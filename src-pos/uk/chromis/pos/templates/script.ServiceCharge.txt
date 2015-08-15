@@ -1,0 +1,53 @@
+// script.ServiceCharge
+// This script applies UsersInput% Service for the Total Receipt value
+//
+//   Chromis POS - The New Face of Open Source POS 
+//   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+//
+//   This file is part of chromis oPOS
+//
+//   Chromis POS is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//
+//   Chromis POS is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+// **************************************************************************
+// This script applies UsersInput% or Fixed Service Charge for the Total Receipt value
+
+import uk.chromis.format.Formats;
+import uk.chromis.pos.ticket.TicketLineInfo;
+import uk.chromis.pos.ticket.TicketProductInfo;
+import java.util.Properties;
+
+//scper = JOptionPane.showInputDialog(null, "Input percentage.....");
+scper = "12.5";
+
+double scrate = Double.parseDouble(scper);
+scrate = scrate/100.00;
+
+total = ticket.getTotal(); 
+if (total > 0.0) { 
+    scval = Formats.PERCENT.formatValue(scrate); 
+ 
+    taxes = ticket.getTaxLines(); 
+    for (int i = 0; i < taxes.length; i++) { 
+        taxline = taxes[i]; 
+        ticket.insertLine(ticket.getLinesCount(),
+            new TicketLineInfo(
+                "Service @  " + scval + " of " + taxline.printSubTotal(),  
+                taxline.getTaxInfo().getTaxCategoryID(),         
+                1.0,
+                +taxline.getSubTotal() * scrate,
+                taxline.getTaxInfo())); 
+    } 
+    sales.setSelectedIndex(ticket.getLinesCount() - 1);
+} else { 
+    java.awt.Toolkit.getDefaultToolkit().beep(); 
+}

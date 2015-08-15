@@ -1,0 +1,1426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+
+
+    <property name="boolean.type" value="boolean" dbms="postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="bit" dbms="mysql"/>
+    <property name="boolean.type" value="smallint" dbms="derby"/>
+    <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
+
+    <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
+    <property name="blob.type" value="bytea" dbms="postgresql"/>
+    <property name="blob.type" value="mediumblob" dbms="mysql"/>
+
+    
+    <changeSet author="UnicentaOpos - John L" id="Create Applications Table">
+        <createTable tableName="APPLICATIONS">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>                     
+    </changeSet>    
+
+    <changeSet author="UnicentaOpos - John L" id="Create Attribute Table">
+        <createTable tableName="ATTRIBUTE">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="UnicentaOpos - John L" id="Create Attributeinstance Table">
+        <createTable tableName="ATTRIBUTEINSTANCE">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALUE" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="ATTRIBUTESETINSTANCE_ID"
+                                 constraintName ="ATTINST_SET"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="ATTRIBUTEINSTANCE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="ATTRIBUTESETINSTANCE"/>
+
+        <addForeignKeyConstraint baseColumnNames="ATTRIBUTE_ID"
+                                 constraintName ="ATTINST_ATT"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="ATTRIBUTEINSTANCE"
+                                 referencedTableName="ATTRIBUTE"/>
+    </changeSet>
+
+    <changeSet author="UnicentaOpos - John L" id="Create Attributeset Table">
+        <createTable tableName="ATTRIBUTESET">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="UnicentaOpos - John L" id="Create Attributesetinstance Table">
+        <createTable tableName="ATTRIBUTESETINSTANCE">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESET_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="ATTRIBUTESET_ID"
+                                 constraintName ="ATTSETINST_SET"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="ATTRIBUTESETINSTANCE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="ATTRIBUTESET"/>
+    </changeSet>
+
+    <changeSet author="UnicentaOpos - John L" id="Create Attributeuse Table">
+        <createTable tableName="ATTRIBUTEUSE">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESET_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LINENO" type="int"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="ATTRIBUTESET_ID"
+                                 constraintName ="ATTUSE_SET"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="ATTRIBUTEUSE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="ATTRIBUTESET"/>
+
+        <addForeignKeyConstraint baseColumnNames="ATTRIBUTE_ID"
+                                 constraintName ="ATTUSE_ATT"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="ATTRIBUTEUSE"
+                                 referencedTableName="ATTRIBUTE"/>
+
+        <createIndex tableName="ATTRIBUTEUSE"
+                     indexName="ATTUSE_LINE"
+                     unique="true">
+            <column name="ATTRIBUTESET_ID" type="varchar(255)"/>
+            <column name="LINENO" type="varchar(255)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="UnicentaOpos - John L" id="Create Attributevalue Table">
+        <createTable tableName="ATTRIBUTEVALUE">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ATTRIBUTE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALUE" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="ATTRIBUTE_ID"
+                                 constraintName ="ATTVAL_ATT"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="ATTRIBUTEVALUE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="ATTRIBUTE"/>
+    </changeSet>
+
+    <changeSet author="UnicentaOpos - John L" id="Create BREAKS Table">
+        <createTable tableName="BREAKS">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="VISIBLE" type="${boolean.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="UnicentaOpos - John L" id="Create Categories Table">
+        <createTable tableName="CATEGORIES">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PARENTID" type="varchar(255)"/>
+            <column name="TEXTTIP" type="varchar(255)" defaultValue="NULL"/>
+            <column name="CATSHOWNAME" type="${boolean.type}" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IMAGE" type="${blob.type}"/>
+            <column name="COLOUR" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="PARENTID"
+                                 constraintName ="CATEGORIES_FK_1"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="CATEGORIES"
+                                 referencedTableName="CATEGORIES"/>
+
+        <createIndex tableName="CATEGORIES"
+                     indexName="CATEGORIES_NAME_INX"
+                     unique="true">
+            <column name="NAME" type="varchar(255)"/>
+        </createIndex>
+    </changeSet>
+ 
+    <changeSet author="UnicentaOpos - John L" id="Create Closedcash Table">
+        <createTable tableName="CLOSEDCASH">
+            <column name="MONEY" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="HOST" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HOSTSEQUENCE" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATESTART" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATEEND" type="timestamp"/>
+            <column name="NOSALES" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="CLOSEDCASH"
+                     indexName="CLOSEDCASH_INX_1">
+            <column name="DATESTART" type="timestamp"/>
+        </createIndex>
+
+        <createIndex tableName="CLOSEDCASH"
+                     indexName="CLOSEDCASH_INX_SEQ"
+                     unique="true">
+            <column name="HOST" type="varchar(255)"/>
+            <column name="HOSTSEQUENCE" type="int"/>
+        </createIndex>
+    </changeSet>
+
+    <createTable tableName="CSVIMPORT">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="ROWNUMBER" type="varchar(255)"/>
+        <column name="CSVERROR" type="varchar(255)"/>
+        <column name="REFERENCE" type="varchar(255)"/>
+        <column name="CODE" type="varchar(255)"/>
+        <column name="NAME" type="varchar(255)"/>
+        <column name="PRICEBUY" type="double precision"/>
+        <column name="PRICESELL" type="double precision"/>
+        <column name="PREVIOUSBUY" type="double precision"/>
+        <column name="PREVIOUSSELL" type="double precision"/>
+    </createTable>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Customers Table">
+    <createTable tableName="CUSTOMERS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="SEARCHKEY" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TAXID" type="varchar(255)"/>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TAXCATEGORY" type="varchar(255)"/>
+        <column name="CARD" type="varchar(255)"/>
+        <column name="MAXDEBT" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ADDRESS" type="varchar(255)"/>
+        <column name="ADDRESS2" type="varchar(255)"/>
+        <column name="POSTAL" type="varchar(255)"/>
+        <column name="CITY" type="varchar(255)"/>
+        <column name="REGION" type="varchar(255)"/>
+        <column name="COUNTRY" type="varchar(255)"/>
+        <column name="FIRSTNAME" type="varchar(255)"/>
+        <column name="LASTNAME" type="varchar(255)"/>
+        <column name="EMAIL" type="varchar(255)"/>
+        <column name="PHONE" type="varchar(255)"/>
+        <column name="PHONE2" type="varchar(255)"/>
+        <column name="FAX" type="varchar(255)"/>
+        <column name="NOTES" type="varchar(255)"/>
+        <column name="VISIBLE" type="${boolean.type}" defaultValueBoolean="true">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CURDATE" type="timestamp"/>
+        <column name="CURDEBT" type="double precision" defaultValueNumeric="0.0"/>
+        <column name="IMAGE" type="${blob.type}"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="TAXCATEGORY"
+                             constraintName ="CUSTOMERS_TAXCAT"
+                             referencedColumnNames = "ID"
+                             baseTableName="CUSTOMERS"
+                             referencedTableName="TAXCUSTCATEGORIES"/>
+
+    <createIndex tableName="CUSTOMERS"
+                 indexName="CUSTOMERS_SKEY_INX"
+                 unique="true">
+        <column name="SEARCHKEY" type="varchar(255)"/>
+    </createIndex>
+    <createIndex tableName="CUSTOMERS"
+                 indexName="CUSTOMERS_TAXID_INX"
+                 unique="false">
+        <column name="TAXID" type="varchar(255)"/>
+    </createIndex>
+    <createIndex tableName="CUSTOMERS"
+                 indexName="CUSTOMERS_NAME_INX"
+                 unique="false">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+    <createIndex tableName="CUSTOMERS"
+                 indexName="CUSTOMERS_CARD_INX"
+                 unique="false">
+        <column name="CARD" type="varchar(255)"/>
+    </createIndex>
+</changeSet> 
+     
+<changeSet author="UnicentaOpos - John L" id="Create New dbpermissions Table">
+    <createTable tableName="DBPERMISSIONS">
+        <column name="CLASSNAME" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="SECTION" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="DISPLAYNAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>            
+        <column name="DESCRIPTION" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+                        
+    <createIndex tableName="DBPERMISSIONS"
+                 indexName="DBPERMISSIONS_CLASSNAME_INX"
+                 unique="true">
+        <column name="CLASSNAME" type="varchar(255)"/>
+    </createIndex> 
+</changeSet>   
+     
+<changeSet author="UnicentaOpos - John L" id="Create Floors Table">
+    <createTable tableName="FLOORS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="IMAGE" type="${blob.type}"/>
+    </createTable>
+
+    <createIndex tableName="FLOORS"
+                 indexName="FLOORS_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+      
+<changeSet author="UnicentaOpos - John L" id="Create LEAVES Table">
+    <createTable tableName="LEAVES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="PPLID" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="STARTDATE" type="timestamp">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ENDDATE" type="timestamp">
+            <constraints nullable="false"/>
+        </column>
+        <column name="NOTES" type="varchar(255)"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="PPLID"
+                             constraintName ="LEAVES_PPLID"
+                             referencedColumnNames = "ID"
+                             baseTableName="LEAVES"
+                             referencedTableName="PEOPLE"/>
+</changeSet>
+      
+<changeSet author="UnicentaOpos - John L" id="Create Locations Table">
+    <createTable tableName="LOCATIONS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ADDRESS" type="varchar(255)"/>
+    </createTable>
+
+    <createIndex tableName="LOCATIONS"
+                 indexName="LOCATIONS_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>    
+      
+<changeSet author="UnicentaOpos - John L" id="Create Moorers Table">
+    <createTable tableName="MOORERS">
+        <column name="VESSELNAME" type="varchar(255)"/>
+        <column name="SIZE" type="int"/>
+        <column name="DAYS" type="int"/>
+        <column name="POWER" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+</changeSet>     
+      
+<changeSet author="UnicentaOpos - John L" id="Create PAYMENTS Table">
+    <createTable tableName="PAYMENTS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="RECEIPT" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PAYMENT" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TOTAL" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TRANSID" type="varchar(255)"/>
+        <column name="NOTES" type="varchar(255)"/>
+        <column name="TENDERED" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CARDNAME" type="varchar(255)"/>
+        <column name="RETURNMSG" type="${blob.type}"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="RECEIPT"
+                             constraintName ="PAYMENTS_FK_RECEIPT"
+                             referencedColumnNames = "ID"
+                             baseTableName="PAYMENTS"
+                             referencedTableName="RECEIPTS"/>
+
+    <createIndex tableName="PAYMENTS"
+                 indexName="PAYMENTS_INX">
+        <column name="PAYMENT" type="varchar(255)"/>
+    </createIndex>
+</changeSet>      
+      
+<changeSet author="UnicentaOpos - John L" id="Create People Table">
+    <createTable tableName="PEOPLE">
+        <column name="ID" type="varchar(255)">
+            <constraints 
+                primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)"/>
+        <column name="APPPASSWORD" type="varchar(255)"/>
+        <column name="CARD" type="varchar(255)"/>
+        <column name="ROLE" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="VISIBLE" type="${boolean.type}">
+            <constraints nullable="false"/>
+        </column>
+        <column name="IMAGE" type="${blob.type}"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="ROLE"
+                             constraintName ="PEOPLE_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="PEOPLE"
+                             referencedTableName="ROLES"/>
+
+    <createIndex tableName="PEOPLE"
+                 indexName="PEOPLE_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+    <createIndex tableName="PEOPLE"
+                 indexName="PEOPLE_CARD_INX"
+                 unique="false">
+        <column name="CARD" type="varchar(255)"/>
+    </createIndex>
+</changeSet>      
+       
+<changeSet author="UnicentaOpos - John L" id="Create Places Table">
+    <createTable tableName="PLACES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="X" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="Y" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="FLOOR" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CUSTOMER" type="varchar(255)"/>
+        <column name="WAITER" type="varchar(255)"/>
+        <column name="TICKETID" type="varchar(255)"/>
+        <column name="TABLEMOVED" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="FLOOR"
+                             constraintName ="PLACES_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="PLACES"
+                             referencedTableName="FLOORS"/>
+
+    <createIndex tableName="PLACES"
+                 indexName="PLACES_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>       
+         
+ 
+<changeSet author="UnicentaOpos - John L" id="Create Products Table">
+    <createTable tableName="PRODUCTS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="REFERENCE" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CODE" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CODETYPE" type="varchar(255)"/>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRICEBUY" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRICESELL" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CATEGORY" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TAXCAT" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ATTRIBUTESET_ID" type="varchar(255)"/>
+        <column name="STOCKCOST" type="double precision"/>
+        <column name="STOCKVOLUME" type="double precision"/>
+        <column name="ISCOM" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ISSCALE" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ISKITCHEN" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRINTKB" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="SENDSTATUS" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ISSERVICE" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="DISPLAY" type="varchar(255)"/>
+        <column name="ATTRIBUTES" type="${blob.type}"/>
+        <column name="ISVPRICE" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ISVERPATRIB" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TEXTTIP" type="varchar(255)"/>
+        <column name="WARRANTY" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="IMAGE" type="${blob.type}"/>
+        <column name="STOCKUNITS" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ALIAS" type="varchar(255)"/>
+        <column name="ALWAYSAVAILABLE" type="varchar(255)"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="CATEGORY"
+                             constraintName ="PRODUCTS_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="PRODUCTS"
+                             referencedTableName="CATEGORIES"/>
+
+    <addForeignKeyConstraint baseColumnNames="TAXCAT"
+                             constraintName ="PRODUCTS_TAXCAT_FK"
+                             referencedColumnNames = "ID"
+                             baseTableName="PRODUCTS"
+                             referencedTableName="TAXCATEGORIES"/>
+
+    <addForeignKeyConstraint baseColumnNames="ATTRIBUTESET_ID"
+                             constraintName ="PRODUCTS_ATTRSET_FK"
+                             referencedColumnNames = "ID"
+                             baseTableName="PRODUCTS"
+                             referencedTableName="ATTRIBUTESET"/>
+
+    <createIndex tableName="PRODUCTS"
+                 indexName="PRODUCTS_INX_0"
+                 unique="true">
+        <column name="REFERENCE" type="varchar(255)"/>
+    </createIndex>
+
+    <createIndex tableName="PRODUCTS"
+                 indexName="PRODUCTS_INX_1"
+                 unique="true">
+        <column name="CODE" type="varchar(255)"/>
+    </createIndex>
+
+    <createIndex tableName="PRODUCTS"
+                 indexName="PRODUCTS_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+    
+<changeSet author="UnicentaOpos - John L" id="Create Products_cat Table">
+    <createTable tableName="PRODUCTS_CAT">
+        <column name="PRODUCT" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="CATORDER" type="integer"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                             constraintName ="PRODUCTS_CAT_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="PRODUCTS_CAT"
+                             referencedTableName="PRODUCTS"/>
+
+    <createIndex tableName="PRODUCTS_CAT"
+                 indexName="PRODUCTS_CAT_INX_1">
+        <column name="CATORDER"/>
+    </createIndex>
+</changeSet>         
+               
+<changeSet author="UnicentaOpos - John L" id="Create Products_com Table">
+    <createTable tableName="PRODUCTS_COM">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="PRODUCT" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="PRODUCT2" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                             constraintName ="PRODUCTS_COM_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="PRODUCTS_COM"
+                             referencedTableName="PRODUCTS"/>
+
+    <addForeignKeyConstraint baseColumnNames="PRODUCT2"
+                             constraintName ="PRODUCTS_COM_FK_2"
+                             referencedColumnNames = "ID"
+                             baseTableName="PRODUCTS_COM"
+                             referencedTableName="PRODUCTS"/>
+
+    <createIndex tableName="PRODUCTS_COM"
+                 indexName="PCOM_INX_PROD"
+                 unique="true">
+        <column name="PRODUCT" type="varchar(255)"/>
+        <column name="PRODUCT2" type="varchar(255)"/>
+    </createIndex>
+</changeSet>                   
+                         
+<changeSet author="UnicentaOpos - John L" id="Create Receipts Table">
+    <createTable tableName="RECEIPTS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="MONEY" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="DATENEW" type="timestamp">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PERSON" type="varchar(255)"/>
+        <column name="ATTRIBUTES" type="${blob.type}"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="MONEY"
+                             constraintName ="RECEIPTS_FK_MONEY"
+                             referencedColumnNames = "MONEY"
+                             baseTableName="RECEIPTS"
+                             referencedTableName="CLOSEDCASH"/>
+
+    <createIndex tableName="RECEIPTS"
+                 indexName="RECEIPTS_INX_1">
+        <column name="DATENEW" type="timestamp"/>
+    </createIndex>
+</changeSet>            
+
+<changeSet author="UnicentaOpos - John L" id="Create reservation_CUSTOMERS Table">
+    <createTable tableName="RESERVATION_CUSTOMERS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="CUSTOMER" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="ID"
+                             constraintName ="RES_CUST_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="RESERVATION_CUSTOMERS"
+                             referencedTableName="reservations"/>
+
+    <addForeignKeyConstraint baseColumnNames="CUSTOMER"
+                             constraintName ="RES_CUST_FK_2"
+                             referencedColumnNames = "ID"
+                             baseTableName="RESERVATION_CUSTOMERS"
+                             referencedTableName="CUSTOMERS"/>
+</changeSet> 
+                                                                                          
+<changeSet author="UnicentaOpos - John L" id="Create reservations Table">
+    <createTable tableName="RESERVATIONS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="CREATED" type="timestamp">
+            <constraints nullable="false"/>
+        </column>
+        <column name="DATENEW" type="timestamp" defaultValueDate="2013-01-01 00:00:00">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TITLE" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CHAIRS" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ISDONE" type="${boolean.type}">
+            <constraints nullable="false"/>
+        </column>
+        <column name="DESCRIPTION" type="varchar(255)"/>
+    </createTable>
+
+    <createIndex tableName="RESERVATIONS"
+                 indexName="RESERVATIONS_INX_1"
+                 unique="true">
+        <column name="DATENEW" type="timestamp"/>
+    </createIndex>
+</changeSet>
+                    
+<changeSet author="UnicentaOpos - John L" id="Create Resources Table">
+    <createTable tableName="RESOURCES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="RESTYPE" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CONTENT" type="${blob.type}"/>
+    </createTable>
+
+    <createIndex tableName="RESOURCES"
+                 indexName="RESOURCES_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Roles Table">
+    <createTable tableName="ROLES">
+        <column name=	"ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PERMISSIONS" type="${blob.type}"/>
+    </createTable>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create SharedTICKETS Table">
+    <createTable tableName="SHAREDTICKETS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CONTENT" type="${blob.type}"/>
+        <column name="PICKUPID" type="int" defaultValue="0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="APPUSER" type="varchar(255)"/>
+    </createTable>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create SHIFT_BREAKS Table">
+    <createTable tableName="SHIFT_BREAKS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="SHIFTID" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="BREAKID" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="STARTTIME" type="timestamp">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ENDTIME" type="timestamp"/>
+    </createTable>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="SHIFTS Table">
+    <createTable tableName="SHIFTS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="STARTSHIFT" type="timestamp">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ENDSHIFT" type="timestamp"/>
+        <column name="PPLID" type="varchar(255)"/>
+    </createTable>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Stock current Table">
+    <createTable tableName="STOCKCURRENT">
+        <column name="LOCATION" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRODUCT" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
+        <column name="UNITS" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                             constraintName ="STOCKCURRENT_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKCURRENT"
+                             referencedTableName="PRODUCTS"/>
+
+    <addForeignKeyConstraint baseColumnNames="ATTRIBUTESETINSTANCE_ID"
+                             constraintName ="STOCKCURRENT_ATTSETINST"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKCURRENT"
+                             referencedTableName="ATTRIBUTESETINSTANCE"/>
+
+    <addForeignKeyConstraint baseColumnNames="LOCATION"
+                             constraintName ="STOCKCURRENT_FK_2"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKCURRENT"
+                             referencedTableName="LOCATIONS"/>
+
+    <createIndex tableName="STOCKCURRENT"
+                 indexName="STOCKCURRENT_INX"
+                 unique="true">
+        <column name="LOCATION" type="varchar(255)"/>
+        <column name="PRODUCT" type="varchar(255)"/>
+        <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Stock diary Table">
+    <createTable tableName="STOCKDIARY">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="DATENEW" type="timestamp">
+            <constraints nullable="false"/>
+        </column>
+        <column name="REASON" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="LOCATION" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRODUCT" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
+        <column name="UNITS" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRICE" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+        <column name="APPUSER" type="varchar(255)"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                             constraintName ="STOCKDIARY_FK_1"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKDIARY"
+                             referencedTableName="PRODUCTS"/>
+
+    <addForeignKeyConstraint baseColumnNames="ATTRIBUTESETINSTANCE_ID"
+                             constraintName ="STOCKDIARY_ATTSETINST"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKDIARY"
+                             referencedTableName="ATTRIBUTESETINSTANCE"/>
+
+    <addForeignKeyConstraint baseColumnNames="LOCATION"
+                             constraintName ="STOCKDIARY_FK_2"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKDIARY"
+                             referencedTableName="LOCATIONS"/>
+
+    <createIndex tableName="STOCKDIARY"
+                 indexName="STOCKDIARY_INX_1">
+        <column name="DATENEW" type="timestamp"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Stock level Table">
+    <createTable tableName="STOCKLEVEL">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="LOCATION" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRODUCT" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="STOCKSECURITY" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+        <column name="STOCKMAXIMUM" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                             constraintName ="STOCKLEVEL_PRODUCT"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKLEVEL"
+                             referencedTableName="PRODUCTS"/>
+
+    <addForeignKeyConstraint baseColumnNames="LOCATION"
+                             constraintName ="STOCKLEVEL_LOCATION"
+                             referencedColumnNames = "ID"
+                             baseTableName="STOCKLEVEL"
+                             referencedTableName="LOCATIONS"/>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TaxCATEGORIES Table">
+    <createTable tableName="TAXCATEGORIES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <createIndex tableName="TAXCATEGORIES"
+                 indexName="TAXCAT_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TaxCustCategories Table">
+    <createTable tableName="TAXCUSTCATEGORIES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <createIndex tableName="TAXCUSTCATEGORIES"
+                 indexName="TAXCUSTCAT_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Taxes Table">
+    <createTable tableName="TAXES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CATEGORY" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CUSTCATEGORY" type="varchar(255)"/>
+        <column name="PARENTID" type="varchar(255)"/>
+        <column name="RATE" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="RATECASCADE" type="${boolean.type}" defaultValueBoolean="false">
+            <constraints nullable="false"/>
+        </column>
+        <column name="RATEORDER" type="int"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="CATEGORY"
+                             constraintName ="TAXES_CAT_FK"
+                             referencedColumnNames = "ID"
+                             baseTableName="TAXES"
+                             referencedTableName="TAXCATEGORIES"/>
+
+    <addForeignKeyConstraint baseColumnNames="CUSTCATEGORY"
+                             constraintName ="TAXES_CUSTCAT_FK"
+                             referencedColumnNames = "ID"
+                             baseTableName="TAXES"
+                             referencedTableName="TAXCUSTCATEGORIES"/>
+
+    <addForeignKeyConstraint baseColumnNames="PARENTID"
+                             constraintName ="TAXES_TAXES_FK"
+                             referencedColumnNames = "ID"
+                             baseTableName="TAXES"
+                             referencedTableName="TAXES"/>
+
+    <createIndex tableName="TAXES"
+                 indexName="TAXES_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TAXLINES Table">
+    <createTable tableName="TAXLINES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="RECEIPT" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TAXID" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="BASE" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+        <column name="AMOUNT" type="double precision" defaultValueNumeric="0.0">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="TAXID"
+                             constraintName ="TAXLINES_TAX"
+                             referencedColumnNames = "ID"
+                             baseTableName="TAXLINES"
+                             referencedTableName="TAXES"/>
+
+    <addForeignKeyConstraint baseColumnNames="RECEIPT"
+                             constraintName ="TAXLINES_RECEIPT"
+                             referencedColumnNames = "ID"
+                             baseTableName="TAXLINES"
+                             referencedTableName="RECEIPTS"/>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create THIRDPARTIES Table">
+    <createTable tableName="THIRDPARTIES">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="CIF" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="NAME" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ADDRESS" type="varchar(255)"/>
+        <column name="CONTACTCOMM" type="varchar(255)"/>
+        <column name="CONTACTFACT" type="varchar(255)"/>
+        <column name="PAYRULE" type="varchar(255)"/>
+        <column name="FAXNUMBER" type="varchar(255)"/>
+        <column name="PHONENUMBER" type="varchar(255)"/>
+        <column name="MOBILENUMBER" type="varchar(255)"/>
+        <column name="EMAIL" type="varchar(255)"/>
+        <column name="WEBPAGE" type="varchar(255)"/>
+        <column name="NOTES" type="varchar(255)"/>
+    </createTable>
+
+    <createIndex tableName="THIRDPARTIES"
+                 indexName="THIRDPARTIES_CIF_INX"
+                 unique="true">
+        <column name="CIF" type="varchar(255)"/>
+    </createIndex>
+
+    <createIndex tableName="THIRDPARTIES"
+                 indexName="THIRDPARTIES_NAME_INX"
+                 unique="true">
+        <column name="NAME" type="varchar(255)"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETLINES Table">
+    <createTable tableName="TICKETLINES">
+        <column name="TICKET" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="LINE" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRODUCT" type="varchar(255)"/>
+        <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
+        <column name="UNITS" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PRICE" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+        <column name="TAXID" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="ATTRIBUTES" type="${blob.type}"/>
+    </createTable>
+
+    <addPrimaryKey columnNames="TICKET, LINE" constraintName="TICKETLINES_PKEY" tableName="TICKETLINES"/>
+
+    <addForeignKeyConstraint baseColumnNames="TICKET"
+                             constraintName ="TICKETLINES_FK_TICKET"
+                             referencedColumnNames = "ID"
+                             baseTableName="TICKETLINES"
+                             referencedTableName="TICKETS"/>
+
+    <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                             constraintName ="TICKETLINES_FK_2"
+                             referencedColumnNames = "ID"
+                             baseTableName="TICKETLINES"
+                             referencedTableName="PRODUCTS"/>
+
+    <addForeignKeyConstraint baseColumnNames="ATTRIBUTESETINSTANCE_ID"
+                             constraintName ="TICKETLINES_ATTSETINST"
+                             referencedColumnNames = "ID"
+                             baseTableName="TICKETLINES"
+                             referencedTableName="ATTRIBUTESETINSTANCE"/>
+
+    <addForeignKeyConstraint baseColumnNames="TAXID"
+                             constraintName ="TICKETLINES_FK_3"
+                             referencedColumnNames = "ID"
+                             baseTableName="TICKETLINES"
+                             referencedTableName="TAXES"/>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETS Table">
+    <createTable tableName="TICKETS">
+        <column name="ID" type="varchar(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="TICKETTYPE" type="int" >
+            <constraints nullable="false"/>
+        </column>
+        <column name="TICKETID" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="PERSON" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="CUSTOMER" type="varchar(255)"/>
+        <column name="STATUS" type="int" defaultValue="0" >
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="ID"
+                             constraintName ="TICKETS_FK_ID"
+                             referencedColumnNames = "ID"
+                             baseTableName="TICKETS"
+                             referencedTableName="RECEIPTS"/>
+
+    <addForeignKeyConstraint baseColumnNames="PERSON"
+                             constraintName ="TICKETS_FK_2"
+                             referencedColumnNames = "ID"
+                             baseTableName="TICKETS"
+                             referencedTableName="PEOPLE"/>
+
+    <addForeignKeyConstraint baseColumnNames="CUSTOMER"
+                             constraintName ="TICKETS_CUSTOMERS_FK"
+                             referencedColumnNames = "ID"
+                             baseTableName="TICKETS"
+                             referencedTableName="CUSTOMERS"/>
+
+    <createIndex tableName="TICKETS"
+                 indexName="TICKETS_TICKETID">
+        <column name="TICKETTYPE" type="int"/>
+        <column name="TICKETID" type="int"/>
+    </createIndex>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Lineremoved Table">
+    <createTable tableName="LINEREMOVED">
+        <column name="NAME" type="varchar(255)"/>
+        <column name="TICKETID" type="varchar(255)"/>
+        <column name="PRODUCTID" type="varchar(255)"/>
+        <column name="PRODUCTname" type="varchar(255)"/>
+        <column name="UNITS" type="double precision">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Add column to Lineremoved Table" dbms="hypersql, hsqldb">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <columnExists columnName="REMOVEDDATE" tableName="LINEREMOVED"/>
+        </not>
+    </preConditions>
+
+    <sql>ALTER TABLE LINEREMOVED ADD COLUMN REMOVEDDATE TIMESTAMP</sql>
+</changeSet>
+
+
+<changeSet author="UnicentaOpos - John L" id="Add column to Lineremoved Table" dbms="oracle, postgresql, mysql" >
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <columnExists columnName="REMOVEDDATE" tableName="LINEREMOVED"/>
+        </not>
+    </preConditions>
+    <sql>ALTER TABLE LINEREMOVED ADD COLUMN REMOVEDDATE TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP </sql>
+
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create Draweropened Table">
+    <createTable tableName="DRAWEROPENED">
+        <column name="OPENDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP"/>
+        <column name="NAME" type="varchar(255)"/>
+        <column name="TICKETID" type="varchar(255)"/>
+    </createTable>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="postgresql, hypersql, hsqldb">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <sequenceExists sequenceName="TICKETSNUM"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE SEQUENCE TICKETSNUM START WITH 1</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="postgresql, hypersql, hsqldb">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <sequenceExists sequenceName="TICKETSNUM_REFUND"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE SEQUENCE TICKETSNUM_REFUND START WITH 1</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="postgresql, hypersql, hsqldb">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <sequenceExists sequenceName="TICKETSNUM_PAYMENT"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE SEQUENCE TICKETSNUM_PAYMENT START WITH 1</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="postgresql, hypersql, hsqldb">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <sequenceExists sequenceName="PICKUP_NUMBER"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE SEQUENCE PICKUP_NUMBER START WITH 1</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="derby">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+        INSERT INTO TICKETSNUM VALUES (DEFAULT)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="derby">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM_REFUND"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM_REFUND (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+        INSERT INTO TICKETSNUM_REFUND VALUES (DEFAULT)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="derby">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM_PAYMENT"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+        INSERT INTO TICKETSNUM_PAYMENT VALUES (DEFAULT)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="derby">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="PICKUP_NUMBER"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+        INSERT INTO PICKUP_NUMBER VALUES (DEFAULT)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM (ID INTEGER DEFAULT 0 NOT NULL);
+        INSERT INTO TICKETSNUM VALUES(1)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM_REFUND"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM_REFUND (ID INTEGER DEFAULT 0 NOT NULL);
+        INSERT INTO TICKETSNUM_REFUND VALUES(1)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM_PAYMENT"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER DEFAULT 0 NOT NULL);
+        INSERT INTO TICKETSNUM_PAYMENT VALUES(1)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="PICKUP_NUMBER"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER DEFAULT 0 NOT NULL);
+        INSERT INTO PICKUP_NUMBER VALUES(1))</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        INSERT INTO TICKETSNUM VALUES(1)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM_REFUND"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM_REFUND (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        INSERT INTO TICKETSNUM_REFUND VALUES(1)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="TICKETSNUM_PAYMENT"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        INSERT INTO TICKETSNUM_PAYMENT VALUES(1)</sql>
+</changeSet>
+
+<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="PICKUP_NUMBER"/>
+        </not>
+    </preConditions>
+
+    <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
+</changeSet>
+
+</databaseChangeLog>
+
