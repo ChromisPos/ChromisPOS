@@ -243,7 +243,6 @@ public class JRootApp extends JPanel implements AppView {
             }
         }
 
-System.out.println(AppConfig2.getInstance().getProperty("db.password"));
 // Clear the cash drawer table as required, by setting 
         try {
             if (getDbVersion() == "d") {
@@ -339,7 +338,8 @@ System.out.println(AppConfig2.getInstance().getProperty("db.password"));
         if (newText != null) {
             if (newText.equals("")) {
                 jLabel1.setText("<html><center>Chromis POS - The New Face of Open Source POS<br>"
-                        + "Copyright \u00A9 2015 uniCenta <br>"
+                        + "Copyright \u00A9 2015 Chromis <br>"
+                        + "<br>"
                         + "http://www.chromis.co.uk/<br>"
                         + "<br>"
                         + " Chromis POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>"
@@ -554,7 +554,7 @@ System.out.println(AppConfig2.getInstance().getProperty("db.password"));
                         bf = new BeanFactoryObj(bean);
                     }
 
-// JG 16 May 2013 use multicatch
+
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
                     // ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
                     throw new BeanFactoryException(e);
@@ -663,11 +663,9 @@ System.out.println(AppConfig2.getInstance().getProperty("db.password"));
                 btn.setFocusPainted(false);
                 btn.setFocusable(false);
                 btn.setRequestFocusEnabled(false);
-//                btn.setHorizontalAlignment(SwingConstants.CENTER); // jg 27 JUL 2013
                 btn.setMaximumSize(new Dimension(110, 60));
                 btn.setPreferredSize(new Dimension(110, 60));
                 btn.setMinimumSize(new Dimension(110, 60));
-// Added: JG 27 Jul 13
                 btn.setHorizontalAlignment(SwingConstants.CENTER);
                 btn.setHorizontalTextPosition(AbstractButton.CENTER);
                 btn.setVerticalTextPosition(AbstractButton.BOTTOM);
@@ -864,10 +862,16 @@ System.out.println(AppConfig2.getInstance().getProperty("db.password"));
         m_jPanelTitle.add(m_jLblTitle, java.awt.BorderLayout.CENTER);
 
         poweredby.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        poweredby.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/poweredby.png"))); // NOI18N
         poweredby.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         poweredby.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        poweredby.setMaximumSize(new java.awt.Dimension(180, 34));
+        poweredby.setMaximumSize(new java.awt.Dimension(222, 34));
         poweredby.setPreferredSize(new java.awt.Dimension(180, 34));
+        poweredby.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                poweredbyMouseClicked(evt);
+            }
+        });
         m_jPanelTitle.add(poweredby, java.awt.BorderLayout.LINE_END);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1028,6 +1032,12 @@ System.out.println(AppConfig2.getInstance().getProperty("db.password"));
         processKey(evt.getKeyChar());
 
     }//GEN-LAST:event_m_txtKeysKeyTyped
+
+    private void poweredbyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_poweredbyMouseClicked
+             if (SwingUtilities.isRightMouseButton(evt)){        
+            System.out.println("create system info box here");
+        }
+    }//GEN-LAST:event_poweredbyMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

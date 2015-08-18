@@ -67,7 +67,6 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
                 // Register the running application
                 try {
                     m_instmanager = new InstanceManager(this);
-// JG 16 May use multicatch
                 } catch (RemoteException | AlreadyBoundException e) {
                 }
             }
@@ -76,7 +75,7 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
             add(m_rootapp, BorderLayout.CENTER);            
  
             try {
-               this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/images/empty.png")));
+               this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/images/poweredby.png")));
             } catch (IOException e) {
             }   
             setTitle(AppLocal.APP_NAME + " - V" + AppLocal.APP_VERSION);               
