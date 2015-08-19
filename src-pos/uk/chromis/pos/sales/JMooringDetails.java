@@ -33,7 +33,7 @@ import net.proteanit.sql.DbUtils;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JMooringDetails extends javax.swing.JDialog {
 

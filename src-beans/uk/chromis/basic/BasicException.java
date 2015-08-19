@@ -21,7 +21,7 @@ package uk.chromis.basic;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class BasicException extends java.lang.Exception {
     

@@ -39,7 +39,7 @@ import uk.chromis.pos.customers.CustomerInfo;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagRestaurantRes extends javax.swing.JPanel implements EditorRecord {
 

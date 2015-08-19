@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.payment;
 
 import uk.chromis.format.Formats;
@@ -34,46 +33,52 @@ import javax.swing.JFrame;
  *
  * @author adrianromero
  */
-public abstract class JPaymentSelect extends javax.swing.JDialog 
-                            implements JPaymentNotifier {
-    
+public abstract class JPaymentSelect extends javax.swing.JDialog
+        implements JPaymentNotifier {
+
     private PaymentInfoList m_aPaymentInfo;
     private boolean printselected;
-    
+
     private boolean accepted;
-    
+
     private AppView app;
-    private double m_dTotal; 
+    private double m_dTotal;
     private CustomerInfoExt customerext;
     private DataLogicSystem dlSystem;
-    
+
 // JG 16 May 12 use diamond inference
     private final Map<String, JPaymentInterface> payments = new HashMap<>();
     private String m_sTransactionID;
-    
-    
-    /** Creates new form JPaymentSelect
+
+    /**
+     * Creates new form JPaymentSelect
+     *
      * @param parent
      * @param modal
-     * @param o */
+     * @param o
+     */
     protected JPaymentSelect(java.awt.Frame parent, boolean modal, ComponentOrientation o) {
         super(parent, modal);
-        initComponents();    
-        
+        initComponents();
+
         this.applyComponentOrientation(o);
-        
-        getRootPane().setDefaultButton(m_jButtonOK); 
-   
+
+        getRootPane().setDefaultButton(m_jButtonOK);
+
     }
-    /** Creates new form JPaymentSelect
+
+    /**
+     * Creates new form JPaymentSelect
+     *
      * @param parent
      * @param modal
-     * @param o */
+     * @param o
+     */
     protected JPaymentSelect(java.awt.Dialog parent, boolean modal, ComponentOrientation o) {
         super(parent, modal);
-        initComponents();    
+        initComponents();
 
-        this.applyComponentOrientation(o);        
+        this.applyComponentOrientation(o);
     }
 
     /**
@@ -85,7 +90,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         dlSystem = (DataLogicSystem) app.getBean("uk.chromis.pos.forms.DataLogicSystem");
         printselected = true;
     }
-    
+
     /**
      *
      * @param value
@@ -93,7 +98,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     public void setPrintSelected(boolean value) {
         printselected = value;
     }
-    
+
     /**
      *
      * @return
@@ -109,7 +114,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     public List<PaymentInfo> getSelectedPayments() {
         return m_aPaymentInfo.getPayments();
     }
-            
+
     /**
      *
      * @param total
@@ -117,37 +122,43 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
      * @return
      */
     public boolean showDialog(double total, CustomerInfoExt customerext) {
-        
+
         m_aPaymentInfo = new PaymentInfoList();
         accepted = false;
-        
+
         m_dTotal = total;
-        
-        this.customerext = customerext;        
-        
+
+        this.customerext = customerext;
+
         setPrintSelected(!Boolean.parseBoolean(app.getProperties().getProperty("till.receiptprintoff")));
         m_jButtonPrint.setSelected(printselected);
 
         m_jTotalEuros.setText(Formats.CURRENCY.formatValue(m_dTotal));
-        
+
         addTabs();
 
         if (m_jTabPayment.getTabCount() == 0) {
             // No payment panels available            
             m_aPaymentInfo.add(getDefaultPayment(total));
-            accepted = true;            
+            accepted = true;
         } else {
             getRootPane().setDefaultButton(m_jButtonOK);
             printState();
+            Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+            Dimension thisDim = this.getSize();
+            int x = (screenDim.width - thisDim.width) / 2;
+            int y = (screenDim.height - thisDim.height) / 2;
+            this.setLocation(x, y);
+
             setVisible(true);
         }
-        
+
         // gets the print button state
         printselected = m_jButtonPrint.isSelected();
-        
+
         // remove all tabs        
         m_jTabPayment.removeAll();
-        
+
         return accepted;
     }
 
@@ -169,15 +180,15 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
      * @return
      */
     protected abstract PaymentInfo getDefaultPayment(double total);
-    
+
     /**
      *
      * @param value
      */
     protected void setOKEnabled(boolean value) {
-        m_jButtonOK.setEnabled(value);        
+        m_jButtonOK.setEnabled(value);
     }
-    
+
     /**
      *
      * @param value
@@ -185,20 +196,20 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     protected void setAddEnabled(boolean value) {
         m_jButtonAdd.setEnabled(value);
     }
-        
+
     /**
      *
      * @param jpay
      */
     protected void addTabPayment(JPaymentCreator jpay) {
         if (app.getAppUserView().getUser().hasPermission(jpay.getKey())) {
-            
+
             JPaymentInterface jpayinterface = payments.get(jpay.getKey());
             if (jpayinterface == null) {
                 jpayinterface = jpay.createJPayment();
                 payments.put(jpay.getKey(), jpayinterface);
             }
-            
+
             jpayinterface.getComponent().applyComponentOrientation(getComponentOrientation());
             m_jTabPayment.addTab(
                     AppLocal.getIntString(jpay.getLabelKey()),
@@ -256,23 +267,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "payment.cash"; }
+        public String getKey() {
+            return "payment.cash";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.cash"; }
+        public String getLabelKey() {
+            return "tab.cash";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/cash.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/cash.png";
+        }
     }
-        
+
     /**
      *
      */
@@ -292,21 +309,27 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "payment.cheque"; }
+        public String getKey() {
+            return "payment.cheque";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.cheque"; }
+        public String getLabelKey() {
+            return "tab.cheque";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/cheque.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/cheque.png";
+        }
     }
 
     /**
@@ -328,23 +351,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "payment.paper"; }
+        public String getKey() {
+            return "payment.paper";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.paper"; }
+        public String getLabelKey() {
+            return "tab.paper";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/voucher.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/voucher.png";
+        }
     }
-   
+
     /**
      *
      */
@@ -364,23 +393,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "payment.magcard"; }
+        public String getKey() {
+            return "payment.magcard";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.magcard"; }
+        public String getLabelKey() {
+            return "tab.magcard";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/ccard.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/ccard.png";
+        }
     }
-        
+
     /**
      *
      */
@@ -400,23 +435,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "payment.free"; }
+        public String getKey() {
+            return "payment.free";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.free"; }
+        public String getLabelKey() {
+            return "tab.free";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/wallet.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/wallet.png";
+        }
     }
-        
+
     /**
      *
      */
@@ -436,21 +477,27 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "payment.debt"; }
+        public String getKey() {
+            return "payment.debt";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.debt"; }
+        public String getLabelKey() {
+            return "tab.debt";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/customer.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/customer.png";
+        }
     }
 
     /**
@@ -472,23 +519,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "refund.cash"; }
+        public String getKey() {
+            return "refund.cash";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.cashrefund"; }
+        public String getLabelKey() {
+            return "tab.cashrefund";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/cash.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/cash.png";
+        }
     }
-        
+
     /**
      *
      */
@@ -508,23 +561,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "refund.cheque"; }
+        public String getKey() {
+            return "refund.cheque";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.chequerefund"; }
+        public String getLabelKey() {
+            return "tab.chequerefund";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/cheque.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/cheque.png";
+        }
     }
-       
+
     /**
      *
      */
@@ -544,21 +603,27 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "refund.paper"; }
+        public String getKey() {
+            return "refund.paper";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.paper"; }
+        public String getLabelKey() {
+            return "tab.paper";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/voucher.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/voucher.png";
+        }
     }
 
     /**
@@ -571,7 +636,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-       public JPaymentInterface createJPayment() {     
+        public JPaymentInterface createJPayment() {
             return new JPaymentMagcard(app, JPaymentSelect.this);
         }
 
@@ -580,29 +645,34 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "refund.magcard"; }
+        public String getKey() {
+            return "refund.magcard";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.magcard"; }
+        public String getLabelKey() {
+            return "tab.magcard";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/ccard.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/ccard.png";
+        }
     }
 
 // * Bank Payment receipt - Thanks Steve Clough! August 2011
-
     /**
      *
      */
-            public class JPaymentBankCreator implements JPaymentCreator {
+    public class JPaymentBankCreator implements JPaymentCreator {
 
         /**
          *
@@ -618,23 +688,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
          * @return
          */
         @Override
-        public String getKey() { return "payment.bank"; }
+        public String getKey() {
+            return "payment.bank";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getLabelKey() { return "tab.bank"; }
+        public String getLabelKey() {
+            return "tab.bank";
+        }
 
         /**
          *
          * @return
          */
         @Override
-        public String getIconKey() { return "/uk/chromis/images/bank.png"; }
+        public String getIconKey() {
+            return "/uk/chromis/images/bank.png";
+        }
     }
-    
+
     /**
      *
      * @param value
@@ -642,15 +718,15 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     protected void setHeaderVisible(boolean value) {
         jPanel6.setVisible(value);
     }
-    
+
     private void printState() {
-        
+
         m_jRemaininglEuros.setText(Formats.CURRENCY.formatValue(m_dTotal - m_aPaymentInfo.getTotal()));
         m_jButtonRemove.setEnabled(!m_aPaymentInfo.isEmpty());
         m_jTabPayment.setSelectedIndex(0); // selecciono el primero
         ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, m_dTotal - m_aPaymentInfo.getTotal(), m_sTransactionID);
     }
-    
+
     /**
      *
      * @param parent
@@ -660,7 +736,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         if (parent == null) {
             return new JFrame();
         } else if (parent instanceof Frame || parent instanceof Dialog) {
-            return (Window)parent;
+            return (Window) parent;
         } else {
             return getWindow(parent.getParent());
         }
@@ -673,22 +749,22 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
      */
     @Override
     public void setStatus(boolean isPositive, boolean isComplete) {
-        
+
         setStatusPanel(isPositive, isComplete);
     }
-    
+
     /**
      *
      * @param tID
      */
-    public void setTransactionID(String tID){
+    public void setTransactionID(String tID) {
         this.m_sTransactionID = tID;
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -835,8 +911,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     private void m_jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonRemoveActionPerformed
 
         m_aPaymentInfo.removeLast();
-        printState();        
-        
+        printState();
+
     }//GEN-LAST:event_m_jButtonRemoveActionPerformed
 
     private void m_jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonAddActionPerformed
@@ -845,45 +921,45 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         if (returnPayment != null) {
             m_aPaymentInfo.add(returnPayment);
             printState();
-        }        
-        
+        }
+
     }//GEN-LAST:event_m_jButtonAddActionPerformed
 
     private void m_jTabPaymentStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m_jTabPaymentStateChanged
 
         if (m_jTabPayment.getSelectedComponent() != null) {
 //            ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, m_dTotal - m_aPaymentInfo.getTotal(), m_sTransactionID);
-            ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, 
+            ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext,
                     m_dTotal - m_aPaymentInfo.getTotal(),
-                    m_sTransactionID);            
+                    m_sTransactionID);
         }
-        
+
     }//GEN-LAST:event_m_jTabPaymentStateChanged
 
     private void m_jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonOKActionPerformed
-        
+
         PaymentInfo returnPayment = ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).executePayment();
 
         if (returnPayment != null) {
-                        
+
             m_aPaymentInfo.add(returnPayment);
             accepted = true;
-            
+
             dispose();
-        }           
-        
+        }
+
     }//GEN-LAST:event_m_jButtonOKActionPerformed
 
     private void m_jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonCancelActionPerformed
 
         dispose();
-        
+
     }//GEN-LAST:event_m_jButtonCancelActionPerformed
 
     private void m_jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonPrintActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_m_jButtonPrintActionPerformed
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -902,5 +978,5 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     private javax.swing.JTabbedPane m_jTabPayment;
     private javax.swing.JLabel m_jTotalEuros;
     // End of variables declaration//GEN-END:variables
-    
+
 }

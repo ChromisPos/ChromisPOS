@@ -30,7 +30,7 @@ import java.io.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class CompanyDetails {
     private String db_url;

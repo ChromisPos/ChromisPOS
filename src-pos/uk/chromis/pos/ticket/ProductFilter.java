@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ProductFilter extends javax.swing.JPanel implements ReportEditorCreator {
     

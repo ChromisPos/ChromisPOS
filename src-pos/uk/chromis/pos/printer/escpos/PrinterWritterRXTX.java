@@ -27,7 +27,7 @@ import java.io.OutputStream;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PrinterWritterRXTX extends PrinterWritter /* implements SerialPortEventListener */ {
     

@@ -26,8 +26,8 @@ report.setReport("/uk/chromis/reports/productsalesprofit");
 report.setResourceBundle("uk/chromis/reports/productsalesprofit_messages");
 
 // Amend: Janar Nagel Jan 2014
-// Amend: JG uniCenta May 2014
-// Amend: JG uniCenta July 2014
+  
+  
 
 report.setSentence("SELECT " +
     "PRODUCTS.NAME, " +

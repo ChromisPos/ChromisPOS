@@ -45,7 +45,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class JPanelReport extends JPanel implements JPanelView, BeanFactoryApp   {
     

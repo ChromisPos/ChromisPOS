@@ -37,7 +37,7 @@ import net.proteanit.sql.DbUtils;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPermissionsList extends javax.swing.JDialog {
 

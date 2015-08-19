@@ -35,7 +35,7 @@ import jpos.POSPrinterConst;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DevicePrinterJavaPOS  implements DevicePrinter {
     

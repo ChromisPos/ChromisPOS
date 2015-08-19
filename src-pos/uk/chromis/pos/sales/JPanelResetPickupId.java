@@ -41,7 +41,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPanelResetPickupId extends JPanel implements JPanelView {
 

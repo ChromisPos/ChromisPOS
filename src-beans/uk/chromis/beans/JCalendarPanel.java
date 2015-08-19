@@ -29,7 +29,7 @@ import javax.swing.border.LineBorder;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JCalendarPanel extends javax.swing.JPanel {
     

@@ -24,7 +24,7 @@ import uk.chromis.beans.LocaleResources;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class LocalRes {
     

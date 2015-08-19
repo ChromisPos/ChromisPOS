@@ -29,7 +29,7 @@ import net.sf.jasperreports.engine.JRField;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JRDataSourceBasic implements JRDataSource {
     

@@ -24,7 +24,7 @@ import uk.chromis.data.loader.SentenceExec;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class SaveProvider {
     

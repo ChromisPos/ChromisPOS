@@ -43,7 +43,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagTicket extends JTicketsBag {
     

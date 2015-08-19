@@ -24,7 +24,7 @@ import uk.chromis.pos.util.StringParser;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DeviceScannerFactory {
     

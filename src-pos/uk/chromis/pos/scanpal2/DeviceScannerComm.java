@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener {
 

@@ -24,7 +24,7 @@ import uk.chromis.format.Formats;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class PaymentInfo {
     

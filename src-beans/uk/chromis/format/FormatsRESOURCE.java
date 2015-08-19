@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class FormatsRESOURCE extends Formats {
     

@@ -24,7 +24,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPasswordDialog extends javax.swing.JDialog {
     

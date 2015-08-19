@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class BatchSentence extends BaseSentence {
     

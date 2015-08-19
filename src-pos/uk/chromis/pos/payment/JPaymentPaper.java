@@ -32,7 +32,7 @@ import java.io.File;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPaymentPaper extends javax.swing.JPanel implements JPaymentInterface {
     

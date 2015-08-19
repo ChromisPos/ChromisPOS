@@ -24,7 +24,7 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PrintItemImage implements PrintItem {
 

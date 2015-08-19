@@ -25,7 +25,7 @@ import java.util.GregorianCalendar;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DateUtils {
     

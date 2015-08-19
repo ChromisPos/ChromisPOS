@@ -26,7 +26,7 @@ import java.util.Date;
 /**
  *
  * @author adrianromero
- * @author JG uniCenta 
+ *    
  */
 public class CustomerInfoExt extends CustomerInfo {
     

@@ -28,7 +28,7 @@ import uk.chromis.pos.forms.AppView;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ThirdPartiesView extends javax.swing.JPanel implements EditorRecord {
 

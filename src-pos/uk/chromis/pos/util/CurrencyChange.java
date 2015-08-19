@@ -23,7 +23,7 @@ import java.text.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public final class CurrencyChange {
 

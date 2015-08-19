@@ -23,7 +23,7 @@ import java.awt.Component;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface EditorRecord extends EditorCreator {
        

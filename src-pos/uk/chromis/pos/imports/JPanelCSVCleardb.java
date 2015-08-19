@@ -32,7 +32,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPanelCSVCleardb extends JPanel implements JPanelView {    
     

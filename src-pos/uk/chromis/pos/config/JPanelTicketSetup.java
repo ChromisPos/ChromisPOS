@@ -26,7 +26,7 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig {
     

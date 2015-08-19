@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DeviceTicket {
 

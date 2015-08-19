@@ -21,7 +21,7 @@ package uk.chromis.pos.scale;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface Scale {
     

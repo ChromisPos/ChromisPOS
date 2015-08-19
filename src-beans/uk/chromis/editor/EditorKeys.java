@@ -21,7 +21,7 @@ package uk.chromis.editor;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface EditorKeys {
     

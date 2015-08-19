@@ -34,7 +34,7 @@ import uk.chromis.pos.forms.DataLogicSales;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ProductFilterSales extends javax.swing.JPanel implements EditorCreator {
     

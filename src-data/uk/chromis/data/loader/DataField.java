@@ -21,7 +21,7 @@ package uk.chromis.data.loader;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DataField {
     

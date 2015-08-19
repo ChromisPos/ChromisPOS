@@ -27,7 +27,7 @@ import javax.swing.JList;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class CustomerRenderer extends DefaultListCellRenderer {
                 

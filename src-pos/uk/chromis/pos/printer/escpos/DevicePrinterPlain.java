@@ -26,7 +26,7 @@ import javax.swing.JComponent;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DevicePrinterPlain implements DevicePrinter  {
     

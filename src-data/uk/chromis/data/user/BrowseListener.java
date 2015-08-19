@@ -21,7 +21,7 @@ package uk.chromis.data.user;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface BrowseListener extends java.util.EventListener {
     

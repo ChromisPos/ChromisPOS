@@ -23,7 +23,7 @@ import uk.chromis.basic.BasicException;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class SerializerWriteBasic implements SerializerWrite<Object[]> {
     

@@ -26,7 +26,7 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
 
 /**
- * @author JG uniCenta
+ *   
  * @author adrianromero
  */
 public class DataLogicCustomers extends BeanFactoryDataSingle {

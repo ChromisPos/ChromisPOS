@@ -28,7 +28,7 @@ import uk.chromis.data.user.StateListener;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JSaver extends JPanel implements StateListener {
     

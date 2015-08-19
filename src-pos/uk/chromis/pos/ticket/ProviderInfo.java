@@ -21,7 +21,7 @@ package uk.chromis.pos.ticket;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ProviderInfo {
     

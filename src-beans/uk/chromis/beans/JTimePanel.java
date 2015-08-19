@@ -33,7 +33,7 @@ import javax.swing.JButton;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTimePanel extends javax.swing.JPanel {
     

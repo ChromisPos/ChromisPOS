@@ -24,7 +24,7 @@ import java.sql.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class JDBCSentence extends BaseSentence {
     

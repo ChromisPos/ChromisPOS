@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagTicketBag extends javax.swing.JPanel {
     

@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class SerializerWriteComposed implements SerializerWrite {
     

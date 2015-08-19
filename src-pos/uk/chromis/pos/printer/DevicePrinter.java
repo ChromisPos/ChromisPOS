@@ -24,7 +24,7 @@ import javax.swing.JComponent;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface DevicePrinter {
     

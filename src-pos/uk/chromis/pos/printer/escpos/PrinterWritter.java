@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class PrinterWritter {
     

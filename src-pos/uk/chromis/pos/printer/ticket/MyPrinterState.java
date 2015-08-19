@@ -25,7 +25,7 @@ import java.awt.geom.AffineTransform;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class MyPrinterState {
 

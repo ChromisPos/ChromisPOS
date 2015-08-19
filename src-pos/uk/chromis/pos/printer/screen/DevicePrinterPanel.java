@@ -30,7 +30,7 @@ import javax.swing.JComponent;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DevicePrinterPanel extends javax.swing.JPanel implements DevicePrinter {
     

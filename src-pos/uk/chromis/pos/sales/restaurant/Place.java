@@ -32,7 +32,7 @@ import java.awt.Insets;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class Place implements SerializableRead, java.io.Serializable {
     

@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketCatalogLines extends javax.swing.JPanel {
     

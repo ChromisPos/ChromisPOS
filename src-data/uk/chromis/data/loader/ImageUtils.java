@@ -29,7 +29,7 @@ import java.util.Properties;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ImageUtils {
     

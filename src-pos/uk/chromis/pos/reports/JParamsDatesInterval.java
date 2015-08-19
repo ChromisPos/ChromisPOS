@@ -33,7 +33,7 @@ import java.util.Date;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JParamsDatesInterval extends javax.swing.JPanel implements ReportEditorCreator {
 

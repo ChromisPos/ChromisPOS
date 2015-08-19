@@ -47,7 +47,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagRestaurant extends javax.swing.JPanel {
     

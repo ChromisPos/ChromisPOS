@@ -28,7 +28,7 @@ import jpos.JposException;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements DeviceFiscalPrinter  {
     

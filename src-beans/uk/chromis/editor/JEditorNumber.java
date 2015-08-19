@@ -29,7 +29,7 @@ import java.io.File;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class JEditorNumber extends JEditorAbstract {
     

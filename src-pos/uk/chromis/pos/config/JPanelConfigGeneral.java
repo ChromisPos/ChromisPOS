@@ -41,7 +41,7 @@ import uk.chromis.pos.util.DirectoryEvent;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 
 public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConfig {

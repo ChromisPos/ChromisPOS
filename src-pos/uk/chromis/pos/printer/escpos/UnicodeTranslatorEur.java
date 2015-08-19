@@ -21,7 +21,7 @@ package uk.chromis.pos.printer.escpos;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class UnicodeTranslatorEur extends UnicodeTranslator {
     

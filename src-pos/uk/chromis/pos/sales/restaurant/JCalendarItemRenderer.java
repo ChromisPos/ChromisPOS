@@ -33,7 +33,7 @@ import uk.chromis.format.Formats;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JCalendarItemRenderer extends javax.swing.JPanel implements ListCellRenderer, Serializable {
 

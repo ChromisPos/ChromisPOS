@@ -33,7 +33,7 @@ import uk.chromis.data.user.ListProviderCreator;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ThirdPartiesPanel extends JPanelTable {
     

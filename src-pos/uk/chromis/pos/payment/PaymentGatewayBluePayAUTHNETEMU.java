@@ -35,7 +35,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentGatewayBluePayAUTHNETEMU implements PaymentGateway {
     

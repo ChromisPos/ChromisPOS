@@ -58,7 +58,7 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPaneldbMigrate extends JPanel implements JPanelView {
 

@@ -27,7 +27,7 @@ import uk.chromis.data.loader.JDBCSentence.JDBCDataResultSet;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class MetaSentence extends JDBCSentence {
     

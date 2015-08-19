@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JListData extends javax.swing.JDialog {
     

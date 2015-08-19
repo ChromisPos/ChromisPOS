@@ -36,7 +36,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class Floor implements SerializableRead {
     

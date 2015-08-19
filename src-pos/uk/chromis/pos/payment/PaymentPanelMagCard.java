@@ -24,7 +24,7 @@ import javax.swing.JComponent;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPanel {
     

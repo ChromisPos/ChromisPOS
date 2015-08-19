@@ -41,7 +41,7 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JImageEditor extends javax.swing.JPanel {
     

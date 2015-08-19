@@ -25,7 +25,7 @@ import uk.chromis.pos.forms.AppLocal;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ReportFieldsArray implements ReportFields {
     

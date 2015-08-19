@@ -23,7 +23,7 @@ import java.awt.Graphics2D;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface PrintItem {
     

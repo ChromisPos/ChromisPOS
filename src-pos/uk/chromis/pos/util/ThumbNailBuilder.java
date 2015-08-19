@@ -27,7 +27,7 @@ import javax.swing.JLabel;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ThumbNailBuilder {
     

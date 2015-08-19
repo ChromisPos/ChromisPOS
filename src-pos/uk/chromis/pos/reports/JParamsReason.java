@@ -32,7 +32,7 @@ import java.awt.Component;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JParamsReason extends javax.swing.JPanel implements ReportEditorCreator {
     

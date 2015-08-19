@@ -26,7 +26,7 @@ import javax.swing.border.Border;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class JEditorAbstract extends javax.swing.JPanel implements EditorComponent {
 

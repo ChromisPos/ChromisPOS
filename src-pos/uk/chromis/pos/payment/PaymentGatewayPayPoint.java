@@ -19,7 +19,7 @@ import org.apache.axis.client.Service;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentGatewayPayPoint implements PaymentGateway {
     

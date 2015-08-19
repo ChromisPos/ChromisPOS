@@ -25,7 +25,7 @@ import java.util.TooManyListenersException;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ScaleSamsungEsp implements Scale, SerialPortEventListener {
     

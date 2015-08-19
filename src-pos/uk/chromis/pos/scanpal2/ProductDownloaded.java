@@ -21,7 +21,7 @@ package uk.chromis.pos.scanpal2;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ProductDownloaded {
     

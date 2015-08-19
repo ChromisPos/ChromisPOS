@@ -56,7 +56,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentGatewayAuthorizeNet implements PaymentGateway {
     

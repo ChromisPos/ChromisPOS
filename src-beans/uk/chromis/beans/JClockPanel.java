@@ -32,7 +32,7 @@ import java.util.GregorianCalendar;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JClockPanel extends javax.swing.JPanel {
     

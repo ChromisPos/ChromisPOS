@@ -23,7 +23,7 @@ import uk.chromis.format.Formats;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentInfoCash_original extends PaymentInfo {
     

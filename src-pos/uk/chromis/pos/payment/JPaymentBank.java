@@ -28,7 +28,7 @@ import java.beans.PropertyChangeListener;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPaymentBank extends javax.swing.JPanel implements JPaymentInterface {
     

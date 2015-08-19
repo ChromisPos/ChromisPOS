@@ -27,7 +27,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class TableRendererBasic extends DefaultTableCellRenderer {
     

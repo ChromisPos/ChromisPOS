@@ -29,7 +29,7 @@ import jpos.LineDisplayConst;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DeviceDisplayJavaPOS implements DeviceDisplay, DeviceDisplayImpl {
     

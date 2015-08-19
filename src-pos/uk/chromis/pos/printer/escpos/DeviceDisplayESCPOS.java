@@ -23,7 +23,7 @@ import uk.chromis.pos.printer.DeviceTicket;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DeviceDisplayESCPOS extends DeviceDisplaySerial {
        

@@ -27,7 +27,7 @@ import uk.chromis.pos.forms.BeanFactoryDataSingle;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DataLogicThirdParties extends BeanFactoryDataSingle {
     

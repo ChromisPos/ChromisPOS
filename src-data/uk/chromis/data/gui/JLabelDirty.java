@@ -25,7 +25,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JLabelDirty extends JLabel {
     

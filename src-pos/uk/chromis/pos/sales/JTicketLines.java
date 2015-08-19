@@ -52,7 +52,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketLines extends javax.swing.JPanel {
 

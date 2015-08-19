@@ -23,7 +23,7 @@ import uk.chromis.pos.forms.AppProperties;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentGatewayFac {
     

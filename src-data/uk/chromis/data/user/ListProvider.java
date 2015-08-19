@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface ListProvider {
 

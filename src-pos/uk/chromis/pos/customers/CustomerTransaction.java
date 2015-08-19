@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author JG uniCenta Gerrard 1 Nov 12
+ *    Gerrard 1 Nov 12
  * Used in Customer's transactions tab to display all this Customer's
  * ticketline values
  */

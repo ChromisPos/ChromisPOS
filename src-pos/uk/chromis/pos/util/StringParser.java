@@ -21,7 +21,7 @@ package uk.chromis.pos.util;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class StringParser {
     

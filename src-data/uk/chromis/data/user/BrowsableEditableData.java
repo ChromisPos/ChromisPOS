@@ -28,7 +28,7 @@ import uk.chromis.data.loader.LocalRes;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class BrowsableEditableData {
     

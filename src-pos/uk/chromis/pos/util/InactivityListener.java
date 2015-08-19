@@ -14,7 +14,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class InactivityListener implements ActionListener, AWTEventListener
 {

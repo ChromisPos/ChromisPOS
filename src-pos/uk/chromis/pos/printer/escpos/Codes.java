@@ -25,7 +25,7 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class Codes {
 

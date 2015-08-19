@@ -30,7 +30,7 @@ import javax.swing.SwingConstants;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JFlowPanel extends JPanel implements Scrollable {
     

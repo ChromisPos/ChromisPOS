@@ -26,7 +26,7 @@ import java.util.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ListProviderCreator implements ListProvider {
     

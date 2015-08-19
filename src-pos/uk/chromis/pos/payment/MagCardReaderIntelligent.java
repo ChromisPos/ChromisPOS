@@ -21,7 +21,7 @@ package uk.chromis.pos.payment;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public final class MagCardReaderIntelligent implements MagCardReader {
     

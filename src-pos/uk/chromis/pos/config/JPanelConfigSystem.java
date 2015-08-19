@@ -28,7 +28,7 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfig {
 

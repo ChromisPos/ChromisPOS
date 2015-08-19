@@ -21,7 +21,7 @@ package uk.chromis.pos.payment;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentGatewayExt implements PaymentGateway {
     

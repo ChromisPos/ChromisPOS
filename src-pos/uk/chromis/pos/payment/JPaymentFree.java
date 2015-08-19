@@ -25,7 +25,7 @@ import java.awt.Component;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPaymentFree extends javax.swing.JPanel implements JPaymentInterface {
     

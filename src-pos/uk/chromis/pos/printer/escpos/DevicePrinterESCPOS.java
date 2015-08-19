@@ -27,7 +27,7 @@ import javax.swing.JComponent;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DevicePrinterESCPOS implements DevicePrinter  {
       

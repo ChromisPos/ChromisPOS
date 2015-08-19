@@ -25,7 +25,7 @@ import java.util.Vector;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JNumberKeys extends javax.swing.JPanel {
 

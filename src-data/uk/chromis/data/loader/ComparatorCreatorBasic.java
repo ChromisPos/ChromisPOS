@@ -23,7 +23,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ComparatorCreatorBasic implements ComparatorCreator {
     

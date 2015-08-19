@@ -29,7 +29,7 @@ import javax.swing.event.EventListenerList;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JEditorKeys extends javax.swing.JPanel implements EditorKeys {
     

@@ -46,7 +46,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPanelButtons extends javax.swing.JPanel {
 

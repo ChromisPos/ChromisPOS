@@ -32,7 +32,7 @@ import uk.chromis.data.user.BrowseListener;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JListNavigator extends javax.swing.JPanel implements BrowseListener, ListSelectionListener {
     

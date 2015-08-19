@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class JTicketsBag extends JPanel {
     

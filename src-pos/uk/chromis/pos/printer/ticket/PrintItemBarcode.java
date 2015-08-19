@@ -31,7 +31,7 @@ import org.krysalis.barcode4j.output.java2d.Java2DCanvasProvider;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PrintItemBarcode implements PrintItem {
 

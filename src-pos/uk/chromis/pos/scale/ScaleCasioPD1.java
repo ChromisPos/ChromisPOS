@@ -25,7 +25,7 @@ import java.util.TooManyListenersException;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ScaleCasioPD1 implements Scale, SerialPortEventListener {
     

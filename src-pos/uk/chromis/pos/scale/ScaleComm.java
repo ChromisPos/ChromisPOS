@@ -25,7 +25,7 @@ import java.util.TooManyListenersException;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class ScaleComm implements Scale, SerialPortEventListener {
     

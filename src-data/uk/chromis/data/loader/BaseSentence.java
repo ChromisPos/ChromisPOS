@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class BaseSentence implements SentenceList, SentenceFind, SentenceExec {
 

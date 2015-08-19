@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public final class TaxCustCategoriesEditor extends JPanel implements EditorRecord {
     

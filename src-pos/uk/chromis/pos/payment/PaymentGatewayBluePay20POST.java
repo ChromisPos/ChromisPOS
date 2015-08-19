@@ -32,7 +32,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentGatewayBluePay20POST implements PaymentGateway {
     

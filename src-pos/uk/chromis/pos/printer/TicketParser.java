@@ -45,7 +45,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class TicketParser extends DefaultHandler {
 

@@ -26,7 +26,7 @@ import java.awt.Component;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class DeviceScale {
     

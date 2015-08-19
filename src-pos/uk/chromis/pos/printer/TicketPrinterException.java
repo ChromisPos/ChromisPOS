@@ -21,7 +21,7 @@ package uk.chromis.pos.printer;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class TicketPrinterException extends java.lang.Exception {
 

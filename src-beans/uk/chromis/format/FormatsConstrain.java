@@ -23,7 +23,7 @@ import java.text.ParseException;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class FormatsConstrain {
    

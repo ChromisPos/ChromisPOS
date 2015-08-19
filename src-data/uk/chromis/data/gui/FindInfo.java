@@ -26,7 +26,7 @@ import java.util.regex.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class FindInfo implements Finder {
     

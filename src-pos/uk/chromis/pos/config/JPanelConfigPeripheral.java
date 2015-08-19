@@ -43,7 +43,7 @@ import org.pushingpixels.substance.api.skin.SkinInfo;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 
 public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelConfig {

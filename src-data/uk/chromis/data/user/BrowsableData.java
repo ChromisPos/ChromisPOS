@@ -29,7 +29,7 @@ import javax.swing.event.ListDataListener;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class BrowsableData implements ListModel {
     

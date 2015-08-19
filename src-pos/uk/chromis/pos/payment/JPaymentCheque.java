@@ -30,7 +30,7 @@ import java.io.File;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPaymentCheque extends javax.swing.JPanel implements JPaymentInterface {
     

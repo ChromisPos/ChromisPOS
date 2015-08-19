@@ -21,7 +21,7 @@ package uk.chromis.data.user;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface EditorListener extends java.util.EventListener {
     

@@ -25,7 +25,7 @@ import java.io.OutputStream;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PrinterWritterFile extends PrinterWritter {
     

@@ -23,7 +23,7 @@ import uk.chromis.pos.ticket.TicketInfo;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface TicketsEditor {
     

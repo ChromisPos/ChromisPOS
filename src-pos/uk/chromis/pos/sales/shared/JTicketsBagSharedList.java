@@ -30,7 +30,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagSharedList extends javax.swing.JDialog {
     

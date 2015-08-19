@@ -37,7 +37,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagRestaurantMap extends JTicketsBag {
 

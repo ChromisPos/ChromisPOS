@@ -46,7 +46,7 @@ import javax.swing.event.EventListenerList;
 
 /**
  *
- * @author JG uniCenta - outline/prep for uniCenta mobile + eCommerce connector
+ *    - outline/prep for uniCenta mobile + eCommerce connector
  */
 public class OrderCustomerList extends JPanel implements TicketSelector {
 

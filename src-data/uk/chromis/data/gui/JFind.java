@@ -27,7 +27,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JFind extends JDialog {
     

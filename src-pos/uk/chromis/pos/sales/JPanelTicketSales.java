@@ -38,7 +38,7 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPanelTicketSales extends JPanelTicket {
 

@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPanelTicketEdits extends JPanelTicket {
     

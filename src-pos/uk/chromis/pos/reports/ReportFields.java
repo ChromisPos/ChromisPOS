@@ -21,7 +21,7 @@ package uk.chromis.pos.reports;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public interface ReportFields {
     

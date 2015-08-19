@@ -39,7 +39,7 @@ import javax.swing.SwingUtilities;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagShared extends JTicketsBag {
 

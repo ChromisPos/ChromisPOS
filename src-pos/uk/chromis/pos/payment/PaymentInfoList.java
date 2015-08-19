@@ -24,7 +24,7 @@ import java.util.LinkedList;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class PaymentInfoList {
     

@@ -25,7 +25,7 @@ import javax.crypto.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class AltEncrypter {
     

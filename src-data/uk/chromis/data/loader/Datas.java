@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public abstract class Datas {
     

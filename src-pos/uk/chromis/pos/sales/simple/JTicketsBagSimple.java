@@ -26,7 +26,7 @@ import uk.chromis.pos.ticket.TicketInfo;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JTicketsBagSimple extends JTicketsBag {
     

@@ -34,7 +34,7 @@ import javax.swing.*;
 
 /**
  *
- * @author JG uniCenta
+ *   
  */
 public class JPaneldbUpdate extends JPanel implements JPanelView {
         
