@@ -1010,17 +1010,25 @@
 
     
     
-    <changeSet author="Chromis POS" id="Register APPJL 1.6" >
+    <changeSet author="Unicentaopos - John L" id="Register APPJL 1.6" >
         <update tableName="APPJL">
             <column name="VERSION" value="1.6"/>
         </update>
     </changeSet>  
     
-    <changeSet author="Chromis POS" id="Register APPJL 1.7" >
-        <update tableName="APPJL">
-            <column name="VERSION" value="1.7"/>
+    <changeSet author="Chromis POS" id="Register Version of POS" >
+        <update tableName="APPLICATIONS">
+            <column name="ID" value="chromispos"/>
+            <column name="NAME" value="Chromis POS"/>
+            <column name="VERSION" value="1.00"/>                                          
         </update>
     </changeSet>   
-    
+   
+    <changeSet author="Chromis POS" id="Drop JDL APP Table" >
+        <sql> DROP TABLE APPJL </sql>       
+    </changeSet>
+     
+      
+        
 </databaseChangeLog>
 

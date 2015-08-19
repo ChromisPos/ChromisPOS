@@ -111,14 +111,13 @@ public class JRootApp extends JPanel implements AppView {
         initOldClasses();
     }
 
-
     private class PrintTimeAction implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
             m_clock = getLineTimer();
             m_date = getLineDate();
-            m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));           
+            m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
             m_jLblTitle.repaint();
             jLabel2.setText("  " + m_date + "  " + m_clock);
         }
@@ -175,6 +174,83 @@ public class JRootApp extends JPanel implements AppView {
         // support for different component orientation languages.
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
+// ******************************************************************************************************************************************
+        // lets get ride of unicenta properties
+        File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
+        if (file.exists()) {
+            try {
+                session = AppViewConnection.createSession(m_props);
+            } catch (BasicException e) {
+                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, e.getMessage(), e));
+                return false;
+            }
+            m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
+
+            String sDBVersion = readDataBaseVersion();
+            System.out.println(sDBVersion);
+            try {
+                con = session.getConnection();
+                md = con.getMetaData();
+                stmt = (Statement) con.createStatement();
+                SQL = "SELECT * from APPJL";
+                rs = stmt.executeQuery(SQL);
+                if (rs.next()) {
+                    sJLVersion = rs.getString("version");
+                }
+            } catch (Exception e) {
+            }
+            if (getDbVersion().equals("x")) {
+                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
+                        AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
+            } else {
+                JOptionPane.showMessageDialog(null, "Converting your system to Chromis POS");
+                String db_user = (AppConfig2.getInstance2().getProperty("db.user"));
+                String db_url = (AppConfig2.getInstance2().getProperty("db.URL"));
+                String db_password = (AppConfig2.getInstance2().getProperty("db.password"));
+                if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
+                    AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
+                    db_password = cypher.decrypt(db_password.substring(6));
+                }
+                try {
+                    ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
+                    DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
+                    String changelog = "uk/chromis/pos/liquibase/jlupdatelog.xml";
+                    Liquibase liquibase = null;
+                    Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
+                    liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
+                    liquibase.update("implement");
+                } catch (DatabaseException ex) {
+                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (LiquibaseException ex) {
+                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    if (con != null) {
+                        try {
+                            con.rollback();
+                            con.close();
+                        } catch (SQLException e) {
+                        }
+                    }
+                }
+            }
+
+            boolean success = file.renameTo(new File(System.getProperty("user.home"), "chromispos.properties"));
+            System.out.println("File renamed");
+            System.exit(0);
+
+        }
+
+// ******************************************************************************************************************************************        
         // Database start
         try {
             session = AppViewConnection.createSession(m_props);
@@ -186,6 +262,7 @@ public class JRootApp extends JPanel implements AppView {
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
 
         String sDBVersion = readDataBaseVersion();
+
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
@@ -254,10 +331,8 @@ public class JRootApp extends JPanel implements AppView {
         } catch (Exception e) {
         }
 
-        // Cargamos las propiedades de base de datos
         m_propsdb = m_dlSystem.getResourceAsProperties(AppConfig2.getInstance().getHost() + "/properties");
-
-        // creamos la caja activa si esta no existe      
+     
         try {
             String sActiveCashIndex = m_propsdb.getProperty("activecash");
             Object[] valcash = sActiveCashIndex == null
@@ -553,7 +628,6 @@ public class JRootApp extends JPanel implements AppView {
 
                         bf = new BeanFactoryObj(bean);
                     }
-
 
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
                     // ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
@@ -1034,7 +1108,7 @@ public class JRootApp extends JPanel implements AppView {
     }//GEN-LAST:event_m_txtKeysKeyTyped
 
     private void poweredbyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_poweredbyMouseClicked
-             if (SwingUtilities.isRightMouseButton(evt)){        
+        if (SwingUtilities.isRightMouseButton(evt)) {
             System.out.println("create system info box here");
         }
     }//GEN-LAST:event_poweredbyMouseClicked

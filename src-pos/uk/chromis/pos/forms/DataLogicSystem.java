@@ -43,7 +43,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     protected String m_sInitScript;
     private SentenceFind m_version;       
     private SentenceExec m_dummy;
-    private String m_dbVersion;
+    private String m_dbVersion ="";
     
     /**
      *
@@ -110,8 +110,8 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     @Override
     public void init(Session s){
 
-        m_sInitScript = "/uk/chromis/pos/scripts/" + s.DB.getName();
-        m_dbVersion = s.DB.getName();
+       m_sInitScript = "/uk/chromis/pos/scripts/" + s.DB.getName();
+       m_dbVersion = s.DB.getName();
 
         m_version = new PreparedSentence(s, "SELECT VERSION FROM APPLICATIONS WHERE ID = ?", SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
         m_dummy = new StaticSentence(s, "SELECT * FROM PEOPLE WHERE 1 = 0");
@@ -130,7 +130,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
             }
         };
 
-//Add 23.2.14 JDL new SQL fro CVS import    
+
 //*******************************************************************        
         productIdRead =new SerializerRead() {
             @Override

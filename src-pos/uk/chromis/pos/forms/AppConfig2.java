@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 public class AppConfig2 {
 
     private static AppConfig2 instance = null;
+    private static AppConfig2 instance2 = null;
     private final Properties m_propsconfig;
     private final File configFile;
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.AppConfig");
@@ -56,6 +57,15 @@ public class AppConfig2 {
         return instance;
     }
 
+        public static AppConfig2 getInstance2() {
+        if (instance2 == null) {
+            instance2 = new AppConfig2(new File(System.getProperty("user.home"), "unicentaopos.properties"));
+        }
+        return instance2;
+    }
+    
+    
+    
     private File getDefaultConfig() {
         return new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + ".properties");
     }
