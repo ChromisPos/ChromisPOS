@@ -20,7 +20,45 @@
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
 
+    <changeSet author="UnicentaOpos - John L" id="Create AppJL Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="APPJL"/>
+            </not>
+        </preConditions>
 
+        <createTable tableName="APPJL">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <insert tableName="APPJL">
+            <column name="ID" value="Unicenta John L's changes"/>
+            <column name="NAME" value="uniCenta oPOS"/>
+            <column name="version" value="0.00"/>          
+        </insert>           
+    </changeSet>
+
+    <changeSet author="Unicentaopos - John L" id="Product Table Alias added m" dbms="mysql, derby, oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ALIAS" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>   
+    
+        <addColumn tableName="PRODUCTS"> 
+            <column name="ALIAS" type="varchar(50)"/>  
+            <column name="ALWAYSAVAILABLE" type="${boolean.type}" defaultValueNumeric="0" >
+                <constraints nullable="false"/>  
+            </column> 
+        </addColumn>             
+    </changeSet>
 
     <changeSet author="Unicentaopos - John L" id="Product Table Alias added p" dbms="postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
@@ -36,6 +74,25 @@
             </column> 
         </addColumn>    
     </changeSet>
+
+    <changeSet author="Unicentaopos - John L" id="Check for Printer" >
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM RESOURCES WHERE NAME='Printer.Ticket.Logo'</sqlCheck>
+        </preConditions>  
+    
+        <insert tableName="RESOURCES">
+            <column name="ID" value="42"/>
+            <column name="NAME" value="Printer.Ticket.Logo"/>
+            <column name="RESTYPE" valueNumeric="1"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/printer.ticket.logo.png"/>
+        </insert>   
+    </changeSet>
+
+
+
+
+
+
 
     <changeSet author="Unicentaopos - John L" id="Add Colour column to Categories table" >
         <preConditions onFail="MARK_RAN">

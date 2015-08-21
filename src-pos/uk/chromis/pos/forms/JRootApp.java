@@ -39,15 +39,19 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -79,33 +83,31 @@ public class JRootApp extends JPanel implements AppView {
     private int m_iActiveCashSequence;
     private Date m_dActiveCashDateStart;
     private Date m_dActiveCashDateEnd;
-
     private String m_sInventoryLocation;
-
     private StringBuilder inputtext;
-
     private DeviceScale m_Scale;
     private DeviceScanner m_Scanner;
     private DeviceTicket m_TP;
     private TicketParser m_TTP;
-
     private Map<String, BeanFactory> m_aBeanFactories;
-
     private JPrincipalApp m_principalapp = null;
-
     private static HashMap<String, String> m_oldclasses; // This is for backwards compatibility purposes
 
     private String m_clock;
     private String m_date;
-
     private Connection con;
     private ResultSet rs;
     private Statement stmt;
+    private PreparedStatement stmt2;
     private String SQL;
-    private String sJLVersion;
+    private String SQL2;
+    private String roles;
     private DatabaseMetaData md;
     private SimpleDateFormat formatter;
     private MessageInf msg;
+    private String db_user;
+    private String db_url;
+    private String db_password;
 
     static {
         initOldClasses();
@@ -175,46 +177,116 @@ public class JRootApp extends JPanel implements AppView {
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
 // ******************************************************************************************************************************************
-        // lets get ride of unicenta properties
+        // lets get rid of unicenta properties
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
-        if (file.exists()) {
+        db_user = (AppConfig2.getInstance2().getProperty("db.user"));
+        db_url = (AppConfig2.getInstance2().getProperty("db.URL"));
+        db_password = (AppConfig2.getInstance2().getProperty("db.password"));
+        if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
+            AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
+            db_password = cypher.decrypt(db_password.substring(6));
+        }
+
+        if (file.exists()) {   
             try {
-                session = AppViewConnection.createSession(m_props);
-            } catch (BasicException e) {
+            session = AppViewConnection.createSession(m_props);
+                }
+                    catch (BasicException e) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, e.getMessage(), e));
-                return false;
-            }
+            return false;
+        }
+            
             m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
 
             String sDBVersion = readDataBaseVersion();
-            System.out.println(sDBVersion);
             try {
-                con = session.getConnection();
-                md = con.getMetaData();
-                stmt = (Statement) con.createStatement();
-                SQL = "SELECT * from APPJL";
+                ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
+                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
+
+                Class.forName(AppConfig2.getInstance2().getProperty("db.driver"));
+
+                con = DriverManager.getConnection(db_url, db_user, db_password);
+                stmt = (Statement) con.createStatement();                
+                SQL = "SELECT * FROM ROLES";                
                 rs = stmt.executeQuery(SQL);
-                if (rs.next()) {
-                    sJLVersion = rs.getString("version");
+                
+                while (rs.next()) {
+                    String decodedDataUsingUTF8;
+                    byte[] bytesData = rs.getBytes("PERMISSIONS");                                                            
+                try {
+		    decodedDataUsingUTF8 = decodedDataUsingUTF8 = new String(bytesData, "UTF-8"); 
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("uniCenta", "Chromis"); 
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("oPos", "Pos"); 
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("Touch friendly Point Of Sale", "The new face of Open Source POS");
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("2009-2014", "2015");
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("sourceforge.net/projects/unicentaopos", "www.chromis.co.uk");                    
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("openbravo", "chromis");
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com/", "uk/");
+                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com.", "uk.");  
+                    bytesData = decodedDataUsingUTF8.getBytes(Charset.forName("UTF-8"));
+                    
+                    SQL2 = "UPDATE ROLES SET PERMISSIONS = ? WHERE ID = ? ";
+                    stmt2 = con.prepareStatement(SQL2);
+                    stmt2.setString(2, rs.getString("ID"));
+                    stmt2.setBytes(1,bytesData);
+                    stmt2.executeUpdate();
+		} catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+		}
                 }
+
+                
+               SQL = "SELECT * FROM RESOURCES WHERE RESTYPE= 0 ";                
+                rs = stmt.executeQuery(SQL);
+                
+                while (rs.next()) {
+                    String decodedDataUsingUTF8;
+                    byte[] bytesData = rs.getBytes("CONTENT");                                                            
+                try {
+                    if (!"49".equals(rs.getString("ID"))) {               
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8 = new String(bytesData, "UTF-8");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("uniCenta", "Chromis");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("oPos", "Pos");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("oPOS", "Pos");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("Touch friendly Point Of Sale", "The new face of Open Source POS");                         
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("Touch Friendly Point Of Sale", "The new face of Open Source POS");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("2009-2014", "2015");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("sourceforge.net/projects/unicentaopos", "www.chromis.co.uk");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("openbravo", "chromis");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com/", "uk/");
+                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com.", "uk.");
+                        bytesData = decodedDataUsingUTF8.getBytes(Charset.forName("UTF-8"));
+                        SQL2 = "UPDATE RESOURCES SET CONTENT = ? WHERE ID = ? ";
+                        stmt2 = con.prepareStatement(SQL2);
+                        stmt2.setString(2, rs.getString("ID"));
+                        stmt2.setBytes(1,bytesData);
+                        stmt2.executeUpdate();
+                        }
+		} catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+		}
+                }  
+               
+
+                stmt2 = con.prepareStatement("DELETE FROM RESOURCES WHERE NAME = 'Printer.Ticket.Logo' ");
+                stmt2.executeUpdate();
+                
+                
+                
+                
+                
             } catch (Exception e) {
+                System.out.println("error picture");
+                System.out.println(e);
             }
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
             } else {
-                JOptionPane.showMessageDialog(null, "Converting your system to Chromis POS");
-                String db_user = (AppConfig2.getInstance2().getProperty("db.user"));
-                String db_url = (AppConfig2.getInstance2().getProperty("db.URL"));
-                String db_password = (AppConfig2.getInstance2().getProperty("db.password"));
-                if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
-                    AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
-                    db_password = cypher.decrypt(db_password.substring(6));
-                }
                 try {
                     ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
                     DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
-                    String changelog = "uk/chromis/pos/liquibase/jlupdatelog.xml";
+                    String changelog = "uk/chromis/pos/liquibase/removeunicenta.xml";
                     Liquibase liquibase = null;
                     Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
                     liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
@@ -270,9 +342,9 @@ public class JRootApp extends JPanel implements AppView {
             } else {
                 // Create or upgrade script exists.
                 if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), AppLocal.getIntString("message.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                    String db_user = (AppConfig2.getInstance().getProperty("db.user"));
-                    String db_url = (AppConfig2.getInstance().getProperty("db.URL"));
-                    String db_password = (AppConfig2.getInstance().getProperty("db.password"));
+                    db_user = (AppConfig2.getInstance().getProperty("db.user"));
+                    db_url = (AppConfig2.getInstance().getProperty("db.URL"));
+                    db_password = (AppConfig2.getInstance().getProperty("db.password"));
 
                     if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
                         // the password is encrypted
@@ -332,7 +404,7 @@ public class JRootApp extends JPanel implements AppView {
         }
 
         m_propsdb = m_dlSystem.getResourceAsProperties(AppConfig2.getInstance().getHost() + "/properties");
-     
+
         try {
             String sActiveCashIndex = m_propsdb.getProperty("activecash");
             Object[] valcash = sActiveCashIndex == null
