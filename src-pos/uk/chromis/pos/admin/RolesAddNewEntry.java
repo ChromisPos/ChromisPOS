@@ -108,7 +108,7 @@ public class RolesAddNewEntry extends javax.swing.JDialog {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         setTitle(bundle.getString("label.addnewentry")); // NOI18N
 
-        jButtonCancel.setIcon(new javax.swing.ImageIcon("D:\\Projects\\unicentaopos381\\src-beans\\com\\openbravo\\images\\cancel.png")); // NOI18N
+        jButtonCancel.setIcon(new javax.swing.ImageIcon("D:\\Projects\\Chromis V1.00\\src-beans\\uk\\chromis\\images\\cancel.png")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -145,7 +145,6 @@ public class RolesAddNewEntry extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText(bundle.getString("label.entrydisplayname")); // NOI18N
 
-        jButtonAdd.setIcon(new javax.swing.ImageIcon("D:\\Projects\\unicentaopos381\\src-beans\\com\\openbravo\\images\\ok.png")); // NOI18N
         jButtonAdd.setText("Add");
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,7 +163,7 @@ public class RolesAddNewEntry extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 316, Short.MAX_VALUE)
+                        .addGap(0, 317, Short.MAX_VALUE)
                         .addComponent(jButtonCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -184,7 +183,7 @@ public class RolesAddNewEntry extends javax.swing.JDialog {
                                     .addComponent(m_jEntryClassName, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

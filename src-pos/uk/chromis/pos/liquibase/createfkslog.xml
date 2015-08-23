@@ -20,7 +20,7 @@
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
 
-    <changeSet author="UnicentaOpos - John L" id="People Table FKs">
+    <changeSet author="Chromis Pos" id="People Table FKs">
 
         <addForeignKeyConstraint baseColumnNames="ROLE"
                                  constraintName ="PEOPLE_FK_1"
@@ -30,7 +30,7 @@
     </changeSet>
 
 
-    <changeSet author="UnicentaOpos - John L" id="Customers Table FKs">
+    <changeSet author="Chromis Pos" id="Customers Table FKs">
         <addForeignKeyConstraint baseColumnNames="TAXCATEGORY"
                                  constraintName ="CUSTOMERS_TAXCAT"
                                  referencedColumnNames = "ID"
@@ -38,7 +38,7 @@
                                  referencedTableName="TAXCUSTCATEGORIES"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Categories Table FKs">
+    <changeSet author="Chromis Pos" id="Categories Table FKs">
         <addForeignKeyConstraint baseColumnNames="PARENTID"
                                  constraintName ="CATEGORIES_FK_1"
                                  referencedColumnNames = "ID"
@@ -46,7 +46,7 @@
                                  referencedTableName="CATEGORIES"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Taxes Table FKs">
+    <changeSet author="Chromis Pos" id="Taxes Table FKs">
         <addForeignKeyConstraint baseColumnNames="CATEGORY"
                                  constraintName ="TAXES_CAT_FK"
                                  referencedColumnNames = "ID"
@@ -66,7 +66,7 @@
                                  referencedTableName="TAXES"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Attributevalue Table FKs">
+    <changeSet author="Chromis Pos" id="Attributevalue Table FKs">
         <addForeignKeyConstraint baseColumnNames="ATTRIBUTE_ID"
                                  constraintName ="ATTVAL_ATT"
                                  referencedColumnNames = "ID"
@@ -75,7 +75,7 @@
                                  referencedTableName="ATTRIBUTE"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Attributeuse Table FKs">
+    <changeSet author="Chromis Pos" id="Attributeuse Table FKs">
         <addForeignKeyConstraint baseColumnNames="ATTRIBUTESET_ID"
                                  constraintName ="ATTUSE_SET"
                                  referencedColumnNames = "ID"
@@ -90,7 +90,7 @@
                                  referencedTableName="ATTRIBUTE"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Attributesetinstance Table FKs">
+    <changeSet author="Chromis Pos" id="Attributesetinstance Table FKs">
         <addForeignKeyConstraint baseColumnNames="ATTRIBUTESET_ID"
                                  constraintName ="ATTSETINST_SET"
                                  referencedColumnNames = "ID"
@@ -99,7 +99,7 @@
                                  referencedTableName="ATTRIBUTESET"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Attributeinstance Table FKs">
+    <changeSet author="Chromis Pos" id="Attributeinstance Table FKs">
         <addForeignKeyConstraint baseColumnNames="ATTRIBUTESETINSTANCE_ID"
                                  constraintName ="ATTINST_SET"
                                  referencedColumnNames = "ID"
@@ -114,7 +114,7 @@
                                  referencedTableName="ATTRIBUTE"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Products Table FKs">
+    <changeSet author="Chromis Pos" id="Products Table FKs">
         <addForeignKeyConstraint baseColumnNames="CATEGORY"
                                  constraintName ="PRODUCTS_FK_1"
                                  referencedColumnNames = "ID"
@@ -134,7 +134,7 @@
                                  referencedTableName="ATTRIBUTESET"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Products_cat Table FKs">
+    <changeSet author="Chromis Pos" id="Products_cat Table FKs">
         <addForeignKeyConstraint baseColumnNames="PRODUCT"
                                  constraintName ="PRODUCTS_CAT_FK_1"
                                  referencedColumnNames = "ID"
@@ -142,7 +142,7 @@
                                  referencedTableName="PRODUCTS"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Products_com Table FKs">
+    <changeSet author="Chromis Pos" id="Products_com Table FKs">
         <addForeignKeyConstraint baseColumnNames="PRODUCT"
                                  constraintName ="PRODUCTS_COM_FK_1"
                                  referencedColumnNames = "ID"
@@ -156,7 +156,7 @@
                                  referencedTableName="PRODUCTS"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Stock level Table FKs">
+    <changeSet author="Chromis Pos" id="Stock level Table FKs">
         <addForeignKeyConstraint baseColumnNames="PRODUCT"
                                  constraintName ="STOCKLEVEL_PRODUCT"
                                  referencedColumnNames = "ID"
@@ -170,7 +170,7 @@
                                  referencedTableName="LOCATIONS"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Receipts Table FKs">
+    <changeSet author="Chromis Pos" id="Receipts Table FKs">
         <addForeignKeyConstraint baseColumnNames="MONEY"
                                  constraintName ="RECEIPTS_FK_MONEY"
                                  referencedColumnNames = "MONEY"
@@ -178,7 +178,7 @@
                                  referencedTableName="CLOSEDCASH"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="TICKETS Table FKs">    
+    <changeSet author="Chromis Pos" id="TICKETS Table FKs">    
         <addForeignKeyConstraint baseColumnNames="ID"
                                  constraintName ="TICKETS_FK_ID"
                                  referencedColumnNames = "ID"
@@ -198,7 +198,7 @@
                                  referencedTableName="CUSTOMERS"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="TICKETLINES Table FKs">        
+    <changeSet author="Chromis Pos" id="TICKETLINES Table FKs">        
         <addForeignKeyConstraint baseColumnNames="TICKET"
                                  constraintName ="TICKETLINES_FK_TICKET"
                                  referencedColumnNames = "ID"
@@ -224,7 +224,7 @@
                                  referencedTableName="TAXES"/>
     </changeSet>    
 
-    <changeSet author="UnicentaOpos - John L" id="PAYMENTS Table FKs">
+    <changeSet author="Chromis Pos" id="PAYMENTS Table FKs">
         <addForeignKeyConstraint baseColumnNames="RECEIPT"
                                  constraintName ="PAYMENTS_FK_RECEIPT"
                                  referencedColumnNames = "ID"
@@ -232,7 +232,7 @@
                                  referencedTableName="RECEIPTS"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="TAXLINES Table FKs">
+    <changeSet author="Chromis Pos" id="TAXLINES Table FKs">
         <addForeignKeyConstraint baseColumnNames="TAXID"
                                  constraintName ="TAXLINES_TAX"
                                  referencedColumnNames = "ID"
@@ -247,7 +247,7 @@
     </changeSet>
 
 
-    <changeSet author="UnicentaOpos - John L" id="Places Table FKs">
+    <changeSet author="Chromis Pos" id="Places Table FKs">
         <addForeignKeyConstraint baseColumnNames="FLOOR"
                                  constraintName ="PLACES_FK_1"
                                  referencedColumnNames = "ID"
@@ -255,7 +255,7 @@
                                  referencedTableName="FLOORS"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="reservation_CUSTOMERS Table FKs">
+    <changeSet author="Chromis Pos" id="reservation_CUSTOMERS Table FKs">
         <addForeignKeyConstraint baseColumnNames="ID"
                                  constraintName ="RES_CUST_FK_1"
                                  referencedColumnNames = "ID"
@@ -268,7 +268,7 @@
                                  baseTableName="RESERVATION_CUSTOMERS"
                                  referencedTableName="CUSTOMERS"/>
     </changeSet>
-    <changeSet author="UnicentaOpos - John L" id="LEAVES Table FKs">
+    <changeSet author="Chromis Pos" id="LEAVES Table FKs">
         <addForeignKeyConstraint baseColumnNames="PPLID"
                           constraintName ="LEAVES_PPLID"
                           referencedColumnNames = "ID"
@@ -276,7 +276,7 @@
                           referencedTableName="PEOPLE"/>
     </changeSet>
     
-    <changeSet author="UnicentaOpos - John L" id="Stock current Table FKs">
+    <changeSet author="Chromis Pos" id="Stock current Table FKs">
         <addForeignKeyConstraint baseColumnNames="PRODUCT"
                                  constraintName ="STOCKCURRENT_FK_1"
                                  referencedColumnNames = "ID"
@@ -296,7 +296,7 @@
                                  referencedTableName="LOCATIONS"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Stock diary Table FKs">
+    <changeSet author="Chromis Pos" id="Stock diary Table FKs">
         <addForeignKeyConstraint baseColumnNames="PRODUCT"
                                  constraintName ="STOCKDIARY_FK_1"
                                  referencedColumnNames = "ID"

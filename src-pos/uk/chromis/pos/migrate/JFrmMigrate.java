@@ -44,7 +44,7 @@ public class JFrmMigrate extends javax.swing.JFrame {
         initComponents();
         
         try {
-            this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/images/favicon.png")));
+            this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/images/smllogo.png")));
         } catch (IOException e) {
         }   
         setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Configuration"));

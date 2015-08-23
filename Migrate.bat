@@ -5,7 +5,7 @@ REM    http://www.chromis.co.uk
 REM
 REM    This file is part of Chromis POS
 REM
-REM     Chromis POS is free software: you can redistribute it and/or modify
+REM    Chromis POS is free software: you can redistribute it and/or modify
 REM    it under the terms of the GNU General Public License as published by
 REM    the Free Software Foundation, either version 3 of the License, or
 REM    (at your option) any later version.

@@ -141,7 +141,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(m_props.getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(m_props.getProperty("db.driver"), true, cloader).newInstance()));
 
-            changelog = "com/unicentaopos/pos/liquibase/migratelog.xml";
+            changelog = "uk/chromis/pos/liquibase/migratelog.xml";
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
@@ -174,7 +174,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(m_props.getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(m_props.getProperty("db.driver"), true, cloader).newInstance()));
 
-            changelog = "com/unicentaopos/pos/liquibase/createfkslog.xml";
+            changelog = "uk/chromis/pos/liquibase/createfkslog.xml";
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
@@ -1251,12 +1251,12 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         if ("MySQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/mysql-connector-java-5.1.26-bin.jar");
             jtxtDbDriver.setText("com.mysql.jdbc.Driver");
-            jtxtDbURL.setText("jdbc:mysql://localhost:3306/unicentaopos");
+            jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromis");
 
         } else if ("PostgreSQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/postgresql-9.2-1003.jdbc4.jar");
             jtxtDbDriver.setText("org.postgresql.Driver");
-            jtxtDbURL.setText("jdbc:postgresql://localhost:5432/unicentaopos");
+            jtxtDbURL.setText("jdbc:postgresql://localhost:5432/chromis");
         } else {
         }
     }//GEN-LAST:event_jNewdbTypeActionPerformed

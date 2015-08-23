@@ -5,7 +5,7 @@
 #
 #    This file is part of Chromis POS
 #
-#     Chromis POS is free software: you can redistribute it and/or modify
+#    Chromis POS is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -19,7 +19,7 @@
 #    along with Chromis POS.  If not, see <http:#www.gnu.org/licenses/>
 
 DIRNAME=`dirname $0`
-CP=$DIRNAME/unicentaopos.jar
+CP=$DIRNAME/chromispos.jar
 CP=$CP:$DIRNAME/locales/
 CP=$CP:$DIRNAME/lib/substance.jar
 java -cp $CP -Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel uk.chromis.pos.config.JFrmConfig

@@ -29,7 +29,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="0" pref="316" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="317" max="32767" attributes="0"/>
                       <Component id="jButtonCancel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jButtonAdd" min="-2" pref="106" max="-2" attributes="0"/>
@@ -57,7 +57,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="12" max="32767" attributes="0"/>
+              <EmptySpace pref="13" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -97,7 +97,7 @@
     <Component class="javax.swing.JButton" name="jButtonCancel">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="/uk/chromis/images/cancel.png"/>
+          <Image iconType="2" name="D:\Projects\Chromis V1.00\src-beans\uk\chromis\images\cancel.png"/>
         </Property>
       </Properties>
       <Events>
@@ -161,9 +161,6 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonAdd">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="D:\Projects\unicentaopos381\src-beans\com\openbravo\images\ok.png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Add"/>
       </Properties>
       <Events>

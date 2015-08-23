@@ -50,7 +50,7 @@ public class PropertyUtils {
     }
 
     private File getDefaultConfig() {
-        return new File(new File(".\\"), "unicentaopos.properties");
+        return new File(new File(".\\"), "chromis.properties");
     }
 
     private void load() {

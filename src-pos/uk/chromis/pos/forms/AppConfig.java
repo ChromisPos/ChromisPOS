@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 /**
  * Creation and Editing of stored settings
- * unicentaopos.properties
  *   
  * @author adrianromero
  */

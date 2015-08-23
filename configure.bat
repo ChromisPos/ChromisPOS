@@ -5,7 +5,7 @@ REM    http://www.chromis.co.uk
 REM
 REM    This file is part of Chromis POS
 REM
-REM     Chromis POS is free software: you can redistribute it and/or modify
+REM    Chromis POS is free software: you can redistribute it and/or modify
 REM    it under the terms of the GNU General Public License as published by
 REM    the Free Software Foundation, either version 3 of the License, or
 REM    (at your option) any later version.
@@ -20,7 +20,7 @@ REM    along with Chromis POS.  If not, see <http:REMwww.gnu.org/licenses/>
 
 
 set DIRNAME=%~dp0
-set CP="%DIRNAME%unicentaopos.jar"
+set CP="%DIRNAME%chromispos.jar"
 set CP=%CP%;"%DIRNAME%locales/"
 set CP=%CP%;"%DIRNAME%lib/substance.jar"
 start /B javaw -cp %CP% uk.chromis.pos.config.JFrmConfig

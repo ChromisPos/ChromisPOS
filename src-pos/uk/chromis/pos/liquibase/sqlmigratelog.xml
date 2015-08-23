@@ -20,7 +20,7 @@
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
     
-    <changeSet author="UnicentaOpos - John L" id="Create Applications Table">
+    <changeSet author="Chromis Pos" id="Create Applications Table">
         <createTable tableName="APPLICATIONS">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -34,7 +34,7 @@
         </createTable>                     
     </changeSet>    
 
-    <changeSet author="UnicentaOpos - John L" id="Create Attribute Table">
+    <changeSet author="Chromis Pos" id="Create Attribute Table">
         <createTable tableName="ATTRIBUTE">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -45,7 +45,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Create Attributeinstance Table">
+    <changeSet author="Chromis Pos" id="Create Attributeinstance Table">
         <createTable tableName="ATTRIBUTEINSTANCE">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -73,7 +73,7 @@
                                  referencedTableName="ATTRIBUTE"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Create Attributeset Table">
+    <changeSet author="Chromis Pos" id="Create Attributeset Table">
         <createTable tableName="ATTRIBUTESET">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -84,7 +84,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Create Attributesetinstance Table">
+    <changeSet author="Chromis Pos" id="Create Attributesetinstance Table">
         <createTable tableName="ATTRIBUTESETINSTANCE">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -103,7 +103,7 @@
                                  referencedTableName="ATTRIBUTESET"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Create Attributeuse Table">
+    <changeSet author="Chromis Pos" id="Create Attributeuse Table">
         <createTable tableName="ATTRIBUTEUSE">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -138,7 +138,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Create Attributevalue Table">
+    <changeSet author="Chromis Pos" id="Create Attributevalue Table">
         <createTable tableName="ATTRIBUTEVALUE">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -157,7 +157,7 @@
                                  referencedTableName="ATTRIBUTE"/>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Create BREAKS Table">
+    <changeSet author="Chromis Pos" id="Create BREAKS Table">
         <createTable tableName="BREAKS">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -172,7 +172,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="UnicentaOpos - John L" id="Create Categories Table">
+    <changeSet author="Chromis Pos" id="Create Categories Table">
         <createTable tableName="CATEGORIES">
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -202,7 +202,7 @@
         </createIndex>
     </changeSet>
  
-    <changeSet author="UnicentaOpos - John L" id="Create Closedcash Table">
+    <changeSet author="Chromis Pos" id="Create Closedcash Table">
         <createTable tableName="CLOSEDCASH">
             <column name="MONEY" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -251,7 +251,7 @@
     </createTable>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Customers Table">
+<changeSet author="Chromis Pos" id="Create Customers Table">
     <createTable tableName="CUSTOMERS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -317,7 +317,7 @@
     </createIndex>
 </changeSet> 
      
-<changeSet author="UnicentaOpos - John L" id="Create New dbpermissions Table">
+<changeSet author="Chromis Pos" id="Create New dbpermissions Table">
     <createTable tableName="DBPERMISSIONS">
         <column name="CLASSNAME" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -340,7 +340,7 @@
     </createIndex> 
 </changeSet>   
      
-<changeSet author="UnicentaOpos - John L" id="Create Floors Table">
+<changeSet author="Chromis Pos" id="Create Floors Table">
     <createTable tableName="FLOORS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -358,7 +358,7 @@
     </createIndex>
 </changeSet>
       
-<changeSet author="UnicentaOpos - John L" id="Create LEAVES Table">
+<changeSet author="Chromis Pos" id="Create LEAVES Table">
     <createTable tableName="LEAVES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -385,7 +385,7 @@
                              referencedTableName="PEOPLE"/>
 </changeSet>
       
-<changeSet author="UnicentaOpos - John L" id="Create Locations Table">
+<changeSet author="Chromis Pos" id="Create Locations Table">
     <createTable tableName="LOCATIONS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -403,7 +403,7 @@
     </createIndex>
 </changeSet>    
       
-<changeSet author="UnicentaOpos - John L" id="Create Moorers Table">
+<changeSet author="Chromis Pos" id="Create Moorers Table">
     <createTable tableName="MOORERS">
         <column name="VESSELNAME" type="varchar(255)"/>
         <column name="SIZE" type="int"/>
@@ -414,7 +414,7 @@
     </createTable>
 </changeSet>     
       
-<changeSet author="UnicentaOpos - John L" id="Create PAYMENTS Table">
+<changeSet author="Chromis Pos" id="Create PAYMENTS Table">
     <createTable tableName="PAYMENTS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -449,7 +449,7 @@
     </createIndex>
 </changeSet>      
       
-<changeSet author="UnicentaOpos - John L" id="Create People Table">
+<changeSet author="Chromis Pos" id="Create People Table">
     <createTable tableName="PEOPLE">
         <column name="ID" type="varchar(255)">
             <constraints 
@@ -485,7 +485,7 @@
     </createIndex>
 </changeSet>      
        
-<changeSet author="UnicentaOpos - John L" id="Create Places Table">
+<changeSet author="Chromis Pos" id="Create Places Table">
     <createTable tableName="PLACES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -524,7 +524,7 @@
 </changeSet>       
          
  
-<changeSet author="UnicentaOpos - John L" id="Create Products Table">
+<changeSet author="Chromis Pos" id="Create Products Table">
     <createTable tableName="PRODUCTS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -629,7 +629,7 @@
     </createIndex>
 </changeSet>
     
-<changeSet author="UnicentaOpos - John L" id="Create Products_cat Table">
+<changeSet author="Chromis Pos" id="Create Products_cat Table">
     <createTable tableName="PRODUCTS_CAT">
         <column name="PRODUCT" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -649,7 +649,7 @@
     </createIndex>
 </changeSet>         
                
-<changeSet author="UnicentaOpos - John L" id="Create Products_com Table">
+<changeSet author="Chromis Pos" id="Create Products_com Table">
     <createTable tableName="PRODUCTS_COM">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -682,7 +682,7 @@
     </createIndex>
 </changeSet>                   
                          
-<changeSet author="UnicentaOpos - John L" id="Create Receipts Table">
+<changeSet author="Chromis Pos" id="Create Receipts Table">
     <createTable tableName="RECEIPTS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -709,7 +709,7 @@
     </createIndex>
 </changeSet>            
 
-<changeSet author="UnicentaOpos - John L" id="Create reservation_CUSTOMERS Table">
+<changeSet author="Chromis Pos" id="Create reservation_CUSTOMERS Table">
     <createTable tableName="RESERVATION_CUSTOMERS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -732,7 +732,7 @@
                              referencedTableName="CUSTOMERS"/>
 </changeSet> 
                                                                                           
-<changeSet author="UnicentaOpos - John L" id="Create reservations Table">
+<changeSet author="Chromis Pos" id="Create reservations Table">
     <createTable tableName="RESERVATIONS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -762,7 +762,7 @@
     </createIndex>
 </changeSet>
                     
-<changeSet author="UnicentaOpos - John L" id="Create Resources Table">
+<changeSet author="Chromis Pos" id="Create Resources Table">
     <createTable tableName="RESOURCES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -783,7 +783,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Roles Table">
+<changeSet author="Chromis Pos" id="Create Roles Table">
     <createTable tableName="ROLES">
         <column name=	"ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -795,7 +795,7 @@
     </createTable>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create SharedTICKETS Table">
+<changeSet author="Chromis Pos" id="Create SharedTICKETS Table">
     <createTable tableName="SHAREDTICKETS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -811,7 +811,7 @@
     </createTable>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create SHIFT_BREAKS Table">
+<changeSet author="Chromis Pos" id="Create SHIFT_BREAKS Table">
     <createTable tableName="SHIFT_BREAKS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -829,7 +829,7 @@
     </createTable>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="SHIFTS Table">
+<changeSet author="Chromis Pos" id="SHIFTS Table">
     <createTable tableName="SHIFTS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -842,7 +842,7 @@
     </createTable>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Stock current Table">
+<changeSet author="Chromis Pos" id="Create Stock current Table">
     <createTable tableName="STOCKCURRENT">
         <column name="LOCATION" type="varchar(255)">
             <constraints nullable="false"/>
@@ -883,7 +883,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Stock diary Table">
+<changeSet author="Chromis Pos" id="Create Stock diary Table">
     <createTable tableName="STOCKDIARY">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -934,7 +934,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Stock level Table">
+<changeSet author="Chromis Pos" id="Create Stock level Table">
     <createTable tableName="STOCKLEVEL">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -966,7 +966,7 @@
                              referencedTableName="LOCATIONS"/>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TaxCATEGORIES Table">
+<changeSet author="Chromis Pos" id="Create TaxCATEGORIES Table">
     <createTable tableName="TAXCATEGORIES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -983,7 +983,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TaxCustCategories Table">
+<changeSet author="Chromis Pos" id="Create TaxCustCategories Table">
     <createTable tableName="TAXCUSTCATEGORIES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -1000,7 +1000,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Taxes Table">
+<changeSet author="Chromis Pos" id="Create Taxes Table">
     <createTable tableName="TAXES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -1047,7 +1047,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TAXLINES Table">
+<changeSet author="Chromis Pos" id="Create TAXLINES Table">
     <createTable tableName="TAXLINES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -1079,7 +1079,7 @@
                              referencedTableName="RECEIPTS"/>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create THIRDPARTIES Table">
+<changeSet author="Chromis Pos" id="Create THIRDPARTIES Table">
     <createTable tableName="THIRDPARTIES">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -1115,7 +1115,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETLINES Table">
+<changeSet author="Chromis Pos" id="Create TICKETLINES Table">
     <createTable tableName="TICKETLINES">
         <column name="TICKET" type="varchar(255)">
             <constraints nullable="false"/>
@@ -1164,7 +1164,7 @@
                              referencedTableName="TAXES"/>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETS Table">
+<changeSet author="Chromis Pos" id="Create TICKETS Table">
     <createTable tableName="TICKETS">
         <column name="ID" type="varchar(255)">
             <constraints primaryKey="true" nullable="false"/>
@@ -1209,7 +1209,7 @@
     </createIndex>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Lineremoved Table">
+<changeSet author="Chromis Pos" id="Create Lineremoved Table">
     <createTable tableName="LINEREMOVED">
         <column name="NAME" type="varchar(255)"/>
         <column name="TICKETID" type="varchar(255)"/>
@@ -1221,7 +1221,7 @@
     </createTable>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Add column to Lineremoved Table" dbms="hypersql, hsqldb">
+<changeSet author="Chromis Pos" id="Add column to Lineremoved Table" dbms="hypersql, hsqldb">
     <preConditions onFail="MARK_RAN">
         <not>
             <columnExists columnName="REMOVEDDATE" tableName="LINEREMOVED"/>
@@ -1232,7 +1232,7 @@
 </changeSet>
 
 
-<changeSet author="UnicentaOpos - John L" id="Add column to Lineremoved Table" dbms="oracle, postgresql, mysql" >
+<changeSet author="Chromis Pos" id="Add column to Lineremoved Table" dbms="oracle, postgresql, mysql" >
     <preConditions onFail="MARK_RAN">
         <not>
             <columnExists columnName="REMOVEDDATE" tableName="LINEREMOVED"/>
@@ -1242,7 +1242,7 @@
 
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create Draweropened Table">
+<changeSet author="Chromis Pos" id="Create Draweropened Table">
     <createTable tableName="DRAWEROPENED">
         <column name="OPENDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP"/>
         <column name="NAME" type="varchar(255)"/>
@@ -1250,7 +1250,7 @@
     </createTable>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="postgresql, hypersql, hsqldb">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="postgresql, hypersql, hsqldb">
     <preConditions onFail="MARK_RAN">
         <not>
             <sequenceExists sequenceName="TICKETSNUM"/>
@@ -1260,7 +1260,7 @@
     <sql>CREATE SEQUENCE TICKETSNUM START WITH 1</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="postgresql, hypersql, hsqldb">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence REFUND" dbms="postgresql, hypersql, hsqldb">
     <preConditions onFail="MARK_RAN">
         <not>
             <sequenceExists sequenceName="TICKETSNUM_REFUND"/>
@@ -1270,7 +1270,7 @@
     <sql>CREATE SEQUENCE TICKETSNUM_REFUND START WITH 1</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="postgresql, hypersql, hsqldb">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM PAYMENT Sequence" dbms="postgresql, hypersql, hsqldb">
     <preConditions onFail="MARK_RAN">
         <not>
             <sequenceExists sequenceName="TICKETSNUM_PAYMENT"/>
@@ -1280,7 +1280,7 @@
     <sql>CREATE SEQUENCE TICKETSNUM_PAYMENT START WITH 1</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="postgresql, hypersql, hsqldb">
+<changeSet author="Chromis Pos" id="Create pickupnumber Sequence" dbms="postgresql, hypersql, hsqldb">
     <preConditions onFail="MARK_RAN">
         <not>
             <sequenceExists sequenceName="PICKUP_NUMBER"/>
@@ -1290,7 +1290,7 @@
     <sql>CREATE SEQUENCE PICKUP_NUMBER START WITH 1</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="derby">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="derby">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM"/>
@@ -1301,7 +1301,7 @@
         INSERT INTO TICKETSNUM VALUES (DEFAULT)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="derby">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence REFUND" dbms="derby">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM_REFUND"/>
@@ -1312,7 +1312,7 @@
         INSERT INTO TICKETSNUM_REFUND VALUES (DEFAULT)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="derby">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM PAYMENT Sequence" dbms="derby">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM_PAYMENT"/>
@@ -1323,7 +1323,7 @@
         INSERT INTO TICKETSNUM_PAYMENT VALUES (DEFAULT)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="derby">
+<changeSet author="Chromis Pos" id="Create pickupnumber Sequence" dbms="derby">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="PICKUP_NUMBER"/>
@@ -1334,7 +1334,7 @@
         INSERT INTO PICKUP_NUMBER VALUES (DEFAULT)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="oracle">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="oracle">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM"/>
@@ -1345,7 +1345,7 @@
         INSERT INTO TICKETSNUM VALUES(1)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="oracle">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence REFUND" dbms="oracle">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM_REFUND"/>
@@ -1356,7 +1356,7 @@
         INSERT INTO TICKETSNUM_REFUND VALUES(1)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="oracle">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM PAYMENT Sequence" dbms="oracle">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM_PAYMENT"/>
@@ -1367,7 +1367,7 @@
         INSERT INTO TICKETSNUM_PAYMENT VALUES(1)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="oracle">
+<changeSet author="Chromis Pos" id="Create pickupnumber Sequence" dbms="oracle">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="PICKUP_NUMBER"/>
@@ -1378,7 +1378,7 @@
         INSERT INTO PICKUP_NUMBER VALUES(1))</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence" dbms="mysql">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="mysql">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM"/>
@@ -1389,7 +1389,7 @@
         INSERT INTO TICKETSNUM VALUES(1)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM Sequence REFUND" dbms="mysql">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence REFUND" dbms="mysql">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM_REFUND"/>
@@ -1400,7 +1400,7 @@
         INSERT INTO TICKETSNUM_REFUND VALUES(1)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create TICKETSNUM PAYMENT Sequence" dbms="mysql">
+<changeSet author="Chromis Pos" id="Create TICKETSNUM PAYMENT Sequence" dbms="mysql">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="TICKETSNUM_PAYMENT"/>
@@ -1411,7 +1411,7 @@
         INSERT INTO TICKETSNUM_PAYMENT VALUES(1)</sql>
 </changeSet>
 
-<changeSet author="UnicentaOpos - John L" id="Create pickupnumber Sequence" dbms="mysql">
+<changeSet author="Chromis Pos" id="Create pickupnumber Sequence" dbms="mysql">
     <preConditions onFail="MARK_RAN">
         <not>
             <tableExists tableName="PICKUP_NUMBER"/>
