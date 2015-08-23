@@ -2035,7 +2035,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         });
 
         jbtnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/logout.png"))); // NOI18N
-        jbtnLogout.setToolTipText("Reprint Last Ticket");
+        jbtnLogout.setToolTipText("Logout");
         jbtnLogout.setFocusPainted(false);
         jbtnLogout.setFocusable(false);
         jbtnLogout.setMargin(new java.awt.Insets(0, 4, 0, 4));
