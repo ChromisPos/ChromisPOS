@@ -37,12 +37,15 @@ public class JPanelConfigERP extends javax.swing.JPanel implements PanelConfig {
     public JPanelConfigERP() {
         initComponents();
         
+        
         jTextField1.getDocument().addDocumentListener(dirty);
         jTextField2.getDocument().addDocumentListener(dirty);
         jtxtId.getDocument().addDocumentListener(dirty);
         jtxtName.getDocument().addDocumentListener(dirty);
         jtxtPassword.getDocument().addDocumentListener(dirty);
         jtxtUrl.getDocument().addDocumentListener(dirty);
+        
+        
     }
     
     /**

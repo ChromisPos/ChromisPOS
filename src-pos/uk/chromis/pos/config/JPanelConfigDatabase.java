@@ -53,6 +53,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         
         initComponents();
         
+        
         jtxtDbDriverLib.getDocument().addDocumentListener(dirty);
         jtxtDbDriver.getDocument().addDocumentListener(dirty);
         jtxtDbURL.getDocument().addDocumentListener(dirty);
@@ -61,7 +62,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         jbtnDbDriverLib.addActionListener(new DirectoryEvent(jtxtDbDriverLib));
         jcboDBDriver.addActionListener(dirty);
 
-//  JG 31 Aug 13 - Added DB Defaults
+
         jcboDBDriver.addItem("Apache Derby Embedded");
         jcboDBDriver.addItem("Apache Derby Client/Server");
         jcboDBDriver.addItem("HSQLDB");
@@ -69,6 +70,9 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         jcboDBDriver.addItem("Oracle 11g Express");
         jcboDBDriver.addItem("PostgreSQL");
         
+      
+        
+       
     }
 
     /**

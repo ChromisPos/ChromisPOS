@@ -424,6 +424,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         for (String name : printernames) {
             cboPrinters.addItem(name);
         }
+        
+        
+        
     }
 
     /**

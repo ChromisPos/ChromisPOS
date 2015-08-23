@@ -62,6 +62,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jUpdatedbprice.addActionListener(dirty);
         jChangeSalesScreen.addActionListener(dirty);
         jConsolidate.addActionListener(dirty);
+        
+        
     }
 
     /**

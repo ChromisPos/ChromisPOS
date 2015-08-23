@@ -39,19 +39,15 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -67,11 +63,9 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import uk.chromis.convert.*;
 
-/**
- *
- * @author adrianromero
- */
+
 public class JRootApp extends JPanel implements AppView {
 
     private AppProperties m_props;
@@ -98,16 +92,12 @@ public class JRootApp extends JPanel implements AppView {
     private Connection con;
     private ResultSet rs;
     private Statement stmt;
-    private PreparedStatement stmt2;
     private String SQL;
-    private String SQL2;
     private String roles;
     private DatabaseMetaData md;
     private SimpleDateFormat formatter;
     private MessageInf msg;
-    private String db_user;
-    private String db_url;
-    private String db_password;
+
 
     static {
         initOldClasses();
@@ -170,159 +160,15 @@ public class JRootApp extends JPanel implements AppView {
      */
     public boolean initApp(AppProperties props) {
 
+        Conversion convert = new Conversion();
+        convert.init();
+
         m_props = props;
         m_jPanelDown.setVisible(!(Boolean.valueOf(AppConfig2.getInstance().getProperty("till.hideinfo"))));
 
         // support for different component orientation languages.
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-// ******************************************************************************************************************************************
-        // lets get rid of unicenta properties
-        File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
-        db_user = (AppConfig2.getInstance2().getProperty("db.user"));
-        db_url = (AppConfig2.getInstance2().getProperty("db.URL"));
-        db_password = (AppConfig2.getInstance2().getProperty("db.password"));
-        if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
-            AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
-            db_password = cypher.decrypt(db_password.substring(6));
-        }
-
-        if (file.exists()) {   
-            try {
-            session = AppViewConnection.createSession(m_props);
-                }
-                    catch (BasicException e) {
-                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, e.getMessage(), e));
-            return false;
-        }
-            
-            m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
-
-            String sDBVersion = readDataBaseVersion();
-            try {
-                ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
-                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
-
-                Class.forName(AppConfig2.getInstance2().getProperty("db.driver"));
-
-                con = DriverManager.getConnection(db_url, db_user, db_password);
-                stmt = (Statement) con.createStatement();                
-                SQL = "SELECT * FROM ROLES";                
-                rs = stmt.executeQuery(SQL);
-                
-                while (rs.next()) {
-                    String decodedDataUsingUTF8;
-                    byte[] bytesData = rs.getBytes("PERMISSIONS");                                                            
-                try {
-		    decodedDataUsingUTF8 = decodedDataUsingUTF8 = new String(bytesData, "UTF-8"); 
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("uniCenta", "Chromis"); 
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("oPos", "Pos"); 
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("Touch friendly Point Of Sale", "The new face of Open Source POS");
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("2009-2014", "2015");
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("sourceforge.net/projects/unicentaopos", "www.chromis.co.uk");                    
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("openbravo", "chromis");
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com/", "uk/");
-                    decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com.", "uk.");  
-                    bytesData = decodedDataUsingUTF8.getBytes(Charset.forName("UTF-8"));
-                    
-                    SQL2 = "UPDATE ROLES SET PERMISSIONS = ? WHERE ID = ? ";
-                    stmt2 = con.prepareStatement(SQL2);
-                    stmt2.setString(2, rs.getString("ID"));
-                    stmt2.setBytes(1,bytesData);
-                    stmt2.executeUpdate();
-		} catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-		}
-                }
-
-                
-               SQL = "SELECT * FROM RESOURCES WHERE RESTYPE= 0 ";                
-                rs = stmt.executeQuery(SQL);
-                
-                while (rs.next()) {
-                    String decodedDataUsingUTF8;
-                    byte[] bytesData = rs.getBytes("CONTENT");                                                            
-                try {
-                    if (!"49".equals(rs.getString("ID"))) {               
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8 = new String(bytesData, "UTF-8");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("uniCenta", "Chromis");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("oPos", "Pos");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("oPOS", "Pos");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("Touch friendly Point Of Sale", "The new face of Open Source POS");                         
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("Touch Friendly Point Of Sale", "The new face of Open Source POS");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("2009-2014", "2015");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("sourceforge.net/projects/unicentaopos", "www.chromis.co.uk");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("openbravo", "chromis");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com/", "uk/");
-                        decodedDataUsingUTF8 = decodedDataUsingUTF8.replaceAll("com.", "uk.");
-                        bytesData = decodedDataUsingUTF8.getBytes(Charset.forName("UTF-8"));
-                        SQL2 = "UPDATE RESOURCES SET CONTENT = ? WHERE ID = ? ";
-                        stmt2 = con.prepareStatement(SQL2);
-                        stmt2.setString(2, rs.getString("ID"));
-                        stmt2.setBytes(1,bytesData);
-                        stmt2.executeUpdate();
-                        }
-		} catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-		}
-                }  
-               
-
-                stmt2 = con.prepareStatement("DELETE FROM RESOURCES WHERE NAME = 'Printer.Ticket.Logo' ");
-                stmt2.executeUpdate();
-                
-                
-                
-                
-                
-            } catch (Exception e) {
-                System.out.println("error picture");
-                System.out.println(e);
-            }
-            if (getDbVersion().equals("x")) {
-                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
-                        AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
-            } else {
-                try {
-                    ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
-                    DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
-                    String changelog = "uk/chromis/pos/liquibase/removeunicenta.xml";
-                    Liquibase liquibase = null;
-                    Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
-                    liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
-                    liquibase.update("implement");
-                } catch (DatabaseException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (LiquibaseException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    if (con != null) {
-                        try {
-                            con.rollback();
-                            con.close();
-                        } catch (SQLException e) {
-                        }
-                    }
-                }
-            }
-
-            boolean success = file.renameTo(new File(System.getProperty("user.home"), "chromispos.properties"));
-            System.out.println("File renamed");
-            System.exit(0);
-
-        }
-
-// ******************************************************************************************************************************************        
         // Database start
         try {
             session = AppViewConnection.createSession(m_props);
@@ -342,9 +188,9 @@ public class JRootApp extends JPanel implements AppView {
             } else {
                 // Create or upgrade script exists.
                 if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), AppLocal.getIntString("message.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                    db_user = (AppConfig2.getInstance().getProperty("db.user"));
-                    db_url = (AppConfig2.getInstance().getProperty("db.URL"));
-                    db_password = (AppConfig2.getInstance().getProperty("db.password"));
+                   String db_user = (AppConfig2.getInstance().getProperty("db.user"));
+                   String db_url = (AppConfig2.getInstance().getProperty("db.URL"));
+                   String db_password = (AppConfig2.getInstance().getProperty("db.password"));
 
                     if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
                         // the password is encrypted
@@ -355,10 +201,8 @@ public class JRootApp extends JPanel implements AppView {
                     try {
                         ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance().getProperty("db.driverlib")).toURI().toURL()});
                         DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
-
                         String changelog = "uk/chromis/pos/liquibase/chromis.xml";
                         Liquibase liquibase = null;
-
                         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
                         liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                         liquibase.update("implement");
@@ -487,7 +331,7 @@ public class JRootApp extends JPanel implements AppView {
                 jLabel1.setText("<html><center>Chromis POS - The New Face of Open Source POS<br>"
                         + "Copyright \u00A9 2015 Chromis <br>"
                         + "<br>"
-                        + "http://www.chromis.co.uk/<br>"
+                        + "http://www.chromis.co.uk<br>"
                         + "<br>"
                         + " Chromis POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>"
                         + "<br>"
@@ -549,9 +393,7 @@ public class JRootApp extends JPanel implements AppView {
         if (closeAppView()) {
 
             // success. continue with the shut down
-            // apago el visor
-            m_TP.getDeviceDisplay().clearVisor();
-            // me desconecto de la base de datos.
+            m_TP.getDeviceDisplay().clearVisor();           
             session.close();
 
             // Download Root form
@@ -701,8 +543,7 @@ public class JRootApp extends JPanel implements AppView {
                         bf = new BeanFactoryObj(bean);
                     }
 
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
-                    // ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {                  
                     throw new BeanFactoryException(e);
                 }
             }
@@ -809,9 +650,9 @@ public class JRootApp extends JPanel implements AppView {
                 btn.setFocusPainted(false);
                 btn.setFocusable(false);
                 btn.setRequestFocusEnabled(false);
-                btn.setMaximumSize(new Dimension(110, 60));
-                btn.setPreferredSize(new Dimension(110, 60));
-                btn.setMinimumSize(new Dimension(110, 60));
+                btn.setMaximumSize(new Dimension(130, 60));
+                btn.setPreferredSize(new Dimension(130, 60));
+                btn.setMinimumSize(new Dimension(130, 60));
                 btn.setHorizontalAlignment(SwingConstants.CENTER);
                 btn.setHorizontalTextPosition(AbstractButton.CENTER);
                 btn.setVerticalTextPosition(AbstractButton.BOTTOM);
@@ -1036,8 +877,8 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/chromis.png"))); // NOI18N
-        jLabel1.setText("<html><center>Chromis POS - The future of open source POS<br>" +
-            "Copyright \u00A9 2009-2014 uniCenta <br>" +
+        jLabel1.setText("<html><center>Chromis POS - The New Face of open source POS<br>" +
+            "Copyright \u00A9 2015 Chromis <br>" +
             "http://www.chromis.co.uk<br>" +
             "<br>" +
             "Chromis POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +
@@ -1099,20 +940,18 @@ public class JRootApp extends JPanel implements AppView {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .add(m_txtKeys, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(m_jClose, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)))
-                .addContainerGap())
+                .add(m_txtKeys, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(287, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .add(0, 0, Short.MAX_VALUE)
+                .add(m_jClose, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(19, 19, 19))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .add(m_txtKeys, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(m_jClose, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -1122,9 +961,9 @@ public class JRootApp extends JPanel implements AppView {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jScrollPane1))
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 171, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(104, 104, 104)
                 .add(m_jLogonName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, Short.MAX_VALUE))

@@ -73,6 +73,8 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         jcboCardReader.addItem("Generic");
         jcboCardReader.addItem("Intelligent");
         jcboCardReader.addItem("Keyboard");
+        
+        
     }
     
     /**

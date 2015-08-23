@@ -86,7 +86,9 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
         jcboTime.addItem(DEFAULT_VALUE);
         
         jcboDatetime.addItem(DEFAULT_VALUE);
-               
+         
+        
+        
     }
 
     private void addLocale(List<Locale> ll, Locale l) {

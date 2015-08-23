@@ -75,7 +75,7 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
             add(m_rootapp, BorderLayout.CENTER);            
  
             try {
-               this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/images/poweredby.png")));
+               this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/images/smllogo.png")));
             } catch (IOException e) {
             }   
             setTitle(AppLocal.APP_NAME + " - V" + AppLocal.APP_VERSION);               
