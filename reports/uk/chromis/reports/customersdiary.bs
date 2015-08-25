@@ -32,8 +32,6 @@ report.setSentence("SELECT " +
         "FROM RECEIPTS, TICKETS, CUSTOMERS, PAYMENTS " +
         "WHERE RECEIPTS.ID = TICKETS.ID AND RECEIPTS.ID = PAYMENTS.RECEIPT " +
             "AND TICKETS.CUSTOMER = CUSTOMERS.ID " +
-// JG AUG 2014 
-//            "AND (PAYMENTS.PAYMENT = 'debt' OR PAYMENTS.PAYMENT = 'debtpaid') " +
             "AND ?(QBF_FILTER) " +
         "ORDER BY CUSTOMERS.NAME, RECEIPTS.DATENEW DESC");
 
@@ -43,7 +41,6 @@ report.addParameter("RECEIPTS.DATENEW");
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
-// JG - 8 Jan 14 paramdates.setEndDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
 report.addQBFFilter(paramdates);

@@ -28,27 +28,27 @@ report.setResourceBundle("uk/chromis/reports/productsalesprofit_messages");
 
   
 
-report.setSentence("SELECT products.REFERENCE, " +
-       "products.NAME, " +
-       "products.PRICEBUY, " +
-       "products.PRICESELL, " +
-       "SUM(ticketlines.UNITS) AS SOLD_UNITS, " +
-       "SUM(ticketlines.UNITS * products.PRICEBUY) AS COST_VALUE, " +
-       "SUM(ticketlines.UNITS * products.PRICESELL) AS EXPECTED_SALES_VALUE, " +
-       "SUM(ticketlines.PRICE) AS ACTUAL_SALES_VALUE, " +
-         "SUM(ticketlines.UNITS * products.PRICESELL) " +
-       "- SUM(ticketlines.UNITS * products.PRICEBUY) " +
+report.setSentence("SELECT PRODUCTS.REFERENCE, " +
+       "PRODUCTS.NAME, " +
+       "PRODUCTS.PRICEBUY, " +
+       "PRODUCTS.PRICESELL, " +
+       "SUM(TICKETLINES.UNITS) AS SOLD_UNITS, " +
+       "SUM(TICKETLINES.UNITS * PRODUCTS.PRICEBUY) AS COST_VALUE, " +
+       "SUM(TICKETLINES.UNITS * PRODUCTS.PRICESELL) AS EXPECTED_SALES_VALUE, " +
+       "SUM(TICKETLINES.PRICE) AS ACTUAL_SALES_VALUE, " +
+         "SUM(TICKETLINES.UNITS * PRODUCTS.PRICESELL) " +
+       "- SUM(TICKETLINES.UNITS * PRODUCTS.PRICEBUY) " +
           "AS EXPECTED_PROFIT, " +
-       "SUM(ticketlines.PRICE) - SUM(ticketlines.UNITS * products.PRICEBUY) " +
+       "SUM(TICKETLINES.PRICE) - SUM(TICKETLINES.UNITS * PRODUCTS.PRICEBUY) " +
           "AS ACTUAL_PROFIT " +
-  "FROM (ticketlines ticketlines " +
-       "INNER JOIN receipts receipts " +
-           "ON (ticketlines.TICKET = receipts.ID)) " +
-       "LEFT OUTER JOIN products products " +
-          "ON (ticketlines.PRODUCT = products.ID) " +
+  "FROM (TICKETLINES TICKETLINES " +
+       "INNER JOIN RECEIPTS RECEIPTS " +
+           "ON (TICKETLINES.TICKET = RECEIPTS.ID)) " +
+       "LEFT OUTER JOIN PRODUCTS PRODUCTS " +
+          "ON (TICKETLINES.PRODUCT = PRODUCTS.ID) " +
     "WHERE ?(QBF_FILTER) " +
-    "GROUP BY ticketlines.PRODUCT " +
-    "ORDER BY products.REFERENCE ASC");
+    "GROUP BY TICKETLINES.PRODUCT " +
+    "ORDER BY PRODUCTS.REFERENCE ASC");
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
@@ -56,7 +56,6 @@ report.addParameter("RECEIPTS.DATENEW");
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
-// JG - 8 Jan 14 paramdates.setEndDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
 report.addQBFFilter(paramdates);

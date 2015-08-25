@@ -26,22 +26,22 @@ report.setSentence("SELECT " +
             "CLOSEDCASH.HOST, " +
             "CLOSEDCASH.DATESTART, " +
             "CLOSEDCASH.DATEEND, " +
-            "taxes.NAME AS TAXNAME, " +
-            "products.REFERENCE, " +
-            "products.NAME, " +
+            "TAXES.NAME AS TAXNAME, " +
+            "PRODUCTS.REFERENCE, " +
+            "PRODUCTS.NAME, " +
             "PRODUCTS.PRICESELL, " +
-            "Sum(ticketlines.UNITS) AS UNITS, " +
+            "Sum(TICKETLINES.UNITS) AS UNITS, " +
             "Sum((TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS TOTAL " +
-        "FROM (taxes INNER JOIN " +
-            "((products INNER JOIN " +
-            "(TICKETS INNER JOIN ticketlines ON TICKETS.ID = ticketlines.TICKET) " +
-            "ON products.ID = ticketlines.PRODUCT) " +
-            "INNER JOIN receipts ON TICKETS.ID = receipts.ID) " +
-            "ON taxes.ID = ticketlines.TAXID) INNER JOIN closedcash " +
-            "ON receipts.MONEY = closedcash.MONEY " +
+        "FROM (TAXES INNER JOIN " +
+            "((PRODUCTS INNER JOIN " +
+            "(TICKETS INNER JOIN TICKETLINES ON TICKETS.ID = TICKETLINES.TICKET) " +
+            "ON PRODUCTS.ID = TICKETLINES.PRODUCT) " +
+            "INNER JOIN RECEIPTS ON TICKETS.ID = RECEIPTS.ID) " +
+            "ON TAXES.ID = TICKETLINES.TAXID) INNER JOIN CLOSEDCASH " +
+            "ON RECEIPTS.MONEY = CLOSEDCASH.MONEY " +
         "WHERE ?(QBF_FILTER) " +
-        "GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.DATESTART, CLOSEDCASH.DATEEND, taxes.NAME, products.REFERENCE, products.NAME, PRODUCTS.PRICESELL " +
-        "ORDER BY CLOSEDCASH.HOST, taxes.NAME, products.NAME");
+        "GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.DATESTART, CLOSEDCASH.DATEEND, TAXES.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.PRICESELL " +
+        "ORDER BY CLOSEDCASH.HOST, TAXES.NAME, PRODUCTS.NAME");
 
 report.addParameter("CLOSEDCASH.DATEEND");
 report.addParameter("CLOSEDCASH.DATEEND");
@@ -49,7 +49,6 @@ report.addParameter("CLOSEDCASH.DATEEND");
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
-// JG - 8 Jan 14 paramdates.setEndDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
 report.addQBFFilter(paramdates);

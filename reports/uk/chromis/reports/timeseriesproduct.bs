@@ -25,7 +25,6 @@ report.setResourceBundle("uk/chromis/reports/timeseriesproduct_messages");
 report.setSentence("SELECT " +
         "CATEGORIES.NAME AS CATNAME, " +
         "PRODUCTS.NAME AS PRODUCT, " +
-//        "PRODUCTS.IMAGE AS PRODIMG, " +
         "PRODUCTS.REFERENCE AS REF, " +
         "PRODUCTS.CODE AS BARCODE, " +
         "PRODUCTS.PRICEBUY, " +
@@ -45,15 +44,12 @@ report.setSentence("SELECT " +
     "GROUP BY CATEGORIES.NAME, PRODUCTS.NAME, PRODUCTS.REFERENCE,PRODUCTS.CODE,PRODUCTS.PRICEBUY, " +
     "PRODUCTS.PRICESELL, PRODUCTS.STOCKCOST,PRODUCTS.STOCKVOLUME, TAXCATEGORIES.ID, TAXCATEGORIES.NAME, PEOPLE.NAME, RECEIPTS.DATENEW " +
     "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME, RECEIPTS.DATENEW, PEOPLE.NAME");
-//    "GROUP BY CATEGORIES.NAME, PRODUCTS.NAME, PRODUCTS.IMAGE, PRODUCTS.REFERENCE,PRODUCTS.CODE,PRODUCTS.PRICEBUY, " +
-//    "PRODUCTS.PRICESELL, PRODUCTS.STOCKCOST,PRODUCTS.STOCKVOLUME, DAY(RECEIPTS.DATENEW), PEOPLE.ID " +
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
-// JG - 8 Jan 14 paramdates.setEndDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
 report.addQBFFilter(paramdates);

@@ -22,10 +22,6 @@ report.setTitleKey("Menu.CustomersBReport");
 report.setReport("/uk/chromis/reports/customers");
 report.setResourceBundle("uk/chromis/reports/customers_messages");
 
-// report.setSentence("SELECT ID, TAXID, NAME, ADDRESS, NOTES, CARD, MAXDEBT, CURDATE, CURDEBT " +
-//                   "FROM CUSTOMERS " +
-//                   "WHERE VISIBLE = " + app.getSession().DB.TRUE() + " AND CURDEBT IS NOT NULL AND CURDEBT > 0");
-
 report.setSentence("SELECT ID, TAXID, NAME, ADDRESS, NOTES, CARD, MAXDEBT, CURDATE, CURDEBT " +
                    "FROM CUSTOMERS " +
                    "WHERE VISIBLE = " + app.getSession().DB.TRUE() + " AND CURDEBT IS NOT NULL AND CURDEBT <> 0");
