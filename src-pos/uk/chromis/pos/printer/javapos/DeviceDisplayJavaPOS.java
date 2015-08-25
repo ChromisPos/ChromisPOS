@@ -26,7 +26,7 @@ import uk.chromis.pos.printer.TicketPrinterException;
 import jpos.JposException;
 import jpos.LineDisplay;
 import jpos.LineDisplayConst;
-
+ 
 /**
  *
  *   

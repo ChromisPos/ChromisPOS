@@ -103,6 +103,7 @@ public abstract class JPanelReport extends JPanel implements JPanelView, BeanFac
             InputStream in = getClass().getResourceAsStream(getReport() + ".ser");
             if (in == null) {      
                 // read and compile the report
+                System.out.println("report   "+getReport());
                 JasperDesign jd = JRXmlLoader.load(getClass().getResourceAsStream(getReport() + ".jrxml"));            
                 jr = JasperCompileManager.compileReport(jd);    
             } else {

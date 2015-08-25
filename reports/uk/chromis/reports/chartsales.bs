@@ -30,7 +30,7 @@ report.setSentence("SELECT CATEGORIES.ID, CATEGORIES.NAME, " +
                 "INNER JOIN (TAXES INNER JOIN TICKETLINES ON TAXES.ID = TICKETLINES.TAXID) " +
                 "ON PRODUCTS.ID = TICKETLINES.PRODUCT) ON TICKETS.ID = TICKETLINES.TICKET " +
                 "WHERE ?(QBF_FILTER) " +
-                "GROUP BY categories.ID, categories.NAME");
+                "GROUP BY CATEGORIES.ID, CATEGORIES.NAME");
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
