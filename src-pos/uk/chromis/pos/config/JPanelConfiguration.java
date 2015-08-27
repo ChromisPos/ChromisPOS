@@ -93,16 +93,7 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         panel = new JPanelTicketSetup();
         m_panelconfig.add(panel);
         jPanelTicketSetup.add(panel.getConfigComponent());
-        
-        
-        //m_panelconfig.add(new JPanelConfigGeneral());
-        //m_panelconfig.add(new JPanelConfigLocale());
-        //m_panelconfig.add(new JPanelConfigPayment());
-        
-        // paneles auxiliares
-        //for (PanelConfig c: m_panelconfig) {
-        //   jPanelDatabase.add(c.getConfigComponent());
-        // }
+
     }
         
     private void restoreProperties() {

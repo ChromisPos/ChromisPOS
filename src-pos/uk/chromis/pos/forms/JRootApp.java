@@ -65,7 +65,6 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import uk.chromis.convert.*;
 
-
 public class JRootApp extends JPanel implements AppView {
 
     private AppProperties m_props;
@@ -97,7 +96,7 @@ public class JRootApp extends JPanel implements AppView {
     private DatabaseMetaData md;
     private SimpleDateFormat formatter;
     private MessageInf msg;
-
+ 
 
     static {
         initOldClasses();
@@ -179,6 +178,52 @@ public class JRootApp extends JPanel implements AppView {
 
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
 
+        /*
+        
+         String sDBVersion = readDataBaseVersion();        
+         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
+            
+         // Create or upgrade database
+         String sScript = sDBVersion == null 
+         ? m_dlSystem.getInitScript() + "-create.sql"
+         : m_dlSystem.getInitScript() + "-upgrade-" + sDBVersion + ".sql";
+         if (JRootApp.class.getResource(sScript) == null) {
+         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, sDBVersion == null
+         ? AppLocal.getIntString("message.databasenotsupported", session.DB.getName()) // Create script does not exists. Database not supported
+         : AppLocal.getIntString("message.noupdatescript"))); // Upgrade script does not exist.
+         session.close();
+         return false;
+         } else {
+         // Create or upgrade script exists.
+         if (JOptionPane.showConfirmDialog(this
+         , AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase")
+         , AppLocal.getIntString("message.title")
+         , JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {  
+
+         try {
+         BatchSentence bsentence = new BatchSentenceResource(session, sScript);
+         bsentence.putParameter("APP_ID", Matcher.quoteReplacement(AppLocal.APP_ID));
+         bsentence.putParameter("APP_NAME", Matcher.quoteReplacement(AppLocal.APP_NAME));
+         bsentence.putParameter("APP_VERSION", Matcher.quoteReplacement(AppLocal.APP_VERSION));
+
+         java.util.List l = bsentence.list();
+         if (l.size() > 0) {
+         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("Database.ScriptWarning"), l.toArray(new Throwable[l.size()])));
+         }
+         } catch (BasicException e) {
+         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, AppLocal.getIntString("Database.ScriptError"), e));
+         session.close();
+         return false;
+         }     
+         } else {
+         session.close();
+         return false;
+         }
+         }
+         }
+
+        
+         */
         String sDBVersion = readDataBaseVersion();
 
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
@@ -186,11 +231,13 @@ public class JRootApp extends JPanel implements AppView {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
             } else {
-                // Create or upgrade script exists.
+                String changelog = sDBVersion == null
+                        ? "uk/chromis/pos/liquibase/chromis.xml"
+                        : "uk/chromis/pos/liquibase/updatechromis.xml";
                 if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), AppLocal.getIntString("message.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                   String db_user = (AppConfig2.getInstance().getProperty("db.user"));
-                   String db_url = (AppConfig2.getInstance().getProperty("db.URL"));
-                   String db_password = (AppConfig2.getInstance().getProperty("db.password"));
+                    String db_user = (AppConfig2.getInstance().getProperty("db.user"));
+                    String db_url = (AppConfig2.getInstance().getProperty("db.URL"));
+                    String db_password = (AppConfig2.getInstance().getProperty("db.password"));
 
                     if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
                         // the password is encrypted
@@ -201,7 +248,7 @@ public class JRootApp extends JPanel implements AppView {
                     try {
                         ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance().getProperty("db.driverlib")).toURI().toURL()});
                         DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
-                        String changelog = "uk/chromis/pos/liquibase/chromis.xml";
+                        
                         Liquibase liquibase = null;
                         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
                         liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
@@ -393,7 +440,7 @@ public class JRootApp extends JPanel implements AppView {
         if (closeAppView()) {
 
             // success. continue with the shut down
-            m_TP.getDeviceDisplay().clearVisor();           
+            m_TP.getDeviceDisplay().clearVisor();
             session.close();
 
             // Download Root form
@@ -543,7 +590,7 @@ public class JRootApp extends JPanel implements AppView {
                         bf = new BeanFactoryObj(bean);
                     }
 
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {                  
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
                     throw new BeanFactoryException(e);
                 }
             }
@@ -961,9 +1008,9 @@ public class JRootApp extends JPanel implements AppView {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 171, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jScrollPane1))
                 .add(104, 104, 104)
                 .add(m_jLogonName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, Short.MAX_VALUE))

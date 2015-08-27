@@ -2060,7 +2060,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnReprint1.setRequestFocusEnabled(false);
         btnReprint1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReprint1ActionPerformed(evt);
+                btnReprintActionPerformed(evt);
             }
         });
 
@@ -2720,9 +2720,30 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         ((JRootApp)m_App).closeAppView(); 
     }//GEN-LAST:event_btnLogout
 
-    private void btnReprint1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprint1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnReprint1ActionPerformed
+    private void btnReprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprintActionPerformed
+       // test if there is valid ticket in the system at this till to be printed
+        if (m_config.getProperty("lastticket.number") != null) {
+            try {
+                TicketInfo ticket = dlSales.loadTicket(Integer.parseInt((m_config.getProperty("lastticket.type"))), Integer.parseInt((m_config.getProperty("lastticket.number"))));
+                if (ticket == null) {
+                    JFrame frame = new JFrame();
+                    JOptionPane.showMessageDialog(frame, AppLocal.getIntString("message.notexiststicket"), AppLocal.getIntString("message.notexiststickettitle"), JOptionPane.WARNING_MESSAGE);
+                } else {
+                    m_ticket = ticket;
+                    m_ticketCopy = null; 
+                    try {
+                        taxeslogic.calculateTaxes(m_ticket);
+                        TicketTaxInfo[] taxlist = m_ticket.getTaxLines();
+                    } catch (TaxesException ex) {
+                    }
+                    printTicket("Printer.ReprintLastTicket", m_ticket, null);
+                }
+            } catch (BasicException e) {
+                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadticket"), e);
+                msg.show(this);
+            }
+        }
+    }//GEN-LAST:event_btnReprintActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
