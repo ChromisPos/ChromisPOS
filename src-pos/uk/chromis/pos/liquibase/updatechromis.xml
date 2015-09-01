@@ -8,5 +8,12 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
  
+    <changeSet author="Chromis POS" id="update to v0.20">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="0.20"/>          
+        </update>               
+    </changeSet> 
+    
+    
 </databaseChangeLog>
 

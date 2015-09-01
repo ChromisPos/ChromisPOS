@@ -96,7 +96,6 @@ public class JRootApp extends JPanel implements AppView {
     private DatabaseMetaData md;
     private SimpleDateFormat formatter;
     private MessageInf msg;
- 
 
     static {
         initOldClasses();
@@ -159,8 +158,12 @@ public class JRootApp extends JPanel implements AppView {
      */
     public boolean initApp(AppProperties props) {
 
+
         Conversion convert = new Conversion();
         convert.init();
+
+
+
 
         m_props = props;
         m_jPanelDown.setVisible(!(Boolean.valueOf(AppConfig2.getInstance().getProperty("till.hideinfo"))));
@@ -248,7 +251,7 @@ public class JRootApp extends JPanel implements AppView {
                     try {
                         ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance().getProperty("db.driverlib")).toURI().toURL()});
                         DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
-                        
+
                         Liquibase liquibase = null;
                         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
                         liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
@@ -279,6 +282,9 @@ public class JRootApp extends JPanel implements AppView {
                             }
                         }
                     }
+                } else {
+                    session.close();
+                    return false;
                 }
             }
         }

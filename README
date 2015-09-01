@@ -1,5 +1,5 @@
-August 12015    
-Release: v1.00
+September 2015    
+Release: v0.20
 
 Welcome to the Chromis family.
 
@@ -12,12 +12,9 @@ any way.
 It can scale from a single machine on your counter-top to tens and tens of
 terminals in different locations.
 
-Chromis POS is used all around the world and it's become a favourite for
-a wide-range of businesses not just because it�s free, but because of its
-ease of use, exceptional flexibility and reliability.
 
 !------!------! THIS IS A MUST READ !------!------!
- Chromis POS v3.80 comes with some defaults settings already included:
+ Chromis POS comes with some defaults settings already included:
     a. A default Category called CATEGORY STANDARD
     b. A default Product with the REFERENCE xxx999
     c. Two default Taxes - TAX EXEMPT and TAX STANDARD
@@ -80,11 +77,4 @@ simple steps...
 
 We're proud of our app' and we hope you enjoy using Chromis POS.
 
-There's quite a few ways to show us some support for the Chromis POS
-free open source software project.
-If you like our software please consider making a donation - www.chromis.co.uk
-You may want to help others in our community www.sourceforge.net/projects/Chromis
 
-Chromis also provide development services for Chromis POS so if you
-find you need some tweaks or a commercial-grade support service then get
-in touch: support@chromis.co.uk
