@@ -35,29 +35,29 @@ import javax.swing.ListCellRenderer;
  * @author adrianromero
  */
 public class RolesPanel extends JPanelTable {
-    
+
     private TableDefinition troles;
     private TableDefinition trolesmenu;
     private DataLogicAdmin dlAdmin;
-    private RolesViewTree jeditor;
+    private RolesView jeditor;
 
     /**
      * Creates a new instance of RolesPanel
      */
     public RolesPanel() {
-     }
-    
+    }
+
     /**
      *
      */
     @Override
     protected void init() {
         dlAdmin = (DataLogicAdmin) app.getBean("uk.chromis.pos.admin.DataLogicAdmin");
-        troles = dlAdmin.getTableRoles();         
-        jeditor = new RolesViewTree(dlAdmin, dirty, app);
+        troles = dlAdmin.getTableRoles();
+        jeditor = new RolesView(dlAdmin, dirty);
         AppLocal.LIST_BY_RIGHTS="";        
     }
-    
+
     /**
      *
      * @return
@@ -66,43 +66,43 @@ public class RolesPanel extends JPanelTable {
     public ListProvider getListProvider() {
         return new ListProviderCreator(troles);
     }
-    
+
     /**
      *
      * @return
      */
     @Override
     public SaveProvider getSaveProvider() {
-        return new SaveProvider(troles);        
+        return new SaveProvider(troles);
     }
-    
+
     /**
      *
      * @return
      */
     @Override
     public Vectorer getVectorer() {
-        return troles.getVectorerBasic(new int[] {1});
+        return troles.getVectorerBasic(new int[]{1});
     }
-    
+
     /**
      *
      * @return
      */
     @Override
     public ComparatorCreator getComparatorCreator() {
-        return troles.getComparatorCreator(new int[] {1});
+        return troles.getComparatorCreator(new int[]{1});
     }
-    
+
     /**
      *
      * @return
      */
     @Override
     public ListCellRenderer getListCellRenderer() {
-        return new ListCellRendererBasic(troles.getRenderStringBasic(new int[] {1}));
+        return new ListCellRendererBasic(troles.getRenderStringBasic(new int[]{1}));
     }
-    
+
     /**
      *
      * @return
@@ -111,7 +111,7 @@ public class RolesPanel extends JPanelTable {
     public EditorRecord getEditor() {
         return jeditor;
     }
-    
+
     /**
      *
      * @return
@@ -119,5 +119,6 @@ public class RolesPanel extends JPanelTable {
     @Override
     public String getTitle() {
         return AppLocal.getIntString("Menu.Roles");
-    }        
+    }
+
 }

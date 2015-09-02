@@ -859,7 +859,7 @@
         </insert>
           
         <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.admin.RolesPanelOriginal"/>
+            <column name="CLASSNAME" value="uk.chromis.pos.admin.RolesPanelNew"/>
             <column name="SECTION" value="##label.sectionmaintenance"/>
             <column name="DISPLAYNAME" value="##label.displayname116"/>
             <column name="DESCRIPTION" value="##label.description116"/>

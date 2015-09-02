@@ -42,7 +42,7 @@
         <insert tableName="APPLICATIONS">
             <column name="ID" value="chromispos"/>
             <column name="NAME" value="Chromis POS"/>
-            <column name="VERSION" value="0.10"/>          
+            <column name="VERSION" value="0.30"/>          
         </insert>               
     </changeSet>    
     

@@ -13,7 +13,13 @@
             <column name="VERSION" value="0.20"/>          
         </update>               
     </changeSet> 
+  
     
+    <changeSet author="Chromis POS" id="update to v0.30">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="0.30"/>          
+        </update>               
+    </changeSet>  
     
 </databaseChangeLog>
 
