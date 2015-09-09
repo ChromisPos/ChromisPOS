@@ -113,7 +113,8 @@ public abstract class JPanelReport extends JPanel implements JPanelView, BeanFac
             }
 // JG 16 May 12 use multicatch
         } catch (JRException | IOException | ClassNotFoundException e) {
-            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
+            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, getReport() + ": " + AppLocal.getIntString("message.cannotloadreport"), e);
+           // MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
             msg.show(this);
             jr = null;
         }  

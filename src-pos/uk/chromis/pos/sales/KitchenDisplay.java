@@ -77,7 +77,6 @@ public class KitchenDisplay {
     public void addRecord(String ID, String table, String pickupID, String product, String multiply, String attributes){
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         Date date = new Date();
-        System.out.println(dateFormat.format(date));
      
      
      try{

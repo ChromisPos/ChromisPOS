@@ -608,7 +608,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
      */
     public void createProduct(String pType) {
 // create a new product and save it using DalaLogicSales
-        Object[] myprod = new Object[25];
+        Object[] myprod = new Object[29];
         myprod[0] = UUID.randomUUID().toString();                               // ID string
         myprod[1] = productReference;                                           // Reference string
         myprod[2] = productBarcode;                                             // Barcode String        
@@ -621,21 +621,23 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[9] = taxcatmodel.getSelectedKey();                               // Tax string
         myprod[10] = null;                                                      // Attributeset string
         myprod[11] = null;                                                      // Image
-        myprod[12] = null;                                                      // Stock cost double
-        myprod[13] = null;                                                      // Stock volume double
-        myprod[14] = jCheckInCatalogue.isSelected();           // In catalog flag
+        myprod[12] = (double) 0;                                                // Stock cost double
+        myprod[13] = (double) 0;                                                // Stock volume double
+        myprod[14] = jCheckInCatalogue.isSelected();                            // In catalog flag
         myprod[15] = null;                                                      // catalog order        
         myprod[16] = null;                                                      //
-        myprod[17] = false;                                    // IsKitchen flag
-        myprod[18] = false;                                    // isService flag
+        myprod[17] = false;                                                     // IsKitchen flag
+        myprod[18] = false;                                                     // isService flag
         myprod[19] = "<HTML>" + productName;                                    //     
-        myprod[20] = false;                                    // isVariable price flag
-        myprod[21] = false;                                    // Compulsory Att flag
+        myprod[20] = false;                                                     // isVariable price flag
+        myprod[21] = false;                                                     // Compulsory Att flag
         myprod[22] = productName;                                               // Text tip string
         myprod[23] = false;                                                     // Warranty flag
         myprod[24] = 0.0;                                                       // StockUnits
         myprod[25] = "";                                                        // Alias
-        myprod[26] = false;                                                     // AlwaysAvailable flag
+        myprod[26] = false; 
+        myprod[27] = "";
+        myprod[28] = false;                                                     // AlwaysAvailable flag
         try {
             if ("new".equals(pType)) {
                 spr.insertData(myprod);

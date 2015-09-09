@@ -181,52 +181,6 @@ public class JRootApp extends JPanel implements AppView {
 
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
 
-        /*
-        
-         String sDBVersion = readDataBaseVersion();        
-         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
-            
-         // Create or upgrade database
-         String sScript = sDBVersion == null 
-         ? m_dlSystem.getInitScript() + "-create.sql"
-         : m_dlSystem.getInitScript() + "-upgrade-" + sDBVersion + ".sql";
-         if (JRootApp.class.getResource(sScript) == null) {
-         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, sDBVersion == null
-         ? AppLocal.getIntString("message.databasenotsupported", session.DB.getName()) // Create script does not exists. Database not supported
-         : AppLocal.getIntString("message.noupdatescript"))); // Upgrade script does not exist.
-         session.close();
-         return false;
-         } else {
-         // Create or upgrade script exists.
-         if (JOptionPane.showConfirmDialog(this
-         , AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase")
-         , AppLocal.getIntString("message.title")
-         , JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {  
-
-         try {
-         BatchSentence bsentence = new BatchSentenceResource(session, sScript);
-         bsentence.putParameter("APP_ID", Matcher.quoteReplacement(AppLocal.APP_ID));
-         bsentence.putParameter("APP_NAME", Matcher.quoteReplacement(AppLocal.APP_NAME));
-         bsentence.putParameter("APP_VERSION", Matcher.quoteReplacement(AppLocal.APP_VERSION));
-
-         java.util.List l = bsentence.list();
-         if (l.size() > 0) {
-         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("Database.ScriptWarning"), l.toArray(new Throwable[l.size()])));
-         }
-         } catch (BasicException e) {
-         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, AppLocal.getIntString("Database.ScriptError"), e));
-         session.close();
-         return false;
-         }     
-         } else {
-         session.close();
-         return false;
-         }
-         }
-         }
-
-        
-         */
         String sDBVersion = readDataBaseVersion();
 
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
@@ -371,7 +325,7 @@ public class JRootApp extends JPanel implements AppView {
         String newLogo = AppConfig2.getInstance().getProperty("start.logo");
         if (newLogo != null) {
             if ("".equals(newLogo)) {
-                jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/chromis.png")));
+                jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png")));
             } else {
                 jLabel1.setIcon(new javax.swing.ImageIcon(newLogo));
             }
@@ -902,7 +856,7 @@ public class JRootApp extends JPanel implements AppView {
         m_jPanelTitle.add(m_jLblTitle, java.awt.BorderLayout.CENTER);
 
         poweredby.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        poweredby.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/poweredby.png"))); // NOI18N
+        poweredby.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/poweredby.png"))); // NOI18N
         poweredby.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         poweredby.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         poweredby.setMaximumSize(new java.awt.Dimension(222, 34));
@@ -929,7 +883,7 @@ public class JRootApp extends JPanel implements AppView {
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/chromis.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png"))); // NOI18N
         jLabel1.setText("<html><center>Chromis POS - The New Face of open source POS<br>" +
             "Copyright \u00A9 2015 Chromis <br>" +
             "http://www.chromis.co.uk<br>" +

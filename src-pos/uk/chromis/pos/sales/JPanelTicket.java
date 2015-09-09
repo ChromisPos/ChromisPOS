@@ -1608,7 +1608,8 @@ private void stateTransition(char cTrans) {
 
 // JG May 2013 replaced with Multicatch
         } catch (JRException | IOException | ClassNotFoundException e) {
-            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
+           // MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
+            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, resourcefile + ": " + AppLocal.getIntString("message.cannotloadreport"), e);
             msg.show(this);
         }
     }
@@ -1692,7 +1693,8 @@ private void stateTransition(char cTrans) {
             scr.setSelectedIndex(m_ticketlines.getSelectedIndex());
             return scr.evalScript(dlSystem.getResourceAsXML(resource), args);
         } catch (ScriptException e) {
-            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"), e);
+          //  MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"), e);
+            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, resource + ": " + AppLocal.getIntString("message.cannotexecute"), e);
             msg.show(this);
             return msg;
         }
