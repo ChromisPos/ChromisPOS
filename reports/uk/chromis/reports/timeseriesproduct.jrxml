@@ -168,8 +168,9 @@ ORDER BY
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{PRICEBUY})]]></textFieldExpression>
 				</textField>
@@ -181,8 +182,9 @@ ORDER BY
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{TAXCATNAME}]]></textFieldExpression>
 				</textField>
@@ -194,8 +196,9 @@ ORDER BY
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue(
 new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAXCAT}))))]]></textFieldExpression>
@@ -208,8 +211,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{PRICESELL})]]></textFieldExpression>
 				</textField>
@@ -221,8 +225,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{REF}]]></textFieldExpression>
 				</textField>
@@ -247,8 +252,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{STOCKCOST})]]></textFieldExpression>
 				</textField>
@@ -260,8 +266,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.DOUBLE.formatValue($F{STOCKVOLUME})]]></textFieldExpression>
 				</textField>
@@ -273,8 +280,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.PERCENT.formatValue($V{MARGIN})]]></textFieldExpression>
 				</textField>
@@ -367,8 +375,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                            <paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[-
 ]]></text>
@@ -381,9 +390,10 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" >
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
+                                        <paragraph lineSpacing="Single"/>
+                                </textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.title}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
@@ -394,8 +404,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[1])]]></textFieldExpression>
 			</textField>
@@ -407,8 +418,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[3])]]></textFieldExpression>
 			</textField>
@@ -433,8 +445,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.printed}]]></textFieldExpression>
 			</textField>
@@ -446,8 +459,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.period}]]></textFieldExpression>
 			</textField>
@@ -463,8 +477,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>
@@ -482,8 +497,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -495,8 +511,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>

@@ -50,8 +50,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.printed}]]></textFieldExpression>
 			</textField>
@@ -77,8 +78,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.host}]]></textFieldExpression>
 			</textField>
@@ -90,8 +92,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.closedate}]]></textFieldExpression>
 			</textField>
@@ -103,8 +106,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.hostsequence}]]></textFieldExpression>
 			</textField>
@@ -116,8 +120,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.payment}]]></textFieldExpression>
 			</textField>
@@ -129,8 +134,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.money}]]></textFieldExpression>
 			</textField>
@@ -153,8 +159,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue($F{DATEEND})]]></textFieldExpression>
 			</textField>
@@ -166,8 +173,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[str("transpayment." + (String)field_PAYMENT.getValue())]]></textFieldExpression>
 			</textField>
@@ -179,8 +187,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{TOTAL})]]></textFieldExpression>
 			</textField>
@@ -192,8 +201,9 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" >
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                        <paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{HOST}]]></textFieldExpression>
 			</textField>

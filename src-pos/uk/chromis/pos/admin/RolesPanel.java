@@ -53,9 +53,9 @@ public class RolesPanel extends JPanelTable {
     @Override
     protected void init() {
         dlAdmin = (DataLogicAdmin) app.getBean("uk.chromis.pos.admin.DataLogicAdmin");
-        troles = dlAdmin.getTableRoles();
+        troles = dlAdmin.getTableRoles();         
         jeditor = new RolesView(dlAdmin, dirty);
-        AppLocal.LIST_BY_RIGHTS="";        
+        AppLocal.LIST_BY_RIGHTS="";       
     }
 
     /**

@@ -919,8 +919,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         } else {
 
-            // Amended JG uniCenta Apr 14 Variable Price Product - Thanks Ron Isaacson
-            // if variable price product, and no amount entered before product pressed, ensure that the multiplier is 0 so no item is added to the ticket           
+          
             if (!prod.isVprice()) {
                 incProduct(1.0, prod);
             } else {
@@ -992,24 +991,13 @@ private void stateTransition(char cTrans) {
 
                     stateToZero();
 
-               /*  commented out by janar153 @ 24.12.2013 to add scale barcode support  
-                    }else if (sCode.length() == 13 && sCode.startsWith("250")) {
-                    // barcode of the other machine
-                    ProductInfoExt oProduct = new ProductInfoExt(); // Es un ticket
-                    oProduct.setReference(null); // para que no se grabe
-                    oProduct.setCode(sCode);
-                    oProduct.setName("Ticket " + sCode.substring(3, 7));
-                    oProduct.setPriceSell(Double.parseDouble(sCode.substring(7, 12)) / 100);   
-                    oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
-                    // Se anade directamente una unidad con el precio y todo
-                    addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
-                } else if (sCode.length() == 13 && sCode.startsWith("210")) {
-                    // barcode of a weigth product
-                    incProductByCodePrice(sCode.substring(0, 7), Double.parseDouble(sCode.substring(7, 12)) / 100);
-                */
-                // added by janar153 @ 24.12.2013 to add scale barcode support
-// JG 27 Apr 2014 - missing bracket enclosures                } else if((sCode.length() == 13) && sCode.startsWith("2") || sCode.startsWith("02")) {
-//                } else if((sCode.length() == 13) || ((sCode.length() == 8)) && (sCode.startsWith("2") || sCode.startsWith("02"))) {
+// lets look at variable price barcodes t donform to GS1 standard
+                    
+                    
+                    
+                    
+                    
+                    
                 } else if((sCode.length() == 13) || (sCode.length() == 8) || (sCode.startsWith("2") || sCode.startsWith("02"))) {                    
                     try {
                         ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);

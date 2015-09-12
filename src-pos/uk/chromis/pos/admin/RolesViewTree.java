@@ -212,7 +212,7 @@ public final class RolesViewTree extends javax.swing.JPanel implements EditorRec
         uTree.clearChecking();
         if (!"".equals(m_jName.getText())) {
             getPermissions();
-            for (String userPermission : m_apermissions) {
+            for (String userPermission : m_apermissions) {             
                 uTree.addCheckingPath(new TreePath(nodePaths.get(userPermission).getPath()));
             }
             jRightsLevel.setValue(m_dlAdmin.getRightsLevel(m_jName.getText()));
