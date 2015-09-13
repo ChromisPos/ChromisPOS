@@ -919,7 +919,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         } else {
 
-          
             if (!prod.isVprice()) {
                 incProduct(1.0, prod);
             } else {
@@ -958,129 +957,146 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-private void stateTransition(char cTrans) {
+    private void stateTransition(char cTrans) {
 
         if ((cTrans == '\n') || (cTrans == '?')) {
-            // Codigo de barras introducido
-            if (m_sBarcode.length() > 0) {
-// added JDL 23.05.13                 
-                String sCode = m_sBarcode.toString();
-                System.out.println("new barcode testing code := " + sCode);
 
-                // added JDL 23.05.13 if stirng is longer than 10 remove the
-                //               if ((sCode.length() > 10) && priceWith00) {
-                //                   sCode = sCode.replace(".","");
-                //                   }
+            /**
+             * ******************************************************************
+             * Start of barcode handling routine
+             *
+             *******************************************************************
+             */
+            if (m_sBarcode.length() > 0) {
+                String sCode = m_sBarcode.toString();
+//********************************************************************************
+// to be removed once working
+                System.out.println("new barcode testing code := " + sCode);
+//********************************************************************************
+
+// Are we passing a customer card these cards start with 'c'                
                 if (sCode.startsWith("c")) {
-                    // barcode of a customers card
                     try {
                         CustomerInfoExt newcustomer = dlSales.findCustomerExt(sCode);
                         if (newcustomer == null) {
                             Toolkit.getDefaultToolkit().beep();
-                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.nocustomer")).show(this);
+                            JOptionPane.showMessageDialog(null,
+                                    sCode + " - " + AppLocal.getIntString("message.nocustomer"),
+                                    "Customer Not Found", JOptionPane.WARNING_MESSAGE);
                         } else {
                             m_oTicket.setCustomer(newcustomer);
                             m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
                         }
                     } catch (BasicException e) {
                         Toolkit.getDefaultToolkit().beep();
-                        new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.nocustomer"), e).show(this);
+                        JOptionPane.showMessageDialog(null,
+                                sCode + " - " + AppLocal.getIntString("message.nocustomer"),
+                                "Customer Not Found", JOptionPane.WARNING_MESSAGE);
                     }
                     stateToZero();
-                } else if (sCode.startsWith(";")) {
+// lets look at variable price barcodes thhat conform to GS1 standard
+// For more details see Chromis docs
 
-                    stateToZero();
+                } else if (((sCode.length() == 13) && (sCode.startsWith("2"))) || ((sCode.length() == 12) && (sCode.startsWith("2")))) {
+// we now have a variable barcode being passed   
+// get the variable type
+                    String sVariableTypePrefix;
+                    String prodCode;
+                    String sVariableNum;
+                    double dPriceSell = 0.0;
+                    double weight = 1.0;
 
-// lets look at variable price barcodes t donform to GS1 standard
-                    
-                    
-                    
-                    
-                    
-                    
-                } else if((sCode.length() == 13) || (sCode.length() == 8) || (sCode.startsWith("2") || sCode.startsWith("02"))) {                    
-                    try {
-                        ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
-                        if(oProduct == null) {
-                            Toolkit.getDefaultToolkit().beep();
-//JG Aug 2014 - MessageInf Type inappropriate
-//                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);
-                            JOptionPane.showMessageDialog(null,
-                                sCode + " - " + AppLocal.getIntString("message.noproduct"),
-                                "Check", JOptionPane.WARNING_MESSAGE);  
-                            stateToZero();
-                        } else {
-                            // set product properties that they can be used later in oPOS resources
-                            oProduct.setProperty("product.barcode", sCode);
-                            // get product base from barcode
-                            double dPriceSell = oProduct.getPriceSell(); // default price for product
-                            double weight = 1.0; // used if barcode includes weight
-                            
-                            String sVariableTypePrefix = sCode.substring(0, 2);
-// JG Aug 2014 - Check for EAN-8 construct
-                            String sVariableNum; 
-                            if (sCode.length() > 8) {
-                                sVariableNum = sCode.substring(8, 12);
-                            } else {
-                                sVariableNum = null;
-                            }
-//                            
-                            if(sVariableTypePrefix.equals("20")) {
-                                dPriceSell = Double.parseDouble(sVariableNum) / 100; // price with two decimals
-                            } 
-                            else if (sVariableTypePrefix.equals("21")) {
-                                dPriceSell = Double.parseDouble(sVariableNum) / 10; //price with one decimal
-                            } 
-                            else if (sVariableTypePrefix.equals("22")) {
-                                dPriceSell = Double.parseDouble(sVariableNum); //price with no decimals
-                            } 
-                            else if (sVariableTypePrefix.equals("23")) {
-                                weight = Double.parseDouble(sVariableNum) / 1000; //weight in kg with three decimals (eg. 1,234 kg)
-                            } 
-                            else if (sVariableTypePrefix.equals("24")) {
-                                weight = Double.parseDouble(sVariableNum) / 100; //weight in kg with two decimals (eg. 12,34 kg)
-                            } 
-                            else if (sVariableTypePrefix.equals("25")) {
-                                weight = Double.parseDouble(sVariableNum) / 10; //weight in kg with one decimal (eg. 123,4 kg)
-                            } 
-                            else if(sVariableTypePrefix.equals("28")) {
+                    if (sCode.length() == 13) {
+                        sVariableTypePrefix = sCode.substring(0, 2);
+                        sVariableNum = sCode.substring(8, 12);
+                        prodCode = sCode.replace(sCode.substring(7, sCode.length() - 1), "00000");
+                        prodCode = prodCode.substring(0, sCode.length() - 1);
+                    } else {
+                        sVariableTypePrefix = sCode.substring(0, 2);;
+                        sVariableNum = sCode.substring(7, 11);
+                        prodCode = sCode.replace(sCode.substring(6, sCode.length() - 1), "00000");
+                        prodCode = prodCode.substring(0, sCode.length() - 1);
+                    }
+
+                    if (sCode.length() == 13) {
+                        switch (sVariableTypePrefix) {
+                            case "20":
+                                dPriceSell = Double.parseDouble(sVariableNum) / 100;
+                                break;
+                            case "21":
+                                dPriceSell = Double.parseDouble(sVariableNum) / 10;
+                                break;
+                            case "22":
+                                dPriceSell = Double.parseDouble(sVariableNum);
+                                break;
+                            case "23":
+                                weight = Double.parseDouble(sVariableNum) / 1000;
+                                break;
+                            case "24":
+                                weight = Double.parseDouble(sVariableNum) / 100;
+                                break;
+                            case "25":
+                                weight = Double.parseDouble(sVariableNum) / 10;
+                                break;
+                            case "28":
                                 sVariableNum = sCode.substring(7, 12);
-                                dPriceSell = Double.parseDouble(sVariableNum) / 100; // price with two decimals
-                            }
-                            
-                            if((sVariableTypePrefix.equals("20")) || (sVariableTypePrefix.equals("21")) || (sVariableTypePrefix.equals("22"))) {
-                                // price in barcode includes tax, so remove tax  from sPriceSell
-                                TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
-                                dPriceSell /= (1.0 + tax.getRate());
-                                oProduct.setProperty("product.price", Double.toString(dPriceSell));
-                            } else if((sVariableTypePrefix.equals("23")) || (sVariableTypePrefix.equals("24")) || (sVariableTypePrefix.equals("25"))) {
-                                oProduct.setProperty("product.weight", Double.toString(weight)); 
-                            } else if((sVariableTypePrefix.equals("28"))) {
-                                // price in barcode includes tax, so remove tax  from sPriceSell
-                                TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
-                                dPriceSell /= (1.0 + tax.getRate());
-                                oProduct.setProperty("product.price", Double.toString(dPriceSell));
-                                weight = -1.0;
-                            }
-                            
-                            if(m_jaddtax.isSelected()) {
-                                TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
-                                addTicketLine(oProduct, weight, dPriceSell / (1.0 + tax.getRate()));
-                            } else {
-                                addTicketLine(oProduct, weight, dPriceSell);
-                            }
-                            
+                                dPriceSell = Double.parseDouble(sVariableNum) / 10;
+                                break;
                         }
-                    } catch(BasicException eData) {
+                    }
+// we now know the product code and the price or weight of it.
+// lets check for the product in the database. 
+                    try {
+                        ProductInfoExt oProduct = dlSales.getProductInfoByCode(prodCode);
+                        if (oProduct == null) {
+                            Toolkit.getDefaultToolkit().beep();
+                            JOptionPane.showMessageDialog(null,
+                                    prodCode + " - " + AppLocal.getIntString("message.noproduct"),
+                                    "Check", JOptionPane.WARNING_MESSAGE);
+                            stateToZero();
+                        } else if (sCode.length() == 13) {
+                            switch (sVariableTypePrefix) {
+                                case "23":
+                                case "24":
+                                case "25":
+                                    oProduct.setProperty("product.weight", Double.toString(weight));
+                                    dPriceSell = oProduct.getPriceSell();
+                                    break;
+                            }
+                        } else {
+// Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
+                            if (oProduct.getPriceSell() != 0.0) {
+                                weight = Double.parseDouble(sVariableNum) / 100;
+                                oProduct.setProperty("product.weight", Double.toString(weight));
+                                dPriceSell = oProduct.getPriceSell();
+                            }else{
+                                dPriceSell = Double.parseDouble(sVariableNum) / 100;
+                            }
+                        }
+                        if (m_jaddtax.isSelected()) {
+                            addTicketLine(oProduct, weight, dPriceSell);
+                        } else {
+                            TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
+                            addTicketLine(oProduct, weight, dPriceSell / (1.0 + tax.getRate()));
+                        }
+                    } catch (BasicException eData) {
                         stateToZero();
                         new MessageInf(eData).show(this);
                     }
+
                 } else {
                     incProductByCode(sCode);
                 }
             } else {
                 Toolkit.getDefaultToolkit().beep();
             }
+
+            /**
+             * ******************************************************************
+             * end of barcode handling routine
+             *
+             *******************************************************************
+             */
         } else {
             // otro caracter
             // Esto es para el codigo de barras...
@@ -1596,7 +1612,7 @@ private void stateTransition(char cTrans) {
 
 // JG May 2013 replaced with Multicatch
         } catch (JRException | IOException | ClassNotFoundException e) {
-           // MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
+            // MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, resourcefile + ": " + AppLocal.getIntString("message.cannotloadreport"), e);
             msg.show(this);
         }
@@ -1681,7 +1697,7 @@ private void stateTransition(char cTrans) {
             scr.setSelectedIndex(m_ticketlines.getSelectedIndex());
             return scr.evalScript(dlSystem.getResourceAsXML(resource), args);
         } catch (ScriptException e) {
-          //  MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"), e);
+            //  MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"), e);
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, resource + ": " + AppLocal.getIntString("message.cannotexecute"), e);
             msg.show(this);
             return msg;
