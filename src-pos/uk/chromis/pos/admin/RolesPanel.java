@@ -39,7 +39,7 @@ public class RolesPanel extends JPanelTable {
     private TableDefinition troles;
     private TableDefinition trolesmenu;
     private DataLogicAdmin dlAdmin;
-    private RolesView jeditor;
+    private RolesViewTree jeditor;
 
     /**
      * Creates a new instance of RolesPanel
@@ -54,7 +54,7 @@ public class RolesPanel extends JPanelTable {
     protected void init() {
         dlAdmin = (DataLogicAdmin) app.getBean("uk.chromis.pos.admin.DataLogicAdmin");
         troles = dlAdmin.getTableRoles();         
-        jeditor = new RolesView(dlAdmin, dirty);
+        jeditor = new RolesViewTree(dlAdmin, dirty, app);
         AppLocal.LIST_BY_RIGHTS="";       
     }
 

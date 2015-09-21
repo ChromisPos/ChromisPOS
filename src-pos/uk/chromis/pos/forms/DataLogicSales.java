@@ -145,8 +145,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ALWAYSAVAILABLE", Datas.BOOLEAN, Formats.BOOLEAN),                                               //26
                 // JDL May 2015
                 new Field("DISCOUNTED", Datas.STRING, Formats.STRING),                                                      //27
-                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN)                                                    //28
-                              
+                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN)                                                    //28                              
         );
     }
 

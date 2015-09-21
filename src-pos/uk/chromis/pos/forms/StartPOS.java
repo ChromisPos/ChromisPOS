@@ -16,9 +16,9 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
-
 package uk.chromis.pos.forms;
 
+import java.io.File;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.instance.InstanceQuery;
 import java.rmi.NotBoundException;
@@ -31,13 +31,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
+import uk.chromis.convert.Conversion;
 import uk.chromis.pos.ticket.TicketInfo;
-
 
 // JG 16 May 2013 deprecated for pushingpixels
 // import org.jvnet.substance.SubstanceLookAndFeel;
 // import org.jvnet.substance.api.SubstanceSkin;
-
 /**
  *
  * @author adrianromero
@@ -45,9 +44,10 @@ import uk.chromis.pos.ticket.TicketInfo;
 public class StartPOS {
 
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.StartPOS");
-    
-    
-    /** Creates a new instance of StartPOS */
+
+    /**
+     * Creates a new instance of StartPOS
+     */
     private StartPOS() {
     }
 
@@ -56,7 +56,7 @@ public class StartPOS {
      * @return
      */
     public static boolean registerApp() {
-                       
+
         // vemos si existe alguna instancia        
         InstanceQuery i = null;
         try {
@@ -66,34 +66,63 @@ public class StartPOS {
 // JG 6 May 2013 to Multicatch
         } catch (RemoteException | NotBoundException e) {
             return true;
-        }  
+        }
     }
-    
+
+    private class OpenApp {
+
+    }
+
     /**
      *
      * @param args
      */
-    public static void main (final String args[]) {
-        
+    public static void main(final String args[]) {
+        File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
+        File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
+
+        if (!chromis.exists()) {
+            if (file.exists()) {
+                Thread t1 = new Thread(new Runnable() {
+                    public void run() {
+                        Conversion convert = new Conversion() {
+                        };
+                        convert.init();
+                    }
+                });
+                t1.start();
+                if (t1.isAlive()) {
+                } else {
+                    startApp(args);
+                }
+            } else {
+                startApp(args);
+            }
+        } else {
+            startApp(args);
+        }
+    }
+
+    private static void startApp(final String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                
+
                 if (!registerApp()) {
                     System.exit(1);
                 }
-                
+
                 AppConfig config = new AppConfig(args);
                 config.load();
-                
+
                 // set Locale.
                 String slang = config.getProperty("user.language");
                 String scountry = config.getProperty("user.country");
                 String svariant = config.getProperty("user.variant");
-                if (slang != null && !slang.equals("") && scountry != null && svariant != null) {                                        
+                if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
                     Locale.setDefault(new Locale(slang, scountry, svariant));
                 }
-                
+
                 // Set the format patterns
                 Formats.setIntegerPattern(config.getProperty("format.integer"));
                 Formats.setDoublePattern(config.getProperty("format.double"));
@@ -101,34 +130,34 @@ public class StartPOS {
                 Formats.setPercentPattern(config.getProperty("format.percent"));
                 Formats.setDatePattern(config.getProperty("format.date"));
                 Formats.setTimePattern(config.getProperty("format.time"));
-                Formats.setDateTimePattern(config.getProperty("format.datetime"));               
-                
+                Formats.setDateTimePattern(config.getProperty("format.datetime"));
+
                 // Set the look and feel.
-                try {             
-                    
-                    Object laf = Class.forName(config.getProperty("swing.defaultlaf")).newInstance();                    
-                    if (laf instanceof LookAndFeel){
+                try {
+
+                    Object laf = Class.forName(config.getProperty("swing.defaultlaf")).newInstance();
+                    if (laf instanceof LookAndFeel) {
                         UIManager.setLookAndFeel((LookAndFeel) laf);
-                    } else if (laf instanceof SubstanceSkin) {                      
+                    } else if (laf instanceof SubstanceSkin) {
                         SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);
                     }
 // JG 6 May 2013 to multicatch
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {                
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                     logger.log(Level.WARNING, "Cannot set Look and Feel", e);
                 }
 // JG July 2014 Hostname for Tickets
                 String hostname = config.getProperty("machine.hostname");
                 TicketInfo.setHostname(hostname);
-                
+
                 String screenmode = config.getProperty("machine.screenmode");
                 if ("fullscreen".equals(screenmode)) {
                     JRootKiosk rootkiosk = new JRootKiosk();
                     rootkiosk.initFrame(config);
                 } else {
-                    JRootFrame rootframe = new JRootFrame(); 
+                    JRootFrame rootframe = new JRootFrame();
                     rootframe.initFrame(config);
                 }
             }
-        });    
-    }    
+        });
+    }
 }

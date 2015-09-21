@@ -119,7 +119,7 @@ public class DataLogicAdmin extends BeanFactoryDataSingle {
                 , SerializerWriteString.INSTANCE
                 , SerializerReadString.INSTANCE); 
       
-          m_roleRightsLevelByUserName = new StaticSentence(s
+        m_roleRightsLevelByUserName = new StaticSentence(s
                 , "SELECT ROLES.RIGHTSLEVEL FROM ROLES INNER JOIN PEOPLE ON PEOPLE.ROLE=ROLES.ID WHERE PEOPLE.NAME= ? "
                 , SerializerWriteString.INSTANCE
                 , SerializerReadString.INSTANCE);      
