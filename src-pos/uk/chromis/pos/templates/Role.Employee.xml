@@ -52,37 +52,37 @@
     <class name="payment.debt"/>
     <class name="sales.PrintKitchen"/>
 
-<!-- Standard button scripts -->
+    <!-- Standard button scripts -->
     <class name="button.totaldiscount"/>
     <class name="button.print"/>
     <class name="button.opendrawer"/>
     
-<!-- Additional button scripts -->
+    <!-- Additional button scripts -->
     <class name="button.linediscount"/>
     <class name="button.sendorder"/>
 
-<class name="uk.chromis.pos.forms.MenuCustomers"/>
+    <class name="uk.chromis.pos.forms.MenuCustomers"/>
     <class name="uk.chromis.pos.customers.CustomersPanel"/>
-            <class name="/uk/chromis/reports/customers.bs"/>
-            <class name="/uk/chromis/reports/customersb.bs"/>
-            <class name="/uk/chromis/reports/customersdiary.bs"/>
+    <class name="/uk/chromis/reports/customers.bs"/>
+    <class name="/uk/chromis/reports/customersb.bs"/>
+    <class name="/uk/chromis/reports/customersdiary.bs"/>
 
-<class name="uk.chromis.pos.forms.MenuStockManagement"/>
+    <class name="uk.chromis.pos.forms.MenuStockManagement"/>
     <class name="uk.chromis.pos.inventory.AuxiliarPanel"/>
     <class name="uk.chromis.pos.inventory.CategoriesPanel"/>
     <class name="uk.chromis.pos.inventory.ProductsPanel"/>
 
-            <class name="/uk/chromis/reports/barcodesheet.bs"/>
-            <class name="/uk/chromis/reports/productscatalog.bs"/>
-            <class name="/uk/chromis/reports/products.bs"/>
-            <class name="/uk/chromis/reports/productlabels.bs"/>
-            <class name="/uk/chromis/reports/salecatalog.bs"/>
-            <class name="/uk/chromis/reports/shelfedgelabels.bs"/>
+    <class name="/uk/chromis/reports/barcodesheet.bs"/>
+    <class name="/uk/chromis/reports/productscatalog.bs"/>
+    <class name="/uk/chromis/reports/products.bs"/>
+    <class name="/uk/chromis/reports/productlabels.bs"/>
+    <class name="/uk/chromis/reports/salecatalog.bs"/>
+    <class name="/uk/chromis/reports/shelfedgelabels.bs"/>
 
-<class name="uk.chromis.pos.forms.MenuSalesManagement"/>
-            <class name="/uk/chromis/reports/productsales.bs"/>
+    <class name="uk.chromis.pos.forms.MenuSalesManagement"/>
+    <class name="/uk/chromis/reports/productsales.bs"/>
 
-   <class name="uk.chromis.pos.epm.JPanelEmployeePresence" />
-   <class name="Menu.ChangePassword"/>
+    <class name="uk.chromis.pos.epm.JPanelEmployeePresence" />
+    <class name="Menu.ChangePassword"/>
 
 </permissions>

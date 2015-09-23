@@ -171,6 +171,8 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
         try {
             JCatalogTab jcurrTab = new JCatalogTab();
             m_jProducts.add(jcurrTab, "");
+         //   java.util.List<ProductInfoExt> prods = m_dlSales.getAllProductCatalogByCatOrder();
+            
             java.util.List<ProductInfoExt> prods = m_dlSales.getAllProductCatalog();
             for (ProductInfoExt prod : prods) {
                 newColour = m_dlSales.getCategoryColour(prod.getCategoryID());

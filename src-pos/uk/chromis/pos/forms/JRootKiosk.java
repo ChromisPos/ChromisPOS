@@ -25,6 +25,7 @@ import uk.chromis.pos.util.OSValidator;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import javax.swing.JFrame;

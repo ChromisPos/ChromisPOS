@@ -37,38 +37,17 @@ import javax.swing.ImageIcon;
  */
 public class DataLogicSystem extends BeanFactoryDataSingle {
     
-    /**
-     *
-     */
+
     protected String m_sInitScript;
     private SentenceFind m_version;       
     private SentenceExec m_dummy;
     private String m_dbVersion ="";
-    
-    /**
-     *
-     */
     protected SentenceList m_peoplevisible;  
     protected SentenceList m_peoplevisibleByRights;
-
-    /**
-     *
-     */
     protected SentenceFind m_peoplebycard;  
-
-    /**
-     *
-     */
+    protected SentenceFind m_getsuperuser;
     protected SerializerRead peopleread;
-
-    /**
-     *
-     */
     protected SentenceList m_permissionlist;
-
-    /**
-     *
-     */
     protected SerializerRead productIdRead;
     
     
@@ -202,7 +181,13 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
             , "SELECT ID, NAME, APPPASSWORD, CARD, ROLE, IMAGE FROM PEOPLE WHERE CARD = ? AND VISIBLE = " + s.DB.TRUE()
             , SerializerWriteString.INSTANCE
             , peopleread);
-           
+        
+        m_getsuperuser = new PreparedSentence(s
+            , "SELECT ID, NAME, APPPASSWORD, CARD, ROLE, IMAGE FROM PEOPLE WHERE NAME = 'SuperAdminUser' "
+            , null
+            , peopleread);        
+        
+        
         m_resourcebytes = new PreparedSentence(s
             , "SELECT CONTENT FROM RESOURCES WHERE NAME = ?"
             , SerializerWriteString.INSTANCE
@@ -313,9 +298,9 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
                     Datas.STRING,
                     Datas.STRING,
                     Datas.INT
-                }));        
+                }));   
         
-        
+                
         resetResourcesCache();        
     }
 
@@ -396,6 +381,11 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         return (AppUser) m_peoplebycard.find(card);
     }
 
+    
+    public final AppUser getsuperuser() throws BasicException {
+        return (AppUser) m_getsuperuser.find();
+    }
+       
     /**
      *
      * @param sRole

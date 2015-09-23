@@ -1,29 +1,23 @@
-03 November 2014
-Release: v3.81
+21st September 2015
+Release: v0.51
 
-v3.80 contains further bug-fixes and Enhancement of v3.70
-
-********* UPGRADING? *********
-v3.81 requires v3.80 to be be installed first
-v3.80 requires v3.70
-If you try to upgrade from an ealier version then you will run into problems.
-
-THIS APPLIES TO UPGRADES ONLY!
-***********************************************************
-
-********* KNOWN ISSUES *********
-1.  There is a known issue with HSQLDB 2.n driver which does not handle BLOB
-    (Categories, Products, Customers, People) correctly
-    It causes an error when loading Sales panel - Clicking OK allows you to
-    continue seemingly with no adverse effect
-    Adding Images to (Categories, Products, Customers, People) forms is not
-    affected.
-    Suggestion: avoid HSQLDB database for now or revert to older 1.8 driver
+Fixed SQL errors in Convert and it now informs the the user of its progress via a progress bar.
 
 
-***********************************************************
+# Default Icon colours changed.
+# Added the ability for the user to change the colout of the icons. Located in the install folder is folder called iconsets, copy the teh required jar to the lIb folder to changethe colours
+# Identified bug in look and feel, unrequired lib file, now fixed
+# Found issue of missing field in products when coming from 3.70  - fixed
+# Found issue with rightslevel moving from 3.70 - fixed
+# Update ticket.buttons to point to image library for built in buttons. Maintains consistency
+# New shortcut icons now in use - thanks Fanzam 
+# Text version of permissions now deactivated by default, On custom permissions will need to be added to the database.
+# Started to tidy the message dialog boxes.
+# The main bug is fix in variable barcodes, these have now been written to comply with GS1 UK & GS1 US. Included is a pdf which explains how these barcodes work and how to set them up correctly in Chromis.
+# Plus a number of bug fixes supplied by John Barrett, thanks John.
 
-1.  Bug: Ticket numbers incrementing incorrectly on Derby DB
-    Fix: Reverted back to Derby driver : 10.10.2
-2.  Bug: Error in UpdateRecord for CSV Import
-    Fix: Java class updated accordingly.
+
+bug #5
+All icons set to use 18x18 size to maintain consistency - fixed
+
+

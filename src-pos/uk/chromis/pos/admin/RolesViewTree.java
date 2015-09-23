@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.admin;
 
 import uk.chromis.basic.BasicException;
@@ -212,9 +211,10 @@ public final class RolesViewTree extends javax.swing.JPanel implements EditorRec
         uTree.clearChecking();
         if (!"".equals(m_jName.getText())) {
             getPermissions();
-            for (String userPermission : m_apermissions) {
-                System.out.println(userPermission);
-                uTree.addCheckingPath(new TreePath(nodePaths.get(userPermission).getPath()));
+            for (String userPermission : m_apermissions) {              
+                if (nodePaths.containsKey(userPermission)) {
+                    uTree.addCheckingPath(new TreePath(nodePaths.get(userPermission).getPath()));
+                }
             }
             jRightsLevel.setValue(m_dlAdmin.getRightsLevel(m_jName.getText()));
             //    jRightsLevel.setText(m_dlAdmin.getRightsLevel(m_jName.getText()).toString());
@@ -341,7 +341,7 @@ public final class RolesViewTree extends javax.swing.JPanel implements EditorRec
         role[1] = m_jName.getText();
         role[2] = Formats.BYTEA.parseValue(buildPermissionsStr());
         role[3] = jRightsLevel.getValue();
-        
+
         if (!hasPermissions) {
             Object[] options = {AppLocal.getIntString("Button.NoPermissionsYes"), AppLocal.getIntString("Button.NoPermissionsNo")};
             if (JOptionPane.showOptionDialog(this,

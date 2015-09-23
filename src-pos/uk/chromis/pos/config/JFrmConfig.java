@@ -25,6 +25,7 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.JRootFrame;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -47,11 +48,11 @@ public class JFrmConfig extends javax.swing.JFrame {
         initComponents();
         
         try {
-            this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/images/smllogo.png")));
+            this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/fixedimages/smllogo.png")));
         } catch (IOException e) {
         }   
-        setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Configuration"));
-        
+        setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Configuration"));        
+        setPreferredSize(new Dimension(800,750));
         addWindowListener(new MyFrameListener()); 
         
         config = new JPanelConfiguration(props);
@@ -86,7 +87,7 @@ public class JFrmConfig extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 550));
+        setMinimumSize(new java.awt.Dimension(800, 650));
         setPreferredSize(new java.awt.Dimension(780, 550));
 
         setSize(new java.awt.Dimension(758, 561));

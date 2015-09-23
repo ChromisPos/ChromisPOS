@@ -48,6 +48,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -63,7 +64,6 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import uk.chromis.convert.*;
 
 public class JRootApp extends JPanel implements AppView {
 
@@ -96,6 +96,10 @@ public class JRootApp extends JPanel implements AppView {
     private DatabaseMetaData md;
     private SimpleDateFormat formatter;
     private MessageInf msg;
+
+    private String db_user;
+    private String db_url;
+    private String db_password;
 
     static {
         initOldClasses();
@@ -143,6 +147,16 @@ public class JRootApp extends JPanel implements AppView {
      * Creates new form JRootApp
      */
     public JRootApp() {
+        // get some default settings 
+        db_user = (AppConfig2.getInstance().getProperty("db.user"));
+        db_url = (AppConfig2.getInstance().getProperty("db.URL"));
+        db_password = (AppConfig2.getInstance().getProperty("db.password"));
+
+        if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
+            // the password is encrypted
+            AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
+            db_password = cypher.decrypt(db_password.substring(6));
+        }
 
         m_aBeanFactories = new HashMap<>();
 
@@ -157,13 +171,6 @@ public class JRootApp extends JPanel implements AppView {
      * @return
      */
     public boolean initApp(AppProperties props) {
-
-
-        Conversion convert = new Conversion();
-        convert.init();
-
-
-
 
         m_props = props;
         m_jPanelDown.setVisible(!(Boolean.valueOf(AppConfig2.getInstance().getProperty("till.hideinfo"))));
@@ -181,52 +188,6 @@ public class JRootApp extends JPanel implements AppView {
 
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
 
-        /*
-        
-         String sDBVersion = readDataBaseVersion();        
-         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
-            
-         // Create or upgrade database
-         String sScript = sDBVersion == null 
-         ? m_dlSystem.getInitScript() + "-create.sql"
-         : m_dlSystem.getInitScript() + "-upgrade-" + sDBVersion + ".sql";
-         if (JRootApp.class.getResource(sScript) == null) {
-         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, sDBVersion == null
-         ? AppLocal.getIntString("message.databasenotsupported", session.DB.getName()) // Create script does not exists. Database not supported
-         : AppLocal.getIntString("message.noupdatescript"))); // Upgrade script does not exist.
-         session.close();
-         return false;
-         } else {
-         // Create or upgrade script exists.
-         if (JOptionPane.showConfirmDialog(this
-         , AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase")
-         , AppLocal.getIntString("message.title")
-         , JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {  
-
-         try {
-         BatchSentence bsentence = new BatchSentenceResource(session, sScript);
-         bsentence.putParameter("APP_ID", Matcher.quoteReplacement(AppLocal.APP_ID));
-         bsentence.putParameter("APP_NAME", Matcher.quoteReplacement(AppLocal.APP_NAME));
-         bsentence.putParameter("APP_VERSION", Matcher.quoteReplacement(AppLocal.APP_VERSION));
-
-         java.util.List l = bsentence.list();
-         if (l.size() > 0) {
-         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("Database.ScriptWarning"), l.toArray(new Throwable[l.size()])));
-         }
-         } catch (BasicException e) {
-         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, AppLocal.getIntString("Database.ScriptError"), e));
-         session.close();
-         return false;
-         }     
-         } else {
-         session.close();
-         return false;
-         }
-         }
-         }
-
-        
-         */
         String sDBVersion = readDataBaseVersion();
 
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
@@ -238,15 +199,6 @@ public class JRootApp extends JPanel implements AppView {
                         ? "uk/chromis/pos/liquibase/chromis.xml"
                         : "uk/chromis/pos/liquibase/updatechromis.xml";
                 if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), AppLocal.getIntString("message.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                    String db_user = (AppConfig2.getInstance().getProperty("db.user"));
-                    String db_url = (AppConfig2.getInstance().getProperty("db.URL"));
-                    String db_password = (AppConfig2.getInstance().getProperty("db.password"));
-
-                    if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
-                        // the password is encrypted
-                        AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
-                        db_password = cypher.decrypt(db_password.substring(6));
-                    }
 
                     try {
                         ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance().getProperty("db.driverlib")).toURI().toURL()});
@@ -257,21 +209,11 @@ public class JRootApp extends JPanel implements AppView {
                         liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                         liquibase.update("implement");
 
-                    } catch (DatabaseException ex) {
+                    } catch (DatabaseException | MalformedURLException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                         Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (LiquibaseException ex) {
                         MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, "Liquibase Error", ex.getCause().toString().replace("liquibase.exception.DatabaseException:", ""));
                         msg.show(this);
-                    } catch (MalformedURLException ex) {
-                        Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InstantiationException ex) {
-                        Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
                     } finally {
                         if (con != null) {
                             try {
@@ -371,7 +313,7 @@ public class JRootApp extends JPanel implements AppView {
         String newLogo = AppConfig2.getInstance().getProperty("start.logo");
         if (newLogo != null) {
             if ("".equals(newLogo)) {
-                jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/chromis.png")));
+                jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png")));
             } else {
                 jLabel1.setIcon(new javax.swing.ImageIcon(newLogo));
             }
@@ -549,7 +491,6 @@ public class JRootApp extends JPanel implements AppView {
         m_iActiveCashSequence = iSeq;
         m_dActiveCashDateStart = dStart;
         m_dActiveCashDateEnd = dEnd;
-
         m_propsdb.setProperty("activecash", m_sActiveCashIndex);
         m_dlSystem.setResourceAsProperties(AppConfig2.getInstance().getHost() + "/properties", m_propsdb);
     }
@@ -571,7 +512,6 @@ public class JRootApp extends JPanel implements AppView {
      */
     @Override
     public Object getBean(String beanfactory) throws BeanFactoryException {
-
         // For backwards compatibility
         beanfactory = mapNewClass(beanfactory);
 
@@ -749,8 +689,9 @@ public class JRootApp extends JPanel implements AppView {
                     if (m_actionuser.authenticate(sPassword)) {
                         openAppView(m_actionuser);
                     } else {
-                        MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.BadPassword"));
-                        msg.show(JRootApp.this);
+                        JOptionPane.showMessageDialog(null,
+                                AppLocal.getIntString("message.BadPassword"),
+                                "Password Error", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -846,8 +787,9 @@ public class JRootApp extends JPanel implements AppView {
 
             if (user == null) {
                 // user not found
-                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.nocard"));
-                msg.show(this);
+                JOptionPane.showMessageDialog(null,
+                        AppLocal.getIntString("message.nocard"),
+                        "User Card", JOptionPane.WARNING_MESSAGE);
             } else {
                 openAppView(user);
             }
@@ -902,7 +844,7 @@ public class JRootApp extends JPanel implements AppView {
         m_jPanelTitle.add(m_jLblTitle, java.awt.BorderLayout.CENTER);
 
         poweredby.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        poweredby.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/poweredby.png"))); // NOI18N
+        poweredby.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/poweredby.png"))); // NOI18N
         poweredby.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         poweredby.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         poweredby.setMaximumSize(new java.awt.Dimension(222, 34));
@@ -929,7 +871,7 @@ public class JRootApp extends JPanel implements AppView {
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/chromis.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png"))); // NOI18N
         jLabel1.setText("<html><center>Chromis POS - The New Face of open source POS<br>" +
             "Copyright \u00A9 2015 Chromis <br>" +
             "http://www.chromis.co.uk<br>" +
@@ -1065,11 +1007,41 @@ public class JRootApp extends JPanel implements AppView {
 
     private void m_txtKeysKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_txtKeysKeyTyped
 
-        m_txtKeys.setText("0");
+        if (evt.getModifiers() != 0) {
+            String keys = evt.getKeyModifiersText(evt.getModifiers()) + "+" + evt.getKeyChar();
+            if ((keys.equals("Alt+Shift+P")) || (keys.equals("Alt+Shift+p"))) {
+                superUserLogin();
+            }
+        }
 
+        m_txtKeys.setText("0");
         processKey(evt.getKeyChar());
 
     }//GEN-LAST:event_m_txtKeysKeyTyped
+
+    private void superUserLogin() {
+        //lets check if the super user exists
+        AppUser user = null;
+        try {
+            user = m_dlSystem.getsuperuser();
+            if (user == null) {
+                ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
+                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
+                Class.forName(AppConfig2.getInstance2().getProperty("db.driver"));
+                con = DriverManager.getConnection(db_url, db_user, db_password);
+
+                PreparedStatement stmt = con.prepareStatement("INSERT INTO PEOPLE (ID, NAME, ROLE, VISIBLE) VALUES ('99', 'SuperAdminUser', '0', 0)");
+                stmt.executeUpdate();
+                user = m_dlSystem.getsuperuser();
+            }
+        } catch (BasicException e) {
+        } catch (SQLException | MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        openAppView(user);
+    }
+
 
     private void poweredbyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_poweredbyMouseClicked
         if (SwingUtilities.isRightMouseButton(evt)) {

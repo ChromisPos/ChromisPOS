@@ -145,8 +145,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ALWAYSAVAILABLE", Datas.BOOLEAN, Formats.BOOLEAN),                                               //26
                 // JDL May 2015
                 new Field("DISCOUNTED", Datas.STRING, Formats.STRING),                                                      //27
-                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN)                                                    //28
-                              
+                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN)                                                    //28                              
         );
     }
 
@@ -423,6 +422,46 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 // ADDED JDL 25.05.13 Warranty flag
 
 
+        /**
+     *
+     * @param category
+     * @return
+     * @throws BasicException
+     */
+    public List<ProductInfoExt> getAllProductCatalogByCatOrder() throws BasicException  {
+	return new PreparedSentence(s
+		, "SELECT "
+                + "P.ID, "
+                + "P.REFERENCE, "
+                + "P.CODE, "
+                + "P.NAME, "
+                + "P.ISCOM, "
+                + "P.ISSCALE, "
+                + "P.PRICEBUY, "
+                + "P.PRICESELL, "
+                + "P.TAXCAT, "
+                + "P.CATEGORY, "
+                + "P.ATTRIBUTESET_ID, "
+                + "P.IMAGE, "
+                + "P.ATTRIBUTES, "
+                + "P.ISKITCHEN, "
+                + "P.ISSERVICE, "
+                + "P.DISPLAY, "
+                + "P.ISVPRICE, "
+                + "P.ISVERPATRIB, "
+                + "P.TEXTTIP, "
+                + "P.WARRANTY, "
+                + "P.STOCKUNITS, "
+                + "P.ALIAS, "
+                + "P.ALWAYSAVAILABLE, "
+                + "P.DISCOUNTED, "
+                + "P.CANDISCOUNT "
+                + "FROM PRODUCTS P, PRODUCTS_CAT O "
+                + "WHERE P.ID = O.PRODUCT "
+                + "ORDER BY O.CATORDER, P.NAME "
+		, null
+		, ProductInfoExt.getSerializerRead()).list();
+    } 
     /**
      *
      * @param category

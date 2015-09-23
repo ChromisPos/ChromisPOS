@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
-
 package uk.chromis.pos.forms;
 
 import uk.chromis.beans.LocaleResources;
@@ -26,7 +25,7 @@ import uk.chromis.beans.LocaleResources;
  * @author adrianromero
  */
 public class AppLocal {
-    
+
     /**
      *
      */
@@ -40,26 +39,25 @@ public class AppLocal {
     /**
      *
      */
-    public static final String APP_VERSION = "0.30";
+    public static final String APP_VERSION = "0.51";
 
     private static final LocaleResources m_resources;
-      
-    
+
     public static String LIST_BY_RIGHTS = "";
-            
-    
-    
+
     static {
         m_resources = new LocaleResources();
         m_resources.addBundleName("pos_messages");
         m_resources.addBundleName("erp_messages");
         m_resources.addBundleName("permissions_messages");
     }
-    
-    /** Creates a new instance of AppLocal */
+
+    /**
+     * Creates a new instance of AppLocal
+     */
     private AppLocal() {
     }
-    
+
     /**
      *
      * @param sKey
@@ -68,14 +66,14 @@ public class AppLocal {
     public static String getIntString(String sKey) {
         return m_resources.getString(sKey);
     }
-    
+
     /**
      *
      * @param sKey
      * @param sValues
      * @return
      */
-    public static String getIntString(String sKey, Object ... sValues) {
+    public static String getIntString(String sKey, Object... sValues) {
         return m_resources.getString(sKey, sValues);
     }
 }
