@@ -101,6 +101,7 @@
 	<class name="/uk/chromis/reports/inventory.bs"/>
 	<class name="uk.chromis.pos.imports.JPanelCSV"/>
 	<class name="uk.chromis.pos.inventory.CategoriesPanel"/>
+        <class name="/uk/chromis/reports/inventoryreorder.bs"/>
 	<class name="sales.ChangeTaxOptions"/>
 	<class name="uk.chromis.pos.inventory.TaxCategoriesPanel"/>
 	<class name="/uk/chromis/reports/extproducts.bs"/>

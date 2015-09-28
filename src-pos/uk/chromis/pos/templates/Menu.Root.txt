@@ -64,6 +64,7 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.InventoryDiff", "/uk/chromis/reports/inventorydiff.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.InventoryDiffDetail", "/uk/chromis/reports/inventorydiffdetail.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.InventoryListDetail", "/uk/chromis/reports/inventorylistdetail.bs");
+        submenu.addPanel("/uk/chromis/images/reports.png", "Menu.InventoryReOrder", "/uk/chromis/reports/inventoryreorder.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.ProductCatalog", "/uk/chromis/reports/productscatalog.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.Products", "/uk/chromis/reports/products.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.ProductLabels", "/uk/chromis/reports/productlabels.bs");

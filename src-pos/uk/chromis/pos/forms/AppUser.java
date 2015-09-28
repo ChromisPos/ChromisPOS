@@ -245,6 +245,7 @@ public class AppUser {
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportInventory2", "/uk/chromis/reports/inventoryb.bs");
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportInventoryBroken", "/uk/chromis/reports/inventorybroken.bs");
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportInventoryDiff", "/uk/chromis/reports/inventorydiff.bs");
+        m_oldclasses.put("net.adrianromero.tpv.reports.JReportInventoryReOrder", "/uk/chromis/reports/InventoryReOrder.bs");
 
         m_oldclasses.put("Menu.SalesManagement", "uk.chromis.pos.forms.MenuSalesManagement");
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportUserSales", "/uk/chromis/reports/usersales.bs");
