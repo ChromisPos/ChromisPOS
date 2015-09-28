@@ -166,5 +166,6 @@
     <class name="Menu.ChangePassword"/>
     <class name="uk.chromis.pos.panels.JPanelPrinter"/>
     <class name="uk.chromis.pos.config.JPanelConfiguration"/>
+    <class name="uk.chromis.pos.inventory.ProductPacksPanel"/>
 
 </permissions>

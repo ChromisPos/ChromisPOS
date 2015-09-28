@@ -59,6 +59,14 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
 
     private Object newColour;
 
+    private boolean m_bShowNonCatalogueProducts = false;
+    public void SetAllProducts( boolean ShowAll ) {
+        m_bShowNonCatalogueProducts = ShowAll;
+    }
+    public boolean getAllProducts() {
+        return m_bShowNonCatalogueProducts;
+    }
+    
     public JCatalogFull(DataLogicSales dlSales) {
         this(dlSales, false, false, 64, 54);
 
@@ -182,6 +190,17 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
                 }
                 jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), sColour);
             }
+            if( m_bShowNonCatalogueProducts ) {
+                java.util.List<ProductInfoExt> noncatproducts = m_dlSales.getAllNonProductCatalog();
+                for (ProductInfoExt prod : noncatproducts) {
+                    newColour = m_dlSales.getCategoryColour(prod.getCategoryID());
+                    String sColour = (String) newColour;
+                    if (sColour == null) {
+                        sColour = "";
+                    }
+                    jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), sColour);
+                }
+            }            
         } catch (BasicException e) {
             JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.notactive"), e));
         }

@@ -55,6 +55,7 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/attributes.png", "Menu.AttributeUse", "uk.chromis.pos.inventory.AttributeUsePanel");
         submenu.addPanel("/uk/chromis/images/stockdiary.png", "Menu.StockDiary", "uk.chromis.pos.inventory.StockDiaryPanel");
         submenu.addPanel("/uk/chromis/images/stockmaint.png", "Menu.StockMovement", "uk.chromis.pos.inventory.StockManagement");
+        submenu.addPanel("/uk/chromis/images/products.png", "Menu.ProductPacks", "uk.chromis.pos.inventory.ProductPacksPanel");
 
     submenu.addTitle("Menu.StockManagement.Reports");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.BarcodeSheet", "/uk/chromis/reports/barcodesheet.bs");

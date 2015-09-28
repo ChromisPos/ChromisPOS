@@ -68,8 +68,8 @@ public class PeoplePanel extends JPanelTable {
         //Any help with this will be appreciated John l
         try {
             AppLocal.LIST_BY_RIGHTS = "select PEOPLE.ID, PEOPLE.NAME, APPPASSWORD, ROLE, VISIBLE, CARD,"
-                    + "IMAGE from PEOPLE inner join roles on people.role=roles.id "
-                    + "where roles.rightslevel <= " + dlAdmin.getRightsLevelByID(app.getAppUserView().getUser().getRole());
+                    + "IMAGE from PEOPLE inner join ROLES on PEOPLE.ROLE=ROLES.ID "
+                    + "where ROLES.RIGHTSLEVEL <= " + dlAdmin.getRightsLevelByID(app.getAppUserView().getUser().getRole());
         } catch (BasicException ex) {
             Logger.getLogger(PeoplePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
