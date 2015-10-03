@@ -521,7 +521,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
             }
         } else {
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions"),
+                    AppLocal.getIntString("message.notpermissions") + " " + sTaskClass,
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();
@@ -555,7 +555,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
         } else {
 
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions"),
+                    AppLocal.getIntString("message.notpermissions") + " " + sTaskClass,
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();

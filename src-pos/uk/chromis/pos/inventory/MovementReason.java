@@ -64,6 +64,10 @@ public class MovementReason extends ComboItemLocal {
      */
     public static final MovementReason OUT_MOVEMENT = new MovementReason(-4, "stock.out.movement");
     
+    public static final MovementReason IN_OPEN_PACK = new MovementReason(-5, "stock.in.openpack");
+
+    public static final MovementReason OUT_OPEN_PACK = new MovementReason(-6, "stock.out.openpack");
+     
     /**
      *
      */

@@ -17,62 +17,75 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 
-package uk.chromis.pos.catalog;
+package uk.chromis.pos.inventory;
 
-import java.awt.Component;
-import java.awt.event.ActionListener;
-import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.IKeyed;
+import java.io.Serializable;
 
 /**
  *
- * @author adrianromero
+ * @author  adrianromero
+ * @version 
  */
-public interface CatalogSelector {
+public class PackProductInfo implements Serializable, IKeyed {
+    
+    private static final long serialVersionUID = 8959679342806L;
+    private String m_sID;
+    private String m_sName;
+       
+    /**
+     *
+     * @param sID
+     * @param sName
+     */
+    public PackProductInfo(String sID, String sName) {
+        m_sID = sID;
+        m_sName = sName;      
+    }
     
     /**
      *
-     * @throws BasicException
+     * @return
      */
-    public void loadCatalog() throws BasicException;
-
+    @Override
+    public Object getKey() {
+        return m_sID;
+    }
+    
     /**
      *
-     * @param id
+     * @param sID
      */
-    public void showCatalogPanel(String id);
-
+    public void setID(String sID) {
+        m_sID = sID;
+    }
+    
     /**
      *
-     * @param value
+     * @return
      */
-    public void setComponentEnabled(boolean value);
+    public String getID() {
+        return m_sID;
+    }
 
     /**
      *
      * @return
      */
-    public Component getComponent();
+    public String getName() {
+        return m_sName;
+    }
     
     /**
      *
-     * @param l
+     * @param sName
      */
-    public void addActionListener(ActionListener l);  
-
-    /**
-     *
-     * @param l
-     */
-    public void removeActionListener(ActionListener l);    
-    
-     /**
-     *
-     * @param ShowAll
-     */
-    public void SetAllProducts( boolean ShowAll );
-    
-    /**
-     *
-     */
-    public boolean getAllProducts();
+    public void setName(String sName) {
+        m_sName = sName;
+    }
+   
+    @Override
+    public String toString(){
+        return m_sName;
+    }
 }

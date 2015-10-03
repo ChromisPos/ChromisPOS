@@ -175,7 +175,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ALWAYSAVAILABLE", Datas.BOOLEAN, Formats.BOOLEAN),                                               //26
                 // JDL May 2015
                 new Field("DISCOUNTED", Datas.STRING, Formats.STRING),                                                      //27
-                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN)                                                    //28                              
+                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN),                                                    //28    
+
+                new Field("ISPACK", Datas.BOOLEAN, Formats.BOOLEAN),                                                        //29
+                new Field("PACKQUANTITY", Datas.DOUBLE, Formats.DOUBLE),                                                    //30
+                new Field("PACKPRODUCT", Datas.STRING, Formats.STRING)                                                      //31
+                   
         );
     }
 
@@ -241,7 +246,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, "                     //21  
                 + "ALIAS, "                                 //22
                 + "ALWAYSAVAILABLE, "                        //23  
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT LEFT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE ID = ? "
                 + "GROUP BY ID, REFERENCE, NAME;", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
@@ -277,8 +283,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, "                     //21   
                 + "ALIAS, "                                 //22
                 + "ALWAYSAVAILABLE, "                        //23   
-                + "DISCOUNTED, CANDISCOUNT "
-                //                + "FROM STOCKCURRENT LEFT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
+                 //                + "FROM STOCKCURRENT LEFT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "FROM STOCKCURRENT RIGHT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE CODE = ?"
 		, SerializerWriteString.INSTANCE
@@ -315,7 +322,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, "                     //21 
                 + "ALIAS, "                                 //22
                 + "ALWAYSAVAILABLE, "                        //23
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE REFERENCE = ?"
 		, SerializerWriteString.INSTANCE
@@ -338,8 +346,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, " //21
                 + "ALIAS, "                                 //22
                 + "ALWAYSAVAILABLE, "                        //23   
-                + "DISCOUNTED, CANDISCOUNT "
-                + "FROM PRODUCTS WHERE ID = ? "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
+                 + "FROM PRODUCTS WHERE ID = ? "
                 //+ "GROUP BY ID, REFERENCE, NAME "
                 // JL changed GROUP BY to ORDER BY, as it does not work with embedded for multiple grouping , 
                 // can find no reason for the group by use at the moment        
@@ -437,7 +446,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P, PRODUCTS_CAT O "
                 + "WHERE P.ID = O.PRODUCT AND P.CATEGORY = ? "
                 + "ORDER BY O.CATORDER, P.NAME "
@@ -451,7 +461,50 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 // ADDED JDL 10.04.2013 TEXTTIP text   
 // ADDED JDL 25.05.13 Warranty flag
 
-
+    
+    /**
+     *
+     * @param category
+     * @return
+     * @throws BasicException
+     */
+    public List<ProductInfoExt> getProductNonCatalog(String category) throws BasicException  {
+	return new PreparedSentence(s
+		, "SELECT "
+                + "P.ID, "
+                + "P.REFERENCE, "
+                + "P.CODE, "
+                + "P.NAME, "
+                + "P.ISCOM, "
+                + "P.ISSCALE, "
+                + "P.PRICEBUY, "
+                + "P.PRICESELL, "
+                + "P.TAXCAT, "
+                + "P.CATEGORY, "
+                + "P.ATTRIBUTESET_ID, "
+                + "P.IMAGE, "
+                + "P.ATTRIBUTES, "
+                + "P.ISKITCHEN, "
+                + "P.ISSERVICE, "
+                + "P.DISPLAY, "
+                + "P.ISVPRICE, "
+                + "P.ISVERPATRIB, "
+                + "P.TEXTTIP, "
+                + "P.WARRANTY, "
+                + "P.STOCKUNITS, "
+                + "P.ALIAS, "
+                + "P.ALWAYSAVAILABLE, "
+                + "P.DISCOUNTED, "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
+                + "FROM PRODUCTS P "
+                + "WHERE NOT EXISTS (SELECT O.PRODUCT FROM PRODUCTS_CAT O WHERE P.ID = O.PRODUCT) "
+                + "AND P.CATEGORY = ? "
+                + "ORDER BY P.NAME "
+		, SerializerWriteString.INSTANCE
+		, ProductInfoExt.getSerializerRead()).list(category);
+    }
+    
         /**
      *
      * @param category
@@ -485,13 +538,57 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P, PRODUCTS_CAT O "
                 + "WHERE P.ID = O.PRODUCT "
                 + "ORDER BY O.CATORDER, P.NAME "
 		, null
 		, ProductInfoExt.getSerializerRead()).list();
     } 
+    
+    
+    /**
+     *
+     * @return
+     * @throws BasicException
+     */
+    public List<ProductInfoExt> getAllNonProductCatalog() throws BasicException  {
+	return new PreparedSentence(s
+		, "SELECT "
+                + "P.ID, "
+                + "P.REFERENCE, "
+                + "P.CODE, "
+                + "P.NAME, "
+                + "P.ISCOM, "
+                + "P.ISSCALE, "
+                + "P.PRICEBUY, "
+                + "P.PRICESELL, "
+                + "P.TAXCAT, "
+                + "P.CATEGORY, "
+                + "P.ATTRIBUTESET_ID, "
+                + "P.IMAGE, "
+                + "P.ATTRIBUTES, "
+                + "P.ISKITCHEN, "
+                + "P.ISSERVICE, "
+                + "P.DISPLAY, "
+                + "P.ISVPRICE, "
+                + "P.ISVERPATRIB, "
+                + "P.TEXTTIP, "
+                + "P.WARRANTY, "
+                + "P.STOCKUNITS, "
+                + "P.ALIAS, "
+                + "P.ALWAYSAVAILABLE, "
+                + "P.DISCOUNTED, "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
+                + "FROM PRODUCTS P "
+                + "WHERE NOT EXISTS (SELECT O.PRODUCT FROM PRODUCTS_CAT O WHERE P.ID = O.PRODUCT) "
+                + "ORDER BY P.CATEGORY, P.NAME "
+		, null
+		, ProductInfoExt.getSerializerRead()).list();
+    }    
+
     /**
      *
      * @param category
@@ -525,7 +622,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P, PRODUCTS_CAT O "
                 + "WHERE P.ID = O.PRODUCT "
                 + "ORDER BY P.CATEGORY, P.NAME "
@@ -568,7 +666,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRODUCTS.ALIAS, "
                 + "PRODUCTS.ALWAYSAVAILABLE, "
                 + "PRODUCTS.DISCOUNTED, "
-                + "PRODUCTS.CANDISCOUNT "
+                + "PRODUCTS.CANDISCOUNT, "
+                + "PRODUCTS.ISPACK, "
+                + "PRODUCTS.PACKQUANTITY, "
+                + "PRODUCTS.PACKPRODUCT "                        
                 + "FROM CATEGORIES INNER JOIN PRODUCTS ON (PRODUCTS.CATEGORY = CATEGORIES.ID) "
                 + "WHERE PRODUCTS.ALWAYSAVAILABLE = " +s.DB.TRUE()+ " "
                 + "ORDER BY  CATEGORIES.NAME, PRODUCTS.NAME", 
@@ -610,7 +711,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, "
+                + "P.PACKQUANTITY, "
+                + "P.PACKPRODUCT "                        
                 + "FROM PRODUCTS P, "
                 + "PRODUCTS_CAT O, PRODUCTS_COM M "
                 + "WHERE P.ID = O.PRODUCT AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
@@ -742,7 +846,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, "         //21
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23 
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT OUTER JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE, NAME",
@@ -781,7 +886,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, "             //21
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23 
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT OUTER JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE ISCOM = " + s.DB.FALSE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE, NAME",
@@ -820,7 +926,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, "             //21
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23  
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT OUTER JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE", new String[] {"NAME", "PRICEBUY", "PRICESELL", "CATEGORY", "CODE"})
@@ -964,6 +1071,25 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     @Override
                     public Object readValues(DataRead dr) throws BasicException {
                         return new TaxCustCategoryInfo(dr.getString(1), dr.getString(2));
+                    }
+                });
+    }
+
+  /**
+     *
+     * @return
+    */
+    public final SentenceList getPackProductList() {
+        return new StaticSentence(s
+            , "SELECT "
+                + "ID, "
+                + "NAME "
+                + "FROM PRODUCTS "
+                + "ORDER BY NAME"
+            , null
+            , new SerializerRead() {@Override
+                    public Object readValues(DataRead dr) throws BasicException {
+                       return new PackProductInfo(dr.getString(1), dr.getString(2));
                     }
                 });
     }
@@ -1504,7 +1630,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ISSERVICE, P.DISPLAY, P.ISVPRICE, "
                 + "P.ISVERPATRIB, P.TEXTTIP, P.WARRANTY, P.STOCKUNITS, "
                 + "P.ALIAS, P.ALWAYSAVAILABLE, "
-                + "P.DISCOUNTED, P.CANDISCOUNT "
+                + "P.DISCOUNTED, P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P LEFT OUTER JOIN PRODUCTS_CAT C "
                 + "ON P.ID = C.PRODUCT "
                 + "WHERE ?(QBF_FILTER) "
@@ -1542,14 +1669,16 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "ISSCALE, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, "
                         + "ATTRIBUTESET_ID, IMAGE, STOCKCOST, STOCKVOLUME, " //14
                         + "ATTRIBUTES, ISKITCHEN, ISSERVICE, DISPLAY, ISVPRICE, "
-                        + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT  ) "  //25
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(productsRow.getDatas(),
+                        + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT, "
+                        + "ISPACK, PACKQUANTITY, PACKPRODUCT  ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{0,
                                     1, 2, 3, 4,
                                     5, 6, 7, 8, 9,
                                     10, 11, 12, 13,
                                     16, 17, 18, 19, 20,
-                                    21, 22, 23, 24, 25, 26, 27, 28})).exec(params);
+                                    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31})).exec(params);
 //JG Aug 2014 - see ProductsEditor setCurrentStock explain				
                         new PreparedSentence(s
                             , "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)"
@@ -1587,11 +1716,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "DISPLAY = ?, ISVPRICE = ?, "
                         + "ISVERPATRIB = ?, TEXTTIP = ?, "
                         + "WARRANTY = ?, ALIAS = ?, ALWAYSAVAILABLE = ?, "
-                        + "DISCOUNTED = ?, CANDISCOUNT = ? "
+                        + "DISCOUNTED = ?, CANDISCOUNT = ?, "
+                        + "ISPACK = ?, PACKQUANTITY = ?, PACKPRODUCT = ? "
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                                     10, 11, 12, 13, 16, 17, 18, 19, 20,
-                                    21, 22, 23, 25, 26, 27, 28, 0})).exec(params);
+                                    21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 0})).exec(params);
                 if (i > 0) {
 				if (((Boolean)values[14])) {
 					if (new PreparedSentence(s

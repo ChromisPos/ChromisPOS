@@ -61,6 +61,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
     private final ComboBoxValModel m_CodetypeModel;
 
+    private final SentenceList packproductsent;
+    private ComboBoxValModel packproductmodel;
+
     private Object m_id;
     private Object pricesell;
     private boolean priceselllock = false;
@@ -102,6 +105,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jCodetype.setModel(m_CodetypeModel);
         m_jCodetype.setVisible(false);
 
+        // Pack Product model
+        packproductsent = dlSales.getPackProductList();
+        packproductmodel = new ComboBoxValModel();
+      
         m_jRef.getDocument().addDocumentListener(dirty);
         m_jCode.getDocument().addDocumentListener(dirty);
         m_jName.getDocument().addDocumentListener(dirty);
@@ -135,6 +142,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPriceBuy.getDocument().addDocumentListener(fm);
         m_jPriceSell.getDocument().addDocumentListener(new PriceSellManager());
         m_jTax.addActionListener(fm);
+
+        m_jIsPack.addActionListener(dirty);
+        m_jPackQuantity.getDocument().addDocumentListener(dirty);
+        m_jPackProduct.addActionListener(dirty);
+        m_jPackProduct.addActionListener(fm);
 
         m_jPriceSellTax.getDocument().addDocumentListener(new PriceTaxManager());
         m_jmargin.getDocument().addDocumentListener(new MarginManager());
@@ -172,6 +184,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         attmodel = new ComboBoxValModel(attsent.list());
         attmodel.add(0, null);
         m_jAtt.setModel(attmodel);
+
+        packproductmodel = new ComboBoxValModel(packproductsent.list());
+        m_jPackProduct.setModel(packproductmodel);
+        
     }
 
     /**
@@ -281,7 +297,13 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jAlias.setEnabled(false);
         m_jAlwaysAvailable.setEnabled(false);
         
-        
+       m_jIsPack.setEnabled(false);
+       m_jPackQuantity.setEnabled(false);
+       packproductmodel.setSelectedKey(null);
+       m_jPackProduct.setEnabled(false);
+       jLabelPackQuantity.setEnabled(false);
+       jLabelPackProduct.setEnabled(false);
+             
         m_jDiscounted.setEnabled(false);        
 
         calculateMargin();
@@ -385,9 +407,18 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jAlias.setEnabled(true);
         m_jAlwaysAvailable.setEnabled(true);
 
+        m_jIsPack.setEnabled(true);
+        m_jPackQuantity.setEnabled(false);
+        m_jPackProduct.setEnabled(false);
+        jLabelPackQuantity.setEnabled(false);
+        jLabelPackProduct.setEnabled(false);
         
         m_jDiscounted.setEnabled(true);
         
+        m_jIsPack.setSelected(false);
+        m_jPackQuantity.setText(null);
+        packproductmodel.setSelectedKey(null);
+
         calculateMargin();
         calculatePriceSellTax();
         calculateGP();
@@ -494,6 +525,16 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         
         m_jDiscounted.setEnabled(false);
         
+        m_jIsPack.setEnabled(true);
+        m_jIsPack.setSelected(((Boolean) myprod[29]));
+        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[30]));
+        packproductmodel.setSelectedKey(myprod[31]);
+       
+        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
+        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
+        jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
+        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
+
         calculateMargin();
         calculatePriceSellTax();
         calculateGP();
@@ -605,6 +646,16 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         
         m_jDiscounted.setEnabled(true);
         
+        m_jIsPack.setSelected(((Boolean) myprod[29]));
+        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[30]));
+        packproductmodel.setSelectedKey(myprod[31]);
+         
+        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
+        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
+         jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
+        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
+      
+        m_jDiscounted.setEnabled(true);
         calculateMargin();
         calculatePriceSellTax();
         calculateGP();
@@ -618,7 +669,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     @Override
     public Object createValue() throws BasicException {
 
-        Object[] myprod = new Object[29];
+        Object[] myprod = new Object[32];
         myprod[0] = m_id;
         myprod[1] = m_jRef.getText();
         myprod[2] = m_jCode.getText();
@@ -663,7 +714,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         myprod[27] = "no";
         myprod[28] = m_jDiscounted.isSelected();
 
-        
+        myprod[29] = m_jIsPack.isSelected();
+        myprod[30] = Formats.DOUBLE.parseValue(m_jPackQuantity.getText());
+        myprod[31] = packproductmodel.getSelectedKey();
+            
         return myprod;
 
     }
@@ -1070,6 +1124,12 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel35 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         m_jDiscounted = new javax.swing.JCheckBox();
+ 	   m_jIsPack = new javax.swing.JCheckBox();
+        m_jPackQuantity = new javax.swing.JTextField();
+        m_jPackProduct = new javax.swing.JComboBox();
+        jLabel37 = new javax.swing.JLabel();
+        jLabelPackQuantity = new javax.swing.JLabel();
+        jLabelPackProduct = new javax.swing.JLabel();
         m_jImage = new uk.chromis.data.gui.JImageEditor();
         jPanel4 = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
@@ -1394,7 +1454,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jStockUnits.setText("0");
         m_jStockUnits.setBorder(null);
         jPanel2.add(m_jStockUnits);
-        m_jStockUnits.setBounds(240, 240, 80, 25);
+        m_jStockUnits.setBounds(370, 210, 80, 25);
 
         m_jAlwaysAvailable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jAlwaysAvailable.addActionListener(new java.awt.event.ActionListener() {
@@ -1416,6 +1476,43 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel33.setBounds(10, 240, 130, 25);
         jPanel2.add(m_jDiscounted);
         m_jDiscounted.setBounds(160, 270, 20, 21);
+
+ m_jIsPack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jIsPackActionPerformed(evt);
+            }
+        });
+        jPanel2.add(m_jIsPack);
+        m_jIsPack.setBounds(320, 240, 20, 21);
+
+        m_jPackQuantity.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        m_jPackQuantity.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jPanel2.add(m_jPackQuantity);
+        m_jPackQuantity.setBounds(350, 270, 80, 25);
+
+        m_jPackProduct.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        m_jPackProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jPackProductActionPerformed(evt);
+            }
+        });
+        jPanel2.add(m_jPackProduct);
+        m_jPackProduct.setBounds(350, 300, 220, 25);
+
+        jLabel37.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel37.setText("Multi Pack");
+        jPanel2.add(jLabel37);
+        jLabel37.setBounds(250, 240, 70, 20);
+
+        jLabelPackQuantity.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelPackQuantity.setText("Pack Quantity");
+        jPanel2.add(jLabelPackQuantity);
+        jLabelPackQuantity.setBounds(260, 270, 90, 20);
+
+        jLabelPackProduct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelPackProduct.setText("of Product");
+        jPanel2.add(jLabelPackProduct);
+        jLabelPackProduct.setBounds(260, 290, 80, 30);
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.prodstock"), jPanel2); // NOI18N
         jTabbedPane1.addTab("Image", m_jImage);
@@ -1626,6 +1723,16 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         }
     }//GEN-LAST:event_m_jAlwaysAvailableActionPerformed
 
+private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jPackProductActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_m_jPackProductActionPerformed
+
+    private void m_jIsPackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jIsPackActionPerformed
+        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
+        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
+        jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
+        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
+    }//GEN-LAST:event_m_jIsPackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonHTML;
@@ -1658,12 +1765,15 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelPackProduct;
+    private javax.swing.JLabel jLabelPackQuantity;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1687,8 +1797,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private javax.swing.JTextField m_jGrossProfit;
     private uk.chromis.data.gui.JImageEditor m_jImage;
     private javax.swing.JCheckBox m_jInCatalog;
+    private javax.swing.JCheckBox m_jIsPack;
     private javax.swing.JCheckBox m_jKitchen;
     private javax.swing.JTextField m_jName;
+    private javax.swing.JComboBox m_jPackProduct;
+    private javax.swing.JTextField m_jPackQuantity;
     private javax.swing.JTextField m_jPriceBuy;
     private javax.swing.JTextField m_jPriceSell;
     private javax.swing.JTextField m_jPriceSellTax;

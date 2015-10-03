@@ -586,12 +586,13 @@ public class JRootApp extends JPanel implements AppView {
         m_oldclasses.put("uk.chromis.pos.reports.JReportInventory2", "/uk/chromis/reports/inventoryb.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportInventoryBroken", "/uk/chromis/reports/inventorybroken.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportInventoryDiff", "/uk/chromis/reports/inventorydiff.bs");
+        m_oldclasses.put("uk.chromis.pos.reports.JReportInventoryReOrder", "/uk/chromis/reports/inventoryreorder.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportPeople", "/uk/chromis/reports/people.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportTaxes", "/uk/chromis/reports/taxes.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportUserSales", "/uk/chromis/reports/usersales.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportProducts", "/uk/chromis/reports/products.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportCatalog", "/uk/chromis/reports/productscatalog.bs");
-
+ 
         // update bean names from 2.10 to 2.20
         m_oldclasses.put("uk.chromis.pos.panels.JPanelTax", "uk.chromis.pos.inventory.TaxPanel");
 

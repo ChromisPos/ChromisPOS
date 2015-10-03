@@ -106,17 +106,20 @@ public class StockManagement extends JPanel implements JPanelView {
         m_ReasonModel.add(MovementReason.IN_PURCHASE);
         m_ReasonModel.add(MovementReason.IN_REFUND);
         m_ReasonModel.add(MovementReason.IN_MOVEMENT);
+        m_ReasonModel.add(MovementReason.IN_OPEN_PACK);
         m_ReasonModel.add(MovementReason.OUT_SALE);
         m_ReasonModel.add(MovementReason.OUT_REFUND);
         m_ReasonModel.add(MovementReason.OUT_BREAK);
         m_ReasonModel.add(MovementReason.OUT_MOVEMENT);        
         m_ReasonModel.add(MovementReason.OUT_CROSSING);        
+        m_ReasonModel.add(MovementReason.OUT_OPEN_PACK);
         
         m_jreason.setModel(m_ReasonModel);
         
         m_cat = new JCatalog(m_dlSales);
         m_cat.addActionListener(new CatalogListener());
-
+        m_cat.SetAllProducts(true);
+  
         catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);
        
 
