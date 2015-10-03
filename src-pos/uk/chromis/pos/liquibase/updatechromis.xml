@@ -7,11 +7,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-<<<<<<< HEAD
-    
-    
-=======
->>>>>>> github/master
+
     <property name="boolean.type" value="boolean" dbms="postgresql, hypersql, hsqldb"/>
     <property name="boolean.type" value="bit" dbms="mysql"/>
     <property name="boolean.type" value="smallint" dbms="derby"/>
@@ -20,12 +16,9 @@
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
-<<<<<<< HEAD
-    
- 
-=======
 
->>>>>>> github/master
+    
+
     <changeSet author="Chromis POS" id="update to v0.20">    
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.20"/>          
@@ -109,14 +102,11 @@
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.51"/>          
         </update>               
-<<<<<<< HEAD
-    </changeSet>                                                                                                                                                                                                                                                                                            
-=======
-    </changeSet>    
 
-  <changeSet author="Chromis POS" id="update to v0.6">    
+    </changeSet>                                                                                                                                                                                                                                                                                            
+     <changeSet author="Chromis POS" id="update to v0.51.01 ">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.6"/>          
+            <column name="VERSION" value="0.51.01"/>          
         </update>
         
         <addColumn tableName="PRODUCTS">
@@ -147,8 +137,6 @@
             <column name="DESCRIPTION" value="##label.description118"/>
         </insert>		
          
-    </changeSet>  
-                                                                       
->>>>>>> github/master
+    </changeSet>                                                                     
 </databaseChangeLog>
 

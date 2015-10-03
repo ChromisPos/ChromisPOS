@@ -54,6 +54,7 @@ import uk.chromis.pos.customers.CustomerTransaction;
 import uk.chromis.pos.inventory.AttributeSetInfo;
 import uk.chromis.pos.inventory.LocationInfo;
 import uk.chromis.pos.inventory.MovementReason;
+import uk.chromis.pos.inventory.PackProductInfo;
 import uk.chromis.pos.inventory.TaxCategoryInfo;
 import uk.chromis.pos.inventory.TaxCustCategoryInfo;
 import uk.chromis.pos.mant.FloorsInfo;
