@@ -101,6 +101,7 @@
     <class name="/uk/chromis/reports/inventorydiff.bs"/>
     <class name="/uk/chromis/reports/inventorydiffdetail.bs"/>
     <class name="/uk/chromis/reports/inventorylistdetail.bs"/>
+    <class name="/uk/chromis/reports/inventoryreorder.bs"/>    
     <class name="/uk/chromis/reports/productscatalog.bs"/>
     <class name="/uk/chromis/reports/products.bs"/>
     <class name="/uk/chromis/reports/productlabels.bs"/>
@@ -165,5 +166,6 @@
     <class name="Menu.ChangePassword"/>
     <class name="uk.chromis.pos.panels.JPanelPrinter"/>
     <class name="uk.chromis.pos.config.JPanelConfiguration"/>
+    <class name="uk.chromis.pos.inventory.ProductPacksPanel"/>
 
 </permissions>

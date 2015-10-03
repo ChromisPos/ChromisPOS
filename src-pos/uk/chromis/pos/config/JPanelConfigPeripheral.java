@@ -167,6 +167,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter.addItem("COM6");
         jcboSerialPrinter.addItem("COM7");
         jcboSerialPrinter.addItem("COM8");
+        jcboSerialPrinter.addItem("COM9");
+        jcboSerialPrinter.addItem("COM10");
         jcboSerialPrinter.addItem("LPT1");
         jcboSerialPrinter.addItem("/dev/ttyS0");
         jcboSerialPrinter.addItem("/dev/ttyS1");
@@ -200,6 +202,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter2.addItem("COM6");
         jcboSerialPrinter2.addItem("COM7");
         jcboSerialPrinter2.addItem("COM8");        
+        jcboSerialPrinter2.addItem("COM9");        
+        jcboSerialPrinter2.addItem("COM10");        
         jcboSerialPrinter2.addItem("LPT1");
         jcboSerialPrinter2.addItem("/dev/ttyS0");
         jcboSerialPrinter2.addItem("/dev/ttyS1");
@@ -233,6 +237,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter3.addItem("COM6");
         jcboSerialPrinter3.addItem("COM7");
         jcboSerialPrinter3.addItem("COM8");        
+        jcboSerialPrinter3.addItem("COM9");        
+        jcboSerialPrinter3.addItem("COM10");        
         jcboSerialPrinter3.addItem("LPT1");
         jcboSerialPrinter3.addItem("/dev/ttyS0");
         jcboSerialPrinter3.addItem("/dev/ttyS1");
@@ -268,6 +274,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter4.addItem("COM6");
         jcboSerialPrinter4.addItem("COM7");
         jcboSerialPrinter4.addItem("COM8");        
+        jcboSerialPrinter4.addItem("COM9");        
+        jcboSerialPrinter4.addItem("COM10");        
         jcboSerialPrinter4.addItem("LPT1");
         jcboSerialPrinter4.addItem("/dev/ttyS0");
         jcboSerialPrinter4.addItem("/dev/ttyS1");
@@ -301,6 +309,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter5.addItem("COM6");
         jcboSerialPrinter5.addItem("COM7");
         jcboSerialPrinter5.addItem("COM8");        
+        jcboSerialPrinter5.addItem("COM9");        
+        jcboSerialPrinter5.addItem("COM10");        
         jcboSerialPrinter5.addItem("LPT1");
         jcboSerialPrinter5.addItem("/dev/ttyS0");
         jcboSerialPrinter5.addItem("/dev/ttyS1");
@@ -334,6 +344,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter6.addItem("COM6");
         jcboSerialPrinter6.addItem("COM7");
         jcboSerialPrinter6.addItem("COM8");        
+        jcboSerialPrinter6.addItem("COM9");        
+        jcboSerialPrinter6.addItem("COM10");        
         jcboSerialPrinter6.addItem("LPT1");
         jcboSerialPrinter6.addItem("/dev/ttyS0");
         jcboSerialPrinter6.addItem("/dev/ttyS1");
@@ -365,6 +377,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialDisplay.addItem("COM6");
         jcboSerialDisplay.addItem("COM7");
         jcboSerialDisplay.addItem("COM8");        
+        jcboSerialDisplay.addItem("COM9");        
+        jcboSerialDisplay.addItem("COM10");        
         jcboSerialDisplay.addItem("LPT1");
         jcboSerialDisplay.addItem("/dev/ttyS0");
         jcboSerialDisplay.addItem("/dev/ttyS1");
@@ -390,6 +404,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialScale.addItem("COM6");
         jcboSerialScale.addItem("COM7");
         jcboSerialScale.addItem("COM8");        
+        jcboSerialScale.addItem("COM9");        
+        jcboSerialScale.addItem("COM10");        
         jcboSerialScale.addItem("/dev/ttyS0");
         jcboSerialScale.addItem("/dev/ttyS1");
         jcboSerialScale.addItem("/dev/ttyS2");
@@ -410,6 +426,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialScanner.addItem("COM6");
         jcboSerialScanner.addItem("COM7");
         jcboSerialScanner.addItem("COM8");        
+        jcboSerialScanner.addItem("COM9");
+        jcboSerialScanner.addItem("COM10");        
         jcboSerialScanner.addItem("/dev/ttyS0");
         jcboSerialScanner.addItem("/dev/ttyS1");
         jcboSerialScanner.addItem("/dev/ttyS2");

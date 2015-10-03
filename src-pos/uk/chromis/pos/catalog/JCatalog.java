@@ -57,6 +57,14 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private boolean pricevisible;
     private boolean taxesincluded;
 
+    private boolean m_bShowNonCatalogueProducts = false;
+    public void SetAllProducts( boolean ShowAll ) {
+        m_bShowNonCatalogueProducts = ShowAll;
+    }
+    public boolean getAllProducts() {
+        return m_bShowNonCatalogueProducts;
+    }
+    
     // Set of Products panels
     // JG Aug 2013 switched to diamond inference
     private final Map<String, ProductInfoExt> m_productsset = new HashMap<>();
@@ -276,6 +284,16 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
 // These are the products selection panel                   
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
                 }
+                
+                                
+                // Sometimes we need to see non catalogue products
+                if( m_bShowNonCatalogueProducts ) {
+                    java.util.List<ProductInfoExt> noncatproducts = m_dlSales.getProductNonCatalog(catid);
+                    for (ProductInfoExt prod : noncatproducts) {
+                        jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
+                    }
+                }                
+  
             }
 
             // Show categories panel

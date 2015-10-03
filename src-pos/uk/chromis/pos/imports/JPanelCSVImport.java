@@ -608,7 +608,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
      */
     public void createProduct(String pType) {
 // create a new product and save it using DalaLogicSales
-        Object[] myprod = new Object[29];
+        Object[] myprod = new Object[32];
         myprod[0] = UUID.randomUUID().toString();                               // ID string
         myprod[1] = productReference;                                           // Reference string
         myprod[2] = productBarcode;                                             // Barcode String        
@@ -638,6 +638,10 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[26] = false; 
         myprod[27] = "";
         myprod[28] = false;                                                     // AlwaysAvailable flag
+        myprod[29] = false;                                                     // Is a pack
+        myprod[30] = (double)0;                                                 // PackQuantity
+        myprod[31] = null;                                                     // Pack Product
+          
         try {
             if ("new".equals(pType)) {
                 spr.insertData(myprod);

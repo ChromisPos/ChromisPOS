@@ -863,7 +863,22 @@
             <column name="SECTION" value="##label.sectionmaintenance"/>
             <column name="DISPLAYNAME" value="##label.displayname116"/>
             <column name="DESCRIPTION" value="##label.description116"/>
-        </insert>                                  		
+        </insert>     
+        
+        <insert tableName="DBPERMISSIONS">		
+           <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
+           <column name="SECTION" value="##label.sectionstock"/>
+           <column name="DISPLAYNAME" value="##label.displayname117"/>
+           <column name="DESCRIPTION" value="##label.description117"/>
+       </insert>	
+                                                             
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname118"/>
+            <column name="DESCRIPTION" value="##label.description118"/>
+        </insert>		
+ 	                             		
     </changeSet>
 
 

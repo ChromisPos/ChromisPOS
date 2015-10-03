@@ -51,6 +51,8 @@ public class JParamsReason extends javax.swing.JPanel implements ReportEditorCre
         m_ReasonModel.add(MovementReason.OUT_REFUND);
         m_ReasonModel.add(MovementReason.OUT_BREAK);
         m_ReasonModel.add(MovementReason.OUT_MOVEMENT);
+        m_ReasonModel.add(MovementReason.IN_OPEN_PACK);
+        m_ReasonModel.add(MovementReason.OUT_OPEN_PACK);
         
         m_jreason.setModel(m_ReasonModel);
         // m_jreason.setSelectedItem(null);
