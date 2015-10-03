@@ -19,7 +19,17 @@
 
 package uk.chromis.beans;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Paint;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 

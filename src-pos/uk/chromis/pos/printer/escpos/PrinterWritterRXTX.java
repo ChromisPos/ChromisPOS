@@ -20,10 +20,15 @@
 package uk.chromis.pos.printer.escpos;
 
 // import javax.comm.*; // Java comm library
-import uk.chromis.pos.printer.TicketPrinterException;
-import gnu.io.*;
+import gnu.io.CommPort;
+import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
+import gnu.io.SerialPort;
+import gnu.io.UnsupportedCommOperationException;
 import java.io.IOException;
 import java.io.OutputStream;
+import uk.chromis.pos.printer.TicketPrinterException;
 
 /**
  *

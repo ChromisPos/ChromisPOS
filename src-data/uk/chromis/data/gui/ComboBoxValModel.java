@@ -19,10 +19,13 @@
 
 package uk.chromis.data.gui;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
 import uk.chromis.data.loader.IKeyGetter;
 import uk.chromis.data.loader.KeyGetterBuilder;
-import java.util.*;
-import javax.swing.*;
 
 /**
  *

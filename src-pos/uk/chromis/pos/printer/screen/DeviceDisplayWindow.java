@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.printer.screen;
 
+import javax.swing.JComponent;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.printer.DeviceDisplay;
-import javax.swing.JComponent;
 
 /**
  *

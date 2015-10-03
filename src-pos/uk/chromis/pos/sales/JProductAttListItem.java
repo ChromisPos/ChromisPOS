@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.data.gui.ComboBoxValModel;
 import java.awt.Component;
 import java.util.List;
+import uk.chromis.data.gui.ComboBoxValModel;
 
 /**
  *

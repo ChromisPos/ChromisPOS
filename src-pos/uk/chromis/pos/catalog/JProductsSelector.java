@@ -19,7 +19,6 @@
 
 package uk.chromis.pos.catalog;
 
-import uk.chromis.beans.JFlowPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -28,6 +27,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import uk.chromis.beans.JFlowPanel;
 
 /**
  *

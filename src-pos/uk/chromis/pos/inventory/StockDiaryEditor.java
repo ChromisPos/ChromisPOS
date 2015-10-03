@@ -19,6 +19,13 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.DateUtils;
 import uk.chromis.beans.JCalendarDialog;
@@ -36,13 +43,6 @@ import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.panels.JProductFinder;
 import uk.chromis.pos.sales.JProductAttEdit;
 import uk.chromis.pos.ticket.ProductInfoExt;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  *

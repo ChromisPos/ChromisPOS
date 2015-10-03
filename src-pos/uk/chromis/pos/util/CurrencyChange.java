@@ -19,8 +19,6 @@
 
 package uk.chromis.pos.util;
 
-import java.text.*;
-
 /**
  *
  *   

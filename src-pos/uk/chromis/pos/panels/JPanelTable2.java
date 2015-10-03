@@ -19,12 +19,12 @@
 
 package uk.chromis.pos.panels;
 
+import javax.swing.ListCellRenderer;
 import uk.chromis.data.loader.ComparatorCreator;
 import uk.chromis.data.loader.Vectorer;
 import uk.chromis.data.model.Row;
 import uk.chromis.data.user.ListProvider;
 import uk.chromis.data.user.SaveProvider;
-import javax.swing.ListCellRenderer;
 
 /**
  *

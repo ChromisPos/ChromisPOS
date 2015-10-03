@@ -19,11 +19,6 @@
 
 package uk.chromis.pos.admin;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppViewConnection;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -31,6 +26,11 @@ import java.awt.Window;
 import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppViewConnection;
 
 /**
  *

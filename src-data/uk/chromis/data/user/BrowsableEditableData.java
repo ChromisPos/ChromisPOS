@@ -19,9 +19,11 @@
 
 package uk.chromis.data.user;
 
-import java.util.*;
-import javax.swing.*;
 import java.awt.Component;
+import java.util.Comparator;
+import java.util.EventListener;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.event.EventListenerList;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.LocalRes;

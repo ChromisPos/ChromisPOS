@@ -19,13 +19,18 @@
 
 package uk.chromis.pos.printer.screen;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.printer.DeviceDisplay;
 import uk.chromis.pos.printer.DeviceDisplayBase;
 import uk.chromis.pos.printer.DeviceDisplayImpl;
-import java.awt.*;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
  *

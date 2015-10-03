@@ -19,10 +19,10 @@
 
 package uk.chromis.editor;
 
-import uk.chromis.basic.BasicException;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.border.Border;
+import uk.chromis.basic.BasicException;
 
 /**
  *

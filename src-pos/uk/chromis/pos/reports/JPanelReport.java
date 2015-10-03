@@ -19,15 +19,6 @@
 
 package uk.chromis.pos.reports;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.gui.MessageInf;
-import uk.chromis.data.loader.BaseSentence;
-import uk.chromis.data.loader.SentenceList;
-import uk.chromis.data.loader.Session;
-import uk.chromis.data.user.EditorCreator;
-import uk.chromis.pos.forms.*;
-import uk.chromis.pos.sales.TaxesLogic;
-import uk.chromis.pos.util.JRViewer300;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,9 +30,28 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.data.loader.BaseSentence;
+import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.Session;
+import uk.chromis.data.user.EditorCreator;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.BeanFactoryApp;
+import uk.chromis.pos.forms.BeanFactoryException;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.JPanelView;
+import uk.chromis.pos.sales.TaxesLogic;
+import uk.chromis.pos.util.JRViewer300;
 
 /**
  *

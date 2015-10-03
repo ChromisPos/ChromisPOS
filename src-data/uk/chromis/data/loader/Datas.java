@@ -19,9 +19,9 @@
 
 package uk.chromis.data.loader;
 
-import uk.chromis.basic.BasicException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import uk.chromis.basic.BasicException;
 
 /**
  *

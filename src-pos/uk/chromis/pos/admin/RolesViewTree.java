@@ -18,15 +18,11 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.admin;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.SentenceList;
-import uk.chromis.data.user.DirtyManager;
-import uk.chromis.data.user.EditorRecord;
-import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppView;
-import uk.chromis.pos.forms.JRootApp;
-import eu.floraresearch.lablib.gui.checkboxtree.*;
+import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
+import eu.floraresearch.lablib.gui.checkboxtree.DefaultCheckboxTreeCellRenderer;
+import eu.floraresearch.lablib.gui.checkboxtree.TreeCheckingEvent;
+import eu.floraresearch.lablib.gui.checkboxtree.TreeCheckingListener;
+import eu.floraresearch.lablib.gui.checkboxtree.TreeCheckingModel;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -47,11 +43,19 @@ import javax.swing.tree.TreePath;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.apache.commons.lang.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import org.apache.commons.lang.StringUtils;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.user.DirtyManager;
+import uk.chromis.data.user.EditorRecord;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.JRootApp;
 
 /**
  *

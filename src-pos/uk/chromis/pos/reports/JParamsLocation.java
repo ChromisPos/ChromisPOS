@@ -19,15 +19,19 @@
 
 package uk.chromis.pos.reports;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.gui.ComboBoxValModel;
-import uk.chromis.data.loader.*;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppView;
-import uk.chromis.pos.forms.DataLogicSales;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.util.List;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.gui.ComboBoxValModel;
+import uk.chromis.data.loader.Datas;
+import uk.chromis.data.loader.QBFCompareEnum;
+import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.SerializerWrite;
+import uk.chromis.data.loader.SerializerWriteBasic;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSales;
 
 /**
  *

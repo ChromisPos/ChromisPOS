@@ -22,14 +22,14 @@ package uk.chromis.pos.thirdparties;
 import javax.swing.ListCellRenderer;
 import uk.chromis.data.gui.ListCellRendererBasic;
 import uk.chromis.data.loader.ComparatorCreator;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.panels.*;
 import uk.chromis.data.loader.TableDefinition;
 import uk.chromis.data.loader.Vectorer;
 import uk.chromis.data.user.EditorRecord;
-import uk.chromis.data.user.SaveProvider;
 import uk.chromis.data.user.ListProvider;
 import uk.chromis.data.user.ListProviderCreator;
+import uk.chromis.data.user.SaveProvider;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.panels.JPanelTable;
 
 /**
  *

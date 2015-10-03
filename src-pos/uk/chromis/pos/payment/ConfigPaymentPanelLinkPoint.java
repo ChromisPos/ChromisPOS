@@ -19,13 +19,13 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.util.AltEncrypter;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.util.AltEncrypter;
 
 /**
  *

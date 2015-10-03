@@ -18,9 +18,9 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package uk.chromis.data.user;
-import uk.chromis.data.loader.TableDefinition;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.SentenceExec;
+import uk.chromis.data.loader.TableDefinition;
 
 /**
  *

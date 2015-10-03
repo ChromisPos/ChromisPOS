@@ -19,11 +19,11 @@
 
 package uk.chromis.pos.inventory;
 
-import uk.chromis.format.Formats;
-import uk.chromis.pos.util.StringUtils;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.util.StringUtils;
 
 
 /**

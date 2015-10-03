@@ -19,11 +19,11 @@
 
 package uk.chromis.pos.sales;
 
+import java.awt.BorderLayout;
+import java.util.List;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.ticket.TicketLineInfo;
-import java.awt.BorderLayout;
-import java.util.List;
 
 /**
  *

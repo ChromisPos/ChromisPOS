@@ -18,17 +18,16 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.forms;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import javax.swing.JFrame;
 import uk.chromis.pos.config.JFrmConfig;
 import uk.chromis.pos.instance.AppMessage;
 import uk.chromis.pos.instance.InstanceManager;
 import uk.chromis.pos.util.OSValidator;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.IOException;
-import java.rmi.AlreadyBoundException;
-import java.rmi.RemoteException;
-import javax.swing.JFrame;
 
 /**
  *

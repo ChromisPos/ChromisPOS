@@ -26,7 +26,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.LocalRes;
-import uk.chromis.data.user.BrowsableData;
 import uk.chromis.data.user.BrowsableEditableData;
 import uk.chromis.data.user.BrowseListener;
 

@@ -19,14 +19,14 @@
 
 package uk.chromis.pos.printer.screen;
 
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import javax.swing.JComponent;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.printer.DevicePrinter;
 import uk.chromis.pos.printer.ticket.BasicTicket;
 import uk.chromis.pos.printer.ticket.BasicTicketForScreen;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import javax.swing.JComponent;
 
 /**
  *

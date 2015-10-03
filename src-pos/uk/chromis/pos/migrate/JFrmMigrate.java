@@ -19,16 +19,16 @@
 
 package uk.chromis.pos.migrate;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppProperties;
-import uk.chromis.pos.forms.JRootFrame;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import uk.chromis.basic.BasicException;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppProperties;
+import uk.chromis.pos.forms.JRootFrame;
 
 /**
  *

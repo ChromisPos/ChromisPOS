@@ -19,13 +19,17 @@
 
 package uk.chromis.data.user;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.LocalRes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EventListener;
+import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.LocalRes;
 
 /**
  *

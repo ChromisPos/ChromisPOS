@@ -19,8 +19,8 @@
 
 package uk.chromis.pos.config;
 
-import uk.chromis.pos.forms.AppConfig;
 import java.awt.Component;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *

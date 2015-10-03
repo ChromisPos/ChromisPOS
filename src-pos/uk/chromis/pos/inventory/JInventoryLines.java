@@ -19,17 +19,21 @@
 
 package uk.chromis.pos.inventory;
 
-import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.AppLocal;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppLocal;
 
 /**
  *

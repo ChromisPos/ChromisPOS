@@ -19,8 +19,8 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.pos.forms.AppLocal;
 import javax.swing.JComponent;
+import uk.chromis.pos.forms.AppLocal;
 
 /**
  *

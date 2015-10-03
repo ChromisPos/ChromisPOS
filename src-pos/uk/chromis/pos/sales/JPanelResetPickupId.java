@@ -20,6 +20,13 @@
 package uk.chromis.pos.sales;
 
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
@@ -31,13 +38,6 @@ import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.AppViewConnection;
 import uk.chromis.pos.forms.JPanelView;
 import uk.chromis.pos.util.AltEncrypter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *

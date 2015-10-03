@@ -2,20 +2,24 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppProperties;
-import uk.chromis.pos.util.AltEncrypter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.security.Security;
-import java.util.*;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.StringTokenizer;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppProperties;
+import uk.chromis.pos.util.AltEncrypter;
 
 /**
  *

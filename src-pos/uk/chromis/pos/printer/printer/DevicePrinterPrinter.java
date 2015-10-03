@@ -19,6 +19,25 @@
 
 package uk.chromis.pos.printer.printer;
 
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
+import javax.print.PrintService;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.JobName;
+import javax.print.attribute.standard.Media;
+import javax.print.attribute.standard.MediaSizeName;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.swing.JComponent;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.pos.forms.AppLocal;
@@ -27,20 +46,6 @@ import uk.chromis.pos.printer.ticket.BasicTicket;
 import uk.chromis.pos.printer.ticket.BasicTicketForPrinter;
 import uk.chromis.pos.util.ReportUtils;
 import uk.chromis.pos.util.SelectPrinter;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.print.*;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.JobName;
-import javax.print.attribute.standard.Media;
-import javax.print.attribute.standard.MediaSizeName;
-import javax.print.attribute.standard.OrientationRequested;
-import javax.swing.JComponent;
 
 /**
  *Class DevicePrinterPrinter is responsible for printing tickets using system <br>

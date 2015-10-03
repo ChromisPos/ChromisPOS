@@ -19,6 +19,11 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.gui.MessageInf;
@@ -29,11 +34,6 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import javax.swing.JPanel;
 
 /**
  *

@@ -19,14 +19,14 @@
 
 package uk.chromis.pos.panels;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.DataField;
-import uk.chromis.data.loader.DataRead;
-import uk.chromis.data.loader.Datas;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.DataField;
+import uk.chromis.data.loader.DataRead;
+import uk.chromis.data.loader.Datas;
 
 /**
  *

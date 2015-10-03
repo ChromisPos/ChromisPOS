@@ -19,6 +19,9 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.user.DirtyManager;
@@ -29,9 +32,6 @@ import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.panels.JProductFinder;
 import uk.chromis.pos.ticket.ProductInfoExt;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.util.UUID;
 
 /**
  *

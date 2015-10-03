@@ -19,6 +19,7 @@
 
 package uk.chromis.pos.mant;
 
+import javax.swing.ListCellRenderer;
 import uk.chromis.data.gui.ListCellRendererBasic;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.TableDefinition;
@@ -30,7 +31,6 @@ import uk.chromis.data.user.SaveProvider;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.panels.JPanelTable;
-import javax.swing.ListCellRenderer;
 
 /**
  *

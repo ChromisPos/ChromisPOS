@@ -19,6 +19,8 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.Component;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.DataRead;
@@ -30,8 +32,6 @@ import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
-import java.util.UUID;
 
 /**
  *

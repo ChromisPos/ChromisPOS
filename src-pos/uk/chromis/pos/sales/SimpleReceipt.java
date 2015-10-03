@@ -19,6 +19,9 @@
 
 package uk.chromis.pos.sales;
 
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.pos.customers.DataLogicCustomers;
@@ -27,9 +30,6 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

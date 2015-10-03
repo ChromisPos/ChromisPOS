@@ -17,20 +17,25 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //    BarCode generator John L 07.03.2015 uses zxing.jar
-package uk.chromis.pos.qrcode;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.util.Hashtable;
+package uk.chromis.pos.qrcode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.*;
+import com.google.zxing.oned.CodaBarWriter;
+import com.google.zxing.oned.Code128Writer;
+import com.google.zxing.oned.Code39Writer;
+import com.google.zxing.oned.EAN13Writer;
+import com.google.zxing.oned.EAN8Writer;
+import com.google.zxing.oned.UPCAWriter;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

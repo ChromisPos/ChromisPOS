@@ -19,18 +19,18 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.pos.customers.CustomerInfoExt;
-import uk.chromis.pos.inventory.TaxCategoryInfo;
-import uk.chromis.pos.ticket.TaxInfo;
-import uk.chromis.pos.ticket.TicketInfo;
-import uk.chromis.pos.ticket.TicketLineInfo;
-import uk.chromis.pos.ticket.TicketTaxInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import uk.chromis.pos.customers.CustomerInfoExt;
+import uk.chromis.pos.inventory.TaxCategoryInfo;
+import uk.chromis.pos.ticket.TaxInfo;
+import uk.chromis.pos.ticket.TicketInfo;
+import uk.chromis.pos.ticket.TicketLineInfo;
+import uk.chromis.pos.ticket.TicketTaxInfo;
 
 /**
  *

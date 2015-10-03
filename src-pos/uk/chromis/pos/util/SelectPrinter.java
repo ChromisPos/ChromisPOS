@@ -19,12 +19,12 @@
 
 package uk.chromis.pos.util;
 
-import uk.chromis.pos.forms.AppLocal;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.SwingUtilities;
+import uk.chromis.pos.forms.AppLocal;
 
 /**
  *

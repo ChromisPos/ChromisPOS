@@ -19,13 +19,13 @@
 
 package uk.chromis.editor;
 
+import java.awt.Toolkit;
+import java.io.File;
 import uk.chromis.basic.BasicException;
 import uk.chromis.format.DoubleUtils;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
-import java.awt.Toolkit;
-import java.io.File;
 
 /**
  *

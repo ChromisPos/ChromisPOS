@@ -19,11 +19,11 @@
 
 package uk.chromis.pos.forms;
 
+import java.io.IOException;
 import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.util.StringUtils;
-import java.io.IOException;
 
 /**
  *

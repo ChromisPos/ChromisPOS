@@ -19,12 +19,12 @@
 
 package uk.chromis.pos.ticket;
 
+import java.awt.image.BufferedImage;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.IKeyed;
 import uk.chromis.data.loader.ImageUtils;
 import uk.chromis.data.loader.SerializerRead;
-import java.awt.image.*;
 
 /**
  *

@@ -19,8 +19,8 @@
 
 package uk.chromis.pos.ticket;
 
-import uk.chromis.data.loader.IKeyed;
 import java.io.Serializable;
+import uk.chromis.data.loader.IKeyed;
 
 /**
  *

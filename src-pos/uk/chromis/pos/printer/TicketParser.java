@@ -18,11 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.printer;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.LocalRes;
-import uk.chromis.pos.forms.DataLogicSystem;
-import uk.chromis.pos.qrcode.BarCode;
-import uk.chromis.pos.ticket.TicketInfo;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.image.BufferedImage;
@@ -33,8 +28,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -42,6 +35,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.qrcode.BarCode;
+import uk.chromis.pos.ticket.TicketInfo;
 
 /**
  *

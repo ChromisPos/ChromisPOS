@@ -20,12 +20,12 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.Component;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
-import java.awt.Component;
 
 /**
  *

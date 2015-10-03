@@ -19,6 +19,8 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.Component;
+import javax.swing.JButton;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.user.EditorListener;
 import uk.chromis.data.user.EditorRecord;
@@ -28,8 +30,6 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.panels.JPanelTable2;
 import uk.chromis.pos.ticket.ProductFilter;
-import java.awt.Component;
-import javax.swing.JButton;
 
 /**
  *

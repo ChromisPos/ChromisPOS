@@ -18,6 +18,7 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.sales;
 
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.PreparedSentence;
@@ -29,7 +30,6 @@ import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
 import uk.chromis.pos.ticket.TicketInfo;
-import java.util.List;
 
 /**
  *

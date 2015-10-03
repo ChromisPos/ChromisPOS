@@ -19,8 +19,6 @@
 package uk.chromis.pos.forms;
 
 import java.io.File;
-import uk.chromis.format.Formats;
-import uk.chromis.pos.instance.InstanceQuery;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Locale;
@@ -32,6 +30,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import uk.chromis.convert.Conversion;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.instance.InstanceQuery;
 import uk.chromis.pos.ticket.TicketInfo;
 
 // JG 16 May 2013 deprecated for pushingpixels

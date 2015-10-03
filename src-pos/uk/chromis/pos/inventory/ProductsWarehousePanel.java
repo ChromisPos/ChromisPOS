@@ -19,8 +19,18 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.*;
+import uk.chromis.data.loader.DataRead;
+import uk.chromis.data.loader.Datas;
+import uk.chromis.data.loader.PreparedSentence;
+import uk.chromis.data.loader.SentenceExec;
+import uk.chromis.data.loader.SentenceExecTransaction;
+import uk.chromis.data.loader.SerializerRead;
+import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.model.Field;
 import uk.chromis.data.model.Row;
 import uk.chromis.data.user.EditorRecord;
@@ -30,10 +40,6 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.panels.JPanelTable2;
 import uk.chromis.pos.reports.JParamsLocation;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.UUID;
 
 /**
  *

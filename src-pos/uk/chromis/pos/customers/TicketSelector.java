@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.customers;
 
-import uk.chromis.basic.BasicException;
 import java.awt.Component;
 import java.awt.event.ActionListener;
+import uk.chromis.basic.BasicException;
 
 /**
  *

@@ -19,9 +19,6 @@
 
 package uk.chromis.pos.printer.javapos;
 
-import uk.chromis.data.loader.ImageUtils;
-import uk.chromis.pos.printer.DevicePrinter;
-import uk.chromis.pos.printer.TicketPrinterException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +29,9 @@ import jpos.CashDrawer;
 import jpos.JposException;
 import jpos.POSPrinter;
 import jpos.POSPrinterConst;
+import uk.chromis.data.loader.ImageUtils;
+import uk.chromis.pos.printer.DevicePrinter;
+import uk.chromis.pos.printer.TicketPrinterException;
 
 /**
  *

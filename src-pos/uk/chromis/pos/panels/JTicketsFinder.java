@@ -19,6 +19,16 @@
 
 package uk.chromis.pos.panels;
 
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Window;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.JCalendarDialog;
 import uk.chromis.data.gui.ComboBoxValModel;
@@ -37,12 +47,6 @@ import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.inventory.TaxCategoryInfo;
 import uk.chromis.pos.ticket.FindTicketsInfo;
 import uk.chromis.pos.ticket.FindTicketsRenderer;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFrame;
 
 /**
  *

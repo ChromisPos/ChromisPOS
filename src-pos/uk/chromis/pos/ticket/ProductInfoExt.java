@@ -18,13 +18,13 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.ticket;
 
+import java.awt.image.BufferedImage;
+import java.util.Properties;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.ImageUtils;
 import uk.chromis.data.loader.SerializerRead;
 import uk.chromis.format.Formats;
-import java.awt.image.BufferedImage;
-import java.util.Properties;
 
 /**
  *

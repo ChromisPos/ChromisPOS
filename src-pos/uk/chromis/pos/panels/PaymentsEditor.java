@@ -19,6 +19,9 @@
 
 package uk.chromis.pos.panels;
 
+import java.awt.Component;
+import java.util.Date;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.IKeyed;
@@ -26,9 +29,6 @@ import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
-import java.util.Date;
-import java.util.UUID;
 
 
 /**

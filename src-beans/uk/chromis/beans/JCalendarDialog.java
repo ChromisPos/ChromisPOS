@@ -19,11 +19,17 @@
 
 package uk.chromis.beans;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import java.util.*;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import javax.swing.JFrame;
 
 /**
  *

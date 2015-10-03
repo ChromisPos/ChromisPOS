@@ -19,8 +19,7 @@
 
 package uk.chromis.data.gui;
 
-import java.util.*;
-import javax.swing.*;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.user.BrowsableEditableData;

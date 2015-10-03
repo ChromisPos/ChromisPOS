@@ -19,10 +19,10 @@
 
 package uk.chromis.data.user;
 
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.loader.TableDefinition;
-import java.util.*;
 
 /**
  *

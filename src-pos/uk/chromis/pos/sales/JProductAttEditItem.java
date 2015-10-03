@@ -19,8 +19,8 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.editor.JEditorKeys;
 import java.awt.Component;
+import uk.chromis.editor.JEditorKeys;
 
 /**
  *

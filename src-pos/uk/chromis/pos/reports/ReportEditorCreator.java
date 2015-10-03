@@ -19,10 +19,10 @@
 
 package uk.chromis.pos.reports;
 
+import java.awt.Component;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.user.FilterEditorCreator;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
 
 /**
  *

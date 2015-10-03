@@ -19,8 +19,8 @@
 
 package uk.chromis.data.loader;
 
-import uk.chromis.format.Formats;
 import uk.chromis.basic.BasicException;
+import uk.chromis.format.Formats;
 
 /**
  *

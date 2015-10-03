@@ -19,11 +19,15 @@
 
 package uk.chromis.data.gui;
 
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.loader.Vectorer;
-import java.awt.*;
-import javax.swing.*;
 
 /**
  *

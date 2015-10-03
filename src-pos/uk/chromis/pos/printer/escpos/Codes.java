@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.printer.escpos;
 
+import java.awt.image.BufferedImage;
 import uk.chromis.pos.printer.DevicePrinter;
 import uk.chromis.pos.printer.DeviceTicket;
-import java.awt.image.BufferedImage;
 
 /**
  *

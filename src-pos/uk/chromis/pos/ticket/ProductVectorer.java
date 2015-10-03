@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.ticket;
 
-import uk.chromis.format.Formats;
-import uk.chromis.data.loader.Vectorer;
 import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.Vectorer;
+import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 /**
  *

@@ -18,10 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.sales;
 
-import uk.chromis.data.loader.LocalRes;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppUser;
-import uk.chromis.pos.util.ThumbNailBuilder;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.Insets;
@@ -43,6 +39,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppUser;
+import uk.chromis.pos.util.ThumbNailBuilder;
 
 /**
  *

@@ -19,6 +19,12 @@
 
 package uk.chromis.pos.panels;
 
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.EventListener;
+import javax.swing.event.EventListenerList;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.SerializerWrite;
@@ -28,12 +34,6 @@ import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.reports.ReportEditorCreator;
 import uk.chromis.pos.ticket.ProductInfoExt;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.EventListener;
-import javax.swing.event.EventListenerList;
 
 /**
  *

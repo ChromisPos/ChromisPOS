@@ -19,11 +19,11 @@
 
 package uk.chromis.data.gui;
 
-import javax.swing.*;
-import uk.chromis.format.Formats;
-import uk.chromis.data.user.BrowseListener;
+import javax.swing.JPanel;
 import uk.chromis.data.user.BrowsableEditableData;
+import uk.chromis.data.user.BrowseListener;
 import uk.chromis.data.user.StateListener;
+import uk.chromis.format.Formats;
 
 /**
  *

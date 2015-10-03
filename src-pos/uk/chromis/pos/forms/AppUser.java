@@ -19,9 +19,6 @@
 
 package uk.chromis.pos.forms;
 
-import uk.chromis.data.loader.LocalRes;
-import uk.chromis.pos.ticket.UserInfo;
-import uk.chromis.pos.util.Hashcypher;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -37,6 +34,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.ticket.UserInfo;
+import uk.chromis.pos.util.Hashcypher;
 
 /**
  *

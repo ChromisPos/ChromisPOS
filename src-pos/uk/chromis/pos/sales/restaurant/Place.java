@@ -20,15 +20,15 @@
 package uk.chromis.pos.sales.restaurant;
 
 import java.awt.Dimension;
+import java.awt.Insets;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.NullIcon;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.SerializableRead;
-import uk.chromis.basic.BasicException;
-import java.awt.Insets;
 
 /**
  *

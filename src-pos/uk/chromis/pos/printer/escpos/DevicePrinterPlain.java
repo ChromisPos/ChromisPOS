@@ -19,10 +19,10 @@
 
 package uk.chromis.pos.printer.escpos;
 
-import uk.chromis.pos.printer.DevicePrinter;
-import uk.chromis.pos.printer.TicketPrinterException;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
+import uk.chromis.pos.printer.DevicePrinter;
+import uk.chromis.pos.printer.TicketPrinterException;
 
 /**
  *

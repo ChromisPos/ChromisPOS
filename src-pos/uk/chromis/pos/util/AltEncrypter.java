@@ -20,8 +20,15 @@
 package uk.chromis.pos.util;
 
 import java.io.UnsupportedEncodingException;
-import java.security.*;
-import javax.crypto.*;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  *

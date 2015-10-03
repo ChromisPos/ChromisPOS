@@ -19,22 +19,36 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.data.loader.LocalRes;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppProperties;
-import uk.chromis.pos.util.AltEncrypter;
-import uk.chromis.pos.util.StringUtils;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppProperties;
+import uk.chromis.pos.util.AltEncrypter;
+import uk.chromis.pos.util.StringUtils;
 
 /**
  *

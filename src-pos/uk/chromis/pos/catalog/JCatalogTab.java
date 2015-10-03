@@ -19,13 +19,18 @@
 
 package uk.chromis.pos.catalog;
 
-import uk.chromis.beans.JFlowPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import uk.chromis.beans.JFlowPanel;
 
 /**
  *

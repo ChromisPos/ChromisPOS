@@ -19,17 +19,17 @@
 
 package uk.chromis.pos.inventory;
 
-import uk.chromis.data.gui.MessageInf;
-import uk.chromis.data.user.BrowsableEditableData;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.scanpal2.DeviceScanner;
-import uk.chromis.pos.scanpal2.DeviceScannerException;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.JFrame;
 import javax.swing.ListModel;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.data.user.BrowsableEditableData;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.scanpal2.DeviceScanner;
+import uk.chromis.pos.scanpal2.DeviceScannerException;
 
 /**
  *

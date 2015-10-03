@@ -20,13 +20,18 @@
 package uk.chromis.pos.sales.shared;
 
 
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.sales.SharedTicketInfo;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.sales.SharedTicketInfo;
 
 /**
  *

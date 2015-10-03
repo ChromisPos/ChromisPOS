@@ -19,8 +19,6 @@
 
 package uk.chromis.pos.util;
 
-import org.jdesktop.swingx.util.OS;
-
 /**
  *
  *   

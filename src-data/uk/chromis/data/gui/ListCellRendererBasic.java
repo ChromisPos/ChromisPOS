@@ -19,9 +19,10 @@
 
 package uk.chromis.data.gui;
 
+import java.awt.Component;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 import uk.chromis.data.loader.IRenderString;
-import java.awt.*;
-import javax.swing.*;
 
 /**
  *

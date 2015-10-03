@@ -19,6 +19,11 @@
 
 package uk.chromis.pos.ticket;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Properties;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.DataWrite;
@@ -27,8 +32,6 @@ import uk.chromis.data.loader.SerializableWrite;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.util.StringUtils;
-import java.io.*;
-import java.util.Properties;
 
 /**
  *
@@ -385,7 +388,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
      *
      * @return
      */
-    public String getProductTaxCategoryID() {
+    public String getProductTaxCategoryID() {        
         return (attributes.getProperty("product.taxcategoryid"));
     }
 

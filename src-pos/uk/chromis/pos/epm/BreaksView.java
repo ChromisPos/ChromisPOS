@@ -19,15 +19,15 @@
 
 package uk.chromis.pos.epm;
 
+import java.awt.Component;
+import java.util.List;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
-import java.util.List;
-import java.util.UUID;
 
 /**
  *

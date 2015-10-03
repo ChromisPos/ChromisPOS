@@ -19,13 +19,13 @@
 
 package uk.chromis.pos.printer.javapos;
 
+import jpos.JposException;
+import jpos.LineDisplay;
+import jpos.LineDisplayConst;
 import uk.chromis.pos.printer.DeviceDisplay;
 import uk.chromis.pos.printer.DeviceDisplayBase;
 import uk.chromis.pos.printer.DeviceDisplayImpl;
 import uk.chromis.pos.printer.TicketPrinterException;
-import jpos.JposException;
-import jpos.LineDisplay;
-import jpos.LineDisplayConst;
  
 /**
  *

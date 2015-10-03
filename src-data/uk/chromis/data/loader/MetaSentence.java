@@ -19,9 +19,9 @@
 
 package uk.chromis.data.loader;
 
-import java.sql.*;
-import java.util.*; 
-import javax.sql.DataSource;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException; 
+import java.util.ArrayList;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.JDBCSentence.JDBCDataResultSet;
 

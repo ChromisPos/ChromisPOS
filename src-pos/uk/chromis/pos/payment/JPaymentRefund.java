@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.payment;
 
+import java.awt.Component;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.forms.AppLocal;
-import java.awt.Component;
 
 /**
  *

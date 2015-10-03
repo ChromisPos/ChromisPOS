@@ -19,18 +19,31 @@
 
 package uk.chromis.pos.panels;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.gui.*;
-import uk.chromis.data.loader.ComparatorCreator;
-import uk.chromis.data.loader.Vectorer;
-import uk.chromis.data.user.*;
-import uk.chromis.pos.customers.CustomerInfoGlobal;
-import uk.chromis.pos.forms.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.gui.JCounter;
+import uk.chromis.data.gui.JLabelDirty;
+import uk.chromis.data.gui.JListNavigator;
+import uk.chromis.data.gui.JNavigator;
+import uk.chromis.data.gui.JSaver;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.data.loader.ComparatorCreator;
+import uk.chromis.data.loader.Vectorer;
+import uk.chromis.data.user.BrowsableEditableData;
+import uk.chromis.data.user.DirtyManager;
+import uk.chromis.data.user.EditorRecord;
+import uk.chromis.data.user.ListProvider;
+import uk.chromis.data.user.SaveProvider;
+import uk.chromis.pos.customers.CustomerInfoGlobal;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.BeanFactoryApp;
+import uk.chromis.pos.forms.BeanFactoryException;
+import uk.chromis.pos.forms.JPanelView;
 
 /**
  *

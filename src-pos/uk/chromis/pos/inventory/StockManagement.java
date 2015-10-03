@@ -19,6 +19,15 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.UUID;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.DateUtils;
 import uk.chromis.beans.JCalendarDialog;
@@ -30,7 +39,11 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.catalog.CatalogSelector;
 import uk.chromis.pos.catalog.JCatalog;
-import uk.chromis.pos.forms.*;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.forms.JPanelView;
 import uk.chromis.pos.printer.TicketParser;
 import uk.chromis.pos.printer.TicketPrinterException;
 import uk.chromis.pos.sales.JProductAttEdit;
@@ -41,15 +54,6 @@ import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.ticket.ProductInfoExt;
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.UUID;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *

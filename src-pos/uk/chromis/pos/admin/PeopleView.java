@@ -19,19 +19,21 @@
 
 package uk.chromis.pos.admin;
 
+import java.awt.Component;
+import java.awt.image.BufferedImage;
+import java.util.UUID;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.SentenceList;
-import uk.chromis.data.user.*;
+import uk.chromis.data.user.DirtyManager;
+import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.util.Hashcypher;
 import uk.chromis.pos.util.StringUtils;
-import java.awt.Component;
-import java.awt.image.BufferedImage;
-import java.util.UUID;
-import javax.swing.*;
 
 /**
  *

@@ -19,9 +19,9 @@
 
 package uk.chromis.data.gui;
 
-import uk.chromis.data.loader.IKeyed;
 import java.util.ArrayList;
 import java.util.List;
+import uk.chromis.data.loader.IKeyed;
 
 /**
  *

@@ -19,6 +19,7 @@
 
 package uk.chromis.pos.reports;
 
+import java.awt.Component;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.Datas;
@@ -28,7 +29,6 @@ import uk.chromis.data.loader.SerializerWriteBasic;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.inventory.MovementReason;
-import java.awt.Component;
 
 /**
  *

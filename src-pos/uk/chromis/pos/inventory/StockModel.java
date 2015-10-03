@@ -20,10 +20,10 @@
 
 package uk.chromis.pos.inventory;
 
+import javax.swing.table.AbstractTableModel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.user.BrowsableData;
 import uk.chromis.format.Formats;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *

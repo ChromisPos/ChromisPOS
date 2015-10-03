@@ -19,15 +19,15 @@
 
 package uk.chromis.pos.customers;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.DataRead;
-import uk.chromis.data.loader.SerializerRead;
-import uk.chromis.pos.forms.DataLogicSales;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.DataRead;
+import uk.chromis.data.loader.SerializerRead;
+import uk.chromis.pos.forms.DataLogicSales;
 
 /**
  *

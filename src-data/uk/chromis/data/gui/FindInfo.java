@@ -19,10 +19,10 @@
 
 package uk.chromis.data.gui;
 
+import java.util.regex.Pattern;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Vectorer;
 import uk.chromis.data.user.Finder;
-import java.util.regex.*;
 
 /**
  *

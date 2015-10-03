@@ -19,6 +19,8 @@
 
 package uk.chromis.pos.ticket;
 
+import java.awt.Component;
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.gui.ListQBFModelNumber;
@@ -32,8 +34,6 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.reports.ReportEditorCreator;
-import java.awt.Component;
-import java.util.List;
 
 /**
  *

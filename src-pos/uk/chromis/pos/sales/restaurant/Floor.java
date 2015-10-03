@@ -19,11 +19,6 @@
 
 package uk.chromis.pos.sales.restaurant;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.DataRead;
-import uk.chromis.data.loader.ImageUtils;
-import uk.chromis.data.loader.SerializableRead;
-import uk.chromis.pos.util.ThumbNailBuilder;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -33,6 +28,11 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.DataRead;
+import uk.chromis.data.loader.ImageUtils;
+import uk.chromis.data.loader.SerializableRead;
+import uk.chromis.pos.util.ThumbNailBuilder;
 
 /**
  *

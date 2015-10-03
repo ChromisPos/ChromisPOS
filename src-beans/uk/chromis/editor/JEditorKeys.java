@@ -19,13 +19,12 @@
 
 package uk.chromis.editor;
 
-import uk.chromis.pos.customers.JCustomerFinder;
 import java.awt.ComponentOrientation;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.EventListener;
 import javax.swing.event.EventListenerList;
+import uk.chromis.pos.customers.JCustomerFinder;
 
 /**
  *

@@ -19,11 +19,11 @@
 
 package uk.chromis.pos.ticket;
 
+import java.util.Date;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.format.Formats;
-import java.util.Date;
 
 /**
  *

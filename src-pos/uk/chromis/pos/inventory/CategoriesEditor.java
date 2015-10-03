@@ -19,33 +19,28 @@
 package uk.chromis.pos.inventory;
 
 import com.bric.swing.ColorPicker;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.SentenceExec;
 import uk.chromis.data.loader.SentenceList;
-import uk.chromis.data.model.Field;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Panel;
-import java.awt.image.BufferedImage;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import javax.swing.BorderFactory;
-import javax.swing.JColorChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 /**
  *

@@ -19,12 +19,12 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.pos.customers.CustomerInfoExt;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppView;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JOptionPane;
+import uk.chromis.pos.customers.CustomerInfoExt;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
 
 /**
  *

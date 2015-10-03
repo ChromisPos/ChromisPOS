@@ -19,17 +19,19 @@
 
 package uk.chromis.pos.customers;
 
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Window;
+import java.util.ArrayList;
+import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.QBFCompareEnum;
 import uk.chromis.data.user.EditorCreator;
 import uk.chromis.data.user.ListProvider;
 import uk.chromis.data.user.ListProviderCreator;
 import uk.chromis.pos.forms.AppLocal;
-import java.awt.*;
-import java.util.ArrayList;
-import javax.swing.JFrame;
-import javax.swing.*;
-import java.awt.event.*;
 
 /**
  *

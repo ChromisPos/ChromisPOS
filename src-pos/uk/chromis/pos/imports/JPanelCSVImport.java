@@ -21,16 +21,10 @@
 package uk.chromis.pos.imports;
 
 import com.csvreader.CsvReader;
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.gui.ComboBoxValModel;
-import uk.chromis.data.loader.SentenceList;
-import uk.chromis.data.loader.Session;
-import uk.chromis.data.user.SaveProvider;
-import uk.chromis.pos.forms.*;
-import uk.chromis.pos.inventory.TaxCategoryInfo;
-import uk.chromis.pos.sales.TaxesLogic;
-import uk.chromis.pos.ticket.ProductInfoExt;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,11 +32,30 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.lang.StringUtils;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.gui.ComboBoxValModel;
+import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.Session;
+import uk.chromis.data.user.SaveProvider;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppProperties;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.AppViewConnection;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.forms.JPanelView;
+import uk.chromis.pos.inventory.TaxCategoryInfo;
+import uk.chromis.pos.sales.TaxesLogic;
+import uk.chromis.pos.ticket.ProductInfoExt;
 
 /**
  * Graphical User Interface and code for importing data from a CSV file allowing

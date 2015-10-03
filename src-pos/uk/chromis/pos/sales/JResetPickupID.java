@@ -19,11 +19,6 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppProperties;
-import uk.chromis.pos.forms.JRootFrame;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -34,7 +29,11 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
-import uk.chromis.pos.sales.JResetPickupID;
+import uk.chromis.basic.BasicException;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppProperties;
+import uk.chromis.pos.forms.JRootFrame;
 
 
 /**

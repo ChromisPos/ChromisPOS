@@ -19,10 +19,10 @@
 
 package uk.chromis.pos.config;
 
-import uk.chromis.data.user.DirtyManager;
-import uk.chromis.pos.forms.AppConfig;
 import java.awt.Component;
 import javax.swing.SpinnerNumberModel;
+import uk.chromis.data.user.DirtyManager;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *

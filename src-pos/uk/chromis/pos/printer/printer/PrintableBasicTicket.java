@@ -19,13 +19,13 @@
 
 package uk.chromis.pos.printer.printer;
 
-import uk.chromis.pos.printer.ticket.BasicTicket;
-import uk.chromis.pos.printer.ticket.PrintItem;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import uk.chromis.pos.printer.ticket.BasicTicket;
+import uk.chromis.pos.printer.ticket.PrintItem;
 
 /**
  *

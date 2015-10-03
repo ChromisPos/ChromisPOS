@@ -20,15 +20,13 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.format.Formats;
-import uk.chromis.pos.customers.CustomerInfoExt;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.util.RoundUtils;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.customers.CustomerInfoExt;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.util.RoundUtils;
 
 /**
  *

@@ -20,8 +20,11 @@
 
 package uk.chromis.pos.util;
 
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.Timer;
 
 // this is a dialog that will dispose of itself after a given amount of time
 public class Test extends JDialog {

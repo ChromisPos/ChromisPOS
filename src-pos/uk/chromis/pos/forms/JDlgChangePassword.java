@@ -19,14 +19,14 @@
 
 package uk.chromis.pos.forms;
 
-import uk.chromis.data.gui.JMessageDialog;
-import uk.chromis.data.gui.MessageInf;
-import uk.chromis.pos.util.Hashcypher;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.JFrame;
+import uk.chromis.data.gui.JMessageDialog;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.pos.util.Hashcypher;
 
 /**
  *

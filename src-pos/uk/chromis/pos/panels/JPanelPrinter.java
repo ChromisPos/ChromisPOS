@@ -19,15 +19,15 @@
 
 package uk.chromis.pos.panels;
 
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.JPanelView;
 import uk.chromis.pos.printer.DeviceFiscalPrinter;
 import uk.chromis.pos.printer.DevicePrinter;
-import java.util.List;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
  *

@@ -19,15 +19,15 @@
 
 package uk.chromis.pos.forms;
 
-import uk.chromis.pos.config.JFrmConfig;
-import uk.chromis.pos.instance.AppMessage;
-import uk.chromis.pos.instance.InstanceManager;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import uk.chromis.pos.config.JFrmConfig;
+import uk.chromis.pos.instance.AppMessage;
+import uk.chromis.pos.instance.InstanceManager;
 import uk.chromis.pos.util.OSValidator;
 
 /**

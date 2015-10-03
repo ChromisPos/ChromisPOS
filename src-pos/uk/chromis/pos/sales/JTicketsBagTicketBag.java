@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.pos.forms.AppLocal;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
+import uk.chromis.pos.forms.AppLocal;
 
 /**
  *
@@ -120,6 +120,9 @@ public class JTicketsBagTicketBag extends javax.swing.JPanel {
         m_jBtnCancel1.setFocusPainted(false);
         m_jBtnCancel1.setFocusable(false);
         m_jBtnCancel1.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jBtnCancel1.setMaximumSize(new java.awt.Dimension(50, 40));
+        m_jBtnCancel1.setMinimumSize(new java.awt.Dimension(50, 40));
+        m_jBtnCancel1.setPreferredSize(new java.awt.Dimension(50, 40));
         m_jBtnCancel1.setRequestFocusEnabled(false);
         m_jBtnCancel1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

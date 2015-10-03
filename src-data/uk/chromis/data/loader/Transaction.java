@@ -19,8 +19,8 @@
 
 package uk.chromis.data.loader;
 
-import uk.chromis.basic.BasicException;
 import java.sql.SQLException;
+import uk.chromis.basic.BasicException;
 
 /**
  *

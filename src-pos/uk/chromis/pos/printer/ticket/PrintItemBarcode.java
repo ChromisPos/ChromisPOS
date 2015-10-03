@@ -19,7 +19,6 @@
 
 package uk.chromis.pos.printer.ticket;
 
-import uk.chromis.pos.printer.DevicePrinter;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import org.krysalis.barcode4j.BarcodeDimension;
@@ -28,6 +27,7 @@ import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.java2d.Java2DCanvasProvider;
+import uk.chromis.pos.printer.DevicePrinter;
 
 /**
  *

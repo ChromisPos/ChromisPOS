@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.config;
 
+import java.awt.Component;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.pos.util.StringParser;
-import java.awt.Component;
 
 /**
  *

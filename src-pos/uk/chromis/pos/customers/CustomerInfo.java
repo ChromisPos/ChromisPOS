@@ -19,8 +19,8 @@
 
 package uk.chromis.pos.customers;
 
-import uk.chromis.pos.util.StringUtils;
 import java.io.Serializable;
+import uk.chromis.pos.util.StringUtils;
 
 /** @author adrianromero */
 

@@ -22,13 +22,18 @@
 
 package uk.chromis.pos.imports;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.*;
-import uk.chromis.pos.util.AltEncrypter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import uk.chromis.basic.BasicException;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppProperties;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.JPanelView;
+import uk.chromis.pos.util.AltEncrypter;
 
 /**
  *

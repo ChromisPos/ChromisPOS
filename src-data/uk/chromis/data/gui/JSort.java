@@ -19,9 +19,13 @@
 
 package uk.chromis.data.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.util.Comparator;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.ComparatorCreator;
 import uk.chromis.data.loader.LocalRes;

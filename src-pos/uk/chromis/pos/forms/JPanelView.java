@@ -19,8 +19,8 @@
 
 package uk.chromis.pos.forms;
 
-import uk.chromis.basic.BasicException;
 import javax.swing.JComponent;
+import uk.chromis.basic.BasicException;
 
 /**
  *

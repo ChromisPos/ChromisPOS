@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.pos.ticket.TaxInfo;
 import java.util.ArrayList;
 import java.util.List;
+import uk.chromis.pos.ticket.TaxInfo;
 
 /**
  *

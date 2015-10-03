@@ -19,14 +19,18 @@
 
 package uk.chromis.pos.reports;
 
+import java.util.ArrayList;
+import java.util.List;
 import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.*;
+import uk.chromis.data.loader.BaseSentence;
+import uk.chromis.data.loader.Datas;
+import uk.chromis.data.loader.QBFBuilder;
+import uk.chromis.data.loader.SerializerReadBasic;
+import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.user.EditorCreator;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.BeanFactoryException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

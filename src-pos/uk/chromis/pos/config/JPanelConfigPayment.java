@@ -20,19 +20,18 @@
 
 package uk.chromis.pos.config;
 
+import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.payment.ConfigPaymentPanelBluePay20POST;
-import uk.chromis.pos.payment.ConfigPaymentPanelBluePayAUTHNETEMU;
 import uk.chromis.pos.payment.ConfigPaymentPanelCaixa;
 import uk.chromis.pos.payment.ConfigPaymentPanelEmpty;
 import uk.chromis.pos.payment.ConfigPaymentPanelGeneric;
 import uk.chromis.pos.payment.ConfigPaymentPanelLinkPoint;
 import uk.chromis.pos.payment.PaymentConfiguration;
-import java.awt.Component;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *

@@ -19,7 +19,6 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.data.loader.Session;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -29,7 +28,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import net.proteanit.sql.DbUtils;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.util.DbUtils;
 
 /**
  *

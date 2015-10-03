@@ -19,7 +19,6 @@
 
 package uk.chromis.data.loader;
 
-import java.util.MissingResourceException;
 import uk.chromis.beans.LocaleResources;
 
 /**

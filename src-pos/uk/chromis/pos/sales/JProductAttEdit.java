@@ -19,6 +19,14 @@
 
 package uk.chromis.pos.sales;
 
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.swing.SwingUtilities;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.Datas;
@@ -33,14 +41,6 @@ import uk.chromis.data.loader.SerializerWriteString;
 import uk.chromis.data.loader.Session;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.inventory.AttributeSetInfo;
-import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Window;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import javax.swing.SwingUtilities;
 
 /**
  *

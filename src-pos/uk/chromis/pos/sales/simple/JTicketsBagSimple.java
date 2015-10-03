@@ -19,9 +19,13 @@
 
 package uk.chromis.pos.sales.simple;
 
-import uk.chromis.pos.forms.*; 
-import javax.swing.*;
-import uk.chromis.pos.sales.*;
+import javax.swing.JComponent; 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.sales.JTicketsBag;
+import uk.chromis.pos.sales.TicketsEditor;
 import uk.chromis.pos.ticket.TicketInfo;
 
 /**

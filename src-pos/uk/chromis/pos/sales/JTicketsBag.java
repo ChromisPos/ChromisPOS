@@ -19,13 +19,13 @@
 
 package uk.chromis.pos.sales;
 
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.sales.restaurant.JTicketsBagRestaurantMap;
 import uk.chromis.pos.sales.shared.JTicketsBagShared;
 import uk.chromis.pos.sales.simple.JTicketsBagSimple;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
  *

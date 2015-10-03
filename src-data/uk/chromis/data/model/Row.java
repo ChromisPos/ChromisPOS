@@ -19,6 +19,10 @@
 
 package uk.chromis.data.model;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.ListCellRenderer;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ListCellRendererBasic;
 import uk.chromis.data.loader.ComparatorCreator;
@@ -37,10 +41,6 @@ import uk.chromis.data.user.FilterEditorCreator;
 import uk.chromis.data.user.ListProvider;
 import uk.chromis.data.user.ListProviderCreator;
 import uk.chromis.data.user.SaveProvider;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import javax.swing.ListCellRenderer;
 
 /**
  *

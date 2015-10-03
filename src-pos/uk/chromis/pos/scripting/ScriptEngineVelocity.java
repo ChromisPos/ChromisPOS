@@ -19,7 +19,6 @@
 
 package uk.chromis.pos.scripting;
 
-import uk.chromis.pos.forms.AppView;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -27,6 +26,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
+import uk.chromis.pos.forms.AppView;
 
 /**
  *

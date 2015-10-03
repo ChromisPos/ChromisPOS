@@ -19,6 +19,11 @@
 
 package uk.chromis.pos.sales;
 
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.ListKeyed;
@@ -29,7 +34,9 @@ import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.panels.JTicketsFinder;
-import uk.chromis.pos.printer.*;
+import uk.chromis.pos.printer.DeviceTicket;
+import uk.chromis.pos.printer.TicketParser;
+import uk.chromis.pos.printer.TicketPrinterException;
 import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
@@ -37,9 +44,6 @@ import uk.chromis.pos.ticket.FindTicketsInfo;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
 import uk.chromis.pos.ticket.TicketTaxInfo;
-import java.awt.*;
-import java.util.ArrayList;
-import javax.swing.*;
 
 /**
  *
@@ -125,7 +129,8 @@ public class JTicketsBagTicket extends JTicketsBag {
 
         jrbSales.setSelected(true);
         
-        m_jEdit.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
+        m_jEdit.setVisible(false);
+       // m_jEdit.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
         m_jRefund.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.RefundTicket"));
         m_jPrint.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintTicket"));
              
@@ -339,6 +344,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_editline.png"))); // NOI18N
         m_jEdit.setText(AppLocal.getIntString("button.print")); // NOI18N
         m_jEdit.setToolTipText("Edit current Ticket");
+        m_jEdit.setEnabled(false);
         m_jEdit.setFocusPainted(false);
         m_jEdit.setFocusable(false);
         m_jEdit.setMargin(new java.awt.Insets(0, 4, 0, 4));

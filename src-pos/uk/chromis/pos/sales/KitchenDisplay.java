@@ -19,9 +19,6 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppView;
-import uk.chromis.pos.forms.DataLogicSystem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +26,9 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSystem;
 
 /**
  *

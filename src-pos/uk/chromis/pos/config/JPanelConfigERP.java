@@ -19,11 +19,11 @@
 
 package uk.chromis.pos.config;
 
+import java.awt.Component;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.util.AltEncrypter;
-import java.awt.Component;
 
 /**
  *

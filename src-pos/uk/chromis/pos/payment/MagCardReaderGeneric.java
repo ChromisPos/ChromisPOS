@@ -19,10 +19,10 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.pos.util.LuhnAlgorithm;
-import uk.chromis.pos.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
+import uk.chromis.pos.util.LuhnAlgorithm;
+import uk.chromis.pos.util.StringUtils;
 
 /**
  *

@@ -19,11 +19,21 @@
 
 package uk.chromis.pos.customers;
 
+import java.util.Date;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.*;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.BeanFactoryApp;
+import uk.chromis.pos.forms.BeanFactoryException;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.forms.JPanelView;
 import uk.chromis.pos.payment.JPaymentSelect;
 import uk.chromis.pos.payment.JPaymentSelectCustomer;
 import uk.chromis.pos.payment.PaymentInfo;
@@ -34,10 +44,6 @@ import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.ticket.TicketInfo;
-import java.util.Date;
-import java.util.List;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 /**
  *

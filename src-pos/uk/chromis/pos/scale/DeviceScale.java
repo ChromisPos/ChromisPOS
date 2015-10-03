@@ -19,10 +19,10 @@
 
 package uk.chromis.pos.scale;
 
+import java.awt.Component;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.StringParser;
-import java.awt.Component;
 
 /**
  *

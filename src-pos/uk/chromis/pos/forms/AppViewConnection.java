@@ -19,9 +19,6 @@
 
 package uk.chromis.pos.forms;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.Session;
-import uk.chromis.pos.util.AltEncrypter;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,6 +26,9 @@ import java.net.URLClassLoader;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.util.AltEncrypter;
 
 /**
  *

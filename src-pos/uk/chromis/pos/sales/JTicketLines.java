@@ -19,12 +19,6 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.data.loader.LocalRes;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.scripting.ScriptEngine;
-import uk.chromis.pos.scripting.ScriptException;
-import uk.chromis.pos.scripting.ScriptFactory;
-import uk.chromis.pos.ticket.TicketLineInfo;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -49,6 +43,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.scripting.ScriptEngine;
+import uk.chromis.pos.scripting.ScriptException;
+import uk.chromis.pos.scripting.ScriptFactory;
+import uk.chromis.pos.ticket.TicketLineInfo;
 
 /**
  *

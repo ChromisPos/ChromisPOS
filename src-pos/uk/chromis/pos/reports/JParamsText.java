@@ -19,6 +19,7 @@
 
 package uk.chromis.pos.reports;
 
+import java.awt.Component;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.QBFCompareEnum;
@@ -27,7 +28,6 @@ import uk.chromis.data.loader.SerializerWriteBasic;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
 
 /**
  *

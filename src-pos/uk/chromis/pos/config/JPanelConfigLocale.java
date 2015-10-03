@@ -19,15 +19,15 @@
 
 package uk.chromis.pos.config;
 
-import uk.chromis.data.user.DirtyManager;
 import java.awt.Component;
-import java.util.Locale;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import uk.chromis.data.user.DirtyManager;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
 
 /**
  *

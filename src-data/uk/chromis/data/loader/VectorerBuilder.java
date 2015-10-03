@@ -19,7 +19,7 @@
 
 package uk.chromis.data.loader;
 
-import java.util.*;
+import java.util.ArrayList;
 import uk.chromis.basic.BasicException;
 
 /**

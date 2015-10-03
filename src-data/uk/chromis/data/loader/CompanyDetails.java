@@ -20,13 +20,8 @@
 package uk.chromis.data.loader;
 
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppViewConnection;
-import uk.chromis.pos.forms.DataLogicSales;
-import uk.chromis.data.loader.Session;
+import java.io.File;
 import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import java.io.*;
 
 /**
  *

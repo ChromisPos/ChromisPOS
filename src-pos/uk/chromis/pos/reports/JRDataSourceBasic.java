@@ -19,13 +19,13 @@
 
 package uk.chromis.pos.reports;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.BaseSentence;
 import uk.chromis.data.loader.DataResultSet;
 import uk.chromis.pos.forms.AppLocal;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
 
 /**
  *

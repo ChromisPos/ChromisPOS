@@ -18,26 +18,26 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.sales;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.JFrame;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppView;
-import uk.chromis.pos.forms.AppViewConnection;
-import uk.chromis.pos.ticket.TicketLineInfo;
-import uk.chromis.pos.util.AltEncrypter;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.swing.JFrame;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.AppViewConnection;
+import uk.chromis.pos.ticket.TicketLineInfo;
+import uk.chromis.pos.util.AltEncrypter;
 
 /**
  *

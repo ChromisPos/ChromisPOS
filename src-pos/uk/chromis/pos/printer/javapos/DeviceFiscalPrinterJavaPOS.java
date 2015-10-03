@@ -19,12 +19,12 @@
 
 package uk.chromis.pos.printer.javapos;
 
-import uk.chromis.pos.printer.DeviceFiscalPrinter;
-import uk.chromis.pos.printer.TicketPrinterException;
-import uk.chromis.pos.util.RoundUtils;
 import javax.swing.JComponent;
 import jpos.FiscalPrinter;
 import jpos.JposException;
+import uk.chromis.pos.printer.DeviceFiscalPrinter;
+import uk.chromis.pos.printer.TicketPrinterException;
+import uk.chromis.pos.util.RoundUtils;
 
 /**
  *

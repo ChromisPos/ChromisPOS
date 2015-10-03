@@ -18,6 +18,16 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package uk.chromis.pos.payment;
+import java.awt.Component;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
@@ -29,16 +39,6 @@ import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.util.RoundUtils;
 import uk.chromis.pos.util.ThumbNailBuilder;
-import java.awt.Component;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
 
 /**
  *

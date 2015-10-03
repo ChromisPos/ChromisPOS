@@ -19,7 +19,6 @@
 
 package uk.chromis.data.gui;
 
-import uk.chromis.data.loader.LocalRes;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -38,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
+import uk.chromis.data.loader.LocalRes;
 
 /**
  *

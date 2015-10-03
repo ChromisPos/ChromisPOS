@@ -19,17 +19,17 @@
 
 package uk.chromis.pos.sales;
 
-import uk.chromis.pos.customers.DataLogicCustomers;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.DataLogicSales;
-import uk.chromis.pos.ticket.TicketInfo;
-import uk.chromis.pos.ticket.TicketLineInfo;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.JFrame;
+import uk.chromis.pos.customers.DataLogicCustomers;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.ticket.TicketInfo;
+import uk.chromis.pos.ticket.TicketLineInfo;
 
 /**
  *

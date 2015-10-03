@@ -19,17 +19,37 @@
 
 package uk.chromis.pos.forms;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.*;
-import uk.chromis.format.Formats;
-import uk.chromis.pos.util.ThumbNailBuilder;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.DataRead;
+import uk.chromis.data.loader.Datas;
+import uk.chromis.data.loader.ImageUtils;
+import uk.chromis.data.loader.PreparedSentence;
+import uk.chromis.data.loader.SentenceExec;
+import uk.chromis.data.loader.SentenceFind;
+import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.SerializerRead;
+import uk.chromis.data.loader.SerializerReadBasic;
+import uk.chromis.data.loader.SerializerReadBytes;
+import uk.chromis.data.loader.SerializerReadInteger;
+import uk.chromis.data.loader.SerializerReadString;
+import uk.chromis.data.loader.SerializerWriteBasic;
+import uk.chromis.data.loader.SerializerWriteBasicExt;
+import uk.chromis.data.loader.SerializerWriteString;
+import uk.chromis.data.loader.Session;
+import uk.chromis.data.loader.StaticSentence;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.util.ThumbNailBuilder;
 
 /**
  *

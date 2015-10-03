@@ -1,12 +1,12 @@
 package uk.chromis.pos.promotion;
 
+import java.util.ArrayList;
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.IKeyed;
 import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.data.loader.SerializerRead;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Aescart1

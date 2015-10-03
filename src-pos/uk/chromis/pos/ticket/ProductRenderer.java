@@ -19,11 +19,14 @@
 
 package uk.chromis.pos.ticket;
 
+import java.awt.Component;
+import java.awt.Image;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JList;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.util.ThumbNailBuilder;
-import java.awt.*;
-import javax.swing.*;
 import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.util.ThumbNailBuilder;
 
 /**
  *

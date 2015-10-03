@@ -19,6 +19,9 @@
 
 package uk.chromis.pos.reports;
 
+import java.awt.Component;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.QBFCompareEnum;
@@ -29,9 +32,6 @@ import uk.chromis.pos.customers.DataLogicCustomers;
 import uk.chromis.pos.customers.JCustomerFinder;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /**
  *

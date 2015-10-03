@@ -21,21 +21,35 @@ package uk.chromis.pos.sales.restaurant;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.beans.*;
-import java.util.*;
-
-import uk.chromis.beans.*;
-import uk.chromis.data.gui.*;
-import uk.chromis.data.loader.*;
-import uk.chromis.data.user.*;
-
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppView;
-import uk.chromis.format.Formats;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
+import uk.chromis.beans.DateUtils;
+import uk.chromis.beans.JCalendarPanel;
+import uk.chromis.beans.JTimePanel;
+import uk.chromis.data.gui.JCounter;
+import uk.chromis.data.gui.JLabelDirty;
+import uk.chromis.data.gui.JListNavigator;
+import uk.chromis.data.gui.JNavigator;
+import uk.chromis.data.gui.JSaver;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.data.loader.LocalRes;
+import uk.chromis.data.user.BrowsableEditableData;
+import uk.chromis.data.user.DirtyManager;
+import uk.chromis.data.user.EditorCreator;
+import uk.chromis.data.user.EditorRecord;
+import uk.chromis.data.user.ListProvider;
+import uk.chromis.data.user.ListProviderCreator;
+import uk.chromis.data.user.SaveProvider;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.customers.CustomerInfo;
 import uk.chromis.pos.customers.DataLogicCustomers;
 import uk.chromis.pos.customers.JCustomerFinder;
-import uk.chromis.pos.customers.CustomerInfo;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
 
 /**
  *

@@ -18,13 +18,10 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.config;
 
+import java.awt.Component;
+import javax.swing.SpinnerNumberModel;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.util.DirectoryEvent;
-import java.awt.Component;
-import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
 
 /**
  *

@@ -20,9 +20,9 @@
 
 package uk.chromis.data.gui;
 
-import uk.chromis.data.loader.QBFCompareEnum;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
+import uk.chromis.data.loader.QBFCompareEnum;
 /**
  *
  * @author  adrian

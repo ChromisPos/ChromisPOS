@@ -19,16 +19,14 @@
 
 package uk.chromis.pos.sales.restaurant;
 
-import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppView;
-import uk.chromis.pos.forms.BeanFactoryException;
-import uk.chromis.pos.forms.DataLogicSystem;
-import uk.chromis.pos.ticket.TicketInfo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSystem;
 
 
 

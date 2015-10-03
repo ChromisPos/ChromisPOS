@@ -18,16 +18,16 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.liquibase;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppViewConnection;
-import uk.chromis.pos.util.AltEncrypter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppViewConnection;
+import uk.chromis.pos.util.AltEncrypter;
 
 
 public class JResetLiquibase extends javax.swing.JFrame {

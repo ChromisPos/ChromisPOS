@@ -19,7 +19,7 @@
 
 package uk.chromis.data.gui;
 
-import java.util.*;
+import java.util.List;
 
 /**
  *

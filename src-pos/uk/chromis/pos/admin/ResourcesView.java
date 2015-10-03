@@ -19,6 +19,10 @@
 
 package uk.chromis.pos.admin;
 
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.util.UUID;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.ImageUtils;
@@ -27,10 +31,6 @@ import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.util.Base64Encoder;
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.util.UUID;
-import javax.swing.JPanel;
 
 /**
  *

@@ -19,9 +19,11 @@
 
 package uk.chromis.data.gui;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import uk.chromis.data.user.DirtyListener;
 import uk.chromis.data.user.DirtyManager;
-import javax.swing.*;
 
 /**
  *

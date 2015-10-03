@@ -19,16 +19,16 @@
 
 package uk.chromis.pos.sales;
 
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.pos.catalog.CatalogSelector;
 import uk.chromis.pos.catalog.JCatalog;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicSystem;
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.util.List;
 
 /**
  *

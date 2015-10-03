@@ -19,11 +19,11 @@
 
 package uk.chromis.pos.payment;
 
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.util.LuhnAlgorithm;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.util.LuhnAlgorithm;
 
 /**
  *

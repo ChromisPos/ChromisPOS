@@ -19,6 +19,10 @@
 
 package uk.chromis.pos.epm;
 
+import java.awt.Component;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.JCalendarDialog;
 import uk.chromis.data.gui.MessageInf;
@@ -28,11 +32,6 @@ import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import java.util.Calendar;
 
 /**
  *

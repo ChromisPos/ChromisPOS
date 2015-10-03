@@ -18,15 +18,15 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.admin;
 
+import java.awt.Component;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
-import java.awt.Component;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

@@ -19,11 +19,11 @@
 
 package uk.chromis.pos.forms;
 
+import java.util.Date;
 import uk.chromis.data.loader.Session;
 import uk.chromis.pos.printer.DeviceTicket;
 import uk.chromis.pos.scale.DeviceScale;
 import uk.chromis.pos.scanpal2.DeviceScanner;
-import java.util.Date;
 
 /**
  *

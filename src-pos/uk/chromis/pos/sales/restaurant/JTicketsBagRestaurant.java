@@ -20,8 +20,12 @@
 
 package uk.chromis.pos.sales.restaurant;
 
-import bsh.Interpreter;
 import bsh.EvalError;
+import bsh.Interpreter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.ListKeyed;
 import uk.chromis.data.gui.MessageInf;
@@ -40,10 +44,6 @@ import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
 
 /**
  *

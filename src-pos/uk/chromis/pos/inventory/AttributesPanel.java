@@ -20,7 +20,11 @@
 package uk.chromis.pos.inventory;
 
 import uk.chromis.data.loader.Datas;
-import uk.chromis.data.model.*;
+import uk.chromis.data.model.Column;
+import uk.chromis.data.model.Field;
+import uk.chromis.data.model.PrimaryKey;
+import uk.chromis.data.model.Row;
+import uk.chromis.data.model.Table;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;

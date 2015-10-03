@@ -19,16 +19,20 @@
 
 package uk.chromis.pos.inventory;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
-import uk.chromis.data.model.*;
+import uk.chromis.data.model.Column;
+import uk.chromis.data.model.Field;
+import uk.chromis.data.model.PrimaryKey;
+import uk.chromis.data.model.Row;
+import uk.chromis.data.model.Table;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.panels.JPanelTable2;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *

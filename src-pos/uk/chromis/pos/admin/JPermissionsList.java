@@ -18,22 +18,18 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.admin;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppViewConnection;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import net.proteanit.sql.DbUtils;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.util.DbUtils;
 
 /**
  *

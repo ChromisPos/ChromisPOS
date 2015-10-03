@@ -18,20 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
 package uk.chromis.pos.forms;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.beans.JFlowPanel;
-import uk.chromis.beans.JPasswordDialog;
-import uk.chromis.data.gui.JMessageDialog;
-import uk.chromis.data.gui.MessageInf;
-import uk.chromis.data.loader.Session;
-import uk.chromis.format.Formats;
-import uk.chromis.pos.printer.DeviceTicket;
-import uk.chromis.pos.printer.TicketParser;
-import uk.chromis.pos.printer.TicketPrinterException;
-import uk.chromis.pos.scale.DeviceScale;
-import uk.chromis.pos.scanpal2.DeviceScanner;
-import uk.chromis.pos.scanpal2.DeviceScannerFactory;
-import uk.chromis.pos.util.AltEncrypter;
 import java.awt.CardLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
@@ -53,10 +39,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Scanner;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -64,6 +63,20 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import uk.chromis.basic.BasicException;
+import uk.chromis.beans.JFlowPanel;
+import uk.chromis.beans.JPasswordDialog;
+import uk.chromis.data.gui.JMessageDialog;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.data.loader.Session;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.printer.DeviceTicket;
+import uk.chromis.pos.printer.TicketParser;
+import uk.chromis.pos.printer.TicketPrinterException;
+import uk.chromis.pos.scale.DeviceScale;
+import uk.chromis.pos.scanpal2.DeviceScanner;
+import uk.chromis.pos.scanpal2.DeviceScannerFactory;
+import uk.chromis.pos.util.AltEncrypter;
 
 public class JRootApp extends JPanel implements AppView {
 

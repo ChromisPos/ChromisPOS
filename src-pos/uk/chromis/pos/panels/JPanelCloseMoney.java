@@ -19,20 +19,6 @@
 
 package uk.chromis.pos.panels;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.data.gui.MessageInf;
-import uk.chromis.data.gui.TableRendererBasic;
-import uk.chromis.data.loader.Datas;
-import uk.chromis.data.loader.SerializerWriteBasic;
-import uk.chromis.data.loader.Session;
-import uk.chromis.data.loader.StaticSentence;
-import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.*;
-import uk.chromis.pos.printer.TicketParser;
-import uk.chromis.pos.printer.TicketPrinterException;
-import uk.chromis.pos.scripting.ScriptEngine;
-import uk.chromis.pos.scripting.ScriptException;
-import uk.chromis.pos.scripting.ScriptFactory;
 import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -43,11 +29,32 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-// import org.joda.time.format.DateTimeFormat;
-// import org.joda.time.format.DateTimeFormatter;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.data.gui.TableRendererBasic;
+import uk.chromis.data.loader.Datas;
+import uk.chromis.data.loader.SerializerWriteBasic;
+import uk.chromis.data.loader.Session;
+import uk.chromis.data.loader.StaticSentence;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppUser;import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.BeanFactoryApp;
+import uk.chromis.pos.forms.BeanFactoryException;
+import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.forms.JPanelView;
+import uk.chromis.pos.printer.TicketParser;
+import uk.chromis.pos.printer.TicketPrinterException;
+import uk.chromis.pos.scripting.ScriptEngine;
+import uk.chromis.pos.scripting.ScriptException;
+import uk.chromis.pos.scripting.ScriptFactory;
 
 
 /**

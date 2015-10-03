@@ -19,13 +19,13 @@
 
 package uk.chromis.data.gui;
 
-import java.util.*;
+import java.util.Comparator;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.ComparatorCreator;
 import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.loader.Vectorer;
-import uk.chromis.data.user.BrowseListener;
 import uk.chromis.data.user.BrowsableEditableData;
+import uk.chromis.data.user.BrowseListener;
 import uk.chromis.data.user.StateListener;
 
 /**

@@ -19,11 +19,6 @@
 
 package uk.chromis.pos.config;
 
-import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppProperties;
-import uk.chromis.pos.forms.JRootFrame;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -32,6 +27,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import uk.chromis.basic.BasicException;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppProperties;
+import uk.chromis.pos.forms.JRootFrame;
 
 /**
  *

@@ -19,13 +19,13 @@
 
 package uk.chromis.pos.reports;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.SerializerWrite;
 import uk.chromis.data.loader.SerializerWriteComposed;
 import uk.chromis.pos.forms.AppView;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

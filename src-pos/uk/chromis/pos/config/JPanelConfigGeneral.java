@@ -18,9 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.config;
 
-import uk.chromis.data.user.DirtyManager;
-import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
 import java.awt.Component;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -32,6 +29,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import org.pushingpixels.substance.api.skin.SkinInfo;
+import uk.chromis.data.user.DirtyManager;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.util.DirectoryEvent;
 
 // JG 16 May 2013 deprecated for pushingpixels

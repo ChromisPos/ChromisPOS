@@ -19,8 +19,12 @@
 
 package uk.chromis.beans;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
+import javax.swing.Icon;
+import javax.swing.JFrame;
 
 /**
  *

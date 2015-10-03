@@ -19,6 +19,9 @@
 
 package uk.chromis.pos.mant;
 
+import java.awt.Component;
+import java.util.UUID;
+import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.SentenceList;
@@ -27,9 +30,6 @@ import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
-import java.awt.Component;
-import java.util.UUID;
-import javax.swing.JPanel;
 
 /**
  *

@@ -19,6 +19,13 @@
 
 package uk.chromis.pos.panels;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Window;
+import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.user.ListProvider;
 import uk.chromis.data.user.ListProviderCreator;
@@ -27,8 +34,6 @@ import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.ticket.ProductFilterSales;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.ticket.ProductRenderer;
-import java.awt.*;
-import javax.swing.JFrame;
 
 /**
  *

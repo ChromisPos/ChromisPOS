@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.customers;
 
+import java.util.Date;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.util.RoundUtils;
-import java.util.Date;
 
 /**
  *

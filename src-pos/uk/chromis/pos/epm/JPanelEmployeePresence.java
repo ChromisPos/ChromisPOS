@@ -20,15 +20,23 @@
 
 package uk.chromis.pos.epm;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.util.Date;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.SwingConstants;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.JFlowPanel;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.*;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.util.Date;
-import javax.swing.*;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.BeanFactoryApp;
+import uk.chromis.pos.forms.BeanFactoryException;
+import uk.chromis.pos.forms.JPanelView;
 
 /**
  *

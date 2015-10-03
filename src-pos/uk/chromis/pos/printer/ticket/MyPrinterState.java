@@ -19,9 +19,9 @@
 
 package uk.chromis.pos.printer.ticket;
 
-import uk.chromis.pos.printer.DevicePrinter;
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
+import uk.chromis.pos.printer.DevicePrinter;
 
 /**
  *

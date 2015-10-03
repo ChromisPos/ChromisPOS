@@ -18,6 +18,22 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.sales.restaurant;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.gui.NullIcon;
@@ -25,15 +41,16 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.loader.SerializerReadClass;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.pos.customers.CustomerInfo;
-import uk.chromis.pos.forms.*;
-import uk.chromis.pos.sales.*;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.sales.DataLogicReceipts;
+import uk.chromis.pos.sales.JTicketsBag;
+import uk.chromis.pos.sales.SharedTicketInfo;
+import uk.chromis.pos.sales.TicketsEditor;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.util.*;
-import javax.swing.*;
 
 /**
  *

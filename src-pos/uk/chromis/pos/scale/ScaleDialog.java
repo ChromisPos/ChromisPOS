@@ -19,10 +19,10 @@
 
 package uk.chromis.pos.scale;
 
-import uk.chromis.beans.JNumberDialog;
-import uk.chromis.pos.forms.AppLocal;
 import java.awt.Component;
 import javax.swing.ImageIcon;
+import uk.chromis.beans.JNumberDialog;
+import uk.chromis.pos.forms.AppLocal;
 
 /**
  *

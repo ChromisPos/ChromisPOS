@@ -19,9 +19,10 @@
 
 package uk.chromis.data.gui;
 
+import java.awt.Component;
+import javax.swing.Icon;
+import javax.swing.UIManager;
 import uk.chromis.data.loader.LocalRes;
-import java.awt.*;
-import javax.swing.*;
 
 /**
  *

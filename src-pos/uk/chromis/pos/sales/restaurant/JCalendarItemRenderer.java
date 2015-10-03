@@ -19,16 +19,17 @@
 
 package uk.chromis.pos.sales.restaurant;
 
-import javax.swing.*;
-import javax.swing.border.*;
-
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
-
 import java.io.Serializable;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import uk.chromis.format.Formats;
 
 /**

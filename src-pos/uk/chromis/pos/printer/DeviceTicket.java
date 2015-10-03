@@ -18,8 +18,31 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.printer;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import uk.chromis.pos.forms.AppProperties;
-import uk.chromis.pos.printer.escpos.*;
+import uk.chromis.pos.printer.escpos.CodesEpson;
+import uk.chromis.pos.printer.escpos.CodesIthaca;
+import uk.chromis.pos.printer.escpos.CodesStar;
+import uk.chromis.pos.printer.escpos.CodesSurePOS;
+import uk.chromis.pos.printer.escpos.CodesTMU220;
+import uk.chromis.pos.printer.escpos.DeviceDisplayESCPOS;
+import uk.chromis.pos.printer.escpos.DeviceDisplaySurePOS;
+import uk.chromis.pos.printer.escpos.DevicePrinterESCPOS;
+import uk.chromis.pos.printer.escpos.DevicePrinterPlain;
+import uk.chromis.pos.printer.escpos.PrinterWritter;
+import uk.chromis.pos.printer.escpos.PrinterWritterFile;
+import uk.chromis.pos.printer.escpos.PrinterWritterRXTX;
+import uk.chromis.pos.printer.escpos.PrinterWritterRaw;
+import uk.chromis.pos.printer.escpos.UnicodeTranslatorEur;
+import uk.chromis.pos.printer.escpos.UnicodeTranslatorInt;
+import uk.chromis.pos.printer.escpos.UnicodeTranslatorStar;
+import uk.chromis.pos.printer.escpos.UnicodeTranslatorSurePOS;
 import uk.chromis.pos.printer.javapos.DeviceDisplayJavaPOS;
 import uk.chromis.pos.printer.javapos.DeviceFiscalPrinterJavaPOS;
 import uk.chromis.pos.printer.javapos.DevicePrinterJavaPOS;
@@ -28,13 +51,6 @@ import uk.chromis.pos.printer.screen.DeviceDisplayPanel;
 import uk.chromis.pos.printer.screen.DeviceDisplayWindow;
 import uk.chromis.pos.printer.screen.DevicePrinterPanel;
 import uk.chromis.pos.util.StringParser;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
