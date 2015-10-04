@@ -1027,7 +1027,6 @@ public class JRootApp extends JPanel implements AppView {
                 superUserLogin();
             }
         }
-
         m_txtKeys.setText("0");
         processKey(evt.getKeyChar());
 
@@ -1043,7 +1042,6 @@ public class JRootApp extends JPanel implements AppView {
                 DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
                 Class.forName(AppConfig2.getInstance2().getProperty("db.driver"));
                 con = DriverManager.getConnection(db_url, db_user, db_password);
-
                 PreparedStatement stmt = con.prepareStatement("INSERT INTO PEOPLE (ID, NAME, ROLE, VISIBLE) VALUES ('99', 'SuperAdminUser', '0', 0)");
                 stmt.executeUpdate();
                 user = m_dlSystem.getsuperuser();
