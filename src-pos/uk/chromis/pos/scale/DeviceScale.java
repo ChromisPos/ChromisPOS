@@ -41,6 +41,9 @@ public class DeviceScale {
         String sScaleParam1 = sd.nextToken(',');
         // String sScaleParam2 = sd.nextToken(',');
         switch (sScaleType) {
+            case "Adam Equipment":
+                m_scale = new ScaleAdam(sScaleParam1, parent );
+                break;
             case "casiopd1":
                 m_scale = new ScaleCasioPD1(sScaleParam1);
                 break;
