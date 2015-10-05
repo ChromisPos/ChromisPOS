@@ -169,6 +169,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter.addItem("COM8");
         jcboSerialPrinter.addItem("COM9");
         jcboSerialPrinter.addItem("COM10");
+        jcboSerialPrinter.addItem("COM11");
+        jcboSerialPrinter.addItem("COM12");
         jcboSerialPrinter.addItem("LPT1");
         jcboSerialPrinter.addItem("/dev/ttyS0");
         jcboSerialPrinter.addItem("/dev/ttyS1");
@@ -203,7 +205,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter2.addItem("COM7");
         jcboSerialPrinter2.addItem("COM8");        
         jcboSerialPrinter2.addItem("COM9");        
-        jcboSerialPrinter2.addItem("COM10");        
+        jcboSerialPrinter2.addItem("COM10");
+        jcboSerialPrinter2.addItem("COM11");
+        jcboSerialPrinter2.addItem("COM12");
+
         jcboSerialPrinter2.addItem("LPT1");
         jcboSerialPrinter2.addItem("/dev/ttyS0");
         jcboSerialPrinter2.addItem("/dev/ttyS1");
@@ -239,6 +244,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter3.addItem("COM8");        
         jcboSerialPrinter3.addItem("COM9");        
         jcboSerialPrinter3.addItem("COM10");        
+        jcboSerialPrinter3.addItem("COM11");        
+        jcboSerialPrinter3.addItem("COM12");        
         jcboSerialPrinter3.addItem("LPT1");
         jcboSerialPrinter3.addItem("/dev/ttyS0");
         jcboSerialPrinter3.addItem("/dev/ttyS1");
@@ -275,7 +282,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter4.addItem("COM7");
         jcboSerialPrinter4.addItem("COM8");        
         jcboSerialPrinter4.addItem("COM9");        
-        jcboSerialPrinter4.addItem("COM10");        
+        jcboSerialPrinter4.addItem("COM10"); 
+        jcboSerialPrinter4.addItem("COM11"); 
+        jcboSerialPrinter4.addItem("COM12"); 
         jcboSerialPrinter4.addItem("LPT1");
         jcboSerialPrinter4.addItem("/dev/ttyS0");
         jcboSerialPrinter4.addItem("/dev/ttyS1");
@@ -311,6 +320,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter5.addItem("COM8");        
         jcboSerialPrinter5.addItem("COM9");        
         jcboSerialPrinter5.addItem("COM10");        
+        jcboSerialPrinter5.addItem("COM11");        
+        jcboSerialPrinter5.addItem("COM12");        
         jcboSerialPrinter5.addItem("LPT1");
         jcboSerialPrinter5.addItem("/dev/ttyS0");
         jcboSerialPrinter5.addItem("/dev/ttyS1");
@@ -346,6 +357,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialPrinter6.addItem("COM8");        
         jcboSerialPrinter6.addItem("COM9");        
         jcboSerialPrinter6.addItem("COM10");        
+        jcboSerialPrinter6.addItem("COM11");        
+        jcboSerialPrinter6.addItem("COM12");        
         jcboSerialPrinter6.addItem("LPT1");
         jcboSerialPrinter6.addItem("/dev/ttyS0");
         jcboSerialPrinter6.addItem("/dev/ttyS1");
@@ -379,6 +392,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialDisplay.addItem("COM8");        
         jcboSerialDisplay.addItem("COM9");        
         jcboSerialDisplay.addItem("COM10");        
+        jcboSerialDisplay.addItem("COM11");        
+        jcboSerialDisplay.addItem("COM12");        
         jcboSerialDisplay.addItem("LPT1");
         jcboSerialDisplay.addItem("/dev/ttyS0");
         jcboSerialDisplay.addItem("/dev/ttyS1");
@@ -395,6 +410,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachineScale.addItem("casiopd1");
         jcboMachineScale.addItem("dialog1");
         jcboMachineScale.addItem("samsungesp");
+        jcboMachineScale.addItem("Adam Equipment");
 
         jcboSerialScale.addItem("COM1");
         jcboSerialScale.addItem("COM2");
@@ -406,6 +422,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialScale.addItem("COM8");        
         jcboSerialScale.addItem("COM9");        
         jcboSerialScale.addItem("COM10");        
+        jcboSerialScale.addItem("COM11");        
+        jcboSerialScale.addItem("COM12");        
         jcboSerialScale.addItem("/dev/ttyS0");
         jcboSerialScale.addItem("/dev/ttyS1");
         jcboSerialScale.addItem("/dev/ttyS2");
@@ -428,6 +446,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialScanner.addItem("COM8");        
         jcboSerialScanner.addItem("COM9");
         jcboSerialScanner.addItem("COM10");        
+        jcboSerialScanner.addItem("COM11");        
+        jcboSerialScanner.addItem("COM12");        
         jcboSerialScanner.addItem("/dev/ttyS0");
         jcboSerialScanner.addItem("/dev/ttyS1");
         jcboSerialScanner.addItem("/dev/ttyS2");
@@ -657,7 +677,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         p = new StringParser(config.getProperty("machine.scale"));
         sparam = p.nextToken(':');
         jcboMachineScale.setSelectedItem(sparam);
-        if ("casiopd1".equals(sparam) || "dialog1".equals(sparam) || "samsungesp".equals(sparam)) {
+        if ("casiopd1".equals(sparam) || "Adam Equipment".equals(sparam) || "dialog1".equals(sparam) || "samsungesp".equals(sparam)) {
             jcboSerialScale.setSelectedItem(p.nextToken(','));
         }
 
@@ -830,7 +850,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
 //JG 20 Aug 2013 Add Casio PD1 Scale
         String sMachineScale = comboValue(jcboMachineScale.getSelectedItem());
-        if ("casiopd1".equals(sMachineScale) || 
+        if ("casiopd1".equals(sMachineScale) || "Adam Equipment".equals(sMachineScale) ||
                 "dialog1".equals(sMachineScale) || 
                 "samsungesp".equals(sMachineScale)) {
             config.setProperty("machine.scale", sMachineScale + ":" + comboValue(jcboSerialScale.getSelectedItem()));
@@ -2054,6 +2074,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         // JG 29 Aug 13 - Add Casio PD1 Scale
         if ("casiopd1".equals(jcboMachineScale.getSelectedItem()) ||
             "dialog1".equals(jcboMachineScale.getSelectedItem()) ||
+            "Adam Equipment".equals(jcboMachineScale.getSelectedItem()) ||
             "samsungesp".equals(jcboMachineScale.getSelectedItem())) {
             cl.show(m_jScaleParams, "comm");
         } else {
