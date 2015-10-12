@@ -24,18 +24,25 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.TransferHandler;
 import javax.swing.filechooser.FileFilter;
 import uk.chromis.data.loader.LocalRes;
 
@@ -57,11 +64,50 @@ public class JImageEditor extends javax.swing.JPanel {
         initComponents();
         
         m_Img = null;
-        m_maxsize = null;
+        m_maxsize = new Dimension( 200, 200 );  // Default maximum size for product images
         m_icon = new ZoomIcon();
         m_jImage.setIcon(m_icon);
         m_jPercent.setText(m_percentformat.format(m_icon.getZoom()));
         privateSetEnabled(isEnabled());
+        
+        // Enable drag & drop image support
+        this.setTransferHandler( createTransferHandler() );
+    }
+    
+    private TransferHandler createTransferHandler(){
+        return new TransferHandler(  ){
+            @Override
+            public boolean importData( JComponent comp, Transferable t ) {
+                if (t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                    try {
+                        Image image = (Image) t.getTransferData(DataFlavor.imageFlavor);
+                        ImageIcon icon = new ImageIcon(image);
+                        setIconImage( icon );
+                        return true;
+                    } catch (Throwable th) {
+                        System.out.println("Failed to accept dropped image " + th);
+                    }
+                } else if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        @SuppressWarnings("unchecked")
+                        List<File> files = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
+                        if (files.size() == 1) {
+                            ImageIcon icon = new ImageIcon(files.get(0).getAbsolutePath());
+                            setIconImage(icon);
+                        }
+                        return true;
+                    } catch (Throwable th) {
+                        System.out.println( "Failed to accept dropped image " + th);
+                    }
+                }            
+                return true;
+            }
+
+            @Override
+            public boolean canImport( JComponent comp, DataFlavor[] transferFlavors ) {
+                return true;
+            }
+        };
     }
     
     /**
@@ -96,6 +142,28 @@ public class JImageEditor extends javax.swing.JPanel {
         m_jScr.setEnabled(value && (m_Img != null));
     }
     
+    /**
+     *
+     * @param img
+     */
+    public void setIconImage(ImageIcon img) {
+        BufferedImage bi = new BufferedImage(
+            img.getIconWidth(),
+            img.getIconHeight(),
+            BufferedImage.TYPE_INT_RGB);
+        Graphics g = bi.createGraphics();
+        // paint the Icon to the BufferedImage.
+        img.paintIcon(null, g, 0,0);
+        g.dispose();
+        
+        // Resize image if it is too big
+        if (m_maxsize != null && (bi.getHeight() > m_maxsize.height || bi.getWidth() > m_maxsize.width)) {
+            bi = resizeImage(bi);
+        }
+        
+        setImage( bi );
+    }
+         
     /**
      *
      * @param img
