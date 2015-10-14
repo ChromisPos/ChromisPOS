@@ -677,13 +677,12 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
     public void createLocationStock( String ProductID, String LocationID, Double security, Double maximum ) throws BasicException {
 
-        // This should only be called on new products - we dont support updates to stock levels
         Object[] values = new Object[5];
-        values[0] = UUID.randomUUID().toString();                               // ID string
-        values[1] = LocationID;                                           // Reference string
-        values[2] = ProductID;                                             // Barcode String        
-        values[3] = (double)security;                                                // Name string        
-        values[4] = (double)maximum;                                     // IScomment flag (Attribute modifier)
+        values[0] = UUID.randomUUID().toString();   // ID string
+        values[1] = LocationID;                            
+        values[2] = ProductID;                              
+        values[3] = (double)security;                      
+        values[4] = (double)maximum;                
       
         PreparedSentence sentence = new PreparedSentence(app.getSession()
                     , "INSERT INTO STOCKLEVEL (ID, LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM) VALUES (?, ?, ?, ?, ?)"
@@ -696,12 +695,11 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
     public void updateLocationStock( String ProductID, String LocationID, Double security, Double maximum ) throws BasicException {
 
-        // This should only be called on new products - we dont support updates to stock levels
         Object[] values = new Object[4];
-        values[0] = (double)security;                                                // Name string        
-        values[1] = (double)maximum;                                     // IScomment flag (Attribute modifier)
-        values[2] = ProductID;                                             // Barcode String        
-        values[3] = LocationID;                                           // Reference string
+        values[0] = (double)security;
+        values[1] = (double)maximum;
+        values[2] = ProductID;   
+        values[3] = LocationID;
       
         PreparedSentence sentence = new PreparedSentence(app.getSession()
                     , "UPDATE STOCKLEVEL SET STOCKSECURITY = ?, STOCKMAXIMUM = ? WHERE PRODUCT = ? AND LOCATION = ?"
@@ -719,10 +717,9 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     public Boolean isExistingLocationStock( String ProductID, String LocationID ) throws BasicException {
         Boolean bExists = false;
         
-        // This should only be called on new products - we dont support updates to stock levels
         Object[] values = new Object[2];
-        values[0] = ProductID;                                             // Barcode String        
-        values[1] = LocationID;                                           // Reference string
+        values[0] = ProductID;   
+        values[1] = LocationID;  
       
         PreparedSentence sentence = new PreparedSentence(app.getSession()
                     , "SELECT * FROM STOCKLEVEL WHERE PRODUCT = ? AND LOCATION = ?"
