@@ -22,4 +22,5 @@ set DIRNAME=%~dp0
 set CP="%DIRNAME%chromispos.jar"
 set CP=%CP%;"%DIRNAME%locales/"
 set CP=%CP%;"%DIRNAME%lib/substance.jar"
+
 start /B javaw -cp %CP% uk.chromis.pos.sales.JResetPickupID

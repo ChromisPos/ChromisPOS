@@ -214,11 +214,13 @@ public class JPanelButtons extends javax.swing.JPanel {
     private class JButtonFunc extends JButton {
 
         public JButtonFunc(String sKey, String sImage, String title) {
-
             setName(sKey);
             setText(title);
+            java.net.URL imgURL=null;
             // allows for the use of a images from the image class file to be used
-            java.net.URL imgURL = getClass().getResource(sImage);
+            if (sImage != null){
+            imgURL = getClass().getResource(sImage);
+            }            
             if (imgURL == null) {
                 setIcon(new ImageIcon(tnbmacro.getThumbNail(panelticket.getResourceAsImage(sImage))));
             } else {

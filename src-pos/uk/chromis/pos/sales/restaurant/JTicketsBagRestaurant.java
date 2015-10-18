@@ -87,7 +87,9 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         
         m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
 //JG July 2014 - Thank you Ron Isaacson        m_TP = new DeviceTicket();
+
         m_TP = new DeviceTicket(app.getProperties());        
+      
         m_TTP2 = new TicketParser(m_App.getDeviceTicket(), m_dlSystem);     
         m_KitchenPrint.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintKitchen"));
         m_KitchenPrint.setVisible(false);

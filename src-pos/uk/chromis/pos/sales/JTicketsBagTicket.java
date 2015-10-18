@@ -89,7 +89,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         // Inicializo la impresora...
 //JG July 2014 - Thank you Ron Isaacson        m_TP = new DeviceTicket();
         m_TP = new DeviceTicket(app.getProperties());        
-   
+
         // Inicializo el parser de documentos de ticket
         m_TTP = new TicketParser(m_TP, m_dlSystem); // para visualizar el ticket
         m_TTP2 = new TicketParser(m_App.getDeviceTicket(), m_dlSystem); // para imprimir el ticket

@@ -22,7 +22,7 @@ report.setTitleKey("Menu.ProductLabels");
 report.setReport("/uk/chromis/reports/productlabels");
 report.setResourceBundle("uk/chromis/reports/productlabels_messages");
 
-report.setSentence("SELECT PRODUCTS.ID, PRODUCTS.REFERENCE, PRODUCTS.CODE, PRODUCTS.NAME, PRODUCTS.PRICEBUY, PRODUCTS.PRICESELL, TC.ID AS TAXCAT, TC.NAME AS TAXCATNAME, CATEGORIES.ID AS CATEGORY, CATEGORIES.NAME AS CATEGORYNAME " +
+report.setSentence("SELECT PRODUCTS.ID, PRODUCTS.REFERENCE, PRODUCTS.CODE, PRODUCTS.CODETYPE, PRODUCTS.NAME, PRODUCTS.PRICEBUY, PRODUCTS.PRICESELL, TC.ID AS TAXCAT, TC.NAME AS TAXCATNAME, CATEGORIES.ID AS CATEGORY, CATEGORIES.NAME AS CATEGORYNAME " +
                  "FROM PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID LEFT OUTER JOIN TAXCATEGORIES TC ON PRODUCTS.TAXCAT = TC.ID " +
                  "WHERE ?(QBF_FILTER) " +
                  "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME");
@@ -37,6 +37,7 @@ report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
 report.addField("ID", uk.chromis.data.loader.Datas.STRING);
 report.addField("REFERENCE", uk.chromis.data.loader.Datas.STRING);
 report.addField("CODE", uk.chromis.data.loader.Datas.STRING);
+report.addField("CODETYPE", uk.chromis.data.loader.Datas.STRING);
 report.addField("NAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("PRICEBUY", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("PRICESELL", uk.chromis.data.loader.Datas.DOUBLE);

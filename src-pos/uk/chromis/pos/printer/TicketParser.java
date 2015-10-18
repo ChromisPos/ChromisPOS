@@ -43,7 +43,7 @@ import uk.chromis.pos.ticket.TicketInfo;
 
 /**
  *
- *   
+ *
  */
 public class TicketParser extends DefaultHandler {
 
@@ -56,7 +56,7 @@ public class TicketParser extends DefaultHandler {
 
     private String bctype;
     private String bcposition;
-    private int bcwidth, bcheight;
+    private int bcwidth, bcheight, qrsize;
     private int m_iTextAlign;
     private int m_iTextLength;
     private int m_iTextStyle;
@@ -231,11 +231,12 @@ public class TicketParser extends DefaultHandler {
                     text = new StringBuilder();
                 } else if ("qrcode".equals(qName)) {
                     text = new StringBuilder();
+                    qrsize = parseInt(attributes.getValue("size"));
                 } else if ("barcode".equals(qName)) {
                     text = new StringBuilder();
                     bctype = attributes.getValue("type");
                     bcposition = attributes.getValue("position");
-                } else if ("barcode2".equals(qName)) {
+                } else if ("prtbarcode".equals(qName)) {
                     text = new StringBuilder();
                     bctype = attributes.getValue("type");
                     bcwidth = parseInt(attributes.getValue("width"));
@@ -353,23 +354,23 @@ public class TicketParser extends DefaultHandler {
                 } else if ("qrcode".equals(qName)) {
                     try {
                         BarCode qrCode = new BarCode();
-                        BufferedImage image = qrCode.getQRCode(text.toString(), 125);
+                        BufferedImage image;
+                        if (qrsize < 50 ) {
+                            image = qrCode.getQRCode(text.toString(), 50);
+                        } else {
+                            image = qrCode.getQRCode(text.toString(), qrsize);
+                        }
                         if (image != null) {
                             m_oOutputPrinter.printImage(image);
                         }
                     } catch (Exception fnfe) {
                     }
                     text = null;
-                } else if ("barcode2".equals(qName)) {
-                    try {
-                        BarCode barCode = new BarCode();
-                        BufferedImage image = barCode.getBarcode(text.toString(), bctype, bcwidth, bcheight);
-                        if (image != null) {
-                            m_oOutputPrinter.printImage(image);
-                        }
-                    } catch (Exception fnfe) {
-                    }
-                    text = null;
+              //  } else if ("prtbarcode".equals(qName)) {
+              //      m_oOutputPrinter.printerHWBarCode(
+              //              bctype,                            
+              //              text.toString());
+              //      text = null;
                 } else if ("text".equals(qName)) {
                     if (m_iTextLength > 0) {
                         switch (m_iTextAlign) {

@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.inventory;
 
 import uk.chromis.data.loader.IKeyed;
@@ -26,15 +25,14 @@ import uk.chromis.data.loader.IKeyed;
  * @author adrianromero
  */
 public class CodeType implements IKeyed {
-    
-    /**
-     *
-     */
-    public static final CodeType EAN13 = new CodeType("EAN13", "EAN13");
 
     /**
      *
      */
+    public static final CodeType EAN13 = new CodeType("EAN13", "EAN13");
+    public static final CodeType EAN8 = new CodeType("EAN-8", "EAN-8");
+    public static final CodeType UPCA = new CodeType("UPC-A", "UPC-A");
+    public static final CodeType UPCE = new CodeType("UPC-E", "UPC-E");
     public static final CodeType CODE128 = new CodeType("CODE128", "CODE128");
 
     /**
@@ -46,7 +44,7 @@ public class CodeType implements IKeyed {
      *
      */
     protected String m_sValue;
-    
+
     private CodeType(String key, String value) {
         m_sKey = key;
         m_sValue = value;
@@ -68,8 +66,9 @@ public class CodeType implements IKeyed {
     public String getValue() {
         return m_sValue;
     }
+
     @Override
     public String toString() {
         return m_sValue;
-    }   
+    }
 }

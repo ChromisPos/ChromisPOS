@@ -65,14 +65,5 @@ public interface CatalogSelector {
      */
     public void removeActionListener(ActionListener l);    
     
-     /**
-     *
-     * @param ShowAll
-     */
-    public void SetAllProducts( boolean ShowAll );
-    
-    /**
-     *
-     */
-    public boolean getAllProducts();
+
 }

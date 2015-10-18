@@ -25,26 +25,26 @@
 <configuration>
 <!-- Sales Ticket Button Bar - Show icons **************************************** -->
 	<!-- SET Sales Ticket Refund Item (Default=DISABLED) -->
-	<!-- button key="button.refundit" image="/uk/chromis/images/img.refundit" code="script.Refundit"/> -->
+	<!-- button key="button.refundit" image="/uk/chromis/images/refundit.png" code="script.Refundit"/> -->
 
 	<!-- SET Sales Ticket ServiceCharge (Default=DISABLED) -->
-	<!-- <button key="button.scharge" image="/uk/chromis/images/img.heart" code="script.ServiceCharge"/> -->
+	<!-- <button key="button.scharge" image="/uk/chromis/images/heart.png" code="script.ServiceCharge"/> -->
                 
 	<!-- SET Line or Total Discount (Default=TotalDiscount= ENABLED) -->
-	<button key="button.totaldiscount" image="/uk/chromis/images/img_discount.png" code="script.totaldiscount"/>
-	<!-- <button key="button.linediscount" image="/uk/chromis/images/img_discount.png" code="script.linediscount"/>  -->
+	<button key="button.totaldiscount" image="img.discount" code="script.totaldiscount"/>
+	<!-- <button key="button.linediscount" image="img.discount" code="script.linediscount"/>  -->
 
 	<!-- SET Waiter's name (Default=DISABLED) -->
-	<!-- <button key="button.setperson" image="/uk/chromis/images/img.user" code="script.SetPerson"/>  -->
+	<!-- <button key="button.setperson" image="img.user" code="script.SetPerson"/>  -->
 
 	<!-- SET Remote Printer (Default=DISABLED) Not required for John L changes--> 
-	<!-- <button key="button.sendorder" image="/uk/chromis/images/img.kit_print" code="script.SendOrder"/>  -->
+	<!-- <button key="button.sendorder" image="img.kit_print" code="script.SendOrder"/>  -->
 
 	<!-- SET Ticket Print Preview (Default=ENABLED) -->
     	<button key="button.print" image="/uk/chromis/images/printer24.png" template="Printer.TicketPreview"/>
 
 	<!-- SET Open Cashdrawer (Default=ENABLED) -->
-	<button key="button.opendrawer" image="/uk/chromis/images/cashdrawer.png" template="Printer.OpenDrawer"/>
+	<button key="button.opendrawer" image="img.cashdrawer" template="Printer.OpenDrawer"/>
         
 <!-- END Sales Ticket Button Bar - Show icons -->
 

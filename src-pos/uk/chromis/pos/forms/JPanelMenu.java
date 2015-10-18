@@ -112,7 +112,7 @@ public class JPanelMenu extends JPanel implements JPanelView {
         if (currententrypanel == null) {
             currententrypanel = new JPanel();                    
             currententrypanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 0, 20, 0));
-            currententrypanel.setLayout(new java.awt.GridLayout(0, 5, 5, 5));
+            currententrypanel.setLayout(new java.awt.GridLayout(0, 3, 5, 5));
             menucontainer.add(currententrypanel);            
         }
         

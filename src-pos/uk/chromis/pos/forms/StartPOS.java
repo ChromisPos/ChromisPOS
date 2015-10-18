@@ -34,9 +34,6 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.instance.InstanceQuery;
 import uk.chromis.pos.ticket.TicketInfo;
 
-// JG 16 May 2013 deprecated for pushingpixels
-// import org.jvnet.substance.SubstanceLookAndFeel;
-// import org.jvnet.substance.api.SubstanceSkin;
 /**
  *
  * @author adrianromero

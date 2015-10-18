@@ -51,17 +51,6 @@ public class DeviceDisplayESCPOS extends DeviceDisplaySerial {
         display.flush();
     }
         
-//    @Override
-//    public void clearLines() {
-//        display.write(ESCPOS.SELECT_DISPLAY);
-//        display.write(ESCPOS.VISOR_CLEAR);
-//        display.write(ESCPOS.VISOR_HOME);
-//        display.flush();
-//    }
-
-    /**
-     *
-     */
     
     @Override
     public void repaintLines() {

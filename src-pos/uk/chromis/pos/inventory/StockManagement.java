@@ -19,15 +19,6 @@
 
 package uk.chromis.pos.inventory;
 
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.UUID;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.DateUtils;
 import uk.chromis.beans.JCalendarDialog;
@@ -39,11 +30,7 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.catalog.CatalogSelector;
 import uk.chromis.pos.catalog.JCatalog;
-import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppView;
-import uk.chromis.pos.forms.DataLogicSales;
-import uk.chromis.pos.forms.DataLogicSystem;
-import uk.chromis.pos.forms.JPanelView;
+import uk.chromis.pos.forms.*;
 import uk.chromis.pos.printer.TicketParser;
 import uk.chromis.pos.printer.TicketPrinterException;
 import uk.chromis.pos.sales.JProductAttEdit;
@@ -54,6 +41,15 @@ import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.ticket.ProductInfoExt;
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.UUID;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -106,20 +102,17 @@ public class StockManagement extends JPanel implements JPanelView {
         m_ReasonModel.add(MovementReason.IN_PURCHASE);
         m_ReasonModel.add(MovementReason.IN_REFUND);
         m_ReasonModel.add(MovementReason.IN_MOVEMENT);
-        m_ReasonModel.add(MovementReason.IN_OPEN_PACK);
         m_ReasonModel.add(MovementReason.OUT_SALE);
         m_ReasonModel.add(MovementReason.OUT_REFUND);
         m_ReasonModel.add(MovementReason.OUT_BREAK);
         m_ReasonModel.add(MovementReason.OUT_MOVEMENT);        
         m_ReasonModel.add(MovementReason.OUT_CROSSING);        
-        m_ReasonModel.add(MovementReason.OUT_OPEN_PACK);
         
         m_jreason.setModel(m_ReasonModel);
         
         m_cat = new JCatalog(m_dlSales);
         m_cat.addActionListener(new CatalogListener());
-        m_cat.SetAllProducts(true);
-  
+
         catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);
        
 

@@ -131,39 +131,23 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         } else {
             pid = product.getID();
 
-// JDL 20.12.20 set product name to a default rather than blank    TO DO        
             attributes.setProperty("product.name", product.getName());
             attributes.setProperty("product.com", product.isCom() ? "true" : "false");
-// ADDED JG 20.12.10 - Kitchen Print
             attributes.setProperty("product.kitchen", product.isKitchen() ? "true" : "false");
-// ***
-// ADDED JG 25.06.11 - IsService
             attributes.setProperty("product.service", product.isService() ? "true" : "false");
-// ***      
-// Added JDL 19.12.12 Variable Price Product
             attributes.setProperty("product.vprice", product.isVprice() ? "true" : "false");
-//     
-
-// Added JDL 09.02.132 
             attributes.setProperty("product.verpatrib", product.isVerpatrib() ? "true" : "false");
-//
 
-// Added JDL 09.04.13 - Amend JG 10 Oct 13
             if (product.getTextTip() != null) {
                 attributes.setProperty("product.texttip", product.getTextTip());
             }
-
-// Added JDL 14.02.15
+            
             attributes.setProperty("product.alwaysavailable", product.getAlwaysAvailable() ? "true" : "false");
 
-// Added JDL 14.02.15
             if (product.getAlias() != null) {
                 attributes.setProperty("product.alias", product.getAlias());
             }
-//
-// Added JDL 25.05.13
             attributes.setProperty("product.warranty", product.getWarranty() ? "true" : "false");
-//        
 
             if (product.getAttributeSetID() != null) {
                 attributes.setProperty("product.attsetid", product.getAttributeSetID());
@@ -384,6 +368,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         return "true".equals(attributes.getProperty("product.com"));
     }
 
+    
     /**
      *
      * @return

@@ -136,8 +136,7 @@ public class DevicePrinterESCPOS implements DevicePrinter  {
      * @param code
      */
     @Override
-    public void printBarCode(String type, String position, String code) {
-        
+    public void printBarCode(String type, String position, String code) {        
         m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);        
         m_codes.printBarcode(m_CommOutputPrinter, type, position, code);
     }
@@ -203,14 +202,12 @@ public class DevicePrinterESCPOS implements DevicePrinter  {
      */
     @Override
     public void endReceipt() {
-        m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);   
-        
+        m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);           
         m_CommOutputPrinter.write(m_codes.getNewLine());
         m_CommOutputPrinter.write(m_codes.getNewLine());
         m_CommOutputPrinter.write(m_codes.getNewLine());
         m_CommOutputPrinter.write(m_codes.getNewLine());
         m_CommOutputPrinter.write(m_codes.getNewLine());
-
         m_CommOutputPrinter.write(m_codes.getCutReceipt());
         m_CommOutputPrinter.flush();
     }
@@ -220,10 +217,11 @@ public class DevicePrinterESCPOS implements DevicePrinter  {
      */
     @Override
     public void openDrawer() {
-
         m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);   
         m_CommOutputPrinter.write(m_codes.getOpenDrawer());
         m_CommOutputPrinter.flush();
     }
+
+
 }
 

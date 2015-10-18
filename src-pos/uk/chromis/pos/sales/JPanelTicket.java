@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.sales;
 
 import bsh.EvalError;
@@ -92,6 +93,9 @@ import uk.chromis.pos.util.AltEncrypter;
 import uk.chromis.pos.util.InactivityListener;
 import uk.chromis.pos.util.JRPrinterAWT300;
 import uk.chromis.pos.util.ReportUtils;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+import uk.chromis.pos.printer.DeviceDisplayAdvance;
 
 /**
  *
@@ -102,7 +106,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     // Variable numerica
     private final static int NUMBERZERO = 0;
     private final static int NUMBERVALID = 1;
-
     private final static int NUMBER_INPUTZERO = 0;
     private final static int NUMBER_INPUTZERODEC = 1;
     private final static int NUMBER_INPUTINT = 2;
@@ -111,106 +114,52 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private final static int NUMBER_PORZERODEC = 5;
     private final static int NUMBER_PORINT = 6;
     private final static int NUMBER_PORDEC = 7;
-
-    /**
-     *
-     */
-    protected JTicketLines m_ticketlines;
-
-    // private Template m_tempLine;
-    private TicketParser m_TTP;
-
-    /**
-     *
-     */
+    private final String m_sCurrentTicket = null;
+    private final String temp_jPrice = "";   
+    
+    protected JTicketLines m_ticketlines, m_ticketlines2;
     protected TicketInfo m_oTicket;
-
-    /**
-     *
-     */
+    protected JPanelButtons m_jbtnconfig;
+    protected AppView m_App;
+    protected DataLogicSystem dlSystem;
+    protected DataLogicSales dlSales;
+    protected DataLogicCustomers dlCustomers;
     protected Object m_oTicketExt;
+    protected TicketsEditor m_panelticket;
+    
 
-    // Estas tres variables forman el estado...
     private int m_iNumberStatus;
     private int m_iNumberStatusInput;
     private int m_iNumberStatusPor;
+    private TicketParser m_TTP;
     private StringBuffer m_sBarcode;
-
     private JTicketsBag m_ticketsbag;
-
     private SentenceList senttax;
     private ListKeyed taxcollection;
-    // private ComboBoxValModel m_TaxModel;
-
     private SentenceList senttaxcategories;
     private ListKeyed taxcategoriescollection;
     private ComboBoxValModel taxcategoriesmodel;
-
     private TaxesLogic taxeslogic;
-
-    /**
-     *
-     */
-    protected JPanelButtons m_jbtnconfig;
-
-    /**
-     *
-     */
-    protected AppView m_App;
-
-    /**
-     *
-     */
-    protected DataLogicSystem dlSystem;
-
-    /**
-     *
-     */
-    protected DataLogicSales dlSales;
-
-    /**
-     *
-     */
-    protected DataLogicCustomers dlCustomers;
-
     private JPaymentSelect paymentdialogreceipt;
     private JPaymentSelect paymentdialogrefund;
-
-// added 27.04.13 JDL    
     private JRootApp root;
     private Object m_principalapp;
     private Boolean restaurant;
-
-// added 27.04.13 JDL for inactivity and Auto logoff    
     private Action logout;
     private InactivityListener listener;
     private Integer delay = 0;
-    private final String m_sCurrentTicket = null;
-
-    /**
-     *
-     */
-    protected TicketsEditor m_panelticket;
     private DataLogicReceipts dlReceipts = null;
-// added 16.05.13 JDL customer name on table    
     private Boolean priceWith00;
-    private final String temp_jPrice = "";
     private String tableDetails;
     private RestaurantDBUtils restDB;
     private KitchenDisplay kitchenDisplay;
     private String ticketPrintType;
-
-// added 25.05.13 JDl warranty receipt
     private Boolean warrantyPrint = false;
-//   private String loyaltyCardNumber=null;
-
     private TicketInfo m_ticket;
     private TicketInfo m_ticketCopy;
     private AppConfig m_config;
 
-    /**
-     * Creates new form JTicketView
-     */
+
     public JPanelTicket() {
 
         initComponents();
@@ -225,7 +174,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public void init(AppView app) throws BeanFactoryException {
       
         m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-
         m_config.load();
 
         m_App = app;
@@ -240,7 +188,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (!m_App.getDeviceScale().existsScale()) {
             m_jbtnScale.setVisible(false);
         }
-//      JG 19 Feb 14 unnecessary parse - if (Boolean.valueOf(m_App.getProperties().getProperty("till.amountattop")).booleanValue()){
         if (Boolean.valueOf(m_App.getProperties().getProperty("till.amountattop"))) {
             m_jPanEntries.remove(jPanel9);
             m_jPanEntries.remove(m_jNumberKey);
@@ -248,7 +195,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_jPanEntries.add(m_jNumberKey);
         }
 
-//      JG 19 Feb 14 unnecessary parse -  jbtnMooring.setVisible(Boolean.valueOf(m_App.getProperties().getProperty("till.marineoption")).booleanValue());
         jbtnMooring.setVisible(Boolean.valueOf(m_App.getProperties().getProperty("till.marineoption")));
 
         priceWith00 = ("true".equals(m_App.getProperties().getProperty("till.pricewith00")));
@@ -288,21 +234,69 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_oTicket = null;
         m_oTicketExt = null;
 
+        
+        if( (app.getDeviceTicket().getDeviceDisplay()!= null) 
+                && (app.getDeviceTicket().getDeviceDisplay() instanceof DeviceDisplayAdvance) ) {
+
+            DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance)m_App.getDeviceTicket().getDeviceDisplay();
+
+            // adds additonal ticketlines list to display if supported
+            if(advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
+                m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.Line"));
+                advDisplay.setTicketLines(m_ticketlines2);
+            }
+
+            m_ticketlines.addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
+
+                    DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance)m_App.getDeviceTicket().getDeviceDisplay();
+
+                    if(advDisplay.hasFeature(DeviceDisplayAdvance.PRODUCT_IMAGE)) {
+                        if (!e.getValueIsAdjusting()) {
+                            int i = m_ticketlines.getSelectedIndex();
+
+                            if (i >= 0) {
+                                try {
+                                    String sProduct = m_oTicket.getLine(i).getProductID();
+                                    if (sProduct != null) {
+                                        ProductInfoExt myProd = JPanelTicket.this.dlSales.getProductInfo(sProduct);
+                                        if (myProd==null)
+                                            Logger.getLogger(JPanelTicket.class.getName()).log(Level.INFO, "-------- Null Product pointer(nothing retrieved for "+sProduct+", check STOCKCURRENT table)");
+                                        else if (myProd.getImage() != null) {
+                                            advDisplay.setProductImage(myProd.getImage());
+
+                                        } else {
+                                            advDisplay.setProductImage(null);
+                                        }
+                                    }
+                                } catch (BasicException ex) {
+                                    Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
+                    }
+
+                    if(advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
+                            int i = m_ticketlines.getSelectedIndex();
+                            m_ticketlines2.clearTicketLines();
+                            for(int j = 0;(m_oTicket!=null)&&(j < m_oTicket.getLinesCount()); j++) {
+                                m_ticketlines2.insertTicketLine(j, m_oTicket.getLine(j));
+                            }
+                            m_ticketlines2.setSelectedIndex(i);
+                    }
+                }
+            });
+
+        }
+
+        
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Object getBean() {
         return this;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public JComponent getComponent() {
         return this;
@@ -358,7 +352,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             if (autoLogoff.equals("true")) {
                 try {
                     delay = Integer.parseInt(m_App.getProperties().getProperty("till.autotimer"));
-// JG 19 Feb 14 -  }catch (Exception e){
                 } catch (NumberFormatException e) {
                     delay = 0;
                 }
@@ -379,7 +372,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         // impuestos incluidos seleccionado ?
         m_jaddtax.setSelected("true".equals(m_jbtnconfig.getProperty("taxesincluded")));
 
-// JG May 2013 use Diamond inference
         java.util.List<TaxInfo> taxlist = senttax.list();
         taxcollection = new ListKeyed<>(taxlist);
         java.util.List<TaxCategoryInfo> taxcategorieslist = senttaxcategories.list();
@@ -399,8 +391,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         taxeslogic = new TaxesLogic(taxlist);
 
-// Added JDL change the startup state of addtax button
-// JG 19 Feb 14 unnecessary parse -  m_jaddtax.setSelected((Boolean.valueOf(m_App.getProperties().getProperty("till.taxincluded")).booleanValue()));          
         m_jaddtax.setSelected((Boolean.parseBoolean(m_App.getProperties().getProperty("till.taxincluded"))));
 
         // Show taxes options
@@ -432,30 +422,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         return m_ticketsbag.deactivate();
     }
 
-    /**
-     *
-     * @return
-     */
     protected abstract JTicketsBag getJTicketsBag();
-
-    /**
-     *
-     * @return
-     */
     protected abstract Component getSouthComponent();
-
-    /**
-     *
-     */
     protected abstract void resetSouthComponent();
-
     protected abstract void reLoadCatalog();
 
-    /**
-     *
-     * @param oTicket
-     * @param oTicketExt
-     */
     @SuppressWarnings("empty-statement")
     @Override
     public void setActiveTicket(TicketInfo oTicket, Object oTicketExt) {
@@ -500,16 +471,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 
 // lets check if this is a moved ticket        
-// JG 19 Feb 14 mod booleans and strings
-//        if ((m_oTicket != null) && (((Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue()) || 
-//                 (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")).booleanValue())))){
         if ((m_oTicket != null) && (((Boolean.parseBoolean(m_App.getProperties().getProperty("table.showwaiterdetails")))
                 || (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")))))) {
 
         }
-// ditto + flipped operands
-//        if ((m_oTicket != null) && (((Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue()) || 
-//                 (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")).booleanValue())))){        
         if ((m_oTicket != null) && (((Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")))
                 || (Boolean.parseBoolean(m_App.getProperties().getProperty("table.showwaiterdetails")))))) {
 // check if the old table and the new table are the same                      
@@ -555,7 +520,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             // Muestro el panel de nulos.
             cl.show(this, "null");
 // John L June 2014
-//            resetSouthComponent();
             if ((m_oTicket != null) && (m_oTicket.getLinesCount() == 0)) {
                 resetSouthComponent();
             }
@@ -586,8 +550,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             // Muestro el panel de tickets.
             cl.show(this, "ticket");
-// JG June 2014 - Thanks John L
-//            resetSouthComponent();
             if (m_oTicket.getLinesCount() == 0) {
                 resetSouthComponent();
             }
@@ -1699,13 +1661,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                 }
                 try {
+                if (m_oTicket.getLine(i).isProductCom()){
+                    dlSystem.addOrder(UUID.randomUUID().toString(), orderUUID, (int) m_oTicket.getLine(i).getMultiply(), "+ " + m_oTicket.getLine(i).getProductName(),
+                            m_oTicket.getLine(i).getProductAttSetInstDesc(), m_oTicket.getLine(i).getProperty("notes"), id, display, 1);
+                }else{
                     dlSystem.addOrder(UUID.randomUUID().toString(), orderUUID, (int) m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getProductName(),
-                            m_oTicket.getLine(i).getProductAttSetInstDesc(), m_oTicket.getLine(i).getProperty("notes"), id, display);
-                } catch (BasicException ex) {
+                            m_oTicket.getLine(i).getProductAttSetInstDesc(), m_oTicket.getLine(i).getProperty("notes"), id, display, 0);
+                } 
+            }   catch (BasicException ex) {
                     Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
         }
+    }
     }
 
     private Object evalScript(ScriptObject scr, String resource, ScriptArg... args) {

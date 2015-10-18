@@ -146,4 +146,5 @@ public class DevicePrinterNull implements DevicePrinter {
     public void printLogo(Byte iNumber) {
         
     }
+
 }

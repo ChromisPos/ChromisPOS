@@ -33,7 +33,6 @@ import uk.chromis.pos.util.AltEncrypter;
 public class JResetLiquibase extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
 
-   // private Statement stmt;
 
     private JResetLiquibase config;
 
@@ -62,13 +61,12 @@ public class JResetLiquibase extends javax.swing.JFrame {
                     Session session = AppViewConnection.createSession(config);
                     Connection con = DriverManager.getConnection(db_url, db_user, db_password);
                     Statement stmt = (Statement) con.createStatement();
-                    String SQL = "DELETE FROM DATABASECHANGELOG ";
+                    String SQL = "DELETE FROM DATABASECHANGELOG ";                    
                     stmt.execute(SQL);
-                    SQL = "UPDATE APPJL SET VERSION = '0.00' WHERE NAME ='uniCenta oPOS' ";
-                    stmt.execute(SQL);
-                    SQL = "UPDATE APPLICATIONS SET VERSION = '0.00' WHERE NAME ='uniCenta oPOS' ";
+                    SQL = "UPDATE APPLICATIONS SET VERSION = '0.00' WHERE NAME ='Chromis Pos' ";
                     stmt.execute(SQL);                     
                     JOptionPane.showMessageDialog(null, "Liquibase tables cleared ready for new attempt.", "Liquibase Reset", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
                 } catch (BasicException | SQLException e) {
                     System.out.println(e.getMessage());
                     JOptionPane.showMessageDialog(null, "Liquibase tables clear Failed.", "Liquibase Reset", JOptionPane.INFORMATION_MESSAGE);

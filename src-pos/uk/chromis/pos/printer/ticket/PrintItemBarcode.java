@@ -68,8 +68,9 @@ public class PrintItemBarcode implements PrintItem {
     public PrintItemBarcode(String type, String position, String code, double scale) {
 
         m_sCode = code;
-        this.scale = scale;
+        //this.scale = scale;
 
+        this.scale = 1.5;
         if (DevicePrinter.BARCODE_CODE128.equals(type)) {
             m_barcode = new Code128Bean();
         } else {

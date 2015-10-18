@@ -19,26 +19,6 @@
 
 package uk.chromis.pos.catalog;
 
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import javax.swing.AbstractListModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
@@ -49,6 +29,17 @@ import uk.chromis.pos.ticket.CategoryInfo;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.ticket.TaxInfo;
 import uk.chromis.pos.util.ThumbNailBuilder;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -66,14 +57,6 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private boolean pricevisible;
     private boolean taxesincluded;
 
-    private boolean m_bShowNonCatalogueProducts = false;
-    public void SetAllProducts( boolean ShowAll ) {
-        m_bShowNonCatalogueProducts = ShowAll;
-    }
-    public boolean getAllProducts() {
-        return m_bShowNonCatalogueProducts;
-    }
-    
     // Set of Products panels
     // JG Aug 2013 switched to diamond inference
     private final Map<String, ProductInfoExt> m_productsset = new HashMap<>();
@@ -293,16 +276,6 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
 // These are the products selection panel                   
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
                 }
-                
-                                
-                // Sometimes we need to see non catalogue products
-                if( m_bShowNonCatalogueProducts ) {
-                    java.util.List<ProductInfoExt> noncatproducts = m_dlSales.getProductNonCatalog(catid);
-                    for (ProductInfoExt prod : noncatproducts) {
-                        jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
-                    }
-                }                
-  
             }
 
             // Show categories panel

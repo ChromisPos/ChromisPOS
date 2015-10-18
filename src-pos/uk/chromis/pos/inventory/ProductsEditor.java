@@ -16,21 +16,9 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.inventory;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
-import java.util.UUID;
-import javax.swing.JPanel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.SentenceList;
@@ -40,6 +28,20 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.sales.TaxesLogic;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Date;
+import java.util.UUID;
+import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import uk.chromis.pos.util.BarcodeValidator;
 
 /**
  *
@@ -49,26 +51,20 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
     private final SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
-
     private final SentenceList taxcatsent;
     private ComboBoxValModel taxcatmodel;
-
     private final SentenceList attsent;
     private ComboBoxValModel attmodel;
-
     private final SentenceList taxsent;
     private TaxesLogic taxeslogic;
-
     private final ComboBoxValModel m_CodetypeModel;
-
-    private final SentenceList packproductsent;
-    private ComboBoxValModel packproductmodel;
-
     private Object m_id;
     private Object pricesell;
     private boolean priceselllock = false;
-
     private boolean reportlock = false;
+    private BarcodeValidator validate;
+    
+    
 
 // JG Mar 14 - Preparing for direct Printer assign rather than script
 //    private Object m_Printkb; - use this for printernumber
@@ -83,6 +79,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     public ProductsEditor(DataLogicSales dlSales, DirtyManager dirty) {
         initComponents();
 
+        validate = new BarcodeValidator();
+        
         // Taxes sentence
         taxsent = dlSales.getTaxList();
 
@@ -105,10 +103,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jCodetype.setModel(m_CodetypeModel);
         m_jCodetype.setVisible(false);
 
-        // Pack Product model
-        packproductsent = dlSales.getPackProductList();
-        packproductmodel = new ComboBoxValModel();
-      
         m_jRef.getDocument().addDocumentListener(dirty);
         m_jCode.getDocument().addDocumentListener(dirty);
         m_jName.getDocument().addDocumentListener(dirty);
@@ -125,42 +119,23 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.addActionListener(dirty);
         m_jCatalogOrder.getDocument().addDocumentListener(dirty);
         txtAttributes.getDocument().addDocumentListener(dirty);
-// Added JG 20.12.10 - Kitchen Print
         m_jKitchen.addActionListener(dirty);
-// Added JG 25.06.11 - Is Service
         m_jService.addActionListener(dirty);
-// Added JDL 19.12.12 - Variable price product
         m_jVprice.addActionListener(dirty);
         m_jVerpatrib.addActionListener(dirty);
-// Added JDL 09.02.13
         m_jTextTip.getDocument().addDocumentListener(dirty);
         m_jDisplay.getDocument().addDocumentListener(dirty);
-// Added JG 7 June 2014 - Stock Units
-        m_jStockUnits.getDocument().putProperty(dlSales, 24);
-
+        m_jStockUnits.getDocument().putProperty(dlSales, 26);
         FieldsManager fm = new FieldsManager();
         m_jPriceBuy.getDocument().addDocumentListener(fm);
         m_jPriceSell.getDocument().addDocumentListener(new PriceSellManager());
         m_jTax.addActionListener(fm);
-
-        m_jIsPack.addActionListener(dirty);
-        m_jPackQuantity.getDocument().addDocumentListener(dirty);
-        m_jPackProduct.addActionListener(dirty);
-        m_jPackProduct.addActionListener(fm);
-
         m_jPriceSellTax.getDocument().addDocumentListener(new PriceTaxManager());
         m_jmargin.getDocument().addDocumentListener(new MarginManager());
-
-// Added JDL 26.05.13 warranty receipt   
         m_jCheckWarrantyReceipt.addActionListener(dirty);
-
         m_jGrossProfit.getDocument().addDocumentListener(new MarginManager());
-
-// Added JDL 14 Feb 2015
         m_jAlias.getDocument().addDocumentListener(dirty);
         m_jAlwaysAvailable.addActionListener(dirty);
-
-// Addes JDl 6.5.15        
         m_jDiscounted.addActionListener(dirty);
         
         writeValueEOF();
@@ -184,10 +159,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         attmodel = new ComboBoxValModel(attsent.list());
         attmodel.add(0, null);
         m_jAtt.setModel(attmodel);
-
-        packproductmodel = new ComboBoxValModel(packproductsent.list());
-        m_jPackProduct.setModel(packproductmodel);
-        
     }
 
     /**
@@ -218,38 +189,21 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPriceBuy.setText(null);
         setPriceSell(null);
         m_jImage.setImage(null);
-        m_jstockcost.setText(null);
-        m_jstockvolume.setText(null);
+        m_jstockcost.setText("0.0");
+        m_jstockvolume.setText("0.0");
         m_jInCatalog.setSelected(false);
         m_jCatalogOrder.setText(null);
         txtAttributes.setText(null);
-// Added JG 20.12.10 - Kitchen Print
         m_jKitchen.setSelected(false);
-// **
-// Added JG 25.06.11 - Is Service
         m_jService.setSelected(false);
-// **
         m_jDisplay.setText(null);
-
-// Addes JDL 19.12.12 - Var Price
         m_jVprice.setSelected(false);
-//         
-
-// Added JDL 09.02.13 for Chris
         m_jVerpatrib.setSelected(false);
-// Added JDL 09.04.13        
         m_jTextTip.setText(null);
-// ADDed JDL 26.05.13
         m_jCheckWarrantyReceipt.setSelected(false);
-
-// JG July 2014
         m_jStockUnits.setVisible(false);
-
-// Added JDL 14 Feb 2015
         m_jAlias.setText(null);
         m_jAlwaysAvailable.setSelected(false);
-
- //added JDL 6.5.2015       
         m_jDiscounted.setSelected(false);    
         
         
@@ -273,37 +227,16 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(false);
         m_jCatalogOrder.setEnabled(false);
         txtAttributes.setEnabled(false);
-// Added JG 20.12.10 - Kitchen Print
         m_jKitchen.setEnabled(false);
-// **
-// Added JG 25.06.11 - Is Service
         m_jService.setEnabled(false);
-// **
         m_jDisplay.setEnabled(false);
-
-// Added JDL 19.12.12 - Var Price
         m_jVprice.setEnabled(false);
-// Added JDL 09.02.13
         m_jVerpatrib.setEnabled(false);
-// ADDED JDL 09.04.13       
         m_jTextTip.setEnabled(false);
-// ADDed JDL 26.05.13
         m_jCheckWarrantyReceipt.setEnabled(false);
-
-// JG July 2014
         m_jStockUnits.setVisible(false);
-
-// Added JDL 14 Feb 2015
         m_jAlias.setEnabled(false);
         m_jAlwaysAvailable.setEnabled(false);
-        
-       m_jIsPack.setEnabled(false);
-       m_jPackQuantity.setEnabled(false);
-       packproductmodel.setSelectedKey(null);
-       m_jPackProduct.setEnabled(false);
-       jLabelPackQuantity.setEnabled(false);
-       jLabelPackProduct.setEnabled(false);
-             
         m_jDiscounted.setEnabled(false);        
 
         calculateMargin();
@@ -332,34 +265,21 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPriceBuy.setText(null);
         setPriceSell(null);
         m_jImage.setImage(null);
-        m_jstockcost.setText(null);
-        m_jstockvolume.setText(null);
+        m_jstockcost.setText("0.0");
+        m_jstockvolume.setText("0.0");
         m_jInCatalog.setSelected(true);
         m_jCatalogOrder.setText(null);
         txtAttributes.setText(null);
-// Added JG 20.12.10 - Kitchen Print
         m_jKitchen.setSelected(false);
-// **
-// Added JG 25.06.11 - Is Service
         m_jService.setSelected(false);
-// **
         m_jDisplay.setText(null);
-
-// Added JDL 19.12.12 - Var Price
         m_jVprice.setSelected(false);
-// Added JDL 09.02.13
         m_jVerpatrib.setSelected(false);
-// ADDED JDL 09.04.13
         m_jTextTip.setText(null);
-// ADDed JDL 26.05.13
         m_jCheckWarrantyReceipt.setSelected(false);
-// JG July 2014
         m_jStockUnits.setVisible(false);
-
-// Added JDL 14 Feb 2015
         m_jAlias.setText(null);
         m_jAlwaysAvailable.setSelected(false);
-        
         m_jDiscounted.setSelected(true);        
         
 
@@ -384,41 +304,18 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(true);
         m_jCatalogOrder.setEnabled(false);
         txtAttributes.setEnabled(true);
-// Added JG 20.12.10 - Kitchen Print
         m_jKitchen.setEnabled(true);
-// **
-// Added JG 25.06.11 - Is Service
         m_jService.setEnabled(true);
-// **
         m_jDisplay.setEnabled(true);
-
-// Added JDL 19.12.12 - var Price
         m_jVprice.setEnabled(true);
-// Added JDL 09.02.13 
         m_jVerpatrib.setEnabled(true);
-// ADDED JDL 08.04.13        
         m_jTextTip.setEnabled(true);
-// ADDed JDL 26.05.13
         m_jCheckWarrantyReceipt.setEnabled(true);
-// JG July 2014
         m_jStockUnits.setVisible(false);
-
-// Added JDL 14 Feb 2015
         m_jAlias.setEnabled(true);
         m_jAlwaysAvailable.setEnabled(true);
-
-        m_jIsPack.setEnabled(true);
-        m_jPackQuantity.setEnabled(false);
-        m_jPackProduct.setEnabled(false);
-        jLabelPackQuantity.setEnabled(false);
-        jLabelPackProduct.setEnabled(false);
-        
         m_jDiscounted.setEnabled(true);
         
-        m_jIsPack.setSelected(false);
-        m_jPackQuantity.setText(null);
-        packproductmodel.setSelectedKey(null);
-
         calculateMargin();
         calculatePriceSellTax();
         calculateGP();
@@ -438,44 +335,31 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_id = myprod[0];
         m_jRef.setText(Formats.STRING.formatValue(myprod[1]));
         m_jCode.setText(Formats.STRING.formatValue(myprod[2]));
-        m_jName.setText(Formats.STRING.formatValue(myprod[3]));
-        m_jComment.setSelected(((Boolean) myprod[4]));
-        m_jScale.setSelected(((Boolean) myprod[5]));
-        m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[6]));
-        setPriceSell(myprod[7]);
-        m_CategoryModel.setSelectedKey(myprod[8]);
-        taxcatmodel.setSelectedKey(myprod[9]);
-        attmodel.setSelectedKey(myprod[10]);
-        m_jImage.setImage((BufferedImage) myprod[11]);
-        m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[12]));
-        m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[13]));
-        m_jInCatalog.setSelected(((Boolean) myprod[14]));
-        m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[15]));
-        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[16]));
-        m_jKitchen.setSelected(((Boolean) myprod[17]));
-// Added JG 25.06.11 - Is Service
-        m_jService.setSelected(((Boolean) myprod[18]));
-
-        m_jDisplay.setText(Formats.STRING.formatValue(myprod[19]));
-
-// Added JDL 19.12.12 - Var Price
-        m_jVprice.setSelected(((Boolean) myprod[20]));
-// Added JDL 09.02.13
-        m_jVerpatrib.setSelected(((Boolean) myprod[21]));
-// Added JDL 09.04.13       
-        m_jTextTip.setText(Formats.STRING.formatValue(myprod[22]));
-// ADDed JDL 26.05.13
-        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[23]));
-
-// JG July 2014 for StockUnits
-        m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[24]));
-
-// Added JDL 14 Feb 2015
-        m_jAlias.setText(Formats.STRING.formatValue(myprod[25]));
-        m_jAlwaysAvailable.setSelected(((Boolean) myprod[26]));
-
-        
-        m_jDiscounted.setSelected(((Boolean) myprod[27]));        
+        m_jName.setText(Formats.STRING.formatValue(myprod[4]));
+        m_jComment.setSelected(((Boolean) myprod[5]));
+        m_jScale.setSelected(((Boolean) myprod[6]));
+        m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[7]));
+        setPriceSell(myprod[8]);
+        m_CategoryModel.setSelectedKey(myprod[9]);
+        taxcatmodel.setSelectedKey(myprod[10]);
+        attmodel.setSelectedKey(myprod[11]);
+        m_jImage.setImage((BufferedImage) myprod[12]);
+        m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[13]));
+        m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[14]));
+        m_jInCatalog.setSelected(((Boolean) myprod[15]));
+        m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[16]));
+        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[17]));
+        m_jKitchen.setSelected(((Boolean) myprod[18]));
+        m_jService.setSelected(((Boolean) myprod[19]));
+        m_jDisplay.setText(Formats.STRING.formatValue(myprod[20]));
+        m_jVprice.setSelected(((Boolean) myprod[21]));
+        m_jVerpatrib.setSelected(((Boolean) myprod[22]));
+        m_jTextTip.setText(Formats.STRING.formatValue(myprod[23]));
+        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[24]));
+        m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[25]));
+        m_jAlias.setText(Formats.STRING.formatValue(myprod[26]));
+        m_jAlwaysAvailable.setSelected(((Boolean) myprod[27]));
+        m_jDiscounted.setSelected(((Boolean) myprod[29]));        
         
         txtAttributes.setCaretPosition(0);
 
@@ -500,41 +384,18 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(false);
         m_jCatalogOrder.setEnabled(false);
         txtAttributes.setEnabled(false);
-// Added JG 20.12.10 - Ktichen Print
         m_jKitchen.setEnabled(false);
-// Added JG 25.06.11 - Is Service
         m_jService.setEnabled(true);
-// **
         m_jDisplay.setEnabled(false);
-
-// Added JDL 19.12.12 - Var Price
         m_jVprice.setEnabled(false);
-// Added JDL 09.02.13 for Chris
         m_jVerpatrib.setEnabled(false);
-// Added JDL 09.04.13
         m_jTextTip.setEnabled(false);
-// ADDed JDL 26.05.13
         m_jCheckWarrantyReceipt.setEnabled(false);
-// JG July 2014
         m_jStockUnits.setVisible(false);
-
-// Added JDL 14 Feb 2015
         m_jAlias.setEnabled(false);
         m_jAlwaysAvailable.setEnabled(false);
-
-        
         m_jDiscounted.setEnabled(false);
         
-        m_jIsPack.setEnabled(true);
-        m_jIsPack.setSelected(((Boolean) myprod[29]));
-        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[30]));
-        packproductmodel.setSelectedKey(myprod[31]);
-       
-        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
-        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
-        jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
-        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
-
         calculateMargin();
         calculatePriceSellTax();
         calculateGP();
@@ -553,47 +414,31 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_id = myprod[0];
         m_jRef.setText(Formats.STRING.formatValue(myprod[1]));
         m_jCode.setText(Formats.STRING.formatValue(myprod[2]));
-        m_jName.setText(Formats.STRING.formatValue(myprod[3]));
-        m_jComment.setSelected(((Boolean) myprod[4]));
-        m_jScale.setSelected(((Boolean) myprod[5]));
-        m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[6]));
-        setPriceSell(myprod[7]);
-        m_CategoryModel.setSelectedKey(myprod[8]);
-        taxcatmodel.setSelectedKey(myprod[9]);
-        attmodel.setSelectedKey(myprod[10]);
-        m_jImage.setImage((BufferedImage) myprod[11]);
-        m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[12]));
-        m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[13]));
-        m_jInCatalog.setSelected(((Boolean) myprod[14]));
-        m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[15]));
-        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[16]));
-// Added JG 20.12.10 - Kitchen Print
-        m_jKitchen.setSelected(((Boolean) myprod[17]));
-// **
-// Added JG 25.06.11 - Is Service
-        m_jService.setSelected(((Boolean) myprod[18]));
-
-        m_jDisplay.setText(Formats.STRING.formatValue(myprod[19]));
-
-// Added JDL 19.12.12 - Var Price
-        m_jVprice.setSelected(((Boolean) myprod[20]));
-//    
-
-// Added JDL 09.02.13 for Chris
-        m_jVerpatrib.setSelected(((Boolean) myprod[21]));
-// Added JDL 09.04.13
-        m_jTextTip.setText(Formats.STRING.formatValue(myprod[22]));
-// ADDed JDL 26.05.13
-        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[23]));
-
-// JG July 2014 for StockUnits
-        m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[24]));
-
-// Added JDL 14 Feb 2015
-        m_jAlias.setText(Formats.STRING.formatValue(myprod[25]));
-        m_jAlwaysAvailable.setSelected(((Boolean) myprod[26]));
-
-        m_jDiscounted.setSelected(((Boolean) myprod[28]));
+        m_jName.setText(Formats.STRING.formatValue(myprod[4]));
+        m_jComment.setSelected(((Boolean) myprod[5]));
+        m_jScale.setSelected(((Boolean) myprod[6]));
+        m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[7]));
+        setPriceSell(myprod[8]);
+        m_CategoryModel.setSelectedKey(myprod[9]);
+        taxcatmodel.setSelectedKey(myprod[10]);
+        attmodel.setSelectedKey(myprod[11]);
+        m_jImage.setImage((BufferedImage) myprod[12]);
+        m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[13]));
+        m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[14]));
+        m_jInCatalog.setSelected(((Boolean) myprod[15]));
+        m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[16]));
+        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[17]));
+        m_jKitchen.setSelected(((Boolean) myprod[18]));
+        m_jService.setSelected(((Boolean) myprod[19]));
+        m_jDisplay.setText(Formats.STRING.formatValue(myprod[20]));
+        m_jVprice.setSelected(((Boolean) myprod[22]));
+        m_jVerpatrib.setSelected(((Boolean) myprod[22]));
+        m_jTextTip.setText(Formats.STRING.formatValue(myprod[23]));
+        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[24]));
+        m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[25]));
+        m_jAlias.setText(Formats.STRING.formatValue(myprod[26]));
+        m_jAlwaysAvailable.setSelected(((Boolean) myprod[27]));
+        m_jDiscounted.setSelected(((Boolean) myprod[29]));
         
         
         txtAttributes.setCaretPosition(0);
@@ -618,44 +463,21 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(true);
         m_jCatalogOrder.setEnabled(m_jInCatalog.isSelected());
         txtAttributes.setEnabled(true);
-// Added JG 20.12.10 - Kitchen Print
         m_jKitchen.setEnabled(true);
-// **
-// Added JG 25.06.11 - Is Service
         m_jService.setEnabled(true);
-// **
         m_jDisplay.setEnabled(true);
-// Added JG 20 Jul 13 - HTML Button     
         setButtonHTML();
-
-// Added JDL 19.12.112 - Var Price
         m_jVprice.setEnabled(true);
-// Added JDL 09.02.13 for Chris
         m_jVerpatrib.setEnabled(true);
-// Added JDL 09.04.13
         m_jTextTip.setEnabled(true);
-// ADDed JDL 26.05.13
         m_jCheckWarrantyReceipt.setEnabled(true);
-// JG July 2014
         m_jStockUnits.setVisible(false);
-
-// Added JDL 14 Feb 2015
         m_jAlias.setEnabled(true);
         m_jAlwaysAvailable.setEnabled(true);
 
         
         m_jDiscounted.setEnabled(true);
         
-        m_jIsPack.setSelected(((Boolean) myprod[29]));
-        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[30]));
-        packproductmodel.setSelectedKey(myprod[31]);
-         
-        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
-        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
-         jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
-        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
-      
-        m_jDiscounted.setEnabled(true);
         calculateMargin();
         calculatePriceSellTax();
         calculateGP();
@@ -669,55 +491,39 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     @Override
     public Object createValue() throws BasicException {
 
-        Object[] myprod = new Object[32];
+        Object[] myprod = new Object[30];
         myprod[0] = m_id;
         myprod[1] = m_jRef.getText();
-        myprod[2] = m_jCode.getText();
-        myprod[3] = m_jName.getText();
-        myprod[4] = m_jComment.isSelected();
-        myprod[5] = m_jScale.isSelected();
-        myprod[6] = Formats.CURRENCY.parseValue(m_jPriceBuy.getText());
-        myprod[7] = pricesell;
-        myprod[8] = m_CategoryModel.getSelectedKey();
-        myprod[9] = taxcatmodel.getSelectedKey();
-        myprod[10] = attmodel.getSelectedKey();
-        myprod[11] = m_jImage.getImage();
-        myprod[12] = Formats.CURRENCY.parseValue(m_jstockcost.getText());
-        myprod[13] = Formats.DOUBLE.parseValue(m_jstockvolume.getText());
-        myprod[14] = m_jInCatalog.isSelected();
-        myprod[15] = Formats.INT.parseValue(m_jCatalogOrder.getText());
-        myprod[16] = Formats.BYTEA.parseValue(txtAttributes.getText());
-// Added JG 20.12.10 - Kitchen Print
-        myprod[17] = m_jKitchen.isSelected();
-// **
-// Added JG 25.06.11 - Is Service
-        myprod[18] = m_jService.isSelected();
-// **
-        myprod[19] = m_jDisplay.getText();
+        myprod[2] = m_jCode.getText();        
+        myprod[3] = validate.BarcodeValidate(m_jCode.getText());
+        myprod[4] = m_jName.getText();
+        myprod[5] = m_jComment.isSelected();
+        myprod[6] = m_jScale.isSelected();
+        myprod[7] = Formats.CURRENCY.parseValue(m_jPriceBuy.getText());
+        myprod[8] = pricesell;
+        myprod[9] = m_CategoryModel.getSelectedKey();
+        myprod[10] = taxcatmodel.getSelectedKey();
+        myprod[11] = attmodel.getSelectedKey();
+        myprod[12] = m_jImage.getImage();
+        myprod[13] = Formats.CURRENCY.parseValue(m_jstockcost.getText());
+        myprod[14] = Formats.DOUBLE.parseValue(m_jstockvolume.getText());
+        myprod[15] = m_jInCatalog.isSelected();
+        myprod[16] = Formats.INT.parseValue(m_jCatalogOrder.getText());
+        myprod[17] = Formats.BYTEA.parseValue(txtAttributes.getText());
+        myprod[18] = m_jKitchen.isSelected();
+        myprod[19] = m_jService.isSelected();
+        myprod[20] = m_jDisplay.getText();
+        myprod[21] = m_jVprice.isSelected();
+        myprod[22] = m_jVerpatrib.isSelected();
+        myprod[23] = m_jTextTip.getText();
+        myprod[24] = m_jCheckWarrantyReceipt.isSelected();
+        myprod[25] = Formats.DOUBLE.parseValue(m_jStockUnits.getText());
+        myprod[26] = m_jAlias.getText();
+        myprod[27] = m_jAlwaysAvailable.isSelected();
+        myprod[28] = "no";
+        myprod[29] = m_jDiscounted.isSelected();
 
-// Added JDL 19.12.12 - Var Price
-        myprod[20] = m_jVprice.isSelected();
-// Added JDL 09.02.13 for Chris
-        myprod[21] = m_jVerpatrib.isSelected();
-// Added JDL 09.04.13
-        myprod[22] = m_jTextTip.getText();
-// ADDed JDL 26.05.13        
-        myprod[23] = m_jCheckWarrantyReceipt.isSelected();
-
-// JG July 2014
-        myprod[24] = Formats.DOUBLE.parseValue(m_jStockUnits.getText());
-
-// Added JDL 14 Feb 2015
-        myprod[25] = m_jAlias.getText();
-        myprod[26] = m_jAlwaysAvailable.isSelected();
-
-        myprod[27] = "no";
-        myprod[28] = m_jDiscounted.isSelected();
-
-        myprod[29] = m_jIsPack.isSelected();
-        myprod[30] = Formats.DOUBLE.parseValue(m_jPackQuantity.getText());
-        myprod[31] = packproductmodel.getSelectedKey();
-            
+        
         return myprod;
 
     }
@@ -1124,12 +930,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel35 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         m_jDiscounted = new javax.swing.JCheckBox();
- 	   m_jIsPack = new javax.swing.JCheckBox();
-        m_jPackQuantity = new javax.swing.JTextField();
-        m_jPackProduct = new javax.swing.JComboBox();
-        jLabel37 = new javax.swing.JLabel();
-        jLabelPackQuantity = new javax.swing.JLabel();
-        jLabelPackProduct = new javax.swing.JLabel();
         m_jImage = new uk.chromis.data.gui.JImageEditor();
         jPanel4 = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
@@ -1454,7 +1254,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jStockUnits.setText("0");
         m_jStockUnits.setBorder(null);
         jPanel2.add(m_jStockUnits);
-        m_jStockUnits.setBounds(370, 210, 80, 25);
+        m_jStockUnits.setBounds(240, 240, 80, 25);
 
         m_jAlwaysAvailable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jAlwaysAvailable.addActionListener(new java.awt.event.ActionListener() {
@@ -1476,43 +1276,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel33.setBounds(10, 240, 130, 25);
         jPanel2.add(m_jDiscounted);
         m_jDiscounted.setBounds(160, 270, 20, 21);
-
- m_jIsPack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jIsPackActionPerformed(evt);
-            }
-        });
-        jPanel2.add(m_jIsPack);
-        m_jIsPack.setBounds(320, 240, 20, 21);
-
-        m_jPackQuantity.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        m_jPackQuantity.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jPanel2.add(m_jPackQuantity);
-        m_jPackQuantity.setBounds(350, 270, 80, 25);
-
-        m_jPackProduct.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m_jPackProduct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jPackProductActionPerformed(evt);
-            }
-        });
-        jPanel2.add(m_jPackProduct);
-        m_jPackProduct.setBounds(350, 300, 220, 25);
-
-        jLabel37.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel37.setText("Multi Pack");
-        jPanel2.add(jLabel37);
-        jLabel37.setBounds(250, 240, 70, 20);
-
-        jLabelPackQuantity.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabelPackQuantity.setText("Pack Quantity");
-        jPanel2.add(jLabelPackQuantity);
-        jLabelPackQuantity.setBounds(260, 270, 90, 20);
-
-        jLabelPackProduct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabelPackProduct.setText("of Product");
-        jPanel2.add(jLabelPackProduct);
-        jLabelPackProduct.setBounds(260, 290, 80, 30);
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.prodstock"), jPanel2); // NOI18N
         jTabbedPane1.addTab("Image", m_jImage);
@@ -1723,16 +1486,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         }
     }//GEN-LAST:event_m_jAlwaysAvailableActionPerformed
 
-private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jPackProductActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_m_jPackProductActionPerformed
-
-    private void m_jIsPackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jIsPackActionPerformed
-        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
-        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
-        jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
-        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
-    }//GEN-LAST:event_m_jIsPackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonHTML;
@@ -1765,15 +1518,12 @@ private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabelPackProduct;
-    private javax.swing.JLabel jLabelPackQuantity;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1797,11 +1547,8 @@ private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JTextField m_jGrossProfit;
     private uk.chromis.data.gui.JImageEditor m_jImage;
     private javax.swing.JCheckBox m_jInCatalog;
-    private javax.swing.JCheckBox m_jIsPack;
     private javax.swing.JCheckBox m_jKitchen;
     private javax.swing.JTextField m_jName;
-    private javax.swing.JComboBox m_jPackProduct;
-    private javax.swing.JTextField m_jPackQuantity;
     private javax.swing.JTextField m_jPriceBuy;
     private javax.swing.JTextField m_jPriceSell;
     private javax.swing.JTextField m_jPriceSellTax;

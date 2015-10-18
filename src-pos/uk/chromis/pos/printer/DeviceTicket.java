@@ -342,6 +342,16 @@ public class DeviceTicket {
         }
     }
 
+        public static String alignHWBarCode(String sLine, int iSize) {      
+        if (sLine.length() > iSize) {
+            return sLine.substring(sLine.length() - iSize);
+        } else {
+            
+            return getWhiteString(iSize - sLine.length(), '0') + sLine;
+        }
+    }
+
+        
     /**
      *
      * @param sLine

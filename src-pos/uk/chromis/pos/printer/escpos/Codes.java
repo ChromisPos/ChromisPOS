@@ -16,115 +16,57 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.printer.escpos;
 
 import java.awt.image.BufferedImage;
+import java.nio.charset.Charset;
 import uk.chromis.pos.printer.DevicePrinter;
 import uk.chromis.pos.printer.DeviceTicket;
 
 /**
  *
- *   
+ *
  */
 public abstract class Codes {
 
-    /** Creates a new instance of Codes */
+    /**
+     * Creates a new instance of Codes
+     */
     public Codes() {
     }
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getInitSequence();
-    
-    /**
-     *
-     * @return
-     */
+
     public abstract byte[] getSize0();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getSize1();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getSize2();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getSize3();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getBoldSet();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getBoldReset();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getUnderlineSet();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getUnderlineReset();
-    
-    /**
-     *
-     * @return
-     */
-    public abstract byte[] getOpenDrawer();    
 
-    /**
-     *
-     * @return
-     */
-    public abstract byte[] getCutReceipt();   
+    public abstract byte[] getOpenDrawer();
 
-    /**
-     *
-     * @return
-     */
-    public abstract byte[] getNewLine();    
+    public abstract byte[] getCutReceipt();
 
-    /**
-     *
-     * @return
-     */
+    public abstract byte[] getNewLine();
+
     public abstract byte[] getImageHeader();
 
-    /**
-     *
-     * @return
-     */
     public abstract int getImageWidth();
 
-    /**
-     *
-     * @return
-     */
     public abstract byte[] getImageLogo(Byte iNumber);
 
     public abstract byte[] setPageMode();
-    
+
     /**
      *
      * @param out
@@ -133,11 +75,8 @@ public abstract class Codes {
      * @param code
      */
     public void printBarcode(PrinterWritter out, String type, String position, String code) {
-
         if (DevicePrinter.BARCODE_EAN13.equals(type)) {
-
             out.write(getNewLine());
-
             out.write(ESCPOS.BAR_HEIGHT);
             if (DevicePrinter.POSITION_NONE.equals(position)) {
                 out.write(ESCPOS.BAR_POSITIONNONE);
@@ -146,58 +85,56 @@ public abstract class Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_CODE02);
-            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code,13).substring(0,12)));
-            out.write(new byte[] { 0x00 });
-
+            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 13).substring(0, 12)));
+            out.write(new byte[]{0x00});
             out.write(getNewLine());
         }
     }
-   
+
+
     /**
      *
      * @param image
      * @return
      */
     public byte[] transImage(BufferedImage image) {
-        
-            CenteredImage centeredimage = new CenteredImage(image, getImageWidth());
+
+        CenteredImage centeredimage = new CenteredImage(image, getImageWidth());
 
         // Imprimo los par\u00e1metros en cu\u00e1druple
         int iWidth = (centeredimage.getWidth() + 7) / 8; // n\u00famero de bytes
         int iHeight = centeredimage.getHeight();
-        
+
         // Array de datos
         byte[] bData = new byte[getImageHeader().length + 4 + iWidth * iHeight];
-        
+
         // Comando de impresion de imagen
         System.arraycopy(getImageHeader(), 0, bData, 0, getImageHeader().length);
-        
+
         int index = getImageHeader().length;
-        
+
         // Dimension de la imagen
-        // JG note: nested ++'s not good construct need change later
-        bData[index ++] = (byte) (iWidth % 256);
-        bData[index ++] = (byte) (iWidth / 256);
-        bData[index ++] = (byte) (iHeight % 256);
-        bData[index ++] = (byte) (iHeight / 256);       
-        
+        bData[index++] = (byte) (iWidth % 256);
+        bData[index++] = (byte) (iWidth / 256);
+        bData[index++] = (byte) (iHeight % 256);
+        bData[index++] = (byte) (iHeight / 256);
+
         // Raw data
-        // JG note: nested ++'s  and var assignments not good construct need change later
         int iRGB;
         int p;
         for (int i = 0; i < centeredimage.getHeight(); i++) {
             for (int j = 0; j < centeredimage.getWidth(); j = j + 8) {
                 p = 0x00;
-                for (int d = 0; d < 8; d ++) {
+                for (int d = 0; d < 8; d++) {
                     p = p << 1;
                     if (centeredimage.isBlack(j + d, i)) {
                         p = p | 0x01;
                     }
                 }
-                
-                bData[index ++] = (byte) p;
+
+                bData[index++] = (byte) p;
             }
-        }        
+        }
         return bData;
     }
 
@@ -249,9 +186,9 @@ public abstract class Codes {
             } else {
                 int rgb = image.getRGB(centeredx, y);
 
-                int gray = (int)(0.30 * ((rgb >> 16) & 0xff) +
-                                 0.59 * ((rgb >> 8) & 0xff) +
-                                 0.11 * (rgb & 0xff));
+                int gray = (int) (0.30 * ((rgb >> 16) & 0xff)
+                        + 0.59 * ((rgb >> 8) & 0xff)
+                        + 0.11 * (rgb & 0xff));
 
                 return gray < 128;
             }

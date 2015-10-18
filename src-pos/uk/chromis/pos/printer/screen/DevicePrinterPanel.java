@@ -128,7 +128,7 @@ public class DevicePrinterPanel extends javax.swing.JPanel implements DevicePrin
      * @param code
      */
     @Override
-    public void printBarCode(String type, String position, String code) {
+    public void printBarCode(String type, String position, String code) {       
         m_ticketcurrent.printBarCode(type, position, code);
     }
 
@@ -198,5 +198,5 @@ public class DevicePrinterPanel extends javax.swing.JPanel implements DevicePrin
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane m_jScrollView;
     // End of variables declaration//GEN-END:variables
-    
+ 
 }

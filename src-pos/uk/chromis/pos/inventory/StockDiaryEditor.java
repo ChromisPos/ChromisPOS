@@ -19,13 +19,6 @@
 
 package uk.chromis.pos.inventory;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.UUID;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.DateUtils;
 import uk.chromis.beans.JCalendarDialog;
@@ -43,6 +36,13 @@ import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.panels.JProductFinder;
 import uk.chromis.pos.sales.JProductAttEdit;
 import uk.chromis.pos.ticket.ProductInfoExt;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -93,13 +93,10 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_ReasonModel.add(MovementReason.OUT_REFUND);
         m_ReasonModel.add(MovementReason.OUT_BREAK);
         m_ReasonModel.add(MovementReason.OUT_MOVEMENT);        
-        m_ReasonModel.add(MovementReason.IN_OPEN_PACK);
-        m_ReasonModel.add(MovementReason.OUT_OPEN_PACK);
-  
+
         m_jreason.setModel(m_ReasonModel);
 
         m_cat = new JCatalog(m_dlSales);
-        m_cat.SetAllProducts(true);
         m_cat.addActionListener(new CatalogListener());
 
         catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);        

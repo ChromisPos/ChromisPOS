@@ -164,5 +164,6 @@ public class DevicePrinterPlain implements DevicePrinter  {
     @Override
     public void openDrawer() {
     }
+
 }
 

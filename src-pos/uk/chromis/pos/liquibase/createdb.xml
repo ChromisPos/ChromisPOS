@@ -1030,7 +1030,7 @@
             <column name="CODE" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="CODETYPE" type="varchar(255)"/>
+            <column name="CODETYPE" type="varchar(50)"/>                
             <column name="NAME" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -1090,14 +1090,7 @@
             <column name="DISCOUNTED" type="varchar(5)" defaultValue="no"></column>  
             <column name="CANDISCOUNT" type="${boolean.type}" defaultValueBoolean="true" >
                 <constraints nullable="false"/>  
-            </column>
-            <column name="ISPACK" type="${boolean.type}" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PACKQUANTITY" type="double precision" />
-            </column>
-            <column name="PACKPRODUCT" type="varchar(255)"/>                    
-  
+            </column>                   
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="CATEGORY"
@@ -1117,12 +1110,6 @@
                                  referencedColumnNames = "ID"
                                  baseTableName="PRODUCTS"
                                  referencedTableName="ATTRIBUTESET"/>
-   
-        <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
-                             constraintName ="PRODUCTS_PACKPRODUCT_FK"
-                             referencedColumnNames = "ID"
-                             baseTableName="PRODUCTS"
-                             referencedTableName="PRODUCTS"/>
 
         <createIndex tableName="PRODUCTS"
                      indexName="PRODUCTS_INX_0"
@@ -2349,10 +2336,23 @@
 
         <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
-    </changeSet>
-    
-    
-    
-    
+    </changeSet>      
+        
+    <changeSet author="Chromis POS" id="Create Orders Table">
+        <createTable tableName="ORDERS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ORDERID" type="varchar(50)"/>                
+            <column name="QTY" type="int"/>           
+            <column name="DETAILS" type="varchar(255)"/>
+            <column name="ATTRIBUTES" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+            <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DISPLAYID" type="int"/> 
+            <column name="AUXILIARY" type="int"/>                                    
+        </createTable>                         
+    </changeSet>  
 </databaseChangeLog>
 

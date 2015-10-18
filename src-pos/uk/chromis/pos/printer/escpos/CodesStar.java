@@ -38,20 +38,16 @@ public class CodesStar extends Codes {
     private static final byte[] CHAR_SIZE_1 = {0x1B, 0x69, 0x01, 0x00};
     private static final byte[] CHAR_SIZE_2 = {0x1B, 0x69, 0x00, 0x01};
     private static final byte[] CHAR_SIZE_3 = {0x1B, 0x69, 0x01, 0x01};
-
     private static final byte[] BOLD_SET = {0x1B, 0x45};
     private static final byte[] BOLD_RESET = {0x1B, 0x46};
-
     private static final byte[] UNDERLINE_SET = {0x1B, 0x2D, 0x01};
     private static final byte[] UNDERLINE_RESET = {0x1B, 0x2D, 0x00};
-
     private static final byte[] OPEN_DRAWER = {0x1C};
     private static final byte[] PARTIAL_CUT = {0x1B, 0x64, 0x30};
     private static final byte[] IMAGE_BEGIN = {0x1B, 0x30};
     private static final byte[] IMAGE_END = {0x1B, 0x7A, 0x01};
     private static final byte[] IMAGE_HEADER = {0x1B, 0x4B};
     private static final byte[] IMAGE_LOGO = {0x1B, 0x1C, 0x70, 0x01, 0x00};
-
     private static final byte[] NEW_LINE = {0x0D, 0x0A}; // Print and carriage return
 
     /**
@@ -261,28 +257,25 @@ public class CodesStar extends Codes {
      */
     @Override
     public void printBarcode(PrinterWritter out, String type, String position, String code) {
-
         if (DevicePrinter.BARCODE_EAN13.equals(type)) {
-
-            // out.write(getNewLine());
-            out.write(new byte[]{0x1B, 0x1D, 0x61, 0x01}); // Align center
-
-            out.write(new byte[]{0x1B, 0x62, 0x03});
+            out.write(getNewLine());
+            out.write(ESCPOS.BAR_HEIGHT);
             if (DevicePrinter.POSITION_NONE.equals(position)) {
-                out.write(new byte[]{0x01});
+                out.write(ESCPOS.BAR_POSITIONNONE);
             } else {
-                out.write(new byte[]{0x02});
+                out.write(ESCPOS.BAR_POSITIONDOWN);
             }
-            out.write(new byte[]{0x02}); // dots
-            out.write(new byte[]{0x50}); // height
-            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 13).substring(0, 12)));
-            out.write(new byte[]{0x1E}); // end char
-
-            out.write(new byte[]{0x1B, 0x1D, 0x61, 0x00}); // Align left
-
+            out.write(ESCPOS.BAR_HRIFONT1);
+            out.write(ESCPOS.BAR_CODE02);
+            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code,13).substring(0,12)));
+            out.write(new byte[] { 0x00 });
+            out.write(getNewLine());
         }
     }
 
+       
+    
+    
     @Override
     public byte[] setPageMode() {
         return PAGEMODE;

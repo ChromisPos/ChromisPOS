@@ -102,41 +102,49 @@
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.51"/>          
         </update>               
+    </changeSet>   
 
-    </changeSet>                                                                                                                                                                                                                                                                                            
-     <changeSet author="Chromis POS" id="update to v0.51.01 ">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.51.01"/>          
-        </update>
-        
-        <addColumn tableName="PRODUCTS">
-            <column name="ISPACK" type="${boolean.type}" defaultValueBoolean="false" >
-                <constraints nullable="false"/>
+
+
+    <changeSet author="Chromis POS" id="Create Orders Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ORDERS"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ORDERS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="PACKQUANTITY" type="double precision"/>
-            <column name="PACKPRODUCT" type="varchar(255)"/>
-        </addColumn>
+            <column name="ORDERID" type="varchar(50)"/>                
+            <column name="QTY" type="int"/>           
+            <column name="DETAILS" type="varchar(255)"/>
+            <column name="ATTRIBUTES" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+            <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DISPLAYID" type="int"/>                                    
+        </createTable>                         
+    </changeSet>   
+     
+    <changeSet author="Chromis POS" id="Add Auxiliary Column to Orders Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="AUXILIARY" tableName="ORDERS"/>
+            </not>
+        </preConditions>
 
-        <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
-                             constraintName ="PRODUCTS_PACKPRODUCT_FK"
-                             referencedColumnNames = "ID"
-                             baseTableName="PRODUCTS"
-                             referencedTableName="PRODUCTS"/>
-    
-        <insert tableName="DBPERMISSIONS">		
-           <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
-           <column name="SECTION" value="##label.sectionstock"/>
-           <column name="DISPLAYNAME" value="##label.displayname117"/>
-           <column name="DESCRIPTION" value="##label.description117"/>
-        </insert>
-        
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname118"/>
-            <column name="DESCRIPTION" value="##label.description118"/>
-        </insert>		
-         
-    </changeSet>                                                                     
+        <addColumn tableName="ORDERS">
+            <column name="AUXILIARY" type="int"/>                                                   
+        </addColumn>                         
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="update to v0.52">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="0.52"/>          
+        </update>               
+    </changeSet>     
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </databaseChangeLog>
 

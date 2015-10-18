@@ -122,7 +122,6 @@ public abstract class BasicTicket implements PrintItem {
      * @param code
      */
     public void printBarCode(String type, String position, String code) {
-
            PrintItem pi = new PrintItemBarcode(type, position, code, getImageScale());
            m_aCommands.add(pi);
            m_iBodyHeight += pi.getHeight();
