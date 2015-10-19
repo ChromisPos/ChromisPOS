@@ -73,7 +73,6 @@ import uk.chromis.pos.ticket.ProductInfoExt;
  * @version 2.0 - Added functionality to remember the last folder opened and
  * importing categories from CVS.
  * @version 2.1 complete re-write of the core code, to make use of the core
- * classes available within Unicenta
  */
 public class JPanelCSVImport extends JPanel implements JPanelView {
 

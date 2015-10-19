@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 uniCenta
+//    Copyright (c) 2015 
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -147,7 +147,16 @@ public class BarcodeImage {
         barcode.setMsgPosition(HumanReadablePlacement.HRP_NONE);
         return getBarcode(value, barcode);
     }
-   
+
+    public static Image badBarcode() {
+        return getBarcodeImage();
+    }
+
+    private static Image getBarcodeImage() {
+        GetBarImage image = new GetBarImage();        
+        return image.getImage();
+    }
+
     private static Image getBarcode(String value, AbstractBarcodeBean barcode) {
 
         barcode.setModuleWidth(1.0);
@@ -177,5 +186,22 @@ public class BarcodeImage {
         g2d.dispose();
 
         return imgtext;
+    }
+
+    private static class GetBarImage {
+
+        private GetBarImage() {
+
+        }
+
+        private BufferedImage getImage() {
+            BufferedImage imgtext = null;
+            try {
+                imgtext = ImageIO.read(getClass().getResourceAsStream("/uk/chromis/fixedimages/invalid1.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(BarcodeImage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return imgtext;
+        }
     }
 }

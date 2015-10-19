@@ -726,7 +726,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 || (!"OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && m_App.getAppUserView().getUser().hasPermission("sales.EditLines"))) {
             //read resource ticket.removeline and execute
             if (executeEventAndRefresh("ticket.removeline", new ScriptArg("index", i)) == null) {
-// JN uniCenta record removed line
+
                 String ticketID = Integer.toString(m_oTicket.getTicketId());
                 if (m_oTicket.getTicketId() == 0) {
                     ticketID = "No Sale";

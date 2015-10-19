@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 uniCenta
+//    Copyright (c) 2015 
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -60,7 +60,6 @@ public class LuhnAlgorithm {
 
 //  Resolution of AMEX card issue
 //  Mikel Iurata, Openbravo Thu Sep 16
-//  Jack Gerrard, uniCenta Fri Sep 17
 //    public static void main(String[] args) {
 //        // Testing sample numbers
 //

@@ -96,8 +96,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.STRING,
             Datas.STRING,
             Datas.DOUBLE,
-            Datas.DOUBLE,
-            // JG uniCenta June 2014 includes StockUnits 
+            Datas.DOUBLE,            
             Datas.DOUBLE};
         auxiliarDatas = new Datas[]{
             Datas.STRING,
