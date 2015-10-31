@@ -78,8 +78,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
      */
     public ProductsEditor(DataLogicSales dlSales, DirtyManager dirty) {
         initComponents();
-
-        validate = new BarcodeValidator();
         
         // Taxes sentence
         taxsent = dlSales.getTaxList();
@@ -495,8 +493,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         myprod[0] = m_id;
         myprod[1] = m_jRef.getText();
         myprod[2] = m_jCode.getText();        
-        myprod[3] = validate.BarcodeValidate(m_jCode.getText());
-        System.out.println("Code type = " + validate.BarcodeValidate(m_jCode.getText()));
+        myprod[3] = BarcodeValidator.BarcodeValidate(m_jCode.getText());        
         myprod[4] = m_jName.getText();
         myprod[5] = m_jComment.isSelected();
         myprod[6] = m_jScale.isSelected();

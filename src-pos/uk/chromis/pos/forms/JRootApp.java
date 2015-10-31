@@ -210,7 +210,7 @@ public class JRootApp extends JPanel implements AppView {
             } else {
                 String changelog = sDBVersion == null
                         ? "uk/chromis/pos/liquibase/chromis.xml"
-                        : "uk/chromis/pos/liquibase/updatechromis.xml";
+                        : "uk/chromis/pos/liquibase/updatesystem.xml";
                 if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), AppLocal.getIntString("message.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 
                     try {

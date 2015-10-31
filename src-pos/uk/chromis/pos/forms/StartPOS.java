@@ -34,10 +34,7 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.instance.InstanceQuery;
 import uk.chromis.pos.ticket.TicketInfo;
 
-/**
- *
- * @author adrianromero
- */
+
 public class StartPOS {
 
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.StartPOS");
@@ -60,7 +57,6 @@ public class StartPOS {
             i = new InstanceQuery();
             i.getAppMessage().restoreWindow();
             return false;
-// JG 6 May 2013 to Multicatch
         } catch (RemoteException | NotBoundException e) {
             return true;
         }
@@ -77,9 +73,10 @@ public class StartPOS {
     public static void main(final String args[]) {
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
+      //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
 
         if (!chromis.exists()) {
-            if (file.exists()) {
+            if (file.exists()) /*|| (openbravo.exists()))*/{
                 Thread t1 = new Thread(new Runnable() {
                     public void run() {
                         Conversion convert = new Conversion() {
@@ -138,11 +135,9 @@ public class StartPOS {
                     } else if (laf instanceof SubstanceSkin) {
                         SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);
                     }
-// JG 6 May 2013 to multicatch
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                     logger.log(Level.WARNING, "Cannot set Look and Feel", e);
                 }
-// JG July 2014 Hostname for Tickets
                 String hostname = config.getProperty("machine.hostname");
                 TicketInfo.setHostname(hostname);
 

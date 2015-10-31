@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.admin;
 
 import java.awt.Component;
@@ -186,14 +185,15 @@ public class PeopleView extends JPanel implements EditorRecord {
         people[3] = m_RoleModel.getSelectedKey();
         people[4] = Boolean.valueOf(m_jVisible.isSelected());
         people[5] = Formats.STRING.parseValue(jcard.getText());
-        people[6] = m_jImage.getImage();
+        people[6] = m_jImage.getImage();        
+
 // Part of quick fix to prevent high levels being changed
 // if new user save it        
         if (m_oId == null) {
             return people;
         }
 
-        if (Integer.parseInt(m_dlAdmin.getRightsLevelByUserName(m_appview.getAppUserView().getUser().getName())) >= Integer.parseInt(m_dlAdmin.getRightsLevelByUserName(m_jName.getText()))) {
+        if (Integer.parseInt(m_dlAdmin.getRightsLevelByUserName(m_appview.getAppUserView().getUser().getName())) >= Integer.parseInt(m_dlAdmin.getRightsLevelByID((String) m_RoleModel.getSelectedKey()))) {
             return people;
         }
         // Do not update record
@@ -215,13 +215,10 @@ public class PeopleView extends JPanel implements EditorRecord {
      * @throws BasicException
      */
     public void activate() throws BasicException {
-        m_sentrole = m_dlAdmin.getRolesList( m_dlAdmin.getRightsLevelByID(m_appview.getAppUserView().getUser().getRole()));
-        
+        m_sentrole = m_dlAdmin.getRolesList(m_dlAdmin.getRightsLevelByID(m_appview.getAppUserView().getUser().getRole()));
+
         //String userLevel =(Integer.toString((Integer.parseInt(m_dlAdmin.getRightsLevelByID(m_appview.getAppUserView().getUser().getRole())))-1));
         //m_sentrole = m_dlAdmin.getRolesList( m_dlAdmin.getRightsLevelByID(userLevel));
-        
-        
-        
         m_RoleModel = new ComboBoxValModel(m_sentrole.list());
         m_jRole.setModel(m_RoleModel);
     }

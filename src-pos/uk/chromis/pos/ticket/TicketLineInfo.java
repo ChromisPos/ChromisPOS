@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) 2015 uniCenta
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.ticket;
 
 import java.io.ByteArrayInputStream;
@@ -132,6 +131,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
             pid = product.getID();
 
             attributes.setProperty("product.name", product.getName());
+            attributes.setProperty("product.code", product.getCode() == null ? "" : product.getCode());
             attributes.setProperty("product.com", product.isCom() ? "true" : "false");
             attributes.setProperty("product.kitchen", product.isKitchen() ? "true" : "false");
             attributes.setProperty("product.service", product.isService() ? "true" : "false");
@@ -141,7 +141,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
             if (product.getTextTip() != null) {
                 attributes.setProperty("product.texttip", product.getTextTip());
             }
-            
+
             attributes.setProperty("product.alwaysavailable", product.getAlwaysAvailable() ? "true" : "false");
 
             if (product.getAlias() != null) {
@@ -156,10 +156,10 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
             if (product.getCategoryID() != null) {
                 attributes.setProperty("product.categoryid", product.getCategoryID());
             }
-            attributes.setProperty("product.discounted", product.getDiscounted());
+           
+            attributes.setProperty("product.discounted", product.getDiscounted() == null ? "no" : product.getDiscounted());            
             attributes.setProperty("product.candiscount", product.getCanDiscount() ? "true" : "false");
-            
-            
+
         }
         init(pid, null, dMultiply, dPrice, tax, attributes);
     }
@@ -368,12 +368,11 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         return "true".equals(attributes.getProperty("product.com"));
     }
 
-    
     /**
      *
      * @return
      */
-    public String getProductTaxCategoryID() {        
+    public String getProductTaxCategoryID() {
         return (attributes.getProperty("product.taxcategoryid"));
     }
 
@@ -533,6 +532,14 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         return StringUtils.encodeXML(attributes.getProperty("product.name"));
     }
 
+    public String printBarcode() {
+        return StringUtils.encodeXML(attributes.getProperty("product.code"));
+    }
+
+    public String getBarcode() {
+        return attributes.getProperty("product.code");
+    }
+
     /**
      *
      * @return
@@ -653,21 +660,18 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         return "true".equals(attributes.getProperty("product.alwaysavailable"));
     }
 
-    
     public boolean canDiscount() {
         return "true".equals(attributes.getProperty("product.candiscount"));
     }
-    
+
     public String getDiscounted() {
         return (attributes.getProperty("product.discounted"));
     }
-    
-    
+
     public void setDiscounted(String value) {
-       attributes.setProperty("product.discounted",value);
+        attributes.setProperty("product.discounted", value);
     }
-    
-    
+
 // Added JDL 14.02.15 - Alias
     /**
      *
@@ -694,6 +698,6 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     void incMultiply() {
-       
+
     }
 }

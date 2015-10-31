@@ -63,6 +63,7 @@ import uk.chromis.pos.inventory.ProductsWarehousePanel;
 import uk.chromis.pos.inventory.TaxCategoryInfo;
 import uk.chromis.pos.sales.TaxesLogic;
 import uk.chromis.pos.ticket.ProductInfoExt;
+import uk.chromis.pos.util.BarcodeValidator;
 
 /**
  * Graphical User Interface and code for importing data from a CSV file allowing
@@ -73,6 +74,7 @@ import uk.chromis.pos.ticket.ProductInfoExt;
  * @version 2.0 - Added functionality to remember the last folder opened and
  * importing categories from CVS.
  * @version 2.1 complete re-write of the core code, to make use of the core
+ * classes available within Unicenta
  */
 public class JPanelCSVImport extends JPanel implements JPanelView {
 
@@ -752,39 +754,40 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
      */
     public void createProduct(String pType) {
 // create a new product and save it using DalaLogicSales
-        Object[] myprod = new Object[32];
+        Object[] myprod = new Object[33];
         myprod[0] = UUID.randomUUID().toString();                               // ID string
         myprod[1] = productReference;                                           // Reference string
-        myprod[2] = productBarcode;                                             // Barcode String        
-        myprod[3] = productName;                                                // Name string        
-        myprod[4] = false;                                     // IScomment flag (Attribute modifier)
-        myprod[5] = false;                                     // ISscale flag
-        myprod[6] = productBuyPrice;                                            // Buy price double
-        myprod[7] = productSellPrice;                                           // Sell price double
-        myprod[8] = dCategory;                                                  // Category string
-        myprod[9] = taxcatmodel.getSelectedKey();                               // Tax string
-        myprod[10] = null;                                                      // Attributeset string
-        myprod[11] = null;                                                      // Image
-        myprod[12] = (double) 0;                                                // Stock cost double
-        myprod[13] = (double) 0;                                                // Stock volume double
-        myprod[14] = jCheckInCatalogue.isSelected();                            // In catalog flag
-        myprod[15] = null;                                                      // catalog order        
-        myprod[16] = null;                                                      //
-        myprod[17] = false;                                                     // IsKitchen flag
-        myprod[18] = false;                                                     // isService flag
-        myprod[19] = "<HTML>" + productName;                                    //     
-        myprod[20] = false;                                                     // isVariable price flag
-        myprod[21] = false;                                                     // Compulsory Att flag
-        myprod[22] = productName;                                               // Text tip string
-        myprod[23] = false;                                                     // Warranty flag
-        myprod[24] = 0.0;                                                       // StockUnits
-        myprod[25] = "";                                                        // Alias
-        myprod[26] = false; 
-        myprod[27] = "";
-        myprod[28] = false;                                                     // AlwaysAvailable flag
-        myprod[29] = false;                                                     // Is a pack
-        myprod[30] = (double)0;                                                 // PackQuantity
-        myprod[31] = null;                                                     // Pack Product
+        myprod[2] = productBarcode;                                             // Barcode String     
+        myprod[3] = BarcodeValidator.BarcodeValidate(productBarcode);           // Barcode Type String
+        myprod[4] = productName;                                                // Name string        
+        myprod[5] = false;                                                      // IScomment flag (Attribute modifier)
+        myprod[6] = false;                                                      // ISscale flag
+        myprod[7] = productBuyPrice;                                            // Buy price double
+        myprod[8] = productSellPrice;                                           // Sell price double
+        myprod[9] = dCategory;                                                  // Category string
+        myprod[10] = taxcatmodel.getSelectedKey();                               // Tax string
+        myprod[11] = null;                                                      // Attributeset string
+        myprod[12] = null;                                                      // Image
+        myprod[13] = (double) 0;                                                // Stock cost double
+        myprod[14] = (double) 0;                                                // Stock volume double
+        myprod[15] = jCheckInCatalogue.isSelected();                            // In catalog flag
+        myprod[16] = null;                                                      // catalog order        
+        myprod[17] = null;                                                      //
+        myprod[18] = false;                                                     // IsKitchen flag
+        myprod[19] = false;                                                     // isService flag
+        myprod[20] = "<HTML>" + productName;                                    //     
+        myprod[21] = false;                                                     // isVariable price flag
+        myprod[22] = false;                                                     // Compulsory Att flag
+        myprod[23] = productName;                                               // Text tip string
+        myprod[24] = false;                                                     // Warranty flag
+        myprod[25] = 0.0;                                                       // StockUnits
+        myprod[26] = "";                                                        // Alias
+        myprod[27] = false; 
+        myprod[28] = "";
+        myprod[29] = false;                                                     // AlwaysAvailable flag
+        myprod[30] = false;                                                     // Is a pack
+        myprod[31] = (double)0;                                                 // PackQuantity
+        myprod[32] = null;                                                     // Pack Product
           
         try {
             if ("new".equals(pType)) {
@@ -1791,3 +1794,4 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     private javax.swing.JButton jbtnDbDriverLib;
     // End of variables declaration//GEN-END:variables
 }
+

@@ -10,9 +10,8 @@
 
 
 
-    <property name="boolean.type" value="boolean" dbms="postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>
     <property name="boolean.type" value="bit" dbms="mysql"/>
-    <property name="boolean.type" value="smallint" dbms="derby"/>
     <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
 
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
@@ -61,10 +60,14 @@
                 <constraints nullable="false"/>
             </column>
             <column name="PERMISSIONS" type="${blob.type}"/>
+            <column name="RIGHTSLEVEL" type="int" defaultValueNumeric="4" >
+                <constraints nullable="false"/> 
+            </column>   
+            
         </createTable>
         <createIndex tableName="ROLES"
-                        indexName="ROLES_NAME_INX"
-                        unique="false">
+                     indexName="ROLES_NAME_INX"
+                     unique="false">
             <column name="NAME" type="varchar(255)"/>
         </createIndex>                    
     </changeSet>

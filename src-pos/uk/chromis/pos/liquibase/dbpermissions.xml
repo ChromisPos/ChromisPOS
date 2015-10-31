@@ -10,9 +10,8 @@
 
 
 
-    <property name="boolean.type" value="boolean" dbms="postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>
     <property name="boolean.type" value="bit" dbms="mysql"/>
-    <property name="boolean.type" value="smallint" dbms="derby"/>
     <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
 
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>

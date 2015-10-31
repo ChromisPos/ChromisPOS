@@ -28,7 +28,7 @@ public class BarcodeValidator {
 
     }
 
-    public String BarcodeValidate(String barcode) {
+    public static String BarcodeValidate(String barcode) {
 
         if (barcode.matches("[0-9]+")) {
 

@@ -39,7 +39,7 @@ import uk.chromis.pos.ticket.TicketInfo;
 
 /**
  *
- *   
+ *
  */
 public class JTicketsBagShared extends JTicketsBag {
 
@@ -143,6 +143,7 @@ public class JTicketsBagShared extends JTicketsBag {
         // BEGIN TRANSACTION
         TicketInfo ticket = dlReceipts.getSharedTicket(id);
         if (ticket == null) {
+            m_jListTickets.setText("");
             throw new BasicException(AppLocal.getIntString("message.noticket"));
         } else {
             dlReceipts.getPickupId(id);
@@ -168,9 +169,9 @@ public class JTicketsBagShared extends JTicketsBag {
                 nl = dlReceipts.getSharedTicketList();
             }
      //       if (Integer.parseInt(dlAdmin.getRightsLevelByID(m_App.getAppUserView().getUser().getRole())) <= (Integer.parseInt(m_config.getProperty("delete.rightslevel")))) {
-     //       } else {
-     //           nl = dlReceipts.getSharedTicketList();
-     //       }
+            //       } else {
+            //           nl = dlReceipts.getSharedTicketList();
+            //       }
 
             if (nl.isEmpty()) {
                 m_jListTickets.setText("");
@@ -184,6 +185,8 @@ public class JTicketsBagShared extends JTicketsBag {
     }
 
     private void selectValidTicket() {
+        
+        /*
         AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
         m_config.load();
         List<SharedTicketInfo> l;
@@ -194,9 +197,9 @@ public class JTicketsBagShared extends JTicketsBag {
                 l = dlReceipts.getSharedTicketList();
             }
       //      if (Integer.parseInt(dlAdmin.getRightsLevelByID(m_App.getAppUserView().getUser().getRole())) <= (Integer.parseInt(m_config.getProperty("delete.rightslevel")))) {
-      //      } else {
-      //          l = dlReceipts.getSharedTicketList();
-      //      }
+            //      } else {
+            //          l = dlReceipts.getSharedTicketList();
+            //      }
             checkLayaways();
             if (l.isEmpty()) {
                 newTicket();
@@ -207,7 +210,24 @@ public class JTicketsBagShared extends JTicketsBag {
             new MessageInf(e).show(this);
             checkLayaways();
             newTicket();
-        }
+        }*/
+               newTicket();
+        /*
+        try {
+            List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
+            if (l.isEmpty()) {
+                m_jListTickets.setText("");                
+                 newTicket();
+            } else {
+// JG Deliberate doClick for testing/reuse
+                m_jListTickets.doClick(); 
+            }
+        } catch (BasicException e) {
+            new MessageInf(e).show(this);
+            newTicket();
+        }  
+        */
+        
     }
 
     private void newTicket() {
@@ -288,8 +308,7 @@ public class JTicketsBagShared extends JTicketsBag {
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jListTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jListTicketsActionPerformed
-        
-                
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -303,23 +322,23 @@ public class JTicketsBagShared extends JTicketsBag {
                         l = dlReceipts.getSharedTicketList();
                     }
        //             if (Integer.parseInt(dlAdmin.getRightsLevelByID(m_App.getAppUserView().getUser().getRole())) <= (Integer.parseInt(m_config.getProperty("delete.rightslevel")))) {
-       //             } else {
-       //                 l = dlReceipts.getSharedTicketList();
-       //             }
+                    //             } else {
+                    //                 l = dlReceipts.getSharedTicketList();
+                    //             }
                     JTicketsBagSharedList listDialog = JTicketsBagSharedList.newJDialog(JTicketsBagShared.this);
                     String id = listDialog.showTicketsList(l);
 
                     if (id != null) {
                         saveCurrentTicket();
-                        setActiveTicket(id);                        
+                        setActiveTicket(id);
                     }
                 } catch (BasicException e) {
-                    new MessageInf(e).show(JTicketsBagShared.this);                  
-                        newTicket();
+                    new MessageInf(e).show(JTicketsBagShared.this);
+                    newTicket();
                 }
             }
         });
-        
+
     }//GEN-LAST:event_m_jListTicketsActionPerformed
 
     private void m_jDelTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDelTicketActionPerformed
