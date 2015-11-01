@@ -16,7 +16,8 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
-    
+  
+    <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>  
 
     <changeSet author="Chromis POS" id="update to v0.20">    
         <update tableName="APPLICATIONS">
