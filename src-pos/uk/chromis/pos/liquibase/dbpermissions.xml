@@ -740,6 +740,13 @@
         </insert>		
 		
         <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname119"/>
+            <column name="DESCRIPTION" value="##label.description119"/>
+        </insert>		
+        
+        <insert tableName="DBPERMISSIONS">		
             <column name="CLASSNAME" value="/uk/chromis/reports/badprice.bs"/>
             <column name="SECTION" value="##label.sectiontools"/>
             <column name="DISPLAYNAME" value="##label.displayname99"/>

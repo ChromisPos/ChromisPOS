@@ -129,6 +129,8 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addTitle("Menu.Import");
         submenu.addPanel("/uk/chromis/images/import.png", "Menu.CSVImport", "uk.chromis.pos.imports.JPanelCSVImport");
         submenu.addPanel("/uk/chromis/images/database.png", "Menu.CSVReset", "uk.chromis.pos.imports.JPanelCSVCleardb");
+        submenu.addPanel("/uk/chromis/images/import.png", "Menu.StockChanges", "uk.chromis.pos.imports.StockChangesPanel");
+
         submenu.addTitle("Menu.Import.Reports");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.UpdatedPrices", "/uk/chromis/reports/updatedprices.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.NewProducts", "/uk/chromis/reports/newproducts.bs");

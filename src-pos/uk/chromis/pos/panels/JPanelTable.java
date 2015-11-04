@@ -66,10 +66,16 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
      */
     protected AppView app;
     
+    protected int m_ListWidth = 0;
+    
     /** Creates new form JPanelTableEditor */
     public JPanelTable() {
 
         initComponents();
+    }
+    
+    public void setListWidth( int width ) {
+       m_ListWidth = width;
     }
     
     /**
@@ -125,6 +131,10 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
             if (cr != null) {
                 JListNavigator nl = new JListNavigator(bd);
                 nl.applyComponentOrientation(getComponentOrientation());
+                if( m_ListWidth > 0 ) {
+                    nl.setPreferredSize(new java.awt.Dimension( m_ListWidth, 2));
+                }
+    
                 if (cr != null) {
                     nl.setCellRenderer(cr);
                 }
