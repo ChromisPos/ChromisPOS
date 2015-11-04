@@ -20,16 +20,21 @@
 
 package uk.chromis.pos.util;
 
+import java.awt.Image;
 import javax.print.DocFlavor;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
+import javax.swing.ImageIcon;
+import uk.chromis.pos.forms.AppConfig2;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSystem;
 
 /**
  *
  * @author adrianromero
  */
 public class ReportUtils {
-    
+         
     private ReportUtils() {
     }
     
@@ -77,6 +82,18 @@ public class ReportUtils {
         }
         
         return printers;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static Image getReportLogo() {
+        ImageIcon img;
+        
+        img = new javax.swing.ImageIcon(ReportUtils.class.getResource("/uk/chromis/fixedimages/reportlogo.png"));            
+        
+        return img.getImage();
     }
 
 }

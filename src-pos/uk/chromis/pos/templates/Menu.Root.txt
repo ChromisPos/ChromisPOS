@@ -136,6 +136,7 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.NewProducts", "/uk/chromis/reports/newproducts.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.MissingData", "/uk/chromis/reports/missingdata.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.InvalidData", "/uk/chromis/reports/invaliddata.bs");
+        submenu.addPanel("/uk/chromis/images/reports.png", "Menu.StockChangesReport", "/uk/chromis/reports/stockchanges.bs");
 
 
     group = menu.addGroup("Menu.System");

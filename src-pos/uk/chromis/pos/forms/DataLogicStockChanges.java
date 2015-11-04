@@ -19,12 +19,9 @@
 
 package uk.chromis.pos.forms;
 
-import java.util.Date;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.DataParams;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.IRenderString;
 import uk.chromis.data.loader.PreparedSentence;
@@ -32,15 +29,12 @@ import uk.chromis.data.loader.RenderStringStockChange;
 import uk.chromis.data.loader.SentenceExec;
 import uk.chromis.data.loader.SentenceExecTransaction;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
-import uk.chromis.data.loader.SerializerWriteString;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.loader.Transaction;
 import uk.chromis.data.model.Field;
 import uk.chromis.data.model.Row;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.inventory.MovementReason;
-import uk.chromis.pos.payment.PaymentInfo;
 
 public class DataLogicStockChanges extends BeanFactoryDataSingle {
     

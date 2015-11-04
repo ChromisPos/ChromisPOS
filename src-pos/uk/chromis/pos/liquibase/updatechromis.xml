@@ -166,7 +166,28 @@
             <column name="CHANGES_FIELD" type="varchar(50)"/>
             <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
             <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
-        </createTable>                         
+        </createTable>       
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname119"/>
+            <column name="DESCRIPTION" value="##label.description119"/>
+        </insert>
+        		
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/stockchanges.bs"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname120"/>
+            <column name="DESCRIPTION" value="##label.description120"/>
+        </insert>		
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="62"/>
+            <column name="NAME" value="img."/>
+            <column name="RESTYPE" valueNumeric="1"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
+        </insert>                  
     </changeSet>           
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </databaseChangeLog>

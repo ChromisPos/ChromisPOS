@@ -167,5 +167,7 @@
     <class name="uk.chromis.pos.panels.JPanelPrinter"/>
     <class name="uk.chromis.pos.config.JPanelConfiguration"/>
     <class name="uk.chromis.pos.inventory.ProductPacksPanel"/>
+    <class name="uk.chromis.pos.imports.StockChangesPanel"/>
+    <class name="/uk/chromis/reports/stockchanges.bs"/>
 
 </permissions>
