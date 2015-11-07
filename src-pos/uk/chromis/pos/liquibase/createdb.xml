@@ -2354,8 +2354,27 @@
         </createTable>                         
     </changeSet>  
     
+<<<<<<< HEAD
     <changeSet author="Chromis POS" id="derby10.10.20">    
     </changeSet>   
     
+=======
+    <changeSet author="Chromis POS" id="Create StockChanges Table">
+        <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="CHANGES_PRODUCT" type="varchar(255)"/>
+            <column name="CHANGES_TYPE" type="int"/>
+            <column name="CHANGES_PROCESSED" type="int"/>
+            <column name="CHANGES_FIELD" type="varchar(50)"/>
+            <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
+            <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
+        </createTable>                         
+    </changeSet>  
+>>>>>>> 29d75dd59970ebd0c8f97c37e58a2352bac05364
 </databaseChangeLog>
 

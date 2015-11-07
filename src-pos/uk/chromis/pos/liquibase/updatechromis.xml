@@ -144,6 +144,7 @@
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.52"/>          
         </update>               
+<<<<<<< HEAD
     </changeSet>   
       
     <changeSet author="Chromis POS" id="update to v0.52-refactored">    
@@ -151,5 +152,53 @@
             <column name="VERSION" value="0.52-refactored"/>          
         </update>               
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+=======
+    </changeSet>     
+ 
+    <changeSet author="Chromis POS" id="Create StockChanges Table">
+         <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="STOCKCHANGES"/>
+            </not>
+        </preConditions>
+
+       <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="CHANGES_PRODUCT" type="varchar(255)"/>
+            <column name="CHANGES_TYPE" type="int"/>
+            <column name="CHANGES_PROCESSED" type="int"/>
+            <column name="CHANGES_FIELD" type="varchar(50)"/>
+            <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
+            <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
+        </createTable>       
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname119"/>
+            <column name="DESCRIPTION" value="##label.description119"/>
+        </insert>
+        		
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/stockchanges.bs"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname120"/>
+            <column name="DESCRIPTION" value="##label.description120"/>
+        </insert>		
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="62"/>
+            <column name="NAME" value="img."/>
+            <column name="RESTYPE" valueNumeric="1"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
+        </insert>                  
+    </changeSet>           
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+>>>>>>> 29d75dd59970ebd0c8f97c37e58a2352bac05364
 </databaseChangeLog>
 
