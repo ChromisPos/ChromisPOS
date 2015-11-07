@@ -52,12 +52,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         //Lets get the printer list
         printServices = PrintServiceLookup.lookupPrintServices(null, null);
-        System.out.println("Number of print services: " + printServices.length);
-
-        for (PrintService printer : printServices) {
-            System.out.println("Printer: " + printer.getName());
-        }
-
+        
         String[] printernames = ReportUtils.getPrintNames();
 
         jcboMachineDisplay.addActionListener(dirty);

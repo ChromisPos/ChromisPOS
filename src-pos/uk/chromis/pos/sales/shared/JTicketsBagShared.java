@@ -123,8 +123,6 @@ public class JTicketsBagShared extends JTicketsBag {
     }
 
     private void saveCurrentTicket() {
-// Thanks Ibastavd & sunnytang 2012/2013 - Mod JG 23 Jul 13    
-// save current ticket, if exists,
         if (m_sCurrentTicket != null) {
             try {
                 dlReceipts.insertSharedTicket(m_sCurrentTicket, m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());

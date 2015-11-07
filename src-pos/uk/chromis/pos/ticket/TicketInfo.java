@@ -95,6 +95,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     private final String m_sResponse;
     private String loyaltyCardNumber;
     private Boolean oldTicket;
+    
 
     // JG July 2014 Ticket creator Host - for ticket print
     private static String Hostname;
@@ -119,9 +120,9 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_User = null;
         m_Customer = null;
         m_sActiveCash = null;
-        m_aLines = new ArrayList<>(); // JG June 2102 diamond inference
+        m_aLines = new ArrayList<>(); 
 
-        payments = new ArrayList<>(); // JG June 2102 diamond inference
+        payments = new ArrayList<>(); 
         taxes = null;
         m_sResponse = null;
         oldTicket = false;
@@ -130,8 +131,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        // esto es solo para serializar tickets que no estan en la bolsa de tickets pendientes
+    public void writeExternal(ObjectOutput out) throws IOException {        
         out.writeObject(m_sId);
         out.writeInt(tickettype);
         out.writeInt(m_iTicketId);
@@ -142,8 +142,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        // esto es solo para serializar tickets que no estan en la bolsa de tickets pendientes
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {        
         m_sId = (String) in.readObject();
         tickettype = in.readInt();
         m_iTicketId = in.readInt();
@@ -153,8 +152,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_aLines = (List<TicketLineInfo>) in.readObject();
         m_User = null;
         m_sActiveCash = null;
-        payments = new ArrayList<>(); // JG June 2102 diamond inference
-        taxes = null;
+        payments = new ArrayList<>(); 
+        taxes = null;        
     }
 
     /**
@@ -212,7 +211,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         t.oldTicket = oldTicket;
         // taxes are not copied, must be calculated again.
-
         return t;
     }
 

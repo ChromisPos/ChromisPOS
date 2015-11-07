@@ -400,7 +400,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         // Authorization for buttons
         btnSplit.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total"));
         m_jDelete.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.EditLines"));
-        m_jNumberKey.setMinusEnabled(m_App.getAppUserView().getUser().hasPermission("sales.EditLines"));
+        //     m_jNumberKey.setMinusEnabled(m_App.getAppUserView().getUser().hasPermission("sales.EditLines"));
         m_jNumberKey.setEqualsEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total"));
         m_jbtnconfig.setPermissions(m_App.getAppUserView().getUser());
 
@@ -524,6 +524,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else {
             if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
                 //Make disable Search and Edit Buttons
+                m_jNumberKey.justEquals();
                 m_jEditLine.setVisible(false);
                 m_jList.setVisible(false);
             }
@@ -1016,7 +1017,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                     break;
                                 case "28":
                                     sVariableNum = sCode.substring(7, 12);
-                                    dPriceSell = Double.parseDouble(sVariableNum) / 10;
+                                    dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                     break;
                             }
                         } else if (sCode.length() == 12) {
@@ -1350,6 +1351,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 if (m_oTicket.getLinesCount() > 0) {
 
                     if (closeTicket(m_oTicket, m_oTicketExt)) {
+                        if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                            try {
+                                JRefundLines.updateRefunds();
+                            } catch (BasicException ex) {
+                                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                         // Ends edition of current receipt
                         m_ticketsbag.deleteTicket();
 
@@ -2525,6 +2533,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
 
         int i = m_ticketlines.getSelectedIndex();
+        if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+            JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice());
+        }
         if (i < 0) {
             Toolkit.getDefaultToolkit().beep(); // No hay ninguna seleccionada
         } else {
