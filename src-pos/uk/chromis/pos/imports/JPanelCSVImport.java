@@ -76,6 +76,7 @@ import uk.chromis.pos.util.BarcodeValidator;
  * @version 2.1 complete re-write of the core code, to make use of the core
  * classes available within Unicenta
  */
+
 public class JPanelCSVImport extends JPanel implements JPanelView {
 
     private ArrayList<String> Headers = new ArrayList<>();
@@ -973,7 +974,6 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jComboReference.setMaximumRowCount(12);
         jComboReference.setEnabled(false);
         jComboReference.setMinimumSize(new java.awt.Dimension(32, 25));
-        jComboReference.setOpaque(false);
         jComboReference.setPreferredSize(new java.awt.Dimension(275, 30));
         jComboReference.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1078,7 +1078,6 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jComboSecurity.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jComboSecurity.setMaximumRowCount(12);
         jComboSecurity.setEnabled(false);
-        jComboSecurity.setOpaque(false);
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel23.setText("Maximum");
@@ -1086,7 +1085,6 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jComboMaximum.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jComboMaximum.setMaximumRowCount(12);
         jComboMaximum.setEnabled(false);
-        jComboMaximum.setOpaque(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1519,7 +1517,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGap(0, 53, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jParamsLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1551,7 +1549,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jParamsLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
