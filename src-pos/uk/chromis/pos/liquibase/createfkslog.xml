@@ -131,6 +131,11 @@
                                  referencedColumnNames = "ID"
                                  baseTableName="PRODUCTS"
                                  referencedTableName="ATTRIBUTESET"/>
+        <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
+                                     constraintName ="PRODUCTS_PACKPRODUCT_FK"
+                                     referencedColumnNames = "ID"
+                                     baseTableName="PRODUCTS"
+                                     referencedTableName="PRODUCTS"/> 
     </changeSet>
 
     <changeSet author="Chromis Pos" id="Products_cat Table FKs">
@@ -269,10 +274,10 @@
     </changeSet>
     <changeSet author="Chromis Pos" id="LEAVES Table FKs">
         <addForeignKeyConstraint baseColumnNames="PPLID"
-                          constraintName ="LEAVES_PPLID"
-                          referencedColumnNames = "ID"
-                          baseTableName="LEAVES"
-                          referencedTableName="PEOPLE"/>
+                                 constraintName ="LEAVES_PPLID"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="LEAVES"
+                                 referencedTableName="PEOPLE"/>
     </changeSet>
     
     <changeSet author="Chromis Pos" id="Stock current Table FKs">
@@ -315,5 +320,6 @@
                                  referencedTableName="LOCATIONS"/>
     </changeSet>
     
+       
 </databaseChangeLog>
 

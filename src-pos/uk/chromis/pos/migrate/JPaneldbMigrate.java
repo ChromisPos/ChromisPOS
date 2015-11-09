@@ -883,8 +883,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     SQL = "SELECT * FROM PRODUCTS";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
-                        SQL = "INSERT INTO PRODUCTS (ID, REFERENCE, CODE, CODETYPE, NAME, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, ATTRIBUTESET_ID, STOCKCOST, STOCKVOLUME, IMAGE, ISCOM, ISSCALE, ISKITCHEN, PRINTKB, SENDSTATUS, ISSERVICE, DISPLAY, ATTRIBUTES, ISVPRICE, ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, CANDISCOUNT )"
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        SQL = "INSERT INTO PRODUCTS (ID, REFERENCE, CODE, CODETYPE, NAME, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, ATTRIBUTESET_ID, STOCKCOST, STOCKVOLUME, IMAGE, ISCOM, ISSCALE, ISKITCHEN, PRINTKB, SENDSTATUS, ISSERVICE, DISPLAY, ATTRIBUTES, ISVPRICE, ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, CANDISCOUNT, ISPACK, PACKQUANTITY, PACKPRODUCT )"
+                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("REFERENCE"));
@@ -915,6 +915,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setString(27, rs.getString("ALIAS"));
                         pstmt.setBoolean(28, rs.getBoolean("ALWAYSAVAILABLE"));
                         pstmt.setBoolean(29, rs.getBoolean("CANDISCOUNT"));
+                        pstmt.setBoolean(30, rs.getBoolean("ISPACK"));
+                        pstmt.setDouble(31, rs.getDouble("PACKQUANTITY"));
+                        pstmt.setString(32, rs.getString("PACKPRODUCT"));
 
                         if (!"xxx999_999xxx_x9x9x9".equals(rs.getString(1))) {
                             pstmt.executeUpdate();
@@ -1009,7 +1012,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("NAME"));
                         pstmt.setBytes(3, rs.getBytes("PERMISSIONS"));
-                        System.out.println("Rights level :"+rs.getInt("RIGHTSLEVEL") );
+                        System.out.println("Rights level :" + rs.getInt("RIGHTSLEVEL"));
                         pstmt.setInt(4, rs.getInt("RIGHTSLEVEL"));
                         pstmt.executeUpdate();
                     }
@@ -1052,6 +1055,25 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setTimestamp(2, rs.getTimestamp("STARTSHIFT"));
                         pstmt.setTimestamp(3, rs.getTimestamp("ENDSHIFT"));
                         pstmt.setString(4, rs.getString("PPLID"));
+                        pstmt.executeUpdate();
+                    }
+
+                    // copy STOCKCHANGES table       
+                    SQL = "SELECT * FROM STOCKCHANGES";
+                    rs = stmt.executeQuery(SQL);
+                    while (rs.next()) {
+                        SQL = "INSERT INTO STOCKCHANGES(ID, LOCATION, USERNAME, UPLOADTIME, CHANGES_PRODUCT, CHANGES_TYPE, CHANGES_PROCESSED, CHANGES_FIELD, CHANGES_TEXTVALUE, CHANGES_BLOBVALUE ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        pstmt = con2.prepareStatement(SQL);
+                        pstmt.setString(1, rs.getString("ID"));
+                        pstmt.setString(2, rs.getString("LOCATION"));
+                        pstmt.setString(3, rs.getString("USERNAME"));
+                        pstmt.setTimestamp(4, rs.getTimestamp("UPLOADTIME"));
+                        pstmt.setString(5, rs.getString("CHANGES_PRODUCT"));
+                        pstmt.setInt(6, rs.getInt("CHANGES_TYPE"));
+                        pstmt.setInt(7, rs.getInt("CHANGES_PROCESSED"));
+                        pstmt.setString(8, rs.getString("CHANGES_FIELD"));
+                        pstmt.setString(9, rs.getString("CHANGES_TEXTVALUE"));
+                        pstmt.setBytes(10, rs.getBytes("CHANGES_BLOBVALUE"));
                         pstmt.executeUpdate();
                     }
 
@@ -1179,7 +1201,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     SQL = "SELECT * FROM TICKETLINES";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
-                        SQL = "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                        SQL = "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES, REFUNDQTY ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
                         pstmt.setString(1, rs.getString("TICKET"));
                         pstmt.setInt(2, rs.getInt("LINE"));
@@ -1189,6 +1211,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setDouble(6, rs.getDouble("PRICE"));
                         pstmt.setString(7, rs.getString("TAXID"));
                         pstmt.setBytes(8, rs.getBytes("ATTRIBUTES"));
+                        pstmt.setString(9, rs.getString("REFUNDQTY"));
                         pstmt.executeUpdate();
                     }
 

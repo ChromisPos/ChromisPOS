@@ -2337,7 +2337,6 @@
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
     </changeSet>      
         
- 
     
     <changeSet author="Chromis POS" id="derby10.10.20">    
     </changeSet>   

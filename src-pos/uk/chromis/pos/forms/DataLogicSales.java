@@ -63,8 +63,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     private String getCardName;
 
     private SentenceExec m_updateRefund;
-    
-    
+
     /**
      * Creates a new instance of SentenceContainerGeneric
      */
@@ -133,9 +132,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ALIAS", Datas.STRING, Formats.STRING), //26
                 new Field("ALWAYSAVAILABLE", Datas.BOOLEAN, Formats.BOOLEAN), //27
                 new Field("DISCOUNTED", Datas.STRING, Formats.STRING), //28
-                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN) //29
-
-        );    
+                new Field("CANDISCOUNT", Datas.BOOLEAN, Formats.BOOLEAN), //29
+                new Field("ISPACK", Datas.BOOLEAN, Formats.BOOLEAN), //30
+                new Field("PACKQUANTITY", Datas.DOUBLE, Formats.DOUBLE), //31
+                new Field("PACKPRODUCT", Datas.STRING, Formats.STRING) //32
+        );
     }
 
     /**
@@ -145,15 +146,13 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     @Override
     public void init(Session s) {
         this.s = s;
-        
-                m_updateRefund =  new StaticSentence(s
-                , "UPDATE TICKETLINES SET REFUNDQTY = ? WHERE TICKET = ? AND LINE = ?  "
-                , new SerializerWriteBasic(new Datas[] {
-                    Datas.DOUBLE,
-                    Datas.STRING,
-                    Datas.INT                    
-                }));
- 
+
+        m_updateRefund = new StaticSentence(s, "UPDATE TICKETLINES SET REFUNDQTY = ? WHERE TICKET = ? AND LINE = ?  ", new SerializerWriteBasic(new Datas[]{
+            Datas.DOUBLE,
+            Datas.STRING,
+            Datas.INT
+        }));
+
     }
 
     /**
@@ -208,11 +207,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, " //21  
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23  
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, PACKPRODUCT "
                 + "FROM STOCKCURRENT LEFT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
-             //   + "WHERE ID = ? "
-             //   + "GROUP BY ID, REFERENCE, NAME;", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
-                + "WHERE ID = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id); 
+                //   + "WHERE ID = ? "
+                //   + "GROUP BY ID, REFERENCE, NAME;", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
+                + "WHERE ID = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
     }
 
 // ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
@@ -244,7 +243,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, " //21   
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23   
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, PACKPRODUCT "
                 //                + "FROM STOCKCURRENT LEFT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "FROM STOCKCURRENT RIGHT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE CODE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
@@ -279,7 +278,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, " //21 
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, PACKRPRODUCT "
                 + "FROM STOCKCURRENT RIGHT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE REFERENCE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sReference);
     }
@@ -300,7 +299,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, " //21
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23   
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, PACKPRODUCT "
                 + "FROM PRODUCTS WHERE ID = ? "
                 //+ "GROUP BY ID, REFERENCE, NAME "
                 // JL changed GROUP BY to ORDER BY, as it does not work with embedded for multiple grouping , 
@@ -389,7 +388,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P, PRODUCTS_CAT O "
                 + "WHERE P.ID = O.PRODUCT AND P.CATEGORY = ? "
                 + "ORDER BY O.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
@@ -434,10 +434,44 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P, PRODUCTS_CAT O "
                 + "WHERE P.ID = O.PRODUCT "
                 + "ORDER BY O.CATORDER, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
+    }
+
+    public List<ProductInfoExt> getAllNonProductCatalog() throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "P.ID, "
+                + "P.REFERENCE, "
+                + "P.CODE, "
+                + "P.NAME, "
+                + "P.ISCOM, "
+                + "P.ISSCALE, "
+                + "P.PRICEBUY, "
+                + "P.PRICESELL, "
+                + "P.TAXCAT, "
+                + "P.CATEGORY, "
+                + "P.ATTRIBUTESET_ID, "
+                + "P.IMAGE, "
+                + "P.ATTRIBUTES, "
+                + "P.ISKITCHEN, "
+                + "P.ISSERVICE, "
+                + "P.DISPLAY, "
+                + "P.ISVPRICE, "
+                + "P.ISVERPATRIB, "
+                + "P.TEXTTIP, "
+                + "P.WARRANTY, "
+                + "P.STOCKUNITS, "
+                + "P.ALIAS, "
+                + "P.ALWAYSAVAILABLE, "
+                + "P.DISCOUNTED, "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
+                + "FROM PRODUCTS P "
+                + "WHERE NOT EXISTS (SELECT O.PRODUCT FROM PRODUCTS_CAT O WHERE P.ID = O.PRODUCT) "
+                + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
 
     /**
@@ -473,7 +507,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P, PRODUCTS_CAT O "
                 + "WHERE P.ID = O.PRODUCT "
                 + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
@@ -513,13 +548,50 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRODUCTS.ALIAS, "
                 + "PRODUCTS.ALWAYSAVAILABLE, "
                 + "PRODUCTS.DISCOUNTED, "
-                + "PRODUCTS.CANDISCOUNT "
+                + "PRODUCTS.CANDISCOUNT, "
+                + "PRODUCTS.ISPACK, "
+                + "PRODUCTS.PACKQUANTITY, "
+                + "PRODUCTS.PACKPRODUCT "
                 + "FROM CATEGORIES INNER JOIN PRODUCTS ON (PRODUCTS.CATEGORY = CATEGORIES.ID) "
                 + "WHERE PRODUCTS.ALWAYSAVAILABLE = " + s.DB.TRUE() + " "
                 + "ORDER BY  CATEGORIES.NAME, PRODUCTS.NAME",
                 null,
                 ProductInfoExt.getSerializerRead()).list();
 
+    }
+
+    public List<ProductInfoExt> getProductNonCatalog(String category) throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "P.ID, "
+                + "P.REFERENCE, "
+                + "P.CODE, "
+                + "P.NAME, "
+                + "P.ISCOM, "
+                + "P.ISSCALE, "
+                + "P.PRICEBUY, "
+                + "P.PRICESELL, "
+                + "P.TAXCAT, "
+                + "P.CATEGORY, "
+                + "P.ATTRIBUTESET_ID, "
+                + "P.IMAGE, "
+                + "P.ATTRIBUTES, "
+                + "P.ISKITCHEN, "
+                + "P.ISSERVICE, "
+                + "P.DISPLAY, "
+                + "P.ISVPRICE, "
+                + "P.ISVERPATRIB, "
+                + "P.TEXTTIP, "
+                + "P.WARRANTY, "
+                + "P.STOCKUNITS, "
+                + "P.ALIAS, "
+                + "P.ALWAYSAVAILABLE, "
+                + "P.DISCOUNTED, "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
+                + "FROM PRODUCTS P "
+                + "WHERE NOT EXISTS (SELECT O.PRODUCT FROM PRODUCTS_CAT O WHERE P.ID = O.PRODUCT) "
+                + "AND P.CATEGORY = ? "
+                + "ORDER BY P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
     }
 
     /**
@@ -555,7 +627,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
-                + "P.CANDISCOUNT "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, "
+                + "P.PACKQUANTITY, "
+                + "P.PACKPRODUCT "
                 + "FROM PRODUCTS P, "
                 + "PRODUCTS_CAT O, PRODUCTS_COM M "
                 + "WHERE P.ID = O.PRODUCT AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
@@ -670,7 +745,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, " //21
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23 
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT OUTER JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE, NAME",
@@ -708,7 +784,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, " //21
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23 
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT OUTER JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE ISCOM = " + s.DB.FALSE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE, NAME",
@@ -746,7 +823,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, " //21
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23  
-                + "DISCOUNTED, CANDISCOUNT "
+                + "DISCOUNTED, CANDISCOUNT, "
+                + "ISPACK, PACKQUANTITY, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT OUTER JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE", new String[]{"NAME", "PRICEBUY", "PRICESELL", "CATEGORY", "CODE"}), new SerializerWriteBasic(new Datas[]{
@@ -1368,7 +1446,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ISSERVICE, P.DISPLAY, P.ISVPRICE, "
                 + "P.ISVERPATRIB, P.TEXTTIP, P.WARRANTY, P.STOCKUNITS, "
                 + "P.ALIAS, P.ALWAYSAVAILABLE, "
-                + "P.DISCOUNTED, P.CANDISCOUNT "
+                + "P.DISCOUNTED, P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT "
                 + "FROM PRODUCTS P LEFT OUTER JOIN PRODUCTS_CAT C "
                 + "ON P.ID = C.PRODUCT "
                 + "WHERE ?(QBF_FILTER) "
@@ -1402,14 +1481,15 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "ISSCALE, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, "
                         + "ATTRIBUTESET_ID, IMAGE, STOCKCOST, STOCKVOLUME, " //14
                         + "ATTRIBUTES, ISKITCHEN, ISSERVICE, DISPLAY, ISVPRICE, "
-                        + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT  ) " //25
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(productsRow.getDatas(),
+                        + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT, " //25
+                        + "ISPACK, PACKQUANTITY, PACKPRODUCT  ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{0,
                                     1, 2, 3, 4,
                                     5, 6, 7, 8, 9,
                                     10, 11, 12, 13, 14,
                                     17, 18, 19, 20,
-                                    21, 22, 23, 24, 25, 26, 27, 28, 29})).exec(params);
+                                    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32})).exec(params);
 //JG Aug 2014 - see ProductsEditor setCurrentStock explain				
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
 
@@ -1420,6 +1500,19 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 }
             }
         };
+    }
+
+    public final SentenceList getPackProductList() {
+        return new StaticSentence(s, "SELECT "
+                + "ID, "
+                + "NAME "
+                + "FROM PRODUCTS "
+                + "ORDER BY NAME", null, new SerializerRead() {
+                    @Override
+                    public Object readValues(DataRead dr) throws BasicException {
+                        return new PackProductInfo(dr.getString(1), dr.getString(2));
+                    }
+                });
     }
 
     /**
@@ -1442,11 +1535,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "DISPLAY = ?, ISVPRICE = ?, "
                         + "ISVERPATRIB = ?, TEXTTIP = ?, "
                         + "WARRANTY = ?, ALIAS = ?, ALWAYSAVAILABLE = ?, "
-                        + "DISCOUNTED = ?, CANDISCOUNT = ? "
+                        + "DISCOUNTED = ?, CANDISCOUNT = ?, "
+                        + "ISPACK = ?, PACKQUANTITY = ?, PACKPRODUCT = ? "
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                                     10, 11, 12, 13, 14, 17, 18, 19, 20,
-                                    21, 22, 23, 25, 26, 27, 28, 29, 0})).exec(params);
+                                    21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 32,0})).exec(params);
                 if (i > 0) {
                     if (((Boolean) values[15])) {
                         if (new PreparedSentence(s, "UPDATE PRODUCTS_CAT SET CATORDER = ? WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{16, 0})).exec(params) == 0) {
@@ -1469,7 +1563,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new SentenceExecTransaction(s) {
             @Override
             public int execInTransaction(Object params) throws BasicException {
-                new PreparedSentence(s, "DELETE FROM STOCKCURRENT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);  
+                new PreparedSentence(s, "DELETE FROM STOCKCURRENT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
                 new PreparedSentence(s, "DELETE FROM PRODUCTS_CAT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
                 return new PreparedSentence(s, "DELETE FROM PRODUCTS WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
 
@@ -1641,7 +1735,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         );
     }
 
-    public final void updateRefundQty(Double qty, String ticket, Integer line ) throws BasicException {
+    public final void updateRefundQty(Double qty, String ticket, Integer line) throws BasicException {
         m_updateRefund.exec(qty, ticket, line);
     }
 
