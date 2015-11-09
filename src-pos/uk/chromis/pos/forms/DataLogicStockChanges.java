@@ -19,8 +19,6 @@
 
 package uk.chromis.pos.forms;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.IRenderString;
@@ -28,10 +26,9 @@ import uk.chromis.data.loader.PreparedSentence;
 import uk.chromis.data.loader.RenderStringStockChange;
 import uk.chromis.data.loader.SentenceExec;
 import uk.chromis.data.loader.SentenceExecTransaction;
+import uk.chromis.data.loader.SerializerWrite;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.Session;
-import uk.chromis.data.loader.StaticSentence;
-import uk.chromis.data.loader.Transaction;
 import uk.chromis.data.model.Field;
 import uk.chromis.data.model.Row;
 import uk.chromis.format.Formats;
@@ -67,7 +64,7 @@ public class DataLogicStockChanges extends BeanFactoryDataSingle {
             };
     
     /** Creates a new instance of DataLogicStockChanges */
-    public DataLogicStockChanges() {       
+    public DataLogicStockChanges() {  
         m_changesRow = new Row(
                 new Field(m_FieldNames[0], m_FieldDataTypes[0], m_fieldformat[0] ), 
                 new Field(m_FieldNames[1], m_FieldDataTypes[1], m_fieldformat[1] ), 
@@ -90,8 +87,9 @@ public class DataLogicStockChanges extends BeanFactoryDataSingle {
      */
     @Override
     public void init(Session session){
+ 
         this.m_session = session;
-           
+        
     }
  
     // Find the column number of the given field
@@ -158,26 +156,6 @@ public class DataLogicStockChanges extends BeanFactoryDataSingle {
         return m_FieldNames.length;
     }
     
-    public void ProcessAllAccepted() {
-    
-        Transaction t = new Transaction(m_session) {
-            @Override
-            public Object transact() throws BasicException {
-                // update the tables
-                new StaticSentence(m_session
-                    , "UPDATE STOCKCHANGES SET CHANGES_PROCESSED = 2 WHERE CHANGES_PROCESSED = 1"
-                    , null).exec();
-                return null;
-            }
-        };
-        try {
-            t.execute();
-        } catch (BasicException ex) {
-            Logger.getLogger(DataLogicStockChanges.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-    }
-    
      public final PreparedSentence getChangesListbyLocation() {
          
          String[] fields =  new String[] { "LOCATION" };
@@ -195,6 +173,21 @@ public class DataLogicStockChanges extends BeanFactoryDataSingle {
         );
     }
 
+     public final PreparedSentence getChangesListbyDate( SerializerWrite serializerWrite) {
+         
+        String[] fields =  new String[] { "UPLOADTIME", "UPLOADTIME" };
+        
+ 	return new PreparedSentence(m_session,
+            "SELECT C.ID, C.LOCATION, C.USERNAME, C.UPLOADTIME, "
+            + "C.PRODUCTID, C.CHANGETYPE, C.CHANGES_PROCESSED, C.FIELD, "
+            + "C.TEXTVALUE, C.BLOBVALUE, IFNULL(P.NAME,'***NEW PRODUCT') AS PRODUCTNAME, P.REFERENCE AS PRODUCTREF "
+            + "FROM STOCKCHANGES C LEFT JOIN PRODUCTS P ON (C.PRODUCTID = P.ID) "
+            + "WHERE C.UPLOADTIME > ? AND C.UPLOADTIME < ? "
+            + "ORDER BY C.LOCATION, P.NAME, C.PRODUCTID",
+            serializerWrite, m_changesRow.getSerializerRead()
+        );
+    }
+     
          /**
      *
      * @return
@@ -269,6 +262,30 @@ public class DataLogicStockChanges extends BeanFactoryDataSingle {
                     ).exec(params);
             }
         };
+    }
+
+    /**
+     *
+     * @return
+     */
+    public final void ActionSql( String sql ) throws BasicException {
+        
+       final String [] statements = sql.split(";");
+        
+        SentenceExec sentence = new SentenceExecTransaction(m_session) {
+            @Override
+            public int execInTransaction(Object params) throws BasicException {
+                int r = 0;
+                for( int i = 0; i < statements.length; ++i ) {
+                    String blank = statements[i].replaceAll("\\s+","");
+                    if( blank.length() > 0 ) {
+                        r = new PreparedSentence(m_session, statements[i], null ).exec(params);
+                    }
+                }
+                return r;
+            }
+        };
+        sentence.exec();
     }
 
 }
