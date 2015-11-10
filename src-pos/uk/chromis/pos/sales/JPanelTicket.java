@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.sales;
 
 import bsh.EvalError;
@@ -1218,9 +1217,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, 1.0, product.getPriceSell());
-// ***************************************************************
-                m_jEditLine.doClick();
-
+               
+                if (!Boolean.parseBoolean(m_App.getProperties().getProperty("product.hidedefaultproductedit"))) {
+                    m_jEditLine.doClick();
+                }
+                
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO
                     && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
