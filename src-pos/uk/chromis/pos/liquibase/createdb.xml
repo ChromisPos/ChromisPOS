@@ -612,6 +612,20 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.ReprintLastTicket.xml"/>
         </insert>
+        <insert tableName="RESOURCES">
+            <column name="ID" value="62"/>
+            <column name="NAME" value="img.reportlogo"/>
+            <column name="RESTYPE" valueNumeric="1"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
+        </insert>
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="63"/>
+            <column name="NAME" value="sql.ActionStockChanges"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>
+        </insert>
+
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create TaxCustCategories Table">

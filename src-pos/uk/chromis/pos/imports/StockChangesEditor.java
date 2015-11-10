@@ -6,10 +6,19 @@
 package uk.chromis.pos.imports;
 
 import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.SentenceList;
@@ -19,7 +28,7 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicStockChanges;
-import uk.chromis.pos.sales.TaxesLogic;
+import uk.chromis.pos.forms.DataLogicSystem;
 
 /**
  *
@@ -30,6 +39,8 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     private Object m_oId;
     private DataLogicStockChanges m_dlChanges;
     private DataLogicSales m_dlSales;
+    private static DataLogicSystem m_dlSystem;
+    
 
     private final SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
@@ -39,12 +50,16 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     private String m_Location;
     private String m_ProductName;
     private String m_ProductRef;
+    private String m_ProductID;
+    private DirtyManager m_Dirty;
     
     /** Creates new form StockChangesEditor
      * @param dirty */
-    public StockChangesEditor( DataLogicStockChanges dlChanges, DataLogicSales dlSales, DirtyManager dirty ) {
+    public StockChangesEditor( DataLogicStockChanges dlChanges, DataLogicSales dlSales,  DataLogicSystem dlSystem, DirtyManager dirty ) {
         m_dlChanges = dlChanges;
         m_dlSales = dlSales;
+        m_dlSystem = dlSystem;
+        m_Dirty = dirty;
         
         initComponents();
         
@@ -77,8 +92,6 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_CategoryModel = new ComboBoxValModel(m_sentcat.list());
         m_jCategory.setModel(m_CategoryModel);
 
-        int numb = m_CategoryModel.getSize();
-        
         m_taxcatmodel = new ComboBoxValModel( m_taxcatsent.list());
         m_jTax.setModel( m_taxcatmodel);
 
@@ -199,7 +212,8 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_Location  = (String) aValue[ m_dlChanges.getIndexOf("LOCATION")];
         m_ProductName = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTNAME")];
         m_ProductRef = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTREF")];
-        
+        m_ProductID = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTID")];
+                
         Integer type = (Integer) aValue[ m_dlChanges.getIndexOf("CHANGETYPE")];
         jComboChangeType.setSelectedIndex( type ) ;
         
@@ -247,6 +261,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_Location  = (String) aValue[ m_dlChanges.getIndexOf("LOCATION")];
         m_ProductName = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTNAME")];
         m_ProductRef = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTREF")];
+        m_ProductID = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTID")];
         
         Integer type = (Integer) aValue[ m_dlChanges.getIndexOf("CHANGETYPE")];
         jComboChangeType.setSelectedIndex( type ) ;
@@ -297,12 +312,12 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         changes[ m_dlChanges.getIndexOf("LOCATION") ] = m_Location;
         changes[ m_dlChanges.getIndexOf("USERNAME") ] = jTextUser.getText();
         changes[ m_dlChanges.getIndexOf("UPLOADTIME") ] = (Date) Formats.TIMESTAMP.parseValue(jTextUploadTime.getText());
-        changes[ m_dlChanges.getIndexOf("PRODUCTID") ] = jTextProduct.getText();
         changes[ m_dlChanges.getIndexOf("CHANGETYPE") ] = jComboChangeType.getSelectedIndex();
         changes[ m_dlChanges.getIndexOf("CHANGES_PROCESSED") ] = jComboAction.getSelectedIndex();
         
         changes[ m_dlChanges.getIndexOf("FIELD") ] = field;
 
+        changes[ m_dlChanges.getIndexOf("PRODUCTID") ] = m_ProductID;
         changes[ m_dlChanges.getIndexOf("PRODUCTNAME") ] = m_ProductName;
         changes[ m_dlChanges.getIndexOf("PRODUCTREF") ] = m_ProductRef;
 
@@ -311,7 +326,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         } else if( field.contentEquals("TAXCAT")) {
             changes[ m_dlChanges.getIndexOf("TEXTVALUE") ] = m_taxcatmodel.getSelectedKey();
         } else if( field.contentEquals("IMAGE")) {
-            changes[ m_dlChanges.getIndexOf("TEXTVALUE") ] = m_jImage.getImage();
+            changes[ m_dlChanges.getIndexOf("BLOBVALUE") ] = m_jImage.getImage();
         } else {
             changes[ m_dlChanges.getIndexOf("TEXTVALUE") ] = jTextValue.getText();
         }     
@@ -334,7 +349,44 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     @Override
     public void refresh() {
     }
+
+    private void showDialog() {
+
+        // Get details of the original font before we change it otherwise all dialogboxes will use new settings
+        JOptionPane pane = new JOptionPane();
+        Font originalFont=pane.getFont();
+
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20)));
+        String message =  AppLocal.getIntString("message.stockchangesactioned");
+        JLabel FontText = new JLabel(message);
+        FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
+
+        JOptionPane newpane = new JOptionPane( );
+        newpane.setMessage(FontText);
+        newpane.setPreferredSize( new Dimension(450,150));
+        
+        Dialog dlg = newpane.createDialog( AppLocal.getIntString("Menu.StockChanges") );
+        dlg.setVisible( true );
+
+        // Return to default settings
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(),originalFont.getStyle(),originalFont.getSize())));
+
+    }
     
+    private void ProcessAllAccepted() {
+        
+        String sql = (m_dlSystem.getResourceAsText("sql.ActionStockChanges"));
+        
+        if( sql != null && sql.length() >0 ) {
+            try {
+                m_dlChanges.ActionSql( sql );
+                showDialog();
+            } catch (BasicException ex) {
+                Logger.getLogger(StockChangesEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -442,14 +494,13 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
                                             .addComponent(m_jCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(m_jImage, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jTextValue, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)))
+                                    .addComponent(jTextValue)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addGap(18, 18, 18)
                                 .addComponent(jComboAction, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(82, 82, 82)
-                                .addComponent(jButtonProcess)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(jButtonProcess))))
                     .addComponent(m_jTitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -503,11 +554,11 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jTaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jTaxActionPerformed
-        m_dlChanges.ProcessAllAccepted();
+     
     }//GEN-LAST:event_m_jTaxActionPerformed
 
     private void jButtonProcessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonProcessMouseClicked
-        // TODO add your handling code here:
+           ProcessAllAccepted();
     }//GEN-LAST:event_jButtonProcessMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

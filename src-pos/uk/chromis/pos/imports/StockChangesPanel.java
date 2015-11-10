@@ -19,17 +19,15 @@
 
 package uk.chromis.pos.imports;
 
-import uk.chromis.pos.inventory.*;
 import java.awt.Component;
-import javax.swing.JButton;
 import javax.swing.ListCellRenderer;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ListCellRendererBasic;
 import uk.chromis.data.loader.ComparatorCreator;
 import uk.chromis.data.loader.ComparatorCreatorBasic;
 import uk.chromis.data.loader.Datas;
-import uk.chromis.data.loader.SentenceExec;
-import uk.chromis.data.loader.SentenceExecTransaction;
+import uk.chromis.data.loader.SerializerWrite;
+import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.Vectorer;
 import uk.chromis.data.loader.VectorerBasic;
 import uk.chromis.data.user.EditorListener;
@@ -41,16 +39,18 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicStockChanges;
+import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.panels.JPanelTable;
-import uk.chromis.pos.reports.JParamsLocation;
+import uk.chromis.pos.reports.JParamsDatesInterval;
 
 public class StockChangesPanel extends JPanelTable implements EditorListener {
 
     private StockChangesEditor jeditor;
-    private JParamsLocation m_paramslocation;    
+    private JParamsDatesInterval m_params;    
     
     private DataLogicStockChanges m_dataLogic = null;
     private DataLogicSales m_dlSales = null;
+    private DataLogicSystem m_dlSystem = null;
     private SaveProvider m_spr = null;
     
     /** Creates a new instance of StockChangesPanel */
@@ -61,20 +61,23 @@ public class StockChangesPanel extends JPanelTable implements EditorListener {
      *
      */
     @Override
-    protected void init() {   
+    protected void init() {
         m_dataLogic = (DataLogicStockChanges) app.getBean("uk.chromis.pos.forms.DataLogicStockChanges");
         m_dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
+        m_dlSystem = (DataLogicSystem) app.getBean("uk.chromis.pos.forms.DataLogicSystem");
 
         m_spr = new SaveProvider(
             m_dataLogic.getChangesUpdate(),
             null,
             m_dataLogic.getChangesDelete());
 
-        m_paramslocation = new JParamsLocation();
-        m_paramslocation.init(app);
+        m_params = new JParamsDatesInterval();
+        m_params.init(app);
+        m_params.setStartDate(uk.chromis.beans.DateUtils.getToday());
+        m_params.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
          // el panel del editor
-        jeditor = new StockChangesEditor( m_dataLogic, m_dlSales, dirty);       
+        jeditor = new StockChangesEditor( m_dataLogic, m_dlSales, m_dlSystem, dirty);       
         
         setListWidth(400);
     }
@@ -94,7 +97,7 @@ public class StockChangesPanel extends JPanelTable implements EditorListener {
      */
     @Override
     public Component getFilter() {
-        return m_paramslocation.getComponent();
+        return m_params.getComponent();
     }
 
     /**
@@ -103,23 +106,7 @@ public class StockChangesPanel extends JPanelTable implements EditorListener {
      */
     @Override
     public Component getToolbarExtras() {
-        
-        JButton btnScanPal = new JButton();
-        btnScanPal.setText("ScanPal");
-        btnScanPal.setVisible(app.getDeviceScanner() != null);
-        btnScanPal.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnScanPalActionPerformed(evt);
-            }
-        });      
-        
-        return btnScanPal;
-    }
-    
-    private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {                                           
-  
-        JDlgUploadProducts.showMessage(this, app.getDeviceScanner(), bd);
+        return null;
     }
 
   /**
@@ -128,8 +115,14 @@ public class StockChangesPanel extends JPanelTable implements EditorListener {
      */
     @Override
     public ListProvider getListProvider() {
-        return new ListProviderCreator(m_dataLogic.getChangesListbyLocation(),
-                m_paramslocation );
+        
+        // This is the filter format returned by JParamsDatesInterval
+        SerializerWriteBasicExt serializerWrite = new SerializerWriteBasicExt(
+                new Datas[] {Datas.OBJECT, Datas.TIMESTAMP, Datas.OBJECT, Datas.TIMESTAMP}, new int[] {1,3} );
+        
+        return new ListProviderCreator(
+                m_dataLogic.getChangesListbyDate( serializerWrite ),
+                m_params );
     }
 
     /**
@@ -183,7 +176,7 @@ public class StockChangesPanel extends JPanelTable implements EditorListener {
      */
     @Override
     public ListCellRenderer getListCellRenderer() {
-        return new ListCellRendererBasic(m_dataLogic.getRenderStringChange() );
+        return new ListCellRendererBasic(m_dataLogic.getRenderStringChange( ) );
     }
     
     /**
@@ -203,7 +196,7 @@ public class StockChangesPanel extends JPanelTable implements EditorListener {
     public void activate() throws BasicException {
         
         jeditor.activate();
-        m_paramslocation.activate();
+        m_params.activate();
 
         super.activate();
     }
