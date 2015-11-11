@@ -87,8 +87,6 @@
 	<!-- <img-height value="96"/> -->
 <!-- END Product Button Size -->
 
-<!-- Print Receipt (Default=ENABLED) -->
-        <printselected value="true"/>
 
 <!-- ADDITIONAL FEATURES ************************************************* -->
     <!-- SET Show Change in Cash Sale (Default=ENABLED -->
