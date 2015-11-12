@@ -298,6 +298,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
+    
+    
+    
+    
+    
     private void saveCurrentTicket() {
         String currentTicket = (String) m_oTicketExt;
         if (currentTicket != null) {

@@ -86,7 +86,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtPhone.getDocument().addDocumentListener(dirty);
         txtPhone2.getDocument().addDocumentListener(dirty);
         txtFax.getDocument().addDocumentListener(dirty);
-        m_jImage.addPropertyChangeListener(dirty);
+        m_jImage.addPropertyChangeListener("image",dirty);
         
         txtAddress.getDocument().addDocumentListener(dirty);
         txtAddress2.getDocument().addDocumentListener(dirty);
