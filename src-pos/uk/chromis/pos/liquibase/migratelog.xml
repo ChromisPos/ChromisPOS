@@ -10,9 +10,8 @@
 
 
 
-    <property name="boolean.type" value="boolean" dbms="postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>
     <property name="boolean.type" value="bit" dbms="mysql"/>
-    <property name="boolean.type" value="smallint" dbms="derby"/>
     <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
 
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
@@ -61,10 +60,14 @@
                 <constraints nullable="false"/>
             </column>
             <column name="PERMISSIONS" type="${blob.type}"/>
+            <column name="RIGHTSLEVEL" type="int" defaultValueNumeric="4" >
+                <constraints nullable="false"/> 
+            </column>   
+            
         </createTable>
         <createIndex tableName="ROLES"
-                        indexName="ROLES_NAME_INX"
-                        unique="false">
+                     indexName="ROLES_NAME_INX"
+                     unique="false">
             <column name="NAME" type="varchar(255)"/>
         </createIndex>                    
     </changeSet>
@@ -423,7 +426,16 @@
             <column name="ALIAS" type="varchar(50)"/>  
             <column name="ALWAYSAVAILABLE" type="${boolean.type}" defaultValueNumeric="0" >
                 <constraints nullable="false"/>  
-            </column>              
+            </column>   
+            <column name="DISCOUNTED" type="varchar(5)" defaultValue="no"></column>  
+            <column name="CANDISCOUNT" type="${boolean.type}" defaultValueBoolean="true" >
+                <constraints nullable="false"/>  
+            </column>            
+            <column name="ISPACK" type="${boolean.type}" defaultValueNumeric="1" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="PACKQUANTITY" type="double precision"/>
+            <column name="PACKPRODUCT" type="varchar(255)"/>                                                                
         </createTable>
 
         <createIndex tableName="PRODUCTS"
@@ -675,6 +687,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="ATTRIBUTES" type="${blob.type}"/>
+            <column name="REFUNDQTY" type="double precision" defaultValueNumeric="0.0"/>
         </createTable>
 
         <addPrimaryKey columnNames="TICKET, LINE" constraintName="TICKETLINES_PKEY" tableName="TICKETLINES"/>
@@ -1003,6 +1016,29 @@
         </createIndex> 
     </changeSet> 
 
+    <changeSet author="Chromis POS" id="Create StockChanges Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="STOCKCHANGES"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="CHANGES_PRODUCT" type="varchar(255)"/>
+            <column name="CHANGES_TYPE" type="int"/>
+            <column name="CHANGES_PROCESSED" type="int"/>
+            <column name="CHANGES_FIELD" type="varchar(50)"/>
+            <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
+            <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
+        </createTable>       
+    </changeSet> 
+
     <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="postgresql, hypersql, hsqldb">
         <sql>CREATE SEQUENCE TICKETSNUM START WITH 1</sql>
     </changeSet>
@@ -1079,5 +1115,21 @@
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
     </changeSet>
 
+    <changeSet author="Chromis Pos" id="add derby from migrate">
+        <sql>
+            INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, EXECTYPE, MD5SUM, DESCRIPTION, LIQUIBASE) 
+            VALUES (
+            'derby10.10.20',
+            'Chromis POS', 
+            'uk/chromis/pos/liquibase/udpdatecreatedb.xml', 
+            '2015-10-23 22:43:33.487',
+            0,
+            'EXECUTED',
+            '7:d41d8cd98f00b204e9800998ecf8427e',
+            'empty',                       
+            '3.5.0-Chromis Mod')                
+        </sql>
+    </changeSet>
+    
 </databaseChangeLog>
 

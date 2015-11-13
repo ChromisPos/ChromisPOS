@@ -45,39 +45,24 @@ import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
 import uk.chromis.pos.ticket.TicketTaxInfo;
 
-/**
- *
- *   
- */
 public class JTicketsBagTicket extends JTicketsBag {
     
     private DataLogicSystem m_dlSystem = null;
 
-    /**
-     *
-     */
     protected DataLogicCustomers dlCustomers = null;
 
     private final DataLogicSales m_dlSales; 
     private TaxesLogic taxeslogic;
     private ListKeyed taxcollection;
-
-
-
     private final DeviceTicket m_TP;    
     private final TicketParser m_TTP;    
     private final TicketParser m_TTP2; 
-    
     private TicketInfo m_ticket;
     private TicketInfo m_ticketCopy;
-    
     private final JTicketsBagTicketBag m_TicketsBagTicketBag;
     
     private final JPanelTicketEdits m_panelticketedit;
 
-    /** Creates new form JTicketsBagTicket
-     * @param app
-     * @param panelticket */
     public JTicketsBagTicket(AppView app, JPanelTicketEdits panelticket) {
         
         super(app, panelticket);
@@ -86,8 +71,6 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
         dlCustomers = (DataLogicCustomers) m_App.getBean("uk.chromis.pos.customers.DataLogicCustomers");
         
-        // Inicializo la impresora...
-//JG July 2014 - Thank you Ron Isaacson        m_TP = new DeviceTicket();
         m_TP = new DeviceTicket(app.getProperties());        
 
         // Inicializo el parser de documentos de ticket
@@ -96,11 +79,8 @@ public class JTicketsBagTicket extends JTicketsBag {
         
         initComponents();
         
-        m_TicketsBagTicketBag = new JTicketsBagTicketBag(this);
-        
-        m_jTicketEditor.addEditorKeys(m_jKeys);
-        
-        // Este deviceticket solo tiene una impresora, la de pantalla
+        m_TicketsBagTicketBag = new JTicketsBagTicketBag(this);        
+        m_jTicketEditor.addEditorKeys(m_jKeys);                
         m_jPanelTicket.add(m_TP.getDevicePrinter("1").getPrinterComponent(), BorderLayout.CENTER);
         
         try {
@@ -109,13 +89,8 @@ public class JTicketsBagTicket extends JTicketsBag {
     }
     }
     
-    /**
-     *
-     */
     @Override
     public void activate() {
-        
-        // precondicion es que no tenemos ticket activado ni ticket en el panel
         
         m_ticket = null;
         m_ticketCopy = null;
@@ -127,8 +102,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         
         m_panelticketedit.setActiveTicket(null, null);
 
-        jrbSales.setSelected(true);
-        
+        jrbSales.setSelected(true);        
         m_jEdit.setVisible(false);
        // m_jEdit.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
         m_jRefund.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.RefundTicket"));
@@ -137,10 +111,6 @@ public class JTicketsBagTicket extends JTicketsBag {
         // postcondicion es que tenemos ticket activado aqui y ticket en el panel
     }
     
-    /**
-     *
-     * @return
-     */
     @Override
     public boolean deactivate() {
         
@@ -151,12 +121,8 @@ public class JTicketsBagTicket extends JTicketsBag {
         // postcondicion es que no tenemos ticket activado ni ticket en el panel
     }
     
-    /**
-     *
-     */
     @Override
-    public void deleteTicket() {
-        
+    public void deleteTicket() {        
         if (m_ticketCopy != null) {           
             // Para editar borramos el ticket anterior
             try {               
@@ -172,9 +138,6 @@ public class JTicketsBagTicket extends JTicketsBag {
         resetToTicket(); 
     }
 
-    /**
-     *
-     */
     public void canceleditionTicket() {
         
         m_ticketCopy = null;
@@ -188,19 +151,11 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_panelticketedit.setActiveTicket(null, null); 
     }
     
-    /**
-     *
-     * @return
-     */
     @Override
     protected JComponent getBagComponent() {
         return m_TicketsBagTicketBag;
     }
     
-    /**
-     *
-     * @return
-     */
     @Override
     protected JComponent getNullComponent() {
         return this;
@@ -247,9 +202,7 @@ public class JTicketsBagTicket extends JTicketsBag {
     }
     
     private void printTicket() {
-        
-        // imprimo m_ticket
-        
+
         try {
             m_jEdit.setEnabled(
                     m_ticket != null
@@ -273,7 +226,7 @@ public class JTicketsBagTicket extends JTicketsBag {
                 ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
                 script.put("ticket", m_ticket);
                 script.put("taxes", m_ticket.getTaxLines());                
-                m_TTP.printTicket(script.eval(m_dlSystem.getResourceAsXML("Printer.TicketPreview")).toString());
+                m_TTP.printTicket(script.eval(m_dlSystem.getResourceAsXML("Printer.TicketRefundPreview")).toString());
             } catch (    ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(this);
@@ -482,8 +435,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_panelticketedit.showCatalog();
 // Indicate that this a ticket in edit mode      
         m_ticketCopy.setOldTicket(true); 
-        m_panelticketedit.setActiveTicket(m_ticket.copyTicket(), null);  
-        
+        m_panelticketedit.setActiveTicket(m_ticket.copyTicket(), null);          
     }//GEN-LAST:event_m_jEditActionPerformed
 
     private void m_jPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jPrintActionPerformed
@@ -508,7 +460,10 @@ public class JTicketsBagTicket extends JTicketsBag {
         java.util.List aRefundLines = new ArrayList();
         
         for(int i = 0; i < m_ticket.getLinesCount(); i++) {
-            TicketLineInfo newline = new TicketLineInfo(m_ticket.getLine(i));
+            TicketLineInfo newline = new TicketLineInfo(m_ticket.getLine(i));   
+            newline.setRefundTicket(m_ticket.getLine(i).getTicket(), m_ticket.getLine(i).getTicketLine());
+            newline.setMultiply(newline.getMultiply()- newline.getRefundQty());
+            newline.setOrderQty(newline.getMultiply()+ newline.getRefundQty());
             aRefundLines.add(newline);
         } 
 

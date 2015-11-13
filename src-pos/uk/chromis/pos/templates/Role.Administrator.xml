@@ -118,4 +118,7 @@
 	<class name="uk.chromis.pos.sales.JPanelTicketEdits"/>
 	<class name="sales.Total"/>
 	<class name="/uk/chromis/reports/paymentreport.bs"/>
+      	<class name="uk.chromis.pos.imports.StockChangesPanel"/>
+	<class name="/uk/chromis/reports/stockchanges.bs"/>
+
  </permissions>

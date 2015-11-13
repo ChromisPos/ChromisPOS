@@ -37,7 +37,7 @@
         ($F{CODETYPE}.equals("UPC-A") ? uk.chromis.pos.util.BarcodeImage.getBarcodeUPCA($F{CODE}) :
             ($F{CODETYPE}.equals("UPC-E") ? uk.chromis.pos.util.BarcodeImage.getBarcodeUPCE($F{CODE}) :
                 ($F{CODETYPE}.equals("CODE128") ? uk.chromis.pos.util.BarcodeImage.getBarcode128($F{CODE}) :
-                    uk.chromis.pos.util.BarcodeImage.getBarcodeUPCE($F{CODE})
+                    uk.chromis.pos.util.BarcodeImage.badBarcode()
                 )
             )
         )

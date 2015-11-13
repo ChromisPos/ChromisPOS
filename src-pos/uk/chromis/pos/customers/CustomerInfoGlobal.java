@@ -24,10 +24,7 @@ package uk.chromis.pos.customers;
 
 import uk.chromis.data.user.BrowsableEditableData;
 
-/**
- *
- * @author HS uniCenta
- */
+
 public class CustomerInfoGlobal {
 
     private static CustomerInfoGlobal INSTANCE;

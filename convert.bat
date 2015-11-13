@@ -19,4 +19,4 @@ REM    You should have received a copy of the GNU General Public License
 REM    along with Chromis POS.  If not, see <http:REMwww.gnu.org/licenses/>
 REM
 
- java -jar jmc_werp.jar
+ javaw -jar obconvert.jar

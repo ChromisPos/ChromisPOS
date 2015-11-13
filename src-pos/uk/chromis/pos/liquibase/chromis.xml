@@ -9,7 +9,6 @@
 
        
     <include file="uk/chromis/pos/liquibase/createdb.xml"/>
-    <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>
     <include file="uk/chromis/pos/liquibase/updatechromis.xml"/>
     <include file="uk/chromis/pos/liquibase/updatechromisbeta.xml"/>
 

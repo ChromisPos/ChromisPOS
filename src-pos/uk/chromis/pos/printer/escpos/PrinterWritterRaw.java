@@ -126,7 +126,7 @@ public final class PrinterWritterRaw extends PrinterWritter {
                 docattributes.add(new DocumentName("Ticket", Locale.getDefault()));
                 PrintRequestAttributeSet jobattributes = new HashPrintRequestAttributeSet();
 
-                jobattributes.add(new JobName("Unicenta", Locale.getDefault()));
+                jobattributes.add(new JobName("chromis", Locale.getDefault()));
                 Doc doc = new SimpleDoc(m_printData, m_docFlavor, docattributes);
                 pj.print(doc, jobattributes);
             } catch (PrintException ex) {

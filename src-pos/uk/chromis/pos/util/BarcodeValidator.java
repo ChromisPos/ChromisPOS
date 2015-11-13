@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 uniCenta
+//    Copyright (c) 2015 
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -28,7 +28,7 @@ public class BarcodeValidator {
 
     }
 
-    public String BarcodeValidate(String barcode) {
+    public static String BarcodeValidate(String barcode) {
 
         if (barcode.matches("[0-9]+")) {
 
@@ -36,6 +36,7 @@ public class BarcodeValidator {
             int odd;
             int even;
             int checkDigit;
+            int checkDigit2;
 
             switch (bSize) {
                 case 7:
@@ -69,7 +70,7 @@ public class BarcodeValidator {
                     if (checkDigit == Character.getNumericValue(barcode.charAt(7))) {
                         return "EAN-8";
                     } else {
-                         return "null";
+                        return "null";
                     }
 
                 case 12:
@@ -109,11 +110,14 @@ public class BarcodeValidator {
                             + Character.getNumericValue(barcode.charAt(11));
 
                     checkDigit = 10 - ((odd + even) % 10);
+                    checkDigit2 = 10 - (((odd / 3) + (even * 3)) % 10);                   
 
                     if (checkDigit == Character.getNumericValue(barcode.charAt(12))) {
                         return "EAN-13";
+                    } else if (checkDigit2 == Character.getNumericValue(barcode.charAt(12))) {
+                        return "EAN-13";
                     } else {
-                         return "null";
+                        return "null";
                     }
                 case 14:
                     odd = (Character.getNumericValue(barcode.charAt(0))
