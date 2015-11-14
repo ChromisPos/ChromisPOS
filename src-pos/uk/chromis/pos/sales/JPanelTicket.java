@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import static java.lang.Integer.parseInt;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +96,7 @@ import uk.chromis.pos.util.ReportUtils;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
+import uk.chromis.pos.util.AutoLogoff;
 
 /**
  *
@@ -298,11 +300,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    
-    
-    
-    
-    
     private void saveCurrentTicket() {
         String currentTicket = (String) m_oTicketExt;
         if (currentTicket != null) {
@@ -319,6 +316,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 // added by JDL 26.04.13
 // lets look at adding a timer event fot auto logoff if required
         Action logout = new logout();
+
         String autoLogoff = (m_App.getProperties().getProperty("till.autoLogoff"));
         if (autoLogoff != null) {
             if (autoLogoff.equals("true")) {
@@ -332,8 +330,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 // if the delay period is not zero create a inactivitylistener instance        
         if (delay != 0) {
-            listener = new InactivityListener(logout, delay);
-            listener.start();
+            //listener = new InactivityListener(logout, delay);
+            //listener.start();
+
+            AutoLogoff.getInstance().setTimer(delay, logout);
+            AutoLogoff.getInstance().start();
         }
 
         paymentdialogreceipt = JPaymentSelectReceipt.getDialog(this);
@@ -410,8 +411,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         switch (m_App.getProperties().getProperty("machine.ticketsbag")) {
             case "restaurant":
                 if ("true".equals(m_App.getProperties().getProperty("till.autoLogoffrestaurant"))) {
-                    if (listener != null) {
-                        listener.restart();
+                    if (AutoLogoff.getInstance().timer) {
+                        AutoLogoff.getInstance().restart();
                     }
                 }
         }
@@ -812,13 +813,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 Toolkit.getDefaultToolkit().beep();
                 new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);
                 stateToZero();
+            } else if (m_jaddtax.isSelected()) {
+                TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
+                addTicketLine(oProduct, 1.0, dPriceSell / (1.0 + tax.getRate()));
             } else {
-                if (m_jaddtax.isSelected()) {
-                    TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
-                    addTicketLine(oProduct, 1.0, dPriceSell / (1.0 + tax.getRate()));
-                } else {
-                    addTicketLine(oProduct, 1.0, dPriceSell);
-                }
+                addTicketLine(oProduct, 1.0, dPriceSell);
             }
         } catch (BasicException eData) {
             stateToZero();
@@ -838,15 +837,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noweight"), e).show(this);
                 stateToZero();
             }
+        } else if (!prod.isVprice()) {
+            incProduct(1.0, prod);
         } else {
-
-            if (!prod.isVprice()) {
-                incProduct(1.0, prod);
-            } else {
-                Toolkit.getDefaultToolkit().beep();
-                JOptionPane.showMessageDialog(null,
-                        AppLocal.getIntString("message.novprice"));
-            }
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,
+                    AppLocal.getIntString("message.novprice"));
         }
     }
 
@@ -905,7 +901,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     stateToZero();
 // lets look at variable price barcodes thhat conform to GS1 standard
 // For more details see Chromis docs
-
                 } else if (((sCode.length() == 13) && (sCode.startsWith("2"))) || ((sCode.length() == 12) && (sCode.startsWith("02")))) {
 // we now have a variable barcode being passed   
 // get the variable type   
@@ -990,15 +985,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         dPriceSell = oProduct.getPriceSell();
                                         break;
                                 }
+                            } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
+                            if (oProduct.getPriceSell() != 0.0) {
+                                weight = Double.parseDouble(sVariableNum) / 100;
+                                oProduct.setProperty("product.weight", Double.toString(weight));
+                                dPriceSell = oProduct.getPriceSell();
                             } else {
-// Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                                if (oProduct.getPriceSell() != 0.0) {
-                                    weight = Double.parseDouble(sVariableNum) / 100;
-                                    oProduct.setProperty("product.weight", Double.toString(weight));
-                                    dPriceSell = oProduct.getPriceSell();
-                                } else {
-                                    dPriceSell = Double.parseDouble(sVariableNum) / 100;
-                                }
+                                dPriceSell = Double.parseDouble(sVariableNum) / 100;
                             }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
@@ -1222,11 +1215,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, 1.0, product.getPriceSell());
-               
+
                 if (!Boolean.parseBoolean(m_App.getProperties().getProperty("product.hidedefaultproductedit"))) {
                     m_jEditLine.doClick();
                 }
-                
+
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO
                     && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {

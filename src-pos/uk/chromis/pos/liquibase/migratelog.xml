@@ -214,7 +214,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="IMAGE" type="${blob.type}"/>
-            <column name="COLOUR" type="varchar(255)"/> 
+            <column name="COLOUR" type="varchar(50)"/> 
         </createTable>
 
         <createIndex tableName="CATEGORIES"
@@ -695,6 +695,9 @@
 
     <changeSet author="Chromis Pos" id="Create Lineremoved Table">
         <createTable tableName="LINEREMOVED">
+            <column name="REMOVEDDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP">
+                <constraints  nullable="false"/>
+            </column>
             <column name="NAME" type="varchar(255)"/>
             <column name="TICKETID" type="varchar(255)"/>
             <column name="PRODUCTID" type="varchar(255)"/>
@@ -1055,21 +1058,6 @@
         <sql>CREATE SEQUENCE PICKUP_NUMBER START WITH 1</sql>
     </changeSet>
 
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="derby">
-        <sql>CREATE TABLE TICKETSNUM (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
-            INSERT INTO TICKETSNUM VALUES (DEFAULT)</sql>
-    </changeSet>
-
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence REFUND" dbms="derby">
-        <sql>CREATE TABLE TICKETSNUM_REFUND (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
-            INSERT INTO TICKETSNUM_REFUND VALUES (DEFAULT)</sql>
-    </changeSet>
-
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM PAYMENT Sequence" dbms="derby">
-        <sql>CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
-            INSERT INTO TICKETSNUM_PAYMENT VALUES (DEFAULT)</sql>
-    </changeSet>
-
     <changeSet author="Chromis Pos" id="Create pickupnumber Sequence" dbms="derby">
         <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
             INSERT INTO PICKUP_NUMBER VALUES (DEFAULT)</sql>
@@ -1130,6 +1118,25 @@
             '3.5.0-Chromis Mod')                
         </sql>
     </changeSet>
+ 
     
+       
+          
+    <changeSet author="Chromis POS" id="Create Orders Table">
+        <createTable tableName="ORDERS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ORDERID" type="varchar(50)"/>                
+            <column name="QTY" type="int"/>           
+            <column name="DETAILS" type="varchar(255)"/>
+            <column name="ATTRIBUTES" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+            <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DISPLAYID" type="int"/>                                    
+        </createTable>                         
+    </changeSet>             
+                   
 </databaseChangeLog>
 

@@ -99,7 +99,89 @@
     </changeSet>                          
     
 
+    <changeSet author="Chromis POS" id="Add PrintkB if not found" dbms="postgresql, hypersql, hsqldb">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="PRINTKB" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>
 
+        <addColumn tableName="PRODUCTS">
+            <column name="PRINTKB" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>                                                   
+        </addColumn>                     
+    </changeSet> 
+
+    <changeSet author="Chromis POS" id="Add PrintkB if not found m" dbms="mysql, oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="PRINTKB" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="PRODUCTS">
+            <column name="PRINTKB" type="${boolean.type}" defaultValueNumeric="1" >
+                <constraints nullable="false"/>
+            </column>                                                   
+        </addColumn>                     
+    </changeSet> 
+
+    <changeSet author="Chromis POS" id="Add PrintkB if not found d" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="PRINTKB" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="PRODUCTS">
+            <column name="PRINTKB" type="SMALLINT" defaultValueNumeric="1" >
+                <constraints nullable="false"/>
+            </column>                                                   
+        </addColumn>                     
+    </changeSet> 
+
+    <changeSet author="Chromis POS" id="Add SENDSTATUS if not found" dbms="postgresql, hypersql, hsqldb">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="SENDSTATUS" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="PRODUCTS">
+            <column name="SENDSTATUS" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>                                                   
+        </addColumn>                     
+    </changeSet> 
+
+    <changeSet author="Chromis POS" id="Add SENDSTATUS if not found m" dbms="mysql, oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="SENDSTATUS" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="PRODUCTS">
+            <column name="SENDSTATUS" type="${boolean.type}" defaultValueNumeric="1" >
+                <constraints nullable="false"/>
+            </column>                                                   
+        </addColumn>                     
+    </changeSet> 
+
+    <changeSet author="Chromis POS" id="Add SENDSTATUS if not found d" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="SENDSTATUS" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="PRODUCTS">
+            <column name="SENDSTATUS" type="SMALLINT" defaultValueNumeric="1" >
+                <constraints nullable="false"/>
+            </column>                                                   
+        </addColumn>                     
+    </changeSet>
 
     <changeSet author="Chromis POS" id="Create Orders Table">
         <preConditions onFail="MARK_RAN">
@@ -637,13 +719,13 @@
         </insert>
     </changeSet>                    
   
-    <changeSet author="Chromis POS" id="Add Pack Products details p" dbms="derby, postgresql, hypersql, hsqldb">    
+    <changeSet author="Chromis POS" id="Add Pack Products details p" dbms="postgresql, hypersql, hsqldb">    
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="ISPACK" tableName="PRODUCTS"/>
             </not>
         </preConditions>   
-           
+
         <addColumn tableName="PRODUCTS">
             <column name="ISPACK" type="${boolean.type}" defaultValueBoolean="false" >
                 <constraints nullable="false"/>
@@ -651,7 +733,7 @@
             <column name="PACKQUANTITY" type="double precision"/>
             <column name="PACKPRODUCT" type="varchar(255)"/>
         </addColumn>
-        
+    
         <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
                                  constraintName ="PRODUCTS_PACKPRODUCT_FK"
                                  referencedColumnNames = "ID"
@@ -659,6 +741,22 @@
                                  referencedTableName="PRODUCTS"/>    
     </changeSet>
     
+    <changeSet author="Chromis POS" id="Add Pack Products details d" dbms="derby">    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ISPACK" tableName="PRODUCTS"/>
+            </not>
+        </preConditions> 
+    
+        <addColumn tableName="PRODUCTS">
+            <column name="ISPACK" type="${boolean.type}" defaultValueBoolean="false" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="PACKQUANTITY" type="double precision"/>
+            <column name="PACKPRODUCT" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>       
+  
     <changeSet author="Chromis POS" id="Add Pack Products details m" dbms="mysql, oracle">    
         <preConditions onFail="MARK_RAN">
             <not>
@@ -680,7 +778,7 @@
                                  baseTableName="PRODUCTS"
                                  referencedTableName="PRODUCTS"/>  
     </changeSet>                                                                       
-      
+          
     <changeSet author="Chromis POS" id="Add sql.ActionStockChanges to resources">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'sql.ActionStockChanges'</sqlCheck>
@@ -700,5 +798,10 @@
         </update>               
     </changeSet>               
  
+    <changeSet author="Chromis POS" id="update to v0.53.1">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="0.53.1"/>          
+        </update>               
+    </changeSet>
 </databaseChangeLog>
 

@@ -16,8 +16,9 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-package uk.chromis.pos.util;
+package uk.chromis.pos.forms;
 
+import uk.chromis.pos.util.*;
 import java.awt.AWTEvent;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
@@ -26,7 +27,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Action;
 import javax.swing.Timer;
 
-public class AutoLogoff implements ActionListener, AWTEventListener {
+public class qqqqqq implements ActionListener, AWTEventListener {
 
     private final static long KEY_EVENTS = AWTEvent.KEY_EVENT_MASK;
     private final static long MOUSE_EVENTS = AWTEvent.MOUSE_MOTION_EVENT_MASK
@@ -38,21 +39,21 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
     private Boolean running = false;
     private Timer LogoffTimer;
 
-    private static AutoLogoff INSTANCE = new AutoLogoff();
+    private static qqqqqq INSTANCE = new qqqqqq();
     public static Boolean timer = false;
 
     // create a basic timer instance
-    private AutoLogoff() {
+    private qqqqqq() {
         LogoffTimer = new Timer(100000, action);
         this.eventMask = USER_EVENTS;
         LogoffTimer.setInitialDelay(100);
     }
 
-    public static AutoLogoff getInstance() {
+    public static qqqqqq getInstance() {
         if (INSTANCE == null) {
-            synchronized (AutoLogoff.class) {
+            synchronized (qqqqqq.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new AutoLogoff();
+                    INSTANCE = new qqqqqq();
                 }
             }
         }

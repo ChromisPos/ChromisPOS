@@ -28,6 +28,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -616,10 +618,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             if (m_jRef == null) {
                 //m_jCode.setText("0123456789012");
                 m_jCode.setText(Long.toString(lDateTime));
-            } else {
-                if (m_jCode.getText() == null || "".equals(m_jCode.getText())) {
-                    m_jCode.setText(m_jRef.getText());
-                }
+            } else if (m_jCode.getText() == null || "".equals(m_jCode.getText())) {
+                m_jCode.setText(m_jRef.getText());
             }
             reportlock = false;
         }
@@ -638,10 +638,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             if (length == 0) {
 //                m_jDisplay.setText("<html>" + "Need Button Text");
                 m_jDisplay.setText(m_jName.getText());
-            } else {
-                if (m_jDisplay.getText() == null || "".equals(m_jDisplay.getText())) {
-                    m_jDisplay.setText("<html>" + m_jName.getText());
-                }
+            } else if (m_jDisplay.getText() == null || "".equals(m_jDisplay.getText())) {
+                m_jDisplay.setText("<html>" + m_jName.getText());
             }
             reportlock = false;
         }
@@ -969,7 +967,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel35 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         m_jDiscounted = new javax.swing.JCheckBox();
- 	   m_jIsPack = new javax.swing.JCheckBox();
+        m_jIsPack = new javax.swing.JCheckBox();
         m_jPackQuantity = new javax.swing.JTextField();
         m_jPackProduct = new javax.swing.JComboBox();
         jLabel37 = new javax.swing.JLabel();
@@ -1231,6 +1229,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel18.setText(AppLocal.getIntString("label.prodorder")); // NOI18N
+        jLabel18.setToolTipText("");
         jPanel2.add(jLabel18);
         jLabel18.setBounds(250, 140, 120, 25);
 
@@ -1322,7 +1321,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jPanel2.add(m_jDiscounted);
         m_jDiscounted.setBounds(160, 270, 20, 21);
 
- m_jIsPack.addActionListener(new java.awt.event.ActionListener() {
+        m_jIsPack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jIsPackActionPerformed(evt);
             }
@@ -1332,6 +1331,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jPackQuantity.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jPackQuantity.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        m_jPackQuantity.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                m_jPackQuantityFocusLost(evt);
+            }
+        });
         jPanel2.add(m_jPackQuantity);
         m_jPackQuantity.setBounds(350, 270, 80, 25);
 
@@ -1534,7 +1538,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     }//GEN-LAST:event_m_jRefFocusLost
 
     private void m_jNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_jNameFocusLost
-// ADDED JG 19 NOV 12 - AUTOFILL
         setDisplay();
     }//GEN-LAST:event_m_jNameFocusLost
 
@@ -1578,6 +1581,15 @@ private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GE
         jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
         jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
     }//GEN-LAST:event_m_jIsPackActionPerformed
+
+    private void m_jPackQuantityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_jPackQuantityFocusLost
+        try {
+            packproductmodel = new ComboBoxValModel(packproductsent.list());
+        } catch (BasicException ex) {
+            Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        m_jPackProduct.setModel(packproductmodel);
+    }//GEN-LAST:event_m_jPackQuantityFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonHTML;

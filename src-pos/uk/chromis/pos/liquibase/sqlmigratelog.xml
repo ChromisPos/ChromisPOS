@@ -185,7 +185,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="IMAGE" type="${blob.type}"/>
-            <column name="COLOUR" type="varchar(255)"/>
+            <column name="COLOUR" type="varchar(50)"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="PARENTID"
@@ -1226,6 +1226,9 @@
 
 <changeSet author="Chromis Pos" id="Create Lineremoved Table">
     <createTable tableName="LINEREMOVED">
+        <column name="REMOVEDDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP">
+            <constraints  nullable="false"/>
+        </column>
         <column name="NAME" type="varchar(255)"/>
         <column name="TICKETID" type="varchar(255)"/>
         <column name="PRODUCTID" type="varchar(255)"/>

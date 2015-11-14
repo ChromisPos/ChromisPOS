@@ -76,6 +76,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     private Statement stmt2;
     private String SQL;
     private PreparedStatement pstmt;
+    private PreparedStatement pstmt2;
     private String ticketsnum;
     private String ticketsnumRefund;
     private String ticketsnumPayment;
@@ -123,6 +124,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
         jNewdbType.addItem("MySQL");
         jNewdbType.addItem("PostgreSQL");
+        jNewdbType.addItem("Derby");
 
     }
 
@@ -133,7 +135,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     @SuppressWarnings("empty-statement")
     public Boolean createMigratedb() {
 
-        if ((!"MySQL".equals(sdbmanager2)) && (!"PostgreSQL".equals(sdbmanager2))) {
+        if ((!"MySQL".equals(sdbmanager2)) && (!"PostgreSQL".equals(sdbmanager2)) && (!"Apache Derby".equals(sdbmanager2))) {
             return (false);
         }
 
@@ -556,7 +558,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     while (rs.next()) {
                         SQL = "INSERT INTO ATTRIBUTESETINSTANCE (ID, ATTRIBUTESET_ID, DESCRIPTION) VALUES (?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
-                        //System.out.println(rs.getString("DESCRIPTION"));
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("ATTRIBUTESET_ID"));
                         pstmt.setString(3, rs.getString("DESCRIPTION"));
@@ -687,10 +688,12 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     }
 
 // copy DATABASECHANGELOG table
+                    pstmt2 = con.prepareStatement("DELETE FROM DATABASECHANGELOG");
+                    pstmt2.executeUpdate();
                     SQL = "SELECT * FROM DATABASECHANGELOG";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
-                        SQL = "INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, EXECTYPE, MD5SUM, DESCRIPTION, COMMENTS, TAG, LIQUIBASE, CONTEXTS, LABELS) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?)";
+                        SQL = "INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, EXECTYPE, MD5SUM, DESCRIPTION, COMMENTS, TAG, LIQUIBASE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
                         pstmt = con2.prepareStatement(SQL);
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("AUTHOR"));
@@ -703,8 +706,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setString(9, rs.getString("COMMENTS"));
                         pstmt.setString(10, rs.getString("TAG"));
                         pstmt.setString(11, rs.getString("LIQUIBASE"));
-                        pstmt.setString(12, rs.getString("CONTEXTS"));
-                        pstmt.setString(13, rs.getString("LABELS"));
                         pstmt.executeUpdate();
                     }
 
@@ -849,15 +850,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setString(5, rs.getString("ROLE"));
                         pstmt.setBoolean(6, rs.getBoolean("VISIBLE"));
                         pstmt.setBytes(7, rs.getBytes("IMAGE"));
-                        pstmt.executeUpdate();
-                    }
-
-                    SQL = "SELECT * FROM PICKUP_NUMBER";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO PICKUP_NUMBER (ID) VALUES (?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
                         pstmt.executeUpdate();
                     }
 
@@ -1012,7 +1004,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("NAME"));
                         pstmt.setBytes(3, rs.getBytes("PERMISSIONS"));
-                        System.out.println("Rights level :" + rs.getInt("RIGHTSLEVEL"));
                         pstmt.setInt(4, rs.getInt("RIGHTSLEVEL"));
                         pstmt.executeUpdate();
                     }
@@ -1266,12 +1257,19 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     }
 
 // WRITE SEQUENCE NUMBER
-                    if (("Apache Derby".equals(sdbmanager2)) || ("MySQL".equals(sdbmanager2))) {
+                    if (("MySQL".equals(sdbmanager2))) {
                         SQL = "UPDATE TICKETSNUM SET ID=" + ticketsnum;
                         stmt2.executeUpdate(SQL);
                         SQL = "UPDATE TICKETSNUM_PAYMENT SET ID=" + ticketsnumPayment;
                         stmt2.executeUpdate(SQL);
                         SQL = "UPDATE TICKETSNUM_REFUND SET ID=" + ticketsnumRefund;
+                        stmt2.executeUpdate(SQL);
+                    } else if (("Apache Derby".equals(sdbmanager))) {
+                        SQL = "CREATE TABLE TICKETSNUM (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH " + ticketsnum + "))";
+                        stmt2.executeUpdate(SQL);
+                        SQL = "CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH " + ticketsnumPayment + "))";
+                        stmt2.executeUpdate(SQL);
+                        SQL = "CREATE TABLE TICKETSNUM_REFUND (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH " + ticketsnumRefund + "))";
                         stmt2.executeUpdate(SQL);
                     } else {
                         SQL = "ALTER SEQUENCE TICKETSNUM RESTART WITH " + ticketsnum;
@@ -1344,12 +1342,16 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/mysql-connector-java-5.1.26-bin.jar");
             jtxtDbDriver.setText("com.mysql.jdbc.Driver");
             jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
-
         } else if ("PostgreSQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/postgresql-9.2-1003.jdbc4.jar");
             jtxtDbDriver.setText("org.postgresql.Driver");
             jtxtDbURL.setText("jdbc:postgresql://localhost:5432/chromispos");
-        } else {
+        } else if ("Derby".equals(jNewdbType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/derby-10.10.2.0.jar");
+            jtxtDbDriver.setText("org.apache.derby.jdbc.EmbeddedDriver");
+            jtxtDbURL.setText("jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
+            jtxtDbUser.setText("");
+            jtxtDbPassword.setText("");
         }
     }//GEN-LAST:event_jNewdbTypeActionPerformed
 
