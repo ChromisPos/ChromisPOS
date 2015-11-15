@@ -217,7 +217,6 @@ public class JTicketsBagShared extends JTicketsBag {
                 m_jListTickets.setText("");                
                  newTicket();
             } else {
-// JG Deliberate doClick for testing/reuse
                 m_jListTickets.doClick(); 
             }
         } catch (BasicException e) {

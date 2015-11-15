@@ -52,7 +52,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     private CustomerInfoExt customerext;
     private DataLogicSystem dlSystem;
 
-// JG 16 May 12 use diamond inference
     private final Map<String, JPaymentInterface> payments = new HashMap<>();
     private String m_sTransactionID;
 

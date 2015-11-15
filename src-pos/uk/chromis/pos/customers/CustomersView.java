@@ -298,7 +298,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCountry.setText(Formats.STRING.formatValue(customer[21]));      
         
         m_CategoryModel.setSelectedKey(customer[22]);
-// JG 3 Oct 2013 - Customer Image
         m_jImage.setImage((BufferedImage) customer[23]);
         
         m_jTaxID.setEnabled(false);
@@ -332,7 +331,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         jButton2.setEnabled(false);
         jButton3.setEnabled(false);
 
-// JG 3 Oct 2013 - for Transaction List table
         transactionModel = new TransactionTableModel(getTransactionOfName((String) customer[3]));
         jTable1.setModel(transactionModel);
         jTable1.setEnabled(false);
@@ -374,7 +372,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         
         m_CategoryModel.setSelectedKey(customer[22]);
 
-// JG 3 Oct 2013 - Customer image
         m_jImage.setImage((BufferedImage) customer[23]);
         
         m_jTaxID.setEnabled(true);
@@ -452,7 +449,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         customer[21] = Formats.STRING.parseValue(txtCountry.getText()); 
         
         customer[22] = m_CategoryModel.getSelectedKey();
-// JG 3 Oct 2013 - Customer image
         customer[23] = m_jImage.getImage();    
         
         return customer;
@@ -463,7 +459,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         return this;
     }
     
-// JG 3 Oct 2013 - Customer Transaction List
     private List<CustomerTransaction> getTransactionOfName(String name) {
 
         List<CustomerTransaction> customerList = new ArrayList<>();

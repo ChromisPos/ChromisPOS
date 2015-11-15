@@ -80,14 +80,11 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         m_App = app;
         m_restaurant = restaurant;
         initComponents();
-// Added by JDL for kitchen printer
         ticketExt = null;  
         
         restDB = new  RestaurantDBUtils(m_App); 
         
         m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
-//JG July 2014 - Thank you Ron Isaacson        m_TP = new DeviceTicket();
-
         m_TP = new DeviceTicket(app.getProperties());        
       
         m_TTP2 = new TicketParser(m_App.getDeviceTicket(), m_dlSystem);     
@@ -211,9 +208,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
 
     private void m_MoveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_MoveTableActionPerformed
 
-// JG 6 Nov 13 - clear Customer from orignal table - Thanks David Kurniawan
         restDB.clearCustomerNameInTableById(m_restaurant.getTable());
-// JG 6 Nov 13 - clear Waiter from orignal table - Thanks David Kurniawan
         restDB.clearWaiterNameInTableById(m_restaurant.getTable());
         restDB.setTableMovedFlag(m_restaurant.getTable());
         m_restaurant.moveTicket();                 

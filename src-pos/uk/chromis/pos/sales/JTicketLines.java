@@ -271,7 +271,7 @@ public class JTicketLines extends javax.swing.JPanel {
             aux.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             aux.setHorizontalAlignment(m_acolumns[column].align);
             Font fName =aux.getFont();
-            aux.setFont(new Font(fName.getName(),Font.PLAIN,14)); //JG 20 May 2013 increased from 12
+            aux.setFont(new Font(fName.getName(),Font.PLAIN,14)); 
  //           aux.setBackground(Color.yellow);
             return aux;
         }

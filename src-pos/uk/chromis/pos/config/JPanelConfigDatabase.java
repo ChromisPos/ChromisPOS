@@ -345,7 +345,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
     }//GEN-LAST:event_jtxtDbDriverActionPerformed
 
     private void jcboDBDriverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboDBDriverActionPerformed
-//  JG 31 Aug 13 - Added DB Defaults
+
         String dirname = System.getProperty("dirname.path");
         dirname = dirname == null ? "./" : dirname;
         
@@ -387,7 +387,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         }
     }//GEN-LAST:event_jcboDBDriverActionPerformed
 
-//  JG 3 Oct 13 - Test DB Connection
+
     private void jButtonTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTestActionPerformed
         try {
             String driverlib = jtxtDbDriverLib.getText();

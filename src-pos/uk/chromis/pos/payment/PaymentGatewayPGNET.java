@@ -84,7 +84,6 @@ public class PaymentGatewayPGNET implements PaymentGateway {
     @Override
     public void execute(PaymentInfoMagcard payinfo) {
 
-// JG 16 May 12 use StringBuilder in place of StringBuilder
         StringBuilder sb = new StringBuilder();
         try {
             
@@ -153,7 +152,6 @@ public class PaymentGatewayPGNET implements PaymentGateway {
             connection.setUseCaches(false);
 
             // not necessarily required but fixes a bug with some servers
-// JG 16 May 12 use try-with-resources
             connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
             try (DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
                 out.write(sb.toString().getBytes());
@@ -198,7 +196,6 @@ public class PaymentGatewayPGNET implements PaymentGateway {
                 payinfo.paymentError(AppLocal.getIntString("message.paymenterror"), sCode);
             }
             
-// JG 16 May 12 use multicatch
         } catch (UnsupportedEncodingException | MalformedURLException eUE) {
             payinfo.paymentError(AppLocal.getIntString("message.paymentexceptionservice"), eUE.getMessage());
         } catch(IOException e){

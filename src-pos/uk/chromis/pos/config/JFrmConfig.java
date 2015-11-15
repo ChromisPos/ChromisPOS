@@ -106,7 +106,6 @@ public class JFrmConfig extends javax.swing.JFrame {
                 config.load();    
                 
 // Set the look and feel.
-// JG 6 May 2013 to Multicatch                
                 try {                    
                     UIManager.setLookAndFeel(config.getProperty("swing.defaultlaf"));
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {

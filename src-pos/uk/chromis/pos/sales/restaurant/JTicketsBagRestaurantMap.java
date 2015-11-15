@@ -80,11 +80,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     private JTicketsBagRestaurantRes m_jreservations;
 
     private Place m_PlaceCurrent;
-
-// TODO - Add Server JG 03.07.2011
     private ServerCurrent m_ServerCurrent;
-
-    // State vars
     private Place m_PlaceClipboard;
     private CustomerInfo customer;
 
@@ -137,7 +133,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         try {
             SentenceList sent = new StaticSentence(
                     app.getSession(),
-                    // "SELECT ID, NAME, X, Y, FLOOR, CUSTOMER FROM PLACES ORDER BY FLOOR", 
                     "SELECT ID, NAME, X, Y, FLOOR, CUSTOMER, WAITER, TICKETID, TABLEMOVED FROM PLACES ORDER BY FLOOR",
                     null,
                     new SerializerReadClass(Place.class));
@@ -211,7 +206,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             currfloor.getContainer().add(pl.getButton());
             pl.setButtonBounds();
 
-// Added JDL 14/04/14 Transparent buttons on tables            
             if (transparentButtons) {
                 pl.getButton().setOpaque(false);
                 pl.getButton().setContentAreaFilled(false);
@@ -432,7 +426,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_panelticket.setActiveTicket(null, null);
     }
 
-// Added JG 03.07.2011 - TODO - Change Server Dialog here
     /**
      *
      */
@@ -518,7 +511,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     if ((Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue())
                             || (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")).booleanValue())) {
                         place.getButton().setText("<html><center>" + customerDetails + waiterDetails + tableName + "</html>");
-//  JG 29 Aug 13 Bug fix }else{;
                     } else {
                         if (m_App.getProperties().getProperty("table.tablecolour") == null) {
                             tableName = "<style=font-size:10px;font-weight:bold;><font color = black>" + place.getName() + "</font></style>";

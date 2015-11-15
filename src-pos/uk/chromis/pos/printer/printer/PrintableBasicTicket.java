@@ -66,11 +66,6 @@ public class PrintableBasicTicket implements Printable {
         int currentpagey = 0;
         boolean printed = false;
 
-//        System.out.println(pageFormat.getImageableX());
-//        System.out.println(pageFormat.getImageableY());
-//        System.out.println(pageFormat.getImageableWidth());
-//        System.out.println(pageFormat.getImageableHeight());
-
         g2d.translate(imageable_x, imageable_y);
 
         java.util.List<PrintItem> commands = ticket.getCommands();

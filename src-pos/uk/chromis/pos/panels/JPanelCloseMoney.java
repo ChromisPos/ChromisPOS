@@ -94,7 +94,6 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
     @Override
     public void init(AppView app) throws BeanFactoryException {
         
-//        m_User.getName();  //JG June 2014
         m_App = app;        
         m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
         m_TTP = new TicketParser(m_App.getDeviceTicket(), m_dlSystem);
@@ -284,7 +283,6 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
                 script.put("payments", m_PaymentsToClose);
                 script.put("nosales",result.toString());                
                 m_TTP.printTicket(script.eval(sresource).toString());
-// JG 16 May 2012 use multicatch
             } catch (ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(this);

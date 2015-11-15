@@ -37,8 +37,7 @@ public class TaxesLogicElement {
      * @param tax
      */
     public TaxesLogicElement(TaxInfo tax) {
-        this.tax = tax;
-        // JG June 2013 use diamond inference
+        this.tax = tax;       
         this.taxsons = new ArrayList<>();
     }
     

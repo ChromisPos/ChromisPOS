@@ -67,7 +67,6 @@ public class AppViewConnection {
             }   
              return new Session(props.getProperty("db.URL"), sDBUser,sDBPassword);     
 
-// JG 16 May use multicatch
         } catch (InstantiationException | IllegalAccessException | MalformedURLException | ClassNotFoundException e) {
             throw new BasicException(AppLocal.getIntString("message.databasedrivererror"), e);
         } catch (SQLException eSQL) {

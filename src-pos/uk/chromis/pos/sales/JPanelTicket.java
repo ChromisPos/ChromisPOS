@@ -330,11 +330,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 // if the delay period is not zero create a inactivitylistener instance        
         if (delay != 0) {
-            //listener = new InactivityListener(logout, delay);
-            //listener.start();
-
-            AutoLogoff.getInstance().setTimer(delay, logout);
-            AutoLogoff.getInstance().start();
+               listener = new InactivityListener(logout, delay);
+              listener.start();
+            // AutoLogoff.getInstance().setTimer(delay, logout);
+            // AutoLogoff.getInstance().start();
         }
 
         paymentdialogreceipt = JPaymentSelectReceipt.getDialog(this);
@@ -411,10 +410,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         switch (m_App.getProperties().getProperty("machine.ticketsbag")) {
             case "restaurant":
                 if ("true".equals(m_App.getProperties().getProperty("till.autoLogoffrestaurant"))) {
-                    if (AutoLogoff.getInstance().timer) {
-                        AutoLogoff.getInstance().restart();
-                    }
+            //               if (AutoLogoff.getInstance().timer) {
+             //                  AutoLogoff.getInstance().restart();
+            //    }
+                   }
+                if (listener != null) {
+                    listener.restart();
                 }
+
         }
 
         m_oTicket = oTicket;
@@ -986,12 +989,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                            if (oProduct.getPriceSell() != 0.0) {
-                                weight = Double.parseDouble(sVariableNum) / 100;
-                                oProduct.setProperty("product.weight", Double.toString(weight));
-                                dPriceSell = oProduct.getPriceSell();
-                            } else {
-                                dPriceSell = Double.parseDouble(sVariableNum) / 100;
+                            {
+                                if (oProduct.getPriceSell() != 0.0) {
+                                    weight = Double.parseDouble(sVariableNum) / 100;
+                                    oProduct.setProperty("product.weight", Double.toString(weight));
+                                    dPriceSell = oProduct.getPriceSell();
+                                } else {
+                                    dPriceSell = Double.parseDouble(sVariableNum) / 100;
+                                }
                             }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
@@ -1424,7 +1429,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
             try {
                 ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
-// JG 19 Feb 14 unnecessary boolean parse - if (Boolean.valueOf(m_App.getProperties().getProperty("receipt.newlayout")).booleanValue()){
                 if (Boolean.parseBoolean(m_App.getProperties().getProperty("receipt.newlayout"))) {
                     script.put("taxes", ticket.getTaxLines());
                 } else {
@@ -1436,12 +1440,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 script.put("warranty", warrantyPrint);
                 script.put("pickupid", getPickupString(ticket));
 
-// JG Aug 2014
                 refreshTicket();
 
                 m_TTP.printTicket(script.eval(sresource).toString(), ticket);
 
-// JG May 2013 replaced with Multicatch            
             } catch (ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(JPanelTicket.this);
@@ -1485,7 +1487,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             JRPrinterAWT300.printPages(jp, 0, jp.getPages().size() - 1, service);
 
-// JG May 2013 replaced with Multicatch
         } catch (JRException | IOException | ClassNotFoundException e) {
             // MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, resourcefile + ": " + AppLocal.getIntString("message.cannotloadreport"), e);
@@ -1501,7 +1502,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
                 script.put("ticketline", oLine);
                 m_TTP.printTicket(script.eval(dlSystem.getResourceAsXML("Printer.TicketLine")).toString());
-// JG May 2013 replaced with Multicatch
             } catch (ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintline"), e);
                 msg.show(JPanelTicket.this);
@@ -1719,7 +1719,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
 
-// Mod JG Sept 2011 - Used inside scripts i.e.: Stock Checking
             String sDBUser = m_App.getProperties().getProperty("db.user");
             String sDBPassword = m_App.getProperties().getProperty("db.password");
 
@@ -2398,8 +2397,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             } else {
                 m_oTicket.setCustomer(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()));
                 if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))) {
-// JG 30 Apr 14 Redundant String() to String() assignment
-//               restDB.setCustomerNameInTableByTicketId (dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId().toString());  
                     restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId());
                 }
             }

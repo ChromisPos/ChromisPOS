@@ -434,7 +434,6 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
      *
      */
     public final void resetResourcesCache() {
-// JG 16 May use multicatch
         resourcescache = new HashMap<>();      
     }
     

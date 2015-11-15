@@ -24,8 +24,6 @@ import uk.chromis.pos.util.StringUtils;
 
 /** @author adrianromero */
 
-// JG 20 Sep 12 Extended for Postal
-// JG 2 Sep 13 Extended for Phone + Email
 public class CustomerInfo implements Serializable {
     
     private static final long serialVersionUID = 9083257536541L;

@@ -91,8 +91,6 @@ public class JProductLineEdit extends javax.swing.JDialog {
         m_bunitsok = true;
         m_bpriceok = true;
 
-//  JG 7 May 14 Allow User edit of Product.Name if has EditLine permissions
-//        m_jName.setEnabled(m_oLine.getProductID() == null && app.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));
         m_jName.setEnabled(app.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));
         m_jPrice.setEnabled(app.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));
         m_jPriceTax.setEnabled(app.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));

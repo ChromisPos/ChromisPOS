@@ -82,7 +82,6 @@ public class DeviceTicket {
         m_deviceprinters = new HashMap<>();
         m_deviceprinterslist = new ArrayList<>();
 
-//JG July 2014 - Thank you Ron Isaacson        DevicePrinter p = new DevicePrinterPanel();
         DevicePrinter p = new DevicePrinterPanel(props);
         m_deviceprinters.put("1", p);
         m_deviceprinterslist.add(p);
@@ -179,7 +178,6 @@ public class DeviceTicket {
 
                 switch (sPrinterType) {
                     case "screen":
-//JG July 2014 - Thank you Ron Isaacson                        addPrinter(sPrinterIndex, new DevicePrinterPanel());
                         addPrinter(sPrinterIndex, new DevicePrinterPanel(props));
                         break;
                     case "printer":
@@ -404,7 +402,6 @@ public class DeviceTicket {
         return alignCenter(sLine, 42);
     }
 
-// JG 16 May 12     public static final byte[] transNumber(String sCad) {
     /**
      *
      * @param sCad

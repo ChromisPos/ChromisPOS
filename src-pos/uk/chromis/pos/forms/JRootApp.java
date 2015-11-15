@@ -301,9 +301,6 @@ public class JRootApp extends JPanel implements AppView {
         // Inicializamos la scanpal
         m_Scanner = DeviceScannerFactory.createInstance(m_props);
 
-        /**
-         * JG Added - Start timer for title bar clock
-         */
         new javax.swing.Timer(250, new PrintTimeAction()).start();
 
         String sWareHouse;
@@ -573,7 +570,6 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private static void initOldClasses() {
-// JG 16 May 2013 use diamond inference
         m_oldclasses = new HashMap<>();
 
         // update bean names from 2.00 to 2.20    

@@ -44,7 +44,6 @@ public abstract class BasicTicket implements PrintItem {
    
        /** Creates a new instance of AbstractTicket */
        public BasicTicket() {
-// JG 16 May 12 use diamond inference
            m_aCommands = new ArrayList<>();
            pil = null;
            m_iBodyHeight = 0;

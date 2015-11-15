@@ -51,7 +51,6 @@ public abstract class JEditorNumber extends JEditorAbstract {
     public JEditorNumber() {
         m_fmt = getFormat();
         
-// added JDL 11.05.13        
         AppConfig m_config =  new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));        
         m_config.load();        
         priceWith00 =("true".equals(m_config.getProperty("till.pricewith00")));
@@ -275,8 +274,7 @@ public abstract class JEditorNumber extends JEditorAbstract {
         firePropertyChange("Text", sOldText, getText());
     } 
  
-    
- /* Added JDL 13.04.13 routine
+/*    
  * routine to set the amount appearance to show '.'
  */ 
     private String setTempjPrice(String jPrice){

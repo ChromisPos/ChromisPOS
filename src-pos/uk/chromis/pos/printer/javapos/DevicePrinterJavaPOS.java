@@ -149,7 +149,6 @@ public class DevicePrinterJavaPOS  implements DevicePrinter {
                 
                 m_printer.printBitmap(POSPrinterConst.PTR_S_RECEIPT, f.getAbsolutePath(), POSPrinterConst.PTR_BM_ASIS, POSPrinterConst.PTR_BM_CENTER);
             }
-// JG 16 May 12 use multicatch
         } catch (IOException | JposException eIO) {
         }
     }

@@ -79,7 +79,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     private String loyaltyCardNumber;
     private Boolean oldTicket;
 
-    // JG July 2014 Ticket creator Host - for ticket print
     private static String Hostname;
 
     public static void setHostname(String name) {
@@ -159,9 +158,9 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
-        m_aLines = new ArrayList<>(); // JG June 2102 diamond inference
+        m_aLines = new ArrayList<>(); 
 
-        payments = new ArrayList<>(); // JG June 2102 diamond inference
+        payments = new ArrayList<>(); 
         taxes = null;
 
     }
@@ -181,13 +180,13 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         t.m_User = m_User;
         t.m_Customer = m_Customer;
 
-        t.m_aLines = new ArrayList<>(); // JG June 2102 diamond inference
+        t.m_aLines = new ArrayList<>(); 
         for (TicketLineInfo l : m_aLines) {
             t.m_aLines.add(l.copyTicketLine());
         }
         t.refreshLines();
 
-        t.payments = new LinkedList<>(); // JG June 2102 diamond inference
+        t.payments = new LinkedList<>(); 
         for (PaymentInfo p : payments) {
             t.payments.add(p.copyPayment());
         }
@@ -259,7 +258,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
      * @return
      */
     public String getName(Object info) {
-// JG Aug 2014 - Add User info
         StringBuilder name = new StringBuilder();
 
         if (m_User != null) {
@@ -504,7 +502,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public void resetPayments() {
-        payments = new ArrayList<>(); // JG June 2102 diamond inference
+        payments = new ArrayList<>(); 
     }
 
     public List<TicketTaxInfo> getTaxes() {
@@ -533,7 +531,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public TicketTaxInfo[] getTaxLines() {
-        Map<String, TicketTaxInfo> m = new HashMap<>(); // JG June 2102 diamond inference
+        Map<String, TicketTaxInfo> m = new HashMap<>(); 
 
         TicketLineInfo oLine;
         for (Iterator<TicketLineInfo> i = m_aLines.iterator(); i.hasNext();) {

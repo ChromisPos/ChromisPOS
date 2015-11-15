@@ -36,7 +36,6 @@ public class PaymentPanelFac {
      * @return
      */
     public static PaymentPanel getPaymentPanel(String sReader, JPaymentNotifier notifier) {
-// JG 16 May 12 use switch
         switch (sReader) {
             case "Intelligent":
                 return new PaymentPanelMagCard(new MagCardReaderIntelligent(), notifier);

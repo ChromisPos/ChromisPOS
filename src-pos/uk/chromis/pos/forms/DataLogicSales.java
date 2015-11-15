@@ -78,7 +78,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.DOUBLE,
             Datas.DOUBLE,
             Datas.STRING};
-//JG Added final Datas.STRING to paymenttabledatas/
         paymenttabledatas = new Datas[]{
             Datas.STRING,
             Datas.STRING,
@@ -177,14 +176,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return productsRow;
     }
 
-// Utilidades de productos
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 ISKITCHEN - DISPLAY for HTML text rendering***
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text 
-// ADDED JDL 25.05.13 Warranty flag
-// JG uniCenta June 2014 includes StockUnits     
     /**
      *
      * @param id
@@ -214,13 +205,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE ID = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
     }
 
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 ISKITCHEN - DISPLAY for HTML text rendering***    
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text 
-// ADDED JDL 25.05.13 Warranty flag
-// JG uniCenta June 2014 includes StockUnits     
     /**
      *
      * @param sCode
@@ -249,13 +233,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE CODE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
     }
 
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 ISKITCHEN - DISPLAY for HTML text rendering***    
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text 
-// ADDED JDL 25.05.13 Warranty flag
-// JG uniCenta June 2014 includes StockUnits     
     /**
      *
      * @param sReference
@@ -307,10 +284,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY ID, REFERENCE, NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
     }
 
-    // Catalogo de productos
-    // ADDED JDL 13.04.13 texttip to category
-    // added display name on icon option 14.04.13
-// JG 3 Oct 2013 - Add Catalgue Status (temp holder for eCommerce links)
     /**
      *
      * @return @throws BasicException
@@ -344,16 +317,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "COLOUR "
                 + "FROM CATEGORIES WHERE PARENTID = ? ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
     }
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 DISPLAY - Button display text for HTML rendering***
-// Performance issue with large dataset:
-// SAFE LIMIT = 3000 BEFORE RUNNING OUT OF STACK SPACE
-// Setting JVM -Xms & -Xmx only partial solution  
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text s
-// ADDED JDL 25.05.13 Warranty flag
-// JG uniCenta June 2014 includes StockUnits  
 
     /**
      *
@@ -394,12 +357,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE P.ID = O.PRODUCT AND P.CATEGORY = ? "
                 + "ORDER BY O.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
     }
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE 
-// ADDED JG 13 NOV 12 DISPLAY - Button display text for HTML rendering***
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text   
-// ADDED JDL 25.05.13 Warranty flag
 
     /**
      *
@@ -514,7 +471,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
 
-    // JG uniCenta June 2014 includes StockUnits  
     /**
      *
      * @param category
@@ -637,7 +593,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "AND P.ISCOM = " + s.DB.TRUE() + " "
                 + "ORDER BY O.CATORDER, P.NAME", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(id);
     }
-// ADDED JG 10 Nov. 12 Promo ***
 
     /**
      *
@@ -721,14 +676,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).find(id);
     }
 
-// Products list
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 DISPLAY - Button display text for HTML rendering***
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text
-// ADDED JDL 25.05.13 Warranty flag
-// JG uniCenta June 2014 includes StockUnits 
     public final SentenceList getProductList() {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
@@ -759,15 +706,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     Datas.OBJECT, Datas.DOUBLE,}), ProductInfoExt.getSerializerRead());
     }
 
-    // Products list
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 DISPLAY - Button display text for HTML rendering***
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text 
-// ADDED JDL 25.05.13 Warranty flag
-// JG July 2014 StockUnits
-    // JG uniCenta June 2014 includes StockUnits 
     public SentenceList getProductListNormal() {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
@@ -799,14 +737,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 }), ProductInfoExt.getSerializerRead());
     }
 
-//Auxiliar list for a filter
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 DISPLAY - Button display text for HTML rendering***
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text 
-// ADDED JDL 25.05.13 Warranty flag    
-// JG uniCenta June 2014 includes StockUnits 
     public SentenceList getProductListAuxiliar() {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
@@ -924,7 +854,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 });
     }
 
-// JG 3 Oct 2013 - Add Catalogue Status (temp holder for eCommerce links)
     /**
      *
      * @return
@@ -958,7 +887,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 });
     }
 
-// JG Oct 2013 - add for CustomerView>Tranx table
+
     /**
      *
      * @return @throws BasicException
@@ -1161,7 +1090,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
             ticket.setLines(new PreparedSentence(s, "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES, L.REFUNDQTY  "
                     + "FROM TICKETLINES L, TAXES T WHERE L.TAXID = T.ID AND L.TICKET = ? ORDER BY L.LINE", SerializerWriteString.INSTANCE, new SerializerReadClass(TicketLineInfo.class)).list(ticket.getId()));
-            ticket.setPayments(new PreparedSentence(s // JG 10 Oct 13 Bug Fix + Add Cardname 20 Oct  
+            ticket.setPayments(new PreparedSentence(s 
                     //                    , "SELECT PAYMENT, TOTAL, TRANSID TENDERED FROM PAYMENTS WHERE RECEIPT = ?" 
                     , "SELECT PAYMENT, TOTAL, TRANSID, TENDERED, CARDNAME FROM PAYMENTS WHERE RECEIPT = ?", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentInfoTicket.class)).list(ticket.getId()));
         }
@@ -1201,8 +1130,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     }
                 }
 
-                // new receipt
-                // Modified JG Aug 2011 - person
+                
                 new PreparedSentence(s, "INSERT INTO RECEIPTS (ID, MONEY, DATENEW, ATTRIBUTES, PERSON) VALUES (?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE
                 ).exec(new DataParams() {
                     @Override
@@ -1259,7 +1187,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                 }
                 final Payments payments = new Payments();
-                SentenceExec paymentinsert = new PreparedSentence(s //JG 22 Oct CCardName
+                SentenceExec paymentinsert = new PreparedSentence(s 
                         //            , "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED) VALUES (?, ?, ?, ?, ?, ?, ?)"
                         , "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE);
 
@@ -1285,7 +1213,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             setString(5, ticket.getTransactionID());
                             setBytes(6, (byte[]) Formats.BYTEA.parseValue(getRetMsg));
                             setDouble(7, getTendered);
-// JG 22 Oct 13 - CCard Name
                             setString(8, getCardName);
                             payments.removeFirst(pName);
                         }
@@ -1422,12 +1349,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return (Integer) s.DB.getSequenceSentence(s, "TICKETSNUM_PAYMENT").find();
     }
 
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 DISPLAY - Button display text for HTML rendering***
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text 
-// ADDED JDL 25.05.13 Warranty flag
     /**
      *
      * @return
@@ -1461,12 +1382,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     Datas.OBJECT, Datas.STRING}), productsRow.getSerializerRead());
     }
 
-// ADDED JG 20.12.10 ISKITCHEN - Kitchen Print + 25.06.2011 ISSERVICE - ISSERVICE
-// ADDED JG 13 NOV 12 DISPLAY - Button display text for HTML rendering***
-// ADDED JDL 19.12.12 - Varible Price Product
-// ADDED JDL 09.02.13 Mandatory attribute flag
-// ADDED JDL 10.04.2013 TEXTTIP text 
-// ADDED JDL 25.05.13 Warranty flag
     /**
      *
      * @return
@@ -1490,7 +1405,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                     10, 11, 12, 13, 14,
                                     17, 18, 19, 20,
                                     21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32})).exec(params);
-//JG Aug 2014 - see ProductsEditor setCurrentStock explain				
+
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
 
                 if (i > 0 && ((Boolean) values[15])) {
@@ -1626,11 +1541,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final SentenceExec getPaymentMovementInsert() {
         return new SentenceExecTransaction(s) {
-// ADDED JG 03.07.11 Payment Notes
             @Override
             public int execInTransaction(Object params) throws BasicException {
                 new PreparedSentence(s, "INSERT INTO RECEIPTS (ID, MONEY, DATENEW) VALUES (?, ?, ?)", new SerializerWriteBasicExt(paymenttabledatas, new int[]{0, 1, 2})).exec(params);
-                return new PreparedSentence(s // JG Modified: ? to Array
+                return new PreparedSentence(s 
                         , "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, NOTES) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(paymenttabledatas, new int[]{3, 0, 4, 5, 6})).exec(params);
             }
         };
@@ -1684,7 +1598,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new StaticSentence(s, "DELETE FROM PRODUCTS_CAT WHERE PRODUCT = ANY (SELECT ID FROM PRODUCTS WHERE CATEGORY = ?)", SerializerWriteString.INSTANCE);
     }
 
-// JG 3 Oct 2013 - Add Catalgue Status (temp holder for eCommerce links)
     /**
      *
      * @return

@@ -1284,7 +1284,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     addFKeys();
 
 // Write new database settings to properties file
-//JG Aug 2014 - added to .properties
                     if ("MySQL".equals(sdbmanager2)) {
                         config.setProperty("db.engine", "MySQL");
                     } else {

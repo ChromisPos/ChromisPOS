@@ -42,7 +42,6 @@ public class DevicePrinterPanel extends javax.swing.JPanel implements DevicePrin
     
     /** Creates new form JPrinterScreen2
      * @param props */
-//JG July 2014 - Thank you Ron Isaacson    public DevicePrinterPanel() {
     public DevicePrinterPanel(AppProperties props) {    
         initComponents();
         
@@ -107,7 +106,6 @@ public class DevicePrinterPanel extends javax.swing.JPanel implements DevicePrin
      */
         @Override
     public void beginReceipt() {
-//JG July 2014 - Thank you Ron Isaacson        m_ticketcurrent = new BasicTicket();
         m_ticketcurrent = new BasicTicketForScreen();
 
     }
@@ -164,7 +162,6 @@ public class DevicePrinterPanel extends javax.swing.JPanel implements DevicePrin
      */
     @Override
     public void endReceipt() {
-//JG July 2014 - Thank you Ron Isaacson        m_jTicketContainer.addTicket(new JTicket(m_ticketcurrent));
         m_jTicketContainer.addTicket(new JTicket(m_ticketcurrent, Integer.parseInt(m_props.getProperty("screen.receipt.columns"))));        
         m_ticketcurrent = null;
     }

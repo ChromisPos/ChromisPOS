@@ -192,10 +192,8 @@ public class AppConfig2 {
         m_propsconfig.setProperty("machine.printername", "(Default)");
 
         // Receipt printer paper set to 72mmx200mm
-// JG 7 May 14 Epson ESC/POS settings
         m_propsconfig.setProperty("paper.receipt.x", "10");
         m_propsconfig.setProperty("paper.receipt.y", "10");
-// JG 7 May 14 Star Micronics settings
 //        m_propsconfig.setProperty("paper.receipt.x", "10");
 //        m_propsconfig.setProperty("paper.receipt.y", "287");
         m_propsconfig.setProperty("paper.receipt.width", "190");

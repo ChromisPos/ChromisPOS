@@ -270,7 +270,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialDisplay.addItem("/dev/ttyS5");
 
         // Scale
-// JG 20 Aug 13 Add Casio PD1 Scale        
         jcboMachineScale.addItem("Not defined");
         jcboMachineScale.addItem("screen");
         jcboMachineScale.addItem("casiopd1");
@@ -354,7 +353,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     @Override
     public void loadProperties(AppConfig config) {
 
-// JG 6 May 2013 to switch
+
         StringParser p = new StringParser(config.getProperty("machine.printer"));
         String sparam = unifySerialInterface(p.nextToken(':'));
 
@@ -381,7 +380,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch
         p = new StringParser(config.getProperty("machine.printer.2"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
@@ -407,7 +405,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch
         p = new StringParser(config.getProperty("machine.printer.3"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
@@ -509,7 +506,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch        
         p = new StringParser(config.getProperty("machine.display"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
@@ -530,7 +526,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 20 Aug 13 Add Casio PD1 Scale
         p = new StringParser(config.getProperty("machine.scale"));
         sparam = p.nextToken(':');
         jcboMachineScale.setSelectedItem(sparam);
@@ -557,7 +552,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     @Override
     public void saveProperties(AppConfig config) {
 
-// JG 6 May 2013 to switch
         String sMachinePrinter = comboValue(jcboMachinePrinter1.getSelectedItem());
         switch (sMachinePrinter) {
             case "epson":
@@ -578,7 +572,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 config.setProperty("machine.printer", sMachinePrinter);
                 break;
         }
-// JG 6 May 2013 to switch
+
         String sMachinePrinter2 = comboValue(jcboMachinePrinter2.getSelectedItem());
         switch (sMachinePrinter2) {
             case "epson":
@@ -600,7 +594,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch
         String sMachinePrinter3 = comboValue(jcboMachinePrinter3.getSelectedItem());
         switch (sMachinePrinter3) {
             case "epson":
@@ -685,7 +678,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
         switch (sMachineDisplay) {
             case "epson":
@@ -701,7 +693,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-//JG 20 Aug 2013 Add Casio PD1 Scale
         String sMachineScale = comboValue(jcboMachineScale.getSelectedItem());
         if ("casiopd1".equals(sMachineScale) || "Adam Equipment".equals(sMachineScale)
                 || "dialog1".equals(sMachineScale)
@@ -1984,8 +1975,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboMachineScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineScaleActionPerformed
         CardLayout cl = (CardLayout) (m_jScaleParams.getLayout());
 
-        // JG 29 Aug 13 - Add Casio PD1 Scale
-        if ("casiopd1".equals(jcboMachineScale.getSelectedItem())
+               if ("casiopd1".equals(jcboMachineScale.getSelectedItem())
                 || "dialog1".equals(jcboMachineScale.getSelectedItem())
                 || "Adam Equipment".equals(jcboMachineScale.getSelectedItem())
                 || "samsungesp".equals(jcboMachineScale.getSelectedItem())) {

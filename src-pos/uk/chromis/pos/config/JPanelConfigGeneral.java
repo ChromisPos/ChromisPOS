@@ -184,7 +184,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                         }
 
                         SwingUtilities.updateComponentTreeUI(JPanelConfigGeneral.this.getTopLevelAncestor());
-// JG 6 May 2013 to Multicatch
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                     }
                 }
@@ -450,8 +449,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     }//GEN-LAST:event_jtxtStartupTextActionPerformed
 
     private void jtxtStartupTextjTetxtStartupTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtStartupTextjTetxtStartupTextFocusGained
-        // JG 31 August 2103 GNU GPL License Warning
-
+       
         transferFocus();
 
         JOptionPane.showMessageDialog(jPanel1,"<html>Changing default Startup Text content may violate the <br>"

@@ -178,7 +178,6 @@ public class PaymentGatewayLinkPoint implements PaymentGateway {
             
         if (payinfo.getTrack1(true) == null){
             moreInfo.append("<creditcard>");
-// JG 16 May 12 use chain of .append
             moreInfo.append("<cardnumber>").append(payinfo.getCardNumber()).append("</cardnumber> ");
                 moreInfo.append("<cardexpmonth>").append(tmp.charAt(0)).append("").append(tmp.charAt(1)).append("</cardexpmonth>");
                 StringBuilder append = moreInfo.append("<cardexpyear>").append(tmp.charAt(2)).append("").append(tmp.charAt(3)).append("</cardexpyear>");
@@ -196,7 +195,6 @@ public class PaymentGatewayLinkPoint implements PaymentGateway {
         
         //Construct the order
         xml.append("<order>");
-// JG 16 May 12 use chain of .append
             xml.append("<merchantinfo><configfile>").append(sConfigfile).append("</configfile></merchantinfo>");
             xml.append("<orderoptions><ordertype>").append(sTransactionType).append("</ordertype><result>TEST</result></orderoptions>");
             xml.append("<payment><chargetotal>").append(URLEncoder.encode(amount.replace(',', '.'), "UTF-8")).append("</chargetotal></payment>");
@@ -248,7 +246,6 @@ public class PaymentGatewayLinkPoint implements PaymentGateway {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         try {
-// JG 16 May 12 use switch
             switch (qName) {
                     case "r_csp":
                         props.put("r_csp", URLDecoder.decode(text, "UTF-8"));

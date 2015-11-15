@@ -389,7 +389,6 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
 
         try {
             m_sentdel.exec(m_id);
-// JG 3 Oct 2013 - simple toggle Category state         
 // TODO replace with ToggleButton
             m_jCatalogDelete.setEnabled(false);
             m_jCatalogAdd.setEnabled(true);
@@ -406,7 +405,6 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
             Object param = m_id;
             m_sentdel.exec(param); // primero borramos
             m_sentadd.exec(param); // y luego insertamos lo que queda
-// JG 3 Oct 2013 - simple toggle Category state
 // TODO replace with ToggleButton            
             m_jCatalogAdd.setEnabled(false);
             m_jCatalogDelete.setEnabled(true);

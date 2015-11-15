@@ -39,7 +39,6 @@ public class PaymentGatewayFac {
     public static PaymentGateway getPaymentGateway(AppProperties props) {
         
         String sReader = props.getProperty("payment.gateway");
-// JG 16 May 12 use switch
         switch (sReader) {
             case "external":
                 return new PaymentGatewayExt();

@@ -59,8 +59,8 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         initPayments("external", new ConfigPaymentPanelEmpty());
         initPayments("PayPoint / SecPay", new ConfigPaymentPanelGeneric());
         initPayments("AuthorizeNet", new ConfigPaymentPanelGeneric());
-        initPayments("BluePay AUTH.NET EMU", new ConfigPaymentPanelBluePay20POST()); // JG Added BluePay re: Walter Wojick
-        initPayments("BluePay 2.0 POST", new ConfigPaymentPanelBluePay20POST()); // JG Added BluePay re: Walter Wojick
+        initPayments("BluePay AUTH.NET EMU", new ConfigPaymentPanelBluePay20POST()); 
+        initPayments("BluePay 2.0 POST", new ConfigPaymentPanelBluePay20POST()); 
         initPayments("Planetauthorize", new ConfigPaymentPanelGeneric());
         initPayments("First Data / LinkPoint / YourPay", new ConfigPaymentPanelLinkPoint());
         initPayments("PaymentsGateway.net", new ConfigPaymentPanelGeneric());

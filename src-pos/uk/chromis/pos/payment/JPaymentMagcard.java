@@ -83,7 +83,6 @@ public class JPaymentMagcard extends javax.swing.JPanel implements JPaymentInter
      *
      * @return
      */
-// JG July 2014
     @Override
     public PaymentInfo executePayment() {
         

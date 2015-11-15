@@ -579,7 +579,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     }
 
     /**
-     * JG Aug 2014 - temporary only! ADD Product now requires a CurrentStock
+     * Aug 2014 - temporary only! ADD Product now requires a CurrentStock
      * entry record This is experimental whilst developing connex to external
      * hosted DB as need to get online product from its DB. So for now just
      * consume a new DB session. Expensive... (I know!)
@@ -606,8 +606,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         }
     }
 
-// ADDED JG 19 NOV 12 - AUTOFILL CODE FIELD AS CANNOT BE NOT NULL
-// AMENDED JDL 11 MAY 12 - STOP AUTOFILL IF FIELD ALREADY EXSISTS, AND GENERATE A RANDOM CODE NUMBER
     private void setCode() {
 
         Long lDateTime = new Date().getTime(); // USED FOR RANDOM CODE DETAILS
@@ -625,8 +623,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         }
     }
 
-// ADDED JG 19 NOV 12 - AUTOFILL BUTTON 
-// AMENDED JDL 11 MAY 12 - STOP AUTOFILL IF FIELD ALREADY EXSISTS   
     private void setDisplay() {
 
         String str = (m_jName.getText());
@@ -644,7 +640,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             reportlock = false;
         }
     }
-// ADDED JG 20 Jul 13 - AUTOFILL HTML BUTTON 
 
     private void setButtonHTML() {
 
@@ -1533,7 +1528,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     }//GEN-LAST:event_m_jPriceSellTaxActionPerformed
 
     private void m_jRefFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_jRefFocusLost
-// ADDED JG 19 NOV 12 - AUTOFILL CODE FIELD AS CANNOT BE NOT NULL
+
         setCode();
     }//GEN-LAST:event_m_jRefFocusLost
 

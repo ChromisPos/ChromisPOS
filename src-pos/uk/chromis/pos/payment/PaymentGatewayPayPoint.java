@@ -135,7 +135,6 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
                 payinfo.paymentOK((String) props.get("auth_code"), (String) props.get("trans_id"), returned);
             } else {
                 String sCode = (String) props.get("code");
-// JG 16 May 12 use switch
                 switch (sCode) {
                         case "N":
                             // N Transaction not authorised. Failure message text available to merchant
@@ -211,7 +210,6 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
                     }
             }
         }
-// JG 16 May 12 use multictach
         } catch (UnknownHostException | UnsupportedEncodingException | ServiceException eUH) {
             payinfo.paymentError(AppLocal.getIntString("message.paymentexceptionservice"), eUH.getMessage());
         } catch (RemoteException remoteException) {

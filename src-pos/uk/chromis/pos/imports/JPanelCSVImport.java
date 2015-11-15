@@ -18,7 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //    CSV Import Panel added by JDL - February 2013
 //    Additonal library required - javacsv
-
 package uk.chromis.pos.imports;
 
 import com.csvreader.CsvReader;
@@ -744,8 +743,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         } else {
             jImport.setEnabled(false);
         }
-        System.out.println("here = " + bStockOK );
     }
+
     /**
      * Deactivates and resets all form fields.
      *
@@ -871,9 +870,9 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[27] = false;                                                     // AlwaysAvailable flag
         myprod[28] = "no";
         myprod[29] = false;
-        myprod[30] = ((isPack != null) && !isPack.isEmpty() && (isPack.equals("1") || isPack.equalsIgnoreCase("yes"))); // Is a pack
+        myprod[30] = ((isPack != null) && !isPack.isEmpty() && (isPack.equals("1") || isPack.equalsIgnoreCase("yes"))); // Is a pack        
         myprod[31] = packSize;                                                 // PackQuantity
-        myprod[32] = packOf;                                                     // Pack Product
+        myprod[32] = (("".equals(packOf)) ? null : packOf);                                                         // Pack Product
 
         try {
             if ("new".equals(pType)) {
@@ -910,7 +909,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[2] = csvError;                                                   // Error description
         myprod[3] = productReference;                                           // Reference string
         myprod[4] = productBarcode;                                             // Barcode String        
-        myprod[5] = productName;                                                // Name string        
+        myprod[5] = productName.replaceAll("\'","");                                                // Name string        
         myprod[6] = productBuyPrice;                                            // Buy price
         myprod[7] = productSellPrice;                                           // Sell price
         myprod[8] = PreviousBuy;                                                // Previous Buy price double
@@ -2055,6 +2054,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             }
             ++i;
         }
+        jComboCategory.addItem(category_disable_text);
     }//GEN-LAST:event_jComboBoxFocusGained
 
     private void jComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboItemStateChanged

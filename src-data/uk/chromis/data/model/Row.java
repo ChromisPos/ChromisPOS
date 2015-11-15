@@ -264,7 +264,6 @@ public class Row {
     private class RowVectorer implements Vectorer {
         @Override
         public String[] getHeaders() throws BasicException {
-// JG Aug 2013 use Diamon Inference
             List<String> l = new ArrayList<>();
             for (Field f : fields) {
                 if (f.isSearchable()) {
@@ -276,7 +275,6 @@ public class Row {
         @Override
         public String[] getValues(Object obj) throws BasicException {   
             Object[] values = (Object[]) obj;            
-// JG Aug 2013 use Diamon Inference
             List<String> l = new ArrayList<>();
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i].isSearchable()) {
@@ -306,7 +304,6 @@ public class Row {
     
     private class RowComparatorCreator implements ComparatorCreator {
         
-// JG Aug 2013 use Diamon Inference
         private List<Integer> comparablefields = new ArrayList<>();
         
         public RowComparatorCreator() {

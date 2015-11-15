@@ -57,12 +57,10 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private boolean pricevisible;
     private boolean taxesincluded;
 
-    // Set of Products panels
-    // JG Aug 2013 switched to diamond inference
+    // Set of Products panels    
     private final Map<String, ProductInfoExt> m_productsset = new HashMap<>();
 
     // Set of Categoriespanels
-    // JG Aug 2013 switched to diamond inference    
     private final Set<String> m_categoriesset = new HashSet<>();
 
     private ThumbNailBuilder tnbbutton;
@@ -264,7 +262,6 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                     }
                 }
 
-// Added JDL to allow any product that is set to always display, to be added.                
                 java.util.List<ProductInfoExt> prods = m_dlSales.getProductCatalogAlways();
                 for (ProductInfoExt prod : prods) {
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
@@ -354,7 +351,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                     // Create  products panel
                     java.util.List<ProductInfoExt> products = m_dlSales.getProductComments(id);
 
-// JG Aug 2013 switched to isEmpty()
+
 //                    if (products.size() == 0) {
                     if (products.isEmpty()) {
                         // no hay productos por tanto lo anado a la de vacios y muestro el panel principal.

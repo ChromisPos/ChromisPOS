@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.ticket;
 
 import java.io.ByteArrayInputStream;
@@ -49,12 +48,15 @@ public class TicketLineInfo1 implements SerializableWrite, SerializableRead, Ser
     private String productid;
     private String attsetinstid;
 
-    /** Creates new TicketLineInfo
+    /**
+     * Creates new TicketLineInfo
+     *
      * @param productid
      * @param dMultiply
      * @param dPrice
      * @param tax
-     * @param props */
+     * @param props
+     */
     public TicketLineInfo1(String productid, double dMultiply, double dPrice, TaxInfo tax, Properties props) {
         init(productid, null, dMultiply, dPrice, tax, props);
     }
@@ -125,33 +127,17 @@ public class TicketLineInfo1 implements SerializableWrite, SerializableRead, Ser
             pid = null;
         } else {
             pid = product.getID();
-// JDL 20.12.20 set product name to a default rather than blank    TO DO        
             attributes.setProperty("product.name", product.getName());
-               attributes.setProperty("product.com", product.isCom() ? "true" : "false");
-// ADDED JG 20.12.10 - Kitchen Print
-	attributes.setProperty("product.kitchen", product.isKitchen() ? "true" : "false");
-// ***
-// ADDED JG 25.06.11 - IsService
-	attributes.setProperty("product.service", product.isService() ? "true" : "false");
-// ***      
-// Added JDL 19.12.12 Variable Price Product
-        attributes.setProperty("product.vprice", product.isVprice() ? "true" : "false");
-//     
- 
-// Added JDL 09.02.132 
-        attributes.setProperty("product.verpatrib", product.isVerpatrib() ? "true" : "false");
-//
+            attributes.setProperty("product.com", product.isCom() ? "true" : "false");
+            attributes.setProperty("product.kitchen", product.isKitchen() ? "true" : "false");
+            attributes.setProperty("product.service", product.isService() ? "true" : "false");
+            attributes.setProperty("product.vprice", product.isVprice() ? "true" : "false");
+            attributes.setProperty("product.verpatrib", product.isVerpatrib() ? "true" : "false");
+            if (product.getTextTip() != null) {
+                attributes.setProperty("product.texttip", product.getTextTip());
+            }
 
-// Added JDL 09.04.13 - Amend JG 10 Oct 13
-        if (product.getTextTip() != null) {
-            attributes.setProperty("product.texttip", product.getTextTip());
-        }
- 
-//
-// Added JDL 25.05.13
-        attributes.setProperty("product.warranty", product.getWarranty()? "true" : "false");        
-//        
-        
+            attributes.setProperty("product.warranty", product.getWarranty() ? "true" : "false");
             if (product.getAttributeSetID() != null) {
                 attributes.setProperty("product.attsetid", product.getAttributeSetID());
             }
@@ -239,13 +225,13 @@ public class TicketLineInfo1 implements SerializableWrite, SerializableRead, Ser
         multiply = dr.getDouble(5);
         price = dr.getDouble(6);
         tax = new TaxInfo(
-                dr.getString(7), 
-                dr.getString(8), 
-                dr.getString(9), 
-                dr.getString(10), 
-                dr.getString(11), 
-                dr.getDouble(12), 
-                dr.getBoolean(13), 
+                dr.getString(7),
+                dr.getString(8),
+                dr.getString(9),
+                dr.getString(10),
+                dr.getString(11),
+                dr.getDouble(12),
+                dr.getBoolean(13),
                 dr.getInt(14));
         attributes = new Properties();
         try {
@@ -362,10 +348,10 @@ public class TicketLineInfo1 implements SerializableWrite, SerializableRead, Ser
      *
      * @param taxID
      */
-    public void setProductTaxCategoryID(String taxID){
-        attributes.setProperty("product.taxcategoryid",taxID);
+    public void setProductTaxCategoryID(String taxID) {
+        attributes.setProperty("product.taxcategoryid", taxID);
     }
-    
+
     /**
      *
      * @return
@@ -569,72 +555,54 @@ public class TicketLineInfo1 implements SerializableWrite, SerializableRead, Ser
     public String printValue() {
         return Formats.CURRENCY.formatValue(getValue());
     }
-// ADDED JG 20.12.10 - Kitchen Print
 
     /**
      *
      * @return
      */
     public boolean isProductKitchen() {
-	return "true".equals(attributes.getProperty("product.kitchen"));
-}
-// ***
-// ADDED JG 25.06.11 - Is Service
+        return "true".equals(attributes.getProperty("product.kitchen"));
+    }
+
 
     /**
      *
      * @return
      */
     public boolean isProductService() {
-	return "true".equals(attributes.getProperty("product.service"));
-}
-// Added JDL 19.12.12 - Variable price product
+        return "true".equals(attributes.getProperty("product.service"));
+    }
 
     /**
      *
      * @return
      */
     public boolean isProductVprice() {
-	return "true".equals(attributes.getProperty("product.vprice"));
-//
-
-}
-
-// Added JDL 09.02.13 for Chris
+        return "true".equals(attributes.getProperty("product.vprice"));
+    }
 
     /**
      *
      * @return
      */
     public boolean isProductVerpatrib() {
-	return "true".equals(attributes.getProperty("product.verpatrib"));
-//
-
-}
-
-// Added JDL 09.04.12 - Variable price product
+        return "true".equals(attributes.getProperty("product.verpatrib"));
+    }
 
     /**
      *
      * @return
      */
     public String printTextTip() {
-	return attributes.getProperty("product.texttip");
-//
-
-}
-
-// Added JDL 09.02.13
+        return attributes.getProperty("product.texttip");
+    }
 
     /**
      *
      * @return
      */
     public boolean isProductWarranty() {
-	return "true".equals(attributes.getProperty("product.warranty"));
-//
-
-}
-
+        return "true".equals(attributes.getProperty("product.warranty"));
+    }
 
 }

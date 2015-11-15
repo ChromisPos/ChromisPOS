@@ -76,7 +76,6 @@ public class PrinterWritterRXTX extends PrinterWritter /* implements SerialPortE
                 }
             }
             m_out.write(data);
-// JG 16 May 12 use multicatch
         } catch (NoSuchPortException | PortInUseException | UnsupportedCommOperationException | IOException e) {
             System.err.println(e);
         }      

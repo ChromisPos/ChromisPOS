@@ -32,7 +32,6 @@ public class PaymentInfoList {
     
     /** Creates a new instance of PaymentInfoComposed */
     public PaymentInfoList() {
-// JG 16 May 12 use diamond inference
         m_apayment = new LinkedList<>();
     }
         

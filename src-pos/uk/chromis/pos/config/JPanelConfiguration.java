@@ -81,7 +81,6 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         m_panelconfig.add(panel);
         jPanelPayment.add(panel.getConfigComponent());
 
-// JG 24 Oct 13 - Add Peripheral tab
         panel = new JPanelConfigPeripheral();
         m_panelconfig.add(panel);
         jPanelPeripheral.add(panel.getConfigComponent());
