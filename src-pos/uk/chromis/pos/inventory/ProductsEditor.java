@@ -467,7 +467,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jVprice.setSelected(((Boolean) myprod[21]));
         m_jVerpatrib.setSelected(((Boolean) myprod[22]));
         m_jTextTip.setText(Formats.STRING.formatValue(myprod[23]));
-        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[24]));
+        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[24]));       
         m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[25]));
         m_jAlias.setText(Formats.STRING.formatValue(myprod[26]));
         m_jAlwaysAvailable.setSelected(((Boolean) myprod[27]));

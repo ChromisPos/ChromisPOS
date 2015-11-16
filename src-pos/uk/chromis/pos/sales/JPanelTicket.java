@@ -881,7 +881,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
              */
             if (m_sBarcode.length() > 0) {
                 String sCode = m_sBarcode.toString();
-
+System.out.println("Barcode = " +sCode);
 // Are we passing a customer card these cards start with 'c'                
                 if (sCode.startsWith("c")) {
                     try {

@@ -173,7 +173,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jTicketExample = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jPickupSize = new javax.swing.JSpinner();
-        m_jReceiptPrintOff = new javax.swing.JCheckBox();
+        m_jReceiptPrintOff = new eu.hansolo.custom.SteelCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jchkSCOnOff = new javax.swing.JCheckBox();
         jchkSCRestaurant = new javax.swing.JCheckBox();
@@ -193,7 +193,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jPanel1.setLayout(null);
 
         jReceiptSize.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jReceiptSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jReceiptSize.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         jReceiptSize.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jReceiptSizeStateChanged(evt);
@@ -236,7 +236,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jLabel2.setBounds(10, 70, 160, 40);
 
         jPickupSize.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jPickupSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jPickupSize.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         jPickupSize.setToolTipText("");
         jPickupSize.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -246,13 +246,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jPanel1.add(jPickupSize);
         jPickupSize.setBounds(190, 70, 50, 40);
 
-        m_jReceiptPrintOff.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jReceiptPrintOff.setText(bundle.getString("label.receiptprint")); // NOI18N
-        m_jReceiptPrintOff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jReceiptPrintOffActionPerformed(evt);
-            }
-        });
         jPanel1.add(m_jReceiptPrintOff);
         m_jReceiptPrintOff.setBounds(10, 120, 180, 30);
 
@@ -354,10 +348,6 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
             jLabelSCRatePerCent.setVisible(false);
         }
     }//GEN-LAST:event_jchkSCOnOffActionPerformed
-
-    private void m_jReceiptPrintOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jReceiptPrintOffActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_m_jReceiptPrintOffActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -377,7 +367,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     private javax.swing.JTextField jTicketExample;
     private javax.swing.JCheckBox jchkSCOnOff;
     private javax.swing.JCheckBox jchkSCRestaurant;
-    private javax.swing.JCheckBox m_jReceiptPrintOff;
+    private eu.hansolo.custom.SteelCheckBox m_jReceiptPrintOff;
     // End of variables declaration//GEN-END:variables
     
 }
