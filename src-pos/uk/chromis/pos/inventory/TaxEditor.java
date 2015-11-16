@@ -264,12 +264,12 @@ public class TaxEditor extends JPanel implements EditorRecord {
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jCascade = new javax.swing.JCheckBox();
         m_jTaxCategory = new javax.swing.JComboBox();
         m_jTaxParent = new javax.swing.JComboBox();
         m_jCustTaxCategory = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jOrder = new javax.swing.JTextField();
+        jCascade = new eu.hansolo.custom.SteelCheckBox();
 
         setLayout(null);
 
@@ -306,11 +306,6 @@ public class TaxEditor extends JPanel implements EditorRecord {
         add(jLabel5);
         jLabel5.setBounds(20, 110, 220, 25);
 
-        jCascade.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCascade.setText(AppLocal.getIntString("label.cascade")); // NOI18N
-        add(jCascade);
-        jCascade.setBounds(320, 140, 110, 25);
-
         m_jTaxCategory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         add(m_jTaxCategory);
         m_jTaxCategory.setBounds(240, 50, 200, 25);
@@ -331,11 +326,16 @@ public class TaxEditor extends JPanel implements EditorRecord {
         jOrder.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         add(jOrder);
         jOrder.setBounds(240, 170, 60, 25);
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jCascade.setText(bundle.getString("label.cascade")); // NOI18N
+        add(jCascade);
+        jCascade.setBounds(310, 140, 130, 30);
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox jCascade;
+    private eu.hansolo.custom.SteelCheckBox jCascade;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

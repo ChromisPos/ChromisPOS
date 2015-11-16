@@ -271,11 +271,11 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         jLabel6 = new javax.swing.JLabel();
         m_jTextTip = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        m_jCatNameShow = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         jColorChooser = new javax.swing.JButton();
         m_jbtnColour = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        m_jCatNameShow = new eu.hansolo.custom.SteelCheckBox();
 
         jInternalFrame1.setVisible(true);
 
@@ -355,11 +355,6 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         add(jLabel7);
         jLabel7.setBounds(20, 130, 130, 15);
 
-        m_jCatNameShow.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        m_jCatNameShow.setSelected(true);
-        add(m_jCatNameShow);
-        m_jCatNameShow.setBounds(195, 130, 30, 21);
-
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText(bundle.getString("label.CatalogueStatusYes")); // NOI18N
@@ -383,6 +378,11 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         jLabel1.setText(bundle.getString("Button.Bordercolour")); // NOI18N
         add(jLabel1);
         jLabel1.setBounds(20, 160, 170, 20);
+
+        m_jCatNameShow.setSelected(true);
+        m_jCatNameShow.setText(" ");
+        add(m_jCatNameShow);
+        m_jCatNameShow.setBounds(200, 120, 40, 30);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jCatalogDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jCatalogDeleteActionPerformed
@@ -442,7 +442,7 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JCheckBox m_jCatNameShow;
+    private eu.hansolo.custom.SteelCheckBox m_jCatNameShow;
     private javax.swing.JButton m_jCatalogAdd;
     private javax.swing.JButton m_jCatalogDelete;
     private javax.swing.JComboBox m_jCategory;
