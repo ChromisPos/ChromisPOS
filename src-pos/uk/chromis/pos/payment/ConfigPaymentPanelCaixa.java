@@ -98,8 +98,8 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
         jLabel4 = new javax.swing.JLabel();
         jtxtCommerceCode = new javax.swing.JTextField();
         jtxtCommerceSign = new javax.swing.JPasswordField();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jtxtCommerceTerminal = new javax.swing.JTextField();
+        jCheckBox1 = new eu.hansolo.custom.SteelCheckBox();
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText(AppLocal.getIntString("label.merchantcode")); // NOI18N
@@ -123,11 +123,10 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
         jtxtCommerceSign.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jtxtCommerceSign.setPreferredSize(new java.awt.Dimension(200, 30));
 
-        jCheckBox1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox1.setText("Ampliado");
-
         jtxtCommerceTerminal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jtxtCommerceTerminal.setPreferredSize(new java.awt.Dimension(200, 30));
+
+        jCheckBox1.setText("Ampliado");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -144,10 +143,10 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jtxtCommerceCode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jCheckBox1)
                         .addComponent(jtxtCommerceSign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jtxtCommerceTerminal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(56, Short.MAX_VALUE))
+                    .addComponent(jtxtCommerceTerminal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,14 +165,14 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox jCheckBox1;
+    private eu.hansolo.custom.SteelCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
