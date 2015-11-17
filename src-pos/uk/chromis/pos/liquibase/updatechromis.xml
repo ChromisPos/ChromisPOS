@@ -196,7 +196,124 @@
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>
         </insert>
            
-    </changeSet>           
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    </changeSet>    
+           
+    <changeSet author="Chromis POS" id="Create Promotions Table">
+          <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PROMOTIONS"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="PROMOTIONS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                 <constraints nullable="false"/>
+            </column>/>                
+            <column name="CRITERIA" type="${blob.type}">
+                 <constraints nullable="false"/>
+            </column>/>
+            <column name="SCRIPT" type="${blob.type}">
+                 <constraints nullable="false"/>
+            </column>/>
+            <column name="ISENABLED" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+         </createTable>  
+                                
+        <createTable tableName="PROMOTEDPRODUCTS">
+            <column name="PROMOTIONID" type="varchar(50)">
+                 <constraints nullable="false"/>
+            </column>/>
+            <column name="PRODUCTID" type="varchar(255)">
+                 <constraints nullable="false"/>
+            </column>/>
+            <column name="INCLUDED" type="${boolean.type}" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+         </createTable>   
+                               
+         <createIndex tableName="PROMOTIONS"
+                     indexName="PROMOTIONS_NAME_INX"
+                     unique="true">
+            <column name="NAME" type="varchar(255)"/>
+        </createIndex>                                                    
+ 
+        <addForeignKeyConstraint 
+            constraintName ="PROMOTEDPRODUCTS_FK_1"
+            baseTableName="PROMOTEDPRODUCTS"
+            baseColumnNames="PRODUCTID"
+            referencedTableName="PRODUCTS"
+            referencedColumnNames = "ID"
+        />
+        
+        <addForeignKeyConstraint 
+            constraintName ="PROMOTEDPRODUCTS_FK_2"
+            baseTableName="PROMOTEDPRODUCTS"
+            baseColumnNames="PROMOTIONID"
+            referencedTableName="PROMOTIONS"
+            referencedColumnNames = "ID"
+        />
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6700"/>
+            <column name="NAME" value="help.promotion"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Help.Promotion.txt"/>
+        </insert>
+                
+       <insert tableName="RESOURCES">
+            <column name="ID" value="6701"/>
+            <column name="NAME" value="promotion.bogof"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.bogof.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6702"/>
+            <column name="NAME" value="promotion.threefortwo"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.multibuy.txt"/>
+        </insert>
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6703"/>
+            <column name="NAME" value="promotion.mealdeal"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.mealdeal.txt"/>
+        </insert>
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6704"/>
+            <column name="NAME" value="promotion.percentoff"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.percentoff.txt"/>
+        </insert>
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6705"/>
+            <column name="NAME" value="promotion.coupon"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
+        </insert>
+                                                                                              
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.promotion.PromotionPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname121"/>
+            <column name="DESCRIPTION" value="##label.description121"/>
+        </insert>
+        		
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/promotions.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname122"/>
+            <column name="DESCRIPTION" value="##label.description122"/>
+        </insert>
+              
+    </changeSet>   
+    
 </databaseChangeLog>
 

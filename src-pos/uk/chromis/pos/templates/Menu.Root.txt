@@ -55,6 +55,7 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/attributes.png", "Menu.AttributeUse", "uk.chromis.pos.inventory.AttributeUsePanel");
         submenu.addPanel("/uk/chromis/images/stockdiary.png", "Menu.StockDiary", "uk.chromis.pos.inventory.StockDiaryPanel");
         submenu.addPanel("/uk/chromis/images/stockmaint.png", "Menu.StockMovement", "uk.chromis.pos.inventory.StockManagement");        
+        submenu.addPanel("/uk/chromis/images/img.discount.png", "Menu.Promotions", "uk.chromis.pos.promotion.PromotionPanel");        
 
     submenu.addTitle("Menu.StockManagement.Reports");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.BarcodeSheet", "/uk/chromis/reports/barcodesheet.bs");
@@ -70,6 +71,7 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.ProductLabels", "/uk/chromis/reports/productlabels.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.SaleCatalog", "/uk/chromis/reports/salecatalog.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.ShelfEdgeLabels", "/uk/chromis/reports/shelfedgelabels.bs");
+ // TODO JDB       submenu.addPanel("/uk/chromis/images/reports.png", "Menu.PromotionsReport", "/uk/chromis/reports/promotions.bs");
         submenu = group.addSubmenu("/uk/chromis/images/sales.png", "Menu.SalesManagement", "uk.chromis.pos.forms.MenuSalesManagement");
 
     submenu.addTitle("Menu.SalesManagement.Reports");
