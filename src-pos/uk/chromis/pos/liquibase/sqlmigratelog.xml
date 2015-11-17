@@ -10,9 +10,8 @@
 
 
 
-    <property name="boolean.type" value="boolean" dbms="postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>
     <property name="boolean.type" value="bit" dbms="mysql"/>
-    <property name="boolean.type" value="smallint" dbms="derby"/>
     <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
 
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
@@ -186,7 +185,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="IMAGE" type="${blob.type}"/>
-            <column name="COLOUR" type="varchar(255)"/>
+            <column name="COLOUR" type="varchar(50)"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="PARENTID"
@@ -594,8 +593,8 @@
             <constraints nullable="false"/>
         </column>
         <column name="PACKQUANTITY" type="double precision" />
-        </column>
-        <column name="PACKPRODUCT" type="varchar(255)"/>
+    </column>
+    <column name="PACKPRODUCT" type="varchar(255)"/>
 
     </createTable>
 
@@ -805,6 +804,9 @@
             <constraints nullable="false"/>
         </column>
         <column name="PERMISSIONS" type="${blob.type}"/>
+        <column name="RIGHTSLEVEL" type="int" defaultValueNumeric="4" >
+            <constraints nullable="false"/> 
+        </column>
     </createTable>
 </changeSet>
 
@@ -1224,6 +1226,9 @@
 
 <changeSet author="Chromis Pos" id="Create Lineremoved Table">
     <createTable tableName="LINEREMOVED">
+        <column name="REMOVEDDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP">
+            <constraints  nullable="false"/>
+        </column>
         <column name="NAME" type="varchar(255)"/>
         <column name="TICKETID" type="varchar(255)"/>
         <column name="PRODUCTID" type="varchar(255)"/>

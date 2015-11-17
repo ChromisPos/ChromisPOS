@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
+
 package uk.chromis.pos.forms;
 
 import uk.chromis.beans.LocaleResources;
@@ -26,21 +27,11 @@ import uk.chromis.beans.LocaleResources;
  */
 public class AppLocal {
 
-    /**
-     *
-     */
     public static final String APP_NAME = "Chromis POS";
-
-    /**
-     *
-     */
     public static final String APP_ID = "chromispos";
-
-    /**
-     *
-     */
-    public static final String APP_VERSION = "0.52";
-
+    public static final String APP_VERSION = "0.53.1";
+    public static final String APP_DEMO = "";
+    
 
     private static final LocaleResources m_resources;
 

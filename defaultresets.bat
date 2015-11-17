@@ -20,4 +20,4 @@ REM    along with Chromis POS.  If not, see <http:REMwww.gnu.org/licenses/>
 REM
 set DIRNAME=%~dp0
 set CP="%DIRNAME%defaultresets.jar"
-start /B javaw -cp %CP% uk.chromis.defaultresets.DefaultResets
+start /B java -cp %CP% uk.chromis.defaultresets.DefaultResets

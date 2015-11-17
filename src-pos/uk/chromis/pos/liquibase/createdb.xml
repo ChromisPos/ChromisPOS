@@ -10,9 +10,8 @@
 
 
 
-    <property name="boolean.type" value="boolean" dbms="postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>
     <property name="boolean.type" value="bit" dbms="mysql"/>
-    <property name="boolean.type" value="smallint" dbms="derby"/>
     <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
 
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
@@ -147,7 +146,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into PEOPLE Table" dbms="mysql, derby, oracle">
+    <changeSet author="Chromis POS" id="Insert into PEOPLE Table" dbms="mysql, oracle">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PEOPLE</sqlCheck>
         </preConditions>
@@ -178,7 +177,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into PEOPLE Table" dbms="postgresql, hypersql, hsqldb">
+    <changeSet author="Chromis POS" id="Insert into PEOPLE Table" dbms="derby, postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PEOPLE</sqlCheck>
         </preConditions>
@@ -613,20 +612,6 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.ReprintLastTicket.xml"/>
         </insert>
-        <insert tableName="RESOURCES">
-            <column name="ID" value="62"/>
-            <column name="NAME" value="img.reportlogo"/>
-            <column name="RESTYPE" valueNumeric="1"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="63"/>
-            <column name="NAME" value="sql.ActionStockChanges"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>
-        </insert>
-
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create TaxCustCategories Table">
@@ -1144,7 +1129,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert default product m" dbms="mysql, derby, oracle">        
+    <changeSet author="Chromis POS" id="Insert default product into table m" dbms="mysql, oracle">   
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PRODUCTS WHERE ID='xxx999_999xxx_x9x9x9'</sqlCheck>  
+        </preConditions> 
+             
         <insert tableName="PRODUCTS">
             <column name="ID" value="xxx999_999xxx_x9x9x9"/>
             <column name="REFERENCE" value="xxx999"/>
@@ -1158,7 +1147,11 @@
         </insert>           
     </changeSet>            
 
-    <changeSet author="Chromis POS" id="Insert default product" dbms="postgresql, hypersql, hsqldb">        
+    <changeSet author="Chromis POS" id="Insert default product into table" dbms="derby, postgresql, hypersql, hsqldb">  
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PRODUCTS WHERE ID='xxx999_999xxx_x9x9x9'</sqlCheck>  
+        </preConditions>                
+              
         <insert tableName="PRODUCTS">
             <column name="ID" value="xxx999_999xxx_x9x9x9"/>
             <column name="REFERENCE" value="xxx999"/>
@@ -2044,7 +2037,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into BREAKS Table" dbms="mysql, derby, oracle">
+    <changeSet author="Chromis POS" id="Insert into BREAKS Table" dbms="mysql, oracle">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM BREAKS </sqlCheck>
         </preConditions>
@@ -2068,7 +2061,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into BREAKS Table" dbms="postgresql, hypersql, hsqldb">
+    <changeSet author="Chromis POS" id="Insert into BREAKS Table" dbms="derby, postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM BREAKS </sqlCheck>
         </preConditions>
@@ -2352,22 +2345,6 @@
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
     </changeSet>      
         
-    <changeSet author="Chromis POS" id="Create Orders Table">
-        <createTable tableName="ORDERS">
-            <column name="ID" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="ORDERID" type="varchar(50)"/>                
-            <column name="QTY" type="int"/>           
-            <column name="DETAILS" type="varchar(255)"/>
-            <column name="ATTRIBUTES" type="varchar(255)"/>
-            <column name="NOTES" type="varchar(255)"/>
-            <column name="TICKETID" type="varchar(255)"/>
-            <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="DISPLAYID" type="int"/> 
-            <column name="AUXILIARY" type="int"/>                                    
-        </createTable>                         
-    </changeSet>  
     
     <changeSet author="Chromis POS" id="Create StockChanges Table">
         <createTable tableName="STOCKCHANGES">
@@ -2482,5 +2459,8 @@
         </insert>
         
     </changeSet>  
+    <changeSet author="Chromis POS" id="derby10.10.20">    
+    </changeSet>   
+     
 </databaseChangeLog>
 

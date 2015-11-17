@@ -208,9 +208,9 @@ public class JRootApp extends JPanel implements AppView {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
             } else {
-                String changelog = sDBVersion == null
+                String changelog = (sDBVersion == null) || ("0.00".equals(sDBVersion))
                         ? "uk/chromis/pos/liquibase/chromis.xml"
-                        : "uk/chromis/pos/liquibase/updatechromis.xml";
+                        : "uk/chromis/pos/liquibase/updatesystem.xml";
                 if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), AppLocal.getIntString("message.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 
                     try {

@@ -34,10 +34,7 @@ import uk.chromis.pos.reports.ReportEditorCreator;
 import java.awt.Component;
 import java.util.List;
 
-/**
- *
- * @author JG uniCenta
- */
+
 public class ProductFilter1 extends javax.swing.JPanel implements ReportEditorCreator {
     
     private SentenceList m_sentcat;

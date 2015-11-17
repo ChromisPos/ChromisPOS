@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 uniCenta
+//    Copyright (c) 2015 
 //    Portions Contributed by: John D L 2013
 //    http://www.chromis.co.uk
 //

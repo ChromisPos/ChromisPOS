@@ -1,3 +1,19 @@
+8th November 2015
+Release: v0.53
+
+Bug #16	variable price, product screen display affected only, now resolved
+Bug #15 Delete freshly added products - Thanks Wildfox coder
+Bug #14 CSV import updated and resolved
+Bug #17 Refund bug inherited from Unicenta and Openbravo, user can refund dame recipt multiple times
+
+Refactor of derby database code, since derby 10.10.20 they boolean function changed. to use true/false rather than 1/0. Table changed to allow the new fucntion.
+Addition of pack product feature from John Barrett, including new table ready for stock app import.
+
+ 
+
+
+
+
 18th October
 Release: v0.52
 

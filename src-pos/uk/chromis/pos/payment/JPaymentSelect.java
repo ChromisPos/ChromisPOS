@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 uniCenta
+//    Copyright (c) 2015 
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -136,9 +136,12 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         this.customerext = customerext;
 
-        setPrintSelected(!Boolean.parseBoolean(app.getProperties().getProperty("till.receiptprintoff")));
+        setPrintSelected(!Boolean.parseBoolean(app.getProperties().getProperty("till.receiptprintoff")));        
         m_jButtonPrint.setSelected(printselected);
 
+        
+        
+        
         m_jTotalEuros.setText(Formats.CURRENCY.formatValue(m_dTotal));
 
         addTabs();
@@ -161,6 +164,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         // gets the print button state
         printselected = m_jButtonPrint.isSelected();
+        
+        
 
         // remove all tabs        
         m_jTabPayment.removeAll();
@@ -901,11 +906,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         m_jButtonPrint.setMargin(new java.awt.Insets(8, 16, 8, 16));
         m_jButtonPrint.setRequestFocusEnabled(false);
         m_jButtonPrint.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/printer24.png"))); // NOI18N
-        m_jButtonPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jButtonPrintActionPerformed(evt);
-            }
-        });
         jPanel5.add(m_jButtonPrint, java.awt.BorderLayout.LINE_START);
 
         getContentPane().add(jPanel5, java.awt.BorderLayout.SOUTH);
@@ -961,10 +961,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         dispose();
 
     }//GEN-LAST:event_m_jButtonCancelActionPerformed
-
-    private void m_jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonPrintActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_m_jButtonPrintActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;

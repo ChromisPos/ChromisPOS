@@ -28,9 +28,8 @@
 
 //    Portions:
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 uniCenta
+//    Copyright (c) 2015 
 //    http://www.chromis.co.uk
-//    author Jack Gerrard
 // This class is a copy of net.sf.jasperreports.engine.print.JRPrinterAWT
 // The modifications are:
 // Added to the constructor the service, instead of isDialog

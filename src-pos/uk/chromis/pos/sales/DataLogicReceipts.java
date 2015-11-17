@@ -87,7 +87,7 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
      */
     public final List<SharedTicketInfo> getSharedTicketListByUser(String User) throws BasicException {
 
-        return (List<SharedTicketInfo>) new StaticSentence(s // JG 20 Aug 13 Bug Fix: invalid SQL string
+        return (List<SharedTicketInfo>) new StaticSentence(s // JG 20 Aug 13 Bug Fix: invalid SQL string                         
                 //                , "SELECT ID, NAME, CONTENT PICKUPID FROM SHAREDTICKETS ORDER BY ID"                
                 , "SELECT ID, NAME, CONTENT, PICKUPID FROM SHAREDTICKETS WHERE NAME LIKE '%" + User + " -%' ", null, new SerializerReadClass(SharedTicketInfo.class)).list();
     }
@@ -142,6 +142,8 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
             Datas.SERIALIZABLE,
             Datas.INT
         };
+        
+        
         new PreparedSentence(s, "INSERT INTO SHAREDTICKETS ("
                 + "ID, "
                 + "NAME, "

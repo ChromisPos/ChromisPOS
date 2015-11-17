@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 uniCenta
+//    Copyright (c) 2015 
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -59,6 +59,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jUpdatedbprice.addActionListener(dirty);
         jChangeSalesScreen.addActionListener(dirty);
         jConsolidate.addActionListener(dirty);
+        jDisableDefaultProduct.addActionListener(dirty);
         
         
     }
@@ -109,6 +110,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jUpdatedbprice.setSelected(Boolean.valueOf(config.getProperty("db.productupdate")));
         jChangeSalesScreen.setSelected(Boolean.valueOf(config.getProperty("sales.newscreen")));
         jConsolidate.setSelected(Boolean.valueOf(config.getProperty("display.consolidated")));
+        jDisableDefaultProduct.setSelected(Boolean.valueOf(config.getProperty("product.hidedefaultproductedit")));
 
 // hide some values until the code has been implmented        
 
@@ -174,14 +176,11 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         config.setProperty("till.amountattop", Boolean.toString(jMoveAMountBoxToTop.isSelected()));
         config.setProperty("screen.600800", Boolean.toString(jCloseCashbtn.isSelected()));
         config.setProperty("table.transparentbuttons", Boolean.toString(jTableButtons.isSelected()));
-
         config.setProperty("dbtable.retaindays", jTableRetain.getValue().toString());
-
         config.setProperty("db.productupdate", Boolean.toString(jUpdatedbprice.isSelected()));
         config.setProperty("sales.newscreen", Boolean.toString( jChangeSalesScreen.isSelected()));
         config.setProperty("display.consolidated", Boolean.toString( jConsolidate.isSelected()));
-        
-
+        config.setProperty("product.hidedefaultproductedit", Boolean.toString( jDisableDefaultProduct.isSelected()));
 
         dirty.setDirty(false);
     }
@@ -222,6 +221,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jUpdatedbprice = new javax.swing.JCheckBox();
         jChangeSalesScreen = new javax.swing.JCheckBox();
         jConsolidate = new javax.swing.JCheckBox();
+        jDisableDefaultProduct = new javax.swing.JCheckBox();
 
         setPreferredSize(new java.awt.Dimension(700, 550));
 
@@ -440,6 +440,11 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jPanel4.add(jConsolidate);
         jConsolidate.setBounds(410, 80, 160, 23);
 
+        jDisableDefaultProduct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jDisableDefaultProduct.setText(bundle.getString("label.default")); // NOI18N
+        jPanel4.add(jDisableDefaultProduct);
+        jDisableDefaultProduct.setBounds(10, 110, 180, 23);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -505,6 +510,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
     private javax.swing.JCheckBox jCloseCashbtn;
     private javax.swing.JCheckBox jConsolidate;
     private javax.swing.JComboBox jCustomerColour;
+    private javax.swing.JCheckBox jDisableDefaultProduct;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelCustomerTextColour;
     private javax.swing.JLabel jLabelInactiveTime;

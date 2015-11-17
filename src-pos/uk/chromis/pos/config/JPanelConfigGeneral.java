@@ -34,11 +34,6 @@ import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.util.DirectoryEvent;
 
-// JG 16 May 2013 deprecated for pushingpixels
-// import org.jvnet.substance.SubstanceLookAndFeel;
-// import org.jvnet.substance.api.SubstanceSkin;
-// import org.jvnet.substance.skin.SkinInfo;
-
 /**
  *
  *   

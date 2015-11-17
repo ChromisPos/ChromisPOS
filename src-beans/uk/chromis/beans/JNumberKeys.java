@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.beans;
 
 import java.awt.ComponentOrientation;
@@ -25,19 +24,22 @@ import java.util.Vector;
 
 /**
  *
- *   
+ *
  */
 public class JNumberKeys extends javax.swing.JPanel {
 
     private Vector m_Listeners = new Vector();
-    
+
     private boolean minusenabled = true;
+    private boolean plusenabled = true;
     private boolean equalsenabled = true;
-    
-    /** Creates new form JNumberKeys */
+
+    /**
+     * Creates new form JNumberKeys
+     */
     public JNumberKeys() {
-        initComponents ();
-        
+        initComponents();
+
         m_jKey0.addActionListener(new MyKeyNumberListener('0'));
         m_jKey1.addActionListener(new MyKeyNumberListener('1'));
         m_jKey2.addActionListener(new MyKeyNumberListener('2'));
@@ -51,8 +53,8 @@ public class JNumberKeys extends javax.swing.JPanel {
         m_jKeyDot.addActionListener(new MyKeyNumberListener('.'));
         m_jMultiply.addActionListener(new MyKeyNumberListener('*'));
         m_jCE.addActionListener(new MyKeyNumberListener('\u007f'));
-        m_jPlus.addActionListener(new MyKeyNumberListener('+'));        
-        m_jMinus.addActionListener(new MyKeyNumberListener('-'));        
+        m_jPlus.addActionListener(new MyKeyNumberListener('+'));
+        m_jMinus.addActionListener(new MyKeyNumberListener('-'));
         m_jEquals.addActionListener(new MyKeyNumberListener('='));
     }
 
@@ -66,11 +68,11 @@ public class JNumberKeys extends javax.swing.JPanel {
         m_jPlus.setVisible(value);
         m_jMultiply.setVisible(value);
     }
-    
+
     @Override
     public void setEnabled(boolean b) {
         super.setEnabled(b);
-        
+
         m_jKey0.setEnabled(b);
         m_jKey1.setEnabled(b);
         m_jKey2.setEnabled(b);
@@ -84,16 +86,16 @@ public class JNumberKeys extends javax.swing.JPanel {
         m_jKeyDot.setEnabled(b);
         m_jMultiply.setEnabled(b);
         m_jCE.setEnabled(b);
-        m_jPlus.setEnabled(b);       
+        m_jPlus.setEnabled(b);
         m_jMinus.setEnabled(minusenabled && b);
-        m_jEquals.setEnabled(equalsenabled && b);   
+        m_jEquals.setEnabled(equalsenabled && b);
     }
-    
+
     @Override
     public void setComponentOrientation(ComponentOrientation o) {
         // Nothing to change
     }
-    
+
     /**
      *
      * @param b
@@ -102,7 +104,7 @@ public class JNumberKeys extends javax.swing.JPanel {
         minusenabled = b;
         m_jMinus.setEnabled(minusenabled && isEnabled());
     }
-    
+
     /**
      *
      * @return
@@ -110,7 +112,24 @@ public class JNumberKeys extends javax.swing.JPanel {
     public boolean isMinusEnabled() {
         return minusenabled;
     }
-    
+
+    /**
+     *
+     * @param b
+     */
+    public void setPlusEnabled(boolean b) {
+        plusenabled = b;
+        m_jPlus.setEnabled(plusenabled && isEnabled());
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isPlusEnabled() {
+        return plusenabled;
+    }
+
     /**
      *
      * @param b
@@ -119,7 +138,7 @@ public class JNumberKeys extends javax.swing.JPanel {
         equalsenabled = b;
         m_jEquals.setEnabled(equalsenabled && isEnabled());
     }
-    
+
     /**
      *
      * @return
@@ -127,7 +146,26 @@ public class JNumberKeys extends javax.swing.JPanel {
     public boolean isEqualsEnabled() {
         return equalsenabled;
     }
-    
+
+    public void justEquals() {      
+        m_jKey0.setEnabled(false);
+        m_jKey1.setEnabled(false);
+        m_jKey2.setEnabled(false);
+        m_jKey3.setEnabled(false);
+        m_jKey4.setEnabled(false);
+        m_jKey5.setEnabled(false);
+        m_jKey6.setEnabled(false);
+        m_jKey7.setEnabled(false);
+        m_jKey8.setEnabled(false);
+        m_jKey9.setEnabled(false);
+        m_jKeyDot.setEnabled(false);
+        m_jMultiply.setEnabled(false);
+        m_jCE.setEnabled(false);
+        m_jPlus.setEnabled(false);
+        m_jMinus.setEnabled(false );
+        m_jEquals.setEnabled(true);
+    }
+
     /**
      *
      * @param enabled
@@ -138,7 +176,7 @@ public class JNumberKeys extends javax.swing.JPanel {
                     .getResource("/uk/chromis/images/btn00.png")));
         }
     }
-    
+
     /**
      *
      * @return
@@ -146,7 +184,7 @@ public class JNumberKeys extends javax.swing.JPanel {
     public boolean isNumbersOnly() {
         return m_jEquals.isVisible();
     }
-    
+
     /**
      *
      * @param listener
@@ -162,20 +200,21 @@ public class JNumberKeys extends javax.swing.JPanel {
     public void removeJNumberEventListener(JNumberEventListener listener) {
         m_Listeners.remove(listener);
     }
-    
+
     private class MyKeyNumberListener implements java.awt.event.ActionListener {
-        
+
         private final char m_cCad;
-        
-        public MyKeyNumberListener(char cCad){
+
+        public MyKeyNumberListener(char cCad) {
             m_cCad = cCad;
         }
+
         @Override
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-           
-            JNumberEvent oEv = new JNumberEvent(JNumberKeys.this, m_cCad);            
+
+            JNumberEvent oEv = new JNumberEvent(JNumberKeys.this, m_cCad);
             JNumberEventListener oListener;
-            
+
             for (Enumeration e = m_Listeners.elements(); e.hasMoreElements();) {
                 oListener = (JNumberEventListener) e.nextElement();
                 oListener.keyPerformed(oEv);
@@ -183,10 +222,10 @@ public class JNumberKeys extends javax.swing.JPanel {
         }
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the FormEditor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the FormEditor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

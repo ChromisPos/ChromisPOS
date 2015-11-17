@@ -55,7 +55,7 @@ public class JTicketCatalogLines extends javax.swing.JPanel {
         
         initComponents();
         
-        m_reflines = new JRefundLines(dlSystem, jTicketEdit);        
+        m_reflines = new JRefundLines(dlSystem, dlSales, jTicketEdit);        
         add(m_reflines, "reflines");
         
         m_catalog = new JCatalog(dlSales, pricevisible, taxesincluded, width, height);
@@ -100,7 +100,6 @@ public class JTicketCatalogLines extends javax.swing.JPanel {
      * @param aRefundLines
      */
     public void showRefundLines(List aRefundLines) {
-        // anado las lineas de refund
         m_reflines.setLines(aRefundLines);
         showView("reflines");
     }   
