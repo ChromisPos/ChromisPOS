@@ -793,65 +793,28 @@
            
     </changeSet>    
            
-    <changeSet author="Chromis POS" id="Create Promotions Table">
+    <changeSet author="Chromis POS" id="Create Promotion Table">
           <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PROMOTIONS"/>
             </not>
         </preConditions>
-
+        
         <createTable tableName="PROMOTIONS">
             <column name="ID" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="NAME" type="varchar(255)">
-                 <constraints nullable="false"/>
-            </column>/>                
-            <column name="CRITERIA" type="${blob.type}">
-                 <constraints nullable="false"/>
-            </column>/>
-            <column name="SCRIPT" type="${blob.type}">
-                 <constraints nullable="false"/>
-            </column>/>
-            <column name="ISENABLED" type="${boolean.type}" defaultValueBoolean="false">
-                <constraints nullable="false"/>
+            <column name="NAME" type="varchar(255)" >
+                <constraints nullable="false" />                
             </column>
-         </createTable>  
-                                
-        <createTable tableName="PROMOTEDPRODUCTS">
-            <column name="PROMOTIONID" type="varchar(50)">
-                 <constraints nullable="false"/>
-            </column>/>
-            <column name="PRODUCTID" type="varchar(255)">
-                 <constraints nullable="false"/>
-            </column>/>
-            <column name="INCLUDED" type="${boolean.type}" defaultValueBoolean="true">
-                <constraints nullable="false"/>
+            <column name="CRITERIA"  type="${blob.type}"/>           
+            <column name="SCRIPT"  type="${blob.type}" >
+                <constraints nullable="false" />
             </column>
-         </createTable>   
-                               
-         <createIndex tableName="PROMOTIONS"
-                     indexName="PROMOTIONS_NAME_INX"
-                     unique="true">
-            <column name="NAME" type="varchar(255)"/>
-        </createIndex>                                                    
- 
-        <addForeignKeyConstraint 
-            constraintName ="PROMOTEDPRODUCTS_FK_1"
-            baseTableName="PROMOTEDPRODUCTS"
-            baseColumnNames="PRODUCTID"
-            referencedTableName="PRODUCTS"
-            referencedColumnNames = "ID"
-        />
-        
-        <addForeignKeyConstraint 
-            constraintName ="PROMOTEDPRODUCTS_FK_2"
-            baseTableName="PROMOTEDPRODUCTS"
-            baseColumnNames="PROMOTIONID"
-            referencedTableName="PROMOTIONS"
-            referencedColumnNames = "ID"
-        />
-        
+            <column name="ISENABLED" type="${boolean.type}" 
+                    defaultValueNumeric="1"/>
+        </createTable>       
+         
         <insert tableName="RESOURCES">
             <column name="ID" value="6700"/>
             <column name="NAME" value="help.promotion"/>
@@ -909,9 +872,7 @@
         </insert>
               
     </changeSet>   
-    
-    </changeSet>    
-         
+
     <changeSet author="Chromis POS" id="update to v0.53">    
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.53"/>          
@@ -923,5 +884,6 @@
             <column name="VERSION" value="0.53.1"/>          
         </update>               
     </changeSet>
+    
 </databaseChangeLog>
 
