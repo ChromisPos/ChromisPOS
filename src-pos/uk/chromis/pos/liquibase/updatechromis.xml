@@ -815,6 +815,16 @@
                     defaultValueNumeric="1"/>
         </createTable>       
          
+       <addColumn tableName="PRODUCTS">
+            <column name="PROMOTIONID" type="varchar(50)" />                                              
+        </addColumn>  
+        
+        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
+                         constraintName ="FK_PRODUCT_PROMOTIONID"
+                         referencedColumnNames = "ID"
+                         baseTableName="PRODUCTS"
+                         referencedTableName="PROMOTIONS"/>
+
         <insert tableName="RESOURCES">
             <column name="ID" value="6700"/>
             <column name="NAME" value="help.promotion"/>

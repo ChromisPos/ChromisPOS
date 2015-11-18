@@ -25,6 +25,7 @@ import uk.chromis.data.loader.SerializerRead;
 import uk.chromis.format.Formats;
 import java.awt.image.BufferedImage;
 import java.util.Properties;
+import uk.chromis.pos.forms.DataLogicSales;
 
 /**
  *
@@ -33,66 +34,78 @@ import java.util.Properties;
  */
 public class ProductInfoExt {
 
-    private static final long serialVersionUID = 7587696873036L;
+    private static final long serialVersionUID = 7587696873037L;
 
     protected String m_ID;
     protected String m_sRef;
     protected String m_sCode;
     protected String m_sCodetype;
     protected String m_sName;
-    protected boolean m_bCom;
-    protected boolean m_bScale;
-    protected double m_dPriceBuy;
-    protected double m_dPriceSell;
+    protected Boolean m_bCom;
+    protected Boolean m_bScale;
+    protected Double m_dPriceBuy;
+    protected Double m_dPriceSell;
     protected String categoryid;
     protected String taxcategoryid;
     protected String attributesetid;
     protected BufferedImage m_Image;
-    protected double m_stockCost;
-    protected double m_stockVolume;
-    protected boolean m_bKitchen;
-    private boolean m_bService;
-    protected Properties attributes;
+    protected Double m_stockCost;
+    protected Double m_stockVolume;
+    protected Boolean m_bKitchen;
+    private Boolean m_bService;
+    protected Properties m_attributes;
     protected String m_sDisplay;
-    protected boolean m_bVprice;
-    protected boolean m_bVerpatrib;
+    protected Boolean m_bVprice;
+    protected Boolean m_bVerpatrib;
     protected String m_sTextTip;
-    protected boolean m_bWarranty;
-    public double m_dStockUnits;
+    protected Boolean m_bWarranty;
+    protected Double m_dStockUnits;
     protected String m_sAlias;
-    protected boolean m_bAlwaysAvailable;
-    protected boolean m_canDiscount;
+    protected Boolean m_bAlwaysAvailable;
+    protected Boolean m_canDiscount;
     protected String m_discounted;
-
+    protected String m_promotionid;
+    protected Boolean m_bCatalog;
+    protected Double m_catorder;
+    protected Boolean m_bPack;
+    protected Double m_packquantity;
+    protected String m_packproduct;
+    
     public ProductInfoExt() {
-        m_ID = null;                    //1
-        m_sRef = "0000";                //2
-        m_sCode = "0000";               //3
-        m_sCodetype = null;             //4
-        m_sName = null;                 //5
-        m_bCom = false;                 //6
-        m_bScale = false;               //7
-        categoryid = null;              //8
-        taxcategoryid = null;           //9
-        attributesetid = null;          //10
-        m_dPriceBuy = 0.0;              //11
-        m_dPriceSell = 0.0;             //12
-        m_stockCost = 0.0;              //13
-        m_stockVolume = 0.0;            //14
-        m_Image = null;                 //15
-        m_bKitchen = false;             //16
-        m_bService = false;             //17
-        m_sDisplay = null;              //18
-        attributes = new Properties();  //19
-        m_bVprice = false;              //10
-        m_bVerpatrib = false;           //21
-        m_sTextTip = null;              //22
-        m_bWarranty = false;            //23
-        m_dStockUnits = 0.0;            //24
-        m_sAlias=null;                  //25
-        m_bAlwaysAvailable = false;     //26
-        m_canDiscount = true;           //27
-        m_discounted = "no";            //28
+        m_ID = null;
+        m_sRef = "0000";
+        m_sCode = "0000";
+        m_sCodetype = null;
+        m_sName = null;
+        m_bCom = false;
+        m_bScale = false;
+        categoryid = null;
+        taxcategoryid = null;
+        attributesetid = null;
+        m_dPriceBuy = 0.0;
+        m_dPriceSell = 0.0;
+        m_stockCost = 0.0;
+        m_stockVolume = 0.0;
+        m_Image = null;
+        m_bKitchen = false;
+        m_bService = false;
+        m_sDisplay = null;
+        m_attributes = new Properties();
+        m_bVprice = false;
+        m_bVerpatrib = false;
+        m_sTextTip = null;
+        m_bWarranty = false;
+        m_dStockUnits = 0.0;
+        m_sAlias=null;
+        m_bAlwaysAvailable = false;
+        m_canDiscount = true;
+        m_discounted = "no";
+        m_promotionid = null;
+        m_bCatalog = true;
+        m_catorder = 0.0;
+        m_bPack = false;
+        m_packquantity = 0.0;
+        m_packproduct = null;
     }
 
     /**
@@ -147,43 +160,43 @@ public class ProductInfoExt {
         m_sDisplay = sDisplay;
     }
 
-    public final boolean isCom() {
+    public final Boolean isCom() {
         return m_bCom;
     }
 
-    public final void setCom(boolean bValue) {
+    public final void setCom(Boolean bValue) {
         m_bCom = bValue;
     }
 
-    public final boolean isScale() {
+    public final Boolean isScale() {
         return m_bScale;
     }
 
-    public final void setScale(boolean bValue) {
+    public final void setScale(Boolean bValue) {
         m_bScale = bValue;
     }
 
-    public final boolean isKitchen() {
+    public final Boolean isKitchen() {
         return m_bKitchen;
     }
 
-    public final void setKitchen(boolean bValue) {
+    public final void setKitchen(Boolean bValue) {
         m_bKitchen = bValue;
     }
 
-    public final boolean isService() {
+    public final Boolean isService() {
         return m_bService;
     }
 
-    public final void setService(boolean bValue) {
+    public final void setService(Boolean bValue) {
         m_bService = bValue;
     }
 
-    public final boolean isVprice() {
+    public final Boolean isVprice() {
         return m_bVprice;
     }
 
-    public final boolean isVerpatrib() {
+    public final Boolean isVerpatrib() {
         return m_bVerpatrib;
     }
 
@@ -191,11 +204,11 @@ public class ProductInfoExt {
         return m_sTextTip;
     }
 
-    public final boolean getWarranty() {
+    public final Boolean getWarranty() {
         return m_bWarranty;
     }
 
-    public final void setWarranty(boolean bValue) {
+    public final void setWarranty(Boolean bValue) {
         m_bWarranty = bValue;
     }
 
@@ -223,19 +236,19 @@ public class ProductInfoExt {
         attributesetid = value;
     }
 
-    public final double getPriceBuy() {
+    public final Double getPriceBuy() {
         return m_dPriceBuy;
     }
 
-    public final void setPriceBuy(double dPrice) {
+    public final void setPriceBuy(Double dPrice) {
         m_dPriceBuy = dPrice;
     }
 
-    public final double getPriceSell() {
+    public final Double getPriceSell() {
         return m_dPriceSell;
     }
 
-    public final void setPriceSell(double dPrice) {
+    public final void setPriceSell(Double dPrice) {
         m_dPriceSell = dPrice;
     }
 
@@ -244,23 +257,23 @@ public class ProductInfoExt {
 
     }
 
-    public final void setStockUnits(double dStockUnits) {
+    public final void setStockUnits(Double dStockUnits) {
         m_dStockUnits = dStockUnits;
     }
 
-    public final double getStockVolume() {
+    public final Double getStockVolume() {
         return m_stockVolume;
     }
 
-    public final void setStockVolume(double dStockVolume) {
+    public final void setStockVolume(Double dStockVolume) {
         m_stockVolume = dStockVolume;
     }
 
-    public final double getStockCost() {
+    public final Double getStockCost() {
         return m_stockCost;
     }
 
-    public final void setStockCost(double dPrice) {
+    public final void setStockCost(Double dPrice) {
         m_stockCost = dPrice;
     }
 
@@ -268,8 +281,19 @@ public class ProductInfoExt {
         m_sTextTip = value;
     }
 
-    public final double getPriceSellTax(TaxInfo tax) {
+    public final Double getPriceSellTax(TaxInfo tax) {
         return m_dPriceSell * (1.0 + tax.getRate());
+    }
+
+    public final String getPromotionID() {
+        return m_promotionid;
+    }
+    
+    public final Boolean getInCatalog() {
+        return m_bCatalog;
+    }
+    public final Double getCatOrder() {
+        return m_catorder;
     }
 
     public String printPriceSell() {
@@ -289,19 +313,19 @@ public class ProductInfoExt {
     }
 
     public String getProperty(String key) {
-        return attributes.getProperty(key);
+        return m_attributes.getProperty(key);
     }
 
     public String getProperty(String key, String defaultvalue) {
-        return attributes.getProperty(key, defaultvalue);
+        return m_attributes.getProperty(key, defaultvalue);
     }
 
     public void setProperty(String key, String value) {
-        attributes.setProperty(key, value);
+        m_attributes.setProperty(key, value);
     }
 
     public Properties getProperties() {
-        return attributes;
+        return m_attributes;
     }
 
      public final String getAlias() {
@@ -312,15 +336,15 @@ public class ProductInfoExt {
         m_sAlias = alias;
     }     
     
-        public final boolean getAlwaysAvailable() {
+        public final Boolean getAlwaysAvailable() {
         return m_bAlwaysAvailable;
     }
 
-    public final void setAlwaysAvailable(boolean bValue) {
+    public final void setAlwaysAvailable(Boolean bValue) {
         m_bAlwaysAvailable = bValue;
     }
  
-    public final boolean getCanDiscount() {
+    public final Boolean getCanDiscount() {
         return m_canDiscount;
     }  
     
@@ -336,33 +360,48 @@ public class ProductInfoExt {
         return new SerializerRead() {
             @Override
             public Object readValues(DataRead dr) throws BasicException {
+                
+                // If this assert fails it is likely a coding error
+                // Look at the number of fields fetched by the SELECT statement
+                // and cross check for a mismatch in the INDEX_xxx fields in
+                // DataLogicSales
+                assert( dr.getDataField().length == DataLogicSales.FIELD_COUNT );
+                
                 ProductInfoExt product = new ProductInfoExt();
-                product.m_ID = dr.getString(1);
-                product.m_sRef = dr.getString(2);
-                product.m_sCode = dr.getString(3);
-                product.m_sCodetype = dr.getString(4);
-                product.m_sName = dr.getString(5);
-                product.m_bCom = dr.getBoolean(6);
-                product.m_bScale = dr.getBoolean(7);
-                product.m_dPriceBuy = dr.getDouble(8);
-                product.m_dPriceSell = dr.getDouble(9);
-                product.taxcategoryid = dr.getString(10);
-                product.categoryid = dr.getString(11);
-                product.attributesetid = dr.getString(12);
-                product.m_Image = ImageUtils.readImage(dr.getBytes(13));
-                product.attributes = ImageUtils.readProperties(dr.getBytes(14));
-                product.m_bKitchen = dr.getBoolean(15);
-                product.m_bService = dr.getBoolean(16);
-                product.m_sDisplay = dr.getString(17);
-                product.m_bVprice = dr.getBoolean(18);
-                product.m_bVerpatrib = dr.getBoolean(19);
-                product.m_sTextTip = dr.getString(20);
-                product.m_bWarranty = dr.getBoolean(21);
-                product.m_dStockUnits = dr.getDouble(22);
-                product.m_sAlias = dr.getString(23);
-                product.m_bAlwaysAvailable = dr.getBoolean(24);
-                product.m_discounted = dr.getString(25);
-                product.m_canDiscount = dr.getBoolean(26);
+                product.m_ID = dr.getString(DataLogicSales.INDEX_ID + 1);
+                product.m_sRef = dr.getString(DataLogicSales.INDEX_REFERENCE + 1);
+                product.m_sCode = dr.getString(DataLogicSales.INDEX_CODE + 1);
+                product.m_sCodetype = dr.getString(DataLogicSales.INDEX_CODETYPE + 1);
+                product.m_sName = dr.getString(DataLogicSales.INDEX_NAME + 1);
+                product.m_bCom = dr.getBoolean(DataLogicSales.INDEX_ISCOM + 1);
+                product.m_bScale = dr.getBoolean(DataLogicSales.INDEX_ISSCALE + 1);
+                product.m_dPriceBuy = dr.getDouble(DataLogicSales.INDEX_PRICEBUY + 1);
+                product.m_dPriceSell = dr.getDouble(DataLogicSales.INDEX_PRICESELL + 1);
+                product.categoryid = dr.getString(DataLogicSales.INDEX_CATEGORY + 1);
+                product.taxcategoryid = dr.getString(DataLogicSales.INDEX_TAXCAT + 1);
+                product.attributesetid = dr.getString(DataLogicSales.INDEX_ATTRIBUTESET_ID + 1);
+                product.m_Image = ImageUtils.readImage(dr.getBytes(DataLogicSales.INDEX_IMAGE + 1));
+                product.m_attributes = ImageUtils.readProperties(dr.getBytes(DataLogicSales.INDEX_ATTRIBUTES + 1));                
+                product.m_stockCost = dr.getDouble(DataLogicSales.INDEX_STOCKCOST + 1);
+                product.m_stockVolume = dr.getDouble(DataLogicSales.INDEX_STOCKVOLUME + 1);
+                product.m_bCatalog = dr.getBoolean(DataLogicSales.INDEX_ISCATALOG + 1);
+                product.m_catorder = dr.getDouble(DataLogicSales.INDEX_CATORDER + 1);
+                product.m_bKitchen = dr.getBoolean(DataLogicSales.INDEX_ISKITCHEN + 1);
+                product.m_bService = dr.getBoolean(DataLogicSales.INDEX_ISSERVICE + 1);
+                product.m_sDisplay = dr.getString(DataLogicSales.INDEX_DISPLAY + 1);
+                product.m_bVprice = dr.getBoolean(DataLogicSales.INDEX_ISVPRICE + 1);
+                product.m_bVerpatrib = dr.getBoolean(DataLogicSales.INDEX_ISVERPATRIB + 1);
+                product.m_sTextTip = dr.getString(DataLogicSales.INDEX_TEXTTIP + 1);
+                product.m_bWarranty = dr.getBoolean(DataLogicSales.INDEX_WARRANTY + 1);
+                product.m_dStockUnits = dr.getDouble(DataLogicSales.INDEX_STOCKUNITS + 1);
+                product.m_sAlias = dr.getString(DataLogicSales.INDEX_ALIAS + 1);
+                product.m_bAlwaysAvailable = dr.getBoolean(DataLogicSales.INDEX_ALWAYSAVAILABLE + 1);
+                product.m_discounted = dr.getString(DataLogicSales.INDEX_DISCOUNTED + 1);
+                product.m_canDiscount = dr.getBoolean(DataLogicSales.INDEX_CANDISCOUNT + 1);
+                product.m_bPack = dr.getBoolean(DataLogicSales.INDEX_ISPACK + 1);
+                product.m_packquantity = dr.getDouble(DataLogicSales.INDEX_PACKQUANTITY + 1);
+                product.m_packproduct = dr.getString(DataLogicSales.INDEX_PACKPRODUCT + 1);
+                product.m_promotionid = dr.getString(DataLogicSales.INDEX_PROMOTIONID + 1);
 
                 return product;
             }

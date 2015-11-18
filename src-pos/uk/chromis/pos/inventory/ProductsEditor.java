@@ -346,6 +346,43 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
     }
 
+    private void extractValues( Object[] myprod ) {
+            m_jTitle.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]) + " - " + 
+                Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]) + " " 
+                + AppLocal.getIntString("label.recorddeleted"));
+        m_id = myprod[DataLogicSales.INDEX_ID];
+        m_jRef.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]));
+        m_jCode.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_CODE]));
+        m_jName.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]));
+        m_jComment.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISCOM]));
+        m_jScale.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISSCALE]));
+        m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[DataLogicSales.INDEX_PRICEBUY]));
+        setPriceSell(myprod[DataLogicSales.INDEX_PRICESELL]);
+        m_CategoryModel.setSelectedKey(myprod[DataLogicSales.INDEX_CATEGORY]);
+        taxcatmodel.setSelectedKey(myprod[DataLogicSales.INDEX_TAXCAT]);
+        attmodel.setSelectedKey(myprod[DataLogicSales.INDEX_ATTRIBUTESET_ID]);
+        m_jImage.setImage((BufferedImage) myprod[DataLogicSales.INDEX_IMAGE]);
+        m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[DataLogicSales.INDEX_STOCKCOST]));
+        m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[DataLogicSales.INDEX_STOCKVOLUME]));
+        m_jInCatalog.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISCATALOG]));
+        m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[DataLogicSales.INDEX_CATORDER]));
+        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[DataLogicSales.INDEX_ATTRIBUTES]));
+        m_jKitchen.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISKITCHEN]));
+        m_jService.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISSERVICE]));
+        m_jDisplay.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_DISPLAY]));
+        m_jVprice.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISVPRICE]));
+        m_jVerpatrib.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISVERPATRIB]));
+        m_jTextTip.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_TEXTTIP]));
+        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[DataLogicSales.INDEX_WARRANTY]));
+        m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[DataLogicSales.INDEX_STOCKUNITS]));
+        m_jAlias.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_ALIAS]));
+        m_jAlwaysAvailable.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ALWAYSAVAILABLE]));
+        m_jDiscounted.setSelected(((Boolean) myprod[DataLogicSales.INDEX_CANDISCOUNT]));
+        m_jIsPack.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISPACK]));
+        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[DataLogicSales.INDEX_PACKQUANTITY]));
+        packproductmodel.setSelectedKey(myprod[DataLogicSales.INDEX_PACKPRODUCT]);    
+    }
+    
     /**
      *
      * @param value
@@ -355,36 +392,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         reportlock = true;
         Object[] myprod = (Object[]) value;
-        m_jTitle.setText(Formats.STRING.formatValue(myprod[1]) + " - " + Formats.STRING.formatValue(myprod[3]) + " " + AppLocal.getIntString("label.recorddeleted"));
-        m_id = myprod[0];
-        m_jRef.setText(Formats.STRING.formatValue(myprod[1]));
-        m_jCode.setText(Formats.STRING.formatValue(myprod[2]));
-        m_jName.setText(Formats.STRING.formatValue(myprod[3]));
-        m_jComment.setSelected(((Boolean) myprod[5]));
-        m_jScale.setSelected(((Boolean) myprod[6]));
-        m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[7]));
-        setPriceSell(myprod[8]);
-        m_CategoryModel.setSelectedKey(myprod[9]);
-        taxcatmodel.setSelectedKey(myprod[10]);
-        attmodel.setSelectedKey(myprod[11]);
-        m_jImage.setImage((BufferedImage) myprod[12]);
-        m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[13]));
-        m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[14]));
-        m_jInCatalog.setSelected(((Boolean) myprod[15]));
-        m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[16]));
-        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[17]));
-        m_jKitchen.setSelected(((Boolean) myprod[18]));
-        m_jService.setSelected(((Boolean) myprod[19]));
-        m_jDisplay.setText(Formats.STRING.formatValue(myprod[20]));
-        m_jVprice.setSelected(((Boolean) myprod[21]));
-        m_jVerpatrib.setSelected(((Boolean) myprod[22]));
-        m_jTextTip.setText(Formats.STRING.formatValue(myprod[23]));
-        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[24]));
-        m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[25]));
-        m_jAlias.setText(Formats.STRING.formatValue(myprod[26]));
-        m_jAlwaysAvailable.setSelected(((Boolean) myprod[27]));
-        m_jDiscounted.setSelected(((Boolean) myprod[28]));
-
+        extractValues( myprod );
+        
         txtAttributes.setCaretPosition(0);
 
         reportlock = false;
@@ -420,9 +429,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jAlwaysAvailable.setEnabled(false);
         m_jDiscounted.setEnabled(false);
         m_jIsPack.setEnabled(true);
-        m_jIsPack.setSelected(((Boolean) myprod[29]));
-        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[30]));
-        packproductmodel.setSelectedKey(myprod[31]);
 
         m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
         m_jPackProduct.setEnabled(m_jIsPack.isSelected());
@@ -443,38 +449,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         reportlock = true;
         Object[] myprod = (Object[]) value;
-        m_jTitle.setText(Formats.STRING.formatValue(myprod[1]) + " - " + Formats.STRING.formatValue(myprod[3]));
-        m_id = myprod[0];
-        m_jRef.setText(Formats.STRING.formatValue(myprod[1]));
-        m_jCode.setText(Formats.STRING.formatValue(myprod[2]));
-        m_jName.setText(Formats.STRING.formatValue(myprod[4]));
-        m_jComment.setSelected(((Boolean) myprod[5]));
-        m_jScale.setSelected(((Boolean) myprod[6]));
-        m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[7]));
-        setPriceSell(myprod[8]);
-        m_CategoryModel.setSelectedKey(myprod[9]);
-        taxcatmodel.setSelectedKey(myprod[10]);
-        attmodel.setSelectedKey(myprod[11]);
-        m_jImage.setImage((BufferedImage) myprod[12]);
-        m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[13]));
-        m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[14]));
-        m_jInCatalog.setSelected(((Boolean) myprod[15]));
-        m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[16]));
-        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[17]));
-        m_jKitchen.setSelected(((Boolean) myprod[18]));
-        m_jService.setSelected(((Boolean) myprod[19]));
-        m_jDisplay.setText(Formats.STRING.formatValue(myprod[20]));
-        m_jVprice.setSelected(((Boolean) myprod[21]));
-        m_jVerpatrib.setSelected(((Boolean) myprod[22]));
-        m_jTextTip.setText(Formats.STRING.formatValue(myprod[23]));
-        m_jCheckWarrantyReceipt.setSelected(((Boolean) myprod[24]));
-        m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[25]));
-        m_jAlias.setText(Formats.STRING.formatValue(myprod[26]));
-        m_jAlwaysAvailable.setSelected(((Boolean) myprod[27]));
-        m_jDiscounted.setSelected(((Boolean) myprod[29]));
-        m_jIsPack.setSelected(((Boolean) myprod[30]));
-        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[31]));
-        packproductmodel.setSelectedKey(myprod[32]);
+
+        extractValues( myprod );
+
         txtAttributes.setCaretPosition(0);
         reportlock = false;
 
@@ -531,39 +508,40 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     public Object createValue() throws BasicException {
 
         Object[] myprod = new Object[33];
-        myprod[0] = m_id;
-        myprod[1] = m_jRef.getText();
-        myprod[2] = m_jCode.getText();
-        myprod[3] = BarcodeValidator.BarcodeValidate(m_jCode.getText());
-        myprod[4] = m_jName.getText();
-        myprod[5] = m_jComment.isSelected();
-        myprod[6] = m_jScale.isSelected();
-        myprod[7] = Formats.CURRENCY.parseValue(m_jPriceBuy.getText());
-        myprod[8] = pricesell;
-        myprod[9] = m_CategoryModel.getSelectedKey();
-        myprod[10] = taxcatmodel.getSelectedKey();
-        myprod[11] = attmodel.getSelectedKey();
-        myprod[12] = m_jImage.getImage();
-        myprod[13] = Formats.CURRENCY.parseValue(m_jstockcost.getText());
-        myprod[14] = Formats.DOUBLE.parseValue(m_jstockvolume.getText());
-        myprod[15] = m_jInCatalog.isSelected();
-        myprod[16] = Formats.INT.parseValue(m_jCatalogOrder.getText());
-        myprod[17] = Formats.BYTEA.parseValue(txtAttributes.getText());
-        myprod[18] = m_jKitchen.isSelected();
-        myprod[19] = m_jService.isSelected();
-        myprod[20] = m_jDisplay.getText();
-        myprod[21] = m_jVprice.isSelected();
-        myprod[22] = m_jVerpatrib.isSelected();
-        myprod[23] = m_jTextTip.getText();
-        myprod[24] = m_jCheckWarrantyReceipt.isSelected();
-        myprod[25] = Formats.DOUBLE.parseValue(m_jStockUnits.getText());
-        myprod[26] = m_jAlias.getText();
-        myprod[27] = m_jAlwaysAvailable.isSelected();
-        myprod[28] = "no";
-        myprod[29] = m_jDiscounted.isSelected();
-        myprod[30] = m_jIsPack.isSelected();
-        myprod[31] = Formats.DOUBLE.parseValue(m_jPackQuantity.getText());
-        myprod[32] = packproductmodel.getSelectedKey();
+        myprod[DataLogicSales.INDEX_ID] = m_id;
+        myprod[DataLogicSales.INDEX_REFERENCE] = m_jRef.getText();
+        myprod[DataLogicSales.INDEX_CODE] = m_jCode.getText();
+        myprod[DataLogicSales.INDEX_CODETYPE] = BarcodeValidator.BarcodeValidate(m_jCode.getText());
+        myprod[DataLogicSales.INDEX_NAME] = m_jName.getText();
+        myprod[DataLogicSales.INDEX_ISCOM] = m_jComment.isSelected();
+        myprod[DataLogicSales.INDEX_ISSCALE] = m_jScale.isSelected();
+        myprod[DataLogicSales.INDEX_PRICEBUY] = Formats.CURRENCY.parseValue(m_jPriceBuy.getText());
+        myprod[DataLogicSales.INDEX_PRICESELL] = pricesell;
+        myprod[DataLogicSales.INDEX_CATEGORY] = m_CategoryModel.getSelectedKey();
+        myprod[DataLogicSales.INDEX_TAXCAT] = taxcatmodel.getSelectedKey();
+        myprod[DataLogicSales.INDEX_ATTRIBUTESET_ID] = attmodel.getSelectedKey();
+        myprod[DataLogicSales.INDEX_IMAGE] = m_jImage.getImage();
+        myprod[DataLogicSales.INDEX_STOCKCOST] = Formats.CURRENCY.parseValue(m_jstockcost.getText());
+        myprod[DataLogicSales.INDEX_STOCKVOLUME] = Formats.DOUBLE.parseValue(m_jstockvolume.getText());
+        myprod[DataLogicSales.INDEX_ISCATALOG] = m_jInCatalog.isSelected();
+        myprod[DataLogicSales.INDEX_CATORDER] = Formats.INT.parseValue(m_jCatalogOrder.getText());
+        myprod[DataLogicSales.INDEX_ATTRIBUTES] = Formats.BYTEA.parseValue(txtAttributes.getText());
+        myprod[DataLogicSales.INDEX_ISKITCHEN] = m_jKitchen.isSelected();
+        myprod[DataLogicSales.INDEX_ISSERVICE] = m_jService.isSelected();
+        myprod[DataLogicSales.INDEX_DISPLAY] = m_jDisplay.getText();
+        myprod[DataLogicSales.INDEX_ISVPRICE] = m_jVprice.isSelected();
+        myprod[DataLogicSales.INDEX_ISVERPATRIB] = m_jVerpatrib.isSelected();
+        myprod[DataLogicSales.INDEX_TEXTTIP] = m_jTextTip.getText();
+        myprod[DataLogicSales.INDEX_WARRANTY] = m_jCheckWarrantyReceipt.isSelected();
+        myprod[DataLogicSales.INDEX_STOCKUNITS] = Formats.DOUBLE.parseValue(m_jStockUnits.getText());
+        myprod[DataLogicSales.INDEX_ALIAS] = m_jAlias.getText();
+        myprod[DataLogicSales.INDEX_ALWAYSAVAILABLE] = m_jAlwaysAvailable.isSelected();
+        myprod[DataLogicSales.INDEX_DISCOUNTED] = "no";
+        myprod[DataLogicSales.INDEX_CANDISCOUNT] = m_jDiscounted.isSelected();
+        myprod[DataLogicSales.INDEX_ISPACK] = m_jIsPack.isSelected();
+        myprod[DataLogicSales.INDEX_PACKQUANTITY] = Formats.DOUBLE.parseValue(m_jPackQuantity.getText());
+        myprod[DataLogicSales.INDEX_PACKPRODUCT] = packproductmodel.getSelectedKey();
+        myprod[DataLogicSales.INDEX_PROMOTIONID] = null;
 
         return myprod;
 

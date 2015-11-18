@@ -59,6 +59,12 @@ public class Row {
     }
     
     /**
+     */
+    public Field[] getFields() {
+        return this.fields;
+    }
+    
+    /**
      *
      * @return
      */

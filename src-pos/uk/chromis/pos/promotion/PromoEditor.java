@@ -58,7 +58,7 @@ import uk.chromis.pos.util.PropertyUtils;
  */
 public class PromoEditor extends JPanel implements EditorRecord {
 
-    private SentenceList m_sentPromo;
+//    private SentenceList m_sentPromo;
     private ComboBoxValModel m_jTypeModel;
     private ComboBoxValModel m_jCatModel;
     private DirtyManager m_Dirty;
@@ -84,7 +84,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
         m_jCategory.setVisible(false);
         //btnValidTo.setVisible(false);
 
-        m_sentPromo = dlSales.getPromoTypeList();
+//        m_sentPromo = dlSales.getPromoTypeList();
         m_jTypeModel = new ComboBoxValModel();
 
         m_jName.getDocument().addDocumentListener(dirty);
@@ -132,8 +132,8 @@ public class PromoEditor extends JPanel implements EditorRecord {
     public void activate() throws BasicException {
         m_jCatModel = new ComboBoxValModel(m_dlSales.getCategoriesList().list());
         m_jCatName.setModel(m_jCatModel);
-        m_jTypeModel = new ComboBoxValModel(m_sentPromo.list());
-        m_jType.setModel(m_jTypeModel);
+ //       m_jTypeModel = new ComboBoxValModel(m_sentPromo.list());
+//        m_jType.setModel(m_jTypeModel);
         onSelectPromoType(null);
     }
 

@@ -2347,6 +2347,12 @@
         
     
     <changeSet author="Chromis POS" id="Create StockChanges Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="STOCKCHANGES"/>
+            </not>
+        </preConditions>
+
         <createTable tableName="STOCKCHANGES">
             <column name="ID" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -2364,6 +2370,12 @@
     </changeSet>  
     
     <changeSet author="Chromis POS" id="Create Promotion Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PROMOTIONS"/>
+            </not>
+        </preConditions>
+
         <createTable tableName="PROMOTIONS">
             <column name="ID" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -2378,6 +2390,16 @@
             <column name="ISENABLED" type="${boolean.type}" 
                     defaultValueNumeric="1"/>
         </createTable>      
+
+        <addColumn tableName="PRODUCTS">
+            <column name="PROMOTIONID" type="varchar(50)" />                                              
+        </addColumn>  
+        
+        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
+                         constraintName ="FK_PRODUCT_PROMOTIONID"
+                         referencedColumnNames = "ID"
+                         baseTableName="PRODUCTS"
+                         referencedTableName="PROMOTIONS"/>
 
         <insert tableName="RESOURCES">
             <column name="ID" value="6700"/>
@@ -2422,7 +2444,7 @@
         </insert>
         
     </changeSet>  
-    
+            
     <changeSet author="Chromis POS" id="derby10.10.20">    
     </changeSet>   
      
