@@ -146,7 +146,7 @@
                                  referencedTableName="PRODUCTS"/>
     </changeSet>
 
-    <changeSet author="Chromis Pos" id="Products_com Table FKs">
+    <changeSet author="Chromis Pos" id="PRODUCTS_COM Table FKs">
         <addForeignKeyConstraint baseColumnNames="PRODUCT"
                                  constraintName ="PRODUCTS_COM_FK_1"
                                  referencedColumnNames = "ID"
