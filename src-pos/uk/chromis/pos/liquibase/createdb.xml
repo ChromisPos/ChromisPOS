@@ -2342,6 +2342,30 @@
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
     </changeSet>      
         
+            
+    <changeSet author="Chromis POS" id="Create STOCKCHANGES Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="STOCKCHANGES"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
+            <column name="CHANGES_PROCESSED" type="int"/>
+        </createTable>       
+    </changeSet> 
     
     <changeSet author="Chromis POS" id="derby10.10.20">    
     </changeSet>   

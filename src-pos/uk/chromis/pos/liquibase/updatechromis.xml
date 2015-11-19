@@ -643,13 +643,20 @@
         </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
         
-    <changeSet author="Chromis POS" id="Create StockChanges Table">
+    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" dbms="postgresql, hypersql, hsqldb">    
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
+        </preConditions> 
+        <dropTable tableName="STOCKCHANGES"/>
+    </changeSet> 
+                 
+    <changeSet author="Chromis POS" id="Create STOCKCHANGES Table">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="STOCKCHANGES"/>
             </not>
         </preConditions>
-
+        
         <createTable tableName="STOCKCHANGES">
             <column name="ID" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -657,15 +664,16 @@
             <column name="LOCATION" type="varchar(255)"/>                
             <column name="USERNAME" type="varchar(50)"/>           
             <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="CHANGES_PRODUCT" type="varchar(255)"/>
-            <column name="CHANGES_TYPE" type="int"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
             <column name="CHANGES_PROCESSED" type="int"/>
-            <column name="CHANGES_FIELD" type="varchar(50)"/>
-            <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
-            <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
         </createTable>       
-    </changeSet> 
-  
+   </changeSet>   
+   
     <changeSet author="Chromis POS" id="Add Pack Products permissions "> 
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>

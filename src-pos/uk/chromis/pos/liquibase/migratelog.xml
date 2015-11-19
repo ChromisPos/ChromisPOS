@@ -1025,13 +1025,14 @@
             <column name="LOCATION" type="varchar(255)"/>                
             <column name="USERNAME" type="varchar(50)"/>           
             <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="CHANGES_PRODUCT" type="varchar(255)"/>
-            <column name="CHANGES_TYPE" type="int"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
             <column name="CHANGES_PROCESSED" type="int"/>
-            <column name="CHANGES_FIELD" type="varchar(50)"/>
-            <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
-            <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
-        </createTable>       
+        </createTable>           
     </changeSet> 
 
     <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="postgresql, hypersql, hsqldb">
