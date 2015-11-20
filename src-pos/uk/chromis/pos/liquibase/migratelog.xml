@@ -471,25 +471,19 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis Pos" id="Create Products_com Table">
+    <changeSet author="Chromis Pos" id="Create PRODUCTS_COM Table">
         <createTable tableName="PRODUCTS_COM">
-            <column name="ID" type="varchar(255)">
+            <column name="ID" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="PRODUCT" type="varchar(255)">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="PRODUCT2" type="varchar(255)">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <createIndex tableName="PRODUCTS_COM"
-                     indexName="PCOM_INX_PROD"
-                     unique="true">
-            <column name="PRODUCT" type="varchar(255)"/>
-            <column name="PRODUCT2" type="varchar(255)"/>
-        </createIndex>
     </changeSet>
 
     <changeSet author="Chromis Pos" id="Create Locations Table">
@@ -580,9 +574,7 @@
         <createIndex tableName="STOCKCURRENT"
                      indexName="STOCKCURRENT_INX"
                      unique="true">
-            <column name="LOCATION" type="varchar(255)"/>
             <column name="PRODUCT" type="varchar(255)"/>
-            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
         </createIndex>
     </changeSet>
 
@@ -1033,13 +1025,14 @@
             <column name="LOCATION" type="varchar(255)"/>                
             <column name="USERNAME" type="varchar(50)"/>           
             <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="CHANGES_PRODUCT" type="varchar(255)"/>
-            <column name="CHANGES_TYPE" type="int"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
             <column name="CHANGES_PROCESSED" type="int"/>
-            <column name="CHANGES_FIELD" type="varchar(50)"/>
-            <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
-            <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
-        </createTable>       
+        </createTable>           
     </changeSet> 
 
     <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence" dbms="postgresql, hypersql, hsqldb">
