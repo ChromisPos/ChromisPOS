@@ -63,7 +63,7 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.customers.DataLogicCustomers;
 import uk.chromis.pos.customers.JCustomerFinder;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.BeanFactoryApp;
@@ -97,6 +97,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.util.AutoLogoff;
+import static java.lang.Integer.parseInt;
 
 /**
  *
@@ -144,7 +145,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Object m_principalapp;
     private Boolean restaurant;
     private Action logout;
-    private InactivityListener listener;
+    // private InactivityListener listener;
     private Integer delay = 0;
     private DataLogicReceipts dlReceipts = null;
     private Boolean priceWith00;
@@ -155,7 +156,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Boolean warrantyPrint = false;
     private TicketInfo m_ticket;
     private TicketInfo m_ticketCopy;
-    private AppConfig m_config;
+    private AppConfigOrig m_config;
 
     public JPanelTicket() {
         initComponents();
@@ -163,7 +164,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public void init(AppView app) throws BeanFactoryException {
-        m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
+        m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
         m_config.load();
 
         m_App = app;
@@ -330,10 +331,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 // if the delay period is not zero create a inactivitylistener instance        
         if (delay != 0) {
-               listener = new InactivityListener(logout, delay);
-              listener.start();
-            // AutoLogoff.getInstance().setTimer(delay, logout);
-            // AutoLogoff.getInstance().start();
+            AutoLogoff.getInstance().setTimer(delay, logout);
+            AutoLogoff.getInstance().start();
         }
 
         paymentdialogreceipt = JPaymentSelectReceipt.getDialog(this);
@@ -387,9 +386,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public boolean deactivate() {
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().stop();
 
         return m_ticketsbag.deactivate();
     }
@@ -410,14 +407,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         switch (m_App.getProperties().getProperty("machine.ticketsbag")) {
             case "restaurant":
                 if ("true".equals(m_App.getProperties().getProperty("till.autoLogoffrestaurant"))) {
-            //               if (AutoLogoff.getInstance().timer) {
-             //                  AutoLogoff.getInstance().restart();
-            //    }
-                   }
-                if (listener != null) {
-                    listener.restart();
+                    //               if (AutoLogoff.getInstance().timer) {
+                    //                  AutoLogoff.getInstance().restart();
+                    //    }
                 }
-
+                AutoLogoff.getInstance().restart();
         }
 
         m_oTicket = oTicket;
@@ -881,9 +875,109 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
              */
             if (m_sBarcode.length() > 0) {
                 String sCode = m_sBarcode.toString();
-System.out.println("Barcode = " +sCode);
+
+                /**
+                 * *****************************************************************************
+                 * Kidsgrove tropicals voucher code
+                 * ******************************************************************************
+                 */
+                if (sCode.startsWith("05V")) {
+// £5.00 voucher                           
+                    try {
+                        if (dlSales.getVoucher(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already Sold. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else if (checkVoucherCurrentTicket(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already on Ticket. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ProductInfoExt oProduct = new ProductInfoExt();
+                            oProduct = dlSales.getProductInfoByCode("05V");
+                            if (oProduct != null) {
+                                oProduct.setCode("05V");
+                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setProperty("vCode", sCode);
+                                oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
+                                addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
+                            } else {
+                                Toolkit.getDefaultToolkit().beep();
+                                JOptionPane.showMessageDialog(null,
+                                        "Vocher code 05V - " + AppLocal.getIntString("message.noproduct"),
+                                        "Check", JOptionPane.WARNING_MESSAGE);
+                                stateToZero();
+                            }
+                        }
+                    } catch (BasicException ex) {
+                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (sCode.startsWith("10V")) {
+// £10.00 voucher   
+                    try {
+                        if (dlSales.getVoucher(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already Sold. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else if (checkVoucherCurrentTicket(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already on Ticket. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ProductInfoExt oProduct = new ProductInfoExt();
+                            oProduct = dlSales.getProductInfoByCode("10V");
+                            if (oProduct != null) {
+                                oProduct.setCode("10V");
+                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setProperty("vCode", sCode);
+                                oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
+                                addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
+                            } else {
+                                Toolkit.getDefaultToolkit().beep();
+                                JOptionPane.showMessageDialog(null,
+                                        "Vocher code 10V - " + AppLocal.getIntString("message.noproduct"),
+                                        "Check", JOptionPane.WARNING_MESSAGE);
+                                stateToZero();
+                            }
+                        }
+                    } catch (BasicException ex) {
+                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (sCode.startsWith("20V")) {
+// £20.00 voucher     
+                    try {
+                        if (dlSales.getVoucher(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already Sold. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else if (checkVoucherCurrentTicket(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already on Ticket. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ProductInfoExt oProduct = new ProductInfoExt();
+                            oProduct = dlSales.getProductInfoByCode("20V");
+                            if (oProduct != null) {
+                                oProduct.setProperty("vCode", sCode);
+                                oProduct.setCode("20V");
+                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
+                                addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
+                            } else {
+                                Toolkit.getDefaultToolkit().beep();
+                                JOptionPane.showMessageDialog(null,
+                                        "Voucher code 20V - " + AppLocal.getIntString("message.noproduct"),
+                                        "Check", JOptionPane.WARNING_MESSAGE);
+                                stateToZero();
+                            }
+                        }
+                    } catch (BasicException ex) {
+                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    /**
+                     * *****************************************************************************
+                     *
+                     * End Kidsgrove tropicals voucher codes
+                     *
+                     * ******************************************************************************
+                     */
 // Are we passing a customer card these cards start with 'c'                
-                if (sCode.startsWith("c")) {
+                } else if (sCode.startsWith("c")) {
                     try {
                         CustomerInfoExt newcustomer = dlSales.findCustomerExt(sCode);
                         if (newcustomer == null) {
@@ -935,7 +1029,6 @@ System.out.println("Barcode = " +sCode);
                             prodCode = sCode.replace(sCode.substring(6, sCode.length() - 1), "00000");
                             prodCode = prodCode.substring(0, sCode.length() - 1);
                         }
-
                         if (sCode.length() == 13) {
                             switch (sVariableTypePrefix) {
                                 case "20":
@@ -1275,9 +1368,7 @@ System.out.println("Barcode = " +sCode);
     }
 
     private boolean closeTicket(TicketInfo ticket, Object ticketext) {
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().stop();
         boolean resultok = false;
 
         if (m_App.getAppUserView().getUser().hasPermission("sales.Total")) {
@@ -1292,9 +1383,7 @@ System.out.println("Barcode = " +sCode);
                 }
                 //read resource ticket.total and execute
                 if (executeEvent(ticket, ticketext, "ticket.total") == null) {
-                    if (listener != null) {
-                        listener.stop();
-                    }
+                    AutoLogoff.getInstance().stop();
                     // Muestro el total
                     printTicket("Printer.TicketTotal", ticket, ticketext);
 
@@ -1321,6 +1410,17 @@ System.out.println("Barcode = " +sCode);
                             // Save the receipt and assign a receipt number
                             try {
                                 dlSales.saveTicket(ticket, m_App.getInventoryLocation());
+
+// Kidsgrove here the payment has been confirmed lets save voucher details into database vCode10V0061
+                                for (TicketLineInfo line : m_oTicket.getLines()) {
+                                    if ((line.getProperty("vCode") != "") && (line.getProperty("vCode") != null)) {
+                                        try {
+                                            dlSales.sellVoucher(
+                                                    new Object[]{line.getProperty("vCode"), Integer.toString(ticket.getTicketId())});
+                                        } catch (BasicException ex) {
+                                        }
+                                    }
+                                }
                                 // code added to allow last ticket reprint       
                                 m_config.setProperty("lastticket.number", Integer.toString(ticket.getTicketId()));
                                 m_config.setProperty("lastticket.type", Integer.toString(ticket.getTicketType()));
@@ -1376,8 +1476,16 @@ System.out.println("Barcode = " +sCode);
         return resultok;
     }
 
+    private boolean checkVoucherCurrentTicket(String voucher) {
+        for (TicketLineInfo line : m_oTicket.getLines()) {
+            if (line.getProperty("vCode").equals(voucher)) {
+                return (true);
+            }
+        }
+        return (false);
+    }
+
 // John L July 2014
-//    private void warrantyCheck(TicketInfo ticket){
     private boolean warrantyCheck(TicketInfo ticket) {
         warrantyPrint = false;
         int lines = 0;
@@ -1398,7 +1506,6 @@ System.out.println("Barcode = " +sCode);
      */
     public String getPickupString(TicketInfo pTicket) {
         if (pTicket == null) {
-//        return("");
             return ("0");
         }
         String tmpPickupId = Integer.toString(pTicket.getPickupId());
@@ -1452,11 +1559,8 @@ System.out.println("Barcode = " +sCode);
     }
 
     private void printReport(String resourcefile, TicketInfo ticket, Object ticketext) {
-
         try {
-
             JasperReport jr;
-
             InputStream in = getClass().getResourceAsStream(resourcefile + ".ser");
             if (in == null) {
                 // read and compile the report
@@ -1467,7 +1571,6 @@ System.out.println("Barcode = " +sCode);
                     jr = (JasperReport) oin.readObject();
                 }
             }
-
             // Construyo el mapa de los parametros.
             Map reportparams = new HashMap();
             // reportparams.put("ARG", params);
@@ -1584,7 +1687,6 @@ System.out.println("Barcode = " +sCode);
     }
 
     public void evalScriptAndRefresh(String resource, ScriptArg... args) {
-
         if (resource == null) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"));
             msg.show(this);
@@ -2304,9 +2406,7 @@ System.out.println("Barcode = " +sCode);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jbtnScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnScaleActionPerformed
-
         stateTransition('\u00a7');
-
     }//GEN-LAST:event_m_jbtnScaleActionPerformed
 
     private void m_jEditLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEditLineActionPerformed
@@ -2331,21 +2431,16 @@ System.out.println("Barcode = " +sCode);
     }//GEN-LAST:event_m_jEditLineActionPerformed
 
     private void m_jEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEnterActionPerformed
-
         stateTransition('\n');
-
     }//GEN-LAST:event_m_jEnterActionPerformed
 
     private void m_jNumberKeyKeyPerformed(uk.chromis.beans.JNumberEvent evt) {//GEN-FIRST:event_m_jNumberKeyKeyPerformed
-
         stateTransition(evt.getKey());
     }//GEN-LAST:event_m_jNumberKeyKeyPerformed
 
     private void m_jKeyFactoryKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_jKeyFactoryKeyTyped
-
         m_jKeyFactory.setText(null);
         stateTransition(evt.getKeyChar());
-
     }//GEN-LAST:event_m_jKeyFactoryKeyTyped
 
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
@@ -2384,9 +2479,7 @@ System.out.println("Barcode = " +sCode);
     }//GEN-LAST:event_m_jListActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().stop();
         JCustomerFinder finder = JCustomerFinder.getCustomerFinder(this, dlCustomers);
         finder.search(m_oTicket.getCustomer());
         finder.setVisible(true);
@@ -2405,12 +2498,12 @@ System.out.println("Barcode = " +sCode);
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindcustomer"), e);
             msg.show(this);
         }
-
+        AutoLogoff.getInstance().restart();
         refreshTicket();
 }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSplitActionPerformed
-
+        AutoLogoff.getInstance().stop();
         if (m_oTicket.getArticlesCount() > 1) {
             //read resource ticket.line and execute
             ReceiptSplit splitdialog = ReceiptSplit.getDialog(this, dlSystem.getResourceAsXML("Ticket.Line"), dlSales, dlCustomers, taxeslogic);
@@ -2426,13 +2519,11 @@ System.out.println("Barcode = " +sCode);
                 }
             }
         }
-
+        AutoLogoff.getInstance().restart();
 }//GEN-LAST:event_btnSplitActionPerformed
 
     private void jEditAttributesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditAttributesActionPerformed
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().stop();
         int i = m_ticketlines.getSelectedIndex();
         if (i < 0) {
             Toolkit.getDefaultToolkit().beep(); // no line selected
@@ -2453,25 +2544,21 @@ System.out.println("Barcode = " +sCode);
                 msg.show(this);
             }
         }
-        if (listener != null) {
-            listener.restart();
-        }
+        AutoLogoff.getInstance().restart();
 }//GEN-LAST:event_jEditAttributesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        AutoLogoff.getInstance().stop();
 // Show the custmer panel - this does deactivate
         {
             m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
-
         }
+        AutoLogoff.getInstance().restart();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jbtnMooringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMooringActionPerformed
 // Display vessel selection box on screen if reply is good add to the ticket
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().stop();
         JMooringDetails mooring = JMooringDetails.getMooringDetails(this, m_App.getSession());
         mooring.setVisible(true);
         if (mooring.isCreate()) {
@@ -2493,7 +2580,9 @@ System.out.println("Barcode = " +sCode);
                 }
             }
         }
+
         refreshTicket();
+        AutoLogoff.getInstance().restart();
     }//GEN-LAST:event_jbtnMooringActionPerformed
 
     private void j_btnKitchenPrtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_j_btnKitchenPrtActionPerformed
@@ -2545,7 +2634,8 @@ System.out.println("Barcode = " +sCode);
     }//GEN-LAST:event_btnLogout
 
     private void btnReprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprintActionPerformed
-        // test if there is valid ticket in the system at this till to be printed
+        
+// test if there is valid ticket in the system at this till to be printed
         if (m_config.getProperty("lastticket.number") != null) {
             try {
                 TicketInfo ticket = dlSales.loadTicket(Integer.parseInt((m_config.getProperty("lastticket.type"))), Integer.parseInt((m_config.getProperty("lastticket.number"))));

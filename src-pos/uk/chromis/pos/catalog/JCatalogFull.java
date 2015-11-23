@@ -37,7 +37,7 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 
 /**
  *
@@ -175,7 +175,7 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
 
             java.util.List< ProductInfoExt> prods;
             
-            AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
+            AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
             m_config.load();
 
             if ((Boolean.valueOf(m_config.getProperty("sales.newscreenbycatorder")))) {

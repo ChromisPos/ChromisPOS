@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import uk.chromis.pos.customers.CustomerInfoExt;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 
@@ -46,13 +47,13 @@ public class JPaymentMagcard extends javax.swing.JPanel implements JPaymentInter
         
         m_notifier = notifier;
         
-        m_paymentgateway = PaymentGatewayFac.getPaymentGateway(app.getProperties());
+        m_paymentgateway = PaymentGatewayFac.getPaymentGateway();
         
         if (m_paymentgateway == null) {
             jlblMessage.setText(AppLocal.getIntString("message.nopaymentgateway"));            
         } else {           
             // Se van a poder efectuar pagos con tarjeta
-            m_cardpanel = PaymentPanelFac.getPaymentPanel(app.getProperties().getProperty("payment.magcardreader"), notifier);
+            m_cardpanel = PaymentPanelFac.getPaymentPanel(AppConfig.getInstance().getProperty("payment.magcardreader"), notifier);
             add(m_cardpanel.getComponent(), BorderLayout.CENTER);
             jlblMessage.setText(null);
             // jlblMessage.setText(AppLocal.getIntString("message.nocardreader"));

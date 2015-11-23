@@ -50,17 +50,17 @@ public class ConfigPaymentPanelBluePay20POST extends javax.swing.JPanel implemen
      * @param config
      */
     @Override
-        public void loadProperties(AppConfig config) {
-        String sAccountID = config.getProperty("payment.BluePay.accountID");
-        String sSecretKey = config.getProperty("payment.BluePay.secretKey");
-        String sURL = config.getProperty("payment.BluePay.URL");
+        public void loadProperties() {
+        String sAccountID = AppConfig.getInstance().getProperty("payment.BluePay.accountID");
+        String sSecretKey = AppConfig.getInstance().getProperty("payment.BluePay.secretKey");
+        String sURL = AppConfig.getInstance().getProperty("payment.BluePay.URL");
         
 //        System.out.println(sURL);
          
         if (sAccountID!=null && sSecretKey!=null && sURL!=null && sURL.startsWith("https://")) {
-            jtxtURL.setText(config.getProperty("payment.BluePay.URL"));
-            jtxtAccountID.setText(config.getProperty("payment.BluePay.accountID"));
-            jtxtSecretKey.setText(config.getProperty("payment.BluePay.secretKey"));
+            jtxtURL.setText(AppConfig.getInstance().getProperty("payment.BluePay.URL"));
+            jtxtAccountID.setText(AppConfig.getInstance().getProperty("payment.BluePay.accountID"));
+            jtxtSecretKey.setText(AppConfig.getInstance().getProperty("payment.BluePay.secretKey"));
         }
     }
 
@@ -68,10 +68,10 @@ public class ConfigPaymentPanelBluePay20POST extends javax.swing.JPanel implemen
      *
      * @param config
      */
-    public void saveProperties(AppConfig config) {
-        config.setProperty("payment.BluePay.accountID", comboValue(jtxtAccountID.getText()));
-        config.setProperty("payment.BluePay.secretKey", comboValue(jtxtSecretKey.getText()));
-        config.setProperty("payment.BluePay.URL", comboValue(jtxtURL.getText()));
+    public void saveProperties() {
+        AppConfig.getInstance().setProperty("payment.BluePay.accountID", comboValue(jtxtAccountID.getText()));
+        AppConfig.getInstance().setProperty("payment.BluePay.secretKey", comboValue(jtxtSecretKey.getText()));
+        AppConfig.getInstance().setProperty("payment.BluePay.URL", comboValue(jtxtURL.getText()));
     }
     
     private String comboValue(Object value) {

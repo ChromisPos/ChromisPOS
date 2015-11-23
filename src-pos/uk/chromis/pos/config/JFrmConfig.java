@@ -24,9 +24,13 @@ import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.SubstanceSkin;
 import uk.chromis.basic.BasicException;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
@@ -52,10 +56,10 @@ public class JFrmConfig extends javax.swing.JFrame {
         } catch (IOException e) {
         }   
         setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Configuration"));        
-        setPreferredSize(new Dimension(800,750));
+        setPreferredSize(new Dimension(900,750));
         addWindowListener(new MyFrameListener()); 
         
-        config = new JPanelConfiguration(props);
+        config = new JPanelConfiguration();
         
         getContentPane().add(config, BorderLayout.CENTER);
        
@@ -88,7 +92,7 @@ public class JFrmConfig extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 650));
-        setPreferredSize(new java.awt.Dimension(780, 550));
+        setPreferredSize(new java.awt.Dimension(780, 700));
 
         setSize(new java.awt.Dimension(758, 561));
         setLocationRelativeTo(null);
@@ -102,16 +106,24 @@ public class JFrmConfig extends javax.swing.JFrame {
             @Override
             public void run() {
                 
-                AppConfig config = new AppConfig(args);
-                config.load();    
+              // config = AppConfig.getInstance().getDefaultConfig();
+              // config.load();    
                 
 // Set the look and feel.
-                try {                    
-                    UIManager.setLookAndFeel(config.getProperty("swing.defaultlaf"));
+   // Set the look and feel.
+                try {
+
+                    Object laf = Class.forName(AppConfig.getInstance().getProperty("swing.defaultlaf")).newInstance();
+                    if (laf instanceof LookAndFeel) {
+                        UIManager.setLookAndFeel((LookAndFeel) laf);
+                    } else if (laf instanceof SubstanceSkin) {
+                        SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);
+                    }
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+             //       logger.log(Level.WARNING, "Cannot set Look and Feel", e);
                 }
                 
-                new JFrmConfig(config).setVisible(true);
+                new JFrmConfig(null).setVisible(true);
             }
         });
     }

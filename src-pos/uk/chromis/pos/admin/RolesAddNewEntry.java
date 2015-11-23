@@ -28,7 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppViewConnection;
 
@@ -231,7 +231,7 @@ public class RolesAddNewEntry extends javax.swing.JDialog {
 
         } else {
 
-        AppConfig config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
+        AppConfigOrig config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
         config.load();
 
         try {

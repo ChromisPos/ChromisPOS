@@ -143,7 +143,7 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
      */
     @Override
     public double getTendered() {
-        return (0.0); 
+        return (0.00); 
     }
 
     /**

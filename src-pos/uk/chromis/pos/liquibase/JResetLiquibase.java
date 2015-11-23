@@ -25,7 +25,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppViewConnection;
 import uk.chromis.pos.util.AltEncrypter;
 
@@ -44,7 +44,7 @@ public class JResetLiquibase extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AppConfig config = new AppConfig(args);
+                AppConfigOrig config = new AppConfigOrig(args);
                 config.load();
 
                 String db_user = (config.getProperty("db.user"));

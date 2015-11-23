@@ -32,7 +32,7 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.AppViewConnection;
@@ -50,7 +50,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
     private boolean m_bunitsok;
     private boolean m_bpriceok;
     private String productID;
-    private final AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
+    private final AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
     private Session session;
     private Connection connection;
     private PreparedStatement pstmt;

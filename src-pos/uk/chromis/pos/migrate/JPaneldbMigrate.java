@@ -63,7 +63,6 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 public class JPaneldbMigrate extends JPanel implements JPanelView {
 
     private DirtyManager dirty = new DirtyManager();
-    private AppConfig config;
     private Connection con;
     private String sdbmanager;
     private Session session;
@@ -106,13 +105,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
         initComponents();
         jPanel2.setPreferredSize(new java.awt.Dimension(645, 209));
-        config = new AppConfig(props.getConfigFile());
         m_props = props;
         m_panelconfig = new ArrayList<>();
-        config.load();
-        for (PanelConfig c : m_panelconfig) {
-            c.loadProperties(config);
-        }
 
         jtxtDbDriverLib.getDocument().addDocumentListener(dirty);
         jtxtDbDriver.getDocument().addDocumentListener(dirty);
@@ -1285,25 +1279,24 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
 // Write new database settings to properties file
                     if ("MySQL".equals(sdbmanager2)) {
-                        config.setProperty("db.engine", "MySQL");
+                        AppConfig.getInstance().setProperty("db.engine", "MySQL");
                     } else {
-                        config.setProperty("db.engine", "PostgreSQL");
-                    }
-//                    
-                    config.setProperty("db.driverlib", jtxtDbDriverLib.getText());
-                    config.setProperty("db.driver", jtxtDbDriver.getText());
-                    config.setProperty("db.URL", jtxtDbURL.getText());
-                    config.setProperty("db.user", jtxtDbUser.getText());
+                        AppConfig.getInstance().setProperty("db.engine", "PostgreSQL");
+                    }                   
+                    AppConfig.getInstance().setProperty("db.driverlib", jtxtDbDriverLib.getText());
+                    AppConfig.getInstance().setProperty("db.driver", jtxtDbDriver.getText());
+                    AppConfig.getInstance().setProperty("db.URL", jtxtDbURL.getText());
+                    AppConfig.getInstance().setProperty("db.user", jtxtDbUser.getText());
                     AltEncrypter cypher = new AltEncrypter("cypherkey" + jtxtDbUser.getText());
-                    config.setProperty("db.password", "crypt:" + cypher.encrypt(new String(jtxtDbPassword.getPassword())));
+                    AppConfig.getInstance().setProperty("db.password", "crypt:" + cypher.encrypt(new String(jtxtDbPassword.getPassword())));
                     dirty.setDirty(false);
 
                     for (PanelConfig c : m_panelconfig) {
-                        c.saveProperties(config);
+                        c.saveProperties();
                     }
 
                     try {
-                        config.save();
+                        AppConfig.getInstance().save();
                         JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.restartchanges"), AppLocal.getIntString("message.title"), JOptionPane.INFORMATION_MESSAGE);
                     } catch (IOException e) {
                         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotsaveconfig"), e));

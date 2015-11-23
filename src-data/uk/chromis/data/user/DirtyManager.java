@@ -115,9 +115,9 @@ public class DirtyManager implements DocumentListener, ChangeListener, ActionLis
     }
     
     public void propertyChange(PropertyChangeEvent evt) {
-        //if ("image".equals(evt.getPropertyName())) {
+     //   if ("image".equals(evt.getPropertyName())) {
             setDirty(true);
-        //}
+       // }
     }
     
 }

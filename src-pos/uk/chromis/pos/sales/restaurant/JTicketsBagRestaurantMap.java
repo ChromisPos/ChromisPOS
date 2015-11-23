@@ -41,7 +41,7 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.loader.SerializerReadClass;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.pos.customers.CustomerInfo;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
@@ -107,7 +107,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
 
         restDB = new RestaurantDBUtils(app);
 
-        AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
+        AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
         m_config.load();
         transparentButtons = Boolean.valueOf(m_config.getProperty("table.transparentbuttons"));
 

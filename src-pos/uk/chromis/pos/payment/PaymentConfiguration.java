@@ -20,7 +20,7 @@
 package uk.chromis.pos.payment;
 
 import javax.swing.JPanel;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 
 /**
  *
@@ -38,12 +38,12 @@ public interface PaymentConfiguration {
      *
      * @param config
      */
-    public void loadProperties(AppConfig config);
+    public void loadProperties();
 
     /**
      *
      * @param config
      */
-    public void saveProperties(AppConfig config);
+    public void saveProperties();
     
 }

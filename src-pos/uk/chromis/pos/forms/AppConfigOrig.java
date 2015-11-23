@@ -4,7 +4,7 @@
 //
 //    This file is part of Chromis POS
 //
-//    Chromis POS is free software: you can redistribute it and/or modify
+//     Chromis POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
-
 
 package uk.chromis.pos.forms;
 
@@ -32,49 +31,82 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author John
+ * Creation and Editing of stored settings
+ *   
+ * @author adrianromero
  */
-public class AppConfig2 {
+public class AppConfigOrig implements AppProperties {
 
-    private static AppConfig2 instance = null;
-    private static AppConfig2 instance2 = null;
-    private final Properties m_propsconfig;
-    private final File configFile;
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.AppConfig");
-
-    protected AppConfig2(File configFile) {
-        this.configFile = configFile;
+     
+    private static AppConfigOrig m_instance = null;
+    private Properties m_propsconfig;
+    private File configfile;
+      
+    /**
+     *
+     * @param args
+     */
+    public AppConfigOrig(String[] args) {
+        if (args.length == 0) {
+            init(getDefaultConfig());
+        } else {
+            init(new File(args[0]));
+        }
+    }
+    
+    /**
+     *
+     * @param configfile
+     */
+    public AppConfigOrig(File configfile) {
+        init(configfile);
+    }
+    
+    private void init(File configfile) {
+        this.configfile = configfile;
         m_propsconfig = new Properties();
-        load();
-        logger.log(Level.INFO, "Reading configuration file: {0}", configFile.getAbsolutePath());
-    }
 
-    public static AppConfig2 getInstance() {
-        if (instance == null) {
-            instance = new AppConfig2(new File(System.getProperty("user.home"), AppLocal.APP_ID + ".properties"));
-        }
-        return instance;
+        logger.log(Level.INFO, "Reading configuration file: {0}", configfile.getAbsolutePath());
     }
-
-        public static AppConfig2 getInstance2() {
-        if (instance2 == null) {
-            instance2 = new AppConfig2(new File(System.getProperty("user.home"), "unicentaopos.properties"));
-        }
-        return instance2;
-    }
-    
-    
     
     private File getDefaultConfig() {
         return new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + ".properties");
     }
-
-    public String getDirPath() {
-        String dirname = System.getProperty("dirname.path");
-        return (dirname == null ? "./" : dirname);
+    
+    /**
+     *
+     * @param sKey
+     * @return keypair from .properties filename
+     */
+    @Override
+    public String getProperty(String sKey) {
+        return m_propsconfig.getProperty(sKey);
+    }
+    
+    /**
+     *
+     * @return Machine name
+     */
+    @Override
+    public String getHost() {
+        return getProperty("machine.hostname");
     }
 
+    /**
+     *
+     * @return .properties filename
+     */
+    @Override
+    public File getConfigFile() {
+        return configfile;
+    }
+    
+    /**
+     * Update .properties resource keypair values
+     * @param sKey
+     * @param sValue
+     */
     public void setProperty(String sKey, String sValue) {
         if (sValue == null) {
             m_propsconfig.remove(sKey);
@@ -82,40 +114,46 @@ public class AppConfig2 {
             m_propsconfig.setProperty(sKey, sValue);
         }
     }
-
-    public String getProperty(String sKey) {
-        return m_propsconfig.getProperty(sKey);
+    
+   /**
+     * Local machine identity
+     * @return Machine name from OS
+     */
+    private String getLocalHostName() {
+        try {
+            return java.net.InetAddress.getLocalHost().getHostName();
+        } catch (java.net.UnknownHostException eUH) {
+            return "localhost";
+        }
     }
-
-    public String newgetProperty(String sKey) {
-        getInstance();
-        return m_propsconfig.getProperty(sKey);
-    }
-
+   
+    /**
+     *
+     * @return Delete .properties filename
+     */
     public boolean delete() {
         loadDefault();
-        return configFile.delete();
+        return configfile.delete();
     }
 
+    /**
+     * Get instance settings
+     * @Read .properties resource files
+     */
     public void load() {
+
         loadDefault();
+
         try {
-            InputStream in = new FileInputStream(configFile);
+            InputStream in = new FileInputStream(configfile);
             if (in != null) {
                 m_propsconfig.load(in);
                 in.close();
             }
-        } catch (IOException e) {
+        } catch (IOException e){
             loadDefault();
         }
-    }
-
-    public void save() throws IOException {
-        OutputStream out = new FileOutputStream(configFile);
-        if (out != null) {
-            m_propsconfig.store(out, AppLocal.APP_NAME + ". Configuration file.");
-            out.close();
-        }
+    
     }
 
     /**
@@ -132,70 +170,73 @@ public class AppConfig2 {
     }
 
     /**
-     * Local machine identity
-     *
-     * @return Machine name from OS
+     * Save values to .properties file
+     * @throws IOException
      */
-    private String getLocalHostName() {
-        try {
-            return java.net.InetAddress.getLocalHost().getHostName();
-        } catch (java.net.UnknownHostException eUH) {
-            return "localhost";
+    public void save() throws IOException {
+        
+        OutputStream out = new FileOutputStream(configfile);
+        if (out != null) {
+            m_propsconfig.store(out, AppLocal.APP_NAME + ". Configuration file.");
+            out.close();
         }
     }
-
-    public String getHost() {
-        return getProperty("machine.hostname");
-    }
-
+    
+    /**
+     * Settings over-rides
+     * @throws IOException
+     */
+    
     private void loadDefault() {
-
+        
+        m_propsconfig = new Properties();
+        
         String dirname = System.getProperty("dirname.path");
         dirname = dirname == null ? "./" : dirname;
-
+        
         m_propsconfig.setProperty("db.driverlib", new File(new File(dirname), "lib/derby.jar").getAbsolutePath());
         m_propsconfig.setProperty("db.driver", "org.apache.derby.jdbc.EmbeddedDriver");
         m_propsconfig.setProperty("db.URL", "jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
         m_propsconfig.setProperty("db.user", "");
         m_propsconfig.setProperty("db.password", "");
+     
 
-        /**
-         *
-         * Default component settings
-         */
+ /**
+  * 
+  * Default component settings
+  */       
         m_propsconfig.setProperty("machine.hostname", getLocalHostName());
-
+        
         Locale l = Locale.getDefault();
         m_propsconfig.setProperty("user.language", l.getLanguage());
         m_propsconfig.setProperty("user.country", l.getCountry());
-        m_propsconfig.setProperty("user.variant", l.getVariant());
-        m_propsconfig.setProperty("swing.defaultlaf", System.getProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel"));
+        m_propsconfig.setProperty("user.variant", l.getVariant());             
+        m_propsconfig.setProperty("swing.defaultlaf", System.getProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel"));             
         m_propsconfig.setProperty("machine.printer", "screen");
         m_propsconfig.setProperty("machine.printer.2", "Not defined");
         m_propsconfig.setProperty("machine.printer.3", "Not defined");
         m_propsconfig.setProperty("machine.printer.4", "Not defined");
         m_propsconfig.setProperty("machine.printer.5", "Not defined");
         m_propsconfig.setProperty("machine.printer.6", "Not defined");
-
+                
         m_propsconfig.setProperty("machine.display", "screen");
         m_propsconfig.setProperty("machine.scale", "Not defined");
         m_propsconfig.setProperty("machine.screenmode", "window"); // fullscreen / window
         m_propsconfig.setProperty("machine.ticketsbag", "standard");
         m_propsconfig.setProperty("machine.scanner", "Not defined");
-
+        
         m_propsconfig.setProperty("payment.gateway", "external");
         m_propsconfig.setProperty("payment.magcardreader", "Not defined");
         m_propsconfig.setProperty("payment.testmode", "false");
         m_propsconfig.setProperty("payment.commerceid", "");
         m_propsconfig.setProperty("payment.commercepassword", "password");
-
+        
         m_propsconfig.setProperty("machine.printername", "(Default)");
 
         // Receipt printer paper set to 72mmx200mm
+
         m_propsconfig.setProperty("paper.receipt.x", "10");
         m_propsconfig.setProperty("paper.receipt.y", "10");
-//        m_propsconfig.setProperty("paper.receipt.x", "10");
-//        m_propsconfig.setProperty("paper.receipt.y", "287");
         m_propsconfig.setProperty("paper.receipt.width", "190");
         m_propsconfig.setProperty("paper.receipt.height", "546");
         m_propsconfig.setProperty("paper.receipt.mediasizename", "A4");
@@ -207,9 +248,9 @@ public class AppConfig2 {
         m_propsconfig.setProperty("paper.standard.height", "698");
         m_propsconfig.setProperty("paper.standard.mediasizename", "A4");
 
-        m_propsconfig.setProperty("machine.uniqueinstance", "false");
-        m_propsconfig.setProperty("screen.receipt.columns", "42");
+        m_propsconfig.setProperty("machine.uniqueinstance", "false");        
+        m_propsconfig.setProperty("screen.receipt.columns", "42");        
+        
 
     }
-
 }

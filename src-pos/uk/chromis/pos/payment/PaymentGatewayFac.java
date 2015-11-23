@@ -19,6 +19,7 @@
 
 package uk.chromis.pos.payment;
 
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppProperties;
 
 /**
@@ -36,28 +37,28 @@ public class PaymentGatewayFac {
      * @param props
      * @return
      */
-    public static PaymentGateway getPaymentGateway(AppProperties props) {
+    public static PaymentGateway getPaymentGateway() {
         
-        String sReader = props.getProperty("payment.gateway");
+        String sReader = AppConfig.getInstance().getProperty("payment.gateway");
         switch (sReader) {
             case "external":
                 return new PaymentGatewayExt();
             case "PayPoint / SecPay":
-                return new PaymentGatewayPayPoint(props);
+                return new PaymentGatewayPayPoint();
             case "AuthorizeNet":
-                return new PaymentGatewayAuthorizeNet(props);
+                return new PaymentGatewayAuthorizeNet();
             case "BluePay AUTH.NET EMU":
-                return new PaymentGatewayBluePayAUTHNETEMU(props);
+                return new PaymentGatewayBluePayAUTHNETEMU();
             case "BluePay 2.0 POST":
-                return new PaymentGatewayBluePay20POST(props);
+                return new PaymentGatewayBluePay20POST();
             case "La Caixa (Spain)":
-                return new PaymentGatewayCaixa(props);
+                return new PaymentGatewayCaixa();
             case "Planetauthorize":
-                return new PaymentGatewayPlanetauthorize(props);
+                return new PaymentGatewayPlanetauthorize();
             case "First Data / LinkPoint / YourPay":
-                return new PaymentGatewayLinkPoint(props);
+                return new PaymentGatewayLinkPoint();
             case "PaymentsGateway.net":
-                return new PaymentGatewayPGNET(props);
+                return new PaymentGatewayPGNET();
             default:
                 return null;
         }

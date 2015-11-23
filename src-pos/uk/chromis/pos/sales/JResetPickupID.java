@@ -30,7 +30,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.JRootFrame;
@@ -105,7 +105,7 @@ public class JResetPickupID extends javax.swing.JFrame {
             @Override
             public void run() {
                 
-                AppConfig config = new AppConfig(args);
+                AppConfigOrig config = new AppConfigOrig(args);
                 config.load();    
                 
 // Set the look and feel.

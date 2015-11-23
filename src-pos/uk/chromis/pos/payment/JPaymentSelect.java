@@ -31,37 +31,24 @@ import java.util.Map;
 import javax.swing.JFrame;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSystem;
 
-/**
- *
- * @author adrianromero
- */
 public abstract class JPaymentSelect extends javax.swing.JDialog
         implements JPaymentNotifier {
 
     private PaymentInfoList m_aPaymentInfo;
     private boolean printselected;
-
     private boolean accepted;
-
     private AppView app;
     private double m_dTotal;
     private CustomerInfoExt customerext;
     private DataLogicSystem dlSystem;
-
     private final Map<String, JPaymentInterface> payments = new HashMap<>();
     private String m_sTransactionID;
 
-    /**
-     * Creates new form JPaymentSelect
-     *
-     * @param parent
-     * @param modal
-     * @param o
-     */
     protected JPaymentSelect(java.awt.Frame parent, boolean modal, ComponentOrientation o) {
         super(parent, modal);
         initComponents();
@@ -72,13 +59,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
     }
 
-    /**
-     * Creates new form JPaymentSelect
-     *
-     * @param parent
-     * @param modal
-     * @param o
-     */
     protected JPaymentSelect(java.awt.Dialog parent, boolean modal, ComponentOrientation o) {
         super(parent, modal);
         initComponents();
@@ -86,46 +66,24 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         this.applyComponentOrientation(o);
     }
 
-    /**
-     *
-     * @param app
-     */
     public void init(AppView app) {
         this.app = app;
         dlSystem = (DataLogicSystem) app.getBean("uk.chromis.pos.forms.DataLogicSystem");
         printselected = true;
     }
 
-    /**
-     *
-     * @param value
-     */
     public void setPrintSelected(boolean value) {
         printselected = value;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isPrintSelected() {
         return printselected;
     }
 
-    /**
-     *
-     * @return
-     */
     public List<PaymentInfo> getSelectedPayments() {
         return m_aPaymentInfo.getPayments();
     }
 
-    /**
-     *
-     * @param total
-     * @param customerext
-     * @return
-     */
     public boolean showDialog(double total, CustomerInfoExt customerext) {
 
         m_aPaymentInfo = new PaymentInfoList();
@@ -135,12 +93,9 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         this.customerext = customerext;
 
-        setPrintSelected(!Boolean.parseBoolean(app.getProperties().getProperty("till.receiptprintoff")));        
+        setPrintSelected(!Boolean.parseBoolean(AppConfig.getInstance().getProperty("till.receiptprintoff")));
         m_jButtonPrint.setSelected(printselected);
 
-        
-        
-        
         m_jTotalEuros.setText(Formats.CURRENCY.formatValue(m_dTotal));
 
         addTabs();
@@ -163,8 +118,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         // gets the print button state
         printselected = m_jButtonPrint.isSelected();
-        
-        
 
         // remove all tabs        
         m_jTabPayment.removeAll();
@@ -172,45 +125,20 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         return accepted;
     }
 
-    /**
-     *
-     */
     protected abstract void addTabs();
 
-    /**
-     *
-     * @param isPositive
-     * @param isComplete
-     */
     protected abstract void setStatusPanel(boolean isPositive, boolean isComplete);
 
-    /**
-     *
-     * @param total
-     * @return
-     */
     protected abstract PaymentInfo getDefaultPayment(double total);
 
-    /**
-     *
-     * @param value
-     */
     protected void setOKEnabled(boolean value) {
         m_jButtonOK.setEnabled(value);
     }
 
-    /**
-     *
-     * @param value
-     */
     protected void setAddEnabled(boolean value) {
         m_jButtonAdd.setEnabled(value);
     }
 
-    /**
-     *
-     * @param jpay
-     */
     protected void addTabPayment(JPaymentCreator jpay) {
         if (app.getAppUserView().getUser().hasPermission(jpay.getKey())) {
 
@@ -228,503 +156,270 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         }
     }
 
-    /**
-     *
-     */
     public interface JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         public JPaymentInterface createJPayment();
 
-        /**
-         *
-         * @return
-         */
         public String getKey();
 
-        /**
-         *
-         * @return
-         */
         public String getLabelKey();
 
-        /**
-         *
-         * @return
-         */
         public String getIconKey();
     }
 
-    /**
-     *
-     */
     public class JPaymentCashCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentCashPos(JPaymentSelect.this, dlSystem);
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "payment.cash";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.cash";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/cash.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentChequeCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentCheque(JPaymentSelect.this);
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "payment.cheque";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.cheque";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/cheque.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentPaperCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentPaper(JPaymentSelect.this, "paperin");
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "payment.paper";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.paper";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/voucher.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentMagcardCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentMagcard(app, JPaymentSelect.this);
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "payment.magcard";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.magcard";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/ccard.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentFreeCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentFree(JPaymentSelect.this);
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "payment.free";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.free";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/wallet.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentDebtCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentDebt(JPaymentSelect.this);
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "payment.debt";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.debt";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/customer.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentCashRefundCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentRefund(JPaymentSelect.this, "cashrefund");
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "refund.cash";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.cashrefund";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/cash.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentChequeRefundCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentRefund(JPaymentSelect.this, "chequerefund");
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "refund.cheque";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.chequerefund";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/cheque.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentPaperRefundCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentRefund(JPaymentSelect.this, "paperout");
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "refund.paper";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.paper";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/voucher.png";
         }
     }
 
-    /**
-     *
-     */
     public class JPaymentMagcardRefundCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentMagcard(app, JPaymentSelect.this);
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "refund.magcard";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.magcard";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/ccard.png";
         }
     }
 
-// * Bank Payment receipt - Thanks Steve Clough! August 2011
-    /**
-     *
-     */
     public class JPaymentBankCreator implements JPaymentCreator {
 
-        /**
-         *
-         * @return
-         */
         @Override
         public JPaymentInterface createJPayment() {
             return new JPaymentBank(JPaymentSelect.this);
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getKey() {
             return "payment.bank";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getLabelKey() {
             return "tab.bank";
         }
 
-        /**
-         *
-         * @return
-         */
         @Override
         public String getIconKey() {
             return "/uk/chromis/images/bank.png";
         }
     }
 
-    /**
-     *
-     * @param value
-     */
     protected void setHeaderVisible(boolean value) {
         jPanel6.setVisible(value);
     }
@@ -737,11 +432,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, m_dTotal - m_aPaymentInfo.getTotal(), m_sTransactionID);
     }
 
-    /**
-     *
-     * @param parent
-     * @return
-     */
     protected static Window getWindow(Component parent) {
         if (parent == null) {
             return new JFrame();
@@ -752,30 +442,17 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         }
     }
 
-    /**
-     *
-     * @param isPositive
-     * @param isComplete
-     */
     @Override
     public void setStatus(boolean isPositive, boolean isComplete) {
 
         setStatusPanel(isPositive, isComplete);
     }
 
-    /**
-     *
-     * @param tID
-     */
     public void setTransactionID(String tID) {
         this.m_sTransactionID = tID;
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

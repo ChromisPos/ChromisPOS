@@ -31,7 +31,7 @@ import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.AppView;
@@ -46,7 +46,7 @@ import uk.chromis.pos.util.AltEncrypter;
 public class JPanelResetPickupId extends JPanel implements JPanelView {
 
 
-    private AppConfig config;
+    private AppConfigOrig config;
     private Connection con;
     private String sdbmanager;
     private Session session;
@@ -67,7 +67,7 @@ public class JPanelResetPickupId extends JPanel implements JPanelView {
     public JPanelResetPickupId(AppProperties props) {
         
         initComponents();
-        config = new AppConfig(props.getConfigFile());      
+        config = new AppConfigOrig(props.getConfigFile());      
         m_props=props;
 
         

@@ -26,7 +26,7 @@ import java.sql.Statement;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.AppView;
@@ -42,7 +42,7 @@ public class JPanelCSVCleardb extends JPanel implements JPanelView {
     private Connection con;
     private Statement stmt;
     private String SQL;
-    private AppConfig config;
+    private AppConfigOrig config;
 
     /**
      *
@@ -61,7 +61,7 @@ public class JPanelCSVCleardb extends JPanel implements JPanelView {
 
         initComponents();
 
-        config = new AppConfig(props.getConfigFile());
+        config = new AppConfigOrig(props.getConfigFile());
         config.load();
 
         jMessageBox.setText("Performing this action, will clear all "

@@ -50,7 +50,7 @@ import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.user.SaveProvider;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.AppView;
@@ -1969,7 +1969,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         File current_folder = chooser.getCurrentDirectory();
         // If we have a file lets save the directory for later use if it's different from the old
         if (last_folder == null || !last_folder.equals(current_folder.getAbsolutePath())) {
-            AppConfig CSVConfig = new AppConfig(config_file);
+            AppConfigOrig CSVConfig = new AppConfigOrig(config_file);
             CSVConfig.load();
             CSVConfig.setProperty("CSV.last_folder", current_folder.getAbsolutePath());
             last_folder = current_folder.getAbsolutePath();

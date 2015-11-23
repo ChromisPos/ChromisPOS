@@ -132,10 +132,10 @@ public class JRootApp extends JPanel implements AppView {
 
     private String getLineTimer() {
         try {
-            if ((AppConfig2.getInstance().getProperty("clock.time") == "") || (AppConfig2.getInstance().getProperty("clock.time") == null)) {
+            if ((AppConfig.getInstance().getProperty("clock.time") == "") || (AppConfig.getInstance().getProperty("clock.time") == null)) {
                 return Formats.HOURMIN.formatValue(new Date());
             } else {
-                formatter = new SimpleDateFormat(AppConfig2.getInstance().getProperty("clock.time"));
+                formatter = new SimpleDateFormat(AppConfig.getInstance().getProperty("clock.time"));
                 return formatter.format(new Date());
             }
         } catch (IllegalArgumentException e) {
@@ -145,10 +145,10 @@ public class JRootApp extends JPanel implements AppView {
 
     private String getLineDate() {
         try {
-            if ((AppConfig2.getInstance().getProperty("clock.date") == "") || (AppConfig2.getInstance().getProperty("clock.date") == null)) {
+            if ((AppConfig.getInstance().getProperty("clock.date") == "") || (AppConfig.getInstance().getProperty("clock.date") == null)) {
                 return Formats.SIMPLEDATE.formatValue(new Date());
             } else {
-                formatter = new SimpleDateFormat(AppConfig2.getInstance().getProperty("clock.date"));
+                formatter = new SimpleDateFormat(AppConfig.getInstance().getProperty("clock.date"));
                 return formatter.format(new Date());
             }
         } catch (IllegalArgumentException e) {
@@ -161,9 +161,9 @@ public class JRootApp extends JPanel implements AppView {
      */
     public JRootApp() {
         // get some default settings 
-        db_user = (AppConfig2.getInstance().getProperty("db.user"));
-        db_url = (AppConfig2.getInstance().getProperty("db.URL"));
-        db_password = (AppConfig2.getInstance().getProperty("db.password"));
+        db_user = (AppConfig.getInstance().getProperty("db.user"));
+        db_url = (AppConfig.getInstance().getProperty("db.URL"));
+        db_password = (AppConfig.getInstance().getProperty("db.password"));
 
         if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
             // the password is encrypted
@@ -186,7 +186,7 @@ public class JRootApp extends JPanel implements AppView {
     public boolean initApp(AppProperties props) {
 
         m_props = props;
-        m_jPanelDown.setVisible(!(Boolean.valueOf(AppConfig2.getInstance().getProperty("till.hideinfo"))));
+        m_jPanelDown.setVisible(!(Boolean.valueOf(AppConfig.getInstance().getProperty("till.hideinfo"))));
 
         // support for different component orientation languages.
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
@@ -214,8 +214,8 @@ public class JRootApp extends JPanel implements AppView {
                 if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), AppLocal.getIntString("message.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 
                     try {
-                        ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance().getProperty("db.driverlib")).toURI().toURL()});
-                        DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
+                        ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+                        DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
                         Liquibase liquibase = null;
                         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
@@ -247,28 +247,28 @@ public class JRootApp extends JPanel implements AppView {
 // Clear the cash drawer table as required, by setting 
         try {
             if (getDbVersion() == "d") {
-                SQL = "DELETE FROM DRAWEROPENED WHERE OPENDATE < {fn TIMESTAMPADD(SQL_TSI_DAY ,-" + AppConfig2.getInstance().getProperty("dbtable.retaindays") + ", CURRENT_TIMESTAMP)}";
+                SQL = "DELETE FROM DRAWEROPENED WHERE OPENDATE < {fn TIMESTAMPADD(SQL_TSI_DAY ,-" + AppConfig.getInstance().getProperty("dbtable.retaindays") + ", CURRENT_TIMESTAMP)}";
             } else {
-                SQL = "DELETE FROM DRAWEROPENED WHERE OPENDATE < (NOW() - INTERVAL '" + AppConfig2.getInstance().getProperty("dbtable.retaindays") + "' DAY)";
+                SQL = "DELETE FROM DRAWEROPENED WHERE OPENDATE < (NOW() - INTERVAL '" + AppConfig.getInstance().getProperty("dbtable.retaindays") + "' DAY)";
             }
             stmt.execute(SQL);
         } catch (Exception e) {
         }
 
-        m_propsdb = m_dlSystem.getResourceAsProperties(AppConfig2.getInstance().getHost() + "/properties");
+        m_propsdb = m_dlSystem.getResourceAsProperties(AppConfig.getInstance().getHost() + "/properties");
 
         try {
             String sActiveCashIndex = m_propsdb.getProperty("activecash");
             Object[] valcash = sActiveCashIndex == null
                     ? null
                     : m_dlSystem.findActiveCash(sActiveCashIndex);
-            if (valcash == null || !AppConfig2.getInstance().getHost().equals(valcash[0])) {
+            if (valcash == null || !AppConfig.getInstance().getHost().equals(valcash[0])) {
                 // no la encuentro o no es de mi host por tanto creo una...
-                setActiveCash(UUID.randomUUID().toString(), m_dlSystem.getSequenceCash(AppConfig2.getInstance().getHost()) + 1, new Date(), null);
+                setActiveCash(UUID.randomUUID().toString(), m_dlSystem.getSequenceCash(AppConfig.getInstance().getHost()) + 1, new Date(), null);
 
                 // creamos la caja activa      
                 m_dlSystem.execInsertCash(
-                        new Object[]{getActiveCashIndex(), AppConfig2.getInstance().getHost(), getActiveCashSequence(), getActiveCashDateStart(), getActiveCashDateEnd()});
+                        new Object[]{getActiveCashIndex(), AppConfig.getInstance().getHost(), getActiveCashSequence(), getActiveCashDateStart(), getActiveCashDateEnd()});
             } else {
                 setActiveCash(sActiveCashIndex, (Integer) valcash[1], (Date) valcash[2], (Date) valcash[3]);
             }
@@ -285,7 +285,7 @@ public class JRootApp extends JPanel implements AppView {
         if (m_sInventoryLocation == null) {
             m_sInventoryLocation = "0";
             m_propsdb.setProperty("location", m_sInventoryLocation);
-            m_dlSystem.setResourceAsProperties(AppConfig2.getInstance().getHost() + "/properties", m_propsdb);
+            m_dlSystem.setResourceAsProperties(AppConfig.getInstance().getHost() + "/properties", m_propsdb);
         }
 
         // Inicializo la impresora...
@@ -317,10 +317,10 @@ public class JRootApp extends JPanel implements AppView {
         } catch (SQLException e) {
             url = "";
         }
-        m_jHost.setText("<html>" + AppConfig2.getInstance().getHost() + " - " + sWareHouse + "<br>" + url);
+        m_jHost.setText("<html>" + AppConfig.getInstance().getHost() + " - " + sWareHouse + "<br>" + url);
 
         // display the new logo if set
-        String newLogo = AppConfig2.getInstance().getProperty("start.logo");
+        String newLogo = AppConfig.getInstance().getProperty("start.logo");
         if (newLogo != null) {
             if ("".equals(newLogo)) {
                 jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png")));
@@ -330,7 +330,7 @@ public class JRootApp extends JPanel implements AppView {
         }
 
         // change text under logo
-        String newText = AppConfig2.getInstance().getProperty("start.text");
+        String newText = AppConfig.getInstance().getProperty("start.text");
         if (newText != null) {
             if (newText.equals("")) {
                 jLabel1.setText("<html><center>Chromis POS - The New Face of Open Source POS<br>"
@@ -502,7 +502,7 @@ public class JRootApp extends JPanel implements AppView {
         m_dActiveCashDateStart = dStart;
         m_dActiveCashDateEnd = dEnd;
         m_propsdb.setProperty("activecash", m_sActiveCashIndex);
-        m_dlSystem.setResourceAsProperties(AppConfig2.getInstance().getHost() + "/properties", m_propsdb);
+        m_dlSystem.setResourceAsProperties(AppConfig.getInstance().getHost() + "/properties", m_propsdb);
     }
 
     /**
@@ -1034,9 +1034,9 @@ public class JRootApp extends JPanel implements AppView {
         try {
             user = m_dlSystem.getsuperuser();
             if (user == null) {
-                ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
-                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
-                Class.forName(AppConfig2.getInstance2().getProperty("db.driver"));
+                ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
+                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
+                Class.forName(AppConfig.getInstance2().getProperty("db.driver"));
                 con = DriverManager.getConnection(db_url, db_user, db_password);
                 PreparedStatement stmt = con.prepareStatement("INSERT INTO PEOPLE (ID, NAME, ROLE, VISIBLE) VALUES ('99', 'SuperAdminUser', '0', 0)");
                 stmt.executeUpdate();

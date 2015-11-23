@@ -24,7 +24,7 @@ import java.io.File;
 import uk.chromis.basic.BasicException;
 import uk.chromis.format.DoubleUtils;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 
 /**
@@ -51,7 +51,7 @@ public abstract class JEditorNumber extends JEditorAbstract {
     public JEditorNumber() {
         m_fmt = getFormat();
         
-        AppConfig m_config =  new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));        
+        AppConfigOrig m_config =  new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));        
         m_config.load();        
         priceWith00 =("true".equals(m_config.getProperty("till.pricewith00")));
         m_config=null;         

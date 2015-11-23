@@ -79,14 +79,8 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         m_jCategory.addActionListener(dirty);
         m_jImage.addPropertyChangeListener("image", dirty);
         m_jCatNameShow.addActionListener(dirty);
-
-// Added JDL 13.04.13
         m_jTextTip.getDocument().addDocumentListener(dirty);
-
-// Added JDL 15.02.15 colour for button borders        
         m_jbtnColour.getDocument().addDocumentListener(dirty);
-
-// get the default border
         border = m_jbtnColour.getBorder();
 
         writeValueEOF();

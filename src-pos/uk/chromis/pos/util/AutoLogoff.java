@@ -71,16 +71,20 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
      * 
      */
     public void start() {
-        running = true;
-        LogoffTimer.setRepeats(false);
-        LogoffTimer.start();
-        Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
+        if (timer) {
+            running = true;
+            LogoffTimer.setRepeats(false);
+            LogoffTimer.start();
+            Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
+        }
     }
 
     public void stop() {
-        running = false;
-        Toolkit.getDefaultToolkit().removeAWTEventListener(this);
-        LogoffTimer.stop();
+        if (timer) {
+            running = false;
+            Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+            LogoffTimer.stop();
+        }
     }
 
     // Implement ActionListener for the Timer
@@ -99,19 +103,27 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // Implement a manually triggered restart
     public void restart() {
-        LogoffTimer.restart();
+        if (timer) {
+            LogoffTimer.restart();
+        }
     }
 
     // if the timer is not running restart it
     public void setRunning() {
-        if (!isTimerRunning()) {
-            LogoffTimer.restart();
+        if (timer) {
+            if (!isTimerRunning()) {
+                LogoffTimer.restart();
+            }
         }
     }
 
     // returns the timer state
     public boolean isTimerRunning() {
-        return (running);
+        if (timer) {
+            return (running);
+        } else {
+            return false;
+        }
     }
 
     // set the timer interval in seconds
@@ -126,7 +138,7 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
         }
     }
 
-    public void removeTimer(){
+    public void removeTimer() {
         timer = false;
     }
 }

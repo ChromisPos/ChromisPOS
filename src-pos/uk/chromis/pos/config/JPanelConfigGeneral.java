@@ -36,28 +36,30 @@ import uk.chromis.pos.util.DirectoryEvent;
 
 /**
  *
- *   
+ *
  */
-
 public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConfig {
 
     private final DirtyManager dirty = new DirtyManager();
 
-    /** Creates new form JPanelConfigGeneral */
+    /**
+     * Creates new form JPanelConfigGeneral
+     */
     public JPanelConfigGeneral() {
 
         initComponents();
 
+        jbtnLogoText.addActionListener(new DirectoryEvent(jtxtStartupText));
+        jbtnLogoName.addActionListener(new DirectoryEvent(jtxtStartupLogo));
         jtxtMachineHostname.getDocument().addDocumentListener(dirty);
         jcboLAF.addActionListener(dirty);
         jcboMachineScreenmode.addActionListener(dirty);
         jcboTicketsBag.addActionListener(dirty);
-        jchkHideInfo.addActionListener(dirty);  
+        jchkHideInfo.addActionListener(dirty);
         jtxtStartupText.getDocument().addDocumentListener(dirty);
-        jbtnLogoText.addActionListener(new DirectoryEvent(jtxtStartupText));        
+
         jtxtStartupLogo.getDocument().addDocumentListener(dirty);
-        jbtnLogoName.addActionListener(new DirectoryEvent(jtxtStartupLogo));
-        
+
         // Installed skins
         LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
         for (LookAndFeelInfo laf : lafs) {
@@ -86,8 +88,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboTicketsBag.addItem("simple");
         jcboTicketsBag.addItem("standard");
         jcboTicketsBag.addItem("restaurant");
-        
-        
+
     }
 
     /**
@@ -113,11 +114,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
 
-        jtxtMachineHostname.setText(config.getProperty("machine.hostname"));
+        jtxtMachineHostname.setText(AppConfig.getInstance().getProperty("machine.hostname"));
 
-        String lafclass = config.getProperty("swing.defaultlaf");
+        String lafclass = AppConfig.getInstance().getProperty("swing.defaultlaf");
         jcboLAF.setSelectedItem(null);
         for (int i = 0; i < jcboLAF.getItemCount(); i++) {
             LAFInfo lafinfo = (LAFInfo) jcboLAF.getItemAt(i);
@@ -128,12 +129,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
         // jcboLAF.setSelectedItem(new LookAndFeelInfo());
 
-        jcboMachineScreenmode.setSelectedItem(config.getProperty("machine.screenmode"));
-        jcboTicketsBag.setSelectedItem(config.getProperty("machine.ticketsbag"));
-        jchkHideInfo.setSelected(Boolean.valueOf(config.getProperty("till.hideinfo")).booleanValue());        
-        jtxtStartupLogo.setText(config.getProperty("start.logo"));
-        jtxtStartupText.setText(config.getProperty("start.text"));          
-  
+        jcboMachineScreenmode.setSelectedItem(AppConfig.getInstance().getProperty("machine.screenmode"));
+        jcboTicketsBag.setSelectedItem(AppConfig.getInstance().getProperty("machine.ticketsbag"));
+        jchkHideInfo.setSelected(Boolean.valueOf(AppConfig.getInstance().getProperty("till.hideinfo")).booleanValue());
+        jtxtStartupLogo.setText(AppConfig.getInstance().getProperty("start.logo"));
+        jtxtStartupText.setText(AppConfig.getInstance().getProperty("start.text"));
+
         dirty.setDirty(false);
     }
 
@@ -142,21 +143,21 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
 
-        config.setProperty("machine.hostname", jtxtMachineHostname.getText());
-        
+        AppConfig.getInstance().setProperty("machine.hostname", jtxtMachineHostname.getText());
+
         LAFInfo laf = (LAFInfo) jcboLAF.getSelectedItem();
-        config.setProperty("swing.defaultlaf", laf == null
+        AppConfig.getInstance().setProperty("swing.defaultlaf", laf == null
                 ? System.getProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel")
                 : laf.getClassName());
 
-        config.setProperty("machine.screenmode", comboValue(jcboMachineScreenmode.getSelectedItem()));
-        config.setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
-        config.setProperty("till.hideinfo", Boolean.toString(jchkHideInfo.isSelected()));         
-        config.setProperty("start.logo", jtxtStartupLogo.getText());
-        config.setProperty("start.text", jtxtStartupText.getText());
-        
+        AppConfig.getInstance().setProperty("machine.screenmode", comboValue(jcboMachineScreenmode.getSelectedItem()));
+        AppConfig.getInstance().setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
+        AppConfig.getInstance().setProperty("till.hideinfo", Boolean.toString(jchkHideInfo.isSelected()));
+        AppConfig.getInstance().setProperty("start.logo", jtxtStartupLogo.getText());
+        AppConfig.getInstance().setProperty("start.text", jtxtStartupText.getText());
+
         dirty.setDirty(false);
     }
 
@@ -215,10 +216,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -438,11 +439,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     }//GEN-LAST:event_jtxtStartupTextActionPerformed
 
     private void jtxtStartupTextjTetxtStartupTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtStartupTextjTetxtStartupTextFocusGained
-       
+
         transferFocus();
 
-        JOptionPane.showMessageDialog(jPanel1,"<html>Changing default Startup Text content may violate the <br>"
-            + " Free Software Foundation's GNU General Public License GPL","GNU GPL Warning",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(jPanel1, "<html>Changing default Startup Text content may violate the <br>"
+                + " Free Software Foundation's GNU General Public License GPL", "GNU GPL Warning", JOptionPane.WARNING_MESSAGE);
 
     }//GEN-LAST:event_jtxtStartupTextjTetxtStartupTextFocusGained
 

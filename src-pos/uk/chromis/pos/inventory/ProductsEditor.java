@@ -419,15 +419,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jAlias.setEnabled(false);
         m_jAlwaysAvailable.setEnabled(false);
         m_jDiscounted.setEnabled(false);
-        m_jIsPack.setEnabled(true);
+        m_jIsPack.setEnabled(false);
         m_jIsPack.setSelected(((Boolean) myprod[29]));
         m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[30]));
         packproductmodel.setSelectedKey(myprod[31]);
 
-        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
-        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
-        jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
-        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
 
         calculateMargin();
         calculatePriceSellTax();
@@ -511,10 +507,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jDiscounted.setEnabled(true);
 
-        m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
-        m_jPackProduct.setEnabled(m_jIsPack.isSelected());
-        jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
-        jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
+     //   m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
+     //   m_jPackProduct.setEnabled(m_jIsPack.isSelected());
+     //   jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
+     //   jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
 
         m_jDiscounted.setEnabled(true);
         calculateMargin();

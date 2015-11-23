@@ -81,7 +81,6 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
         jcboPercent.addItem("#,##0.##%");
         
         jcboDate.addItem(DEFAULT_VALUE);
-//        jcboDate.addItem(DEFAULT_VALUE);
         
         jcboTime.addItem(DEFAULT_VALUE);
         
@@ -117,11 +116,11 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
      *
      * @param config
      */
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
         
-        String slang = config.getProperty("user.language");
-        String scountry = config.getProperty("user.country");
-        String svariant = config.getProperty("user.variant");
+        String slang = AppConfig.getInstance().getProperty("user.language");
+        String scountry = AppConfig.getInstance().getProperty("user.country");
+        String svariant = AppConfig.getInstance().getProperty("user.variant");
         
         if (slang != null && !slang.equals("") && scountry != null && svariant != null) {                    
             Locale currentlocale = new Locale(slang, scountry, svariant);
@@ -136,13 +135,13 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
             jcboLocale.setSelectedIndex(0);
         }
         
-        jcboInteger.setSelectedItem(writeWithDefault(config.getProperty("format.integer")));
-        jcboDouble.setSelectedItem(writeWithDefault(config.getProperty("format.double")));
-        jcboCurrency.setSelectedItem(writeWithDefault(config.getProperty("format.currency")));
-        jcboPercent.setSelectedItem(writeWithDefault(config.getProperty("format.percent")));
-        jcboDate.setSelectedItem(writeWithDefault(config.getProperty("format.date")));
-        jcboTime.setSelectedItem(writeWithDefault(config.getProperty("format.time")));
-        jcboDatetime.setSelectedItem(writeWithDefault(config.getProperty("format.datetime")));
+        jcboInteger.setSelectedItem(writeWithDefault(AppConfig.getInstance().getProperty("format.integer")));
+        jcboDouble.setSelectedItem(writeWithDefault(AppConfig.getInstance().getProperty("format.double")));
+        jcboCurrency.setSelectedItem(writeWithDefault(AppConfig.getInstance().getProperty("format.currency")));
+        jcboPercent.setSelectedItem(writeWithDefault(AppConfig.getInstance().getProperty("format.percent")));
+        jcboDate.setSelectedItem(writeWithDefault(AppConfig.getInstance().getProperty("format.date")));
+        jcboTime.setSelectedItem(writeWithDefault(AppConfig.getInstance().getProperty("format.time")));
+        jcboDatetime.setSelectedItem(writeWithDefault(AppConfig.getInstance().getProperty("format.datetime")));
                
         dirty.setDirty(false);
     }
@@ -151,26 +150,26 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
      *
      * @param config
      */
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
         
         Locale l = ((LocaleInfo) jcboLocale.getSelectedItem()).getLocale();
         if (l == null) {
-            config.setProperty("user.language", "");
-            config.setProperty("user.country", "");
-            config.setProperty("user.variant", "");
+            AppConfig.getInstance().setProperty("user.language", "");
+            AppConfig.getInstance().setProperty("user.country", "");
+            AppConfig.getInstance().setProperty("user.variant", "");
         } else {
-            config.setProperty("user.language", l.getLanguage());
-            config.setProperty("user.country", l.getCountry());
-            config.setProperty("user.variant", l.getVariant());
+            AppConfig.getInstance().setProperty("user.language", l.getLanguage());
+            AppConfig.getInstance().setProperty("user.country", l.getCountry());
+            AppConfig.getInstance().setProperty("user.variant", l.getVariant());
         }
          
-        config.setProperty("format.integer", readWithDefault(jcboInteger.getSelectedItem()));
-        config.setProperty("format.double", readWithDefault(jcboDouble.getSelectedItem()));
-        config.setProperty("format.currency", readWithDefault(jcboCurrency.getSelectedItem()));
-        config.setProperty("format.percent", readWithDefault(jcboPercent.getSelectedItem()));
-        config.setProperty("format.date", readWithDefault(jcboDate.getSelectedItem()));
-        config.setProperty("format.time", readWithDefault(jcboTime.getSelectedItem()));
-        config.setProperty("format.datetime", readWithDefault(jcboDatetime.getSelectedItem()));
+        AppConfig.getInstance().setProperty("format.integer", readWithDefault(jcboInteger.getSelectedItem()));
+        AppConfig.getInstance().setProperty("format.double", readWithDefault(jcboDouble.getSelectedItem()));
+        AppConfig.getInstance().setProperty("format.currency", readWithDefault(jcboCurrency.getSelectedItem()));
+        AppConfig.getInstance().setProperty("format.percent", readWithDefault(jcboPercent.getSelectedItem()));
+        AppConfig.getInstance().setProperty("format.date", readWithDefault(jcboDate.getSelectedItem()));
+        AppConfig.getInstance().setProperty("format.time", readWithDefault(jcboTime.getSelectedItem()));
+        AppConfig.getInstance().setProperty("format.datetime", readWithDefault(jcboDatetime.getSelectedItem()));
         
         dirty.setDirty(false);
     }

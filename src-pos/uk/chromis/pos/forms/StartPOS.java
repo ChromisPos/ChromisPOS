@@ -106,7 +106,7 @@ public class StartPOS {
                     System.exit(1);
                 }
 
-                AppConfig config = new AppConfig(args);
+                AppConfigOrig config = new AppConfigOrig(args);
                 config.load();
 
                 // set Locale.

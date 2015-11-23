@@ -49,19 +49,19 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
         
-        String sCommerceID = config.getProperty("payment.commerceid");
-        String sCommerceTerminal = config.getProperty("payment.terminal");
-        String sCommerceSign = config.getProperty("payment.commercesign");
-        String sCommerceSHA = config.getProperty("payment.SHA");
+        String sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
+        String sCommerceTerminal = AppConfig.getInstance().getProperty("payment.terminal");
+        String sCommerceSign = AppConfig.getInstance().getProperty("payment.commercesign");
+        String sCommerceSHA = AppConfig.getInstance().getProperty("payment.SHA");
         
         if (sCommerceID!=null && sCommerceTerminal!=null && sCommerceSign!=null && sCommerceSHA!=null && sCommerceSign.startsWith("crypt:")) {
-            jtxtCommerceCode.setText(config.getProperty("payment.commerceid"));
+            jtxtCommerceCode.setText(AppConfig.getInstance().getProperty("payment.commerceid"));
             AltEncrypter cypher = new AltEncrypter("cypherkey");
-            jtxtCommerceTerminal.setText(comboValue(config.getProperty("payment.terminal")));
-            jtxtCommerceSign.setText(cypher.decrypt(config.getProperty("payment.commercesign").substring(6)));
-            jCheckBox1.setSelected(Boolean.valueOf(config.getProperty("payment.SHA")).booleanValue());
+            jtxtCommerceTerminal.setText(comboValue(AppConfig.getInstance().getProperty("payment.terminal")));
+            jtxtCommerceSign.setText(cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercesign").substring(6)));
+            jCheckBox1.setSelected(Boolean.valueOf(AppConfig.getInstance().getProperty("payment.SHA")).booleanValue());
         }
      
     }
@@ -71,12 +71,12 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
-        config.setProperty("payment.commerceid", comboValue(jtxtCommerceCode.getText()));
-        config.setProperty("payment.terminal", comboValue(jtxtCommerceTerminal.getText()));
+    public void saveProperties() {
+        AppConfig.getInstance().setProperty("payment.commerceid", comboValue(jtxtCommerceCode.getText()));
+        AppConfig.getInstance().setProperty("payment.terminal", comboValue(jtxtCommerceTerminal.getText()));
         AltEncrypter cypher = new AltEncrypter("cypherkey");
-        config.setProperty("payment.commercesign", "crypt:" + cypher.encrypt(new String(jtxtCommerceSign.getPassword())));
-        config.setProperty("payment.SHA", comboValue(jCheckBox1.isSelected()));
+        AppConfig.getInstance().setProperty("payment.commercesign", "crypt:" + cypher.encrypt(new String(jtxtCommerceSign.getPassword())));
+        AppConfig.getInstance().setProperty("payment.SHA", comboValue(jCheckBox1.isSelected()));
     }
     
     private String comboValue(Object value) {

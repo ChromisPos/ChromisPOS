@@ -28,7 +28,7 @@ import javax.swing.SwingUtilities;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.pos.admin.DataLogicAdmin;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppConfigOrig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.sales.DataLogicReceipts;
@@ -156,7 +156,7 @@ public class JTicketsBagShared extends JTicketsBag {
     }
 
     private void checkLayaways() {
-        AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
+        AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
         m_config.load();
         List<SharedTicketInfo> nl;
         try {
@@ -309,7 +309,7 @@ public class JTicketsBagShared extends JTicketsBag {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
+                AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
                 m_config.load();
                 List<SharedTicketInfo> l;
                 try {

@@ -802,6 +802,26 @@
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.53.1"/>          
         </update>               
-    </changeSet>
+    </changeSet>      
+
+    <changeSet author="Chromis POS" id="Create Voucher Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="VOUCHERS"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="VOUCHERS">
+            <column name="VOUCHER" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>           
+            <column name="SOLDDATE" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="REDEEMDATE" type="timestamp" />            
+            <column name="SOLDTICKETID" type="varchar(50)"/>
+            <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
+        </createTable>       
+    </changeSet> 
+    
+  
 </databaseChangeLog>
 
