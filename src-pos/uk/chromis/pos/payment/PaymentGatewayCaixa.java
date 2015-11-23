@@ -45,6 +45,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.AltEncrypter;
@@ -75,9 +76,9 @@ public class PaymentGatewayCaixa implements PaymentGateway {
      */
     public PaymentGatewayCaixa (AppProperties props) {
         AltEncrypter cypher = new AltEncrypter("cypherkey");
-        this.sCommerceSign = cypher.decrypt(props.getProperty("payment.commercesign").substring(6));
+        this.sCommerceSign = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercesign").substring(6));
         
-        this.m_bTestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        this.m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
         
         //EUR, USD, GPB
         this.m_sCurrency = (Locale.getDefault().getCountry().isEmpty())

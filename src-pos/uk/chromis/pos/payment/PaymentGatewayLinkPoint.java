@@ -41,6 +41,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.AltEncrypter;
@@ -72,11 +73,11 @@ public class PaymentGatewayLinkPoint implements PaymentGateway {
     public PaymentGatewayLinkPoint(AppProperties props) {
 
         
-        this.m_bTestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
-        this.sConfigfile = props.getProperty("payment.commerceid");
-        this.sClientCertPath = props.getProperty("payment.certificatePath");
+        this.m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
+        this.sConfigfile = AppConfig.getInstance().getProperty("payment.commerceid");
+        this.sClientCertPath = AppConfig.getInstance().getProperty("payment.certificatePath");
         AltEncrypter cypher = new AltEncrypter("cypherkey");
-        this.sPasswordCert = cypher.decrypt(props.getProperty("payment.certificatePassword").substring(6));
+        this.sPasswordCert = cypher.decrypt(AppConfig.getInstance().getProperty("payment.certificatePassword").substring(6));
         
         HOST = (m_bTestMode)
                 ? "staging.linkpt.net"

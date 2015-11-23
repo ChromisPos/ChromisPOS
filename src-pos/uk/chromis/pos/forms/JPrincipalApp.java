@@ -624,7 +624,6 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
     }// </editor-fold>//GEN-END:initComponents
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
     setMenuVisible(!m_jPanelLeft.isVisible());
 
 }//GEN-LAST:event_jButton1ActionPerformed

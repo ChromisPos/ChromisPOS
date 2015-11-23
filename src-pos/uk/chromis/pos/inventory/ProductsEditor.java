@@ -264,7 +264,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
      */
     @Override
     public void writeValueInsert() {
-
         reportlock = true;
 
         m_jTitle.setText(AppLocal.getIntString("label.recordnew"));
@@ -280,8 +279,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPriceBuy.setText(null);
         setPriceSell(null);
         m_jImage.setImage(null);
-        m_jstockcost.setText(null);
-        m_jstockvolume.setText(null);
+        m_jstockcost.setText("0.00");
+        m_jstockvolume.setText("0.00");
         m_jInCatalog.setSelected(true);
         m_jCatalogOrder.setText(null);
         txtAttributes.setText(null);
@@ -383,7 +382,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jStockUnits.setText(Formats.DOUBLE.formatValue(myprod[25]));
         m_jAlias.setText(Formats.STRING.formatValue(myprod[26]));
         m_jAlwaysAvailable.setSelected(((Boolean) myprod[27]));
-        m_jDiscounted.setSelected(((Boolean) myprod[28]));
+        m_jDiscounted.setSelected(((Boolean) myprod[29]));
 
         txtAttributes.setCaretPosition(0);
 
@@ -419,11 +418,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jAlias.setEnabled(false);
         m_jAlwaysAvailable.setEnabled(false);
         m_jDiscounted.setEnabled(false);
-        m_jIsPack.setEnabled(false);
-        m_jIsPack.setSelected(((Boolean) myprod[29]));
-        m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[30]));
-        packproductmodel.setSelectedKey(myprod[31]);
-
 
         calculateMargin();
         calculatePriceSellTax();
@@ -507,11 +501,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jDiscounted.setEnabled(true);
 
-     //   m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
-     //   m_jPackProduct.setEnabled(m_jIsPack.isSelected());
-     //   jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
-     //   jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
-
+        //   m_jPackQuantity.setEnabled(m_jIsPack.isSelected());
+        //   m_jPackProduct.setEnabled(m_jIsPack.isSelected());
+        //   jLabelPackQuantity.setEnabled(m_jIsPack.isSelected());
+        //   jLabelPackProduct.setEnabled(m_jIsPack.isSelected());
         m_jDiscounted.setEnabled(true);
         calculateMargin();
         calculatePriceSellTax();
@@ -1168,6 +1161,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jstockcost.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jstockcost.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        m_jstockcost.setText("0.00");
         jPanel2.add(m_jstockcost);
         m_jstockcost.setBounds(370, 60, 80, 25);
 
@@ -1178,6 +1172,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jstockvolume.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jstockvolume.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        m_jstockvolume.setText("0.00");
         jPanel2.add(m_jstockvolume);
         m_jstockvolume.setBounds(370, 100, 80, 25);
 

@@ -50,7 +50,7 @@ import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.user.SaveProvider;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.AppView;
@@ -78,7 +78,6 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
     private AppView m_App;
     private AppProperties m_props;
-
     private ArrayList<String> Headers = new ArrayList<>();
     private Session s;
     private Connection con;
@@ -166,8 +165,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 m_dlSales.getProductCatDelete());
 
         // Save Last file for later use.
-        last_folder = m_props.getProperty("CSV.last_folder");
-        config_file = m_props.getConfigFile();
+        last_folder = AppConfig.getInstance().getProperty("CSV.last_folder");
+       // config_file = m_props.getConfigFile();
 
         documentListener = new DocumentListener() {
             @Override
@@ -1969,12 +1968,10 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         File current_folder = chooser.getCurrentDirectory();
         // If we have a file lets save the directory for later use if it's different from the old
         if (last_folder == null || !last_folder.equals(current_folder.getAbsolutePath())) {
-            AppConfigOrig CSVConfig = new AppConfigOrig(config_file);
-            CSVConfig.load();
-            CSVConfig.setProperty("CSV.last_folder", current_folder.getAbsolutePath());
+            AppConfig.getInstance().setProperty("CSV.last_folder", current_folder.getAbsolutePath());
             last_folder = current_folder.getAbsolutePath();
             try {
-                CSVConfig.save();
+                AppConfig.getInstance().save();
             } catch (IOException ex) {
                 Logger.getLogger(JPanelCSVImport.class.getName()).log(Level.SEVERE, null, ex);
             }

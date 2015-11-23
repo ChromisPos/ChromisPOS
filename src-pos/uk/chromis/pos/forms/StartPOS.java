@@ -105,31 +105,30 @@ public class StartPOS {
                 if (!registerApp()) {
                     System.exit(1);
                 }
-
-                AppConfigOrig config = new AppConfigOrig(args);
-                config.load();
+                
+               AppConfig config = AppConfig.getInstance();
 
                 // set Locale.
-                String slang = config.getProperty("user.language");
-                String scountry = config.getProperty("user.country");
-                String svariant = config.getProperty("user.variant");
+                String slang = AppConfig.getInstance().getProperty("user.language");
+                String scountry = AppConfig.getInstance().getProperty("user.country");
+                String svariant = AppConfig.getInstance().getProperty("user.variant");
                 if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
                     Locale.setDefault(new Locale(slang, scountry, svariant));
                 }
 
                 // Set the format patterns
-                Formats.setIntegerPattern(config.getProperty("format.integer"));
-                Formats.setDoublePattern(config.getProperty("format.double"));
-                Formats.setCurrencyPattern(config.getProperty("format.currency"));
-                Formats.setPercentPattern(config.getProperty("format.percent"));
-                Formats.setDatePattern(config.getProperty("format.date"));
-                Formats.setTimePattern(config.getProperty("format.time"));
-                Formats.setDateTimePattern(config.getProperty("format.datetime"));
+                Formats.setIntegerPattern(AppConfig.getInstance().getProperty("format.integer"));
+                Formats.setDoublePattern(AppConfig.getInstance().getProperty("format.double"));
+                Formats.setCurrencyPattern(AppConfig.getInstance().getProperty("format.currency"));
+                Formats.setPercentPattern(AppConfig.getInstance().getProperty("format.percent"));
+                Formats.setDatePattern(AppConfig.getInstance().getProperty("format.date"));
+                Formats.setTimePattern(AppConfig.getInstance().getProperty("format.time"));
+                Formats.setDateTimePattern(AppConfig.getInstance().getProperty("format.datetime"));
 
                 // Set the look and feel.
                 try {
 
-                    Object laf = Class.forName(config.getProperty("swing.defaultlaf")).newInstance();
+                    Object laf = Class.forName(AppConfig.getInstance().getProperty("swing.defaultlaf")).newInstance();
                     if (laf instanceof LookAndFeel) {
                         UIManager.setLookAndFeel((LookAndFeel) laf);
                     } else if (laf instanceof SubstanceSkin) {
@@ -138,10 +137,10 @@ public class StartPOS {
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                     logger.log(Level.WARNING, "Cannot set Look and Feel", e);
                 }
-                String hostname = config.getProperty("machine.hostname");
+                String hostname = AppConfig.getInstance().getProperty("machine.hostname");
                 TicketInfo.setHostname(hostname);
 
-                String screenmode = config.getProperty("machine.screenmode");
+                String screenmode = AppConfig.getInstance().getProperty("machine.screenmode");
                 if ("fullscreen".equals(screenmode)) {
                     JRootKiosk rootkiosk = new JRootKiosk();
                     rootkiosk.initFrame(config);

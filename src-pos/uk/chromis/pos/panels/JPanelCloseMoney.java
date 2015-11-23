@@ -44,6 +44,7 @@ import uk.chromis.data.loader.SerializerWriteBasic;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppUser;import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.BeanFactoryApp;
@@ -116,8 +117,8 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
 
         
         jPanelTop.setVisible(false);        
-        if (m_App.getProperties().getProperty("screen.600800") != null) {           
-            if (Boolean.valueOf(m_App.getProperties().getProperty("screen.600800")) == true) {             
+        if (AppConfig.getInstance().getProperty("screen.600800") != null) {           
+            if (Boolean.valueOf(AppConfig.getInstance().getProperty("screen.600800")) == true) {             
                    jPanelTop.setVisible(true);
                    jPanelBottom.setVisible(false);
             } else {

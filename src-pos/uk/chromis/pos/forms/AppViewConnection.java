@@ -46,34 +46,37 @@ public class AppViewConnection {
      * @return
      * @throws BasicException
      */
-    public static Session createSession(AppProperties props) throws BasicException {
-               
-        try{
+    public static Session createSession(AppProperties props) throws BasicException {               
+        return createSession();
+    }
 
-            // register the database driver
+    
+    public static Session createSession() throws BasicException {               
+        try{
             if (isJavaWebStart()) {
-                Class.forName(props.getProperty("db.driver"), true, Thread.currentThread().getContextClassLoader());
+                Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, Thread.currentThread().getContextClassLoader());
             } else {
-                ClassLoader cloader = new URLClassLoader(new URL[] {new File(props.getProperty("db.driverlib")).toURI().toURL()});
-                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(props.getProperty("db.driver"), true, cloader).newInstance()));
+                ClassLoader cloader = new URLClassLoader(new URL[] {new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
             }
 
-            String sDBUser = props.getProperty("db.user");
-            String sDBPassword = props.getProperty("db.password");        
+            String sDBUser = AppConfig.getInstance().getProperty("db.user");
+            String sDBPassword = AppConfig.getInstance().getProperty("db.password");        
             if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
                 // the password is encrypted
                 AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
                 sDBPassword = cypher.decrypt(sDBPassword.substring(6));
             }   
-             return new Session(props.getProperty("db.URL"), sDBUser,sDBPassword);     
+             return new Session(AppConfig.getInstance().getProperty("db.URL"), sDBUser,sDBPassword);     
 
         } catch (InstantiationException | IllegalAccessException | MalformedURLException | ClassNotFoundException e) {
             throw new BasicException(AppLocal.getIntString("message.databasedrivererror"), e);
         } catch (SQLException eSQL) {
             throw new BasicException(AppLocal.getIntString("message.databaseconnectionerror"), eSQL);
         }   
-    }
-
+    }    
+    
+    
     private static boolean isJavaWebStart() {
 
         try {

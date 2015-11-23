@@ -32,6 +32,7 @@ import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.StringUtils;
@@ -59,13 +60,13 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
      * @param props */
     public PaymentGatewayBluePay20POST(AppProperties props) {
         // Grab some configuration variables
-        BP_AccountID = props.getProperty("payment.BluePay20POST.accountID");
+        BP_AccountID = AppConfig.getInstance().getProperty("payment.BluePay20POST.accountID");
         
-        this.BP_SecretKey = props.getProperty("payment.BluePay20POST.secretKey");
+        this.BP_SecretKey = AppConfig.getInstance().getProperty("payment.BluePay20POST.secretKey");
 
-        BP_TestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        BP_TestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
         
-        ENDPOINTADDRESS = props.getProperty( "payment.BluePay20POST.URL" );
+        ENDPOINTADDRESS = AppConfig.getInstance().getProperty( "payment.BluePay20POST.URL" );
     }
 
     /**

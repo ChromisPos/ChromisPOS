@@ -31,7 +31,7 @@ import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.AppView;
@@ -46,7 +46,6 @@ import uk.chromis.pos.util.AltEncrypter;
 public class JPanelResetPickupId extends JPanel implements JPanelView {
 
 
-    private AppConfigOrig config;
     private Connection con;
     private String sdbmanager;
     private Session session;
@@ -56,19 +55,18 @@ public class JPanelResetPickupId extends JPanel implements JPanelView {
     
     /** Creates new form JPaneldbUpdate
      * @param oApp */
-    public JPanelResetPickupId(AppView oApp) {
-        this(oApp.getProperties());       
-    }
+  //  public JPanelResetPickupId(AppView oApp) {
+ //       this(oApp.getProperties());       
+ //   }
 
     /**
      *
      * @param props
      */
-    public JPanelResetPickupId(AppProperties props) {
+    public JPanelResetPickupId() {
         
         initComponents();
-        config = new AppConfigOrig(props.getConfigFile());      
-        m_props=props;
+
 
         
     }
@@ -144,9 +142,9 @@ public class JPanelResetPickupId extends JPanel implements JPanelView {
     public void activate() throws BasicException {
                 
        // connect to the database
-         String db_user =(m_props.getProperty("db.user"));
-         String db_url = (m_props.getProperty("db.URL"));
-         String db_password = (m_props.getProperty("db.password"));     
+         String db_user =(AppConfig.getInstance().getProperty("db.user"));
+         String db_url = (AppConfig.getInstance().getProperty("db.URL"));
+         String db_password = (AppConfig.getInstance().getProperty("db.password"));     
          
          if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
                 // the password is encrypted
@@ -155,7 +153,7 @@ public class JPanelResetPickupId extends JPanel implements JPanelView {
         }
         
          try{
-            session = AppViewConnection.createSession(m_props);
+            session = AppViewConnection.createSession();
             con = DriverManager.getConnection(db_url,db_user,db_password);                   
             sdbmanager = con.getMetaData().getDatabaseProductName(); 
             stmt = (Statement) con.createStatement(); 

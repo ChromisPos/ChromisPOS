@@ -29,7 +29,7 @@ import uk.chromis.basic.BasicException;
 import uk.chromis.pos.catalog.CatalogSelector;
 import uk.chromis.pos.catalog.JCatalog;
 import uk.chromis.pos.catalog.JCatalogFull;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.ticket.ProductInfoExt;
@@ -73,10 +73,8 @@ public class JPanelTicketSales extends JPanelTicket {
      */
     @Override
     protected Component getSouthComponent() {
-        AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
         
-        if (Boolean.valueOf(m_config.getProperty("sales.newscreen"))){
+        if (Boolean.valueOf(AppConfig.getInstance().getProperty("sales.newscreen"))){
             m_cat = new JCatalogFull(dlSales,
                     "true".equals(m_jbtnconfig.getProperty("pricevisible")),
                     "true".equals(m_jbtnconfig.getProperty("taxesincluded")),
@@ -113,7 +111,7 @@ public class JPanelTicketSales extends JPanelTicket {
      */
     @Override
     protected JTicketsBag getJTicketsBag() {
-        return JTicketsBag.createTicketsBag(m_App.getProperties().getProperty("machine.ticketsbag"), m_App, this);
+        return JTicketsBag.createTicketsBag(AppConfig.getInstance().getProperty("machine.ticketsbag"), m_App, this);
     }
 
     /**

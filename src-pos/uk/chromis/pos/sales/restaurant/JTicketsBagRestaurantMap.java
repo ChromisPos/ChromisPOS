@@ -41,7 +41,7 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.loader.SerializerReadClass;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.pos.customers.CustomerInfo;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
@@ -106,10 +106,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         super(app, panelticket);
 
         restDB = new RestaurantDBUtils(app);
-
-        AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
-        transparentButtons = Boolean.valueOf(m_config.getProperty("table.transparentbuttons"));
+        transparentButtons = Boolean.valueOf(AppConfig.getInstance().getProperty("table.transparentbuttons"));
 
         dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
         dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
@@ -476,46 +473,46 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     place.getButton().setEnabled(true);
 // get the customer details form the database
 // We have set the option show details on table.   
-                    if (m_App.getProperties().getProperty("table.tablecolour") == null) {
+                    if (AppConfig.getInstance().getProperty("table.tablecolour") == null) {
                         tableName = "<style=font-size:9px;font-weight:bold;><font color = black>" + place.getName() + "</font></style>";
                     } else {
-                        tableName = "<style=font-size:9px;font-weight:bold;><font color =" + m_App.getProperties().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
+                        tableName = "<style=font-size:9px;font-weight:bold;><font color =" + AppConfig.getInstance().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
                     }
 
-                    if (Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue()) {
-                        if (m_App.getProperties().getProperty("table.waitercolour") == null) {
+                    if (Boolean.valueOf(AppConfig.getInstance().getProperty("table.showwaiterdetails")).booleanValue()) {
+                        if (AppConfig.getInstance().getProperty("table.waitercolour") == null) {
                             waiterDetails = (restDB.getWaiterNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color = red>"
                                     + restDB.getWaiterNameInTableById(place.getId()) + "</font></style><br>";
                         } else {
                             waiterDetails = (restDB.getWaiterNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color ="
-                                    + m_App.getProperties().getProperty("table.waitercolour") + ">" + restDB.getWaiterNameInTableById(place.getId()) + "</font></style><br>";
+                                    + AppConfig.getInstance().getProperty("table.waitercolour") + ">" + restDB.getWaiterNameInTableById(place.getId()) + "</font></style><br>";
                         }
                         place.getButton().setIcon(ICO_OCU_SM);
                     } else {
                         waiterDetails = "";
                     }
 
-                    if (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")).booleanValue()) {
-                        place.getButton().setIcon((Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue() && (restDB.getCustomerNameInTable(place.getName()) != null)) ? ICO_WAITER : ICO_OCU_SM);
-                        if (m_App.getProperties().getProperty("table.customercolour") == null) {
+                    if (Boolean.valueOf(AppConfig.getInstance().getProperty("table.showcustomerdetails")).booleanValue()) {
+                        place.getButton().setIcon((Boolean.valueOf(AppConfig.getInstance().getProperty("table.showwaiterdetails")).booleanValue() && (restDB.getCustomerNameInTable(place.getName()) != null)) ? ICO_WAITER : ICO_OCU_SM);
+                        if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
                             customerDetails = (restDB.getCustomerNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color = blue>"
                                     + restDB.getCustomerNameInTableById(place.getId()) + "</font></style><br>";
                         } else {
                             customerDetails = (restDB.getCustomerNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color ="
-                                    + m_App.getProperties().getProperty("table.customercolour") + ">" + restDB.getCustomerNameInTableById(place.getId()) + "</font></style><br>";
+                                    + AppConfig.getInstance().getProperty("table.customercolour") + ">" + restDB.getCustomerNameInTableById(place.getId()) + "</font></style><br>";
                         }
                     } else {
                         customerDetails = "";
                     }
 
-                    if ((Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue())
-                            || (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")).booleanValue())) {
+                    if ((Boolean.valueOf(AppConfig.getInstance().getProperty("table.showwaiterdetails")).booleanValue())
+                            || (Boolean.valueOf(AppConfig.getInstance().getProperty("table.showcustomerdetails")).booleanValue())) {
                         place.getButton().setText("<html><center>" + customerDetails + waiterDetails + tableName + "</html>");
                     } else {
-                        if (m_App.getProperties().getProperty("table.tablecolour") == null) {
+                        if (AppConfig.getInstance().getProperty("table.tablecolour") == null) {
                             tableName = "<style=font-size:10px;font-weight:bold;><font color = black>" + place.getName() + "</font></style>";
                         } else {
-                            tableName = "<style=font-size:10px;font-weight:bold;><font color =" + m_App.getProperties().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
+                            tableName = "<style=font-size:10px;font-weight:bold;><font color =" +AppConfig.getInstance().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
                         }
 
                         place.getButton().setText("<html><center>" + tableName + "</html>");

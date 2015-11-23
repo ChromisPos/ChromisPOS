@@ -31,13 +31,12 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
@@ -51,13 +50,11 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
     protected EventListenerList listeners = new EventListenerList();
     private DataLogicSales m_dlSales;
     private TaxesLogic taxeslogic;
-
     private boolean pricevisible;
     private boolean taxesincluded;
     private final Map<String, ProductInfoExt> m_productsset = new HashMap<>();
     private final Set<String> m_categoriesset = new HashSet<>();
     private ThumbNailBuilder tnbbutton;
-
     private Object newColour;
 
     public JCatalogFull(DataLogicSales dlSales) {
@@ -174,11 +171,8 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
             m_jProducts.add(jcurrTab, "");
 
             java.util.List< ProductInfoExt> prods;
-            
-            AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-            m_config.load();
 
-            if ((Boolean.valueOf(m_config.getProperty("sales.newscreenbycatorder")))) {
+            if ((Boolean.valueOf(AppConfig.getInstance().getProperty("sales.newscreenbycatorder")))) {
                 prods = m_dlSales.getAllProductCatalogByCatOrder();
             } else {
                 prods = m_dlSales.getAllProductCatalog();
@@ -240,7 +234,6 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
                 }
             }
         } else {
-
             CardLayout cl = (CardLayout) (m_jProducts.getLayout());
             cl.show(m_jProducts, "PRODUCT." + id);
         }

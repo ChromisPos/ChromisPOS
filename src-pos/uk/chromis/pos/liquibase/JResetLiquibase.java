@@ -25,17 +25,13 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppViewConnection;
 import uk.chromis.pos.util.AltEncrypter;
 
-
 public class JResetLiquibase extends javax.swing.JFrame {
+
     private static final long serialVersionUID = 1L;
-
-
-    private JResetLiquibase config;
-
 
     /**
      * @param args the command line arguments
@@ -44,12 +40,10 @@ public class JResetLiquibase extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AppConfigOrig config = new AppConfigOrig(args);
-                config.load();
 
-                String db_user = (config.getProperty("db.user"));
-                String db_url = (config.getProperty("db.URL"));
-                String db_password = (config.getProperty("db.password"));
+                String db_user = (AppConfig.getInstance().getProperty("db.user"));
+                String db_url = (AppConfig.getInstance().getProperty("db.URL"));
+                String db_password = (AppConfig.getInstance().getProperty("db.password"));
 
                 if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
                     // the password is encrypted
@@ -58,13 +52,13 @@ public class JResetLiquibase extends javax.swing.JFrame {
                 }
 
                 try {
-                    Session session = AppViewConnection.createSession(config);
+                    Session session = AppViewConnection.createSession();
                     Connection con = DriverManager.getConnection(db_url, db_user, db_password);
                     Statement stmt = (Statement) con.createStatement();
-                    String SQL = "DELETE FROM DATABASECHANGELOG ";                    
+                    String SQL = "DELETE FROM DATABASECHANGELOG ";
                     stmt.execute(SQL);
                     SQL = "UPDATE APPLICATIONS SET VERSION = '0.00' WHERE NAME ='Chromis Pos' ";
-                    stmt.execute(SQL);                     
+                    stmt.execute(SQL);
                     JOptionPane.showMessageDialog(null, "Liquibase tables cleared ready for new attempt.", "Liquibase Reset", JOptionPane.INFORMATION_MESSAGE);
                     System.exit(0);
                 } catch (BasicException | SQLException e) {

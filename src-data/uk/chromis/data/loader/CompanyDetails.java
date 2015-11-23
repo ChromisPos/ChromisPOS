@@ -21,7 +21,7 @@ package uk.chromis.data.loader;
 
 
 import java.io.File;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
@@ -37,10 +37,7 @@ public class CompanyDetails {
     /**
      *
      */
-    public CompanyDetails() {          
-   
-       AppConfigOrig config = new AppConfigOrig(m_config);
-    // AppViewConnection Session = new AppViewConnection();
+    public CompanyDetails() {             
     
     
 }
@@ -49,11 +46,11 @@ public class CompanyDetails {
      *
      * @param config
      */
-    public void loadProperties(AppConfigOrig config) {
+    public void loadProperties() {
          
-        db_url=(config.getProperty("db.url"));
-        db_user=(config.getProperty("db_user"));
-        db_password=(config.getProperty("db.password"));
+        db_url=(AppConfig.getInstance().getProperty("db.url"));
+        db_user=(AppConfig.getInstance().getProperty("db_user"));
+        db_password=(AppConfig.getInstance().getProperty("db.password"));
        //catch (BasicException){
          // Session s = new Session(db_url,db_user,"epos");
         

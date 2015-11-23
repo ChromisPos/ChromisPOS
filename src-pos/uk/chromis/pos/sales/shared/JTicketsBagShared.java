@@ -28,7 +28,7 @@ import javax.swing.SwingUtilities;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.pos.admin.DataLogicAdmin;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.sales.DataLogicReceipts;
@@ -156,12 +156,10 @@ public class JTicketsBagShared extends JTicketsBag {
     }
 
     private void checkLayaways() {
-        AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
         List<SharedTicketInfo> nl;
         try {
             //delete.rightslevel          
-            if ("true".equals(m_config.getProperty("sharedticket.currentuser"))) {
+            if ("true".equals(AppConfig.getInstance().getProperty("sharedticket.currentuser"))) {
                 nl = dlReceipts.getSharedTicketListByUser(m_App.getAppUserView().getUser().getName());
             } else {
                 nl = dlReceipts.getSharedTicketList();
@@ -309,11 +307,9 @@ public class JTicketsBagShared extends JTicketsBag {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-                m_config.load();
                 List<SharedTicketInfo> l;
                 try {
-                    if ("true".equals(m_config.getProperty("sharedticket.currentuser"))) {
+                    if ("true".equals(AppConfig.getInstance().getProperty("sharedticket.currentuser"))) {
                         l = dlReceipts.getSharedTicketListByUser(m_App.getAppUserView().getUser().getName());
                     } else {
                         l = dlReceipts.getSharedTicketList();
@@ -343,7 +339,6 @@ public class JTicketsBagShared extends JTicketsBag {
         int res = JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.wannadelete"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (res == JOptionPane.YES_OPTION) {
             deleteTicket();
-
         }
 
     }//GEN-LAST:event_m_jDelTicketActionPerformed

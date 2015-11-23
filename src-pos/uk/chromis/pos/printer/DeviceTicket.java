@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.printer.escpos.CodesEpson;
 import uk.chromis.pos.printer.escpos.CodesIthaca;
@@ -97,7 +98,7 @@ public class DeviceTicket {
         PrinterWritterPool pws = new PrinterWritterPool();
 
         // La impresora fiscal
-        StringParser sf = new StringParser(props.getProperty("machine.fiscalprinter"));
+        StringParser sf = new StringParser(AppConfig.getInstance().getProperty("machine.fiscalprinter"));
         String sFiscalType = sf.nextToken(':');
         String sFiscalParam1 = sf.nextToken(',');
         try {
@@ -110,7 +111,7 @@ public class DeviceTicket {
             m_deviceFiscal = new DeviceFiscalPrinterNull(e.getMessage());
         }
 
-        StringParser sd = new StringParser(props.getProperty("machine.display"));
+        StringParser sd = new StringParser(AppConfig.getInstance().getProperty("machine.display"));
         String sDisplayType = sd.nextToken(':');
         String sDisplayParam1 = sd.nextToken(',');
         String sDisplayParam2 = sd.nextToken(',');
@@ -159,7 +160,7 @@ public class DeviceTicket {
         // Empezamos a iterar por las impresoras...
         int iPrinterIndex = 1;
         String sPrinterIndex = Integer.toString(iPrinterIndex);
-        String sprinter = props.getProperty("machine.printer");
+        String sprinter = AppConfig.getInstance().getProperty("machine.printer");
 
         while (sprinter != null && !"".equals(sprinter)) {
 
@@ -188,11 +189,11 @@ public class DeviceTicket {
                             sPrinterParam2 = "standard";
                         }
                         addPrinter(sPrinterIndex, new DevicePrinterPrinter(parent, sPrinterParam1,
-                                Integer.parseInt(props.getProperty("paper." + sPrinterParam2 + ".x")),
-                                Integer.parseInt(props.getProperty("paper." + sPrinterParam2 + ".y")),
-                                Integer.parseInt(props.getProperty("paper." + sPrinterParam2 + ".width")),
-                                Integer.parseInt(props.getProperty("paper." + sPrinterParam2 + ".height")),
-                                props.getProperty("paper." + sPrinterParam2 + ".mediasizename")
+                                Integer.parseInt(AppConfig.getInstance().getProperty("paper." + sPrinterParam2 + ".x")),
+                                Integer.parseInt(AppConfig.getInstance().getProperty("paper." + sPrinterParam2 + ".y")),
+                                Integer.parseInt(AppConfig.getInstance().getProperty("paper." + sPrinterParam2 + ".width")),
+                                Integer.parseInt(AppConfig.getInstance().getProperty("paper." + sPrinterParam2 + ".height")),
+                                AppConfig.getInstance().getProperty("paper." + sPrinterParam2 + ".mediasizename")
                         ));
                         break;
                     case "epson":
@@ -223,7 +224,7 @@ public class DeviceTicket {
 
             iPrinterIndex++;
             sPrinterIndex = Integer.toString(iPrinterIndex);
-            sprinter = props.getProperty("machine.printer." + sPrinterIndex);
+            sprinter = AppConfig.getInstance().getProperty("machine.printer." + sPrinterIndex);
         }
     }
 

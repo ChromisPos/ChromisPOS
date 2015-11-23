@@ -32,7 +32,7 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Session;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.AppViewConnection;
@@ -50,7 +50,6 @@ public class JProductLineEdit extends javax.swing.JDialog {
     private boolean m_bunitsok;
     private boolean m_bpriceok;
     private String productID;
-    private final AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
     private Session session;
     private Connection connection;
     private PreparedStatement pstmt;
@@ -78,9 +77,8 @@ public class JProductLineEdit extends javax.swing.JDialog {
             throw new BasicException(AppLocal.getIntString("message.cannotcalculatetaxes"));
         }
 
-        m_config.load();
         if (!productID.equals("xxx999_999xxx_x9x9x9")) {
-            m_jButtonUpdate.setVisible(Boolean.valueOf(m_config.getProperty("db.productupdate")));
+            m_jButtonUpdate.setVisible(Boolean.valueOf(AppConfig.getInstance().getProperty("db.productupdate")));
         }else{
             m_jButtonUpdate.setVisible(false);
         }
@@ -95,7 +93,6 @@ public class JProductLineEdit extends javax.swing.JDialog {
         m_jPrice.setEnabled(app.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));
         m_jPriceTax.setEnabled(app.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));
 
-//        m_jName.setText(m_oLine.getProperty("product.name"));
         m_jName.setText(oLine.getProductName());
         m_jUnits.setDoubleValue(oLine.getMultiply());
         m_jPrice.setDoubleValue(oLine.getPrice());
@@ -168,7 +165,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
                 m_oLine.setPrice(value);
                 m_jPriceTax.setDoubleValue(m_oLine.getPriceTax());
                 m_bpriceok = true;
-                m_jButtonUpdate.setEnabled(Boolean.valueOf(m_config.getProperty("db.productupdate")));
+                m_jButtonUpdate.setEnabled(Boolean.valueOf(AppConfig.getInstance().getProperty("db.productupdate")));
             }
 
             printTotals();
@@ -188,7 +185,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
                 m_oLine.setPriceTax(value);
                 m_jPrice.setDoubleValue(m_oLine.getPrice());
                 m_bpriceok = true;
-                m_jButtonUpdate.setEnabled(Boolean.valueOf(m_config.getProperty("db.productupdate")));
+                m_jButtonUpdate.setEnabled(Boolean.valueOf(AppConfig.getInstance().getProperty("db.productupdate")));
             }
 
             printTotals();
@@ -434,16 +431,16 @@ public class JProductLineEdit extends javax.swing.JDialog {
 
     private void m_jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonUpdateActionPerformed
         // Update the database with the new price passed
-        String db_password = (m_config.getProperty("db.password"));
+        String db_password = (AppConfig.getInstance().getProperty("db.password"));
 
-        if (m_config.getProperty("db.user") != null && db_password != null && db_password.startsWith("crypt:")) {
+        if (AppConfig.getInstance().getProperty("db.user") != null && db_password != null && db_password.startsWith("crypt:")) {
             // the password is encrypted
-            AltEncrypter cypher = new AltEncrypter("cypherkey" + m_config.getProperty("db.user"));
+            AltEncrypter cypher = new AltEncrypter("cypherkey" + AppConfig.getInstance().getProperty("db.user"));
             db_password = cypher.decrypt(db_password.substring(6));
         }
         try {
-            session = AppViewConnection.createSession(m_config);
-            connection = DriverManager.getConnection(m_config.getProperty("db.URL"), m_config.getProperty("db.user"), db_password);
+            session = AppViewConnection.createSession();
+            connection = DriverManager.getConnection(AppConfig.getInstance().getProperty("db.URL"), AppConfig.getInstance().getProperty("db.user"), db_password);
             pstmt = connection.prepareStatement("UPDATE PRODUCTS SET PRICESELL = ? WHERE ID = ?");
             pstmt.setDouble(1, m_jPrice.getDoubleValue());
             pstmt.setString(2, productID);

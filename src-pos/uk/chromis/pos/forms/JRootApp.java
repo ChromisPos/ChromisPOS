@@ -638,16 +638,13 @@ public class JRootApp extends JPanel implements AppView {
         try {
 
             jScrollPane1.getViewport().setView(null);
-
             JFlowPanel jPeople = new JFlowPanel();
             jPeople.applyComponentOrientation(getComponentOrientation());
-
             java.util.List people = m_dlSystem.listPeopleVisible();
 
             for (int i = 0; i < people.size(); i++) {
 
                 AppUser user = (AppUser) people.get(i);
-
                 JButton btn = new JButton(new AppUserAction(user));
                 btn.applyComponentOrientation(getComponentOrientation());
                 btn.setFocusPainted(false);
@@ -719,11 +716,9 @@ public class JRootApp extends JPanel implements AppView {
 
             m_principalapp = new JPrincipalApp(this, user);
 
-            // The user status notificator
             jPanel3.add(m_principalapp.getNotificator());
             jPanel3.revalidate();
 
-            // The main panel
             m_jPanelContainer.add(m_principalapp, "_" + m_principalapp.getUser().getId());
             showView("_" + m_principalapp.getUser().getId());
 
@@ -1034,9 +1029,9 @@ public class JRootApp extends JPanel implements AppView {
         try {
             user = m_dlSystem.getsuperuser();
             if (user == null) {
-                ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
-                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
-                Class.forName(AppConfig.getInstance2().getProperty("db.driver"));
+                ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+                DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
+                Class.forName(AppConfig.getInstance().getProperty("db.driver"));
                 con = DriverManager.getConnection(db_url, db_user, db_password);
                 PreparedStatement stmt = con.prepareStatement("INSERT INTO PEOPLE (ID, NAME, ROLE, VISIBLE) VALUES ('99', 'SuperAdminUser', '0', 0)");
                 stmt.executeUpdate();

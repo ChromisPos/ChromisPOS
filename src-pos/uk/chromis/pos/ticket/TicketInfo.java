@@ -42,7 +42,7 @@ import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.payment.PaymentInfo;
 import uk.chromis.pos.payment.PaymentInfoMagcard;
@@ -549,13 +549,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public String printId() {
-// We need acces to the config file        
-        AppConfigOrig m_config = new AppConfigOrig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
-        String receiptSize = (m_config.getProperty("till.receiptsize"));
-        String receiptPrefix = (m_config.getProperty("till.receiptprefix"));
-// we have finished with m_config so unload it      
-        m_config = null;
+
+        String receiptSize = (AppConfig.getInstance().getProperty("till.receiptsize"));
+        String receiptPrefix = (AppConfig.getInstance().getProperty("till.receiptprefix"));
+
 
         if (m_iTicketId > 0) {
             String tmpTicketId = Integer.toString(m_iTicketId);

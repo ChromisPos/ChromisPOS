@@ -41,6 +41,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 
@@ -66,13 +67,13 @@ public class PaymentGatewayBluePayAUTHNETEMU implements PaymentGateway {
      */
     public PaymentGatewayBluePayAUTHNETEMU(AppProperties props) {
         // Grab some configuration variables
-        m_sCommerceID = props.getProperty("payment.BluePay.accountID");
+        m_sCommerceID = AppConfig.getInstance().getProperty("payment.BluePay.accountID");
 
-        this.m_sCommercePassword = props.getProperty("payment.BluePay.secretKey");
+        this.m_sCommercePassword = AppConfig.getInstance().getProperty("payment.BluePay.secretKey");
 
-        m_bTestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
 
-        ENDPOINTADDRESS = props.getProperty("payment.BluePay.URL");
+        ENDPOINTADDRESS = AppConfig.getInstance().getProperty("payment.BluePay.URL");
     }
 
     /**

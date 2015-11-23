@@ -16,8 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
-
-
 package uk.chromis.pos.forms;
 
 import java.io.File;
@@ -35,10 +33,9 @@ import java.util.logging.Logger;
  *
  * @author John
  */
-public class AppConfig {
+public class AppConfig implements AppProperties {
 
-    private static AppConfig instance = null;
-    private static AppConfig instance2 = null;
+    private static AppConfig instance = null;   
     private final Properties m_propsconfig;
     private final File configFile;
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.AppConfig");
@@ -57,15 +54,9 @@ public class AppConfig {
         return instance;
     }
 
-        public static AppConfig getInstance2() {
-        if (instance2 == null) {
-            instance2 = new AppConfig(new File(System.getProperty("user.home"), "unicentaopos.properties"));
-        }
-        return instance2;
-    }
     
     
-    
+
     private File getDefaultConfig() {
         return new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + ".properties");
     }
@@ -210,6 +201,11 @@ public class AppConfig {
         m_propsconfig.setProperty("machine.uniqueinstance", "false");
         m_propsconfig.setProperty("screen.receipt.columns", "42");
 
+    }
+
+    @Override
+    public File getConfigFile() {
+        return configFile;
     }
 
 }

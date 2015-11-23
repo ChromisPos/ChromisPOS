@@ -22,6 +22,7 @@ package uk.chromis.pos.printer.screen;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.printer.DevicePrinter;
@@ -162,7 +163,7 @@ public class DevicePrinterPanel extends javax.swing.JPanel implements DevicePrin
      */
     @Override
     public void endReceipt() {
-        m_jTicketContainer.addTicket(new JTicket(m_ticketcurrent, Integer.parseInt(m_props.getProperty("screen.receipt.columns"))));        
+        m_jTicketContainer.addTicket(new JTicket(m_ticketcurrent, Integer.parseInt(AppConfig.getInstance().getProperty("screen.receipt.columns"))));        
         m_ticketcurrent = null;
     }
     

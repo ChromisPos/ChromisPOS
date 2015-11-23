@@ -26,7 +26,7 @@ import java.sql.Statement;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.AppView;
@@ -42,7 +42,6 @@ public class JPanelCSVCleardb extends JPanel implements JPanelView {
     private Connection con;
     private Statement stmt;
     private String SQL;
-    private AppConfigOrig config;
 
     /**
      *
@@ -60,9 +59,6 @@ public class JPanelCSVCleardb extends JPanel implements JPanelView {
     public JPanelCSVCleardb(AppProperties props) {
 
         initComponents();
-
-        config = new AppConfigOrig(props.getConfigFile());
-        config.load();
 
         jMessageBox.setText("Performing this action, will clear all "
                 + "data in the CSVImport table. \n\n"
@@ -96,9 +92,9 @@ public class JPanelCSVCleardb extends JPanel implements JPanelView {
     @Override
     public void activate() throws BasicException {
         // connect to the database
-        String db_user = (config.getProperty("db.user"));
-        String db_url = (config.getProperty("db.URL"));
-        String db_password = (config.getProperty("db.password"));
+        String db_user = (AppConfig.getInstance().getProperty("db.user"));
+        String db_url = (AppConfig.getInstance().getProperty("db.URL"));
+        String db_password = (AppConfig.getInstance().getProperty("db.password"));
 
         if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
             // the password is encrypted

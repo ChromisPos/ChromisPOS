@@ -25,7 +25,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import uk.chromis.basic.BasicException;
-import uk.chromis.pos.forms.AppConfigOrig;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.JRootFrame;
@@ -96,8 +96,8 @@ public class JFrmMigrate extends javax.swing.JFrame {
             @Override
             public void run() {
                 
-                AppConfigOrig config = new AppConfigOrig(args);
-                config.load();    
+                AppConfig config = AppConfig.getInstance();
+                
                 
 // Set the look and feel.
              //   try {                    
