@@ -593,8 +593,13 @@
             <constraints nullable="false"/>
         </column>
         <column name="PACKQUANTITY" type="double precision" />
-    </column>
-    <column name="PACKPRODUCT" type="varchar(255)"/>
+        </column>
+        <column name="PACKPRODUCT" type="varchar(255)"/>
+        <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true">
+        <constraints nullable="false"/>
+        </column>
+        <column name="CATORDER" type="integer" />
+        <column name="PROMOTIONID" type="varchar(50)" /> 
 
     </createTable>
 
@@ -621,6 +626,13 @@
                              referencedColumnNames = "ID"
                              baseTableName="PRODUCTS"
                              referencedTableName="PRODUCTS"/>
+        
+    <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
+                            constraintName ="FK_PRODUCT_PROMOTIONID"
+                            referencedColumnNames = "ID"
+                            baseTableName="PRODUCTS"
+                            referencedTableName="PROMOTIONS"/>
+    </createTable>
 
     <createIndex tableName="PRODUCTS"
                  indexName="PRODUCTS_INX_0"
@@ -640,26 +652,6 @@
         <column name="NAME" type="varchar(255)"/>
     </createIndex>
 </changeSet>
-    
-<changeSet author="Chromis Pos" id="Create Products_cat Table">
-    <createTable tableName="PRODUCTS_CAT">
-        <column name="PRODUCT" type="varchar(255)">
-            <constraints primaryKey="true" nullable="false"/>
-        </column>
-        <column name="CATORDER" type="integer"/>
-    </createTable>
-
-    <addForeignKeyConstraint baseColumnNames="PRODUCT"
-                             constraintName ="PRODUCTS_CAT_FK_1"
-                             referencedColumnNames = "ID"
-                             baseTableName="PRODUCTS_CAT"
-                             referencedTableName="PRODUCTS"/>
-
-    <createIndex tableName="PRODUCTS_CAT"
-                 indexName="PRODUCTS_CAT_INX_1">
-        <column name="CATORDER"/>
-    </createIndex>
-</changeSet>         
                
 <changeSet author="Chromis Pos" id="Create PRODUCTS_COM Table">
     <createTable tableName="PRODUCTS_COM">

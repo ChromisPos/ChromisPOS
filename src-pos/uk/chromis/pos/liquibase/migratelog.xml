@@ -435,7 +435,13 @@
                 <constraints nullable="false"/>
             </column>
             <column name="PACKQUANTITY" type="double precision"/>
-            <column name="PACKPRODUCT" type="varchar(255)"/>                                                                
+            <column name="PACKPRODUCT" type="varchar(255)"/>    
+            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true">
+               <constraints nullable="false"/>
+            </column>
+            <column name="CATORDER" type="integer" />
+            <column name="PROMOTIONID" type="varchar(50)" /> 
+                                                            
         </createTable>
 
         <createIndex tableName="PRODUCTS"
@@ -454,20 +460,6 @@
                      indexName="PRODUCTS_NAME_INX"
                      unique="true">
             <column name="NAME" type="varchar(255)"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet author="Chromis Pos" id="Create Products_cat Table">
-        <createTable tableName="PRODUCTS_CAT">
-            <column name="PRODUCT" type="varchar(255)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="CATORDER" type="integer"/>
-        </createTable>
-
-        <createIndex tableName="PRODUCTS_CAT"
-                     indexName="PRODUCTS_CAT_INX_1">
-            <column name="CATORDER"/>
         </createIndex>
     </changeSet>
 

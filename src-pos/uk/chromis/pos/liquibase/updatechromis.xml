@@ -875,20 +875,6 @@
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
         </insert>
                                                                                               
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.promotion.PromotionPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname121"/>
-            <column name="DESCRIPTION" value="##label.description121"/>
-        </insert>
-        		
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/promotions.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname122"/>
-            <column name="DESCRIPTION" value="##label.description122"/>
-        </insert>
-              
     </changeSet>   
 
     <changeSet author="Chromis POS" id="update to v0.53">    
@@ -900,6 +886,50 @@
     <changeSet author="Chromis POS" id="update to v0.53.1">    
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.53.1"/>          
+        </update>               
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Add Catalog to PRODUCTS table">
+         <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ISCATALOG" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>   
+        
+       <addColumn tableName="PRODUCTS">
+            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true">
+               <constraints nullable="false"/>
+            </column>
+            <column name="CATORDER" type="integer" />
+        </addColumn>
+        
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Migrate PRODUCTS_CAT table">
+          <preConditions onFail="MARK_RAN">
+            <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions>
+        
+        <update tableName="PRODUCTS">
+            <column name="ISCATALOG" valueBoolean="false"/>          
+        </update>               
+        
+        <sql>UPDATE PRODUCTS P LEFT JOIN PRODUCTS_CAT O ON P.ID=O.PRODUCT SET P.ISCATALOG=1, P.CATORDER = O.CATORDER</sql>
+
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Remove PRODUCTS_CAT table">
+          <preConditions onFail="MARK_RAN">
+            <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions>
+        
+        <dropTable tableName="PRODUCTS_CAT" />
+
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="update to v0.53.1.1">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="0.53.1.1"/>          
         </update>               
     </changeSet>
     
