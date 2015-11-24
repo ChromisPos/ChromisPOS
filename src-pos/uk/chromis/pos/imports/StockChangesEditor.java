@@ -350,20 +350,18 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     public void refresh() {
     }
 
-    private void showDialog() {
+    private void showDialog( String message ) {
 
         // Get details of the original font before we change it otherwise all dialogboxes will use new settings
         JOptionPane pane = new JOptionPane();
         Font originalFont=pane.getFont();
 
         UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20)));
-        String message =  AppLocal.getIntString("message.stockchangesactioned");
         JLabel FontText = new JLabel(message);
-        FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
 
         JOptionPane newpane = new JOptionPane( );
         newpane.setMessage(FontText);
-        newpane.setPreferredSize( new Dimension(450,150));
+//        newpane.setPreferredSize( new Dimension(450,150));
         
         Dialog dlg = newpane.createDialog( AppLocal.getIntString("Menu.StockChanges") );
         dlg.setVisible( true );
@@ -380,9 +378,11 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         if( sql != null && sql.length() >0 ) {
             try {
                 m_dlChanges.ActionSql( sql );
-                showDialog();
+                String message =  AppLocal.getIntString("message.stockchangesactioned");
+                showDialog(message);
             } catch (BasicException ex) {
                 Logger.getLogger(StockChangesEditor.class.getName()).log(Level.SEVERE, null, ex);
+                showDialog( ex.toString() );
             }
         }
     }
