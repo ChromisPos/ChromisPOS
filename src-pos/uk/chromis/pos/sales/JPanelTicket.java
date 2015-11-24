@@ -98,6 +98,7 @@ import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.util.AutoLogoff;
 import static java.lang.Integer.parseInt;
 import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.printer.DeviceTicket;
 
 /**
  *
@@ -145,7 +146,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Object m_principalapp;
     private Boolean restaurant;
     private Action logout;
-    // private InactivityListener listener;
     private Integer delay = 0;
     private DataLogicReceipts dlReceipts = null;
     private Boolean priceWith00;
@@ -248,7 +248,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             }
                         }
                     }
-
                     if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
                         int i = m_ticketlines.getSelectedIndex();
                         m_ticketlines2.clearTicketLines();
@@ -259,9 +258,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                 }
             });
-
         }
-
     }
 
     @Override
@@ -1463,6 +1460,24 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_oTicket.resetPayments();
         }
 
+        
+// Reset the customer display here         
+      //  executeEventAndRefresh("display.default"); 
+        String sresource = dlSystem.getResourceAsXML("display.message");
+         DeviceTicket m_TP = new DeviceTicket(this, AppConfig.getInstance());
+        if (sresource == null) {           
+            m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
+        } else {
+            try {
+                m_TTP.printTicket(sresource);
+            } catch (TicketPrinterException eTP) {
+                m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
+            }
+        }
+
+        
+        
+        
         // cancelled the ticket.total script
         // or canceled the payment dialog
         // or canceled the ticket.close script
