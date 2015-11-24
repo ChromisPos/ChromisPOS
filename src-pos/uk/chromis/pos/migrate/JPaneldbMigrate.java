@@ -66,7 +66,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     private Connection con;
     private String sdbmanager;
     private Session session;
-    private AppProperties m_props;
     private Connection con2;
     private String sdbmanager2;
     private Session session2;
@@ -134,8 +133,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         }
 
         try {
-            ClassLoader cloader = new URLClassLoader(new URL[]{new File(m_props.getProperty("db.driverlib")).toURI().toURL()});
-            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(m_props.getProperty("db.driver"), true, cloader).newInstance()));
+            ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
             changelog = "uk/chromis/pos/liquibase/migratelog.xml";
 
@@ -159,8 +158,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     public Boolean addFKeys() {
 
         try {
-            ClassLoader cloader = new URLClassLoader(new URL[]{new File(m_props.getProperty("db.driverlib")).toURI().toURL()});
-            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(m_props.getProperty("db.driver"), true, cloader).newInstance()));
+            ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
             changelog = "uk/chromis/pos/liquibase/createfkslog.xml";
 

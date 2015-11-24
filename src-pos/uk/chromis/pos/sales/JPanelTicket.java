@@ -26,12 +26,9 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import static java.lang.Integer.parseInt;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -155,7 +152,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private String ticketPrintType;
     private Boolean warrantyPrint = false;
     private TicketInfo m_ticket;
-    private TicketInfo m_ticketCopy;    
+    private TicketInfo m_ticketCopy;
+    public static InactivityListener Listener;
 
     public JPanelTicket() {
         initComponents();
@@ -278,6 +276,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         @Override
         public void actionPerformed(ActionEvent ae) {
+            System.out.println("here!!!!!!!!!!!!!!!");
+            //System.out.println(AutoLogoff.getInstance().isTimerRunning());
+
             switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
                 case "restaurant":
                     if ("false".equals(AppConfig.getInstance().getProperty("till.autoLogoffrestaurant"))) {
@@ -308,7 +309,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public void activate() throws BasicException {
-// added by JDL 26.04.13
 // lets look at adding a timer event fot auto logoff if required
         Action logout = new logout();
 
@@ -326,7 +326,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 // if the delay period is not zero create a inactivitylistener instance        
         if (delay != 0) {
             AutoLogoff.getInstance().setTimer(delay, logout);
-            AutoLogoff.getInstance().start();
         }
 
         paymentdialogreceipt = JPaymentSelectReceipt.getDialog(this);
@@ -380,8 +379,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public boolean deactivate() {
-        AutoLogoff.getInstance().stop();
-
+        AutoLogoff.getInstance().deactivateTimer();
+        //Listener.stop();
         return m_ticketsbag.deactivate();
     }
 
@@ -398,14 +397,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public void setActiveTicket(TicketInfo oTicket, Object oTicketExt) {
 // check if a inactivity timer has been created, and if it is not running start up again
 // this is required for autologoff mode in restaurant and it is set to return to the table view.        
+
         switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
             case "restaurant":
-                if ("true".equals(AppConfig.getInstance().getProperty("till.autoLogoffrestaurant"))) {
-                    //               if (AutoLogoff.getInstance().timer) {
-                    //                  AutoLogoff.getInstance().restart();
-                    //    }
+                if ("true".equals(AppConfig.getInstance().getProperty("till.autoLogoffrestaurant")) && "true".equals(AppConfig.getInstance().getProperty("till.autoLogoff"))) {
+                    if (!AutoLogoff.getInstance().isTimerRunning()) {
+                        AutoLogoff.getInstance().activateTimer();
+                    }
                 }
-                AutoLogoff.getInstance().restart();
+                ;
         }
 
         m_oTicket = oTicket;
@@ -1075,13 +1075,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                             if (oProduct.getPriceSell() != 0.0) {
+                            {
+                                if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
+                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1359,7 +1361,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private boolean closeTicket(TicketInfo ticket, Object ticketext) {
-        AutoLogoff.getInstance().stop();
+        AutoLogoff.getInstance().deactivateTimer();
         boolean resultok = false;
 
         if (m_App.getAppUserView().getUser().hasPermission("sales.Total")) {
@@ -1374,7 +1376,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
                 //read resource ticket.total and execute
                 if (executeEvent(ticket, ticketext, "ticket.total") == null) {
-                    AutoLogoff.getInstance().stop();
+                    AutoLogoff.getInstance().deactivateTimer();
                     // Muestro el total
                     printTicket("Printer.TicketTotal", ticket, ticketext);
 
@@ -1444,7 +1446,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 restDB.clearCustomerNameInTable(ticketext.toString());
                                 restDB.clearWaiterNameInTable(ticketext.toString());
                                 restDB.clearTicketIdInTable(ticketext.toString());
-//                                restDB.
                             }
                         }
                     }
@@ -1460,12 +1461,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_oTicket.resetPayments();
         }
 
-        
 // Reset the customer display here         
-      //  executeEventAndRefresh("display.default"); 
-        String sresource = dlSystem.getResourceAsXML("display.message");
-         DeviceTicket m_TP = new DeviceTicket(this, AppConfig.getInstance());
-        if (sresource == null) {           
+        String sresource = dlSystem.getResourceAsXML("Display.Message");
+        DeviceTicket m_TP = new DeviceTicket(this, AppConfig.getInstance());
+        if (sresource == null) {
             m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
         } else {
             try {
@@ -1475,9 +1474,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         }
 
-        
-        
-        
         // cancelled the ticket.total script
         // or canceled the payment dialog
         // or canceled the ticket.close script
@@ -2487,7 +2483,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jListActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
-        AutoLogoff.getInstance().stop();
+        AutoLogoff.getInstance().deactivateTimer();
         JCustomerFinder finder = JCustomerFinder.getCustomerFinder(this, dlCustomers);
         finder.search(m_oTicket.getCustomer());
         finder.setVisible(true);
@@ -2506,12 +2502,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindcustomer"), e);
             msg.show(this);
         }
-        AutoLogoff.getInstance().restart();
+        AutoLogoff.getInstance().activateTimer();
         refreshTicket();
 }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSplitActionPerformed
-        AutoLogoff.getInstance().stop();
+        AutoLogoff.getInstance().deactivateTimer();
         if (m_oTicket.getArticlesCount() > 1) {
             //read resource ticket.line and execute
             ReceiptSplit splitdialog = ReceiptSplit.getDialog(this, dlSystem.getResourceAsXML("Ticket.Line"), dlSales, dlCustomers, taxeslogic);
@@ -2527,11 +2523,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             }
         }
-        AutoLogoff.getInstance().restart();
+        AutoLogoff.getInstance().activateTimer();
 }//GEN-LAST:event_btnSplitActionPerformed
 
     private void jEditAttributesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditAttributesActionPerformed
-        AutoLogoff.getInstance().stop();
+        AutoLogoff.getInstance().deactivateTimer();
         int i = m_ticketlines.getSelectedIndex();
         if (i < 0) {
             Toolkit.getDefaultToolkit().beep(); // no line selected
@@ -2552,21 +2548,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 msg.show(this);
             }
         }
-        AutoLogoff.getInstance().restart();
+        AutoLogoff.getInstance().activateTimer();
 }//GEN-LAST:event_jEditAttributesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        AutoLogoff.getInstance().stop();
+        AutoLogoff.getInstance().activateTimer();
 // Show the custmer panel - this does deactivate
         {
             m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
         }
-        AutoLogoff.getInstance().restart();
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jbtnMooringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMooringActionPerformed
 // Display vessel selection box on screen if reply is good add to the ticket
-        AutoLogoff.getInstance().stop();
+        AutoLogoff.getInstance().deactivateTimer();
         JMooringDetails mooring = JMooringDetails.getMooringDetails(this, m_App.getSession());
         mooring.setVisible(true);
         if (mooring.isCreate()) {
@@ -2590,12 +2586,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 
         refreshTicket();
-        AutoLogoff.getInstance().restart();
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_jbtnMooringActionPerformed
 
     private void j_btnKitchenPrtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_j_btnKitchenPrtActionPerformed
 // John L - replace older SendOrder script
-
+        AutoLogoff.getInstance().deactivateTimer();
         if (m_oTicket.getTicketType() != 1) {
             String rScript = (dlSystem.getResourceAsText("script.SendOrder"));
             Interpreter i = new Interpreter();
@@ -2626,6 +2622,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     break;
             }
         }
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_j_btnKitchenPrtActionPerformed
 
     private void m_jaddtaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jaddtaxActionPerformed
@@ -2642,7 +2639,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_btnLogout
 
     private void btnReprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprintActionPerformed
-
+        AutoLogoff.getInstance().deactivateTimer();
 // test if there is valid ticket in the system at this till to be printed
         if (AppConfig.getInstance().getProperty("lastticket.number") != null) {
             try {
@@ -2665,6 +2662,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 msg.show(this);
             }
         }
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_btnReprintActionPerformed
 
 

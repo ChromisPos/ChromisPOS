@@ -43,7 +43,7 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // create a basic timer instance
     private AutoLogoff() {
-        LogoffTimer = new Timer(100000, action);
+        LogoffTimer = new Timer(10000, action);
         this.eventMask = USER_EVENTS;
         LogoffTimer.setInitialDelay(100);
     }
@@ -71,8 +71,8 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
      * 
      */
     public void start() {
-        if (timer) {
-            running = true;
+        if (this.timer) {
+            this.running = true;
             LogoffTimer.setRepeats(false);
             LogoffTimer.start();
             Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
@@ -80,8 +80,8 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
     }
 
     public void stop() {
-        if (timer) {
-            running = false;
+        if (this.timer) {
+            this.running = false;
             Toolkit.getDefaultToolkit().removeAWTEventListener(this);
             LogoffTimer.stop();
         }
@@ -95,32 +95,18 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // Implement AWTEventListener, all events are dispatched via this
     @Override
-    public void eventDispatched(AWTEvent e) {
-        if (isTimerRunning()) {
+    public void eventDispatched(AWTEvent e) { 
+        if ((this.timer) && this.isTimerRunning()) {
             LogoffTimer.restart();
         }
     }
 
-    // Implement a manually triggered restart
-    public void restart() {
-        if (timer) {
-            LogoffTimer.restart();
-        }
-    }
-
-    // if the timer is not running restart it
-    public void setRunning() {
-        if (timer) {
-            if (!isTimerRunning()) {
-                LogoffTimer.restart();
-            }
-        }
-    }
+ 
 
     // returns the timer state
     public boolean isTimerRunning() {
-        if (timer) {
-            return (running);
+        if (this.timer) {
+            return (this.running);
         } else {
             return false;
         }
@@ -128,17 +114,26 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // set the timer interval in seconds
     public void setTimer(Integer period, Action action) {
-        timer = true;
+        this.timer = true;
         if (isTimerRunning()) {
-            stop();
+            this.stop();
             LogoffTimer = new Timer(period, action);
-            start();
+            LogoffTimer.start();
         } else {
             LogoffTimer = new Timer(period, action);
+            LogoffTimer.start();
         }
     }
 
-    public void removeTimer() {
-        timer = false;
+    public void activateTimer() {
+        this.timer = true; 
+        this.running = true;
+        this.start();
+    }
+
+    public void deactivateTimer() {
+        this.stop();
+        this.running = false;
+        this.timer = false;
     }
 }

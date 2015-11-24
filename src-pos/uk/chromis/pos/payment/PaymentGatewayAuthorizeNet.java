@@ -86,10 +86,10 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
         // Grab some configuration variables
         m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
         
-        AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
-        this.m_sCommercePassword = cypher.decrypt(props.getProperty("payment.commercepassword").substring(6));
+        AltEncrypter cypher = new AltEncrypter("cypherkey" + AppConfig.getInstance().getProperty("payment.commerceid"));
+        this.m_sCommercePassword = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6));
 
-        m_bTestMode = Boolean.parseBoolean(props.getProperty("payment.testmode"));
+        m_bTestMode = Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.testmode"));
         
         ENDPOINTADDRESS = (m_bTestMode) 
                 ? "https://test.authorize.net/gateway/transact.dll"

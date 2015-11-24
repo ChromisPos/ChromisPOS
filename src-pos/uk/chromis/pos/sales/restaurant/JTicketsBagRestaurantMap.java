@@ -51,6 +51,7 @@ import uk.chromis.pos.sales.SharedTicketInfo;
 import uk.chromis.pos.sales.TicketsEditor;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
+import uk.chromis.pos.util.AutoLogoff;
 
 /**
  *
@@ -267,6 +268,8 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             printState();
             m_panelticket.setActiveTicket(null, null);
 
+            AutoLogoff.getInstance().deactivateTimer();
+            
             return true;
         } else {
             return false;
