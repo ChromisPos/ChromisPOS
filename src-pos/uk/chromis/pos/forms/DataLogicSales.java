@@ -1139,7 +1139,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "ATTRIBUTES, ISKITCHEN, ISSERVICE, DISPLAY, ISVPRICE, "
                         + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT, "
                         + "ISPACK, PACKQUANTITY, PACKPRODUCT, PROMOTIONID  ) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{ INDEX_ID,
                                     INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
@@ -1157,7 +1157,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)",
                         new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
 
-                if (i > 0 && ((Boolean) values[15])) {
+                if (i > 0 && ((Boolean) values[INDEX_ISCATALOG])) {
                     return new PreparedSentence(s, "INSERT INTO PRODUCTS_CAT (PRODUCT, CATORDER) VALUES (?, ?)",
                             new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID, INDEX_CATORDER})).exec(params);
                 } else {
@@ -1204,7 +1204,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "ISPACK = ?, PACKQUANTITY = ?, PACKPRODUCT = ?, "
                         + "PROMOTIONID = ? "
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
-                                new int[]{INDEX_ID, INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
+                                new int[]{INDEX_ID,
                                     INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
                                     INDEX_NAME, INDEX_ISCOM, INDEX_ISSCALE,
                                     INDEX_PRICEBUY, INDEX_PRICESELL, INDEX_CATEGORY,
@@ -1220,12 +1220,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                                             
                 if (i > 0) {
-                    if (((Boolean) values[15])) {
-                        if (new PreparedSentence(s, "UPDATE PRODUCTS_CAT SET CATORDER = ? WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{16, 0})).exec(params) == 0) {
-                            new PreparedSentence(s, "INSERT INTO PRODUCTS_CAT (PRODUCT, CATORDER) VALUES (?, ?)", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0, 16})).exec(params);
+                    if (((Boolean) values[INDEX_ISCATALOG])) {
+                        if (new PreparedSentence(s, "UPDATE PRODUCTS_CAT SET CATORDER = ? WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_CATORDER, INDEX_ID})).exec(params) == 0) {
+                            new PreparedSentence(s, "INSERT INTO PRODUCTS_CAT (PRODUCT, CATORDER) VALUES (?, ?)", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID, INDEX_CATORDER})).exec(params);
                         }
                     } else {
-                        new PreparedSentence(s, "DELETE FROM PRODUCTS_CAT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
+                        new PreparedSentence(s, "DELETE FROM PRODUCTS_CAT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
                     }
                 }
                 return i;
@@ -1241,9 +1241,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new SentenceExecTransaction(s) {
             @Override
             public int execInTransaction(Object params) throws BasicException {
-                new PreparedSentence(s, "DELETE FROM STOCKCURRENT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
-                new PreparedSentence(s, "DELETE FROM PRODUCTS_CAT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
-                return new PreparedSentence(s, "DELETE FROM PRODUCTS WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{0})).exec(params);
+                new PreparedSentence(s, "DELETE FROM STOCKCURRENT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
+                new PreparedSentence(s, "DELETE FROM PRODUCTS_CAT WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
+                return new PreparedSentence(s, "DELETE FROM PRODUCTS WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
 
             }
         };

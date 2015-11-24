@@ -280,8 +280,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPriceBuy.setText(null);
         setPriceSell(null);
         m_jImage.setImage(null);
-        m_jstockcost.setText(null);
-        m_jstockvolume.setText(null);
+        m_jstockcost.setText("0");
+        m_jstockvolume.setText("0");
         m_jInCatalog.setSelected(true);
         m_jCatalogOrder.setText(null);
         txtAttributes.setText(null);
@@ -507,7 +507,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     @Override
     public Object createValue() throws BasicException {
 
-        Object[] myprod = new Object[33];
+        Object[] myprod = new Object[DataLogicSales.FIELD_COUNT];
         myprod[DataLogicSales.INDEX_ID] = m_id;
         myprod[DataLogicSales.INDEX_REFERENCE] = m_jRef.getText();
         myprod[DataLogicSales.INDEX_CODE] = m_jCode.getText();
