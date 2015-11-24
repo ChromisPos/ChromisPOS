@@ -1369,7 +1369,13 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final TableDefinition getTableCategories() {
         return new TableDefinition(s,
-                "CATEGORIES", new String[]{"ID", "NAME", "PARENTID", "IMAGE", "TEXTTIP", "CATSHOWNAME", "COLOUR"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "", AppLocal.getIntString("label.image")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.IMAGE, Datas.STRING, Datas.BOOLEAN, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.NULL, Formats.STRING, Formats.BOOLEAN, Formats.STRING}, new int[]{0}
+                "CATEGORIES", new String[]{
+                    "ID", "NAME", "PARENTID", "IMAGE", "TEXTTIP", "CATSHOWNAME", "COLOUR"},
+                new String[]{"ID", AppLocal.getIntString("Label.Name"), "", AppLocal.getIntString("label.image")},
+                new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.IMAGE, Datas.STRING, Datas.BOOLEAN, Datas.STRING},
+                new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.NULL, Formats.STRING, Formats.BOOLEAN, Formats.STRING},
+                new int[]{0},
+                "NAME"
         );
     }
 
@@ -1379,7 +1385,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final TableDefinition getTableTaxes() {
         return new TableDefinition(s,
-                "TAXES", new String[]{"ID", "NAME", "CATEGORY", "CUSTCATEGORY", "PARENTID", "RATE", "RATECASCADE", "RATEORDER"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), AppLocal.getIntString("label.taxcategory"), AppLocal.getIntString("label.custtaxcategory"), AppLocal.getIntString("label.taxparent"), AppLocal.getIntString("label.dutyrate"), AppLocal.getIntString("label.cascade"), AppLocal.getIntString("label.order")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.BOOLEAN, Datas.INT}, new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.STRING, Formats.STRING, Formats.PERCENT, Formats.BOOLEAN, Formats.INT}, new int[]{0}
+                "TAXES", new String[]{"ID", "NAME", "CATEGORY", "CUSTCATEGORY", "PARENTID", "RATE", "RATECASCADE", "RATEORDER"}, 
+                new String[]{"ID", AppLocal.getIntString("Label.Name"), AppLocal.getIntString("label.taxcategory"),
+                    AppLocal.getIntString("label.custtaxcategory"), AppLocal.getIntString("label.taxparent"), AppLocal.getIntString("label.dutyrate"),
+                    AppLocal.getIntString("label.cascade"), AppLocal.getIntString("label.order")}, 
+                new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.BOOLEAN, Datas.INT},
+                new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.STRING, Formats.STRING, Formats.PERCENT, Formats.BOOLEAN, Formats.INT},
+                new int[]{0},
+                "NAME"
         );
     }
 
@@ -1389,7 +1402,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final TableDefinition getTableTaxCustCategories() {
         return new TableDefinition(s,
-                "TAXCUSTCATEGORIES", new String[]{"ID", "NAME"}, new String[]{"ID", AppLocal.getIntString("Label.Name")}, new Datas[]{Datas.STRING, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING}, new int[]{0}
+                "TAXCUSTCATEGORIES", new String[]{"ID", "NAME"}, 
+                new String[]{"ID", AppLocal.getIntString("Label.Name")}, 
+                new Datas[]{Datas.STRING, Datas.STRING},
+                new Formats[]{Formats.STRING, Formats.STRING},
+                new int[]{0},
+                "NAME"
         );
     }
 
@@ -1399,7 +1417,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final TableDefinition getTableTaxCategories() {
         return new TableDefinition(s,
-                "TAXCATEGORIES", new String[]{"ID", "NAME"}, new String[]{"ID", AppLocal.getIntString("Label.Name")}, new Datas[]{Datas.STRING, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING}, new int[]{0}
+                "TAXCATEGORIES", new String[]{"ID", "NAME"}, 
+                new String[]{"ID", AppLocal.getIntString("Label.Name")},
+                new Datas[]{Datas.STRING, Datas.STRING}, 
+                new Formats[]{Formats.STRING, Formats.STRING},
+                new int[]{0},
+                "NAME"
         );
     }
 
@@ -1409,7 +1432,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final TableDefinition getTableLocations() {
         return new TableDefinition(s,
-                "LOCATIONS", new String[]{"ID", "NAME", "ADDRESS"}, new String[]{"ID", AppLocal.getIntString("label.locationname"), AppLocal.getIntString("label.locationaddress")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING}, new int[]{0}
+                "LOCATIONS", new String[]{"ID", "NAME", "ADDRESS"}, 
+                new String[]{"ID", AppLocal.getIntString("label.locationname"), AppLocal.getIntString("label.locationaddress")}, 
+                new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING}, 
+                new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING},
+                new int[]{0},
+                "NAME"
         );
     }
 
