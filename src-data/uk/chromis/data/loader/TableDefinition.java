@@ -34,8 +34,10 @@ public class TableDefinition {
     private String[] fieldtran;
     private Datas[] fielddata;
     private Formats[] fieldformat;
+    private String m_orderBy;
 
     private int[] idinx;
+
 
     /**
      * Creates a new instance of TableDefinition
@@ -53,7 +55,26 @@ public class TableDefinition {
             String tablename,
             String[] fieldname, String[] fieldtran, Datas[] fielddata, Formats[] fieldformat,
             int[] idinx) {
-
+        this( s, tablename, fieldname, fieldtran, fielddata, fieldformat, idinx, null );
+    }
+    
+    /**
+     * Creates a new instance of TableDefinition
+     *
+     * @param s
+     * @param fieldformat
+     * @param tablename
+     * @param fieldname
+     * @param fieldtran
+     * @param idinx
+     * @param fielddata
+     */
+    public TableDefinition(
+            Session s,
+            String tablename,
+            String[] fieldname, String[] fieldtran, Datas[] fielddata, Formats[] fieldformat,
+            int[] idinx, String orderby ) {
+        
         m_s = s;
         this.tablename = tablename;
 
@@ -63,6 +84,8 @@ public class TableDefinition {
         this.fieldformat = fieldformat;
 
         this.idinx = idinx;
+        
+        m_orderBy = orderby;
     }
 
     /**
@@ -216,6 +239,11 @@ public class TableDefinition {
 
         sent.append(" from ");
         sent.append(tablename);
+        if( m_orderBy != null && m_orderBy.length() > 0 ) {
+            sent.append(" ORDER BY ");
+            sent.append( m_orderBy );            
+        }
+        
         if (!AppLocal.LIST_BY_RIGHTS.equals("")) {
 
             sent.delete(0, sent.length());
