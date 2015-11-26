@@ -5,11 +5,30 @@
  */
 package uk.chromis.pos.promotion;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
+import uk.chromis.data.gui.JMessageDialog;
+import uk.chromis.data.gui.ListValModel;
+import uk.chromis.data.gui.MessageInf;
+import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
@@ -24,24 +43,78 @@ import uk.chromis.pos.forms.DataLogicSystem;
  *
  * @author John
  */
-public class PromotionEditor extends javax.swing.JPanel implements EditorRecord {
+public class PromotionEditor extends javax.swing.JPanel 
+    implements EditorRecord, ListSelectionListener  {
 
-    private DirtyManager m_Dirty;
+    private final DirtyManager m_Dirty;
     DataLogicPromotions m_dlPromotions;
     DataLogicAdmin m_dlAdmin;
     DataLogicSystem m_dlSystem;
+
+    private final AppView m_App;
+    private String m_ID;
+    private String m_criteria;
     
-    private AppView m_App;
-    private Object m_ID;
+    private final int m_IndexID;
+    private final int m_IndexName;
+    private final int m_IndexCriteria;
+    private final int m_IndexScript;
+    private final int m_IndexEnabled;
     
-    private int m_IndexID;
-    private int m_IndexName;
-    private int m_IndexCriteria;
-    private int m_IndexScript;
-    private int m_IndexEnabled;
+    private SentenceList m_SentenceProducts;
+    private ListValModel m_ModelProducts;
+    
     private SentenceList m_SentenceResource;
     private ComboBoxValModel m_ModelResource;
-   
+
+    
+    class ProductsListCellRenderer extends JComponent
+        implements ListCellRenderer {
+         Color listForeground, listBackground,  
+             listSelectionForeground,  
+             listSelectionBackground;  
+         
+        DefaultListCellRenderer m_defaultRenderer;  
+        JCheckBox m_checkbox;
+        JLabel m_Label;
+
+        public ProductsListCellRenderer() {  
+            setLayout (new BorderLayout());  
+            m_defaultRenderer = new DefaultListCellRenderer();  
+            m_checkbox = new JCheckBox();  
+            add (m_checkbox, BorderLayout.WEST);  
+            add (m_defaultRenderer, BorderLayout.CENTER);  
+            
+             UIDefaults uid = UIManager.getLookAndFeel().getDefaults();  
+             listForeground =  uid.getColor ("List.foreground");  
+             listBackground =  uid.getColor ("List.background");  
+             listSelectionForeground =  uid.getColor ("List.selectionForeground");  
+             listSelectionBackground =  uid.getColor ("List.selectionBackground"); 
+        }  
+        
+        public Component getListCellRendererComponent(JList list, Object value, int index,
+            boolean isSelected, boolean cellHasFocus) {
+            Object [] avalues = (Object []) value;
+            String name = (String) avalues[DataLogicPromotions.INDEX_PROMOTEDPRODUCT_NAME];
+            String ref = (String) avalues[DataLogicPromotions.INDEX_PROMOTEDPRODUCT_REFERENCE];
+            String promotion = (String) avalues[DataLogicPromotions.INDEX_PROMOTEDPRODUCT_PROMOTIONID];
+            String product = ref + "-" + name;
+
+            m_defaultRenderer.getListCellRendererComponent(list, product, index,
+            isSelected, cellHasFocus);
+
+            m_checkbox.setSelected (isSelected);
+            
+            Component[] comps = getComponents();  
+            for (int i=0; i<comps.length; i++) {  
+               comps[i].setForeground (listForeground);  
+               comps[i].setBackground (listBackground);  
+            }  
+        
+            return this;  
+        }
+    }
+    
     /** Creates new form
      * @param app
      * @param dirty */
@@ -54,7 +127,8 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
         
         m_App = app;
         m_Dirty = dirty;
-    
+        m_criteria = null;
+        
         m_IndexID = m_dlPromotions.getIndexOf("ID");
         m_IndexName = m_dlPromotions.getIndexOf("NAME");
         m_IndexCriteria = m_dlPromotions.getIndexOf("CRITERIA");
@@ -64,12 +138,42 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
         m_ModelResource = new ComboBoxValModel();
         jComboBoxResources.setModel(m_ModelResource);
 
+        ListCellRenderer renderer = new ProductsListCellRenderer();
+        jListProducts.setCellRenderer(renderer);
+        jListProducts.addListSelectionListener( this );
+        jListProducts.setSelectionModel(new DefaultListSelectionModel() {
+            private static final long serialVersionUID = 1L;
+
+            boolean gestureStarted = false;
+
+            @Override
+            public void setSelectionInterval(int index0, int index1) {
+                if(!gestureStarted){
+                    if (isSelectedIndex(index0)) {
+                        super.removeSelectionInterval(index0, index1);
+                    } else {
+                        super.addSelectionInterval(index0, index1);
+                    }
+                }
+                gestureStarted = true;
+            }
+
+            @Override
+            public void setValueIsAdjusting(boolean isAdjusting) {
+                if (isAdjusting == false) {
+                    gestureStarted = false;
+                }
+            }
+
+        });
+
+        m_ModelProducts = new ListValModel();
+        jListProducts.setModel(m_ModelProducts);
+        
         m_jName.getDocument().addDocumentListener(dirty);
         m_jTextCriteria.getDocument().addDocumentListener(dirty);
         m_jTextScript.getDocument().addDocumentListener(dirty);
         jCheckBoxEnabled.addActionListener(dirty);
-            
-        writeValueEOF();
     }
 
      /**
@@ -77,12 +181,19 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
      * @throws BasicException
      */
     public void activate() throws BasicException {
+        writeValueEOF();
+        
         m_SentenceResource = m_dlPromotions.getResourceScriptListSentence();
-
         m_ModelResource = new ComboBoxValModel( m_SentenceResource.list());
         jComboBoxResources.setModel(m_ModelResource);
     }
 
+    public void valueChanged(ListSelectionEvent e) {
+    if (e.getValueIsAdjusting() == false) {
+            m_Dirty.setDirty(true);
+        }
+    }
+    
     /**
      *
      */
@@ -105,7 +216,9 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
     @Override
     public void writeValueEOF() {
         m_ID = null;
-
+        m_criteria = null;
+        showProducts();
+        
         m_jName.setText(null);
         m_jTextCriteria.setText(null);
         m_jTextScript.setText(null);
@@ -122,6 +235,9 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
     @Override
     public void writeValueInsert() {
         m_ID = UUID.randomUUID().toString();
+        m_criteria = null;
+        showProducts();
+        
         m_jName.setText(null);
         m_jTextCriteria.setText(null);
         m_jTextScript.setText(null);
@@ -132,6 +248,52 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
        jButtonScript.setEnabled(false);
     }
 
+    private void showProducts() {
+          
+        m_SentenceProducts = m_dlPromotions.getPromotedProductsSentence(m_ID, m_criteria );
+        try {
+            m_ModelProducts = new ListValModel(m_SentenceProducts.list());
+        } catch (BasicException ex) {
+            JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"), ex));
+        }
+        jListProducts.setModel(m_ModelProducts);
+        
+        if( m_ID != null ) {
+            int count = m_ModelProducts.getSize();
+            List<Integer> aIndexes = new ArrayList<Integer>();
+            
+            for( int i = 0; i < count; ++i ) {
+                Object [] avalues = (Object [] ) m_ModelProducts.getElementAt(i);
+                String pid = (String) avalues[DataLogicPromotions.INDEX_PROMOTEDPRODUCT_PROMOTIONID];
+                if( pid != null && pid.contentEquals( m_ID )) {
+                    aIndexes.add(i);
+                }
+            }
+            
+            int list[] = new int[aIndexes.size()];
+            for( int i = 0; i < aIndexes.size(); ++i )
+                list[i] = aIndexes.get(i);
+
+            jListProducts.setSelectedIndices( list );
+        }
+    }
+    
+    private void valuesToControls( Object[] attrset ) {
+        
+        m_ID =  m_dlPromotions.getFormatOf( m_IndexID ).formatValue(attrset[ m_IndexID ]);
+        m_jName.setText( m_dlPromotions.getFormatOf( m_IndexName ).formatValue(attrset[ m_IndexName ]));
+        m_jTextCriteria.setText( m_dlPromotions.getFormatOf( m_IndexCriteria ).formatValue(attrset[ m_IndexCriteria ]));
+        m_jTextCriteria.setCaretPosition(0);
+        m_criteria = m_jTextCriteria.getText();
+        
+        m_jTextScript.setText( m_dlPromotions.getFormatOf( m_IndexScript ).formatValue(attrset[ m_IndexScript ]));
+        m_jTextScript.setCaretPosition(0);
+        jCheckBoxEnabled.setSelected( (Boolean) (attrset[ m_IndexEnabled ]) );
+        m_ModelResource.setSelectedKey(null);
+
+        showProducts();
+    }
+
     /**
      *
      * @param value
@@ -139,14 +301,8 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
     @Override
     public void writeValueDelete(Object value) {
         Object[] attrset = (Object[]) value;
-        m_ID = attrset[ m_IndexID ];
-        m_jName.setText( m_dlPromotions.getFormatOf( m_IndexName ).formatValue(attrset[ m_IndexName ]));
-        m_jTextCriteria.setText( m_dlPromotions.getFormatOf( m_IndexCriteria ).formatValue(attrset[ m_IndexCriteria ]));
-        m_jTextCriteria.setCaretPosition(0);
-        m_jTextScript.setText( m_dlPromotions.getFormatOf( m_IndexScript ).formatValue(attrset[ m_IndexScript ]));
-        m_jTextScript.setCaretPosition(0);
-        jCheckBoxEnabled.setSelected( (Boolean) (attrset[ m_IndexEnabled ]) );
-        m_ModelResource.setSelectedKey(null);
+
+        valuesToControls( attrset );
 
         enableAll( false );
         jButtonScript.setEnabled(false);
@@ -161,14 +317,7 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
     public void writeValueEdit(Object value) {
         Object[] attrset = (Object[]) value;
         
-        m_ID = attrset[ m_IndexID ];
-        m_jName.setText( m_dlPromotions.getFormatOf( m_IndexName ).formatValue(attrset[ m_IndexName ]));
-        m_jTextCriteria.setText( m_dlPromotions.getFormatOf( m_IndexCriteria ).formatValue(attrset[ m_IndexCriteria ]));
-        m_jTextCriteria.setCaretPosition(0);
-        m_jTextScript.setText( m_dlPromotions.getFormatOf( m_IndexScript ).formatValue(attrset[ m_IndexScript ]));
-        m_jTextScript.setCaretPosition(0);
-        jCheckBoxEnabled.setSelected( (Boolean) (attrset[ m_IndexEnabled ]) );
-        m_ModelResource.setSelectedKey(null);
+        valuesToControls( attrset );
 
         enableAll( true );
         jButtonScript.setEnabled(false);
@@ -189,6 +338,17 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
         attrset[m_IndexCriteria] = m_dlPromotions.getFormatOf( m_IndexCriteria ).parseValue(m_jTextCriteria.getText());
         attrset[m_IndexScript] =  m_dlPromotions.getFormatOf( m_IndexScript ).parseValue(m_jTextScript.getText());
         attrset[m_IndexEnabled] = jCheckBoxEnabled.isSelected();
+        
+        // Set Promotionid in the selected products
+        List<Object> selected = jListProducts.getSelectedValuesList();
+        List<String> aProducts = new ArrayList<String>();
+        
+        for(Object item : selected) {
+            Object [] values = (Object []) item;
+            aProducts.add( Datas.STRING.toString( values[ DataLogicPromotions.INDEX_PROMOTEDPRODUCT_ID ] ) );
+        }
+        
+        m_dlPromotions.resetPromotionID( m_ID, aProducts );
         
         return attrset;
     }
@@ -235,6 +395,9 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
         jComboBoxResources = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jButtonTest = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListProducts = new javax.swing.JList();
+        jLabel5 = new javax.swing.JLabel();
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(AppLocal.getIntString("Label.Name")); // NOI18N
@@ -242,6 +405,7 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
         m_jName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         m_jTextScript.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jTextScript.setLineWrap(true);
         m_jTextScript.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 m_jTextScriptKeyTyped(evt);
@@ -249,6 +413,7 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
         });
 
         m_jTextCriteria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jTextCriteria.setLineWrap(true);
 
         jLabel1.setText("Criteria");
 
@@ -261,11 +426,8 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
             }
         });
 
-        jButtonScript.setText("Copy");
-        jButtonScript.setMaximumSize(null);
-        jButtonScript.setMinimumSize(null);
+        jButtonScript.setText("Use");
         jButtonScript.setName(""); // NOI18N
-        jButtonScript.setPreferredSize(null);
         jButtonScript.setRolloverEnabled(false);
         jButtonScript.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -281,83 +443,105 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
             }
         });
 
-        jLabel4.setText("Promotion resources:");
+        jLabel4.setText("Script resources:");
 
-        jButtonTest.setText("Test");
+        jButtonTest.setText("--->");
         jButtonTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonTestActionPerformed(evt);
             }
         });
 
+        jListProducts.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jListProducts);
+
+        jLabel5.setText("Products in Promotion");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBoxResources, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonScript, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(m_jTextScript)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButtonHelp, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButtonTest)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(m_jTextScript)
-                            .addComponent(m_jTextCriteria))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel1))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                                .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addGap(6, 6, 6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBoxResources, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonScript))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(jButtonHelp)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(m_jTextCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonTest)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jCheckBoxEnabled, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBoxEnabled))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jTextCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jButtonHelp))
+                        .addGap(5, 5, 5)
+                        .addComponent(m_jTextCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(4, 4, 4)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButtonTest)
+                                .addGap(37, 37, 37)))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(jComboBoxResources, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonScript, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jButtonScript)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonHelp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonTest)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(m_jTextScript, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(m_jTextScript, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -396,11 +580,12 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
 
     private void jButtonHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHelpActionPerformed
         JOptionPane.showMessageDialog( this,
-            m_dlSystem.getResourceAsText( "help.promotions" ) );
+            m_dlSystem.getResourceAsText( "help.promotion" ) );
     }//GEN-LAST:event_jButtonHelpActionPerformed
 
     private void jButtonTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTestActionPerformed
-        // TODO add your handling code here:
+        m_criteria = m_jTextCriteria.getText();
+        showProducts();
     }//GEN-LAST:event_jButtonTestActionPerformed
 
 
@@ -414,6 +599,9 @@ public class PromotionEditor extends javax.swing.JPanel implements EditorRecord 
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JList jListProducts;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField m_jName;
     private javax.swing.JTextArea m_jTextCriteria;
     private javax.swing.JTextArea m_jTextScript;

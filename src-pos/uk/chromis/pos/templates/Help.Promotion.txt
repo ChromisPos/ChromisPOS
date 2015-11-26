@@ -1,13 +1,13 @@
 Promotion criteria is an SQL WHERE clause used to select which products are included.
 
-All crisps until 29th November 2015
-    P.NAME LIKE '%crisps% AND CURDATE() < '2015-11-29'
+All crisps
+    P.NAME LIKE '%crisps%
    
 Item with barcode 5098276743003
     P.CODE = '5098276743003'
 
-All wines during happy hour
-    C.NAME = 'Wine' AND CURTIME() > '20:00:00' AND CURTIME() < '21:00:00'
+All products in the wines category except champagne
+    C.NAME = 'Wine' AND NOT P.NAME LIKE '%champagne%'
 
 Examples of field names are:
     P.ID            // Product ID
@@ -15,6 +15,4 @@ Examples of field names are:
     P.CODE          // Product barcode
     P.NAME          // Product Name
     C.NAME          // Category Name
-    CURDATE()       // The current date
-    CURTIME()       // The Current time
 

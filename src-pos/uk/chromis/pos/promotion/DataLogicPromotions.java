@@ -19,6 +19,9 @@
 
 package uk.chromis.pos.promotion;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.PreparedSentence;
@@ -68,10 +71,7 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
                 new Field(m_PromotionFieldNames[3], m_PromotionFieldDataTypes[3], m_PromotionFieldFormat[3] ), 
                 new Field(m_PromotionFieldNames[4], m_PromotionFieldDataTypes[4], m_PromotionFieldFormat[4] ) 
                 );
-        
-        m_ProductRow = new Row(
-                new Field("PRODUCTID", Datas.STRING, Formats.STRING ), 
-                new Field("DISPLAYNAME", Datas.STRING, Formats.STRING, true, true, true ) );
+
     }
     
     /**
@@ -158,12 +158,30 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
         );
     }
 
-    public final PreparedSentence getPromotedProductsSentence( String sqlWhere ) {
- 	return new PreparedSentence(m_session,
-            "SELECT P.ID AS PRODUCTID, P.REFERENCE + ' - ' + P.NAME AS DISPLAYNAME " + 
-            "FROM PRODUCTS P LEFT JOIN CATEGORIES C ON (P.CATEGORY = C.ID) " +
-            "WHERE " + sqlWhere,
-            null,
+    static int INDEX_PROMOTEDPRODUCT_ID = 0;
+    static int INDEX_PROMOTEDPRODUCT_REFERENCE = 1;
+    static int INDEX_PROMOTEDPRODUCT_NAME = 2;
+    static int INDEX_PROMOTEDPRODUCT_PROMOTIONID = 3;
+            
+    public final PreparedSentence getPromotedProductsSentence( String PromotionID, String sqlWhere ) {
+        
+        if( m_ProductRow == null ) { 
+           m_ProductRow = new Row(
+                new Field("PRODUCTID", Datas.STRING, Formats.STRING ), 
+                new Field("REFERENCE", Datas.STRING, Formats.STRING ),
+                new Field("NAME", Datas.STRING, Formats.STRING ),
+                new Field("PROMOTIONID", Datas.STRING, Formats.STRING ) );
+        }
+        
+        String sql =  "SELECT P.ID AS PRODUCTID, P.REFERENCE, P.NAME, P.PROMOTIONID " + 
+            "FROM PRODUCTS P LEFT JOIN CATEGORIES C ON (P.CATEGORY = C.ID) "
+            + "WHERE P.PROMOTIONID='" + PromotionID + "'";
+        
+        if( sqlWhere != null && !sqlWhere.isEmpty() ) {
+            sql = sql + " OR (" + sqlWhere + ")";
+        }
+        
+ 	return new PreparedSentence(m_session, sql, null,
             m_ProductRow.getSerializerRead()
         );
     }
@@ -202,7 +220,7 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
             public int execInTransaction(Object params) throws BasicException {
                 String[] fields = new String[] {
                             "NAME", "CRITERIA", "SCRIPT",
-                            "ISENABLED, ID"
+                            "ISENABLED", "ID"
                         };
                 
 		return new PreparedSentence(m_session
@@ -234,6 +252,24 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
                     ).exec(params);
             }
         };
+    }
+
+    public void resetPromotionID( String promotionID, List<String> aProductIDs ) throws BasicException {
+        
+        new PreparedSentence( m_session,
+           "UPDATE PRODUCTS SET PROMOTIONID = NULL WHERE PROMOTIONID = '"
+           + promotionID + "'",
+           null).exec();
+
+       if( aProductIDs.size() > 0 ) {
+           String sql = "UPDATE PRODUCTS SET PROMOTIONID = '" 
+                + promotionID + "' WHERE ID IN ( ";   
+           for( String s : aProductIDs ) {
+               sql = sql + s + ",";
+           }
+           sql = sql + "'-' ) ";   
+           new PreparedSentence( m_session, sql, null).exec();
+       }
     }
 
 }

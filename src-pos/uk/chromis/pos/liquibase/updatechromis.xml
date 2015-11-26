@@ -650,7 +650,7 @@
         <dropTable tableName="STOCKCHANGES"/>
     </changeSet> 
                  
-    <changeSet author="Chromis POS" id="Create STOCKCHANGES Table">
+    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="STOCKCHANGES"/>
@@ -671,7 +671,9 @@
             <column name="TEXTVALUE" type="varchar(255)"/> 
             <column name="BLOBVALUE" type="${blob.type}"/>                                    
             <column name="CHANGES_PROCESSED" type="int"/>
-        </createTable>       
+        </createTable> 
+        
+        <sql>ALTER TABLE STOCKCHANGES ENGINE=InnoDB</sql>                          
    </changeSet>   
    
     <changeSet author="Chromis POS" id="Add Pack Products permissions "> 
@@ -821,18 +823,10 @@
             </column>
             <column name="ISENABLED" type="${boolean.type}" 
                     defaultValueNumeric="1"/>
-        </createTable>       
-         
-       <addColumn tableName="PRODUCTS">
-            <column name="PROMOTIONID" type="varchar(50)" />                                              
-        </addColumn>  
+        </createTable> 
         
-        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
-                         constraintName ="FK_PRODUCT_PROMOTIONID"
-                         referencedColumnNames = "ID"
-                         baseTableName="PRODUCTS"
-                         referencedTableName="PROMOTIONS"/>
-
+        <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>                          
+        
         <insert tableName="RESOURCES">
             <column name="ID" value="6700"/>
             <column name="NAME" value="help.promotion"/>
@@ -874,7 +868,18 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
         </insert>
-                                                                                              
+        
+       <addColumn tableName="PRODUCTS">
+            <column name="PROMOTIONID" type="varchar(50)"
+                    defaultValue="NULL" />                                              
+        </addColumn>  
+      
+        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
+                                 constraintName ="PRODUCTS_PROMOTIONID_FK"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="PRODUCTS"
+                                 referencedTableName="PROMOTIONS"/>  
+                                                                                                      
     </changeSet>   
 
     <changeSet author="Chromis POS" id="update to v0.53">    
