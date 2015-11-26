@@ -21,6 +21,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
+import uk.chromis.data.gui.JMessageDialog;
+import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
@@ -381,8 +383,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
                 String message =  AppLocal.getIntString("message.stockchangesactioned");
                 showDialog(message);
             } catch (BasicException ex) {
-                Logger.getLogger(StockChangesEditor.class.getName()).log(Level.SEVERE, null, ex);
-                showDialog( ex.toString() );
+                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"), ex));
             }
         }
     }
