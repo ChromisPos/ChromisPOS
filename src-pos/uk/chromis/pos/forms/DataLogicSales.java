@@ -29,8 +29,6 @@ import uk.chromis.pos.inventory.*;
 import uk.chromis.pos.mant.FloorsInfo;
 import uk.chromis.pos.payment.PaymentInfo;
 import uk.chromis.pos.payment.PaymentInfoTicket;
-import uk.chromis.pos.promotion.PromoInfo;
-import uk.chromis.pos.promotion.PromoTypeInfo;
 import uk.chromis.pos.ticket.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -435,17 +433,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      *
      * @param id
      * @return
-     */
-    public final SentenceList getCatName(String id) {
-        return new StaticSentence(s, "SELECT "
-                + "ID "
-                + "FROM CATEGORIES WHERE ID = ?", null, new SerializerReadClass(PromoTypeInfo.class));
-    }
-
-    /**
-     *
-     * @param id
-     * @return
      * @throws BasicException
      */
     public final CategoryInfo getCategoryInfo(String id) throws BasicException {
@@ -615,6 +602,23 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "COLOUR "
                 + "FROM CATEGORIES "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
+    }
+    
+     /**
+     *
+     * @return
+     */
+    public final SentenceList getPromotionsList() {
+         return new StaticSentence(s, "SELECT "
+                + "ID, NAME, CRITERIA, SCRIPT, ISENABLED "
+                + "FROM PROMOTIONS "
+                + "ORDER BY NAME", null, 
+                new SerializerRead() {@Override
+                    public Object readValues(DataRead dr) throws BasicException {
+                    return new PromotionInfo(dr.getString(1), dr.getString(2), 
+                            dr.getString(3), dr.getString(4), dr.getBoolean(5) );
+                    }
+                });
     }
 
     /**
@@ -1179,7 +1183,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             @Override
             public int execInTransaction(Object params) throws BasicException {
                 Object[] values = (Object[]) params;
-                int i = new PreparedSentence(s, "UPDATE PRODUCTS SET ID = ?, REFERENCE = ?, "
+                int i = new PreparedSentence(s, "UPDATE PRODUCTS SET REFERENCE = ?, "
                         + "CODE = ?, CODETYPE = ?, NAME = ?, ISCOM = ?, "
                         + "ISSCALE = ?, PRICEBUY = ?, "
                         + "PRICESELL = ?, CATEGORY = ?, "
@@ -1194,7 +1198,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "ISPACK = ?, PACKQUANTITY = ?, PACKPRODUCT = ?, "
                         + "PROMOTIONID = ?, ISCATALOG = ?, CATORDER = ? "
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
-                                new int[]{INDEX_ID,
+                                new int[]{
                                     INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
                                     INDEX_NAME, INDEX_ISCOM, INDEX_ISSCALE,
                                     INDEX_PRICEBUY, INDEX_PRICESELL, INDEX_CATEGORY,

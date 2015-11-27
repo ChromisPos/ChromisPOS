@@ -20,8 +20,6 @@
 package uk.chromis.pos.promotion;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.PreparedSentence;

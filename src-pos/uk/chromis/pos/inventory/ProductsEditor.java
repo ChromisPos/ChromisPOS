@@ -52,6 +52,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
     private final SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
+    private final SentenceList m_sentpromotion;
+    private ComboBoxValModel m_PromotionModel;
     private final SentenceList taxcatsent;
     private ComboBoxValModel taxcatmodel;
     private final SentenceList attsent;
@@ -83,6 +85,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_sentcat = dlSales.getCategoriesList();
         m_CategoryModel = new ComboBoxValModel();
 
+        // Promotions model
+        m_sentpromotion = dlSales.getPromotionsList();
+        m_PromotionModel = new ComboBoxValModel();
+        
         // Taxes model
         taxcatsent = dlSales.getTaxCategoriesList();
         taxcatmodel = new ComboBoxValModel();
@@ -108,6 +114,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jComment.addActionListener(dirty);
         m_jScale.addActionListener(dirty);
         m_jCategory.addActionListener(dirty);
+        jComboBoxPromotion.addActionListener(dirty);
         m_jTax.addActionListener(dirty);
         m_jAtt.addActionListener(dirty);
         m_jPriceBuy.getDocument().addDocumentListener(dirty);
@@ -125,7 +132,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jTextTip.getDocument().addDocumentListener(dirty);
         m_jDisplay.getDocument().addDocumentListener(dirty);
         m_jStockUnits.getDocument().putProperty(dlSales, 24);
-
+        
         FieldsManager fm = new FieldsManager();
         m_jPriceBuy.getDocument().addDocumentListener(fm);
         m_jPriceSell.getDocument().addDocumentListener(new PriceSellManager());
@@ -158,6 +165,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_CategoryModel = new ComboBoxValModel(m_sentcat.list());
         m_jCategory.setModel(m_CategoryModel);
 
+        m_PromotionModel = new ComboBoxValModel(m_sentpromotion.list());
+        jComboBoxPromotion.setModel(m_PromotionModel);  
+        
         taxcatmodel = new ComboBoxValModel(taxcatsent.list());
         m_jTax.setModel(taxcatmodel);
 
@@ -193,6 +203,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jComment.setSelected(false);
         m_jScale.setSelected(false);
         m_CategoryModel.setSelectedKey(null);
+        m_PromotionModel.setSelectedKey(null);
+        jCheckBoxPromotion.setSelected(false);
+
         taxcatmodel.setSelectedKey(null);
         attmodel.setSelectedKey(null);
         m_jPriceBuy.setText(null);
@@ -223,6 +236,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jComment.setEnabled(false);
         m_jScale.setEnabled(false);
         m_jCategory.setEnabled(false);
+        jComboBoxPromotion.setEnabled(false);
+        jCheckBoxPromotion.setEnabled(false);
+
         m_jTax.setEnabled(false);
         m_jAtt.setEnabled(false);
         m_jPriceBuy.setEnabled(false);
@@ -275,6 +291,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jComment.setSelected(false);
         m_jScale.setSelected(false);
         m_CategoryModel.setSelectedKey(null);
+        m_PromotionModel.setSelectedKey(null);
+        jCheckBoxPromotion.setSelected(false);
         taxcatmodel.setSelectedKey(null);
         attmodel.setSelectedKey(null);
         m_jPriceBuy.setText(null);
@@ -306,6 +324,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jComment.setEnabled(true);
         m_jScale.setEnabled(true);
         m_jCategory.setEnabled(true);
+        jCheckBoxPromotion.setEnabled(true);
+
         m_jTax.setEnabled(true);
         m_jAtt.setEnabled(true);
         m_jPriceBuy.setEnabled(true);
@@ -359,6 +379,17 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPriceBuy.setText(Formats.CURRENCY.formatValue(myprod[DataLogicSales.INDEX_PRICEBUY]));
         setPriceSell(myprod[DataLogicSales.INDEX_PRICESELL]);
         m_CategoryModel.setSelectedKey(myprod[DataLogicSales.INDEX_CATEGORY]);
+        
+        Object prom = myprod[DataLogicSales.INDEX_PROMOTIONID];
+        if( prom == null ) {
+            jComboBoxPromotion.setEnabled(false);
+            jCheckBoxPromotion.setSelected(false);
+        } else {
+            jComboBoxPromotion.setEnabled(true);   
+            jCheckBoxPromotion.setSelected(true);
+        }
+        m_PromotionModel.setSelectedKey( prom );
+                
         taxcatmodel.setSelectedKey(myprod[DataLogicSales.INDEX_TAXCAT]);
         attmodel.setSelectedKey(myprod[DataLogicSales.INDEX_ATTRIBUTESET_ID]);
         m_jImage.setImage((BufferedImage) myprod[DataLogicSales.INDEX_IMAGE]);
@@ -380,7 +411,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jDiscounted.setSelected(((Boolean) myprod[DataLogicSales.INDEX_CANDISCOUNT]));
         m_jIsPack.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISPACK]));
         m_jPackQuantity.setText(Formats.DOUBLE.formatValue(myprod[DataLogicSales.INDEX_PACKQUANTITY]));
-        packproductmodel.setSelectedKey(myprod[DataLogicSales.INDEX_PACKPRODUCT]);    
+        packproductmodel.setSelectedKey(myprod[DataLogicSales.INDEX_PACKPRODUCT]);
+        
     }
     
     /**
@@ -405,6 +437,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jComment.setEnabled(false);
         m_jScale.setEnabled(false);
         m_jCategory.setEnabled(false);
+        jComboBoxPromotion.setEnabled(false);
+        jCheckBoxPromotion.setEnabled(false);
+
         m_jTax.setEnabled(false);
         m_jAtt.setEnabled(false);
         m_jPriceBuy.setEnabled(false);
@@ -462,6 +497,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jComment.setEnabled(true);
         m_jScale.setEnabled(true);
         m_jCategory.setEnabled(true);
+        jCheckBoxPromotion.setEnabled(true);
+
         m_jTax.setEnabled(true);
         m_jAtt.setEnabled(true);
         m_jPriceBuy.setEnabled(true);
@@ -518,6 +555,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         myprod[DataLogicSales.INDEX_PRICEBUY] = Formats.CURRENCY.parseValue(m_jPriceBuy.getText());
         myprod[DataLogicSales.INDEX_PRICESELL] = pricesell;
         myprod[DataLogicSales.INDEX_CATEGORY] = m_CategoryModel.getSelectedKey();
+        myprod[DataLogicSales.INDEX_PROMOTIONID] = m_PromotionModel.getSelectedKey();
         myprod[DataLogicSales.INDEX_TAXCAT] = taxcatmodel.getSelectedKey();
         myprod[DataLogicSales.INDEX_ATTRIBUTESET_ID] = attmodel.getSelectedKey();
         myprod[DataLogicSales.INDEX_IMAGE] = m_jImage.getImage();
@@ -541,8 +579,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         myprod[DataLogicSales.INDEX_ISPACK] = m_jIsPack.isSelected();
         myprod[DataLogicSales.INDEX_PACKQUANTITY] = Formats.DOUBLE.parseValue(m_jPackQuantity.getText());
         myprod[DataLogicSales.INDEX_PACKPRODUCT] = packproductmodel.getSelectedKey();
-        myprod[DataLogicSales.INDEX_PROMOTIONID] = null;
-
+       
         return myprod;
 
     }
@@ -920,6 +957,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel22 = new javax.swing.JLabel();
         m_jAlias = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jComboBoxPromotion = new javax.swing.JComboBox();
+        jCheckBoxPromotion = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         m_jstockcost = new javax.swing.JTextField();
@@ -1127,12 +1167,12 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jTextTip.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jPanel1.add(m_jTextTip);
-        m_jTextTip.setBounds(130, 280, 220, 25);
+        m_jTextTip.setBounds(130, 320, 220, 25);
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel21.setText(bundle.getString("label.texttip")); // NOI18N
         jPanel1.add(jLabel21);
-        jLabel21.setBounds(10, 280, 100, 25);
+        jLabel21.setBounds(10, 320, 100, 25);
 
         m_jCheckWarrantyReceipt.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jCheckWarrantyReceipt.setText(bundle.getString("label.productreceipt")); // NOI18N
@@ -1142,7 +1182,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             }
         });
         jPanel1.add(m_jCheckWarrantyReceipt);
-        m_jCheckWarrantyReceipt.setBounds(130, 310, 310, 23);
+        m_jCheckWarrantyReceipt.setBounds(130, 350, 310, 23);
 
         m_jGrossProfit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jGrossProfit.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -1165,6 +1205,24 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel2.setText(AppLocal.getIntString("label.prodname")); // NOI18N
         jPanel1.add(jLabel2);
         jLabel2.setBounds(10, 70, 100, 25);
+
+        jLabel36.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel36.setText("Promotion");
+        jPanel1.add(jLabel36);
+        jLabel36.setBounds(10, 280, 90, 30);
+
+        jComboBoxPromotion.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jComboBoxPromotion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(jComboBoxPromotion);
+        jComboBoxPromotion.setBounds(160, 280, 380, 30);
+
+        jCheckBoxPromotion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxPromotionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jCheckBoxPromotion);
+        jCheckBoxPromotion.setBounds(130, 290, 30, 21);
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.prodgeneral"), jPanel1); // NOI18N
 
@@ -1569,8 +1627,19 @@ private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GE
         m_jPackProduct.setModel(packproductmodel);
     }//GEN-LAST:event_m_jPackQuantityFocusLost
 
+    private void jCheckBoxPromotionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxPromotionActionPerformed
+        if( jCheckBoxPromotion.isSelected() ) {
+            jComboBoxPromotion.setEnabled(true);
+        } else {
+            jComboBoxPromotion.setEnabled(false);   
+            jComboBoxPromotion.getModel().setSelectedItem(null);
+        }
+    }//GEN-LAST:event_jCheckBoxPromotionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonHTML;
+    private javax.swing.JCheckBox jCheckBoxPromotion;
+    private javax.swing.JComboBox jComboBoxPromotion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1600,6 +1669,7 @@ private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
