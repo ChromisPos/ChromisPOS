@@ -68,11 +68,9 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
         dlCustomers = (DataLogicCustomers) m_App.getBean("uk.chromis.pos.customers.DataLogicCustomers");
 
-        m_TP = new DeviceTicket(app.getProperties());
-
-        // Inicializo el parser de documentos de ticket
-        m_TTP = new TicketParser(m_TP, m_dlSystem); // para visualizar el ticket
-        m_TTP2 = new TicketParser(m_App.getDeviceTicket(), m_dlSystem); // para imprimir el ticket
+        m_TP = new DeviceTicket(app.getProperties());        
+        m_TTP = new TicketParser(m_TP, m_dlSystem); 
+        m_TTP2 = new TicketParser(m_App.getDeviceTicket(), m_dlSystem); 
 
         initComponents();
 
@@ -101,21 +99,17 @@ public class JTicketsBagTicket extends JTicketsBag {
 
         jrbSales.setSelected(true);
         m_jEdit.setVisible(false);
-        // m_jEdit.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
         m_jRefund.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.RefundTicket"));
         m_jPrint.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintTicket"));
-
-        // postcondicion es que tenemos ticket activado aqui y ticket en el panel
+        
     }
 
     @Override
     public boolean deactivate() {
-
-        // precondicion es que tenemos ticket activado aqui y ticket en el panel        
+      
         m_ticket = null;
         m_ticketCopy = null;
-        return true;
-        // postcondicion es que no tenemos ticket activado ni ticket en el panel
+        return true;        
     }
 
     @Override
@@ -164,37 +158,30 @@ public class JTicketsBagTicket extends JTicketsBag {
             findTicket = m_jTicketEditor.getValueInteger();
         } catch (BasicException e) {
         }
-
         try {
-
             TicketInfo ticket = (iTicketid == -1)
                     ? m_dlSales.loadTicket(iTickettype, findTicket)
                     : m_dlSales.loadTicket(iTickettype, iTicketid);
-
             if (ticket == null) {
-                //MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.notexiststicket"));
-                //msg.show(this);
                 JFrame frame = new JFrame();
                 JOptionPane.showMessageDialog(frame, AppLocal.getIntString("message.notexiststicket"), AppLocal.getIntString("message.notexiststickettitle"), JOptionPane.WARNING_MESSAGE);
-
             } else {
                 m_ticket = ticket;
-                m_ticketCopy = null; // se asigna al pulsar el boton de editar o devolver
+                m_ticketCopy = null; 
 
                 try {
                     taxeslogic.calculateTaxes(m_ticket);
-                    TicketTaxInfo[] taxlist = m_ticket.getTaxLines();
-                    //  taxcollection = new ListKeyed<TaxInfo>(taxlist);
+                    TicketTaxInfo[] taxlist = m_ticket.getTaxLines();                   
                 } catch (TaxesException ex) {
                 }
                 printTicket();
+                m_jEdit.setVisible((m_dlSystem.getRecordCount(m_App.getActiveCashIndex(), m_ticket.getId()) > 0) && m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
             }
 
         } catch (BasicException e) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadticket"), e);
             msg.show(this);
         }
-
         m_jTicketEditor.reset();
         m_jTicketEditor.activate();
     }
@@ -211,8 +198,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         }
         m_jRefund.setEnabled(m_ticket != null && m_ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL);
         m_jPrint.setEnabled(m_ticket != null);
-
-        // Este deviceticket solo tiene una impresora, la de pantalla
+        
         m_TP.getDevicePrinter("1").reset();
 
         if (m_ticket == null) {
@@ -469,7 +455,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         if (aRefundLines.isEmpty()) {
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,
-                     AppLocal.getIntString("message.refundable"),
+                    AppLocal.getIntString("message.refundable"),
                     "Refund Complete", JOptionPane.WARNING_MESSAGE);
         } else {
             m_ticketCopy = null;
@@ -478,8 +464,9 @@ public class JTicketsBagTicket extends JTicketsBag {
             TicketInfo refundticket = new TicketInfo();
             refundticket.setTicketType(TicketInfo.RECEIPT_REFUND);
             refundticket.setCustomer(m_ticket.getCustomer());
-            refundticket.setPayments(m_ticket.getPayments());     
+            refundticket.setPayments(m_ticket.getPayments());
             refundticket.setOldTicket(true);
+            refundticket.setProperty("oldticket", m_ticket.getId());
             m_panelticketedit.setActiveTicket(refundticket, null);
         }
 

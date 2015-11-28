@@ -22,7 +22,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,9 +80,11 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     private SentenceFind m_getProductByCode;
     private SentenceFind m_getProductByName;
 
+    private SentenceFind m_getRecordCount;
+
     private SentenceFind m_resourcebytes;
     private SentenceExec m_resourcebytesinsert;
-    private SentenceExec m_resourcebytesupdate;    
+    private SentenceExec m_resourcebytesupdate;
     protected SentenceFind m_sequencecash;
     protected SentenceFind m_activecash;
     protected SentenceExec m_insertcash;
@@ -161,6 +162,11 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
                 //, new SerializerWriteBasic(Datas.STRING)
                 , productIdRead
         );
+
+        m_getRecordCount = new PreparedSentence(s,
+                "SELECT COUNT(*) FROM TICKETLINES JOIN PAYMENTS ON TICKETLINES.TICKET = "
+                + "PAYMENTS.RECEIPT JOIN RECEIPTS ON RECEIPTS.ID = TICKETLINES.TICKET WHERE  "
+                + "RECEIPTS.MONEY=? AND TICKETLINES.TICKET =? ", new SerializerWriteBasic(new Datas[]{Datas.STRING, Datas.STRING}), SerializerReadInteger.INSTANCE);
 
         //******************************************************************      
         m_peoplevisible = new StaticSentence(s, "SELECT ID, NAME, APPPASSWORD, CARD, ROLE, IMAGE FROM PEOPLE WHERE VISIBLE = " + s.DB.TRUE() + " ORDER BY NAME", null, peopleread);
@@ -506,12 +512,17 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     public final Object[] findActiveCash(String sActiveCashIndex) throws BasicException {
         return (Object[]) m_activecash.find(sActiveCashIndex);
     }
-       
-    /**
-     *
-     * @param cash
-     * @throws BasicException
-     */
+
+    public final int getRecordCount(String money, String ticket ) throws BasicException {
+        Integer i = (Integer) m_getRecordCount.find(money, ticket);
+        return (i == null) ? 1 : i;
+    }
+     /**
+             *
+             * @param cash
+             * @throws BasicException
+             */
+
     public final void execInsertCash(Object[] cash) throws BasicException {
         m_insertcash.exec(cash);
     }

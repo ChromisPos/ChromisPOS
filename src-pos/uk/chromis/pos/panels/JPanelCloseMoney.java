@@ -65,13 +65,10 @@ import uk.chromis.pos.scripting.ScriptFactory;
 public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryApp {
     
     private AppView m_App;
-    private DataLogicSystem m_dlSystem;
-    
-    private PaymentsModel m_PaymentsToClose = null;   
-    
+    private DataLogicSystem m_dlSystem;    
+    private PaymentsModel m_PaymentsToClose = null;      
     private TicketParser m_TTP;
-    private final DateFormat df= new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");   
-    
+    private final DateFormat df= new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");       
     private Session s;
     private Connection con;  
     private Statement stmt;
