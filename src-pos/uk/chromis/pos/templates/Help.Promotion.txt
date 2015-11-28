@@ -1,18 +1,20 @@
 Promotion criteria is an SQL WHERE clause used to select which products are included.
 
 All crisps
-    P.NAME LIKE '%crisps%
+    PRODUCTS.NAME LIKE '%crisps%
    
 Item with barcode 5098276743003
-    P.CODE = '5098276743003'
+    PRODUCTS.CODE = '5098276743003'
 
 All products in the wines category except champagne
-    C.NAME = 'Wine' AND NOT P.NAME LIKE '%champagne%'
+    CATEGORIES.NAME = 'Wine' AND NOT PRODUCTS.NAME LIKE '%champagne%'
 
-Examples of field names are:
-    P.ID            // Product ID
-    P.REFERENCE     // Product Reference
-    P.CODE          // Product barcode
-    P.NAME          // Product Name
-    C.NAME          // Category Name
+Field names are any from these database tables: PRODUCTS, CATEGORIES, TAXCATEGORIES
+For example:
+    PRODUCTS.ID            // Product ID
+    PRODUCTS.REFERENCE     // Product Reference
+    PRODUCTS.CODE          // Product bar code
+    PRODUCTS.NAME          // Product Name
+    CATEGORIES.NAME        // Category Name
+    TAXCATEGORIES.NAME     // Tax category Name
 

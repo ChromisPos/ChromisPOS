@@ -171,9 +171,11 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
                 new Field("PROMOTIONID", Datas.STRING, Formats.STRING ) );
         }
         
-        String sql =  "SELECT P.ID AS PRODUCTID, P.REFERENCE, P.NAME, P.PROMOTIONID " + 
-            "FROM PRODUCTS P LEFT JOIN CATEGORIES C ON (P.CATEGORY = C.ID) "
-            + "WHERE P.PROMOTIONID='" + PromotionID + "'";
+        String sql =  "SELECT PRODUCTS.ID AS PRODUCTID, PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.PROMOTIONID " + 
+            "FROM PRODUCTS " +
+            "LEFT JOIN CATEGORIES ON (PRODUCTS.CATEGORY = CATEGORIES.ID) " +
+            "LEFT JOIN TAXCATEGORIES ON (PRODUCTS.TAXCAT = TAXCATEGORIES.ID) "
+            + "WHERE PRODUCTS.PROMOTIONID='" + PromotionID + "'";
         
         if( sqlWhere != null && !sqlWhere.isEmpty() ) {
             sql = sql + " OR (" + sqlWhere + ")";
