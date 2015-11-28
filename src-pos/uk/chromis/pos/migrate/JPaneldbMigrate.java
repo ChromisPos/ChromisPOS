@@ -104,7 +104,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
         initComponents();
         jPanel2.setPreferredSize(new java.awt.Dimension(645, 209));
-    //    m_props = props;
+        //    m_props = props;
         m_panelconfig = new ArrayList<>();
 
         jtxtDbDriverLib.getDocument().addDocumentListener(dirty);
@@ -816,17 +816,17 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     SQL = "SELECT * FROM PAYMENTS";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
-                        SQL = "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, NOTES, CARDNAME) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        SQL = "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, NOTES, TENDERED, CARDNAME, RETURNMSG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("RECEIPT"));
                         pstmt.setString(3, rs.getString("PAYMENT"));
                         pstmt.setDouble(4, rs.getDouble("TOTAL"));
                         pstmt.setString(5, rs.getString("TRANSID"));
-                        pstmt.setBytes(6, rs.getBytes("RETURNMSG"));
-                        pstmt.setString(7, rs.getString("NOTES"));
-                        pstmt.setDouble(8, rs.getDouble("TENDERED"));
-                        pstmt.setString(9, rs.getString("CARDNAME"));
+                        pstmt.setString(6, rs.getString("NOTES"));
+                        pstmt.setDouble(7, rs.getDouble("TENDERED"));
+                        pstmt.setString(8, rs.getString("CARDNAME"));
+                        pstmt.setBytes(9, rs.getBytes("RETURNMSG"));
                         pstmt.executeUpdate();
                     }
 
@@ -1214,6 +1214,20 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.executeUpdate();
                     }
 
+// copy TICKETS table       
+                    SQL = "SELECT * FROM VOUCHERS";
+                    rs = stmt.executeQuery(SQL);
+                    while (rs.next()) {
+                        SQL = "INSERT INTO VOUCHERS (VOUCHER, SOLDDATE, REDEEMDATE, SOLDTICKETID, REDEEMTICKETID) VALUES (?, ?, ?, ?, ?)";
+                        pstmt = con2.prepareStatement(SQL);
+                        pstmt.setString(1, rs.getString("VOUCHER"));
+                        pstmt.setTimestamp(2, rs.getTimestamp("SOLDDATE"));
+                        pstmt.setTimestamp(3, rs.getTimestamp("REDEEMDATE"));
+                        pstmt.setString(4, rs.getString("SOLDTICKETID"));
+                        pstmt.setString(5, rs.getString("REDEEMTICKETID"));
+                        pstmt.executeUpdate();
+                    }
+
 // GET THE SEQUENCE NUMBERS
                     if (("Apache Derby".equals(sdbmanager)) || ("MySQL".equals(sdbmanager))) {
                         SQL = "SELECT * FROM TICKETSNUM";
@@ -1281,7 +1295,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         AppConfig.getInstance().setProperty("db.engine", "MySQL");
                     } else {
                         AppConfig.getInstance().setProperty("db.engine", "PostgreSQL");
-                    }                   
+                    }
                     AppConfig.getInstance().setProperty("db.driverlib", jtxtDbDriverLib.getText());
                     AppConfig.getInstance().setProperty("db.driver", jtxtDbDriver.getText());
                     AppConfig.getInstance().setProperty("db.URL", jtxtDbURL.getText());

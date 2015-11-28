@@ -304,7 +304,7 @@ public class JTicketsBagShared extends JTicketsBag {
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jListTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jListTicketsActionPerformed
-      //  AutoLogoff.getInstance().deactivateTimer();
+        AutoLogoff.getInstance().deactivateTimer();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -332,16 +332,16 @@ public class JTicketsBagShared extends JTicketsBag {
                 }
             }
         });
-      //  AutoLogoff.getInstance().activateTimer();
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_m_jListTicketsActionPerformed
 
     private void m_jDelTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDelTicketActionPerformed
-
+        AutoLogoff.getInstance().deactivateTimer();
         int res = JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.wannadelete"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (res == JOptionPane.YES_OPTION) {
             deleteTicket();
         }
-
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_m_jDelTicketActionPerformed
 
     private void m_jNewTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jNewTicketActionPerformed

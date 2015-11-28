@@ -708,14 +708,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="Chromis Pos" id="Add column to Lineremoved Table" dbms="hypersql, hsqldb">
-        <sql>ALTER TABLE LINEREMOVED ADD COLUMN REMOVEDDATE TIMESTAMP</sql>
-    </changeSet>
 
-
-    <changeSet author="Chromis Pos" id="Add column to Lineremoved Table" dbms="oracle, postgresql, mysql" >
-        <sql>ALTER TABLE LINEREMOVED ADD COLUMN REMOVEDDATE TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP </sql>
-    </changeSet>
 
     <changeSet author="Chromis Pos" id="Create PAYMENTS Table">
         <createTable tableName="PAYMENTS">
@@ -1118,10 +1111,7 @@
             '3.5.0-Chromis Mod')                
         </sql>
     </changeSet>
- 
-    
        
-          
     <changeSet author="Chromis POS" id="Create Orders Table">
         <createTable tableName="ORDERS">
             <column name="ID" type="varchar(50)">
@@ -1137,6 +1127,18 @@
             <column name="DISPLAYID" type="int"/>                                    
         </createTable>                         
     </changeSet>             
-                   
+ 
+    <changeSet author="Chromis POS" id="Create Voucher Table">                  
+        <createTable tableName="VOUCHERS">
+            <column name="VOUCHER" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>           
+            <column name="SOLDDATE" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="REDEEMDATE" type="timestamp" />            
+            <column name="SOLDTICKETID" type="varchar(50)"/>
+            <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
+        </createTable>       
+    </changeSet>            
+          
 </databaseChangeLog>
 

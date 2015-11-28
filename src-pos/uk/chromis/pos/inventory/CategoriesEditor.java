@@ -229,7 +229,7 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         cat[2] = m_CategoryModel.getSelectedKey();
         cat[3] = m_jImage.getImage();
         cat[4] = m_jTextTip.getText();
-        cat[5] = Boolean.valueOf(m_jCatNameShow.isSelected());
+        cat[5] = m_jCatNameShow.isSelected();
         cat[6] = m_jbtnColour.getText();
 
         return cat;

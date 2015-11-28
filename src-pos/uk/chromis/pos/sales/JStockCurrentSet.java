@@ -17,10 +17,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 
-package uk.chromis.pos.config;
+package uk.chromis.pos.sales;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -36,29 +35,32 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.JRootFrame;
 
+
 /**
  *
  * @author adrianromero
  */
-public class JFrmConfig extends javax.swing.JFrame {
- 
-    private final JPanelConfiguration config;
+public class JStockCurrentSet extends javax.swing.JFrame {
     
-    /** Creates new form JFrmConfig
-     * @param props */
-    public JFrmConfig(AppProperties props) {
-      
+    private JPanelStockCurrent config;
+
+    /**
+     *
+     * @param props
+     */
+    public JStockCurrentSet() {
+        
         initComponents();
         
         try {
             this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/fixedimages/smllogo.png")));
         } catch (IOException e) {
         }   
-        setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Configuration"));        
-        setPreferredSize(new Dimension(900,750));
+        setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Resetpickup"));
+        
         addWindowListener(new MyFrameListener()); 
         
-        config = new JPanelConfiguration();
+       config = new JPanelStockCurrent();
         
         getContentPane().add(config, BorderLayout.CENTER);
        
@@ -90,11 +92,9 @@ public class JFrmConfig extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 650));
-        setPreferredSize(new java.awt.Dimension(780, 700));
 
-        setSize(new java.awt.Dimension(758, 561));
-        setLocationRelativeTo(null);
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds((screenSize.width-507)/2, (screenSize.height-304)/2, 507, 304);
     }// </editor-fold>//GEN-END:initComponents
     
     /**
@@ -105,24 +105,24 @@ public class JFrmConfig extends javax.swing.JFrame {
             @Override
             public void run() {
                 
-              // config = AppConfig.getInstance().getDefaultConfig();
-              // config.load();    
+                AppConfig config = AppConfig.getInstance();
+                
                 
 // Set the look and feel.
-   // Set the look and feel.
-                try {
-
-                    Object laf = Class.forName(AppConfig.getInstance().getProperty("swing.defaultlaf")).newInstance();
-                    if (laf instanceof LookAndFeel) {
+                try {                    
+                    Object laf = Class.forName(AppConfig.getInstance().getProperty("swing.defaultlaf")).newInstance();                    
+                    if (laf instanceof LookAndFeel){
                         UIManager.setLookAndFeel((LookAndFeel) laf);
-                    } else if (laf instanceof SubstanceSkin) {
-                        SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);
+                    } else if (laf instanceof SubstanceSkin) {                      
+                        SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);                   
                     }
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-             //       logger.log(Level.WARNING, "Cannot set Look and Feel", e);
                 }
                 
-                new JFrmConfig(null).setVisible(true);
+                JStockCurrentSet resetFrame = new JStockCurrentSet();//
+                resetFrame.setSize(360, 120);
+                resetFrame.setVisible(true);
+                
             }
         });
     }

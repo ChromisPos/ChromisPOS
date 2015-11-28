@@ -131,7 +131,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jcboMachineScreenmode.setSelectedItem(AppConfig.getInstance().getProperty("machine.screenmode"));
         jcboTicketsBag.setSelectedItem(AppConfig.getInstance().getProperty("machine.ticketsbag"));
-        jchkHideInfo.setSelected(Boolean.valueOf(AppConfig.getInstance().getProperty("till.hideinfo")).booleanValue());
+        jchkHideInfo.setSelected(AppConfig.getInstance().getBoolean("till.hideinfo"));
         jtxtStartupLogo.setText(AppConfig.getInstance().getProperty("start.logo"));
         jtxtStartupText.setText(AppConfig.getInstance().getProperty("start.text"));
 
@@ -154,7 +154,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         AppConfig.getInstance().setProperty("machine.screenmode", comboValue(jcboMachineScreenmode.getSelectedItem()));
         AppConfig.getInstance().setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
-        AppConfig.getInstance().setProperty("till.hideinfo", Boolean.toString(jchkHideInfo.isSelected()));
+        AppConfig.getInstance().setBoolean("till.hideinfo", jchkHideInfo.isSelected());
         AppConfig.getInstance().setProperty("start.logo", jtxtStartupLogo.getText());
         AppConfig.getInstance().setProperty("start.text", jtxtStartupText.getText());
 

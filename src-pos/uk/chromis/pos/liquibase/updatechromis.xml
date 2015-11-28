@@ -822,6 +822,11 @@
         </createTable>       
     </changeSet> 
     
+    <changeSet author="Chromis POS" id="change Mysql Voucher-Orders-Stockchanges table to InnoDB (if required)" dbms="mysql">            
+        <sql>ALTER VOUCHERS APPLICATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER STOCKCHANGES APPLICATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER ORDERS APPLICATIONS ENGINE=InnoDB</sql>
+    </changeSet>         
   
 </databaseChangeLog>
 

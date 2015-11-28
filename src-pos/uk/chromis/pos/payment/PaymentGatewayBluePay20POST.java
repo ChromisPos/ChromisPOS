@@ -64,7 +64,7 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
         
         this.BP_SecretKey = AppConfig.getInstance().getProperty("payment.BluePay20POST.secretKey");
 
-        BP_TestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
+        BP_TestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         
         ENDPOINTADDRESS = AppConfig.getInstance().getProperty( "payment.BluePay20POST.URL" );
     }

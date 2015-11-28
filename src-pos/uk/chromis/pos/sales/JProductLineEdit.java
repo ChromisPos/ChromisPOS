@@ -78,7 +78,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
         }
 
         if (!productID.equals("xxx999_999xxx_x9x9x9")) {
-            m_jButtonUpdate.setVisible(Boolean.valueOf(AppConfig.getInstance().getProperty("db.productupdate")));
+            m_jButtonUpdate.setVisible(AppConfig.getInstance().getBoolean("db.productupdate"));
         }else{
             m_jButtonUpdate.setVisible(false);
         }
@@ -165,9 +165,8 @@ public class JProductLineEdit extends javax.swing.JDialog {
                 m_oLine.setPrice(value);
                 m_jPriceTax.setDoubleValue(m_oLine.getPriceTax());
                 m_bpriceok = true;
-                m_jButtonUpdate.setEnabled(Boolean.valueOf(AppConfig.getInstance().getProperty("db.productupdate")));
+                m_jButtonUpdate.setEnabled(AppConfig.getInstance().getBoolean("db.productupdate"));
             }
-
             printTotals();
         }
     }
@@ -185,7 +184,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
                 m_oLine.setPriceTax(value);
                 m_jPrice.setDoubleValue(m_oLine.getPrice());
                 m_bpriceok = true;
-                m_jButtonUpdate.setEnabled(Boolean.valueOf(AppConfig.getInstance().getProperty("db.productupdate")));
+                m_jButtonUpdate.setEnabled(AppConfig.getInstance().getBoolean("db.productupdate"));
             }
 
             printTotals();

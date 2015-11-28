@@ -136,7 +136,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter1.addItem("epson");
         jcboMachinePrinter1.addItem("tmu220");
         jcboMachinePrinter1.addItem("star");
-        jcboMachinePrinter1.addItem("ODP1000");
         jcboMachinePrinter1.addItem("ithaca");
         jcboMachinePrinter1.addItem("surepos");
         jcboMachinePrinter1.addItem("plain");
@@ -153,8 +152,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter2.addItem("printer");
         jcboMachinePrinter2.addItem("epson");
         jcboMachinePrinter2.addItem("tmu220");
-        jcboMachinePrinter2.addItem("star");
-        jcboMachinePrinter2.addItem("ODP1000");
+        jcboMachinePrinter2.addItem("star");        
         jcboMachinePrinter2.addItem("ithaca");
         jcboMachinePrinter2.addItem("surepos");
         jcboMachinePrinter2.addItem("plain");
@@ -172,7 +170,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter3.addItem("epson");
         jcboMachinePrinter3.addItem("tmu220");
         jcboMachinePrinter3.addItem("star");
-        jcboMachinePrinter3.addItem("ODP1000");
         jcboMachinePrinter3.addItem("ithaca");
         jcboMachinePrinter3.addItem("surepos");
         jcboMachinePrinter3.addItem("plain");
@@ -190,7 +187,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter4.addItem("epson");
         jcboMachinePrinter4.addItem("tmu220");
         jcboMachinePrinter4.addItem("star");
-        jcboMachinePrinter4.addItem("ODP1000");
         jcboMachinePrinter4.addItem("ithaca");
         jcboMachinePrinter4.addItem("surepos");
         jcboMachinePrinter4.addItem("plain");
@@ -208,7 +204,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter5.addItem("epson");
         jcboMachinePrinter5.addItem("tmu220");
         jcboMachinePrinter5.addItem("star");
-        jcboMachinePrinter5.addItem("ODP1000");
         jcboMachinePrinter5.addItem("ithaca");
         jcboMachinePrinter5.addItem("surepos");
         jcboMachinePrinter5.addItem("plain");
@@ -226,7 +221,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter6.addItem("epson");
         jcboMachinePrinter6.addItem("tmu220");
         jcboMachinePrinter6.addItem("star");
-        jcboMachinePrinter6.addItem("ODP1000");
         jcboMachinePrinter6.addItem("ithaca");
         jcboMachinePrinter6.addItem("surepos");
         jcboMachinePrinter6.addItem("plain");

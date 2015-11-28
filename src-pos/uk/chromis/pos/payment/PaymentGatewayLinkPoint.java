@@ -73,7 +73,7 @@ public class PaymentGatewayLinkPoint implements PaymentGateway {
     public PaymentGatewayLinkPoint(AppProperties props) {
 
         
-        this.m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
+        this.m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         this.sConfigfile = AppConfig.getInstance().getProperty("payment.commerceid");
         this.sClientCertPath = AppConfig.getInstance().getProperty("payment.certificatePath");
         AltEncrypter cypher = new AltEncrypter("cypherkey");

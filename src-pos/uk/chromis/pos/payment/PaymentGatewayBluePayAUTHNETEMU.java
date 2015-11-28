@@ -71,8 +71,7 @@ public class PaymentGatewayBluePayAUTHNETEMU implements PaymentGateway {
 
         this.m_sCommercePassword = AppConfig.getInstance().getProperty("payment.BluePay.secretKey");
 
-        m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
-
+        m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         ENDPOINTADDRESS = AppConfig.getInstance().getProperty("payment.BluePay.URL");
     }
 

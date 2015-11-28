@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class AppConfig implements AppProperties {
 
-    private static AppConfig instance = null;   
+    private static AppConfig instance = null;
     private final Properties m_propsconfig;
     private final File configFile;
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.AppConfig");
@@ -53,9 +53,6 @@ public class AppConfig implements AppProperties {
         }
         return instance;
     }
-
-    
-    
 
     private File getDefaultConfig() {
         return new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + ".properties");
@@ -76,6 +73,20 @@ public class AppConfig implements AppProperties {
 
     public String getProperty(String sKey) {
         return m_propsconfig.getProperty(sKey);
+    }
+
+    public void setBoolean(String sKey, Boolean sValue) {
+        if (sValue == null) {
+            m_propsconfig.remove(sKey);
+        } else if (sValue) {
+            m_propsconfig.setProperty(sKey, "true");
+        } else {
+            m_propsconfig.setProperty(sKey, "false");
+        }
+    }
+
+    public Boolean getBoolean(String sKey) {
+        return Boolean.valueOf(m_propsconfig.getProperty(sKey));
     }
 
     public String newgetProperty(String sKey) {
@@ -122,11 +133,6 @@ public class AppConfig implements AppProperties {
         }
     }
 
-    /**
-     * Local machine identity
-     *
-     * @return Machine name from OS
-     */
     private String getLocalHostName() {
         try {
             return java.net.InetAddress.getLocalHost().getHostName();

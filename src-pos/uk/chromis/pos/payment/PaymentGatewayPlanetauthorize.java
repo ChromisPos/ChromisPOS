@@ -63,7 +63,7 @@ public class PaymentGatewayPlanetauthorize implements PaymentGateway {
         AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
         this.m_sCommercePassword = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6));
 
-        m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
+        m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
     }
     
     /**

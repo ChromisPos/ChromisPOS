@@ -96,8 +96,7 @@ public class DeviceDisplayPanel extends JPanel implements DeviceDisplay, DeviceD
      * @param sLine2
      */
     @Override
-    public void writeVisor(int animation, String sLine1, String sLine2) {
-        
+    public void writeVisor(int animation, String sLine1, String sLine2) {        
         m_displaylines.writeVisor(animation, sLine1, sLine2);
     }
     

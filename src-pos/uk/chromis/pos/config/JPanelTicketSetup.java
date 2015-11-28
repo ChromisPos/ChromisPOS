@@ -92,8 +92,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
             jPickupSize.setModel(new SpinnerNumberModel(Integer.parseInt(pickupSize), 1, 20, 1));
         }
 
-        jTextReceiptPrefix.setText(AppConfig.getInstance().getProperty("till.receiptprefix"));
-// build the example receipt using the loaded details        
+        jTextReceiptPrefix.setText(AppConfig.getInstance().getProperty("till.receiptprefix"));      
         receipt = "";
         x = 1;
         while (x < (Integer) jReceiptSize.getValue()) {
@@ -103,15 +102,15 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
 
         receipt += "1";
         jTicketExample.setText(jTextReceiptPrefix.getText() + receipt);
-        m_jReceiptPrintOff.setSelected(Boolean.valueOf(AppConfig.getInstance().getProperty("till.receiptprintoff")).booleanValue());
+        m_jReceiptPrintOff.setSelected(AppConfig.getInstance().getBoolean("till.receiptprintoff"));
 
         String SCCheck = (AppConfig.getInstance().getProperty("till.SCRate"));
         if (SCCheck == null) {
             AppConfig.getInstance().setProperty("till.SCRate", "0");
         }
         jTextSCRate.setText(AppConfig.getInstance().getProperty("till.SCRate").toString());
-        jchkSCOnOff.setSelected(Boolean.valueOf(AppConfig.getInstance().getProperty("till.SCOnOff")).booleanValue());
-        jchkSCRestaurant.setSelected(Boolean.valueOf(AppConfig.getInstance().getProperty("till.SCRestaurant")).booleanValue());
+        jchkSCOnOff.setSelected(AppConfig.getInstance().getBoolean("till.SCOnOff"));
+        jchkSCRestaurant.setSelected(AppConfig.getInstance().getBoolean("till.SCRestaurant"));
 
         if (jchkSCOnOff.isSelected()) {
             jchkSCRestaurant.setVisible(true);
@@ -138,10 +137,10 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         AppConfig.getInstance().setProperty("till.receiptprefix", jTextReceiptPrefix.getText());
         AppConfig.getInstance().setProperty("till.receiptsize", jReceiptSize.getValue().toString());
         AppConfig.getInstance().setProperty("till.pickupsize", jPickupSize.getValue().toString());
-        AppConfig.getInstance().setProperty("till.receiptprintoff", Boolean.toString(m_jReceiptPrintOff.isSelected()));
-        AppConfig.getInstance().setProperty("till.SCOnOff", Boolean.toString(jchkSCOnOff.isSelected()));
+        AppConfig.getInstance().setBoolean("till.receiptprintoff", m_jReceiptPrintOff.isSelected());
+        AppConfig.getInstance().setBoolean("till.SCOnOff", jchkSCOnOff.isSelected());
         AppConfig.getInstance().setProperty("till.SCRate", jTextSCRate.getText());
-        AppConfig.getInstance().setProperty("till.SCRestaurant", Boolean.toString(jchkSCRestaurant.isSelected()));
+        AppConfig.getInstance().setBoolean("till.SCRestaurant",jchkSCRestaurant.isSelected());
 
         dirty.setDirty(false);
     }

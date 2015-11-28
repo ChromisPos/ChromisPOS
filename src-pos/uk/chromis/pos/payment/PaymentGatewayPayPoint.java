@@ -52,7 +52,7 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
         AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
         this.m_sCommercePassword = cypher.decrypt(props.getProperty("payment.commercepassword").substring(6));
         
-        m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
+        m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         m_sCurrency = (Locale.getDefault().getCountry().isEmpty())
             ? Currency.getInstance("EUR").getCurrencyCode()
             : Currency.getInstance(Locale.getDefault()).getCurrencyCode();

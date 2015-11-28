@@ -251,21 +251,16 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
             } catch (EvalError ex) {
                 Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // Autologoff after sales            
-            String autoLogoff = (AppConfig.getInstance().getProperty("till.autoLogoff"));
-            String autoLogoffRestaurant = (AppConfig.getInstance().getProperty("till.autoLogoffrestaurant"));
-            if (autoLogoff != null) {
-                if (autoLogoff.equals("true")) {
-                    // check how far to logoof to ie tables or application
-                    if (autoLogoffRestaurant == null) {
-                        ((JRootApp) m_App).closeAppView();
-                    } else if (autoLogoffRestaurant.equals("true")) {
-                        m_restaurant.newTicket();
-                    } else {
-                        ((JRootApp) m_App).closeAppView();
-                    };
+            // Autologoff after printing to kitchen                                
+            if (JPanelTicket.autoLogoffEnabled && JPanelTicket.autoLogoffAfterKitchen) {
+                // check how far to logoof to ie tables or application
+                if (JPanelTicket.autoLogoffToTables) {
+                    m_restaurant.newTicket();
+                } else {
+                    ((JRootApp) m_App).closeAppView();
                 }
             }
+
     }//GEN-LAST:event_m_KitchenPrintActionPerformed
     }
 

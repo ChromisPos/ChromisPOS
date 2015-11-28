@@ -78,16 +78,16 @@ public class PaymentGatewayCaixa implements PaymentGateway {
         AltEncrypter cypher = new AltEncrypter("cypherkey");
         this.sCommerceSign = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercesign").substring(6));
         
-        this.m_bTestMode = Boolean.valueOf(AppConfig.getInstance().getProperty("payment.testmode")).booleanValue();
+        this.m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         
         //EUR, USD, GPB
         this.m_sCurrency = (Locale.getDefault().getCountry().isEmpty())
             ? Currency.getInstance("EUR").getCurrencyCode()
             : Currency.getInstance(Locale.getDefault()).getCurrencyCode();
         
-        this.sTerminal = props.getProperty("payment.terminal");
-        this.sMerchantCode = props.getProperty("payment.commerceid");
-        this.bSha = Boolean.valueOf(props.getProperty("payment.SHA")).booleanValue();
+        this.sTerminal = AppConfig.getInstance().getProperty("payment.terminal");
+        this.sMerchantCode = AppConfig.getInstance().getProperty("payment.commerceid");
+        this.bSha = AppConfig.getInstance().getBoolean("payment.SHA");
         
         ENDPOINTADDRESS = (m_bTestMode)
                 ? "https://sis-t.sermepa.es:25443/sis/operaciones"

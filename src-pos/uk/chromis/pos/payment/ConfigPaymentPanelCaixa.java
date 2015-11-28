@@ -35,19 +35,11 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
         initComponents();
     }
     
-    /**
-     *
-     * @return
-     */
     @Override
     public JPanel getComponent() {
         return this;
     }
     
-    /**
-     *
-     * @param config
-     */
     @Override
     public void loadProperties() {
         
@@ -61,15 +53,11 @@ public class ConfigPaymentPanelCaixa extends javax.swing.JPanel implements Payme
             AltEncrypter cypher = new AltEncrypter("cypherkey");
             jtxtCommerceTerminal.setText(comboValue(AppConfig.getInstance().getProperty("payment.terminal")));
             jtxtCommerceSign.setText(cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercesign").substring(6)));
-            jCheckBox1.setSelected(Boolean.valueOf(AppConfig.getInstance().getProperty("payment.SHA")).booleanValue());
+            jCheckBox1.setSelected(AppConfig.getInstance().getBoolean("payment.SHA"));
         }
      
     }
     
-    /**
-     *
-     * @param config
-     */
     @Override
     public void saveProperties() {
         AppConfig.getInstance().setProperty("payment.commerceid", comboValue(jtxtCommerceCode.getText()));

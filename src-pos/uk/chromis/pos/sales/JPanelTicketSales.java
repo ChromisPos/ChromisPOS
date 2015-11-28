@@ -74,7 +74,7 @@ public class JPanelTicketSales extends JPanelTicket {
     @Override
     protected Component getSouthComponent() {
         
-        if (Boolean.valueOf(AppConfig.getInstance().getProperty("sales.newscreen"))){
+        if (AppConfig.getInstance().getBoolean("sales.newscreen")){
             m_cat = new JCatalogFull(dlSales,
                     "true".equals(m_jbtnconfig.getProperty("pricevisible")),
                     "true".equals(m_jbtnconfig.getProperty("taxesincluded")),

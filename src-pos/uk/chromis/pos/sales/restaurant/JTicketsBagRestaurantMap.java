@@ -107,7 +107,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         super(app, panelticket);
 
         restDB = new RestaurantDBUtils(app);
-        transparentButtons = Boolean.valueOf(AppConfig.getInstance().getProperty("table.transparentbuttons"));
+        transparentButtons = AppConfig.getInstance().getBoolean("table.transparentbuttons");
 
         dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
         dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
@@ -482,7 +482,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                         tableName = "<style=font-size:9px;font-weight:bold;><font color =" + AppConfig.getInstance().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
                     }
 
-                    if (Boolean.valueOf(AppConfig.getInstance().getProperty("table.showwaiterdetails")).booleanValue()) {
+                    if (AppConfig.getInstance().getBoolean("table.showwaiterdetails")) {
                         if (AppConfig.getInstance().getProperty("table.waitercolour") == null) {
                             waiterDetails = (restDB.getWaiterNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color = red>"
                                     + restDB.getWaiterNameInTableById(place.getId()) + "</font></style><br>";
@@ -495,8 +495,8 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                         waiterDetails = "";
                     }
 
-                    if (Boolean.valueOf(AppConfig.getInstance().getProperty("table.showcustomerdetails")).booleanValue()) {
-                        place.getButton().setIcon((Boolean.valueOf(AppConfig.getInstance().getProperty("table.showwaiterdetails")).booleanValue() && (restDB.getCustomerNameInTable(place.getName()) != null)) ? ICO_WAITER : ICO_OCU_SM);
+                    if (AppConfig.getInstance().getBoolean("table.showcustomerdetails")) {
+                        place.getButton().setIcon(((AppConfig.getInstance().getBoolean("table.showwaiterdetails")) && (restDB.getCustomerNameInTable(place.getName()) != null)) ? ICO_WAITER : ICO_OCU_SM);
                         if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
                             customerDetails = (restDB.getCustomerNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color = blue>"
                                     + restDB.getCustomerNameInTableById(place.getId()) + "</font></style><br>";
@@ -508,8 +508,8 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                         customerDetails = "";
                     }
 
-                    if ((Boolean.valueOf(AppConfig.getInstance().getProperty("table.showwaiterdetails")).booleanValue())
-                            || (Boolean.valueOf(AppConfig.getInstance().getProperty("table.showcustomerdetails")).booleanValue())) {
+                    if ((AppConfig.getInstance().getBoolean("table.showwaiterdetails"))
+                            || (AppConfig.getInstance().getBoolean("table.showcustomerdetails"))) {
                         place.getButton().setText("<html><center>" + customerDetails + waiterDetails + tableName + "</html>");
                     } else {
                         if (AppConfig.getInstance().getProperty("table.tablecolour") == null) {

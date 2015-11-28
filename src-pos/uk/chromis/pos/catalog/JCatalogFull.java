@@ -172,7 +172,7 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
 
             java.util.List< ProductInfoExt> prods;
 
-            if ((Boolean.valueOf(AppConfig.getInstance().getProperty("sales.newscreenbycatorder")))) {
+            if ((AppConfig.getInstance().getBoolean("sales.newscreenbycatorder"))) {
                 prods = m_dlSales.getAllProductCatalogByCatOrder();
             } else {
                 prods = m_dlSales.getAllProductCatalog();

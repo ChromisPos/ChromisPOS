@@ -33,7 +33,7 @@
 	<line><text align="center" length="42">Chromis POS</text></line>
 	<line><text align="center" length="42">The New Face of Open source POS</text></line>
 	<line><text align="center" length="42">Copyright (c) 2015 Chromis</text></line>
-	<line><text align="center" length="42">Printer.TicketPreview</text></line>
+	<line><text align="center" length="42">Printer.TicketRefundPreview</text></line>
 	<line></line>
 
 	#if (${ticket.ticketType} == 0)
@@ -75,7 +75,7 @@
 		<text align ="right" length="10">${ticketline.printValue()}</text>
 	</line>
 
-	#if(${ticketline.getRefundQty()}>0)
+	#if((${ticketline.getRefundQty()}>0) && (${ticket.ticketType} == 0))
 	<line>
 		<text align ="right" length="42">x${ticketline.getRefundQty()} unit(s) Refunded</text>
 	</line>

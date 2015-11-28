@@ -116,17 +116,14 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
         m_jsalestable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         
-        jPanelTop.setVisible(false);        
-        if (AppConfig.getInstance().getProperty("screen.600800") != null) {           
-            if (Boolean.valueOf(AppConfig.getInstance().getProperty("screen.600800")) == true) {             
+        jPanelTop.setVisible(false);                         
+            if (AppConfig.getInstance().getBoolean("screen.600800")) {             
                    jPanelTop.setVisible(true);
                    jPanelBottom.setVisible(false);
             } else {
                    jPanelTop.setVisible(false);
                    jPanelBottom.setVisible(true);
-            }        
-    
-        }
+            }           
     }
     
     /**

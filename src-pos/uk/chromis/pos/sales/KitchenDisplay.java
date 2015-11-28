@@ -30,10 +30,7 @@ import uk.chromis.data.loader.Session;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSystem;
 
-/**
- *
- * @author Administrator
- */
+
 public class KitchenDisplay {
     private Session s;
     private Connection con;  

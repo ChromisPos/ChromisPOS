@@ -170,9 +170,7 @@ public class JRootApp extends JPanel implements AppView {
             AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
             db_password = cypher.decrypt(db_password.substring(6));
         }
-
         m_aBeanFactories = new HashMap<>();
-
         // Inicializo los componentes visuales
         initComponents();
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(30, 30));
@@ -186,7 +184,7 @@ public class JRootApp extends JPanel implements AppView {
     public boolean initApp(AppProperties props) {
 
         m_props = props;
-        m_jPanelDown.setVisible(!(Boolean.valueOf(AppConfig.getInstance().getProperty("till.hideinfo"))));
+        m_jPanelDown.setVisible(!AppConfig.getInstance().getBoolean("till.hideinfo"));
 
         // support for different component orientation languages.
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
@@ -394,13 +392,10 @@ public class JRootApp extends JPanel implements AppView {
      *
      */
     public void tryToClose() {
-
         if (closeAppView()) {
-
             // success. continue with the shut down
             m_TP.getDeviceDisplay().clearVisor();
             session.close();
-
             // Download Root form
             SwingUtilities.getWindowAncestor(this).dispose();
         }
@@ -527,7 +522,6 @@ public class JRootApp extends JPanel implements AppView {
 
         BeanFactory bf = m_aBeanFactories.get(beanfactory);
         if (bf == null) {
-
             // testing sripts
             if (beanfactory.startsWith("/")) {
                 bf = new BeanFactoryScript(beanfactory);
@@ -570,8 +564,9 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private static void initOldClasses() {
+        
         m_oldclasses = new HashMap<>();
-
+/*
         // update bean names from 2.00 to 2.20    
         m_oldclasses.put("uk.chromis.pos.reports.JReportCustomers", "/uk/chromis/reports/customers.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportCustomersB", "/uk/chromis/reports/customersb.bs");
@@ -591,7 +586,7 @@ public class JRootApp extends JPanel implements AppView {
  
         // update bean names from 2.10 to 2.20
         m_oldclasses.put("uk.chromis.pos.panels.JPanelTax", "uk.chromis.pos.inventory.TaxPanel");
-
+*/
     }
 
     /**
@@ -620,7 +615,6 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private void printerStart() {
-
         String sresource = m_dlSystem.getResourceAsXML("Printer.Start");
         if (sresource == null) {
             m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
@@ -634,9 +628,7 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private void listPeople() {
-
         try {
-
             jScrollPane1.getViewport().setView(null);
             JFlowPanel jPeople = new JFlowPanel();
             jPeople.applyComponentOrientation(getComponentOrientation());
@@ -656,7 +648,6 @@ public class JRootApp extends JPanel implements AppView {
                 btn.setHorizontalAlignment(SwingConstants.CENTER);
                 btn.setHorizontalTextPosition(AbstractButton.CENTER);
                 btn.setVerticalTextPosition(AbstractButton.BOTTOM);
-
                 jPeople.add(btn);
             }
             jScrollPane1.getViewport().setView(jPeople);
