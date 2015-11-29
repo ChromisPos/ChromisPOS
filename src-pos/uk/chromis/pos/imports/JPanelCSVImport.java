@@ -873,7 +873,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[29] = false;
         myprod[30] = ((isPack != null) && !isPack.isEmpty() && (isPack.equals("1") || isPack.equalsIgnoreCase("yes"))); // Is a pack
         myprod[31] = packSize;                                                 // PackQuantity
-        myprod[32] = packOf;                                                     // Pack Product
+        myprod[32] = ((packOf==null)||(packOf.isEmpty()))?null:packOf;          // Pack Product
 
         try {
             if ("new".equals(pType)) {

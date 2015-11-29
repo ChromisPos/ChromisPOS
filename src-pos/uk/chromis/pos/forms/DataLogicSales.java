@@ -278,7 +278,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKCURRENT.UNITS, " //21 
                 + "ALIAS, " //22
                 + "ALWAYSAVAILABLE, " //23
-                + "DISCOUNTED, CANDISCOUNT, PACKRPRODUCT "
+                + "DISCOUNTED, CANDISCOUNT, PACKPRODUCT "
                 + "FROM STOCKCURRENT RIGHT JOIN PRODUCTS ON (STOCKCURRENT.PRODUCT = PRODUCTS.ID) "
                 + "WHERE REFERENCE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sReference);
     }
@@ -1540,7 +1540,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                                     10, 11, 12, 13, 14, 17, 18, 19, 20,
-                                    21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 32,0})).exec(params);
+                                    21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32,0})).exec(params);
                 if (i > 0) {
                     if (((Boolean) values[15])) {
                         if (new PreparedSentence(s, "UPDATE PRODUCTS_CAT SET CATORDER = ? WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{16, 0})).exec(params) == 0) {
