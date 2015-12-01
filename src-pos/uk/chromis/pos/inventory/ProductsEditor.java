@@ -39,6 +39,7 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.sales.TaxesLogic;
@@ -80,7 +81,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         taxsent = dlSales.getTaxList();
 
         // Categories model
-        m_sentcat = dlSales.getCategoriesList();
+            m_sentcat = dlSales.getCategoriesList();
+
         m_CategoryModel = new ComboBoxValModel();
 
         // Taxes model

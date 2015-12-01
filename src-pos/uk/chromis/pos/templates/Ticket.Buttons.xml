@@ -109,7 +109,6 @@
         <!-- <event key="ticket.close" code="event.close"/> -->
 
 
-         <taxesincluded value="true"/>
          <!-- <taxcategoryid value="001"/> -->
          <!-- <pricevisible value="true" /> -->
          

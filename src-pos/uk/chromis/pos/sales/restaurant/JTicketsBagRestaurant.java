@@ -44,6 +44,7 @@ import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
+import uk.chromis.pos.ticket.TicketType;
 
 /**
  *
@@ -237,7 +238,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
     @SuppressWarnings("empty-statement")
     private void m_KitchenPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_KitchenPrintActionPerformed
 // This replaces the code from the buttons script
-        if (ticket.getTicketType() != 1) {
+        if  (!ticket.getTicketType().equals(TicketType.REFUND)) {
             ticket = m_restaurant.getActiveTicket();
             String rScript = (m_dlSystem.getResourceAsText("script.SendOrder"));
 

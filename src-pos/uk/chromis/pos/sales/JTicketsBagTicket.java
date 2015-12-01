@@ -44,6 +44,7 @@ import uk.chromis.pos.ticket.FindTicketsInfo;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
 import uk.chromis.pos.ticket.TicketTaxInfo;
+import uk.chromis.pos.ticket.TicketType;
 
 public class JTicketsBagTicket extends JTicketsBag {
 
@@ -68,9 +69,9 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
         dlCustomers = (DataLogicCustomers) m_App.getBean("uk.chromis.pos.customers.DataLogicCustomers");
 
-        m_TP = new DeviceTicket(app.getProperties());        
-        m_TTP = new TicketParser(m_TP, m_dlSystem); 
-        m_TTP2 = new TicketParser(m_App.getDeviceTicket(), m_dlSystem); 
+        m_TP = new DeviceTicket(app.getProperties());
+        m_TTP = new TicketParser(m_TP, m_dlSystem);
+        m_TTP2 = new TicketParser(m_App.getDeviceTicket(), m_dlSystem);
 
         initComponents();
 
@@ -101,15 +102,15 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jEdit.setVisible(false);
         m_jRefund.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.RefundTicket"));
         m_jPrint.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintTicket"));
-        
+
     }
 
     @Override
     public boolean deactivate() {
-      
+
         m_ticket = null;
         m_ticketCopy = null;
-        return true;        
+        return true;
     }
 
     @Override
@@ -167,11 +168,11 @@ public class JTicketsBagTicket extends JTicketsBag {
                 JOptionPane.showMessageDialog(frame, AppLocal.getIntString("message.notexiststicket"), AppLocal.getIntString("message.notexiststickettitle"), JOptionPane.WARNING_MESSAGE);
             } else {
                 m_ticket = ticket;
-                m_ticketCopy = null; 
+                m_ticketCopy = null;
 
                 try {
                     taxeslogic.calculateTaxes(m_ticket);
-                    TicketTaxInfo[] taxlist = m_ticket.getTaxLines();                   
+                    TicketTaxInfo[] taxlist = m_ticket.getTaxLines();
                 } catch (TaxesException ex) {
                 }
                 printTicket();
@@ -191,14 +192,16 @@ public class JTicketsBagTicket extends JTicketsBag {
         try {
             m_jEdit.setEnabled(
                     m_ticket != null
-                    && (m_ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL || m_ticket.getTicketType() == TicketInfo.RECEIPT_REFUND)
+                    && (m_ticket.getTicketType().equals(TicketType.NORMAL) || m_ticket.getTicketType().equals(TicketType.INVOICE)
+                    || m_ticket.getTicketType().equals(TicketType.REFUND))
                     && m_dlSales.isCashActive(m_ticket.getActiveCash()));
         } catch (BasicException e) {
             m_jEdit.setEnabled(false);
         }
-        m_jRefund.setEnabled(m_ticket != null && m_ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL);
+        m_jRefund.setEnabled(m_ticket != null && (m_ticket.getTicketType().equals(TicketType.NORMAL)
+                || m_ticket.getTicketType().equals(TicketType.INVOICE)));
         m_jPrint.setEnabled(m_ticket != null);
-        
+
         m_TP.getDevicePrinter("1").reset();
 
         if (m_ticket == null) {
@@ -439,7 +442,6 @@ public class JTicketsBagTicket extends JTicketsBag {
     }//GEN-LAST:event_m_jPrintActionPerformed
 
     private void m_jRefundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jRefundActionPerformed
-
         java.util.List aRefundLines = new ArrayList();
 
         for (int i = 0; i < m_ticket.getLinesCount(); i++) {
@@ -462,7 +464,7 @@ public class JTicketsBagTicket extends JTicketsBag {
             m_TicketsBagTicketBag.showRefund();
             m_panelticketedit.showRefundLines(aRefundLines);
             TicketInfo refundticket = new TicketInfo();
-            refundticket.setTicketType(TicketInfo.RECEIPT_REFUND);
+            refundticket.setTicketType(TicketType.REFUND); 
             refundticket.setCustomer(m_ticket.getCustomer());
             refundticket.setPayments(m_ticket.getPayments());
             refundticket.setOldTicket(true);

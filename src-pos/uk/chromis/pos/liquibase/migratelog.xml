@@ -1096,6 +1096,26 @@
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
     </changeSet>
 
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE" dbms="postgresql, hypersql, hsqldb">  
+        <sql>CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1</sql>  
+    </changeSet>  
+
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE mysql" dbms="mysql">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
+    </changeSet>
+
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE oracle" dbms="oracle">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
+    </changeSet>
+
+    <changeSet author="Chromis Pos" id="CCreate TICKETSNUM Sequence INVOICE  derby" dbms="derby">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
+    </changeSet
+
+
     <changeSet author="Chromis Pos" id="add derby from migrate">
         <sql>
             INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, EXECTYPE, MD5SUM, DESCRIPTION, LIQUIBASE) 

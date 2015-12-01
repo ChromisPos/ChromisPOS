@@ -162,7 +162,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jTicketExample = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jPickupSize = new javax.swing.JSpinner();
-        jPanel2 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
         m_jReceiptPrintOff = new eu.hansolo.custom.SteelCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jchkSCOnOff = new javax.swing.JCheckBox();
@@ -196,7 +196,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText(bundle.getString("Label.ticketsetupnumber")); // NOI18N
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(10, 20, 160, 40);
+        jLabel1.setBounds(20, 20, 160, 40);
 
         jTextReceiptPrefix.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTextReceiptPrefix.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -223,7 +223,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(bundle.getString("label.pickupcodesize")); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(10, 70, 160, 40);
+        jLabel2.setBounds(20, 70, 160, 40);
 
         jPickupSize.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jPickupSize.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
@@ -236,16 +236,17 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jPanel1.add(jPickupSize);
         jPickupSize.setBounds(190, 70, 50, 40);
 
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        m_jReceiptPrintOff.setBorder(null);
         m_jReceiptPrintOff.setText(bundle.getString("label.receiptprint")); // NOI18N
-        jPanel2.add(m_jReceiptPrintOff, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jPanel6.add(m_jReceiptPrintOff, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, -1));
 
-        jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 120, 320, 30);
+        jPanel1.add(jPanel6);
+        jPanel6.setBounds(20, 120, 540, 30);
 
         add(jPanel1);
-        jPanel1.setBounds(10, 10, 730, 160);
+        jPanel1.setBounds(10, 10, 730, 170);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), bundle.getString("label.SChargepanel"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
         jPanel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -304,7 +305,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jLabel4.setBounds(380, 10, 290, 70);
 
         add(jPanel5);
-        jPanel5.setBounds(10, 180, 730, 90);
+        jPanel5.setBounds(10, 190, 730, 90);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextReceiptPrefixKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextReceiptPrefixKeyReleased
@@ -352,8 +353,8 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     private javax.swing.JLabel jLabelSCRate;
     private javax.swing.JLabel jLabelSCRatePerCent;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JSpinner jPickupSize;
     private javax.swing.JSpinner jReceiptSize;
     private javax.swing.JTextField jTextField2;

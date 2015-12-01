@@ -71,6 +71,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jDisableDefaultProduct.addActionListener(dirty);
         jCustomerScreen.addActionListener(dirty);
         jTaxIncluded.addActionListener(dirty);
+        jCategoiesBynumber.addActionListener(dirty);
     }
 
     /**
@@ -126,6 +127,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jDisableDefaultProduct.setSelected(AppConfig.getInstance().getBoolean("product.hidedefaultproductedit"));
         jCustomerScreen.setSelected(AppConfig.getInstance().getBoolean("machine.customerdisplay"));
         jTaxIncluded.setSelected(AppConfig.getInstance().getBoolean("till.taxincluded"));
+        jCategoiesBynumber.setSelected(AppConfig.getInstance().getBoolean("till.categoriesbynumberorder"));
 
 // hide some values until the code has been implmented        
         if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
@@ -205,8 +207,9 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         AppConfig.getInstance().setBoolean("display.consolidated", jConsolidate.isSelected());
         AppConfig.getInstance().setBoolean("product.hidedefaultproductedit", jDisableDefaultProduct.isSelected());
         AppConfig.getInstance().setBoolean("machine.customerdisplay", jCustomerScreen.isSelected());
-        AppConfig.getInstance().setBoolean("till.taxincluded",  jTaxIncluded.isSelected());
-                
+        AppConfig.getInstance().setBoolean("till.taxincluded", jTaxIncluded.isSelected());
+        AppConfig.getInstance().setBoolean("till.categoriesbynumberorder", jCategoiesBynumber.isSelected());
+
         dirty.setDirty(false);
     }
 
@@ -257,6 +260,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jChangeSalesScreen = new eu.hansolo.custom.SteelCheckBox();
         jMoveAMountBoxToTop = new eu.hansolo.custom.SteelCheckBox();
         jCustomerScreen = new eu.hansolo.custom.SteelCheckBox();
+        jCategoiesBynumber = new eu.hansolo.custom.SteelCheckBox();
         jLabelInactiveTime = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(700, 500));
@@ -463,6 +467,9 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jCustomerScreen.setText(bundle.getString("label.customerscreen")); // NOI18N
         jPanel5.add(jCustomerScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, 190, -1));
 
+        jCategoiesBynumber.setText(bundle.getString("label.categoryorder")); // NOI18N
+        jPanel5.add(jCategoiesBynumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 170, -1));
+
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 20, 580, -1));
 
         jLabelInactiveTime.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -559,6 +566,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
     private javax.swing.JTextField jAutoLogoffTime;
     private eu.hansolo.custom.SteelCheckBox jAutoLogoffToTables;
     private eu.hansolo.custom.SteelCheckBox jAutologoffAfterSale;
+    private eu.hansolo.custom.SteelCheckBox jCategoiesBynumber;
     private eu.hansolo.custom.SteelCheckBox jChangeSalesScreen;
     private eu.hansolo.custom.SteelCheckBox jCheckPrice00;
     private eu.hansolo.custom.SteelCheckBox jCloseCashbtn;

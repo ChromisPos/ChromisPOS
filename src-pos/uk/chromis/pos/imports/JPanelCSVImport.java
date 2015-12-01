@@ -166,7 +166,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
         // Save Last file for later use.
         last_folder = AppConfig.getInstance().getProperty("CSV.last_folder");
-       // config_file = m_props.getConfigFile();
+        // config_file = m_props.getConfigFile();
 
         documentListener = new DocumentListener() {
             @Override
@@ -908,7 +908,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[2] = csvError;                                                   // Error description
         myprod[3] = productReference;                                           // Reference string
         myprod[4] = productBarcode;                                             // Barcode String        
-        myprod[5] = productName.replaceAll("\'","");                                                // Name string        
+        myprod[5] = productName.replaceAll("\'", "");                                                // Name string        
         myprod[6] = productBuyPrice;                                            // Buy price
         myprod[7] = productSellPrice;                                           // Sell price
         myprod[8] = PreviousBuy;                                                // Previous Buy price double

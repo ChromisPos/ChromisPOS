@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
+
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
@@ -16,89 +17,31 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
-  
     <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>  
-
-    <changeSet author="Chromis POS" id="update to v0.20">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.20"/>          
-        </update>               
-    </changeSet> 
-  
+ 
     
-    <changeSet author="Chromis POS" id="update to v0.30">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.30"/>          
-        </update>               
-    </changeSet>  
+    <!-- ***************************************************************************************** --> 
+    <!-- ***************************************************************************************** --> 
+    <!-- Using the liquibase scripts.
+        
+         The liquibase script has now been broken down into sections. There are some sections that
+         remain as they are, due to the order of historic processing. and errors that would be
+         created by modifying these.
+         If the size of the script decome unmanagablem additional scripts will be created.
+        
+         When there is a need to add any new changes into the liquibase scripts.
+         DO NOT, change an existing changeset, this will change the MD5 signature for the change
+         and will then prevent the scrip from running throwing a liquibase error.
     
+    Please read the comments before each section -->
     
-    <changeSet author="Chromis POS" id="change Mysql tables to InnoDB (if required)" dbms="mysql">            
-        <sql>ALTER TABLE APPLICATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTEINSTANCE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTESET ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTESETINSTANCE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTEUSE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTEVALUE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE BREAKS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CATEGORIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CLOSEDCASH ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CSVIMPORT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CUSTOMERS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE DATABASECHANGELOG ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE DATABASECHANGELOGLOCK ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE DBPERMISSIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE DRAWEROPENED ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE FLOORS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE LEAVES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE LINEREMOVED ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE LOCATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE MOORERS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PAYMENTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PEOPLE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PICKUP_NUMBER ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PLACES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PRODUCTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PRODUCTS_CAT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PRODUCTS_COM ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RECEIPTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RESERVATION_CUSTOMERS	 ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RESERVATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RESOURCES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ROLES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE SHAREDTICKETS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE SHIFT_BREAKS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE SHIFTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE STOCKCURRENT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE STOCKDIARY ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE STOCKLEVEL ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXCATEGORIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXCUSTCATEGORIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXLINES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE THIRDPARTIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETLINES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETSNUM ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETSNUM_PAYMENT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETSNUM_REFUND ENGINE=InnoDB</sql>      
-    </changeSet>    
-    
-    <changeSet author="Chromis POS" id="update to v0.40">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.40"/>          
-        </update>               
-    </changeSet> 
-         
-    <changeSet author="Chromis POS" id="update to to new menu for roles">    
-        <update tableName="RESOURCES">
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
-            <where>NAME='Menu.Root'</where>      
-        </update>               
-    </changeSet>                          
-    
-
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->    
+    <!-- Need to enure that all columns are present before attempting to refactor for deriby
+    Once refactored all columns will be added with new format
+    DO NOT MOVE OR ADD TO THIS SECTION -->
     <changeSet author="Chromis POS" id="Add PrintkB if not found" dbms="postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -182,47 +125,14 @@
             </column>                                                   
         </addColumn>                     
     </changeSet>
-
-    <changeSet author="Chromis POS" id="Create Orders Table">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="ORDERS"/>
-            </not>
-        </preConditions>
-
-        <createTable tableName="ORDERS">
-            <column name="ID" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="ORDERID" type="varchar(50)"/>                
-            <column name="QTY" type="int"/>           
-            <column name="DETAILS" type="varchar(255)"/>
-            <column name="ATTRIBUTES" type="varchar(255)"/>
-            <column name="NOTES" type="varchar(255)"/>
-            <column name="TICKETID" type="varchar(255)"/>
-            <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="DISPLAYID" type="int"/>                                    
-        </createTable>                         
-    </changeSet>   
-     
-    <changeSet author="Chromis POS" id="Add Auxiliary Column to Orders Table">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="AUXILIARY" tableName="ORDERS"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="ORDERS">
-            <column name="AUXILIARY" type="int"/>                                                   
-        </addColumn>                         
-    </changeSet>
-
-    <changeSet author="Chromis POS" id="update to v0.52">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.52"/>          
-        </update>               
-    </changeSet>   
-    
+    <!-- End of refactoring preperation -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->    
+    <!-- Refactors derby database to use update driver for boolean 
+    Any columns that used 'int' will be converted to use true/false.
+    DO NOT CHANGE THIS SECTION -->    
     <changeSet author="Chromis POS" id="Refactor People table" dbms="derby">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
@@ -615,34 +525,12 @@
             '3.5.0-Chromis Mod')                
         </sql>
     </changeSet>     
-              
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-    <changeSet author="Chromis POS" id="Add refund qty Ticketlines Table">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="REFUNDQTY" tableName="TICKETLINES"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="TICKETLINES">
-            <column name="REFUNDQTY" type="double precision" defaultValueNumeric="0.0"/>                                                   
-        </addColumn>                         
-    </changeSet>   
-                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                                             
-    <changeSet author="Chromis POS" id="Insert into RESOURCES Table">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE ID='63'</sqlCheck>
-        </preConditions>
-
-        <insert tableName="RESOURCES">
-            <column name="ID" value="63"/>
-            <column name="NAME" value="Printer.TicketRefundPreview"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.TicketRefundPreview.xml"/>
-        </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-        
+    <!-- End of  Derby refactoring -->                 
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->    
+    <!-- Add any new tables required in this section -->
     <changeSet author="Chromis POS" id="Create StockChanges Table">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -664,61 +552,97 @@
             <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
             <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
         </createTable>       
-    </changeSet> 
+    </changeSet>   
   
-    <changeSet author="Chromis POS" id="Add Pack Products permissions "> 
+
+    <changeSet author="Chromis POS" id="Create Voucher Table">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
+            <not>
+                <tableExists tableName="VOUCHERS"/>
+            </not>
         </preConditions>
-              
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname117"/>
-            <column name="DESCRIPTION" value="##label.description117"/>
-        </insert>
-        
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname118"/>
-            <column name="DESCRIPTION" value="##label.description118"/>
-        </insert>		         
-    </changeSet> 
-   
-    <changeSet author="Chromis POS" id="Add StockChanges to permissions">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description119'</sqlCheck>
-        </preConditions>   
-            
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
-            <column name="SECTION" value="##label.sectiontools"/>
-            <column name="DISPLAYNAME" value="##label.displayname119"/>
-            <column name="DESCRIPTION" value="##label.description119"/>
-        </insert>
-        		
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/stockchanges.bs"/>
-            <column name="SECTION" value="##label.sectiontools"/>
-            <column name="DISPLAYNAME" value="##label.displayname120"/>
-            <column name="DESCRIPTION" value="##label.description120"/>
-        </insert>		                 
-    </changeSet>           
+
+        <createTable tableName="VOUCHERS">
+            <column name="VOUCHER" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>           
+            <column name="SOLDDATE" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="REDEEMDATE" type="timestamp" />            
+            <column name="SOLDTICKETID" type="varchar(50)"/>
+            <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
+        </createTable>       
+    </changeSet>
     
-    <changeSet author="Chromis POS" id="Add reportlogo to resources">
+    <changeSet author="Chromis POS" id="Create Orders Table">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'img.reportlogo'</sqlCheck>
-        </preConditions> 
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="62"/>
-            <column name="NAME" value="img.reportlogo"/>
-            <column name="RESTYPE" valueNumeric="1"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
-        </insert>
-    </changeSet>                    
-  
+            <not>
+                <tableExists tableName="ORDERS"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ORDERS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ORDERID" type="varchar(50)"/>                
+            <column name="QTY" type="int"/>           
+            <column name="DETAILS" type="varchar(255)"/>
+            <column name="ATTRIBUTES" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+            <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DISPLAYID" type="int"/>                                    
+        </createTable>                         
+    </changeSet> 
+    
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE" dbms="postgresql, hypersql, hsqldb">  
+        <sql>CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1</sql>  
+    </changeSet>  
+
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE mysql" dbms="mysql">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
+    </changeSet>
+
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE oracle" dbms="oracle">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
+    </changeSet>
+
+    <changeSet author="Chromis Pos" id="CCreate TICKETSNUM Sequence INVOICE  derby" dbms="derby">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
+    </changeSet>
+    <!-- End of new tables sections -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->   
+    <!-- Add any new columns required in this section --> 
+    <changeSet author="Chromis POS" id="Add refund qty Ticketlines Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="REFUNDQTY" tableName="TICKETLINES"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="TICKETLINES">
+            <column name="REFUNDQTY" type="double precision" defaultValueNumeric="0.0"/>                                                   
+        </addColumn>                         
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="check for Stockunits column">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="STOCKUNITS" tableName="PRODUCTS"/>
+            </not>
+        </preConditions>     
+               
+        <addColumn tableName="PRODUCTS">
+            <column name="STOCKUNITS" type="double precision" defaultValueNumeric="0"/>
+        </addColumn>
+    </changeSet>
+
     <changeSet author="Chromis POS" id="Add Pack Products details p" dbms="postgresql, hypersql, hsqldb">    
         <preConditions onFail="MARK_RAN">
             <not>
@@ -739,23 +663,7 @@
                                  referencedColumnNames = "ID"
                                  baseTableName="PRODUCTS"
                                  referencedTableName="PRODUCTS"/>    
-    </changeSet>
-    
-    <changeSet author="Chromis POS" id="Add Pack Products details d" dbms="derby">    
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="ISPACK" tableName="PRODUCTS"/>
-            </not>
-        </preConditions> 
-    
-        <addColumn tableName="PRODUCTS">
-            <column name="ISPACK" type="${boolean.type}" defaultValueBoolean="false" >
-                <constraints nullable="false"/>
-            </column>
-            <column name="PACKQUANTITY" type="double precision"/>
-            <column name="PACKPRODUCT" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>       
+    </changeSet>           
   
     <changeSet author="Chromis POS" id="Add Pack Products details m" dbms="mysql, oracle">    
         <preConditions onFail="MARK_RAN">
@@ -777,8 +685,80 @@
                                  referencedColumnNames = "ID"
                                  baseTableName="PRODUCTS"
                                  referencedTableName="PRODUCTS"/>  
-    </changeSet>                                                                       
-          
+    </changeSet>        
+  
+    <changeSet author="Chromis POS" id="Add Pack Products details d" dbms="derby">    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ISPACK" tableName="PRODUCTS"/>
+            </not>
+        </preConditions> 
+    
+        <addColumn tableName="PRODUCTS">
+            <column name="ISPACK" type="${boolean.type}" defaultValueBoolean="false" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="PACKQUANTITY" type="double precision"/>
+            <column name="PACKPRODUCT" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Add Auxiliary Column to Orders Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="AUXILIARY" tableName="ORDERS"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="ORDERS">
+            <column name="AUXILIARY" type="int"/>                                                   
+        </addColumn>                         
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="check for catorder column in categories table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="CATORDER" tableName="CATEGORIES" />
+            </not>
+        </preConditions>     
+               
+        <addColumn tableName="CATEGORIES">
+            <column name="CATORDER" type="integer"/>
+        </addColumn>        
+    </changeSet>
+    <!-- End of new columns sections -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->              
+    <!-- Add any new resource changesets to this section --> 
+    <changeSet author="Chromis POS" id="Insert into RESOURCES Table">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE ID='63'</sqlCheck>
+        </preConditions>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="63"/>
+            <column name="NAME" value="Printer.TicketRefundPreview"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.TicketRefundPreview.xml"/>
+        </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        
+    
+    <changeSet author="Chromis POS" id="Add reportlogo to resources">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'img.reportlogo'</sqlCheck>
+        </preConditions> 
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="62"/>
+            <column name="NAME" value="img.reportlogo"/>
+            <column name="RESTYPE" valueNumeric="1"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
+        </insert>
+    </changeSet> 
+    
     <changeSet author="Chromis POS" id="Add sql.ActionStockChanges to resources">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'sql.ActionStockChanges'</sqlCheck>
@@ -790,43 +770,152 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>
         </insert>
-    </changeSet>    
-         
-    <changeSet author="Chromis POS" id="update to v0.53">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53"/>          
-        </update>               
-    </changeSet>               
- 
-    <changeSet author="Chromis POS" id="update to v0.53.1">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.1"/>          
-        </update>               
-    </changeSet>      
-
-    <changeSet author="Chromis POS" id="Create Voucher Table">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="VOUCHERS"/>
-            </not>
-        </preConditions>
-
-        <createTable tableName="VOUCHERS">
-            <column name="VOUCHER" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>           
-            <column name="SOLDDATE" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="REDEEMDATE" type="timestamp" />            
-            <column name="SOLDTICKETID" type="varchar(50)"/>
-            <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
-        </createTable>       
     </changeSet> 
     
+    <changeSet author="Chromis POS" id="update sql.ActionStockChanges to resources">        
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>  
+            <where>NAME='sql.ActionStockChanges'</where>      
+        </update> 
+    </changeSet>                     
+                                                       
+    <changeSet author="Chromis POS" id="update to to new menu for roles">    
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
+            <where>NAME='Menu.Root'</where>      
+        </update>               
+    </changeSet>
+    <!-- End of resource changeset section   -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->              
+    <!-- Add any new dbpermission changesets to this section -->   
+    <changeSet author="Chromis POS" id="Add Pack Products permissions "> 
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
+        </preConditions>
+              
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname117"/>
+            <column name="DESCRIPTION" value="##label.description117"/>
+        </insert>
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname118"/>
+            <column name="DESCRIPTION" value="##label.description118"/>
+        </insert>		         
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Add StockChanges to permissions">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description119'</sqlCheck>
+        </preConditions>   
+            
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname119"/>
+            <column name="DESCRIPTION" value="##label.description119"/>
+        </insert>
+        		
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/stockchanges.bs"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname120"/>
+            <column name="DESCRIPTION" value="##label.description120"/>
+        </insert>		                 
+    </changeSet>    
+    
+    <changeSet author="Chromis POS" id="Add button.refundeditsale to permissions">        
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="button.refundeditsale"/>
+            <column name="SECTION" value="##label.sectionbuttons"/>
+            <column name="DISPLAYNAME" value="##label.displayname121"/>
+            <column name="DESCRIPTION" value="##label.description121"/>
+        </insert>
+    </changeSet>
+    <!-- End of dbpermissions changeset section   -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->   
+    <!-- Mysql change to InnoDB if required 
+         All new tables should be followed by the InnDB change for that table.         
+    -->
+    <changeSet author="Chromis POS" id="change Mysql tables to InnoDB (if required)" dbms="mysql">            
+        <sql>ALTER TABLE APPLICATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTEINSTANCE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTESET ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTESETINSTANCE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTEUSE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTEVALUE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE BREAKS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CATEGORIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CLOSEDCASH ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CSVIMPORT ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CUSTOMERS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DATABASECHANGELOG ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DATABASECHANGELOGLOCK ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DBPERMISSIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DRAWEROPENED ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE FLOORS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE LEAVES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE LINEREMOVED ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE LOCATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE MOORERS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PAYMENTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PEOPLE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PICKUP_NUMBER ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PLACES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PRODUCTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PRODUCTS_CAT ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PRODUCTS_COM ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RECEIPTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RESERVATION_CUSTOMERS	 ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RESERVATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RESOURCES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ROLES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE SHAREDTICKETS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE SHIFT_BREAKS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE SHIFTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE STOCKCURRENT ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE STOCKDIARY ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE STOCKLEVEL ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXCATEGORIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXCUSTCATEGORIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXLINES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE THIRDPARTIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETLINES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETSNUM ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETSNUM_PAYMENT ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETSNUM_REFUND ENGINE=InnoDB</sql>      
+    </changeSet>    
+    
     <changeSet author="Chromis POS" id="change Mysql Voucher-Orders-Stockchanges table to InnoDB (if required)" dbms="mysql">            
-        <sql>ALTER VOUCHERS APPLICATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER STOCKCHANGES APPLICATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER ORDERS APPLICATIONS ENGINE=InnoDB</sql>
-    </changeSet>         
-  
+        <sql>ALTER TABLE STOCKCHANGES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ORDERS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE VOUCHERS ENGINE=InnoDB</sql>
+    </changeSet> 
+    <!-- End of InnoDB section --> 
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->  
+    <!-- Update this section with the latest version number -->
+    <!-- Remember to always change the ID details as well -->    
+    <changeSet author="Chromis POS" id="Update to v0.53.2">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="0.53.2"/>          
+        </update>               
+    </changeSet> 
+    <!-- ***************************************************************************************** -->      
 </databaseChangeLog>
 

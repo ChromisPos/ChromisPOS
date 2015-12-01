@@ -142,8 +142,7 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
             Datas.SERIALIZABLE,
             Datas.INT
         };
-        
-        
+            
         new PreparedSentence(s, "INSERT INTO SHAREDTICKETS ("
                 + "ID, "
                 + "NAME, "

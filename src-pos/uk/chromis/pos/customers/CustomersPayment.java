@@ -44,6 +44,7 @@ import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.ticket.TicketInfo;
+import uk.chromis.pos.ticket.TicketType;
 
 /**
  *
@@ -553,7 +554,8 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
 
             // Save the ticket
             TicketInfo ticket = new TicketInfo();
-            ticket.setTicketType(TicketInfo.RECEIPT_PAYMENT);
+          //  ticket.setTicketType(TicketInfo.RECEIPT_PAYMENT);
+            ticket.setTicketType(TicketType.PAYMENT);
 
             List<PaymentInfo> payments = paymentdialog.getSelectedPayments();
 

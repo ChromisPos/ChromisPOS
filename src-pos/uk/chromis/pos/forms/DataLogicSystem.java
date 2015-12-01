@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.forms;
 
 import java.awt.image.BufferedImage;
@@ -96,16 +97,9 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     private String SQL;
     private Map<String, byte[]> resourcescache;
 
-    /**
-     * Creates a new instance of DataLogicSystem
-     */
     public DataLogicSystem() {
     }
 
-    /**
-     *
-     * @param s
-     */
     @Override
     public void init(Session s) {
 
@@ -261,51 +255,27 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         resetResourcesCache();
     }
 
-    /**
-     *
-     * @return
-     */
     public String getInitScript() {
         return m_sInitScript;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getDBVersion() {
         return m_dbVersion;
     }
 
-    /**
-     *
-     * @return @throws BasicException
-     */
     public final String findVersion() throws BasicException {
         return (String) m_version.find(AppLocal.APP_ID);
     }
 
-    /**
-     *
-     * @return @throws BasicException
-     */
     public final String getUser() throws BasicException {
         return ("");
 
     }
 
-    /**
-     *
-     * @throws BasicException
-     */
     public final void execDummy() throws BasicException {
         m_dummy.exec();
     }
 
-    /**
-     *
-     * @return @throws BasicException
-     */
     public final List listPeopleVisible() throws BasicException {
         return m_peoplevisible.list();
     }
@@ -314,22 +284,10 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         return m_peoplevisibleByRights.list(rightsLevel);
     }
 
-    /**
-     *
-     * @param role
-     * @return
-     * @throws BasicException
-     */
     public final List<String> getPermissions(String role) throws BasicException {
         return m_permissionlist.list(role);
     }
 
-    /**
-     *
-     * @param card
-     * @return
-     * @throws BasicException
-     */
     public final AppUser findPeopleByCard(String card) throws BasicException {
         return (AppUser) m_peoplebycard.find(card);
     }
@@ -338,11 +296,6 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         return (AppUser) m_getsuperuser.find();
     }
 
-    /**
-     *
-     * @param sRole
-     * @return
-     */
     public final String findRolePermissions(String sRole) {
 
         try {
@@ -352,23 +305,14 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         }
     }
 
-    /*
-     *
-     * @param userdata
-     * @throws BasicException
-     */
     public final void execChangePassword(Object[] userdata) throws BasicException {
         m_changepassword.exec(userdata);
     }
 
-    /**
-     *
-     */
     public final void resetResourcesCache() {
         resourcescache = new HashMap<>();
     }
 
-//    private final byte[] getResource(String name) {
     private byte[] getResource(String name) {
 
         byte[] resource;
@@ -388,12 +332,6 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         return resource;
     }
 
-    /**
-     *
-     * @param name
-     * @param type
-     * @param data
-     */
     public final void setResource(String name, int type, byte[] data) {
 
         Object[] value = new Object[]{UUID.randomUUID().toString(), name, type, data};
@@ -406,47 +344,22 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         }
     }
 
-    /**
-     *
-     * @param sName
-     * @param data
-     */
     public final void setResourceAsBinary(String sName, byte[] data) {
         setResource(sName, 2, data);
     }
 
-    /**
-     *
-     * @param sName
-     * @return
-     */
     public final byte[] getResourceAsBinary(String sName) {
         return getResource(sName);
     }
 
-    /**
-     *
-     * @param sName
-     * @return
-     */
     public final String getResourceAsText(String sName) {
         return Formats.BYTEA.formatValue(getResource(sName));
     }
 
-    /**
-     *
-     * @param sName
-     * @return
-     */
     public final String getResourceAsXML(String sName) {
         return Formats.BYTEA.formatValue(getResource(sName));
     }
 
-    /**
-     *
-     * @param sName
-     * @return
-     */
     public final BufferedImage getResourceAsImage(String sName) {
         try {
             byte[] img = getResource(sName); // , ".png"
@@ -456,11 +369,6 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         }
     }
 
-    /**
-     *
-     * @param sName
-     * @param p
-     */
     public final void setResourceAsProperties(String sName, Properties p) {
         if (p == null) {
             setResource(sName, 0, null); // texto
@@ -474,11 +382,6 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         }
     }
 
-    /**
-     *
-     * @param sName
-     * @return
-     */
     public final Properties getResourceAsProperties(String sName) {
 
         Properties p = new Properties();
@@ -492,23 +395,11 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         return p;
     }
 
-    /**
-     *
-     * @param host
-     * @return
-     * @throws BasicException
-     */
     public final int getSequenceCash(String host) throws BasicException {
         Integer i = (Integer) m_sequencecash.find(host);
         return (i == null) ? 1 : i;
     }
 
-    /**
-     *
-     * @param sActiveCashIndex
-     * @return
-     * @throws BasicException
-     */
     public final Object[] findActiveCash(String sActiveCashIndex) throws BasicException {
         return (Object[]) m_activecash.find(sActiveCashIndex);
     }
@@ -517,38 +408,19 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         Integer i = (Integer) m_getRecordCount.find(money, ticket);
         return (i == null) ? 1 : i;
     }
-     /**
-             *
-             * @param cash
-             * @throws BasicException
-             */
 
     public final void execInsertCash(Object[] cash) throws BasicException {
         m_insertcash.exec(cash);
     }
 
-    /**
-     *
-     * @param drawer
-     * @throws BasicException
-     */
     public final void execDrawerOpened(Object[] drawer) throws BasicException {
         m_draweropened.exec(drawer);
     }
 
-    /**
-     *
-     * @param permissions
-     * @throws BasicException
-     */
     public final void execUpdatePermissions(Object[] permissions) throws BasicException {
         m_updatepermissions.exec(permissions);
     }
 
-    /**
-     *
-     * @param line
-     */
     public final void execLineRemoved(Object[] line) {
         try {
             m_lineremoved.exec(line);

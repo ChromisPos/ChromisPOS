@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.catalog;
 
 import uk.chromis.basic.BasicException;
@@ -40,6 +39,7 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
@@ -66,6 +66,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private ThumbNailBuilder tnbbutton;
     private ThumbNailBuilder tnbcat;
     private ThumbNailBuilder tnbsubcat;
+    private java.util.List<CategoryInfo> categories;
 
     private CategoryInfo showingcategory = null;
 
@@ -152,10 +153,17 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         taxeslogic = new TaxesLogic(m_dlSales.getTaxList().list());
 
         // Load all categories.
-        java.util.List<CategoryInfo> categories = m_dlSales.getRootCategories();
+        List categories;
+        if (AppConfig.getInstance().getBoolean("till.categoriesbynumberorder")) {
+            categories = m_dlSales.getRootCategoriesByCatOrder();
+            categories.addAll(m_dlSales.getRootCategoriesByName());
+        } else {
+            categories = m_dlSales.getRootCategories();
+        }
 
         // Select the first category
         m_jListCategories.setCellRenderer(new SmallCategoryRenderer());
+
         m_jListCategories.setModel(new CategoriesListModel(categories)); // aCatList
         if (m_jListCategories.getModel().getSize() == 0) {
             m_jscrollcat.setVisible(false);
@@ -251,7 +259,13 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                 m_categoriesset.add(catid);
 
 // Add subcategories
-                java.util.List<CategoryInfo> categories = m_dlSales.getSubcategories(catid);
+                if (AppConfig.getInstance().getBoolean("till.categoriesbynumberorder")) {
+                    categories = m_dlSales.getSubcategoriesByCatOrder(catid);
+                    categories.addAll(m_dlSales.getSubcategoriesByName(catid));
+                } else {
+                    categories = m_dlSales.getSubcategories(catid);
+                }
+
                 for (CategoryInfo cat : categories) {
 // these the sub categories displayed in the main products Panel    
 
@@ -266,7 +280,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                 for (ProductInfoExt prod : prods) {
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
                 }
-           
+
 // Add products
                 java.util.List<ProductInfoExt> products = m_dlSales.getProductCatalog(catid);
                 for (ProductInfoExt prod : products) {
@@ -351,7 +365,6 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                     // Create  products panel
                     java.util.List<ProductInfoExt> products = m_dlSales.getProductComments(id);
 
-
 //                    if (products.size() == 0) {
                     if (products.isEmpty()) {
                         // no hay productos por tanto lo anado a la de vacios y muestro el panel principal.
@@ -364,7 +377,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                     } else {
 
                         // Load product panel                    
-                            product = m_dlSales.getProductInfo(id);
+                        product = m_dlSales.getProductInfo(id);
                         m_productsset.put(id, product);
 
                         JCatalogTab jcurrTab = new JCatalogTab();
@@ -374,7 +387,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                         // Add products
                         for (ProductInfoExt prod : products) {
 // ADDED JDL 09.04.13 TEXT TIP FUNCTION  
-                            jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(),"");
+                            jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
                         }
                         selectIndicatorPanel(new ImageIcon(tnbbutton.getThumbNail(product.getImage())), product.getDisplay(), product.getTextTip());
 

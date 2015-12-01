@@ -299,12 +299,46 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES "
                 + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead()).list();
     }
 
+    /**
+     *
+     * @return @throws BasicException
+     */
+    public final List<CategoryInfo> getRootCategoriesByCatOrder() throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES "
+                + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " AND CATORDER IS NOT NULL "
+                + "ORDER BY CATORDER", null, CategoryInfo.getSerializerRead()).list();
+                   }
+
+    public final List<CategoryInfo> getRootCategoriesByName() throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES "
+                + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " AND CATORDER IS NULL "
+                + "ORDER BY NAME", null, CategoryInfo.getSerializerRead()).list();
+                   }    
+    
+    
     /**
      *
      * @param category
@@ -318,10 +352,36 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES WHERE PARENTID = ? ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
     }
 
+    public final List<CategoryInfo> getSubcategoriesByCatOrder(String category) throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES WHERE PARENTID = ? AND CATORDER IS NOT NULL ORDER BY CATORDER", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);                
+    }
+    
+    public final List<CategoryInfo> getSubcategoriesByName(String category) throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES WHERE PARENTID = ? AND CATORDER IS NULL ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);                
+    }
+    
+    
     /**
      *
      * @param category
@@ -674,7 +734,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES "
                 + "WHERE ID = ? "
                 + "ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).find(id);
@@ -869,11 +930,13 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
     }
 
+      
     /**
      *
      * @return
@@ -907,6 +970,25 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "LEFT OUTER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID "
                 + "LEFT OUTER JOIN TAXES ON TICKETLINES.TAXID = TAXES.ID  "
                 + "WHERE CUSTOMERS.ID = TICKETS.CUSTOMER AND TICKETLINES.PRODUCT = PRODUCTS.ID AND RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET "
+                + "GROUP BY CUSTOMERS.NAME, RECEIPTS.DATENEW, TICKETS.TICKETID, PRODUCTS.NAME, TICKETS.TICKETTYPE "
+                + "ORDER BY RECEIPTS.DATENEW DESC, PRODUCTS.NAME",
+                null,
+                CustomerTransaction.getSerializerRead()).list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public final List<CustomerTransaction> getCustomersTransactionList(String name) throws BasicException {
+        return new PreparedSentence(s,
+                "SELECT TICKETS.TICKETID, PRODUCTS.NAME AS PNAME, "
+                + "SUM(TICKETLINES.UNITS) AS UNITS, "
+                + "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS AMOUNT, "
+                + "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE * (1.0 + TAXES.RATE)) AS TOTAL, "
+                + "RECEIPTS.DATENEW, CUSTOMERS.NAME AS CNAME "
+                + "FROM RECEIPTS, CUSTOMERS, TICKETS, TICKETLINES "
+                + "LEFT OUTER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID "
+                + "LEFT OUTER JOIN TAXES ON TICKETLINES.TAXID = TAXES.ID  "
+                + "WHERE CUSTOMERS.ID = TICKETS.CUSTOMER AND TICKETLINES.PRODUCT = PRODUCTS.ID AND RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET "
+                + "AND CUSTOMERS.NAME = \"" + name + "\" "
                 + "GROUP BY CUSTOMERS.NAME, RECEIPTS.DATENEW, TICKETS.TICKETID, PRODUCTS.NAME, TICKETS.TICKETTYPE "
                 + "ORDER BY RECEIPTS.DATENEW DESC, PRODUCTS.NAME",
                 null,
@@ -1113,23 +1195,25 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             public Object transact() throws BasicException {
 
                 // Set Receipt Id
-                if (ticket.getTicketId() == 0) {
-                    switch (ticket.getTicketType()) {
-                        case TicketInfo.RECEIPT_NORMAL:
-                            ticket.setTicketId(getNextTicketIndex());
-                            break;
-                        case TicketInfo.RECEIPT_REFUND:
-                            ticket.setTicketId(getNextTicketRefundIndex());
-                            break;
-                        case TicketInfo.RECEIPT_PAYMENT:
-                            ticket.setTicketId(getNextTicketPaymentIndex());
-                            break;
-                        case TicketInfo.RECEIPT_NOSALE:
-                            ticket.setTicketId(getNextTicketPaymentIndex());
-                            break;
-                        default:
-                            throw new BasicException();
-                    }
+                switch (ticket.getTicketType()) {
+                    case NORMAL:
+                        ticket.setTicketId(getNextTicketIndex());
+                        break;
+                    case REFUND:
+                        ticket.setTicketId(getNextTicketRefundIndex());
+                        break;
+                    case PAYMENT:
+                        ticket.setTicketId(getNextTicketPaymentIndex());
+                        break;
+                    case NOSALE:
+                        ticket.setTicketId(getNextTicketPaymentIndex());
+                        break;
+                    case INVOICE:
+                        ticket.setTicketId(getNextTicketInvoiceIndex());
+                        break;
+
+                    default:
+                        throw new BasicException();
                 }
 
                 new PreparedSentence(s, "INSERT INTO RECEIPTS (ID, MONEY, DATENEW, ATTRIBUTES, PERSON) VALUES (?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE
@@ -1157,7 +1241,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     @Override
                     public void writeValues() throws BasicException {
                         setString(1, ticket.getId());
-                        setInt(2, ticket.getTicketType());
+                        setInt(2, ticket.getTicketType().getId());
                         setInt(3, ticket.getTicketId());
                         setString(4, ticket.getUser().getId());
                         setString(5, ticket.getCustomerId());
@@ -1333,6 +1417,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return (Integer) s.DB.getSequenceSentence(s, "TICKETSNUM").find();
     }
 
+    public final Integer getNextTicketInvoiceIndex() throws BasicException {
+        return (Integer) s.DB.getSequenceSentence(s, "TICKETSNUM_INVOICE").find();
+    }
+
     /**
      *
      * @return @throws BasicException
@@ -1455,7 +1543,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                                     10, 11, 12, 13, 14, 17, 18, 19, 20,
-                                    21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 32, 0})).exec(params);
+                                    21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 0})).exec(params);
                 if (i > 0) {
                     if (((Boolean) values[15])) {
                         if (new PreparedSentence(s, "UPDATE PRODUCTS_CAT SET CATORDER = ? WHERE PRODUCT = ?", new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{16, 0})).exec(params) == 0) {
@@ -1603,7 +1691,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final TableDefinition getTableCategories() {
         return new TableDefinition(s,
-                "CATEGORIES", new String[]{"ID", "NAME", "PARENTID", "IMAGE", "TEXTTIP", "CATSHOWNAME", "COLOUR"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "", AppLocal.getIntString("label.image")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.IMAGE, Datas.STRING, Datas.BOOLEAN, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.NULL, Formats.STRING, Formats.BOOLEAN, Formats.STRING}, new int[]{0}
+                "CATEGORIES", new String[]{"ID", "NAME", "PARENTID", "IMAGE", 
+                    "TEXTTIP", "CATSHOWNAME", "COLOUR", "CATORDER"}, 
+                new String[]{"ID", AppLocal.getIntString("Label.Name"), "", 
+                    AppLocal.getIntString("label.image")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.IMAGE, Datas.STRING, Datas.BOOLEAN, Datas.STRING, Datas.INT}, new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.NULL, Formats.STRING, Formats.BOOLEAN, Formats.STRING, Formats.INT}, new int[]{0}
         );
     }
 
@@ -1661,8 +1752,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
     public final void sellVoucher(Object[] voucher) throws BasicException {
         m_sellvoucher.exec(voucher);
-    }      
-    
+    }
+
     /**
      *
      */

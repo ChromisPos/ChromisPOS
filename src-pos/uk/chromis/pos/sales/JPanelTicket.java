@@ -94,6 +94,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.printer.DeviceTicket;
+import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.util.AutoLogoff;
 
 /**
@@ -406,7 +407,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public void setActiveTicket(TicketInfo oTicket, Object oTicketExt) {
 // check if a inactivity timer has been created, and if it is not running start up again
 // this is required for autologoff mode in restaurant and it is set to return to the table view.        
-
         switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
             case "restaurant":
                 if (autoLogoffEnabled && autoLogoffInactivity) {
@@ -490,7 +490,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
 
         } else {
-            if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+            if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                 //Make disable Search and Edit Buttons
                 m_jNumberKey.justEquals();
                 jEditAttributes.setVisible(false);
@@ -1070,15 +1070,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                            {
-                                if (oProduct.getPriceSell() != 0.0) {
+                             if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
-                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1228,7 +1226,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                    if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(newline.getMultiply() - 1.0);
                         paintTicketLine(i, newline);
                     } else {
@@ -1245,7 +1243,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
                     //If it's a refund - button means one unit more
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                    if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(newline.getMultiply() + 1.0);
                         if (newline.getMultiply() >= 0) {
                             removeTicketLine(i);
@@ -1270,7 +1268,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                    if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(-dPor);
                         newline.setPrice(Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
@@ -1289,7 +1287,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_NORMAL) {
+                    if (m_oTicket.getTicketType().equals(TicketType.NORMAL) || m_oTicket.getTicketType().equals(TicketType.NORMAL)) {
                         newline.setMultiply(dPor);
                         newline.setPrice(-Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
@@ -1322,7 +1320,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             } else if (cTrans == ' ' || cTrans == '=') {
                 if (m_oTicket.getLinesCount() > 0) {
                     if (closeTicket(m_oTicket, m_oTicketExt)) {
-                        if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                        if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                             try {
                                 JRefundLines.updateRefunds();
                             } catch (BasicException ex) {
@@ -1363,9 +1361,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     printTicket("Printer.TicketTotal", ticket, ticketext);
 
                     // Select the Payments information
-                    JPaymentSelect paymentdialog = ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL
-                            ? paymentdialogreceipt
-                            : paymentdialogrefund;
+                    JPaymentSelect paymentdialog = ticket.getTicketType().equals(TicketType.REFUND)
+                            ? paymentdialogrefund
+                            : paymentdialogreceipt;
                     paymentdialog.setPrintSelected("true".equals(m_jbtnconfig.getProperty("printselected", "true")));
 
                     paymentdialog.setTransactionID(ticket.getTransactionID());
@@ -1383,6 +1381,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         //read resource ticket.save and execute
                         if (executeEvent(ticket, ticketext, "ticket.save") == null) {
                             // Save the receipt and assign a receipt number
+                            if (!paymentdialog.isPrintSelected()) {
+                                ticket.setTicketType(TicketType.INVOICE);
+                            }
+
                             try {
                                 dlSales.saveTicket(ticket, m_App.getInventoryLocation());
 
@@ -1398,7 +1400,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 }
                                 // code added to allow last ticket reprint       
                                 AppConfig.getInstance().setProperty("lastticket.number", Integer.toString(ticket.getTicketId()));
-                                AppConfig.getInstance().setProperty("lastticket.type", Integer.toString(ticket.getTicketType()));
+                                AppConfig.getInstance().setProperty("lastticket.type", Integer.toString(ticket.getTicketType().getId())); 
                                 AppConfig.getInstance().save();
                             } catch (BasicException eData) {
                                 MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
@@ -1413,7 +1415,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
                             printTicket(paymentdialog.isPrintSelected() || warrantyPrint
                                     ? "Printer.Ticket"
-                                    //                                    ? ticketPrintType
                                     : "Printer.Ticket2", ticket, ticketext);
 
 //                            if (m_oTicket.getLoyaltyCardNumber() != null){
@@ -2420,14 +2421,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
         int i = m_ticketlines.getSelectedIndex();
-        if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND && (!m_oTicket.getLine(i).isProductCom())) {
+        if ((m_oTicket.getTicketType().equals(TicketType.REFUND))  && (!m_oTicket.getLine(i).isProductCom())) {
             JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice(), m_oTicket.getLine(i).getProperty("orgLine"));
             removeTicketLine(i);
             while (i < m_oTicket.getLinesCount() && m_oTicket.getLine(i).isProductCom()) {
                 JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice(), m_oTicket.getLine(i).getProperty("orgLine"));
                 removeTicketLine(i);
             }
-        } else if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+        } else if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,
                     AppLocal.getIntString("message.deleteauxiliaryitem"),
@@ -2437,7 +2438,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else {
             removeTicketLine(i); // elimino la linea           
         }
-
     }//GEN-LAST:event_m_jDeleteActionPerformed
 
     private void m_jUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jUpActionPerformed
@@ -2570,7 +2570,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void j_btnKitchenPrtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_j_btnKitchenPrtActionPerformed
 // John L - replace older SendOrder script
         AutoLogoff.getInstance().deactivateTimer();
-        if (m_oTicket.getTicketType() != 1) {
+        if (!m_oTicket.getTicketType().equals(TicketType.REFUND)) {
             String rScript = (dlSystem.getResourceAsText("script.SendOrder"));
             Interpreter i = new Interpreter();
             try {
