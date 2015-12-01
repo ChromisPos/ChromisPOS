@@ -29,7 +29,6 @@ public class PaymentInfoCash_original extends PaymentInfo {
     
     private double m_dPaid;
     private double m_dTotal;
-    private double m_dTendered;    
     private String m_dCardName =null;    
     
     /** Creates a new instance of PaymentInfoCash
@@ -91,7 +90,7 @@ public class PaymentInfoCash_original extends PaymentInfo {
      */
     @Override
     public double getTendered() {
-        return m_dTendered;
+        return m_dPaid;
     }
 
     /**
