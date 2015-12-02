@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.ticket;
 
 import java.util.List;
@@ -28,58 +27,59 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.EditorCreator;
 import uk.chromis.editor.JEditorKeys;
 import uk.chromis.editor.JEditorString;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 
-
 /**
  *
- *   
+ *
  */
 public class ProductFilterSales extends javax.swing.JPanel implements EditorCreator {
-    
+
     private final SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
 
-    /** Creates new form ProductFilterSales
+    /**
+     * Creates new form ProductFilterSales
+     *
      * @param dlSales
-     * @param jKeys */
+     * @param jKeys
+     */
     public ProductFilterSales(DataLogicSales dlSales, JEditorKeys jKeys) {
         initComponents();
 
         m_jtxtBarCode.addEditorKeys(jKeys);
         m_jtxtName.addEditorKeys(jKeys);
-        
+
         // El modelo de categorias
         m_sentcat = dlSales.getCategoriesList();
-        m_CategoryModel = new ComboBoxValModel();           
-        
+        m_CategoryModel = new ComboBoxValModel();
+
         m_jCboPriceBuy.setModel(ListQBFModelNumber.getMandatoryNumber());
         m_jPriceBuy.addEditorKeys(jKeys);
-        
+
         m_jCboPriceSell.setModel(ListQBFModelNumber.getMandatoryNumber());
         m_jPriceSell.addEditorKeys(jKeys);
-        
-// JG July 2014 - added for Stock count
+
         m_jCboStockUnits.setModel(ListQBFModelNumber.getOverrideMandatoryNumber());
-        m_jStockUnits.addEditorKeys(jKeys);                
+        m_jStockUnits.addEditorKeys(jKeys);
     }
-    
+
     /**
      *
      */
     public void activate() {
-        
+
         m_jtxtBarCode.reset();
         m_jtxtBarCode.setEditModeEnum(JEditorString.MODE_123);
         m_jtxtBarCode.activate();
         m_jtxtName.reset();
         m_jPriceBuy.reset();
         m_jPriceSell.reset();
-// JG July 2014 - added for Stock count        
         m_jCboStockUnits.setSelectedIndex(2);
-        m_jStockUnits.setDoubleValue(0.0);        
-        
+        m_jStockUnits.setDoubleValue(0.0);
+
         try {
             List catlist = m_sentcat.list();
             catlist.add(0, null);
@@ -89,26 +89,25 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
             // no hay validacion
         }
     }
-    
+
     /**
      *
-     * @return
-     * @throws BasicException
+     * @return @throws BasicException
      */
     @Override
     public Object createValue() throws BasicException {
-        
+
         Object[] afilter = new Object[12];
 
         // BarCode
         if (m_jtxtBarCode.getText() == null || m_jtxtBarCode.getText().equals("")) {
             afilter[8] = QBFCompareEnum.COMP_NONE;
             afilter[9] = null;
-        } else{
+        } else {
             afilter[8] = QBFCompareEnum.COMP_RE;
             afilter[9] = "%" + m_jtxtBarCode.getText() + "%";
         }
-        
+
         // Product Name/Description
         if (m_jtxtName.getText() == null || m_jtxtName.getText().equals("")) {
             afilter[0] = QBFCompareEnum.COMP_NONE;
@@ -117,7 +116,7 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
             afilter[0] = QBFCompareEnum.COMP_RE;
             afilter[1] = "%" + m_jtxtName.getText() + "%";
         }
-        
+
         // Precio de compra
         afilter[3] = m_jPriceBuy.getDoubleValue();
         afilter[2] = afilter[3] == null ? QBFCompareEnum.COMP_NONE : m_jCboPriceBuy.getSelectedItem();
@@ -125,7 +124,7 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
         // Precio de venta
         afilter[5] = m_jPriceSell.getDoubleValue();
         afilter[4] = afilter[5] == null ? QBFCompareEnum.COMP_NONE : m_jCboPriceSell.getSelectedItem();
-        
+
         // Categoria
         if (m_CategoryModel.getSelectedKey() == null) {
             afilter[6] = QBFCompareEnum.COMP_NONE;
@@ -134,11 +133,6 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
             afilter[6] = QBFCompareEnum.COMP_EQUALS;
             afilter[7] = m_CategoryModel.getSelectedKey();
         }
-        
-        // Inventory
-// JG July 2014 - added for Stock Count
-//        afilter[11] = m_jStockUnits.getDoubleValue();
-//        afilter[10] = afilter[11] == null ? QBFCompareEnum.COMP_NONE : m_jCboStockUnits.getSelectedItem();
 
         if (m_jStockUnits.getDoubleValue() == null) {
             m_jCboStockUnits.setSelectedIndex(2);
@@ -150,16 +144,14 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
             afilter[10] = m_jCboStockUnits.getSelectedItem();
             afilter[11] = m_jStockUnits.getDoubleValue();
         }
-        
 
+        return afilter;
+    }
 
-return afilter;
-    } 
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -262,8 +254,8 @@ return afilter;
     private void m_jCboPriceBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jCboPriceBuyActionPerformed
 
     }//GEN-LAST:event_m_jCboPriceBuyActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -281,5 +273,5 @@ return afilter;
     private uk.chromis.editor.JEditorString m_jtxtBarCode;
     private uk.chromis.editor.JEditorString m_jtxtName;
     // End of variables declaration//GEN-END:variables
-    
+
 }

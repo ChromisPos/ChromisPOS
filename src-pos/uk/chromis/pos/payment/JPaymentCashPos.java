@@ -54,7 +54,7 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
     
     /** Creates new form JPaymentCash
      * @param notifier
-     * @param dlSystem */
+     * @param dlSystem */ 
     public JPaymentCashPos(JPaymentNotifier notifier, DataLogicSystem dlSystem) {
         
         m_notifier = notifier;
@@ -63,16 +63,13 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
         
         m_jTendered.addPropertyChangeListener("Edition", new RecalculateState());
         m_jTendered.addEditorKeys(m_jKeys);
-        
-// added JDL 11.05.13        
-        AppConfig m_config =  new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));        
-        m_config.load();        
-        priceWith00 =("true".equals(m_config.getProperty("till.pricewith00")));
+               
+        priceWith00 =("true".equals(AppConfig.getInstance().getProperty("till.pricewith00")));
         if (priceWith00) {
             // use '00' instead of '.'
             m_jKeys.dotIs00(true);
         }
-//        m_config=null;
+
        
         String code = dlSystem.getResourceAsXML("payment.cash");
         if (code != null) {
@@ -163,8 +160,7 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
     public class ScriptPaymentCash {
         
         private final DataLogicSystem dlSystem;
-        private final ThumbNailBuilder tnbbutton;
-        private final AppConfig m_config;
+        private final ThumbNailBuilder tnbbutton;   
         
         /**
          *
@@ -172,10 +168,6 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
          */
         public ScriptPaymentCash(DataLogicSystem dlSystem) {
 //added 19.04.13 JDL        
-            AppConfig m_config =  new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));        
-            m_config.load();
-            this.m_config = m_config;
-        
             this.dlSystem = dlSystem;
             tnbbutton = new ThumbNailBuilder(64, 50, "uk/chromis/images/cash.png");
         }
@@ -189,7 +181,7 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
             JButton btn = new JButton();
 //added 19.04.13 JDL removal of text on payment buttons if required.   
             try {
-            if ((m_config.getProperty("payments.textoverlay")).equals("true")){
+            if ((AppConfig.getInstance().getProperty("payments.textoverlay")).equals("true")){
                      btn.setIcon(new ImageIcon(tnbbutton.getThumbNailText(dlSystem.getResourceAsImage(image),"")));  
             } else {
                      btn.setIcon(new ImageIcon(tnbbutton.getThumbNailText(dlSystem.getResourceAsImage(image), Formats.CURRENCY.formatValue(amount)))); 

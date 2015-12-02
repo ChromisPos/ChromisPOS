@@ -58,7 +58,7 @@ public class JProductsSelector extends javax.swing.JPanel {
         public void addProduct(Image img, String display, ActionListener al,String textTip) {        
         JButton btn = new JButton();
         btn.applyComponentOrientation(getComponentOrientation());
-// Added JG 13 Nov 12 - Render Display text
+
         btn.setText(display);
 //        btn.setText(name);
         btn.setIcon(new ImageIcon(img));

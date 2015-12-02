@@ -25,12 +25,6 @@ import uk.chromis.data.loader.DataWrite;
 import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.data.loader.SerializableWrite;
 
-/**
- *
- * JG - add AppUser
- * JG - Aug 2014 Add Customer
- * Format is CustomerName : Ticket : User
- */
 public class SharedTicketInfo implements SerializableRead, SerializableWrite {
     
     private static final long serialVersionUID = 7640633837719L;
@@ -86,7 +80,6 @@ public class SharedTicketInfo implements SerializableRead, SerializableWrite {
         return name;
     }
 
-// JG Aug 2014 - Add User info
 
     /**
      *
@@ -95,7 +88,6 @@ public class SharedTicketInfo implements SerializableRead, SerializableWrite {
         public String getAppUser() {
         return UserName;
     }
-// JG Aug 2014 - Add Customer info
 
     /**
      *

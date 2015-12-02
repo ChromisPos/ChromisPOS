@@ -41,21 +41,14 @@ public abstract class JEditorNumber extends JEditorAbstract {
     private char DEC_SEP = '.';
     private int m_iNumberStatus;
     private String m_sNumber;
-    private boolean m_bNegative;
-    
-    private Formats m_fmt;
-    
+    private boolean m_bNegative;    
+    private Formats m_fmt;    
     private Boolean priceWith00;
     
     /** Creates a new instance of JEditorNumber */
     public JEditorNumber() {
-        m_fmt = getFormat();
-        
-// added JDL 11.05.13        
-        AppConfig m_config =  new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));        
-        m_config.load();        
-        priceWith00 =("true".equals(m_config.getProperty("till.pricewith00")));
-        m_config=null;         
+        m_fmt = getFormat();       
+        priceWith00 =("true".equals(AppConfig.getInstance().getProperty("till.pricewith00")));        
         reset();
     }
     
@@ -275,8 +268,7 @@ public abstract class JEditorNumber extends JEditorAbstract {
         firePropertyChange("Text", sOldText, getText());
     } 
  
-    
- /* Added JDL 13.04.13 routine
+/*    
  * routine to set the amount appearance to show '.'
  */ 
     private String setTempjPrice(String jPrice){

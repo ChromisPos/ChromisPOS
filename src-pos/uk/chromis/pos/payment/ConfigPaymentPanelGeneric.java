@@ -49,14 +49,14 @@ public class ConfigPaymentPanelGeneric extends javax.swing.JPanel implements Pay
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
-        String sCommerceID = config.getProperty("payment.commerceid");
-        String sCommercePass = config.getProperty("payment.commercepassword");
+    public void loadProperties() {
+        String sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
+        String sCommercePass = AppConfig.getInstance().getProperty("payment.commercepassword");
         
         if (sCommerceID != null && sCommercePass != null && sCommercePass.startsWith("crypt:")) {
-            jtxtCommerceID.setText(config.getProperty("payment.commerceid"));
-            AltEncrypter cypher = new AltEncrypter("cypherkey" + config.getProperty("payment.commerceid"));
-            jtxtCommercePwd.setText(cypher.decrypt(config.getProperty("payment.commercepassword").substring(6)));
+            jtxtCommerceID.setText(AppConfig.getInstance().getProperty("payment.commerceid"));
+            AltEncrypter cypher = new AltEncrypter("cypherkey" + AppConfig.getInstance().getProperty("payment.commerceid"));
+            jtxtCommercePwd.setText(cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6)));
         }
     }
     
@@ -65,10 +65,10 @@ public class ConfigPaymentPanelGeneric extends javax.swing.JPanel implements Pay
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
-        config.setProperty("payment.commerceid", jtxtCommerceID.getText());
+    public void saveProperties() {
+        AppConfig.getInstance().setProperty("payment.commerceid", jtxtCommerceID.getText());
         AltEncrypter cypher = new AltEncrypter("cypherkey" + jtxtCommerceID.getText());       
-        config.setProperty("payment.commercepassword", "crypt:" + cypher.encrypt(new String(jtxtCommercePwd.getPassword())));
+        AppConfig.getInstance().setProperty("payment.commercepassword", "crypt:" + cypher.encrypt(new String(jtxtCommercePwd.getPassword())));
     }
     
     /** This method is called from within the constructor to

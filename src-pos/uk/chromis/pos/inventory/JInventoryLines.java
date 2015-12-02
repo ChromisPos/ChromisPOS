@@ -212,7 +212,6 @@ public class JInventoryLines extends javax.swing.JPanel {
     }
     
     private static class InventoryTableModel extends AbstractTableModel {
-// JG 16 May 2013 use diamond inference        
         private ArrayList<InventoryLine> m_rows = new ArrayList<>();
         
         @Override

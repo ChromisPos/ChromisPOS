@@ -91,7 +91,6 @@ public class SQLDatabase implements TreeNode {
     }
     @Override
     public boolean isLeaf() {
-// JG 16 May 2013 use isEmpty
         return m_aTables.isEmpty();
     }    
 }

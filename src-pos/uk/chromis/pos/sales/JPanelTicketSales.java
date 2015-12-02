@@ -73,10 +73,8 @@ public class JPanelTicketSales extends JPanelTicket {
      */
     @Override
     protected Component getSouthComponent() {
-        AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
         
-        if (Boolean.valueOf(m_config.getProperty("sales.newscreen"))){
+        if (AppConfig.getInstance().getBoolean("sales.newscreen")){
             m_cat = new JCatalogFull(dlSales,
                     "true".equals(m_jbtnconfig.getProperty("pricevisible")),
                     "true".equals(m_jbtnconfig.getProperty("taxesincluded")),
@@ -113,7 +111,7 @@ public class JPanelTicketSales extends JPanelTicket {
      */
     @Override
     protected JTicketsBag getJTicketsBag() {
-        return JTicketsBag.createTicketsBag(m_App.getProperties().getProperty("machine.ticketsbag"), m_App, this);
+        return JTicketsBag.createTicketsBag(AppConfig.getInstance().getProperty("machine.ticketsbag"), m_App, this);
     }
 
     /**

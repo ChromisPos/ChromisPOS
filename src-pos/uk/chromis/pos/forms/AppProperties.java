@@ -21,28 +21,11 @@ package uk.chromis.pos.forms;
 
 import java.io.File;
 
-/**
- *
- * @author adrianromero
- */
 public interface AppProperties {
 
-    /**
-     *
-     * @return
-     */
     public File getConfigFile(); 
 
-    /**
-     *
-     * @return
-     */
     public String getHost();    
 
-    /**
-     *
-     * @param sKey
-     * @return
-     */
     public String getProperty(String sKey); // Config property.
 }

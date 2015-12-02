@@ -163,10 +163,10 @@ public final class BreaksView extends javax.swing.JPanel implements EditorRecord
         m_jBreakName = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         m_jBreakDescription = new javax.swing.JTextArea();
-        m_jVisible = new javax.swing.JCheckBox();
         m_Ncx = new javax.swing.JLabel();
         m_Name3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        m_jVisible = new eu.hansolo.custom.SteelCheckBox();
 
         m_jBreakName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
@@ -175,8 +175,6 @@ public final class BreaksView extends javax.swing.JPanel implements EditorRecord
         m_jBreakDescription.setLineWrap(true);
         m_jBreakDescription.setRows(5);
         jScrollPane1.setViewportView(m_jBreakDescription);
-
-        m_jVisible.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         m_Ncx.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_Ncx.setText(AppLocal.getIntString("label.epm.visible")); // NOI18N
@@ -187,6 +185,8 @@ public final class BreaksView extends javax.swing.JPanel implements EditorRecord
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jLabel1.setText(bundle.getString("label.epm.employee")); // NOI18N
+
+        m_jVisible.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -199,10 +199,10 @@ public final class BreaksView extends javax.swing.JPanel implements EditorRecord
                     .addComponent(m_Name3, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                     .addComponent(m_Ncx, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(m_jVisible)
-                    .addComponent(m_jBreakName)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(m_jBreakName, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jVisible, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(214, 214, 214))
         );
         layout.setVerticalGroup(
@@ -213,16 +213,14 @@ public final class BreaksView extends javax.swing.JPanel implements EditorRecord
                     .addComponent(m_jBreakName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(m_Ncx, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jVisible, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(m_Ncx, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Name3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(m_jVisible, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(m_Name3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -234,6 +232,6 @@ public final class BreaksView extends javax.swing.JPanel implements EditorRecord
     private javax.swing.JLabel m_Ncx;
     private javax.swing.JTextArea m_jBreakDescription;
     private javax.swing.JTextField m_jBreakName;
-    private javax.swing.JCheckBox m_jVisible;
+    private eu.hansolo.custom.SteelCheckBox m_jVisible;
     // End of variables declaration//GEN-END:variables
 }

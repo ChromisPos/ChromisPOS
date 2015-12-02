@@ -34,6 +34,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.AltEncrypter;
@@ -57,12 +58,12 @@ public class PaymentGatewayPlanetauthorize implements PaymentGateway {
      * @param props
      */
     public PaymentGatewayPlanetauthorize (AppProperties props) {
-        m_sCommerceID = props.getProperty("payment.commerceid");
+        m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
 
         AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
-        this.m_sCommercePassword = cypher.decrypt(props.getProperty("payment.commercepassword").substring(6));
+        this.m_sCommercePassword = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6));
 
-        m_bTestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
     }
     
     /**

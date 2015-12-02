@@ -211,7 +211,6 @@ public class JMessageDialog extends javax.swing.JDialog {
         jcmdMore.setEnabled(false);
         jscrException.setVisible(true);
         setSize(getWidth(), 310);
-// JG 25 May 2013 change for JDK 7
         validate();
 //        validateTree();
         

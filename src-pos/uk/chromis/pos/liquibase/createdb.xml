@@ -1574,7 +1574,7 @@
             <column name="NAME" type="varchar(255)"/>
             <column name="TICKETID" type="varchar(255)"/>
             <column name="PRODUCTID" type="varchar(255)"/>
-            <column name="PRODUCTname" type="varchar(255)"/>
+            <column name="PRODUCTNAME" type="varchar(255)"/>
             <column name="UNITS" type="double precision">
                 <constraints nullable="false"/>
             </column>

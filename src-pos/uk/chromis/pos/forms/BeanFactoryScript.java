@@ -65,7 +65,6 @@ public class BeanFactoryScript implements BeanFactoryApp {
             if (bean instanceof BeanFactoryApp) {
                 ((BeanFactoryApp) bean).init(app);
             }
-// JG 16 May use multicatch
         } catch (ScriptException | IOException e) {
             throw new BeanFactoryException(e);
         }     

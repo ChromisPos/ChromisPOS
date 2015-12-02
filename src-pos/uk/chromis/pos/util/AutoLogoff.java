@@ -43,7 +43,7 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // create a basic timer instance
     private AutoLogoff() {
-        LogoffTimer = new Timer(100000, action);
+        LogoffTimer = new Timer(10000, action);
         this.eventMask = USER_EVENTS;
         LogoffTimer.setInitialDelay(100);
     }
@@ -71,16 +71,20 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
      * 
      */
     public void start() {
-        running = true;
-        LogoffTimer.setRepeats(false);
-        LogoffTimer.start();
-        Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
+        if (this.timer) {
+            this.running = true;
+            LogoffTimer.setRepeats(false);
+            LogoffTimer.start();
+            Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
+        }
     }
 
     public void stop() {
-        running = false;
-        Toolkit.getDefaultToolkit().removeAWTEventListener(this);
-        LogoffTimer.stop();
+        if (this.timer) {
+            this.running = false;
+            Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+            LogoffTimer.stop();
+        }
     }
 
     // Implement ActionListener for the Timer
@@ -91,42 +95,47 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // Implement AWTEventListener, all events are dispatched via this
     @Override
-    public void eventDispatched(AWTEvent e) {
-        if (isTimerRunning()) {
+    public void eventDispatched(AWTEvent e) { 
+        if ((this.timer) && this.isTimerRunning()) {
             LogoffTimer.restart();
         }
     }
 
-    // Implement a manually triggered restart
-    public void restart() {
-        LogoffTimer.restart();
-    }
-
-    // if the timer is not running restart it
-    public void setRunning() {
-        if (!isTimerRunning()) {
-            LogoffTimer.restart();
-        }
-    }
+ 
 
     // returns the timer state
     public boolean isTimerRunning() {
-        return (running);
+        if (this.timer) {
+            return (this.running);
+        } else {
+            return false;
+        }
     }
 
     // set the timer interval in seconds
     public void setTimer(Integer period, Action action) {
-        timer = true;
+        this.timer = true;
         if (isTimerRunning()) {
-            stop();
+            this.stop();
             LogoffTimer = new Timer(period, action);
-            start();
+            LogoffTimer.start();
         } else {
             LogoffTimer = new Timer(period, action);
+            LogoffTimer.start();
         }
     }
 
-    public void removeTimer(){
-        timer = false;
+    public void activateTimer() {
+      //  System.out.println("activate");
+        this.timer = true; 
+        this.running = true;
+        this.start();
+    }
+
+    public void deactivateTimer() {
+     //   System.out.println("deactivate");
+        this.stop();
+        this.running = false;
+        this.timer = false;
     }
 }

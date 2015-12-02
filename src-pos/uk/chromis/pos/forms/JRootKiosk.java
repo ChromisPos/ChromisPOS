@@ -63,7 +63,7 @@ public class JRootKiosk extends javax.swing.JFrame implements AppMessage {
         
         if (m_rootapp.initApp(m_props)) {
             
-            if ("true".equals(props.getProperty("machine.uniqueinstance"))) {
+            if ("true".equals(AppConfig.getInstance().getProperty("machine.uniqueinstance"))) {
                 // Register the running application
                 try {
                     m_instmanager = new InstanceManager(this);

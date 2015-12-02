@@ -126,7 +126,7 @@ public class JFind extends JDialog {
         m_jWhere = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         m_jMatch = new javax.swing.JComboBox();
-        m_jMatchCase = new javax.swing.JCheckBox();
+        m_jMatchCase = new eu.hansolo.custom.SteelCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jcmdOK = new javax.swing.JButton();
         jcmdCancel = new javax.swing.JButton();
@@ -137,46 +137,51 @@ public class JFind extends JDialog {
 
         jPanel1.setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText(LocalRes.getIntString("label.findwhat")); // NOI18N
         jPanel1.add(jLabel1);
         jLabel1.setBounds(10, 20, 100, 25);
 
-        m_jFind.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jFind.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel1.add(m_jFind);
         m_jFind.setBounds(110, 20, 230, 25);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText(LocalRes.getIntString("label.where")); // NOI18N
         jPanel1.add(jLabel2);
         jLabel2.setBounds(10, 50, 100, 25);
 
-        m_jWhere.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        m_jWhere.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jPanel1.add(m_jWhere);
         m_jWhere.setBounds(110, 50, 230, 25);
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setText(LocalRes.getIntString("label.match")); // NOI18N
         jPanel1.add(jLabel3);
         jLabel3.setBounds(10, 80, 100, 25);
 
-        m_jMatch.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        m_jMatch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jPanel1.add(m_jMatch);
         m_jMatch.setBounds(110, 80, 230, 25);
 
-        m_jMatchCase.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        m_jMatchCase.setText(LocalRes.getIntString("label.casesensitive")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jMatchCase.setText(bundle.getString("label.casesensitive")); // NOI18N
+        m_jMatchCase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jMatchCaseActionPerformed(evt);
+            }
+        });
         jPanel1.add(m_jMatchCase);
-        m_jMatchCase.setBounds(110, 110, 230, 25);
+        m_jMatchCase.setBounds(110, 110, 230, 30);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jcmdOK.setText(LocalRes.getIntString("button.ok")); // NOI18N
-        jcmdOK.setMaximumSize(new java.awt.Dimension(65, 33));
-        jcmdOK.setMinimumSize(new java.awt.Dimension(65, 33));
-        jcmdOK.setPreferredSize(new java.awt.Dimension(65, 33));
+        jcmdOK.setMaximumSize(new java.awt.Dimension(85, 33));
+        jcmdOK.setMinimumSize(new java.awt.Dimension(85, 33));
+        jcmdOK.setPreferredSize(new java.awt.Dimension(85, 33));
         jcmdOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcmdOKActionPerformed(evt);
@@ -185,7 +190,10 @@ public class JFind extends JDialog {
         jPanel2.add(jcmdOK);
 
         jcmdCancel.setText(LocalRes.getIntString("button.cancel")); // NOI18N
-        jcmdCancel.setPreferredSize(new java.awt.Dimension(65, 33));
+        jcmdCancel.setMaximumSize(new java.awt.Dimension(85, 23));
+        jcmdCancel.setMinimumSize(new java.awt.Dimension(85, 23));
+        jcmdCancel.setName(""); // NOI18N
+        jcmdCancel.setPreferredSize(new java.awt.Dimension(85, 33));
         jcmdCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcmdCancelActionPerformed(evt);
@@ -195,8 +203,8 @@ public class JFind extends JDialog {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-434)/2, (screenSize.height-222)/2, 434, 222);
+        setSize(new java.awt.Dimension(434, 222));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jcmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdCancelActionPerformed
@@ -212,6 +220,10 @@ public class JFind extends JDialog {
         dispose();
         
     }//GEN-LAST:event_jcmdOKActionPerformed
+
+    private void m_jMatchCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jMatchCaseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_m_jMatchCaseActionPerformed
     
 //    /**
 //     * @param args the command line arguments
@@ -241,7 +253,7 @@ public class JFind extends JDialog {
     private javax.swing.JButton jcmdOK;
     private javax.swing.JTextField m_jFind;
     private javax.swing.JComboBox m_jMatch;
-    private javax.swing.JCheckBox m_jMatchCase;
+    private eu.hansolo.custom.SteelCheckBox m_jMatchCase;
     private javax.swing.JComboBox m_jWhere;
     // End of variables declaration//GEN-END:variables
     

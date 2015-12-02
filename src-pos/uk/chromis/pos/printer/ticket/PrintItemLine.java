@@ -59,7 +59,7 @@ public class PrintItemLine implements PrintItem {
         this.font = font;
         this.fontheight = fontheight;
 
-// JG 16 May 12 use diamond inference
+
         m_atext = new ArrayList<>();
     }
 

@@ -33,7 +33,7 @@ import uk.chromis.pos.forms.AppView;
  */
 public class JParamsComposed extends javax.swing.JPanel implements ReportEditorCreator {
     
-// JG 16 May 12 use diamond inference
+
     private List<ReportEditorCreator> editors = new ArrayList<>();
     
     /** Creates new form JParamsComposed */

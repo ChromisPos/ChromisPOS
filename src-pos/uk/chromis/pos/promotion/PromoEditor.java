@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.promotion;
 
 import com.mysql.jdbc.Connection;
@@ -44,6 +43,7 @@ import uk.chromis.data.loader.Session;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
@@ -68,10 +68,13 @@ public class PromoEditor extends JPanel implements EditorRecord {
     private DataLogicSales m_dlSales;
     private Session s;
 
-    /** Creates new form PlacesEditor
+    /**
+     * Creates new form PlacesEditor
+     *
      * @param app
      * @param dlSales
-     * @param dirty */
+     * @param dirty
+     */
     public PromoEditor(AppView app, DataLogicSales dlSales, DirtyManager dirty) {
         m_dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
         initComponents();
@@ -103,13 +106,13 @@ public class PromoEditor extends JPanel implements EditorRecord {
 
         m_jType.addActionListener(dirty);
         m_jType.addActionListener(new java.awt.event.ActionListener() {
- 
+
             @Override
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onSelectPromoType(evt);
             }
         });
-        
+
         /*btnValidTo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnValidToActionPerformed(evt);
@@ -121,7 +124,6 @@ public class PromoEditor extends JPanel implements EditorRecord {
                 btnValidToActionPerformed(evt);
             }
         });*/
-
         writeValueEOF();
     }
 
@@ -150,9 +152,8 @@ public class PromoEditor extends JPanel implements EditorRecord {
     @Override
     public void writeValueEOF() {
 
-
         m_sID = null;
-/*        m_jName.setText(null);
+        /*        m_jName.setText(null);
         m_jTypeModel.setSelectedKey(null);
         m_jStartDate.setText(null);
         m_jEndDate.setText(null);
@@ -180,7 +181,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
         m_jStepAmount.setEnabled(false);
         //m_jStepQty.setEnabled(false);
         m_jBonusArticle.setEnabled(false);*/
-        
+
     }
 
     /**
@@ -206,8 +207,8 @@ public class PromoEditor extends JPanel implements EditorRecord {
         m_jBonusArticle.setText(null);
         m_jProdName.setText(null);
         m_jBonusProd.setText(null);
-        
-/*        m_jName.setEnabled(false);
+
+        /*        m_jName.setEnabled(false);
         m_jStartDate.setEnabled(false);
         m_jEndDate.setEnabled(false);
         m_jStartHour.setEnabled(false);
@@ -222,8 +223,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
         m_jBonusArticle.setEnabled(false);
         m_jType.setEnabled(true);
         * 
-        */
-
+         */
     }
 
     /**
@@ -268,7 +268,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
         }
 
 
-/*        m_jName.setEnabled(true);
+        /*        m_jName.setEnabled(true);
         m_jStartDate.setEnabled(false);
         m_jEndDate.setEnabled(false);
         //m_jStartHour.setEnabled(false);
@@ -282,7 +282,6 @@ public class PromoEditor extends JPanel implements EditorRecord {
         //m_jStepQty.setEnabled(false);
         m_jBonusArticle.setEnabled(false);
         m_jType.setEnabled(true);*/
-        
     }
 
     /**
@@ -291,7 +290,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
      */
     @Override
     public void writeValueEdit(Object value) {
-        
+
         Object[] promo = (Object[]) value;
         m_sID = Formats.STRING.formatValue(promo[0]);
         m_jName.setText(Formats.STRING.formatValue(promo[1]));
@@ -325,8 +324,8 @@ public class PromoEditor extends JPanel implements EditorRecord {
         } catch (BasicException ex) {
             Logger.getLogger(PromoEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-/*        m_jName.setEnabled(true);
+
+        /*        m_jName.setEnabled(true);
         m_jStartDate.setEnabled(false);
         m_jEndDate.setEnabled(false);
         //m_jStartHour.setEnabled(false);
@@ -339,15 +338,14 @@ public class PromoEditor extends JPanel implements EditorRecord {
         m_jStepAmount.setEnabled(false);
         //m_jStepQty.setEnabled(false);
         m_jType.setEnabled(true);*/
-
         Integer _type = new Integer(promo[8].toString());
-        
+
         switch (_type) {
 
             // discount in %
             case 1:
 //                jLabel13.setText("%");
-                
+
                 //m_jName.setText(null);
                 //m_jStartDate.setText(null);
                 //m_jEndDate.setText(null);
@@ -363,13 +361,13 @@ public class PromoEditor extends JPanel implements EditorRecord {
                 m_jStepQty.setText(null);
                 //m_jBonusArticle.setText(null);
                 m_jBonusProd.setText(null);
-                
+
                 break;
 
             // discount in $
             case 2:
 //                jLabel13.setText("$");
-                
+
                 //m_jName.setText(null);
                 //m_jStartDate.setText(null);
                 //m_jEndDate.setText(null);
@@ -385,13 +383,13 @@ public class PromoEditor extends JPanel implements EditorRecord {
                 m_jStepQty.setText(null);
                 m_jBonusArticle.setText(null);
                 m_jBonusProd.setText(null);
-                
+
                 break;
 
             // Gift / Coupon
             case 3:
 //                jLabel13.setText("");
-                
+
                 //m_jName.setText(null);
                 //m_jStartDate.setText(null);
                 //m_jEndDate.setText(null);
@@ -407,13 +405,13 @@ public class PromoEditor extends JPanel implements EditorRecord {
                 //m_jStepQty.setText(null);
                 //m_jBonusArticle.setText(null);
                 //m_jBonusProd.setText(null);
-                
+
                 break;
 
             //Get X% of discount on the cheapest article of a category
             case 4:
 //                jLabel13.setText("%");
-                
+
                 //m_jName.setText(null);
                 //m_jStartDate.setText(null);
                 //m_jEndDate.setText(null);
@@ -429,13 +427,13 @@ public class PromoEditor extends JPanel implements EditorRecord {
                 m_jStepQty.setText(null);
                 m_jBonusArticle.setText(null);
                 m_jBonusProd.setText(null);
-                
+
                 break;
 
             //Mix'n'Match (Buy 2 get 3)  
             case 5:
 //                jLabel13.setText("");
-                
+
                 //m_jName.setText(null);
                 //m_jStartDate.setText(null);
                 //m_jEndDate.setText(null);
@@ -451,13 +449,13 @@ public class PromoEditor extends JPanel implements EditorRecord {
                 //m_jStepQty.setText(null);
                 m_jBonusArticle.setText(null);
                 m_jBonusProd.setText(null);
-                
+
                 break;
-                
+
             // discount in % by category
             case 6:
 //                jLabel13.setText("%");
-                
+
                 //m_jName.setText(null);
                 //m_jStartDate.setText(null);
                 //m_jEndDate.setText(null);
@@ -473,7 +471,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
                 m_jStepQty.setText(null);
                 //m_jBonusArticle.setText(null);
                 m_jBonusProd.setText(null);
-                
+
                 break;
 
         }
@@ -482,15 +480,12 @@ public class PromoEditor extends JPanel implements EditorRecord {
 
     /**
      *
-     * @return
-     * @throws BasicException
+     * @return @throws BasicException
      */
     @Override
     public Object createValue() throws BasicException {
 
-
         // Here we will do the integrity check of the promotion, depending on the selected discount value
-
         if (m_jTypeModel.getSelectedKey() != null) {
 
             Integer _type = new Integer(m_jTypeModel.getSelectedKey().toString());
@@ -580,7 +575,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
                         return null;
                     }
                     break;
-                    
+
                 //6 --> Discount in %
                 case 6:
 
@@ -589,7 +584,6 @@ public class PromoEditor extends JPanel implements EditorRecord {
                         return null;
                     }
                     break;
-
 
             }
         } else {
@@ -618,9 +612,7 @@ public class PromoEditor extends JPanel implements EditorRecord {
         promo[15] = Formats.STRING.parseValue(m_jBonusProd.getText());
         //promo[15] = Formats.STRING.parseValue(_DescBonusArticle);
 
-
         return promo;
-
 
     }
 
@@ -632,297 +624,292 @@ public class PromoEditor extends JPanel implements EditorRecord {
     public Component getComponent() {
         return this;
     }
-    
 
-private void onSelectPromoType(java.awt.event.ActionEvent evt) {                                   
+    private void onSelectPromoType(java.awt.event.ActionEvent evt) {
 
-    if (m_jTypeModel.getSelectedKey() != null) {
+        if (m_jTypeModel.getSelectedKey() != null) {
 
-        Integer _type = new Integer(m_jTypeModel.getSelectedKey().toString());
-        
-        if(m_jCategory.getText().isEmpty()) {
-            m_jCatName.setSelectedIndex(-1);
-        }
+            Integer _type = new Integer(m_jTypeModel.getSelectedKey().toString());
 
-        m_jAmount.setText("");
-        m_jBonusArticle.setText("");
-        //m_jCategory.setText("");
-        m_jStepQty.setText("");
-        m_jMin.setText("");
-        m_jMax.setText("");
-        m_jProdName.setText("");
-        m_jBonusProd.setText("");
-        m_jProdName.setText(null);
-        m_jBonusProd.setText(null);
+            if (m_jCategory.getText().isEmpty()) {
+                m_jCatName.setSelectedIndex(-1);
+            }
 
-        switch (_type) {
+            m_jAmount.setText("");
+            m_jBonusArticle.setText("");
+            //m_jCategory.setText("");
+            m_jStepQty.setText("");
+            m_jMin.setText("");
+            m_jMax.setText("");
+            m_jProdName.setText("");
+            m_jBonusProd.setText("");
+            m_jProdName.setText(null);
+            m_jBonusProd.setText(null);
 
-            // discount in %
-            case 1:
+            switch (_type) {
+
+                // discount in %
+                case 1:
 //                jLabel13.setText("%");
-                
-                //m_jName.setText(null);
-                //m_jStartDate.setText(null);
-                //m_jEndDate.setText(null);
-                //m_jStartHour.setText(null);
-                //m_jEndHour.setText(null);
-                //m_jTypeModel.setSelectedKey(null);
-                //m_jArticle.setText(null);
-                m_jCategory.setText(null);
-                //m_jAmount.setText(null);
-                m_jMin.setText(null);
-                m_jMax.setText(null);
-                m_jStepAmount.setText(null);
-                m_jStepQty.setText(null);
-                m_jBonusArticle.setText(null);
-                m_jBonusProd.setText(null);
-                
-                break;
 
-            // discount value
-            case 2:
+                    //m_jName.setText(null);
+                    //m_jStartDate.setText(null);
+                    //m_jEndDate.setText(null);
+                    //m_jStartHour.setText(null);
+                    //m_jEndHour.setText(null);
+                    //m_jTypeModel.setSelectedKey(null);
+                    //m_jArticle.setText(null);
+                    m_jCategory.setText(null);
+                    //m_jAmount.setText(null);
+                    m_jMin.setText(null);
+                    m_jMax.setText(null);
+                    m_jStepAmount.setText(null);
+                    m_jStepQty.setText(null);
+                    m_jBonusArticle.setText(null);
+                    m_jBonusProd.setText(null);
+
+                    break;
+
+                // discount value
+                case 2:
 //                jLabel13.setText("Value");
-                
-                //m_jName.setText(null);
-                //m_jStartDate.setText(null);
-                //m_jEndDate.setText(null);
-                //m_jStartHour.setText(null);
-                //m_jEndHour.setText(null);
-                //m_jTypeModel.setSelectedKey(null);
-                //m_jArticle.setText(null);
-                m_jCategory.setText(null);
-                //m_jAmount.setText(null);
-                m_jMin.setText(null);
-                m_jMax.setText(null);
-                m_jStepAmount.setText(null);
-                m_jStepQty.setText(null);
-                m_jBonusArticle.setText(null);
-                m_jBonusProd.setText(null);
-                
-                break;
 
-            // Gift / Coupon
-            case 3:
+                    //m_jName.setText(null);
+                    //m_jStartDate.setText(null);
+                    //m_jEndDate.setText(null);
+                    //m_jStartHour.setText(null);
+                    //m_jEndHour.setText(null);
+                    //m_jTypeModel.setSelectedKey(null);
+                    //m_jArticle.setText(null);
+                    m_jCategory.setText(null);
+                    //m_jAmount.setText(null);
+                    m_jMin.setText(null);
+                    m_jMax.setText(null);
+                    m_jStepAmount.setText(null);
+                    m_jStepQty.setText(null);
+                    m_jBonusArticle.setText(null);
+                    m_jBonusProd.setText(null);
+
+                    break;
+
+                // Gift / Coupon
+                case 3:
 //                jLabel13.setText("");
-                
-                //m_jName.setText(null);
-                //m_jStartDate.setText(null);
-                //m_jEndDate.setText(null);
-                //m_jStartHour.setText(null);
-                //m_jEndHour.setText(null);
-                //m_jTypeModel.setSelectedKey(null);
-                //m_jArticle.setText(null);
-                m_jCategory.setText(null);
-                m_jAmount.setText(null);
-                //m_jMin.setText(null);
-                //m_jMax.setText(null);
-                //m_jStepAmount.setText(null);
-                //m_jStepQty.setText(null);
-                //m_jBonusArticle.setText(null);
-                //m_jBonusProd.setText(null);
-                
-                break;
 
-            //Get X% of discount on the cheapest article of a category
-            case 4:
+                    //m_jName.setText(null);
+                    //m_jStartDate.setText(null);
+                    //m_jEndDate.setText(null);
+                    //m_jStartHour.setText(null);
+                    //m_jEndHour.setText(null);
+                    //m_jTypeModel.setSelectedKey(null);
+                    //m_jArticle.setText(null);
+                    m_jCategory.setText(null);
+                    m_jAmount.setText(null);
+                    //m_jMin.setText(null);
+                    //m_jMax.setText(null);
+                    //m_jStepAmount.setText(null);
+                    //m_jStepQty.setText(null);
+                    //m_jBonusArticle.setText(null);
+                    //m_jBonusProd.setText(null);
+
+                    break;
+
+                //Get X% of discount on the cheapest article of a category
+                case 4:
 //                jLabel13.setText("%");
 
-                //m_jName.setText(null);
-                //m_jStartDate.setText(null);
-                //m_jEndDate.setText(null);
-                //m_jStartHour.setText(null);
-                //m_jEndHour.setText(null);
-                //m_jTypeModel.setSelectedKey(null);
-                m_jArticle.setText(null);
-                //m_jCategory.setText(null);
-                //m_jAmount.setText(null);
-                //m_jMin.setText(null);
-                //m_jMax.setText(null);
-                m_jStepAmount.setText(null);
-                m_jStepQty.setText(null);
-                m_jBonusArticle.setText(null);
-                m_jBonusProd.setText(null);
-                
-                break;
+                    //m_jName.setText(null);
+                    //m_jStartDate.setText(null);
+                    //m_jEndDate.setText(null);
+                    //m_jStartHour.setText(null);
+                    //m_jEndHour.setText(null);
+                    //m_jTypeModel.setSelectedKey(null);
+                    m_jArticle.setText(null);
+                    //m_jCategory.setText(null);
+                    //m_jAmount.setText(null);
+                    //m_jMin.setText(null);
+                    //m_jMax.setText(null);
+                    m_jStepAmount.setText(null);
+                    m_jStepQty.setText(null);
+                    m_jBonusArticle.setText(null);
+                    m_jBonusProd.setText(null);
 
-            //Mix'n'Match (Buy 2 get 3)  
-            case 5:
+                    break;
+
+                //Mix'n'Match (Buy 2 get 3)  
+                case 5:
 //                jLabel13.setText("");
-                
-                //m_jName.setText(null);
-                //m_jStartDate.setText(null);
-                //m_jEndDate.setText(null);
-                //m_jStartHour.setText(null);
-                //m_jEndHour.setText(null);
-                //m_jTypeModel.setSelectedKey(null);
-                //m_jArticle.setText(null);
-                m_jCategory.setText(null);
-                m_jAmount.setText(null);
-                //m_jMin.setText(null);
-                //m_jMax.setText(null);
-                m_jStepAmount.setText(null);
-                //m_jStepQty.setText(null);
-                m_jBonusArticle.setText(null);
-                m_jBonusProd.setText(null);
-                
-                break;
-                
-            // discount in % by category
-            case 6:
+
+                    //m_jName.setText(null);
+                    //m_jStartDate.setText(null);
+                    //m_jEndDate.setText(null);
+                    //m_jStartHour.setText(null);
+                    //m_jEndHour.setText(null);
+                    //m_jTypeModel.setSelectedKey(null);
+                    //m_jArticle.setText(null);
+                    m_jCategory.setText(null);
+                    m_jAmount.setText(null);
+                    //m_jMin.setText(null);
+                    //m_jMax.setText(null);
+                    m_jStepAmount.setText(null);
+                    //m_jStepQty.setText(null);
+                    m_jBonusArticle.setText(null);
+                    m_jBonusProd.setText(null);
+
+                    break;
+
+                // discount in % by category
+                case 6:
 //                jLabel13.setText("%");
-                
-                //m_jName.setText(null);
-                //m_jStartDate.setText(null);
-                //m_jEndDate.setText(null);
-                //m_jStartHour.setText(null);
-                //m_jEndHour.setText(null);
-                //m_jTypeModel.setSelectedKey(null);
-                //m_jArticle.setText(null);
-                //m_jCategory.setText(null);
-                //m_jAmount.setText(null);
+
+                    //m_jName.setText(null);
+                    //m_jStartDate.setText(null);
+                    //m_jEndDate.setText(null);
+                    //m_jStartHour.setText(null);
+                    //m_jEndHour.setText(null);
+                    //m_jTypeModel.setSelectedKey(null);
+                    //m_jArticle.setText(null);
+                    //m_jCategory.setText(null);
+                    //m_jAmount.setText(null);
+                    m_jMin.setText(null);
+                    m_jMax.setText(null);
+                    m_jStepAmount.setText(null);
+                    m_jStepQty.setText(null);
+                    //m_jBonusArticle.setText(null);
+                    m_jBonusProd.setText(null);
+
+                    break;
+
+            }
+        }
+
+    }
+
+    private void OnCheckAmount(java.awt.event.FocusEvent evt) {
+
+        if (!m_jAmount.getText().equals("")) {
+            if (!isNumeric(m_jAmount.getText())) {
+                JOptionPane.showConfirmDialog(this, "The Amount is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
+                m_jAmount.setText(null);
+            }
+        }
+    }
+
+    private void OnCheckMin(java.awt.event.FocusEvent evt) {
+
+        if (!m_jMin.getText().equals("")) {
+            if (!isNumeric(m_jMin.getText())) {
+                JOptionPane.showConfirmDialog(this, "The minimum is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
                 m_jMin.setText(null);
+                return;
+            }
+        }
+        if ((!m_jMin.getText().equals("")) && (!m_jMax.getText().equals(""))) {
+            Integer _min = new Integer(m_jMin.getText());
+            Integer _max = new Integer(m_jMax.getText());
+
+            if (_min > _max) {
+                JOptionPane.showConfirmDialog(this, "The minimum can't be greater than the maximum", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
+                m_jMin.setText(null);
+            }
+        }
+
+    }
+
+    private void OnCheckMax(java.awt.event.FocusEvent evt) {
+
+        if (!m_jMax.getText().equals("")) {
+            if (!isNumeric(m_jMax.getText())) {
+                JOptionPane.showConfirmDialog(this, "The maximum is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
                 m_jMax.setText(null);
+                return;
+            }
+        }
+        if ((!m_jMin.getText().equals("")) && (!m_jMax.getText().equals(""))) {
+            Integer _min = new Integer(m_jMin.getText());
+            Integer _max = new Integer(m_jMax.getText());
+
+            if (_max < _min) {
+                JOptionPane.showConfirmDialog(this, "The minimum can't be greater than the maximum", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
+                m_jMin.setText(null);
+            }
+        }
+
+    }
+
+    private void OnCheckQuantityStep(java.awt.event.FocusEvent evt) {
+
+        if (!m_jStepAmount.getText().equals("")) {
+            if (!isNumeric(m_jStepAmount.getText())) {
+                JOptionPane.showConfirmDialog(this, "The step is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
                 m_jStepAmount.setText(null);
+            }
+        }
+
+    }
+
+    private void OnCheckDiscountStep(java.awt.event.FocusEvent evt) {
+
+        if (!m_jStepQty.getText().equals("")) {
+            if (!isNumeric(m_jStepQty.getText())) {
+                JOptionPane.showConfirmDialog(this, "The step is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
                 m_jStepQty.setText(null);
-                //m_jBonusArticle.setText(null);
-                m_jBonusProd.setText(null);
-                
-                break;
-
+            }
         }
+
     }
 
+    private void OnCheckBonus(java.awt.event.FocusEvent evt) {
+        if (!m_jBonusArticle.getText().equals("")) {
 
-}                                  
-
-private void OnCheckAmount(java.awt.event.FocusEvent evt) {                               
-
-    if (!m_jAmount.getText().equals("")) {
-        if (!isNumeric(m_jAmount.getText())) {
-            JOptionPane.showConfirmDialog(this, "The Amount is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-            m_jAmount.setText(null);
-        }
-    }
-}                              
-
-private void OnCheckMin(java.awt.event.FocusEvent evt) {                            
-
-    if (!m_jMin.getText().equals("")) {
-        if (!isNumeric(m_jMin.getText())) {
-            JOptionPane.showConfirmDialog(this, "The minimum is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-            m_jMin.setText(null);
-            return;
-        }
-    }
-    if ((!m_jMin.getText().equals("")) && (!m_jMax.getText().equals(""))) {
-        Integer _min = new Integer(m_jMin.getText());
-        Integer _max = new Integer(m_jMax.getText());
-
-        if (_min > _max) {
-            JOptionPane.showConfirmDialog(this, "The minimum can't be greater than the maximum", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-            m_jMin.setText(null);
-        }
-    }
-
-}                           
-
-private void OnCheckMax(java.awt.event.FocusEvent evt) {                            
-
-
-    if (!m_jMax.getText().equals("")) {
-        if (!isNumeric(m_jMax.getText())) {
-            JOptionPane.showConfirmDialog(this, "The maximum is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-            m_jMax.setText(null);
-            return;
-        }
-    }
-    if ((!m_jMin.getText().equals("")) && (!m_jMax.getText().equals(""))) {
-        Integer _min = new Integer(m_jMin.getText());
-        Integer _max = new Integer(m_jMax.getText());
-
-        if (_max < _min) {
-            JOptionPane.showConfirmDialog(this, "The minimum can't be greater than the maximum", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-            m_jMin.setText(null);
-        }
-    }
-
-
-}                           
-
-private void OnCheckQuantityStep(java.awt.event.FocusEvent evt) {                                     
-
-    if (!m_jStepAmount.getText().equals("")) {
-        if (!isNumeric(m_jStepAmount.getText())) {
-            JOptionPane.showConfirmDialog(this, "The step is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-            m_jStepAmount.setText(null);
-        }
-    }
-
-
-}                                    
-
-private void OnCheckDiscountStep(java.awt.event.FocusEvent evt) {                                     
-
-    if (!m_jStepQty.getText().equals("")) {
-        if (!isNumeric(m_jStepQty.getText())) {
-            JOptionPane.showConfirmDialog(this, "The step is not correct", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-            m_jStepQty.setText(null);
-        }
-    }
-
-}                                    
-
-private void OnCheckBonus(java.awt.event.FocusEvent evt) {
-    if (!m_jBonusArticle.getText().equals("")) {
-
-        try {
             try {
-                ProductInfoExt _pie = dls.getProductInfoByReference(m_jBonusArticle.getText());
-                m_jBonusArticle.setText(_pie.getID());
-                _DescBonusArticle = _pie.getName();
-            } catch (NullPointerException e) {
+                try {
+                    ProductInfoExt _pie = dls.getProductInfoByReference(m_jBonusArticle.getText());
+                    m_jBonusArticle.setText(_pie.getID());
+                    _DescBonusArticle = _pie.getName();
+                } catch (NullPointerException e) {
+                    JOptionPane.showConfirmDialog(this, "This Product doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
+                }
+
+            } catch (BasicException e) {
                 JOptionPane.showConfirmDialog(this, "This Product doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
             }
 
-        } catch (BasicException e) {
-            JOptionPane.showConfirmDialog(this, "This Product doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
         }
-
     }
-}
 
-private void OnCheckArticle(java.awt.event.FocusEvent evt) {
+    private void OnCheckArticle(java.awt.event.FocusEvent evt) {
 
-    if (!m_jArticle.getText().equals("")) {
-        try {
+        if (!m_jArticle.getText().equals("")) {
             try {
-                ProductInfoExt _pie = dls.getProductInfoByReference(m_jArticle.getText());
-                m_jArticle.setText(_pie.getID());
-            } catch (NullPointerException e) {
+                try {
+                    ProductInfoExt _pie = dls.getProductInfoByReference(m_jArticle.getText());
+                    m_jArticle.setText(_pie.getID());
+                } catch (NullPointerException e) {
+                    JOptionPane.showConfirmDialog(this, "This Product doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (BasicException e) {
                 JOptionPane.showConfirmDialog(this, "This Product doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
             }
-        } catch (BasicException e) {
-            JOptionPane.showConfirmDialog(this, "This Product doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
+
         }
 
     }
 
-}
-
-private void OnCheckCategory(java.awt.event.FocusEvent evt) {
-    if (!m_jCategory.getText().equals("")) {
-        try {
+    private void OnCheckCategory(java.awt.event.FocusEvent evt) {
+        if (!m_jCategory.getText().equals("")) {
             try {
-                CategoryInfo _ci = dls.getCategoryInfo(m_jCategory.getText());
-            } catch (NullPointerException e) {
+                try {
+                    CategoryInfo _ci = dls.getCategoryInfo(m_jCategory.getText());
+                } catch (NullPointerException e) {
+                    JOptionPane.showConfirmDialog(this, "This Category doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (BasicException e) {
                 JOptionPane.showConfirmDialog(this, "This Category doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
             }
-        } catch (BasicException e) {
-            JOptionPane.showConfirmDialog(this, "This Category doesn't exist", AppLocal.getIntString("Invalid Entry"), JOptionPane.WARNING_MESSAGE);
-        }
 
+        }
     }
-}
 
     private boolean isNumeric(String test) {
         try {
@@ -1243,54 +1230,52 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
 
     private void btnValidFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidFromActionPerformed
 
-    Date date;
-    try {
-        date = (Date) Formats.TIMESTAMP.parseValue(m_jStartDate.getText());
-    } catch (BasicException e) {
-        date = null;
-    }
-    date = JCalendarDialog.showCalendarTimeHours(this, date);
-    if (date != null) {
+        Date date;
+        try {
+            date = (Date) Formats.TIMESTAMP.parseValue(m_jStartDate.getText());
+        } catch (BasicException e) {
+            date = null;
+        }
+        date = JCalendarDialog.showCalendarTimeHours(this, date);
+        if (date != null) {
 
+            DateFormat formatter_date;
+            formatter_date = new SimpleDateFormat("yyyyMMdd");
 
-        DateFormat formatter_date;
-        formatter_date = new SimpleDateFormat("yyyyMMdd");
+            DateFormat formatter_heure;
+            formatter_heure = new SimpleDateFormat("HH");
 
-        DateFormat formatter_heure;
-        formatter_heure = new SimpleDateFormat("HH");
-
-        String _date = formatter_date.format(date);
-        String _heure = formatter_heure.format(date);
-        m_jStartDate.setText(Formats.STRING.formatValue(_date));
-        m_jStartHour.setText(Formats.STRING.formatValue(_heure));
-    }
+            String _date = formatter_date.format(date);
+            String _heure = formatter_heure.format(date);
+            m_jStartDate.setText(Formats.STRING.formatValue(_date));
+            m_jStartHour.setText(Formats.STRING.formatValue(_heure));
+        }
 
     }//GEN-LAST:event_btnValidFromActionPerformed
 
     private void btnValidToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidToActionPerformed
 
-    Date date;
-    try {
-        date = (Date) Formats.TIMESTAMP.parseValue(m_jEndDate.getText());
-    } catch (BasicException e) {
-        date = null;
-    }
-    date = JCalendarDialog.showCalendarTimeHours(this, date);
-    if (date != null) {
+        Date date;
+        try {
+            date = (Date) Formats.TIMESTAMP.parseValue(m_jEndDate.getText());
+        } catch (BasicException e) {
+            date = null;
+        }
+        date = JCalendarDialog.showCalendarTimeHours(this, date);
+        if (date != null) {
 
+            DateFormat formatter_date;
+            formatter_date = new SimpleDateFormat("yyyyMMdd");
 
-        DateFormat formatter_date;
-        formatter_date = new SimpleDateFormat("yyyyMMdd");
+            DateFormat formatter_heure;
+            formatter_heure = new SimpleDateFormat("HH");
 
-        DateFormat formatter_heure;
-        formatter_heure = new SimpleDateFormat("HH");
+            String _date = formatter_date.format(date);
+            String _heure = formatter_heure.format(date);
 
-        String _date = formatter_date.format(date);
-        String _heure = formatter_heure.format(date);
-
-        m_jEndDate.setText(Formats.STRING.formatValue(_date));
-        m_jEndHour.setText(Formats.STRING.formatValue(_heure));
-    }
+            m_jEndDate.setText(Formats.STRING.formatValue(_date));
+            m_jEndHour.setText(Formats.STRING.formatValue(_heure));
+        }
     }//GEN-LAST:event_btnValidToActionPerformed
 
     private void m_jSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jSearchActionPerformed
@@ -1328,33 +1313,33 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
     }//GEN-LAST:event_m_jCatNameActionPerformed
 
     private void m_jCategoryPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_m_jCategoryPropertyChange
-        if(m_jCategory.getText().isEmpty()) {
+        if (m_jCategory.getText().isEmpty()) {
             m_jCatName.setSelectedIndex(-1);
         }
     }//GEN-LAST:event_m_jCategoryPropertyChange
-   
+
     private void assignProduct(ProductInfoExt prod) {
 
-            if (prod == null) {
-                //m_jArticle.setText(null);
-                //Jt_articleid.setText(null);
-            } else {
-                m_jArticle.setText(prod.getID());
-            }
+        if (prod == null) {
+            //m_jArticle.setText(null);
+            //Jt_articleid.setText(null);
+        } else {
+            m_jArticle.setText(prod.getID());
+        }
 
     }
-    
+
     private void assignProduct1(ProductInfoExt prod) {
 
-            if (prod == null) {
-                //m_jBonusArticle.setText(null);
-                //jt_bonusid.setText(null);
-            } else {
-                m_jBonusArticle.setText(prod.getID());
-            }
+        if (prod == null) {
+            //m_jBonusArticle.setText(null);
+            //jt_bonusid.setText(null);
+        } else {
+            m_jBonusArticle.setText(prod.getID());
+        }
 
     }
-    
+
     private void getCatID(String name) throws BasicException {
         Connection connection;// = null;
         Statement statement;// = null;
@@ -1379,9 +1364,9 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
             resultSet = statement.executeQuery("SELECT * FROM CATEGORIES WHERE NAME = '" + name + "'");
             while (resultSet.next()) {
                 String id = resultSet.getString("ID");
-                
-                    m_jCategory.setText(id);
-                
+
+                m_jCategory.setText(id);
+
             }
 
             connection.close();
@@ -1391,10 +1376,9 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
             // Could not connect to the database
 //            System.out.println(e);
 
-
         }
-}
-    
+    }
+
     private void getCatName(String Id) throws BasicException {
         Connection connection;// = null;
         Statement statement;// = null;
@@ -1419,17 +1403,17 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
             resultSet = statement.executeQuery("SELECT * FROM CATEGORIES WHERE ID = '" + Id + "'");
             while (resultSet.next()) {
                 String name = resultSet.getString("NAME");
-                
-                int ii=m_jCatName.getItemCount();
-                for(int i=1; i<ii; i++){
+
+                int ii = m_jCatName.getItemCount();
+                for (int i = 1; i < ii; i++) {
                     String a = m_jCatModel.getElementAt(i).toString();
                     String b = name;
-                    if(a.equals(b)){
+                    if (a.equals(b)) {
                         //m_jCatModel.setSelectedKey(i);
                         m_jCatModel.setSelectedItem(name);
                     }
                 }
-                
+
             }
 
             connection.close();
@@ -1439,10 +1423,9 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
             // Could not connect to the database
 //            System.out.println(e);
 
-
         }
-}
-    
+    }
+
     private void getProdName(String Id) throws BasicException {
         Connection connection;// = null;
         Statement statement;// = null;
@@ -1477,10 +1460,9 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
             // Could not connect to the database
 //            System.out.println(e);
 
-
         }
-}
-    
+    }
+
     private void getBonusName(String Id) throws BasicException {
         Connection connection;// = null;
         Statement statement;// = null;
@@ -1515,10 +1497,9 @@ private void OnCheckCategory(java.awt.event.FocusEvent evt) {
             // Could not connect to the database
 //            System.out.println(e);
 
-
         }
-}
-    
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnValidFrom;
     private javax.swing.JButton btnValidTo;

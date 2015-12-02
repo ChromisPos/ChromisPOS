@@ -45,6 +45,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.AltEncrypter;
@@ -75,18 +76,18 @@ public class PaymentGatewayCaixa implements PaymentGateway {
      */
     public PaymentGatewayCaixa (AppProperties props) {
         AltEncrypter cypher = new AltEncrypter("cypherkey");
-        this.sCommerceSign = cypher.decrypt(props.getProperty("payment.commercesign").substring(6));
+        this.sCommerceSign = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercesign").substring(6));
         
-        this.m_bTestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        this.m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         
         //EUR, USD, GPB
         this.m_sCurrency = (Locale.getDefault().getCountry().isEmpty())
             ? Currency.getInstance("EUR").getCurrencyCode()
             : Currency.getInstance(Locale.getDefault()).getCurrencyCode();
         
-        this.sTerminal = props.getProperty("payment.terminal");
-        this.sMerchantCode = props.getProperty("payment.commerceid");
-        this.bSha = Boolean.valueOf(props.getProperty("payment.SHA")).booleanValue();
+        this.sTerminal = AppConfig.getInstance().getProperty("payment.terminal");
+        this.sMerchantCode = AppConfig.getInstance().getProperty("payment.commerceid");
+        this.bSha = AppConfig.getInstance().getBoolean("payment.SHA");
         
         ENDPOINTADDRESS = (m_bTestMode)
                 ? "https://sis-t.sermepa.es:25443/sis/operaciones"
@@ -118,11 +119,10 @@ public class PaymentGatewayCaixa implements PaymentGateway {
         //terminal = "1";
         //sign = "qwertyasdf0123456789";
         
-// JG 16 May 12 use StringBuilder in place of StringBuilder
+
         StringBuilder sb = new StringBuilder();
         String currency = "978"; //default euros
         String xml="";
-// JG 16 May 12 use switch
         switch (m_sCurrency) {
             case "USD":
                 currency = "840"; //dollars
@@ -173,7 +173,6 @@ public class PaymentGatewayCaixa implements PaymentGateway {
             "</DATOSENTRADA>";
         }
         
-// JG 16 May 12 use chain
         sb.append("entrada=").append(URLEncoder.encode(xml, "UTF-8"));
 
         // open secure connection
@@ -183,14 +182,12 @@ public class PaymentGatewayCaixa implements PaymentGateway {
         connection.setUseCaches(false);
 
         // not necessarily required but fixes a bug with some servers
-// JG 16 May 12 use try-with-resources
         connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
             try (DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
                 out.write(sb.toString().getBytes());
                 out.flush();
             }
             String sReturned;
-// JG 16 May 12 use try-with-resources            
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 sReturned = in.readLine();
             }
@@ -210,7 +207,6 @@ public class PaymentGatewayCaixa implements PaymentGateway {
                 } else {
                    
                     String sCode = (String) props.get("Ds_Response");
-// JG 16 May 12 use switch
                     switch (sCode) {
                             case "0101":
                                 payinfo.paymentError(AppLocal.getIntString("message.paymentnotauthorised"), "Card date expired");
@@ -258,7 +254,6 @@ public class PaymentGatewayCaixa implements PaymentGateway {
                         }
                     
                     sCode = (String)props.get("CODIGO");
-// JG 16 May 12 use switch
                     switch (sCode) {
                             case "SIS0054":
                                 payinfo.paymentError(AppLocal.getIntString("message.paymentnotauthorised"), "Pedido repetido.");
@@ -279,7 +274,6 @@ public class PaymentGatewayCaixa implements PaymentGateway {
                 payinfo.paymentError(lpp.getResult(), "");
             }
         } 
-// JG 16 May 12 use multicatch
         } catch (UnsupportedEncodingException | MalformedURLException eUE) {
             payinfo.paymentError(AppLocal.getIntString("message.paymentexceptionservice"), eUE.getMessage());
         } catch(IOException e){
@@ -349,7 +343,6 @@ public class PaymentGatewayCaixa implements PaymentGateway {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         try {
-// JG 16 May 12 use switch                
             switch (qName) {
                     case "CODIGO":
                         props.put("CODIGO", URLDecoder.decode(text, "UTF-8"));

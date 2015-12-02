@@ -20,7 +20,7 @@
 package uk.chromis.pos.config;
 
 import java.awt.Component;
-import uk.chromis.pos.forms.AppConfig;
+
 
 /**
  *
@@ -32,13 +32,13 @@ public interface PanelConfig {
      *
      * @param config
      */
-    public void loadProperties(AppConfig config);    
+    public void loadProperties();    
 
     /**
      *
      * @param config
      */
-    public void saveProperties(AppConfig config);   
+    public void saveProperties();   
 
     /**
      *

@@ -47,7 +47,6 @@ public class SerializerReadClass implements SerializerRead {
             SerializableRead sr = (SerializableRead) m_clazz.newInstance();
             sr.readValues(dr);
             return sr;
-// JG 16 May 12 use multicatch
         } catch (java.lang.InstantiationException | IllegalAccessException | ClassCastException eIns) {
             return null;
         }
