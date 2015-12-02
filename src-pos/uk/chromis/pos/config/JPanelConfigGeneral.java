@@ -36,28 +36,30 @@ import uk.chromis.pos.util.DirectoryEvent;
 
 /**
  *
- *   
+ *
  */
-
 public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConfig {
 
     private final DirtyManager dirty = new DirtyManager();
 
-    /** Creates new form JPanelConfigGeneral */
+    /**
+     * Creates new form JPanelConfigGeneral
+     */
     public JPanelConfigGeneral() {
 
         initComponents();
 
+        jbtnLogoText.addActionListener(new DirectoryEvent(jtxtStartupText));
+        jbtnLogoName.addActionListener(new DirectoryEvent(jtxtStartupLogo));
         jtxtMachineHostname.getDocument().addDocumentListener(dirty);
         jcboLAF.addActionListener(dirty);
         jcboMachineScreenmode.addActionListener(dirty);
         jcboTicketsBag.addActionListener(dirty);
-        jchkHideInfo.addActionListener(dirty);  
+        jchkHideInfo.addActionListener(dirty);
         jtxtStartupText.getDocument().addDocumentListener(dirty);
-        jbtnLogoText.addActionListener(new DirectoryEvent(jtxtStartupText));        
+
         jtxtStartupLogo.getDocument().addDocumentListener(dirty);
-        jbtnLogoName.addActionListener(new DirectoryEvent(jtxtStartupLogo));
-        
+
         // Installed skins
         LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
         for (LookAndFeelInfo laf : lafs) {
@@ -86,8 +88,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboTicketsBag.addItem("simple");
         jcboTicketsBag.addItem("standard");
         jcboTicketsBag.addItem("restaurant");
-        
-        
+
     }
 
     /**
@@ -113,11 +114,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
 
-        jtxtMachineHostname.setText(config.getProperty("machine.hostname"));
+        jtxtMachineHostname.setText(AppConfig.getInstance().getProperty("machine.hostname"));
 
-        String lafclass = config.getProperty("swing.defaultlaf");
+        String lafclass = AppConfig.getInstance().getProperty("swing.defaultlaf");
         jcboLAF.setSelectedItem(null);
         for (int i = 0; i < jcboLAF.getItemCount(); i++) {
             LAFInfo lafinfo = (LAFInfo) jcboLAF.getItemAt(i);
@@ -128,12 +129,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
         // jcboLAF.setSelectedItem(new LookAndFeelInfo());
 
-        jcboMachineScreenmode.setSelectedItem(config.getProperty("machine.screenmode"));
-        jcboTicketsBag.setSelectedItem(config.getProperty("machine.ticketsbag"));
-        jchkHideInfo.setSelected(Boolean.valueOf(config.getProperty("till.hideinfo")).booleanValue());        
-        jtxtStartupLogo.setText(config.getProperty("start.logo"));
-        jtxtStartupText.setText(config.getProperty("start.text"));          
-  
+        jcboMachineScreenmode.setSelectedItem(AppConfig.getInstance().getProperty("machine.screenmode"));
+        jcboTicketsBag.setSelectedItem(AppConfig.getInstance().getProperty("machine.ticketsbag"));
+        jchkHideInfo.setSelected(AppConfig.getInstance().getBoolean("till.hideinfo"));
+        jtxtStartupLogo.setText(AppConfig.getInstance().getProperty("start.logo"));
+        jtxtStartupText.setText(AppConfig.getInstance().getProperty("start.text"));
+
         dirty.setDirty(false);
     }
 
@@ -142,21 +143,21 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
 
-        config.setProperty("machine.hostname", jtxtMachineHostname.getText());
-        
+        AppConfig.getInstance().setProperty("machine.hostname", jtxtMachineHostname.getText());
+
         LAFInfo laf = (LAFInfo) jcboLAF.getSelectedItem();
-        config.setProperty("swing.defaultlaf", laf == null
+        AppConfig.getInstance().setProperty("swing.defaultlaf", laf == null
                 ? System.getProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel")
                 : laf.getClassName());
 
-        config.setProperty("machine.screenmode", comboValue(jcboMachineScreenmode.getSelectedItem()));
-        config.setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
-        config.setProperty("till.hideinfo", Boolean.toString(jchkHideInfo.isSelected()));         
-        config.setProperty("start.logo", jtxtStartupLogo.getText());
-        config.setProperty("start.text", jtxtStartupText.getText());
-        
+        AppConfig.getInstance().setProperty("machine.screenmode", comboValue(jcboMachineScreenmode.getSelectedItem()));
+        AppConfig.getInstance().setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
+        AppConfig.getInstance().setBoolean("till.hideinfo", jchkHideInfo.isSelected());
+        AppConfig.getInstance().setProperty("start.logo", jtxtStartupLogo.getText());
+        AppConfig.getInstance().setProperty("start.text", jtxtStartupText.getText());
+
         dirty.setDirty(false);
     }
 
@@ -184,7 +185,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                         }
 
                         SwingUtilities.updateComponentTreeUI(JPanelConfigGeneral.this.getTopLevelAncestor());
-// JG 6 May 2013 to Multicatch
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                     }
                 }
@@ -216,10 +216,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -233,7 +233,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboLAF = new javax.swing.JComboBox();
         jcboMachineScreenmode = new javax.swing.JComboBox();
         jcboTicketsBag = new javax.swing.JComboBox();
-        jchkHideInfo = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jtxtStartupLogo = new javax.swing.JTextField();
@@ -242,6 +241,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jbtnLogoName = new javax.swing.JButton();
         jbtnLogoText = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jchkHideInfo = new eu.hansolo.custom.SteelCheckBox();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setPreferredSize(new java.awt.Dimension(650, 450));
@@ -286,21 +286,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboTicketsBag.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jcboTicketsBag.setPreferredSize(new java.awt.Dimension(200, 30));
 
-        jchkHideInfo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
-        jchkHideInfo.setText(bundle.getString("label.Infopanel")); // NOI18N
-        jchkHideInfo.setToolTipText("");
-        jchkHideInfo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jchkHideInfo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jchkHideInfo.setMaximumSize(new java.awt.Dimension(0, 25));
-        jchkHideInfo.setMinimumSize(new java.awt.Dimension(0, 0));
-        jchkHideInfo.setPreferredSize(new java.awt.Dimension(150, 30));
-        jchkHideInfo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jchkHideInfoActionPerformed(evt);
-            }
-        });
-
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), bundle.getString("label.startuppanel"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
         jPanel1.setLayout(null);
 
@@ -369,6 +355,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jPanel1.add(jButton1);
         jButton1.setBounds(60, 63, 40, 23);
 
+        jchkHideInfo.setText(bundle.getString("label.Infopanel")); // NOI18N
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -379,13 +367,13 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                         .addContainerGap()
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel11Layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcboLAF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel11Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jcboMachineScreenmode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jcboLAF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel11Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -395,9 +383,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jchkHideInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jcboTicketsBag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(jcboTicketsBag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 293, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 563, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addGap(84, 84, 84))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,9 +407,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcboTicketsBag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jchkHideInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jchkHideInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(227, Short.MAX_VALUE))
         );
@@ -450,22 +439,17 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     }//GEN-LAST:event_jtxtStartupTextActionPerformed
 
     private void jtxtStartupTextjTetxtStartupTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtStartupTextjTetxtStartupTextFocusGained
-        // JG 31 August 2103 GNU GPL License Warning
 
         transferFocus();
 
-        JOptionPane.showMessageDialog(jPanel1,"<html>Changing default Startup Text content may violate the <br>"
-            + " Free Software Foundation's GNU General Public License GPL","GNU GPL Warning",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(jPanel1, "<html>Changing default Startup Text content may violate the <br>"
+                + " Free Software Foundation's GNU General Public License GPL", "GNU GPL Warning", JOptionPane.WARNING_MESSAGE);
 
     }//GEN-LAST:event_jtxtStartupTextjTetxtStartupTextFocusGained
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jtxtStartupText.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jchkHideInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkHideInfoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jchkHideInfoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -482,7 +466,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JComboBox jcboLAF;
     private javax.swing.JComboBox jcboMachineScreenmode;
     private javax.swing.JComboBox jcboTicketsBag;
-    private javax.swing.JCheckBox jchkHideInfo;
+    private eu.hansolo.custom.SteelCheckBox jchkHideInfo;
     private javax.swing.JTextField jtxtMachineHostname;
     private javax.swing.JTextField jtxtStartupLogo;
     private javax.swing.JTextField jtxtStartupText;

@@ -59,6 +59,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.AltEncrypter;
@@ -83,12 +84,12 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
      * @param props */
     public PaymentGatewayAuthorizeNet(AppProperties props) {
         // Grab some configuration variables
-        m_sCommerceID = props.getProperty("payment.commerceid");
+        m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
         
-        AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
-        this.m_sCommercePassword = cypher.decrypt(props.getProperty("payment.commercepassword").substring(6));
+        AltEncrypter cypher = new AltEncrypter("cypherkey" + AppConfig.getInstance().getProperty("payment.commerceid"));
+        this.m_sCommercePassword = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6));
 
-        m_bTestMode = Boolean.parseBoolean(props.getProperty("payment.testmode"));
+        m_bTestMode = Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.testmode"));
         
         ENDPOINTADDRESS = (m_bTestMode) 
                 ? "https://test.authorize.net/gateway/transact.dll"
@@ -109,16 +110,12 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
     @Override
     public void execute(PaymentInfoMagcard payinfo) {
 
-// JG 16 May 12 use StringBuilder in place of StringBuilder
-// JG 17 May 14 further amends        
         StringBuilder sb = new StringBuilder();
         try {
 
             sb.append("x_cpversion=1.0"); // current supported version
             
-            sb.append("&x_market_type=2"); // 2 = Retail
-            
-//            sb.append("&x_device_type=1");  // JG 1 Oct 13 - changed from 1 unknown to PC based 5
+            sb.append("&x_market_type=2"); // 2 = Retail            
             sb.append("&x_device_type=5"); //5 = PC based terminal
             
             sb.append("&x_login=");        
@@ -157,11 +154,9 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
                 sb.append("&x_track2=");
                 sb.append(payinfo.getTrack2(false));
             }
-// JG 17 May 14 Gateway Response config            
+
             sb.append("&x_method=CC");
             sb.append("&x_version=3.1");
-// JG 23 May            sb.append("&x_delim_data=TRUE");
-// JG July 2014
             sb.append("&x_repsonse_format=0");            
             sb.append("&x_delim_char=|");
             sb.append("&x_relay_response=FALSE");
@@ -190,21 +185,17 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
             connection.setUseCaches(false);
 
             // not necessarily required but fixes a bug with some servers
-            // JG May 12 added try-with-resources
             connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
             try (DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
 
                 out.write(sb.toString().getBytes());
                 out.flush();
-// JG 17 May 2014 - added as missing
                 out.close();                
             }
-// JG 17 May 14 - String response from gateway
             String returned;
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 returned = in.readLine();
               
-// JG 17 May 2014 - added as missing
                 in.close();
             }
             
@@ -212,10 +203,6 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
             AuthorizeNetParser anp = new AuthorizeNetParser(returned);
             Map props = anp.splitXML();
 
-// JG July 2014
-//            anp.parseData(props);
-
-// JG 17 May 14 - RESPONSE evaluation - this is error point!!            
             if (anp.getResult().equals(LocalRes.getIntString("button.ok"))) {
                 if (APPROVED.equals(props.get("ResponseCode"))) { 
                     //Transaction approved
@@ -223,13 +210,10 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
                     payinfo.paymentOK(props.get("AuthCode").toString(), props.get("TransID").toString(), returned);                    
                 } else {
                     StringBuilder errorLine = new StringBuilder();
-// JG July 2014
                     //Transaction declined
                     if (anp.getNumErrors()>0) {
                         
                         for (int i=1; i<=anp.getNumErrors(); i++) {
-// JG July 2014                            errorLine.append(props.get("Description").toString());
-//                            errorLine.append("\n");
                             errorLine.append(props.get("ErrorCode"+Integer.toString(i)));
                             errorLine.append(": ");
                             errorLine.append(props.get("ErrorText"+Integer.toString(i)));
@@ -244,7 +228,6 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
                 payinfo.paymentError(anp.getResult(), "");
             }
            
-// JG 16 May 12 use multicatch
         } catch (UnsupportedEncodingException | MalformedURLException eUE) {
             payinfo.paymentError(AppLocal.getIntString("message.paymentexceptionservice"), eUE.getMessage());
         } catch(IOException e){
@@ -291,7 +274,6 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
     public void endElement(String uri, String localName, String qName) throws SAXException {
  
         try {
-// JG 16 May 12 use switch
             if (qName.equals("ResponseCode")) {
                 props.put("ResponseCode", URLDecoder.decode(text, "UTF-8"));
                 text="";

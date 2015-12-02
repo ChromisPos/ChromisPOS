@@ -26,12 +26,10 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import static java.lang.Integer.parseInt;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,12 +88,13 @@ import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
 import uk.chromis.pos.ticket.TicketTaxInfo;
 import uk.chromis.pos.util.AltEncrypter;
-import uk.chromis.pos.util.InactivityListener;
 import uk.chromis.pos.util.JRPrinterAWT300;
 import uk.chromis.pos.util.ReportUtils;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
+import uk.chromis.pos.printer.DeviceTicket;
+import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.util.AutoLogoff;
 
 /**
@@ -115,6 +114,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private final static int NUMBER_PORZERODEC = 5;
     private final static int NUMBER_PORINT = 6;
     private final static int NUMBER_PORDEC = 7;
+
+    public static Boolean autoLogoffEnabled;
+    public static Boolean autoLogoffInactivity;
+    public static Boolean autoLogoffAfterSales;
+    public static Boolean autoLogoffToTables;
+    public static Boolean autoLogoffAfterKitchen;
+
     private final String m_sCurrentTicket = null;
     private final String temp_jPrice = "";
     protected JTicketLines m_ticketlines, m_ticketlines2;
@@ -144,7 +150,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Object m_principalapp;
     private Boolean restaurant;
     private Action logout;
-    private InactivityListener listener;
     private Integer delay = 0;
     private DataLogicReceipts dlReceipts = null;
     private Boolean priceWith00;
@@ -155,7 +160,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Boolean warrantyPrint = false;
     private TicketInfo m_ticket;
     private TicketInfo m_ticketCopy;
-    private AppConfig m_config;
 
     public JPanelTicket() {
         initComponents();
@@ -163,9 +167,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public void init(AppView app) throws BeanFactoryException {
-        m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
-
         m_App = app;
         restDB = new RestaurantDBUtils(m_App);
 
@@ -177,15 +178,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (!m_App.getDeviceScale().existsScale()) {
             m_jbtnScale.setVisible(false);
         }
-        if (Boolean.valueOf(m_App.getProperties().getProperty("till.amountattop"))) {
+        if (AppConfig.getInstance().getBoolean("till.amountattop")) {
             m_jPanEntries.remove(jPanel9);
             m_jPanEntries.remove(m_jNumberKey);
             m_jPanEntries.add(jPanel9);
             m_jPanEntries.add(m_jNumberKey);
         }
 
-        jbtnMooring.setVisible(Boolean.valueOf(m_App.getProperties().getProperty("till.marineoption")));
-        priceWith00 = ("true".equals(m_App.getProperties().getProperty("till.pricewith00")));
+        jbtnMooring.setVisible(AppConfig.getInstance().getBoolean("till.marineoption"));
+        priceWith00 = ("true".equals(AppConfig.getInstance().getProperty("till.pricewith00")));
         if (priceWith00) {
             m_jNumberKey.dotIs00(true);
         }
@@ -214,56 +215,66 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_oTicket = null;
         m_oTicketExt = null;
 
-        if ((app.getDeviceTicket().getDeviceDisplay() != null)
-                && (app.getDeviceTicket().getDeviceDisplay() instanceof DeviceDisplayAdvance)) {
-            DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance) m_App.getDeviceTicket().getDeviceDisplay();
-            if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
-                m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.Line"));
-                advDisplay.setTicketLines(m_ticketlines2);
-            }
-            m_ticketlines.addListSelectionListener(new ListSelectionListener() {
-                public void valueChanged(ListSelectionEvent e) {
+// get all the logoff flags        
+        autoLogoffEnabled = AppConfig.getInstance().getBoolean("till.enableautologoff");
+        autoLogoffInactivity = AppConfig.getInstance().getBoolean("till.autologoffinactivitytimer");
+        autoLogoffAfterSales = AppConfig.getInstance().getBoolean("till.autologoffaftersale");
+        autoLogoffToTables = AppConfig.getInstance().getBoolean("till.autologofftotables");
+        autoLogoffAfterKitchen = AppConfig.getInstance().getBoolean("till.autologoffafterkitchen");
 
-                    DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance) m_App.getDeviceTicket().getDeviceDisplay();
+        /*
+        Code to drive full screen display
+         */
+        if (AppConfig.getInstance().getBoolean("machine.customerdisplay")) {
+            if ((app.getDeviceTicket().getDeviceDisplay() != null)
+                    && (app.getDeviceTicket().getDeviceDisplay() instanceof DeviceDisplayAdvance)) {
+                DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance) m_App.getDeviceTicket().getDeviceDisplay();
+                if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
+                    m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.Line"));
+                    advDisplay.setTicketLines(m_ticketlines2);
+                }
+                m_ticketlines.addListSelectionListener(new ListSelectionListener() {
+                    public void valueChanged(ListSelectionEvent e) {
+                        DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance) m_App.getDeviceTicket().getDeviceDisplay();
 
-                    if (advDisplay.hasFeature(DeviceDisplayAdvance.PRODUCT_IMAGE)) {
-                        if (!e.getValueIsAdjusting()) {
-                            int i = m_ticketlines.getSelectedIndex();
-
-                            if (i >= 0) {
-                                try {
-                                    String sProduct = m_oTicket.getLine(i).getProductID();
-                                    if (sProduct != null) {
-                                        ProductInfoExt myProd = JPanelTicket.this.dlSales.getProductInfo(sProduct);
-                                        if (myProd == null) {
-                                            Logger.getLogger(JPanelTicket.class.getName()).log(Level.INFO, "-------- Null Product pointer(nothing retrieved for " + sProduct + ", check STOCKCURRENT table)");
-                                        } else if (myProd.getImage() != null) {
-                                            advDisplay.setProductImage(myProd.getImage());
-
-                                        } else {
-                                            advDisplay.setProductImage(null);
+                        if (advDisplay.hasFeature(DeviceDisplayAdvance.PRODUCT_IMAGE)) {
+                            if (!e.getValueIsAdjusting()) {
+                                int i = m_ticketlines.getSelectedIndex();
+                                if (i >= 0) {
+                                    try {
+                                        String sProduct = m_oTicket.getLine(i).getProductID();
+                                        if (sProduct != null) {
+                                            ProductInfoExt myProd = JPanelTicket.this.dlSales.getProductInfo(sProduct);
+                                            if (myProd == null) {
+                                                Logger.getLogger(JPanelTicket.class.getName()).log(Level.INFO, "-------- Null Product pointer(nothing retrieved for " + sProduct + ", check STOCKCURRENT table)");
+                                            } else if (myProd.getImage() != null) {
+                                                advDisplay.setProductImage(myProd.getImage());
+                                            } else {
+                                                advDisplay.setProductImage(null);
+                                            }
                                         }
+                                    } catch (BasicException ex) {
+                                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                } catch (BasicException ex) {
-                                    Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                         }
-                    }
-
-                    if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
-                        int i = m_ticketlines.getSelectedIndex();
-                        m_ticketlines2.clearTicketLines();
-                        for (int j = 0; (m_oTicket != null) && (j < m_oTicket.getLinesCount()); j++) {
-                            m_ticketlines2.insertTicketLine(j, m_oTicket.getLine(j));
+                        if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
+                            int i = m_ticketlines.getSelectedIndex();
+                            m_ticketlines2.clearTicketLines();
+                            for (int j = 0; (m_oTicket != null) && (j < m_oTicket.getLinesCount()); j++) {
+                                m_ticketlines2.insertTicketLine(j, m_oTicket.getLine(j));
+                            }
+                            m_ticketlines2.setSelectedIndex(i);
                         }
-                        m_ticketlines2.setSelectedIndex(i);
                     }
-                }
-            });
+                });
+            }
 
+            /*
+        End of screen display
+             */
         }
-
     }
 
     @Override
@@ -283,9 +294,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            switch (m_App.getProperties().getProperty("machine.ticketsbag")) {
+            System.out.println("In logoff action");
+            switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
                 case "restaurant":
-                    if ("false".equals(m_App.getProperties().getProperty("till.autoLogoffrestaurant"))) {
+                    if (!autoLogoffToTables && autoLogoffEnabled) {
                         deactivate();
                         ((JRootApp) m_App).closeAppView();
                         break;
@@ -313,28 +325,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public void activate() throws BasicException {
-// added by JDL 26.04.13
-// lets look at adding a timer event fot auto logoff if required
+// if the autologoff and inactivity is configured the setup the timer with action
         Action logout = new logout();
-
-        String autoLogoff = (m_App.getProperties().getProperty("till.autoLogoff"));
-        if (autoLogoff != null) {
-            if (autoLogoff.equals("true")) {
-                try {
-                    delay = Integer.parseInt(m_App.getProperties().getProperty("till.autotimer"));
-                } catch (NumberFormatException e) {
-                    delay = 0;
+        if (autoLogoffEnabled && autoLogoffInactivity) {
+            try {
+                delay = Integer.parseInt(AppConfig.getInstance().getProperty("till.autologofftimerperiod"));
+                if (delay != 0) {
+                    AutoLogoff.getInstance().setTimer(delay * 1000, logout);
                 }
-                delay *= 1000;
+            } catch (NumberFormatException e) {
+                delay = 0;
             }
-        }
-// if the delay period is not zero create a inactivitylistener instance        
-        if (delay != 0) {
-            //listener = new InactivityListener(logout, delay);
-            //listener.start();
-
-            AutoLogoff.getInstance().setTimer(delay, logout);
-            AutoLogoff.getInstance().start();
         }
 
         paymentdialogreceipt = JPaymentSelectReceipt.getDialog(this);
@@ -364,7 +365,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         taxeslogic = new TaxesLogic(taxlist);
 
-        m_jaddtax.setSelected((Boolean.parseBoolean(m_App.getProperties().getProperty("till.taxincluded"))));
+        m_jaddtax.setSelected((Boolean.parseBoolean(AppConfig.getInstance().getProperty("till.taxincluded"))));
 
         // Show taxes options
         if (m_App.getAppUserView().getUser().hasPermission("sales.ChangeTaxOptions")) {
@@ -388,10 +389,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public boolean deactivate() {
-        if (listener != null) {
-            listener.stop();
-        }
-
+        AutoLogoff.getInstance().deactivateTimer();
+        //Listener.stop();
         return m_ticketsbag.deactivate();
     }
 
@@ -408,11 +407,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public void setActiveTicket(TicketInfo oTicket, Object oTicketExt) {
 // check if a inactivity timer has been created, and if it is not running start up again
 // this is required for autologoff mode in restaurant and it is set to return to the table view.        
-        switch (m_App.getProperties().getProperty("machine.ticketsbag")) {
+        switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
             case "restaurant":
-                if ("true".equals(m_App.getProperties().getProperty("till.autoLogoffrestaurant"))) {
-                    if (AutoLogoff.getInstance().timer) {
-                        AutoLogoff.getInstance().restart();
+                if (autoLogoffEnabled && autoLogoffInactivity) {
+                    System.out.println("setActive ticket");
+                    if (!AutoLogoff.getInstance().isTimerRunning()) {
+                        AutoLogoff.getInstance().activateTimer();
                     }
                 }
         }
@@ -427,8 +427,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_oTicket.setDate(new Date()); // Set the edition date.
 
 // Set some of the table details here if in restaurant mode
-//      if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))&& m_oTicket.getTicketType()!=1){
-            if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag")) && !oTicket.getOldTicket()) {
+            if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag")) && !oTicket.getOldTicket()) {
 // Check if there is a customer name in the database for this table
 
                 if (restDB.getCustomerNameInTable(oTicketExt.toString()) == null) {
@@ -446,12 +445,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 
 // lets check if this is a moved ticket        
-        if ((m_oTicket != null) && (((Boolean.parseBoolean(m_App.getProperties().getProperty("table.showwaiterdetails")))
-                || (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")))))) {
+        if ((m_oTicket != null) && (((Boolean.parseBoolean(AppConfig.getInstance().getProperty("table.showwaiterdetails")))
+                || (AppConfig.getInstance().getBoolean("table.showcustomerdetails"))))) {
 
         }
-        if ((m_oTicket != null) && (((Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")))
-                || (Boolean.parseBoolean(m_App.getProperties().getProperty("table.showwaiterdetails")))))) {
+        if ((m_oTicket != null) && (((AppConfig.getInstance().getBoolean("table.showcustomerdetails"))
+                || (AppConfig.getInstance().getBoolean("table.showwaiterdetails"))))) {
 // check if the old table and the new table are the same                      
             if (restDB.getTableMovedFlag(m_oTicket.getId())) {
                 restDB.moveCustomer(oTicketExt.toString(), m_oTicket.getId());
@@ -459,12 +458,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
         // read resources ticket.show and execute
         executeEvent(m_oTicket, m_oTicketExt, "ticket.show");
-
-        if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))) {
-            //      j_btnKitchenPrt.setVisible(false); 
-        } else {
-            j_btnKitchenPrt.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintKitchen"));
-        }
+        j_btnKitchenPrt.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintKitchen"));
         refreshTicket();
     }
 
@@ -496,7 +490,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
 
         } else {
-            if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+            if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                 //Make disable Search and Edit Buttons
                 m_jNumberKey.justEquals();
                 jEditAttributes.setVisible(false);
@@ -565,7 +559,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void addTicketLine(ProductInfoExt oProduct, double dMul, double dPrice) {
-
         if (oProduct.isVprice()) {
             TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
             if (m_jaddtax.isSelected()) {
@@ -621,7 +614,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             }
 
-            if (Boolean.parseBoolean(m_App.getProperties().getProperty("display.consolidated"))) {
+            if (Boolean.parseBoolean(AppConfig.getInstance().getProperty("display.consolidated"))) {
 // includes modified consolidate receipt code for screen and refreshes the screen afer updating     
                 int numlines = m_oTicket.getLinesCount();
                 for (int i = 0; i < numlines; i++) {
@@ -639,7 +632,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 String current_name = current_ticketline.getProductName();
                                 String loop_name = loop_ticketline.getProductName();
 
-                                if (Boolean.parseBoolean(m_App.getProperties().getProperty("display.consolidatedwithoutprice"))) {
+                                if (Boolean.parseBoolean(AppConfig.getInstance().getProperty("display.consolidatedwithoutprice"))) {
                                     if ((loop_productid.equals(current_productid)) && (loop_unit != 0.0D) && (loop_attr.equals(current_attr)) && (loop_name.equals(current_name))) {
                                         current_unit += loop_unit;
                                         loop_ticketline.setMultiply(0.0D);
@@ -698,25 +691,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         });
 
                 if (m_oTicket.getLine(i).isProductCom()) {
-                    // Es un producto auxiliar, lo borro y santas pascuas.
                     m_oTicket.removeLine(i);
                     m_ticketlines.removeTicketLine(i);
                 } else {
-                    // Es un producto normal, lo borro.
                     m_oTicket.removeLine(i);
                     m_ticketlines.removeTicketLine(i);
-                    // Y todos lo auxiliaries que hubiera debajo.
                     while (i < m_oTicket.getLinesCount() && m_oTicket.getLine(i).isProductCom()) {
                         m_oTicket.removeLine(i);
                         m_ticketlines.removeTicketLine(i);
                     }
                 }
 
-                visorTicketLine(null); // borro el visor 
-                printPartialTotals(); // pinto los totales parciales...                           
-                stateToZero(); // Pongo a cero    
+                visorTicketLine(null);
+                printPartialTotals();
+                stateToZero();
 
-                //read resource ticket.change and execute
                 executeEventAndRefresh("ticket.change");
             }
         } else {
@@ -873,14 +862,110 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             /**
              * ******************************************************************
              * Start of barcode handling routine
-             *
-             *******************************************************************
+             * ******************************************************************
              */
             if (m_sBarcode.length() > 0) {
                 String sCode = m_sBarcode.toString();
+                /**
+                 * *****************************************************************************
+                 * Kidsgrove Tropicals voucher code
+                 * ******************************************************************************
+                 */
+                if (sCode.startsWith("05V")) {
+// £5.00 voucher                           
+                    try {
+                        if (dlSales.getVoucher(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already Sold. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else if (checkVoucherCurrentTicket(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already on Ticket. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ProductInfoExt oProduct = new ProductInfoExt();
+                            oProduct = dlSales.getProductInfoByCode("05V");
+                            if (oProduct != null) {
+                                oProduct.setCode("05V");
+                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setProperty("vCode", sCode);
+                                oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
+                                addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
+                            } else {
+                                Toolkit.getDefaultToolkit().beep();
+                                JOptionPane.showMessageDialog(null,
+                                        "Vocher code 05V - " + AppLocal.getIntString("message.noproduct"),
+                                        "Check", JOptionPane.WARNING_MESSAGE);
+                                stateToZero();
+                            }
+                        }
+                    } catch (BasicException ex) {
+                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (sCode.startsWith("10V")) {
+// £10.00 voucher   
+                    try {
+                        if (dlSales.getVoucher(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already Sold. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else if (checkVoucherCurrentTicket(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already on Ticket. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ProductInfoExt oProduct = new ProductInfoExt();
+                            oProduct = dlSales.getProductInfoByCode("10V");
+                            if (oProduct != null) {
+                                oProduct.setCode("10V");
+                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setProperty("vCode", sCode);
+                                oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
+                                addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
+                            } else {
+                                Toolkit.getDefaultToolkit().beep();
+                                JOptionPane.showMessageDialog(null,
+                                        "Vocher code 10V - " + AppLocal.getIntString("message.noproduct"),
+                                        "Check", JOptionPane.WARNING_MESSAGE);
+                                stateToZero();
+                            }
+                        }
+                    } catch (BasicException ex) {
+                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (sCode.startsWith("20V")) {
+// £20.00 voucher     
+                    try {
+                        if (dlSales.getVoucher(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already Sold. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else if (checkVoucherCurrentTicket(sCode)) {
+                            stateToZero();
+                            JOptionPane.showMessageDialog(null, "Voucher Code \"" + sCode + "\" already on Ticket. Please use another voucher", "Invalid Vocuher", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ProductInfoExt oProduct = new ProductInfoExt();
+                            oProduct = dlSales.getProductInfoByCode("20V");
+                            if (oProduct != null) {
+                                oProduct.setProperty("vCode", sCode);
+                                oProduct.setCode("20V");
+                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
+                                addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
+                            } else {
+                                Toolkit.getDefaultToolkit().beep();
+                                JOptionPane.showMessageDialog(null,
+                                        "Voucher code 20V - " + AppLocal.getIntString("message.noproduct"),
+                                        "Check", JOptionPane.WARNING_MESSAGE);
+                                stateToZero();
+                            }
+                        }
+                    } catch (BasicException ex) {
+                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
+                    /**
+                     * *****************************************************************************
+                     * End Kidsgrove Tropicals voucher codes
+                     * ******************************************************************************
+                     */
 // Are we passing a customer card these cards start with 'c'                
-                if (sCode.startsWith("c")) {
+                } else if (sCode.startsWith("c")) {
                     try {
                         CustomerInfoExt newcustomer = dlSales.findCustomerExt(sCode);
                         if (newcustomer == null) {
@@ -932,7 +1017,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             prodCode = sCode.replace(sCode.substring(6, sCode.length() - 1), "00000");
                             prodCode = prodCode.substring(0, sCode.length() - 1);
                         }
-
                         if (sCode.length() == 13) {
                             switch (sVariableTypePrefix) {
                                 case "20":
@@ -986,13 +1070,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                            if (oProduct.getPriceSell() != 0.0) {
-                                weight = Double.parseDouble(sVariableNum) / 100;
-                                oProduct.setProperty("product.weight", Double.toString(weight));
-                                dPriceSell = oProduct.getPriceSell();
-                            } else {
-                                dPriceSell = Double.parseDouble(sVariableNum) / 100;
-                            }
+                             if (oProduct.getPriceSell() != 0.0) {
+                                    weight = Double.parseDouble(sVariableNum) / 100;
+                                    oProduct.setProperty("product.weight", Double.toString(weight));
+                                    dPriceSell = oProduct.getPriceSell();
+                                } else {
+                                    dPriceSell = Double.parseDouble(sVariableNum) / 100;
+                                }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1014,8 +1098,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             /**
              * ******************************************************************
              * end of barcode handling routine
-             *
-             *******************************************************************
+             * ******************************************************************
              */
         } else {
             m_sBarcode.append(cTrans);
@@ -1143,7 +1226,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                    if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(newline.getMultiply() - 1.0);
                         paintTicketLine(i, newline);
                     } else {
@@ -1160,7 +1243,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
                     //If it's a refund - button means one unit more
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                    if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(newline.getMultiply() + 1.0);
                         if (newline.getMultiply() >= 0) {
                             removeTicketLine(i);
@@ -1185,7 +1268,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                    if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(-dPor);
                         newline.setPrice(Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
@@ -1204,7 +1287,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_NORMAL) {
+                    if (m_oTicket.getTicketType().equals(TicketType.NORMAL) || m_oTicket.getTicketType().equals(TicketType.NORMAL)) {
                         newline.setMultiply(dPor);
                         newline.setPrice(-Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
@@ -1216,13 +1299,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, 1.0, product.getPriceSell());
 
-                if (!Boolean.parseBoolean(m_App.getProperties().getProperty("product.hidedefaultproductedit"))) {
+                if (!Boolean.parseBoolean(AppConfig.getInstance().getProperty("product.hidedefaultproductedit"))) {
                     m_jEditLine.doClick();
                 }
-
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines") && m_sBarcode.length() < 2) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, 1.0, -product.getPriceSell());
             } else if (cTrans == '+'
@@ -1232,14 +1314,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 addTicketLine(product, getPorValue(), product.getPriceSell());
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERVALID
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines") && m_sBarcode.length() < 2) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, getPorValue(), -product.getPriceSell());
             } else if (cTrans == ' ' || cTrans == '=') {
                 if (m_oTicket.getLinesCount() > 0) {
-
                     if (closeTicket(m_oTicket, m_oTicketExt)) {
-                        if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                        if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                             try {
                                 JRefundLines.updateRefunds();
                             } catch (BasicException ex) {
@@ -1247,18 +1328,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             }
                         }
                         m_ticketsbag.deleteTicket();
-                        String autoLogoff = (m_App.getProperties().getProperty("till.autoLogoff"));
-                        if (autoLogoff != null) {
-                            if (autoLogoff.equals("true")) {
-                                if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))
-                                        && ("true".equals(m_App.getProperties().getProperty("till.autoLogoffrestaurant")))) {
-                                    deactivate();
-                                    setActiveTicket(null, null);
-                                } else {
-                                    ((JRootApp) m_App).closeAppView();
-                                }
-                            }
-                        };
+                        if ((!("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag"))) && autoLogoffEnabled && autoLogoffAfterSales)) {
+                            ((JRootApp) m_App).closeAppView();
+                        }
                     } else {
                         refreshTicket();
                     }
@@ -1270,9 +1342,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private boolean closeTicket(TicketInfo ticket, Object ticketext) {
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().deactivateTimer();
         boolean resultok = false;
 
         if (m_App.getAppUserView().getUser().hasPermission("sales.Total")) {
@@ -1287,16 +1357,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
                 //read resource ticket.total and execute
                 if (executeEvent(ticket, ticketext, "ticket.total") == null) {
-                    if (listener != null) {
-                        listener.stop();
-                    }
                     // Muestro el total
                     printTicket("Printer.TicketTotal", ticket, ticketext);
 
                     // Select the Payments information
-                    JPaymentSelect paymentdialog = ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL
-                            ? paymentdialogreceipt
-                            : paymentdialogrefund;
+                    JPaymentSelect paymentdialog = ticket.getTicketType().equals(TicketType.REFUND)
+                            ? paymentdialogrefund
+                            : paymentdialogreceipt;
                     paymentdialog.setPrintSelected("true".equals(m_jbtnconfig.getProperty("printselected", "true")));
 
                     paymentdialog.setTransactionID(ticket.getTransactionID());
@@ -1314,26 +1381,40 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         //read resource ticket.save and execute
                         if (executeEvent(ticket, ticketext, "ticket.save") == null) {
                             // Save the receipt and assign a receipt number
+                            if (!paymentdialog.isPrintSelected()) {
+                                ticket.setTicketType(TicketType.INVOICE);
+                            }
+
                             try {
                                 dlSales.saveTicket(ticket, m_App.getInventoryLocation());
+
+// Kidsgrove here the payment has been confirmed lets save voucher details into database vCode10V0061
+                                for (TicketLineInfo line : m_oTicket.getLines()) {
+                                    if ((line.getProperty("vCode") != "") && (line.getProperty("vCode") != null)) {
+                                        try {
+                                            dlSales.sellVoucher(
+                                                    new Object[]{line.getProperty("vCode"), Integer.toString(ticket.getTicketId())});
+                                        } catch (BasicException ex) {
+                                        }
+                                    }
+                                }
                                 // code added to allow last ticket reprint       
-                                m_config.setProperty("lastticket.number", Integer.toString(ticket.getTicketId()));
-                                m_config.setProperty("lastticket.type", Integer.toString(ticket.getTicketType()));
-                                m_config.save();
+                                AppConfig.getInstance().setProperty("lastticket.number", Integer.toString(ticket.getTicketId()));
+                                AppConfig.getInstance().setProperty("lastticket.type", Integer.toString(ticket.getTicketType().getId())); 
+                                AppConfig.getInstance().save();
                             } catch (BasicException eData) {
                                 MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
                                 msg.show(this);
+
                             } catch (IOException ex) {
-                                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(JPanelTicket.class
+                                        .getName()).log(Level.SEVERE, null, ex);
                             }
                             //read resource ticket.close and execute
                             executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
 
-                            // Print receipt. 
-// John L July 2014 previous || warranty print reinstated
                             printTicket(paymentdialog.isPrintSelected() || warrantyPrint
                                     ? "Printer.Ticket"
-                                    //                                    ? ticketPrintType
                                     : "Printer.Ticket2", ticket, ticketext);
 
 //                            if (m_oTicket.getLoyaltyCardNumber() != null){
@@ -1344,12 +1425,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 //                            }
                             resultok = true;
 // if restaurant clear any customer name in table for this table once receipt is printed
-//                            if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))&&  m_oTicket.getTicketType() !=1) {  
-                            if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag")) && !ticket.getOldTicket()) {
+                            if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag")) && !ticket.getOldTicket()) {
                                 restDB.clearCustomerNameInTable(ticketext.toString());
                                 restDB.clearWaiterNameInTable(ticketext.toString());
                                 restDB.clearTicketIdInTable(ticketext.toString());
-//                                restDB.
                             }
                         }
                     }
@@ -1365,14 +1444,35 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_oTicket.resetPayments();
         }
 
+// Reset the customer display here         
+        String sresource = dlSystem.getResourceAsXML("Display.Message");
+        DeviceTicket m_TP = new DeviceTicket(this, AppConfig.getInstance());
+        if (sresource == null) {
+            m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
+        } else {
+            try {
+                m_TTP.printTicket(sresource);
+            } catch (TicketPrinterException eTP) {
+                m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
+            }
+        }
+
         // cancelled the ticket.total script
         // or canceled the payment dialog
         // or canceled the ticket.close script
+        AutoLogoff.getInstance().activateTimer();
         return resultok;
     }
 
-// John L July 2014
-//    private void warrantyCheck(TicketInfo ticket){
+    private boolean checkVoucherCurrentTicket(String voucher) {
+        for (TicketLineInfo line : m_oTicket.getLines()) {
+            if (line.getProperty("vCode").equals(voucher)) {
+                return (true);
+            }
+        }
+        return (false);
+    }
+
     private boolean warrantyCheck(TicketInfo ticket) {
         warrantyPrint = false;
         int lines = 0;
@@ -1386,18 +1486,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         return false;
     }
 
-    /**
-     *
-     * @param pTicket
-     * @return
-     */
     public String getPickupString(TicketInfo pTicket) {
         if (pTicket == null) {
-//        return("");
             return ("0");
         }
         String tmpPickupId = Integer.toString(pTicket.getPickupId());
-        String pickupSize = (m_App.getProperties().getProperty("till.pickupsize"));
+        String pickupSize = (AppConfig.getInstance().getProperty("till.pickupsize"));
         if (pickupSize != null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())) {
             while (tmpPickupId.length() < (Integer.parseInt(pickupSize))) {
                 tmpPickupId = "0" + tmpPickupId;
@@ -1424,8 +1518,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
             try {
                 ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
-// JG 19 Feb 14 unnecessary boolean parse - if (Boolean.valueOf(m_App.getProperties().getProperty("receipt.newlayout")).booleanValue()){
-                if (Boolean.parseBoolean(m_App.getProperties().getProperty("receipt.newlayout"))) {
+                if (Boolean.parseBoolean(AppConfig.getInstance().getProperty("receipt.newlayout"))) {
                     script.put("taxes", ticket.getTaxLines());
                 } else {
                     script.put("taxes", taxcollection);
@@ -1436,12 +1529,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 script.put("warranty", warrantyPrint);
                 script.put("pickupid", getPickupString(ticket));
 
-// JG Aug 2014
                 refreshTicket();
 
                 m_TTP.printTicket(script.eval(sresource).toString(), ticket);
 
-// JG May 2013 replaced with Multicatch            
             } catch (ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(JPanelTicket.this);
@@ -1450,11 +1541,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void printReport(String resourcefile, TicketInfo ticket, Object ticketext) {
-
         try {
-
             JasperReport jr;
-
             InputStream in = getClass().getResourceAsStream(resourcefile + ".ser");
             if (in == null) {
                 // read and compile the report
@@ -1465,7 +1553,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     jr = (JasperReport) oin.readObject();
                 }
             }
-
             // Construyo el mapa de los parametros.
             Map reportparams = new HashMap();
             // reportparams.put("ARG", params);
@@ -1481,11 +1568,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             JasperPrint jp = JasperFillManager.fillReport(jr, reportparams, new JRMapArrayDataSource(new Object[]{reportfields}));
 
-            PrintService service = ReportUtils.getPrintService(m_App.getProperties().getProperty("machine.printername"));
+            PrintService service = ReportUtils.getPrintService(AppConfig.getInstance().getProperty("machine.printername"));
 
             JRPrinterAWT300.printPages(jp, 0, jp.getPages().size() - 1, service);
 
-// JG May 2013 replaced with Multicatch
         } catch (JRException | IOException | ClassNotFoundException e) {
             // MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, resourcefile + ": " + AppLocal.getIntString("message.cannotloadreport"), e);
@@ -1501,7 +1587,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
                 script.put("ticketline", oLine);
                 m_TTP.printTicket(script.eval(dlSystem.getResourceAsXML("Printer.TicketLine")).toString());
-// JG May 2013 replaced with Multicatch
             } catch (ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintline"), e);
                 msg.show(JPanelTicket.this);
@@ -1564,7 +1649,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 m_oTicket.getLine(i).getProductAttSetInstDesc(), m_oTicket.getLine(i).getProperty("notes"), id, display, 0);
                     }
                 } catch (BasicException ex) {
-                    Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JPanelTicket.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -1584,7 +1670,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     public void evalScriptAndRefresh(String resource, ScriptArg... args) {
-
         if (resource == null) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"));
             msg.show(this);
@@ -1602,7 +1687,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private Object executeEventAndRefresh(String eventkey, ScriptArg... args) {
-
         String resource = m_jbtnconfig.getEvent(eventkey);
         if (resource == null) {
             return null;
@@ -1617,7 +1701,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private Object executeEvent(TicketInfo ticket, Object ticketext, String eventkey, ScriptArg... args) {
-
         String resource = m_jbtnconfig.getEvent(eventkey);
         if (resource == null) {
             return null;
@@ -1643,9 +1726,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    /**
-     *
-     */
     public static class ScriptArg {
 
         private final String key;
@@ -1665,9 +1745,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    /* Added JDL 13.04.13 routine
-     * routine to set the amount appearance to show '.'
-     */
     private String setTempjPrice(String jPrice) {
         jPrice = jPrice.replace(".", "");
 // remove all leading zeros from the string        
@@ -1678,6 +1755,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             jPrice = "0" + jPrice;
         }
         return (jPrice.length() <= 2) ? jPrice : (new StringBuffer(jPrice).insert(jPrice.length() - 2, ".").toString());
+
     }
 
     public class ScriptObject {
@@ -1718,17 +1796,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         public Object evalScript(String code, ScriptArg... args) throws ScriptException {
 
             ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
-
-// Mod JG Sept 2011 - Used inside scripts i.e.: Stock Checking
-            String sDBUser = m_App.getProperties().getProperty("db.user");
-            String sDBPassword = m_App.getProperties().getProperty("db.password");
+            String sDBUser = AppConfig.getInstance().getProperty("db.user");
+            String sDBPassword = AppConfig.getInstance().getProperty("db.password");
 
             if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
                 AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
                 sDBPassword = cypher.decrypt(sDBPassword.substring(6));
             }
-            script.put("hostname", m_App.getProperties().getProperty("machine.hostname"));
-            script.put("dbURL", m_App.getProperties().getProperty("db.URL"));
+            script.put("hostname", AppConfig.getInstance().getProperty("machine.hostname"));
+            script.put("dbURL", AppConfig.getInstance().getProperty("db.URL"));
             script.put("dbUser", sDBUser);
             script.put("dbPassword", sDBPassword);
 // End mod            
@@ -2305,12 +2381,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jbtnScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnScaleActionPerformed
-
         stateTransition('\u00a7');
-
     }//GEN-LAST:event_m_jbtnScaleActionPerformed
 
     private void m_jEditLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEditLineActionPerformed
+        AutoLogoff.getInstance().deactivateTimer();
         int i = m_ticketlines.getSelectedIndex();
         if (i < 0) {
             Toolkit.getDefaultToolkit().beep(); // no line selected
@@ -2328,39 +2403,41 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 new MessageInf(e).show(this);
             }
         }
-
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_m_jEditLineActionPerformed
 
     private void m_jEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEnterActionPerformed
-
         stateTransition('\n');
-
     }//GEN-LAST:event_m_jEnterActionPerformed
 
     private void m_jNumberKeyKeyPerformed(uk.chromis.beans.JNumberEvent evt) {//GEN-FIRST:event_m_jNumberKeyKeyPerformed
-
         stateTransition(evt.getKey());
     }//GEN-LAST:event_m_jNumberKeyKeyPerformed
 
     private void m_jKeyFactoryKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_jKeyFactoryKeyTyped
-
         m_jKeyFactory.setText(null);
         stateTransition(evt.getKeyChar());
-
     }//GEN-LAST:event_m_jKeyFactoryKeyTyped
 
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
-
         int i = m_ticketlines.getSelectedIndex();
-        if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
-            JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice());
-        }
-        if (i < 0) {
-            Toolkit.getDefaultToolkit().beep(); // No hay ninguna seleccionada
+        if ((m_oTicket.getTicketType().equals(TicketType.REFUND))  && (!m_oTicket.getLine(i).isProductCom())) {
+            JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice(), m_oTicket.getLine(i).getProperty("orgLine"));
+            removeTicketLine(i);
+            while (i < m_oTicket.getLinesCount() && m_oTicket.getLine(i).isProductCom()) {
+                JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice(), m_oTicket.getLine(i).getProperty("orgLine"));
+                removeTicketLine(i);
+            }
+        } else if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,
+                    AppLocal.getIntString("message.deleteauxiliaryitem"),
+                    "auxiliary Item", JOptionPane.WARNING_MESSAGE);
+        } else if (i < 0) {
+            Toolkit.getDefaultToolkit().beep();
         } else {
             removeTicketLine(i); // elimino la linea           
         }
-
     }//GEN-LAST:event_m_jDeleteActionPerformed
 
     private void m_jUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jUpActionPerformed
@@ -2376,18 +2453,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jDownActionPerformed
 
     private void m_jListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jListActionPerformed
-
+        AutoLogoff.getInstance().deactivateTimer();
         ProductInfoExt prod = JProductFinder.showMessage(JPanelTicket.this, dlSales);
         if (prod != null) {
             buttonTransition(prod);
         }
-
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_m_jListActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().deactivateTimer();
         JCustomerFinder finder = JCustomerFinder.getCustomerFinder(this, dlCustomers);
         finder.search(m_oTicket.getCustomer());
         finder.setVisible(true);
@@ -2397,9 +2472,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 m_oTicket.setCustomer(null);
             } else {
                 m_oTicket.setCustomer(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()));
-                if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))) {
-// JG 30 Apr 14 Redundant String() to String() assignment
-//               restDB.setCustomerNameInTableByTicketId (dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId().toString());  
+                if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag"))) {
                     restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId());
                 }
             }
@@ -2408,12 +2481,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindcustomer"), e);
             msg.show(this);
         }
-
+        AutoLogoff.getInstance().activateTimer();
         refreshTicket();
 }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSplitActionPerformed
-
+        AutoLogoff.getInstance().deactivateTimer();
         if (m_oTicket.getArticlesCount() > 1) {
             //read resource ticket.line and execute
             ReceiptSplit splitdialog = ReceiptSplit.getDialog(this, dlSystem.getResourceAsXML("Ticket.Line"), dlSales, dlCustomers, taxeslogic);
@@ -2423,19 +2496,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             ticket2.setCustomer(m_oTicket.getCustomer());
 
             if (splitdialog.showDialog(ticket1, ticket2, m_oTicketExt)) {
-                if (closeTicket(ticket2, m_oTicketExt)) { // already checked  that number of lines > 0                            
-                    setActiveTicket(ticket1, m_oTicketExt);// set result ticket
-// maybe look at returning to table set up after splitting the bill     
+                if (closeTicket(ticket2, m_oTicketExt)) {
+                    setActiveTicket(ticket1, m_oTicketExt);
                 }
             }
         }
-
+        AutoLogoff.getInstance().activateTimer();
 }//GEN-LAST:event_btnSplitActionPerformed
 
     private void jEditAttributesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditAttributesActionPerformed
-        if (listener != null) {
-            listener.stop();
-        }
+        // AutoLogoff.getInstance().deactivateTimer();
         int i = m_ticketlines.getSelectedIndex();
         if (i < 0) {
             Toolkit.getDefaultToolkit().beep(); // no line selected
@@ -2454,27 +2524,24 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             } catch (BasicException ex) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindattributes"), ex);
                 msg.show(this);
+                AutoLogoff.getInstance().activateTimer();
             }
         }
-        if (listener != null) {
-            listener.restart();
-        }
+        //  AutoLogoff.getInstance().activateTimer();
 }//GEN-LAST:event_jEditAttributesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        AutoLogoff.getInstance().activateTimer();
 // Show the custmer panel - this does deactivate
         {
             m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
-
         }
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jbtnMooringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMooringActionPerformed
 // Display vessel selection box on screen if reply is good add to the ticket
-        if (listener != null) {
-            listener.stop();
-        }
+        AutoLogoff.getInstance().deactivateTimer();
         JMooringDetails mooring = JMooringDetails.getMooringDetails(this, m_App.getSession());
         mooring.setVisible(true);
         if (mooring.isCreate()) {
@@ -2497,41 +2564,47 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         }
         refreshTicket();
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_jbtnMooringActionPerformed
 
     private void j_btnKitchenPrtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_j_btnKitchenPrtActionPerformed
 // John L - replace older SendOrder script
+        AutoLogoff.getInstance().deactivateTimer();
+        if (!m_oTicket.getTicketType().equals(TicketType.REFUND)) {
+            String rScript = (dlSystem.getResourceAsText("script.SendOrder"));
+            Interpreter i = new Interpreter();
+            try {
+                i.set("ticket", m_oTicket);
+                i.set("place", m_oTicketExt);
+                i.set("user", m_App.getAppUserView().getUser());
+                i.set("sales", this);
+                i.set("pickupid", m_oTicket.getPickupId());
+                Object result;
+                result = i.eval(rScript);
 
-        String rScript = (dlSystem.getResourceAsText("script.SendOrder"));
+            } catch (EvalError ex) {
+                Logger.getLogger(JPanelTicket.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
 
-        Interpreter i = new Interpreter();
-        try {
-            i.set("ticket", m_oTicket);
-            i.set("place", m_oTicketExt);
-            i.set("user", m_App.getAppUserView().getUser());
-            i.set("sales", this);
-            i.set("pickupid", m_oTicket.getPickupId());
-            Object result;
-            result = i.eval(rScript);
-        } catch (EvalError ex) {
-            Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+            AutoLogoff.getInstance().activateTimer();
+// Autologoff after sending to kitchen if required
+            // lets check what mode we are operating in               
+            switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
+                case "restaurant":
+                    if (autoLogoffEnabled && autoLogoffAfterKitchen) {
+                        if (autoLogoffToTables) {
+                            deactivate();
+                            setActiveTicket(null, null);
+                            break;
+                        } else {
+                            deactivate();
+                            ((JRootApp) m_App).closeAppView();
+                            break;
+                        }
+                    }
+            }
         }
-
-// Autologoff after sending to kitchen 
-        // lets check what mode we are operating in   
-        switch (m_App.getProperties().getProperty("machine.ticketsbag")) {
-            case "restaurant":
-//Go back to the main login screen if not set to go back to the tables.               
-                if ("false".equals(m_App.getProperties().getProperty("till.autoLogoffrestaurant"))) {
-                    deactivate();
-                    ((JRootApp) m_App).closeAppView();
-                    break;
-                }
-                deactivate();
-                setActiveTicket(null, null);
-                break;
-        }
-
     }//GEN-LAST:event_j_btnKitchenPrtActionPerformed
 
     private void m_jaddtaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jaddtaxActionPerformed
@@ -2543,15 +2616,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jaddtaxActionPerformed
 
     private void btnLogout(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout
+        AutoLogoff.getInstance().deactivateTimer();
         deactivate();
         ((JRootApp) m_App).closeAppView();
     }//GEN-LAST:event_btnLogout
 
     private void btnReprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprintActionPerformed
-        // test if there is valid ticket in the system at this till to be printed
-        if (m_config.getProperty("lastticket.number") != null) {
+        AutoLogoff.getInstance().deactivateTimer();
+// test if there is valid ticket in the system at this till to be printed
+        if (AppConfig.getInstance().getProperty("lastticket.number") != null) {
             try {
-                TicketInfo ticket = dlSales.loadTicket(Integer.parseInt((m_config.getProperty("lastticket.type"))), Integer.parseInt((m_config.getProperty("lastticket.number"))));
+                TicketInfo ticket = dlSales.loadTicket(Integer.parseInt((AppConfig.getInstance().getProperty("lastticket.type"))), Integer.parseInt((AppConfig.getInstance().getProperty("lastticket.number"))));
                 if (ticket == null) {
                     JFrame frame = new JFrame();
                     JOptionPane.showMessageDialog(frame, AppLocal.getIntString("message.notexiststicket"), AppLocal.getIntString("message.notexiststickettitle"), JOptionPane.WARNING_MESSAGE);
@@ -2570,6 +2645,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 msg.show(this);
             }
         }
+        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_btnReprintActionPerformed
 
 

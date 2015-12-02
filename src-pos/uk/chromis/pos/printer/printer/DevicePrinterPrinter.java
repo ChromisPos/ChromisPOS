@@ -90,7 +90,6 @@ public class DevicePrinterPrinter implements DevicePrinter {
     private int imageable_y;
     private Media media;
     
-    // JG 16 May 12 use multicatch
     private static final HashMap<String, MediaSizeName> mediasizenamemap = new HashMap<>();
 
     /** 

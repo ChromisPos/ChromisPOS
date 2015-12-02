@@ -22,6 +22,7 @@
 
 boolean kitchen = false;
 
+if (ticket.getTicketType() != 1) {
 for(int i= 0; i < ticket.getLinesCount(); i++){
 	line = ticket.getLine(i);
 
@@ -45,9 +46,9 @@ if (kitchen){
 for(int i = ticket.getLinesCount()-1; i>= 0 ; i--){
 	line = ticket.getLine(i);
 	String a = line.getProperty("sendstatus");
-
-		
+	
 	if((line.isProductKitchen()) && (line.getProperty("sendstatus").equals("No"))){
 		line.setProperty("sendstatus", "OK");
 	}
+}
 }

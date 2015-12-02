@@ -91,7 +91,6 @@ public class SQLTable implements TreeNode {
     }
     @Override
     public boolean isLeaf() {
-// JG 16 May 2013 use isEmpty instead of size.
         return m_aColumns.isEmpty();
     }   
 //    public Enumeration children(){

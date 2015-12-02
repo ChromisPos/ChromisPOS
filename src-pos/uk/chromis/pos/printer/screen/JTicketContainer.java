@@ -24,7 +24,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Rectangle;
 
-// JG 16 May 12 replace
+
 // import java.awt.*;
 // import java.awt.event.*;
 // import java.awt.image.*;

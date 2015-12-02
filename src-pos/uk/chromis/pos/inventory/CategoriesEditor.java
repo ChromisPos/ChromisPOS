@@ -38,6 +38,7 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
@@ -71,22 +72,15 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         // El modelo de categorias
         m_sentcat = dlSales.getCategoriesList();
         m_CategoryModel = new ComboBoxValModel();
-
         m_sentadd = dlSales.getCatalogCategoryAdd();
         m_sentdel = dlSales.getCatalogCategoryDel();
-
+        m_jCatalogOrder.getDocument().addDocumentListener(dirty);
         m_jName.getDocument().addDocumentListener(dirty);
         m_jCategory.addActionListener(dirty);
         m_jImage.addPropertyChangeListener("image", dirty);
         m_jCatNameShow.addActionListener(dirty);
-
-// Added JDL 13.04.13
         m_jTextTip.getDocument().addDocumentListener(dirty);
-
-// Added JDL 15.02.15 colour for button borders        
         m_jbtnColour.getDocument().addDocumentListener(dirty);
-
-// get the default border
         border = m_jbtnColour.getBorder();
 
         writeValueEOF();
@@ -115,7 +109,7 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         if ("".equals(m_jbtnColour.getText())) {
             m_jbtnColour.setBorder(border);
         } else {
-            m_jbtnColour.setBorder(BorderFactory.createLineBorder(new Color((int) Integer.decode(m_jbtnColour.getText())), 3));
+            m_jbtnColour.setBorder(BorderFactory.createLineBorder(new Color((int) Integer.decode(m_jbtnColour.getText())), 4));
         }
 
     }
@@ -136,6 +130,8 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         m_jCatalogAdd.setEnabled(false);
         m_jTextTip.setText(null);
         m_jTextTip.setEnabled(false);
+        m_jCatalogOrder.setText(null);
+        m_jCatalogOrder.setEnabled(false);
         m_jCatNameShow.setSelected(false);
         m_jCatNameShow.setEnabled(false);
         m_jbtnColour.setText(null);
@@ -164,6 +160,8 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         m_jbtnColour.setText(null);
         m_jbtnColour.setEnabled(true);
         m_jbtnColour.setBorder(border);
+        m_jCatalogOrder.setText(null);
+        m_jCatalogOrder.setEnabled(true);
     }
 
     /**
@@ -180,6 +178,7 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         m_jTextTip.setText(Formats.STRING.formatValue(cat[4]));
         m_jCatNameShow.setSelected(((Boolean) cat[5]).booleanValue());
         m_jbtnColour.setText(Formats.STRING.formatValue(cat[6]));
+        m_jCatalogOrder.setText(Formats.INT.formatValue(cat[7]));
         m_jName.setEnabled(false);
         m_jCategory.setEnabled(false);
         m_jImage.setEnabled(false);
@@ -205,6 +204,7 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         m_jTextTip.setText(Formats.STRING.formatValue(cat[4]));
         m_jCatNameShow.setSelected(((Boolean) cat[5]));
         m_jbtnColour.setText(Formats.STRING.formatValue(cat[6]));
+        m_jCatalogOrder.setText(Formats.INT.formatValue(cat[7]));
         m_jName.setEnabled(true);
         m_jCategory.setEnabled(true);
         m_jImage.setEnabled(true);
@@ -213,6 +213,7 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         m_jTextTip.setEnabled(true);
         m_jCatNameShow.setEnabled(true);
         m_jbtnColour.setEnabled(true);
+        m_jCatalogOrder.setEnabled(true);
 
         if ("".equals(m_jbtnColour.getText())) {
             m_jbtnColour.setBorder(border);
@@ -228,15 +229,16 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
     @Override
     public Object createValue() throws BasicException {
 
-        Object[] cat = new Object[7];
+        Object[] cat = new Object[8];
 
         cat[0] = m_id;
         cat[1] = m_jName.getText();
         cat[2] = m_CategoryModel.getSelectedKey();
         cat[3] = m_jImage.getImage();
         cat[4] = m_jTextTip.getText();
-        cat[5] = Boolean.valueOf(m_jCatNameShow.isSelected());
+        cat[5] = m_jCatNameShow.isSelected();
         cat[6] = m_jbtnColour.getText();
+        cat[7] = Formats.INT.parseValue(m_jCatalogOrder.getText());
 
         return cat;
     }
@@ -271,11 +273,13 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         jLabel6 = new javax.swing.JLabel();
         m_jTextTip = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        m_jCatNameShow = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         jColorChooser = new javax.swing.JButton();
         m_jbtnColour = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        m_jCatNameShow = new eu.hansolo.custom.SteelCheckBox();
+        m_jCatalogOrder = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
 
         jInternalFrame1.setVisible(true);
 
@@ -293,9 +297,9 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText(AppLocal.getIntString("label.image")); // NOI18N
         add(jLabel3);
-        jLabel3.setBounds(20, 200, 80, 15);
+        jLabel3.setBounds(20, 270, 80, 15);
         add(m_jImage);
-        m_jImage.setBounds(200, 200, 250, 190);
+        m_jImage.setBounds(200, 270, 250, 190);
 
         m_jCatalogAdd.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jCatalogAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/editnew.png"))); // NOI18N
@@ -355,11 +359,6 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
         add(jLabel7);
         jLabel7.setBounds(20, 130, 130, 15);
 
-        m_jCatNameShow.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        m_jCatNameShow.setSelected(true);
-        add(m_jCatNameShow);
-        m_jCatNameShow.setBounds(195, 130, 30, 21);
-
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText(bundle.getString("label.CatalogueStatusYes")); // NOI18N
@@ -375,21 +374,36 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
             }
         });
         add(jColorChooser);
-        jColorChooser.setBounds(300, 155, 30, 30);
+        jColorChooser.setBounds(300, 208, 30, 30);
+
+        m_jbtnColour.setMargin(new java.awt.Insets(3, 3, 3, 3));
         add(m_jbtnColour);
-        m_jbtnColour.setBounds(200, 160, 90, 20);
+        m_jbtnColour.setBounds(200, 210, 90, 25);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText(bundle.getString("Button.Bordercolour")); // NOI18N
         add(jLabel1);
-        jLabel1.setBounds(20, 160, 170, 20);
+        jLabel1.setBounds(20, 210, 170, 20);
+
+        m_jCatNameShow.setSelected(true);
+        m_jCatNameShow.setText(" ");
+        add(m_jCatNameShow);
+        m_jCatNameShow.setBounds(200, 120, 40, 30);
+
+        m_jCatalogOrder.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        add(m_jCatalogOrder);
+        m_jCatalogOrder.setBounds(200, 170, 30, 25);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText(bundle.getString("label.categoryordernumber")); // NOI18N
+        add(jLabel9);
+        jLabel9.setBounds(20, 170, 160, 20);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jCatalogDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jCatalogDeleteActionPerformed
 
         try {
             m_sentdel.exec(m_id);
-// JG 3 Oct 2013 - simple toggle Category state         
 // TODO replace with ToggleButton
             m_jCatalogDelete.setEnabled(false);
             m_jCatalogAdd.setEnabled(true);
@@ -406,7 +420,6 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
             Object param = m_id;
             m_sentdel.exec(param); // primero borramos
             m_sentadd.exec(param); // y luego insertamos lo que queda
-// JG 3 Oct 2013 - simple toggle Category state
 // TODO replace with ToggleButton            
             m_jCatalogAdd.setEnabled(false);
             m_jCatalogDelete.setEnabled(true);
@@ -444,9 +457,11 @@ public final class CategoriesEditor extends JPanel implements EditorRecord {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JCheckBox m_jCatNameShow;
+    private javax.swing.JLabel jLabel9;
+    private eu.hansolo.custom.SteelCheckBox m_jCatNameShow;
     private javax.swing.JButton m_jCatalogAdd;
     private javax.swing.JButton m_jCatalogDelete;
+    private javax.swing.JTextField m_jCatalogOrder;
     private javax.swing.JComboBox m_jCategory;
     private uk.chromis.data.gui.JImageEditor m_jImage;
     private javax.swing.JTextField m_jName;

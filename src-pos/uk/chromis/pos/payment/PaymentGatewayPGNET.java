@@ -33,6 +33,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.AltEncrypter;
@@ -58,12 +59,12 @@ public class PaymentGatewayPGNET implements PaymentGateway {
      */
     public PaymentGatewayPGNET(AppProperties props) {
         // Grab some configuration variables
-        m_sCommerceID = props.getProperty("payment.commerceid");
+        m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
         
         AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
-        this.m_sCommercePassword = cypher.decrypt(props.getProperty("payment.commercepassword").substring(6));
+        this.m_sCommercePassword = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6));
         
-        m_bTestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         
         ENDPOINTADDRESS = (m_bTestMode) 
                 ? "https://www.paymentsgateway.net/cgi-bin/posttest.pl"
@@ -84,7 +85,6 @@ public class PaymentGatewayPGNET implements PaymentGateway {
     @Override
     public void execute(PaymentInfoMagcard payinfo) {
 
-// JG 16 May 12 use StringBuilder in place of StringBuilder
         StringBuilder sb = new StringBuilder();
         try {
             
@@ -153,7 +153,6 @@ public class PaymentGatewayPGNET implements PaymentGateway {
             connection.setUseCaches(false);
 
             // not necessarily required but fixes a bug with some servers
-// JG 16 May 12 use try-with-resources
             connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
             try (DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
                 out.write(sb.toString().getBytes());
@@ -198,7 +197,6 @@ public class PaymentGatewayPGNET implements PaymentGateway {
                 payinfo.paymentError(AppLocal.getIntString("message.paymenterror"), sCode);
             }
             
-// JG 16 May 12 use multicatch
         } catch (UnsupportedEncodingException | MalformedURLException eUE) {
             payinfo.paymentError(AppLocal.getIntString("message.paymentexceptionservice"), eUE.getMessage());
         } catch(IOException e){

@@ -36,16 +36,14 @@ public class JPanelConfigERP extends javax.swing.JPanel implements PanelConfig {
     /** Creates new form JPanelConfigERP */
     public JPanelConfigERP() {
         initComponents();
-        
-        
+ 
         jTextField1.getDocument().addDocumentListener(dirty);
         jTextField2.getDocument().addDocumentListener(dirty);
         jtxtId.getDocument().addDocumentListener(dirty);
         jtxtName.getDocument().addDocumentListener(dirty);
         jtxtPassword.getDocument().addDocumentListener(dirty);
         jtxtUrl.getDocument().addDocumentListener(dirty);
-        
-        
+     
     }
     
     /**
@@ -71,15 +69,15 @@ public class JPanelConfigERP extends javax.swing.JPanel implements PanelConfig {
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
 
-        jtxtUrl.setText(config.getProperty("erp.URL"));    
-        jtxtId.setText(config.getProperty("erp.id"));
-        jTextField2.setText(config.getProperty("erp.pos"));
-        jTextField1.setText(config.getProperty("erp.org"));
+        jtxtUrl.setText(AppConfig.getInstance().getProperty("erp.URL"));    
+        jtxtId.setText(AppConfig.getInstance().getProperty("erp.id"));
+        jTextField2.setText(AppConfig.getInstance().getProperty("erp.pos"));
+        jTextField1.setText(AppConfig.getInstance().getProperty("erp.org"));
         
-        String sERPUser = config.getProperty("erp.user");
-        String sERPPassword = config.getProperty("erp.password");        
+        String sERPUser = AppConfig.getInstance().getProperty("erp.user");
+        String sERPPassword = AppConfig.getInstance().getProperty("erp.password");        
         if (sERPUser != null && sERPPassword != null && sERPPassword.startsWith("crypt:")) {
             // La clave esta encriptada.
             AltEncrypter cypher = new AltEncrypter("cypherkey" + sERPUser);
@@ -96,16 +94,14 @@ public class JPanelConfigERP extends javax.swing.JPanel implements PanelConfig {
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
-        
-        config.setProperty("erp.URL", jtxtUrl.getText());
-        config.setProperty("erp.id", jtxtId.getText());
-        config.setProperty("erp.pos", jTextField2.getText());
-        config.setProperty("erp.org", jTextField1.getText());
-        
-        config.setProperty("erp.user", jtxtName.getText());
+    public void saveProperties() {        
+        AppConfig.getInstance().setProperty("erp.URL", jtxtUrl.getText());
+        AppConfig.getInstance().setProperty("erp.id", jtxtId.getText());
+        AppConfig.getInstance().setProperty("erp.pos", jTextField2.getText());
+        AppConfig.getInstance().setProperty("erp.org", jTextField1.getText());        
+        AppConfig.getInstance().setProperty("erp.user", jtxtName.getText());
         AltEncrypter cypher = new AltEncrypter("cypherkey" + jtxtName.getText());             
-        config.setProperty("erp.password", "crypt:" + cypher.encrypt(new String(jtxtPassword.getPassword())));
+        AppConfig.getInstance().setProperty("erp.password", "crypt:" + cypher.encrypt(new String(jtxtPassword.getPassword())));
 
         dirty.setDirty(false);
     }

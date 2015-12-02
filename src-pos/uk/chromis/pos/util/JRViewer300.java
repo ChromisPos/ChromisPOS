@@ -551,7 +551,6 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
 	/**
 	 *
 	 */
-// JG Jul 2012 Added Docx Contributor
         protected void initSaveContributors()
 	{
 		final String[] defaultContributors =

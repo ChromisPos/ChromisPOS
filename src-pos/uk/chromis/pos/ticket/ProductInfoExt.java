@@ -63,6 +63,9 @@ public class ProductInfoExt {
     protected boolean m_bAlwaysAvailable;
     protected boolean m_canDiscount;
     protected String m_discounted;
+    protected Boolean m_ispack;
+    protected Double m_packquantity;
+    protected String m_packproduct;
 
     public ProductInfoExt() {
         m_ID = null;                    //1
@@ -89,10 +92,13 @@ public class ProductInfoExt {
         m_sTextTip = null;              //22
         m_bWarranty = false;            //23
         m_dStockUnits = 0.0;            //24
-        m_sAlias=null;                  //25
+        m_sAlias = null;                //25
         m_bAlwaysAvailable = false;     //26
         m_canDiscount = true;           //27
         m_discounted = "no";            //28
+        m_ispack = false;               //29
+        m_packquantity = null;          //30    
+        m_packproduct = null;           //31
     }
 
     /**
@@ -304,34 +310,58 @@ public class ProductInfoExt {
         return attributes;
     }
 
-     public final String getAlias() {
+    public final String getAlias() {
         return m_sAlias;
     }
 
-     public final void setAlias(String alias) {
+    public final void setAlias(String alias) {
         m_sAlias = alias;
-    }     
-    
-        public final boolean getAlwaysAvailable() {
+    }
+
+    public final boolean getAlwaysAvailable() {
         return m_bAlwaysAvailable;
     }
 
     public final void setAlwaysAvailable(boolean bValue) {
         m_bAlwaysAvailable = bValue;
     }
- 
+
     public final boolean getCanDiscount() {
         return m_canDiscount;
-    }  
-    
-     public final String getDiscounted() {
+    }
+
+    public final String getDiscounted() {
         return m_discounted;
-    }   
-    
-     public void setDiscounted(String discount) {
+    }
+
+    public void setDiscounted(String discount) {
         m_discounted = discount;
     }
+
+    public final boolean getIsPack() {
+        return m_ispack;
+    }
+
+    public void setIsPack(Boolean ispack) {
+        m_ispack = ispack; 
+    }
+
+    public final double getPackQuantity() {
+        return m_packquantity;
+    }
+
+    public final void setPackQuantity(double packQuantity) {
+        m_packquantity = packQuantity;    
+    }
     
+    public final String getPackProduct() {
+        return m_packproduct;
+    }
+
+    public void setPackProduct(String packproduct) {
+        m_packproduct = packproduct;
+    }
+
     public static SerializerRead getSerializerRead() {
         return new SerializerRead() {
             @Override
@@ -363,6 +393,9 @@ public class ProductInfoExt {
                 product.m_bAlwaysAvailable = dr.getBoolean(24);
                 product.m_discounted = dr.getString(25);
                 product.m_canDiscount = dr.getBoolean(26);
+                product.m_ispack = dr.getBoolean(27);
+                product.m_packquantity = dr.getDouble(28);
+                product.m_packproduct = dr.getString(29);
 
                 return product;
             }

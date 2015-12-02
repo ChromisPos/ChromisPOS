@@ -54,16 +54,16 @@ public class ConfigPaymentPanelLinkPoint extends javax.swing.JPanel implements P
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
-        String sCommerceID = config.getProperty("payment.commerceid");
-        String sCertificatePass = config.getProperty("payment.certificatePassword");
-        String sCertificatePath = config.getProperty("payment.certificatePath");
+    public void loadProperties() {
+        String sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
+        String sCertificatePass = AppConfig.getInstance().getProperty("payment.certificatePassword");
+        String sCertificatePath = AppConfig.getInstance().getProperty("payment.certificatePath");
         
         if (sCommerceID!=null && sCertificatePath!=null && sCertificatePass!=null && sCertificatePass.startsWith("crypt:")) {
-            jtxtStoreName.setText(config.getProperty("payment.commerceid"));
+            jtxtStoreName.setText(AppConfig.getInstance().getProperty("payment.commerceid"));
             AltEncrypter cypher = new AltEncrypter("cypherkey");
-            jtxtCertificatePass.setText(cypher.decrypt(config.getProperty("payment.certificatePassword").substring(6)));
-            jtxtCertificatePath.setText(config.getProperty("payment.certificatePath"));
+            jtxtCertificatePass.setText(cypher.decrypt(AppConfig.getInstance().getProperty("payment.certificatePassword").substring(6)));
+            jtxtCertificatePath.setText(AppConfig.getInstance().getProperty("payment.certificatePath"));
         }
     }
     
@@ -72,11 +72,11 @@ public class ConfigPaymentPanelLinkPoint extends javax.swing.JPanel implements P
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
         AltEncrypter cypher = new AltEncrypter("cypherkey");      
-        config.setProperty("payment.commerceid", comboValue(jtxtStoreName.getText()));
-        config.setProperty("payment.certificatePath", comboValue(jtxtCertificatePath.getText()));
-        config.setProperty("payment.certificatePassword", "crypt:" + cypher.encrypt(new String(jtxtCertificatePass.getPassword())));
+        AppConfig.getInstance().setProperty("payment.commerceid", comboValue(jtxtStoreName.getText()));
+        AppConfig.getInstance().setProperty("payment.certificatePath", comboValue(jtxtCertificatePath.getText()));
+        AppConfig.getInstance().setProperty("payment.certificatePassword", "crypt:" + cypher.encrypt(new String(jtxtCertificatePass.getPassword())));
     }
     
     private String comboValue(Object value) {

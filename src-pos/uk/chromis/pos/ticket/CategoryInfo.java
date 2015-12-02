@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.ticket;
 
 import java.awt.image.BufferedImage;
@@ -28,8 +27,8 @@ import uk.chromis.data.loader.SerializerRead;
 
 /**
  *
- * @author  Adrian
- * @version 
+ * @author Adrian
+ * @version
  */
 public class CategoryInfo implements IKeyed {
 
@@ -40,129 +39,84 @@ public class CategoryInfo implements IKeyed {
     private BufferedImage m_Image;
     private Boolean m_bCatShowName;
     private String m_sColour;
+    private Integer m_iCatOrder;
 
-    /** Creates new CategoryInfo
+    /**
+     * Creates new CategoryInfo
+     *
      * @param id
      * @param name
      * @param image
      * @param texttip
-     * @param catshowname */
-    public CategoryInfo(String id, String name, BufferedImage image, String texttip, Boolean catshowname, String colour) {
+     * @param catshowname
+     */
+    public CategoryInfo(String id, String name, BufferedImage image, String texttip, Boolean catshowname, String colour, Integer catorder) {
         m_sID = id;
         m_sName = name;
         m_Image = image;
         m_sTextTip = texttip;
         m_bCatShowName = catshowname;
         m_sColour = colour;
+        m_iCatOrder = catorder;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Object getKey() {
         return m_sID;
     }
 
-    /**
-     *
-     * @param sID
-     */
     public void setID(String sID) {
         m_sID = sID;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getID() {
         return m_sID;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getName() {
         return m_sName;
     }
 
-    /**
-     *
-     * @param sName
-     */
     public void setName(String sName) {
         m_sName = sName;
     }
-// ADDED JDL 13.04.13 *************
 
-    /**
-     *
-     * @return
-     */
-        public String getTextTip() {
+    public String getTextTip() {
         return m_sTextTip;
     }
 
-    /**
-     *
-     * @param sName
-     */
     public void setTextTip(String sName) {
         m_sTextTip = sName;
     }
- 
-    /**
-     *
-     * @return
-     */
+
     public Boolean getCatShowName() {
         return m_bCatShowName;
     }
 
-    /**
-     *
-     * @param bcatshowname
-     */
     public void setCatShowName(Boolean bcatshowname) {
         m_bCatShowName = bcatshowname;
     }
-    
-        /**
-     *
-     * @return
-     */
-    
+
     public Object getColour() {
         return m_sColour;
     }
-    
-    /**
-     *
-     * @param 
-     */
+
     public void setColour(String sColour) {
         m_sColour = sColour;
     }
-    
-    
-    // *******************************
-    
-    /**
-     *
-     * @return
-     */
-        
+
+    public Integer getCatOrder() {
+        return m_iCatOrder;
+    }
+
+    public void setColour(Integer catorder) {
+        m_iCatOrder = catorder;
+    }
+
     public BufferedImage getImage() {
         return m_Image;
     }
 
-    /**
-     *
-     * @param img
-     */
     public void setImage(BufferedImage img) {
         m_Image = img;
     }
@@ -172,14 +126,12 @@ public class CategoryInfo implements IKeyed {
         return m_sName;
     }
 
-    /**
-     *
-     * @return
-     */
     public static SerializerRead getSerializerRead() {
-        return new SerializerRead() {@Override
- public Object readValues(DataRead dr) throws BasicException {
-            return new CategoryInfo(dr.getString(1), dr.getString(2), ImageUtils.readImage(dr.getBytes(3)),dr.getString(4),dr.getBoolean(5), dr.getString(6));
-        }};
+        return new SerializerRead() {
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new CategoryInfo(dr.getString(1), dr.getString(2), ImageUtils.readImage(dr.getBytes(3)), dr.getString(4), dr.getBoolean(5), dr.getString(6), dr.getInt(7));
+            }
+        };
     }
 }

@@ -55,10 +55,6 @@ public class AltEncrypter {
             
             cipherDecrypt = Cipher.getInstance("DESEDE/ECB/PKCS5Padding");
             cipherDecrypt.init(Cipher.DECRYPT_MODE, key);
-//        } catch (UnsupportedEncodingException e) {  // JG 1 Oct 13 - use multicatch
-//        } catch (NoSuchPaddingException e) {
-//        } catch (NoSuchAlgorithmException e) {
-//        } catch (InvalidKeyException e) {
         } catch (UnsupportedEncodingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException e) {
         }
     }
@@ -72,9 +68,6 @@ public class AltEncrypter {
         try {
             return StringUtils.byte2hex(cipherEncrypt.doFinal(str.getBytes("UTF8")));
         } catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException e) {
-//        } catch (UnsupportedEncodingException e) { // JG 1 Oct 13 - use multicatch
-//        } catch (BadPaddingException e) {
-//        } catch (IllegalBlockSizeException e) {
         }
         return null;
     }
@@ -87,10 +80,7 @@ public class AltEncrypter {
     public String decrypt(String str) {
         try {
             return new String(cipherDecrypt.doFinal(StringUtils.hex2byte(str)), "UTF8");
-        } catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException e) {
-//        } catch (UnsupportedEncodingException e) { // JG 1 Oct 13 - use multicatch
-//        } catch (BadPaddingException e) {
-//        } catch (IllegalBlockSizeException e) {            
+        } catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException e) {          
         }
         return null;
     }    

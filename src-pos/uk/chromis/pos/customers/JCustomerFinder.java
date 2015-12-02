@@ -201,7 +201,6 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
             afilter[5] = "%" + m_jtxtName.getText() + "%";
         }
 
-// Added JG 20 Sept 12
         // Postal
         if (m_jtxtPostal.getText() == null || m_jtxtPostal.getText().equals("")) {
             afilter[6] = QBFCompareEnum.COMP_NONE;
@@ -211,7 +210,6 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
             afilter[7] = "%" + m_jtxtPostal.getText() + "%";
         }
 
-// Added JG 20 Sept 12
         // Phone
         if (m_jtxtPhone.getText() == null || m_jtxtPhone.getText().equals("")) {
             afilter[8] = QBFCompareEnum.COMP_NONE;
@@ -221,7 +219,6 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
             afilter[9] = "%" + m_jtxtPhone.getText() + "%";
         }
 
-// Added JG 20 Sept 12
         // Email
         if (m_jtxtEmail.getText() == null || m_jtxtEmail.getText().equals("")) {
             afilter[10] = QBFCompareEnum.COMP_NONE;

@@ -18,9 +18,11 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.printer.escpos;
 
+import uk.chromis.pos.printer.DeviceTicket;
+
 /**
  *
- *   
+ *
  */
 public class CodesEpson extends Codes {
 
@@ -58,133 +60,88 @@ public class CodesEpson extends Codes {
         return CHAR_SIZE_0;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getSize1() {
         return CHAR_SIZE_1;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getSize2() {
         return CHAR_SIZE_2;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getSize3() {
         return CHAR_SIZE_3;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getBoldSet() {
         return BOLD_SET;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getBoldReset() {
         return BOLD_RESET;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getUnderlineSet() {
         return UNDERLINE_SET;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getUnderlineReset() {
         return UNDERLINE_RESET;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getOpenDrawer() {
         return OPEN_DRAWER;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getCutReceipt() {
         return PARTIAL_CUT_1;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getNewLine() {
         return NEW_LINE;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getImageHeader() {
         return IMAGE_HEADER;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int getImageWidth() {
         return 256;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public byte[] getImageLogo(Byte iNumber) {
         byte[] IMAGE_LOGO = {0x1C, 0x70, iNumber, 0x00};
         return IMAGE_LOGO;
     }
-    
-    
-    
-    
-    
+
     @Override
     public byte[] setPageMode() {
         return PAGEMODE;
     }
-    
-    
-    
+
+    @Override
+    public void printBarcode(PrinterWritter out, String type, String position, String code) {
+// Modified 07.02.2014 JDL    
+        out.write(new byte[]{0x1b, 0x61, 0x01}); //set to print in the centre of the line  
+        out.write(new byte[]{0x1D, 0x77, 0x02}); // set the width of barcode  
+        out.write(new byte[]{0x1D, 0x48, 0x02}); // set the position of user readable text
+        out.write(new byte[]{0x1D, 0x68, 0x20}); // set the height of barcode
+        out.write(new byte[]{0x1D, 0x6B, 0x02}); // setup to use ean13             
+        out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 12).substring(0, 12)));
+        out.write(new byte[]{0x00}); //end barcode   
+
+    }
+
 }

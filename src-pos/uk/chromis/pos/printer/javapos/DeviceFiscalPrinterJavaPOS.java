@@ -190,16 +190,16 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jTextField2 = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
         jButton2 = new javax.swing.JButton();
+        jCheckBox1 = new eu.hansolo.custom.SteelCheckBox();
+        jCheckBox2 = new eu.hansolo.custom.SteelCheckBox();
+        jCheckBox3 = new eu.hansolo.custom.SteelCheckBox();
+        jCheckBox4 = new eu.hansolo.custom.SteelCheckBox();
+        jCheckBox5 = new eu.hansolo.custom.SteelCheckBox();
 
         setLayout(null);
 
@@ -222,24 +222,10 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         jPanel1.add(jTextField1);
         jTextField1.setBounds(20, 30, 260, 25);
 
-        jCheckBox1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox1.setText("jCheckBox1");
-        jCheckBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jPanel1.add(jCheckBox1);
-        jCheckBox1.setBounds(290, 30, 110, 25);
-
         jTextField2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jTextField2.setText("jTextField2");
         jPanel1.add(jTextField2);
         jTextField2.setBounds(20, 60, 260, 25);
-
-        jCheckBox2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox2.setText("jCheckBox2");
-        jCheckBox2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox2.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jPanel1.add(jCheckBox2);
-        jCheckBox2.setBounds(290, 60, 110, 25);
 
         jTextField3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jTextField3.setText("jTextField3");
@@ -256,27 +242,6 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         jPanel1.add(jTextField5);
         jTextField5.setBounds(20, 150, 260, 25);
 
-        jCheckBox3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox3.setText("jCheckBox3");
-        jCheckBox3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox3.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jPanel1.add(jCheckBox3);
-        jCheckBox3.setBounds(290, 90, 110, 25);
-
-        jCheckBox4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox4.setText("jCheckBox4");
-        jCheckBox4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox4.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jPanel1.add(jCheckBox4);
-        jCheckBox4.setBounds(290, 120, 110, 25);
-
-        jCheckBox5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox5.setText("jCheckBox5");
-        jCheckBox5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBox5.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jPanel1.add(jCheckBox5);
-        jCheckBox5.setBounds(290, 150, 110, 25);
-
         jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton2.setText("*Z Report");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -286,6 +251,26 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         });
         jPanel1.add(jButton2);
         jButton2.setBounds(20, 220, 130, 23);
+
+        jCheckBox1.setText("jCheckBox1");
+        jPanel1.add(jCheckBox1);
+        jCheckBox1.setBounds(290, 30, 160, 30);
+
+        jCheckBox2.setText("jCheckBox2");
+        jPanel1.add(jCheckBox2);
+        jCheckBox2.setBounds(290, 60, 170, 30);
+
+        jCheckBox3.setText("jCheckBox3");
+        jPanel1.add(jCheckBox3);
+        jCheckBox3.setBounds(290, 90, 160, 30);
+
+        jCheckBox4.setText("jCheckBox4");
+        jPanel1.add(jCheckBox4);
+        jCheckBox4.setBounds(290, 120, 170, 30);
+
+        jCheckBox5.setText("jCheckBox5");
+        jPanel1.add(jCheckBox5);
+        jCheckBox5.setBounds(290, 150, 160, 30);
 
         add(jPanel1);
         jPanel1.setBounds(10, 60, 470, 260);
@@ -307,11 +292,11 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
+    private eu.hansolo.custom.SteelCheckBox jCheckBox1;
+    private eu.hansolo.custom.SteelCheckBox jCheckBox2;
+    private eu.hansolo.custom.SteelCheckBox jCheckBox3;
+    private eu.hansolo.custom.SteelCheckBox jCheckBox4;
+    private eu.hansolo.custom.SteelCheckBox jCheckBox5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
