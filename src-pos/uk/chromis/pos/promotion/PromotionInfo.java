@@ -17,9 +17,18 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 
-package uk.chromis.pos.inventory;
+package uk.chromis.pos.promotion;
 
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.IKeyed;
+import uk.chromis.data.loader.ImageUtils;
+import uk.chromis.data.loader.SerializerRead;
+import uk.chromis.format.Formats;
+import uk.chromis.pos.ticket.CategoryInfo;
 
 /**
  *
@@ -36,7 +45,7 @@ public class PromotionInfo implements IKeyed {
     private String m_sScript;
     private Boolean m_bIsEnabled;
 
-    /** Creates a new instance of LocationInfo */
+    /** Creates a new instance of PromotionInfo */
     public PromotionInfo( String sID, String sName, String sCriteria,
             String sScript, Boolean bIsEnabled )
     {
@@ -46,6 +55,24 @@ public class PromotionInfo implements IKeyed {
         m_sScript = sScript;
         m_bIsEnabled = bIsEnabled;
     }
+   
+        /** Creates a new instance of PromotionInfo */
+    public PromotionInfo( String sID, String sName, byte [] aCriteria,
+            byte [] aScript, Boolean bIsEnabled )
+    {
+        m_sID = sID;
+        m_sName = sName;
+        
+        try {
+            m_sCriteria = new String(aCriteria, "UTF-8");
+            m_sScript = new String(aScript, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(PromotionInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        m_bIsEnabled = bIsEnabled;
+    }
+    
     
     /**
      *
@@ -139,4 +166,6 @@ public class PromotionInfo implements IKeyed {
     public String toString(){
         return m_sName;
     }    
+
+
 }

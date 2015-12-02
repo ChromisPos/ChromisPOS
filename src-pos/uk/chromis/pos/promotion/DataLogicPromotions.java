@@ -20,20 +20,27 @@
 package uk.chromis.pos.promotion;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import uk.chromis.basic.BasicException;
+import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.PreparedSentence;
 import uk.chromis.data.loader.SentenceExec;
 import uk.chromis.data.loader.SentenceExecTransaction;
 import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.SerializerRead;
 import uk.chromis.data.loader.SerializerReadString;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
+import uk.chromis.data.loader.SerializerWriteString;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.model.Field;
 import uk.chromis.data.model.Row;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.ticket.CategoryInfo;
 
 public class DataLogicPromotions extends BeanFactoryDataSingle {
     
@@ -49,6 +56,13 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
     protected String[] m_PromotionFieldNames = new String[] {
                 "ID", "NAME", "CRITERIA", "SCRIPT", "ISENABLED"
             };          
+    
+    protected int INDEX_ID = 0;
+    protected int INDEX_NAME = 1;
+    protected int INDEX_CRITERIA = 2;
+    protected int INDEX_SCRIPT = 3;
+    protected int INDEX_ISENABLED = 4;
+    protected int FIELD_COUNT = 5;
     
     private Datas[] m_PromotionFieldDataTypes = new Datas[] 
         {Datas.STRING, Datas.STRING, Datas.SERIALIZABLE,
@@ -271,5 +285,36 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
            new PreparedSentence( m_session, sql, null).exec();
        }
     }
+ 
+    /**
+     *
+     * @return
+     */
+    public static SerializerRead getPromotionsSerializerRead() {
+        return new SerializerRead() {@Override
+        public Object readValues(DataRead dr) throws BasicException {
+            
+            return new PromotionInfo(dr.getString(1), dr.getString(2),
+                    Formats.BYTEA.formatValue( Datas.SERIALIZABLE.getValue(dr, 3) ),
+                    Formats.BYTEA.formatValue( Datas.SERIALIZABLE.getValue(dr, 4) ),
+                    dr.getBoolean(5) );
+        }};
+    }    
+
+    /**
+        *
+        * @param id
+        * @return
+        * @throws BasicException
+        */
+       public final PromotionInfo getPromotionInfo(String id) throws BasicException {
+           return (PromotionInfo) new PreparedSentence( m_session, "SELECT "
+                    + "ID, NAME, CRITERIA, SCRIPT, ISENABLED "
+                    + "FROM PROMOTIONS "
+                    + "WHERE ID = ?",
+                   SerializerWriteString.INSTANCE, 
+                   getPromotionsSerializerRead())
+                   .find(id);
+       }
 
 }

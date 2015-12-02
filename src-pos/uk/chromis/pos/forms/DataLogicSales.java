@@ -18,6 +18,7 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.forms;
 
+import uk.chromis.pos.promotion.PromotionInfo;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.*;
 import uk.chromis.data.model.Field;
@@ -616,7 +617,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new SerializerRead() {@Override
                     public Object readValues(DataRead dr) throws BasicException {
                     return new PromotionInfo(dr.getString(1), dr.getString(2), 
-                            dr.getString(3), dr.getString(4), dr.getBoolean(5) );
+                                Formats.BYTEA.formatValue(dr.getBytes(3)),
+                                Formats.BYTEA.formatValue(dr.getBytes(4)),
+                                dr.getBoolean(5) );
                     }
                 });
     }
