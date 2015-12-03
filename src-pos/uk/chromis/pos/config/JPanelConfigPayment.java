@@ -40,7 +40,6 @@ import uk.chromis.pos.payment.PaymentConfiguration;
 public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConfig {
 
     private final DirtyManager dirty = new DirtyManager();
-//    private Map<String, PaymentConfiguration> paymentsName = new HashMap<String, PaymentConfiguration>();
     private final Map<String, PaymentConfiguration> paymentsName = new HashMap<>();
     private PaymentConfiguration pc;
     
@@ -59,8 +58,8 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         initPayments("external", new ConfigPaymentPanelEmpty());
         initPayments("PayPoint / SecPay", new ConfigPaymentPanelGeneric());
         initPayments("AuthorizeNet", new ConfigPaymentPanelGeneric());
-        initPayments("BluePay AUTH.NET EMU", new ConfigPaymentPanelBluePay20POST()); // JG Added BluePay re: Walter Wojick
-        initPayments("BluePay 2.0 POST", new ConfigPaymentPanelBluePay20POST()); // JG Added BluePay re: Walter Wojick
+        initPayments("BluePay AUTH.NET EMU", new ConfigPaymentPanelBluePay20POST()); 
+        initPayments("BluePay 2.0 POST", new ConfigPaymentPanelBluePay20POST()); 
         initPayments("Planetauthorize", new ConfigPaymentPanelGeneric());
         initPayments("First Data / LinkPoint / YourPay", new ConfigPaymentPanelLinkPoint());
         initPayments("PaymentsGateway.net", new ConfigPaymentPanelGeneric());
@@ -98,12 +97,12 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
 
-        jcboCardReader.setSelectedItem(config.getProperty("payment.magcardreader"));
-        jcboPaymentGateway.setSelectedItem(config.getProperty("payment.gateway"));
-        jchkPaymentTest.setSelected(Boolean.parseBoolean(config.getProperty("payment.testmode")));       
-        pc.loadProperties(config);
+        jcboCardReader.setSelectedItem(AppConfig.getInstance().getProperty("payment.magcardreader"));
+        jcboPaymentGateway.setSelectedItem(AppConfig.getInstance().getProperty("payment.gateway"));
+        jchkPaymentTest.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.testmode")));       
+        pc.loadProperties();
         dirty.setDirty(false);
     }
    
@@ -112,12 +111,12 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
         
-        config.setProperty("payment.magcardreader", comboValue(jcboCardReader.getSelectedItem()));
-        config.setProperty("payment.gateway", comboValue(jcboPaymentGateway.getSelectedItem()));
-        config.setProperty("payment.testmode", Boolean.toString(jchkPaymentTest.isSelected()));
-        pc.saveProperties(config);
+        AppConfig.getInstance().setProperty("payment.magcardreader", comboValue(jcboCardReader.getSelectedItem()));
+        AppConfig.getInstance().setProperty("payment.gateway", comboValue(jcboPaymentGateway.getSelectedItem()));
+        AppConfig.getInstance().setProperty("payment.testmode", Boolean.toString(jchkPaymentTest.isSelected()));
+        pc.saveProperties();
         dirty.setDirty(false);
     }
     
@@ -141,9 +140,10 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jcboPaymentGateway = new javax.swing.JComboBox();
-        jchkPaymentTest = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         jcboCardReader = new javax.swing.JComboBox();
+        jchkPaymentTest = new eu.hansolo.custom.SteelCheckBox();
+        jPanel1 = new javax.swing.JPanel();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setPreferredSize(new java.awt.Dimension(600, 450));
@@ -165,10 +165,6 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
             }
         });
 
-        jchkPaymentTest.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jchkPaymentTest.setText(AppLocal.getIntString("label.paymenttestmode")); // NOI18N
-        jchkPaymentTest.setPreferredSize(new java.awt.Dimension(80, 30));
-
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText(AppLocal.getIntString("label.magcardreader")); // NOI18N
         jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -176,6 +172,11 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
 
         jcboCardReader.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jcboCardReader.setPreferredSize(new java.awt.Dimension(200, 30));
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jchkPaymentTest.setText(bundle.getString("label.paymenttestmode")); // NOI18N
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -185,16 +186,26 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jcboCardReader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jcboCardReader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(jcboPaymentGateway, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jchkPaymentTest, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap(176, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(43, 43, 43)
+                                .addComponent(jchkPaymentTest, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(77, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,13 +216,16 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
                     .addComponent(jcboCardReader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jcboPaymentGateway, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jchkPaymentTest, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcboPaymentGateway, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jchkPaymentTest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(155, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -231,10 +245,11 @@ private void jcboPaymentGatewayActionPerformed(java.awt.event.ActionEvent evt) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JComboBox jcboCardReader;
     private javax.swing.JComboBox jcboPaymentGateway;
-    private javax.swing.JCheckBox jchkPaymentTest;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentTest;
     // End of variables declaration//GEN-END:variables
     
 }

@@ -118,7 +118,6 @@ public class SQLTableModel extends AbstractTableModel {
      */
     public String getColumnString(int row) {
         Object [] rowvalues = (Object[]) m_aRows.get(row);
-// JG 16 May 2013 use StringBuilder instead of StringBuilder
         StringBuilder s = new StringBuilder();
         for(int i = 0; i < rowvalues.length; i++) {
             if (i > 0) {

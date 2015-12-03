@@ -49,7 +49,6 @@ public class ProductRenderer extends DefaultListCellRenderer {
         ProductInfoExt prod = (ProductInfoExt) value;
         if (prod != null) {
 
-// JG  June 2014 Added Stock Units
 //            setText("<html>" + prod.getReference() + " - " + prod.getName() + "<br>&nbsp;&nbsp;&nbsp;&nbsp;" + Formats.CURRENCY.formatValue(prod.getPriceSell()));
             setText("<html>" + prod.getReference() + " - " + prod.getName() + "<br> " +
                     "<b>" + AppLocal.getIntString("label.stockunits") +    ":</b> " + Formats.DOUBLE.formatValue(prod.getStockUnits()) + "<br /> " +

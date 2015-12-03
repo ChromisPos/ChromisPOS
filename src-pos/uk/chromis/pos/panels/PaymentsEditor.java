@@ -81,7 +81,6 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         setReasonTotal(null, null);
         m_jreason.setEnabled(false);
         jTotal.setEnabled(false);
-// JG Added July 2011
         m_sNotes = null;
         m_jNotes.setEnabled(false);
 
@@ -100,7 +99,6 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         m_jreason.setEnabled(true);
         jTotal.setEnabled(true);   
         jTotal.activate();
-// JG Added July 2011
         m_sNotes = null;
         m_jNotes.setEnabled(true);
         m_jNotes.setText(m_sNotes);
@@ -119,7 +117,6 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         setReasonTotal(payment[4], payment[5]);
         m_jreason.setEnabled(false);
         jTotal.setEnabled(false);
-// JG Added July 2011
         m_sNotes = (String) payment[6];
         m_jNotes.setEnabled(false);
     }
@@ -138,7 +135,6 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         m_jreason.setEnabled(false);
         jTotal.setEnabled(false);
         jTotal.activate();
-// JG Added July 2011
         m_sNotes = (String) payment[6];
         m_jNotes.setEnabled(false);
     }
@@ -150,7 +146,6 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
      */
     @Override
     public Object createValue() throws BasicException {
-//JG Modified Array + 1 - July 2011
         Object[] payment = new Object[7];
         payment[0] = m_sId == null ? UUID.randomUUID().toString() : m_sId;
         payment[1] = m_App.getActiveCashIndex();
@@ -160,7 +155,6 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         PaymentReason reason = (PaymentReason) m_ReasonModel.getSelectedItem();
         Double dtotal = jTotal.getDoubleValue();
         payment[5] = reason == null ? dtotal : reason.addSignum(dtotal);
-// JG Added July 2011
         String snotes = "";
         m_sNotes = m_jNotes.getText();
         payment[6] = m_sNotes == null ? snotes : m_sNotes;

@@ -27,6 +27,7 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicStockChanges;
@@ -42,7 +43,6 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     private DataLogicStockChanges m_dlChanges;
     private DataLogicSales m_dlSales;
     private static DataLogicSystem m_dlSystem;
-    
 
     private final SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
@@ -54,17 +54,20 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     private String m_ProductRef;
     private String m_ProductID;
     private DirtyManager m_Dirty;
-    
-    /** Creates new form StockChangesEditor
-     * @param dirty */
-    public StockChangesEditor( DataLogicStockChanges dlChanges, DataLogicSales dlSales,  DataLogicSystem dlSystem, DirtyManager dirty ) {
+
+    /**
+     * Creates new form StockChangesEditor
+     *
+     * @param dirty
+     */
+    public StockChangesEditor(DataLogicStockChanges dlChanges, DataLogicSales dlSales, DataLogicSystem dlSystem, DirtyManager dirty) {
         m_dlChanges = dlChanges;
         m_dlSales = dlSales;
         m_dlSystem = dlSystem;
         m_Dirty = dirty;
-        
+
         initComponents();
-        
+
         // Categories model
         m_sentcat = dlSales.getCategoriesList();
         m_CategoryModel = new ComboBoxValModel();
@@ -72,10 +75,10 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         // Taxes model
         m_taxcatsent = dlSales.getTaxCategoriesList();
         m_taxcatmodel = new ComboBoxValModel();
-    
+
         m_jCategory.addActionListener(dirty);
         m_jTax.addActionListener(dirty);
-        
+
         jComboChangeType.addActionListener(dirty);
         jComboAction.addActionListener(dirty);
         jComboField.addActionListener(dirty);
@@ -84,7 +87,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
 
         writeValueEOF();
     }
-   
+
     /**
      *
      * @throws BasicException
@@ -94,34 +97,34 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_CategoryModel = new ComboBoxValModel(m_sentcat.list());
         m_jCategory.setModel(m_CategoryModel);
 
-        m_taxcatmodel = new ComboBoxValModel( m_taxcatsent.list());
-        m_jTax.setModel( m_taxcatmodel);
+        m_taxcatmodel = new ComboBoxValModel(m_taxcatsent.list());
+        m_jTax.setModel(m_taxcatmodel);
 
     }
-    
-    private void setValueControl( String field ) {
-        
+
+    private void setValueControl(String field) {
+
         jTextValue.setVisible(false);
-        m_jImage.setVisible(false);                
-        m_jCategory.setVisible(false);                
-        m_jTax.setVisible(false);                
-        
-        if( field == null ) {
+        m_jImage.setVisible(false);
+        m_jCategory.setVisible(false);
+        m_jTax.setVisible(false);
+
+        if (field == null) {
             return;
         }
-        
-        if( field.contentEquals("IMAGE")) {
-            m_jImage.setVisible(true);    
-        } else if( field.contentEquals("CATEGORY")) {
-            m_jCategory.setVisible(true);    
-        } else if( field.contentEquals("TAXCAT")) {
-            m_jTax.setVisible(true);    
+
+        if (field.contentEquals("IMAGE")) {
+            m_jImage.setVisible(true);
+        } else if (field.contentEquals("CATEGORY")) {
+            m_jCategory.setVisible(true);
+        } else if (field.contentEquals("TAXCAT")) {
+            m_jTax.setVisible(true);
         } else {
-            jTextValue.setVisible(true);                
+            jTextValue.setVisible(true);
         }
     }
-    
-   /**
+
+    /**
      *
      */
     @Override
@@ -129,7 +132,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_jTitle.setText(AppLocal.getIntString("label.recordeof"));
 
         m_oId = null;
-        
+
         jComboChangeType.setSelectedIndex(0);
         jComboAction.setSelectedIndex(0);
         jComboField.setSelectedIndex(0);
@@ -140,7 +143,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         jTextUser.setText(null);
         jTextValue.setText(null);
         m_jImage.setImage(null);
-        
+
         jComboChangeType.setEnabled(false);
         jComboAction.setEnabled(false);
         jComboField.setEnabled(false);
@@ -148,10 +151,10 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_jImage.setEnabled(false);
         jTextValue.setEnabled(false);
         m_jTax.setEnabled(false);
-        m_jCategory.setEnabled(false);    
+        m_jCategory.setEnabled(false);
 
-        setValueControl( null );
-}
+        setValueControl(null);
+    }
 
     /**
      *
@@ -159,9 +162,9 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     @Override
     public void writeValueInsert() {
         m_jTitle.setText(AppLocal.getIntString("label.recordnew"));
-        
+
         m_oId = UUID.randomUUID().toString();
-        
+
         jComboChangeType.setSelectedIndex(0);
         jComboAction.setSelectedIndex(0);
         jComboField.setSelectedIndex(0);
@@ -172,82 +175,78 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         jTextUser.setText(null);
         jTextValue.setText(null);
         m_jImage.setImage(null);
-        
+
         jComboChangeType.setEnabled(true);
         jComboAction.setEnabled(true);
         jComboField.setEnabled(true);
         jTextValue.setEnabled(true);
         m_jTax.setEnabled(true);
-        m_jCategory.setEnabled(true);    
+        m_jCategory.setEnabled(true);
         m_jImage.setEnabled(true);
 
-        setValueControl( null );
+        setValueControl(null);
     }
-    
-    	
-    public static void setSelectedValue(JComboBox comboBox, String value)
-    {
+
+    public static void setSelectedValue(JComboBox comboBox, String value) {
         String item;
-        for (int i = 0; i < comboBox.getItemCount(); i++)
-        {
-            item = (String)comboBox.getItemAt(i);
-            if (item.contentEquals(value) )
-            {
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            item = (String) comboBox.getItemAt(i);
+            if (item.contentEquals(value)) {
                 comboBox.setSelectedIndex(i);
                 break;
             }
         }
     }
-    
+
     /**
      *
      * @param value
      */
     @Override
     public void writeValueEdit(Object value) {
-         
+
         Object[] aValue = (Object[]) value;
-          
-        m_jTitle.setText(Formats.STRING.formatValue( aValue[ m_dlChanges.getIndexOf("PRODUCTNAME")] ));
-      
-        m_oId = aValue[ m_dlChanges.getIndexOf("ID")];
-        m_Location  = (String) aValue[ m_dlChanges.getIndexOf("LOCATION")];
-        m_ProductName = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTNAME")];
-        m_ProductRef = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTREF")];
-        m_ProductID = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTID")];
-                
-        Integer type = (Integer) aValue[ m_dlChanges.getIndexOf("CHANGETYPE")];
-        jComboChangeType.setSelectedIndex( type ) ;
-        
-        jComboAction.setSelectedIndex( (Integer) aValue[ m_dlChanges.getIndexOf("CHANGES_PROCESSED")]);
 
-        String field = (String) aValue[ m_dlChanges.getIndexOf("FIELD")];
-        setSelectedValue( jComboField, field );
+        m_jTitle.setText(Formats.STRING.formatValue(aValue[m_dlChanges.getIndexOf("PRODUCTNAME")]));
 
-        jTextProduct.setText( m_ProductName );
-        jTextUploadTime.setText(Formats.TIMESTAMP.formatValue( aValue[ m_dlChanges.getIndexOf("UPLOADTIME")] ));
-        jTextUser.setText(Formats.STRING.formatValue( aValue[ m_dlChanges.getIndexOf("USERNAME")] ));
-        jTextValue.setText(Formats.STRING.formatValue( aValue[ m_dlChanges.getIndexOf("TEXTVALUE")] ));
-        m_jImage.setImage((BufferedImage) aValue[ m_dlChanges.getIndexOf("BLOBVALUE")] );
-        if( field.contentEquals("CATEGORY")) {
-            m_CategoryModel.setSelectedKey(  aValue[ m_dlChanges.getIndexOf("TEXTVALUE")] );
+        m_oId = aValue[m_dlChanges.getIndexOf("ID")];
+        m_Location = (String) aValue[m_dlChanges.getIndexOf("LOCATION")];
+        m_ProductName = (String) aValue[m_dlChanges.getIndexOf("PRODUCTNAME")];
+        m_ProductRef = (String) aValue[m_dlChanges.getIndexOf("PRODUCTREF")];
+        m_ProductID = (String) aValue[m_dlChanges.getIndexOf("PRODUCTID")];
+
+        Integer type = (Integer) aValue[m_dlChanges.getIndexOf("CHANGETYPE")];
+        jComboChangeType.setSelectedIndex(type);
+
+        jComboAction.setSelectedIndex((Integer) aValue[m_dlChanges.getIndexOf("CHANGES_PROCESSED")]);
+
+        String field = (String) aValue[m_dlChanges.getIndexOf("FIELD")];
+        setSelectedValue(jComboField, field);
+
+        jTextProduct.setText(m_ProductName);
+        jTextUploadTime.setText(Formats.TIMESTAMP.formatValue(aValue[m_dlChanges.getIndexOf("UPLOADTIME")]));
+        jTextUser.setText(Formats.STRING.formatValue(aValue[m_dlChanges.getIndexOf("USERNAME")]));
+        jTextValue.setText(Formats.STRING.formatValue(aValue[m_dlChanges.getIndexOf("TEXTVALUE")]));
+        m_jImage.setImage((BufferedImage) aValue[m_dlChanges.getIndexOf("BLOBVALUE")]);
+        if (field.contentEquals("CATEGORY")) {
+            m_CategoryModel.setSelectedKey(aValue[m_dlChanges.getIndexOf("TEXTVALUE")]);
         }
-        
-        if( field.contentEquals("TAXCAT")) {
-            m_taxcatmodel.setSelectedKey( aValue[ m_dlChanges.getIndexOf("TEXTVALUE")] );
+
+        if (field.contentEquals("TAXCAT")) {
+            m_taxcatmodel.setSelectedKey(aValue[m_dlChanges.getIndexOf("TEXTVALUE")]);
         }
-        
+
         jComboChangeType.setEnabled(true);
         jComboAction.setEnabled(true);
         jComboField.setEnabled(true);
         jTextValue.setEnabled(true);
         m_jTax.setEnabled(true);
-        m_jCategory.setEnabled(true);    
+        m_jCategory.setEnabled(true);
         m_jImage.setEnabled(true);
-       
-        setValueControl( field );
 
-     }
+        setValueControl(field);
+
+    }
 
     /**
      *
@@ -256,86 +255,85 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     @Override
     public void writeValueDelete(Object value) {
         m_jTitle.setText(AppLocal.getIntString("label.recorddeleted"));
-        
+
         Object[] aValue = (Object[]) value;
-        
-        m_oId = aValue[ m_dlChanges.getIndexOf("ID")];
-        m_Location  = (String) aValue[ m_dlChanges.getIndexOf("LOCATION")];
-        m_ProductName = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTNAME")];
-        m_ProductRef = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTREF")];
-        m_ProductID = (String) aValue[ m_dlChanges.getIndexOf("PRODUCTID")];
-        
-        Integer type = (Integer) aValue[ m_dlChanges.getIndexOf("CHANGETYPE")];
-        jComboChangeType.setSelectedIndex( type ) ;
-        
-        jComboAction.setSelectedIndex( (Integer) aValue[ m_dlChanges.getIndexOf("CHANGES_PROCESSED")]);
-        
-        String field = (String) aValue[ m_dlChanges.getIndexOf("FIELD")];
-        setSelectedValue( jComboField, field );
+
+        m_oId = aValue[m_dlChanges.getIndexOf("ID")];
+        m_Location = (String) aValue[m_dlChanges.getIndexOf("LOCATION")];
+        m_ProductName = (String) aValue[m_dlChanges.getIndexOf("PRODUCTNAME")];
+        m_ProductRef = (String) aValue[m_dlChanges.getIndexOf("PRODUCTREF")];
+        m_ProductID = (String) aValue[m_dlChanges.getIndexOf("PRODUCTID")];
+
+        Integer type = (Integer) aValue[m_dlChanges.getIndexOf("CHANGETYPE")];
+        jComboChangeType.setSelectedIndex(type);
+
+        jComboAction.setSelectedIndex((Integer) aValue[m_dlChanges.getIndexOf("CHANGES_PROCESSED")]);
+
+        String field = (String) aValue[m_dlChanges.getIndexOf("FIELD")];
+        setSelectedValue(jComboField, field);
 
         jTextProduct.setText(m_ProductName);
-        jTextUploadTime.setText(Formats.TIMESTAMP.formatValue( aValue[ m_dlChanges.getIndexOf("UPLOADTIME")] ));
-        jTextUser.setText(Formats.STRING.formatValue( aValue[ m_dlChanges.getIndexOf("USERNAME")] ));
-        jTextValue.setText(Formats.STRING.formatValue( aValue[ m_dlChanges.getIndexOf("TEXTVALUE")] ));
-        m_jImage.setImage((BufferedImage) aValue[ m_dlChanges.getIndexOf("BLOBVALUE")] );
+        jTextUploadTime.setText(Formats.TIMESTAMP.formatValue(aValue[m_dlChanges.getIndexOf("UPLOADTIME")]));
+        jTextUser.setText(Formats.STRING.formatValue(aValue[m_dlChanges.getIndexOf("USERNAME")]));
+        jTextValue.setText(Formats.STRING.formatValue(aValue[m_dlChanges.getIndexOf("TEXTVALUE")]));
+        m_jImage.setImage((BufferedImage) aValue[m_dlChanges.getIndexOf("BLOBVALUE")]);
 
-        if( field.contentEquals("CATEGORY")) {
-            m_CategoryModel.setSelectedKey(  aValue[ m_dlChanges.getIndexOf("TEXTVALUE")] );
+        if (field.contentEquals("CATEGORY")) {
+            m_CategoryModel.setSelectedKey(aValue[m_dlChanges.getIndexOf("TEXTVALUE")]);
         }
-        
-        if( field.contentEquals("TAXCAT")) {
-            m_taxcatmodel.setSelectedKey( aValue[ m_dlChanges.getIndexOf("TEXTVALUE")] );
-        }     
-        
+
+        if (field.contentEquals("TAXCAT")) {
+            m_taxcatmodel.setSelectedKey(aValue[m_dlChanges.getIndexOf("TEXTVALUE")]);
+        }
+
         jComboChangeType.setEnabled(false);
         jComboAction.setEnabled(false);
         jComboField.setEnabled(false);
         jTextValue.setEnabled(false);
         m_jTax.setEnabled(false);
-        m_jCategory.setEnabled(false);    
+        m_jCategory.setEnabled(false);
         m_jImage.setEnabled(false);
-        
-        setValueControl( field );
+
+        setValueControl(field);
     }
-    
+
     /**
      *
-     * @return
-     * @throws BasicException
+     * @return @throws BasicException
      */
     @Override
     public Object createValue() throws BasicException {
         int count = m_dlChanges.getFieldCount();
 
         String field = (String) jComboField.getSelectedItem();
-        
+
         Object[] changes = new Object[count];
-        changes[ m_dlChanges.getIndexOf("ID") ] = m_oId;
-        changes[ m_dlChanges.getIndexOf("LOCATION") ] = m_Location;
-        changes[ m_dlChanges.getIndexOf("USERNAME") ] = jTextUser.getText();
-        changes[ m_dlChanges.getIndexOf("UPLOADTIME") ] = (Date) Formats.TIMESTAMP.parseValue(jTextUploadTime.getText());
-        changes[ m_dlChanges.getIndexOf("CHANGETYPE") ] = jComboChangeType.getSelectedIndex();
-        changes[ m_dlChanges.getIndexOf("CHANGES_PROCESSED") ] = jComboAction.getSelectedIndex();
-        
-        changes[ m_dlChanges.getIndexOf("FIELD") ] = field;
+        changes[m_dlChanges.getIndexOf("ID")] = m_oId;
+        changes[m_dlChanges.getIndexOf("LOCATION")] = m_Location;
+        changes[m_dlChanges.getIndexOf("USERNAME")] = jTextUser.getText();
+        changes[m_dlChanges.getIndexOf("UPLOADTIME")] = (Date) Formats.TIMESTAMP.parseValue(jTextUploadTime.getText());
+        changes[m_dlChanges.getIndexOf("CHANGETYPE")] = jComboChangeType.getSelectedIndex();
+        changes[m_dlChanges.getIndexOf("CHANGES_PROCESSED")] = jComboAction.getSelectedIndex();
 
-        changes[ m_dlChanges.getIndexOf("PRODUCTID") ] = m_ProductID;
-        changes[ m_dlChanges.getIndexOf("PRODUCTNAME") ] = m_ProductName;
-        changes[ m_dlChanges.getIndexOf("PRODUCTREF") ] = m_ProductRef;
+        changes[m_dlChanges.getIndexOf("FIELD")] = field;
 
-        if( field.contentEquals("CATEGORY")) {
-            changes[ m_dlChanges.getIndexOf("TEXTVALUE") ] = m_CategoryModel.getSelectedKey();
-        } else if( field.contentEquals("TAXCAT")) {
-            changes[ m_dlChanges.getIndexOf("TEXTVALUE") ] = m_taxcatmodel.getSelectedKey();
-        } else if( field.contentEquals("IMAGE")) {
-            changes[ m_dlChanges.getIndexOf("BLOBVALUE") ] = m_jImage.getImage();
+        changes[m_dlChanges.getIndexOf("PRODUCTID")] = m_ProductID;
+        changes[m_dlChanges.getIndexOf("PRODUCTNAME")] = m_ProductName;
+        changes[m_dlChanges.getIndexOf("PRODUCTREF")] = m_ProductRef;
+
+        if (field.contentEquals("CATEGORY")) {
+            changes[m_dlChanges.getIndexOf("TEXTVALUE")] = m_CategoryModel.getSelectedKey();
+        } else if (field.contentEquals("TAXCAT")) {
+            changes[m_dlChanges.getIndexOf("TEXTVALUE")] = m_taxcatmodel.getSelectedKey();
+        } else if (field.contentEquals("IMAGE")) {
+            changes[m_dlChanges.getIndexOf("BLOBVALUE")] = m_jImage.getImage();
         } else {
-            changes[ m_dlChanges.getIndexOf("TEXTVALUE") ] = jTextValue.getText();
-        }     
-                
+            changes[m_dlChanges.getIndexOf("TEXTVALUE")] = jTextValue.getText();
+        }
+
         return changes;
     }
-    
+
     /**
      *
      * @return
@@ -344,7 +342,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     public Component getComponent() {
         return this;
     }
-    
+
     /**
      *
      */
@@ -353,41 +351,38 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     }
 
     private void showDialog( String message ) {
-
         // Get details of the original font before we change it otherwise all dialogboxes will use new settings
         JOptionPane pane = new JOptionPane();
-        Font originalFont=pane.getFont();
+        Font originalFont = pane.getFont();
 
         UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20)));
         JLabel FontText = new JLabel(message);
 
-        JOptionPane newpane = new JOptionPane( );
+        JOptionPane newpane = new JOptionPane();
         newpane.setMessage(FontText);
 //        newpane.setPreferredSize( new Dimension(450,150));
         
-        Dialog dlg = newpane.createDialog( AppLocal.getIntString("Menu.StockChanges") );
-        dlg.setVisible( true );
+        Dialog dlg = newpane.createDialog(AppLocal.getIntString("Menu.StockChanges"));
+        dlg.setVisible(true);
 
         // Return to default settings
-        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(),originalFont.getStyle(),originalFont.getSize())));
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(), originalFont.getStyle(), originalFont.getSize())));
 
     }
-    
+
     private void ProcessAllAccepted() {
-        
         String sql = (m_dlSystem.getResourceAsText("sql.ActionStockChanges"));
-        
-        if( sql != null && sql.length() >0 ) {
+        if (sql != null && sql.length() > 0) {
             try {
                 m_dlChanges.ActionSql( sql );
                 String message =  AppLocal.getIntString("message.stockchangesactioned");
-                showDialog(message);
+                showDialog(message);                
             } catch (BasicException ex) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"), ex));
             }
         }
     }
-     
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -555,11 +550,11 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jTaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jTaxActionPerformed
-     
+
     }//GEN-LAST:event_m_jTaxActionPerformed
 
     private void jButtonProcessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonProcessMouseClicked
-           ProcessAllAccepted();
+        ProcessAllAccepted();
     }//GEN-LAST:event_jButtonProcessMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

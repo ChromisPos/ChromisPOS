@@ -109,7 +109,7 @@
         <line>
             <text>------------------------------------------</text>
         </line>
-<!-- JG 9 Nov 12 for Categories -->
+
         <line></line>
         <line>
             <text bold="true">Product Category Sales</text>
@@ -146,7 +146,7 @@
             <text>------------------------------------------</text>
         </line>
         <line></line>
-<!-- end -->
+
         <line>
             <text align ="left" length="32">Receipts:</text>
             <text align ="right" length="10">${payments.printSales()}</text>
@@ -158,9 +158,9 @@
         </line>
         <line size="1">
             <text align ="left" length="22" bold="true">Taxes</text>
-<!-- JG 4 June 2014 -->
+
             <text align ="left" length="10" bold="true">${payments.printSalesTaxesBase()}</text>
-<!-- end -->            
+
             <text align ="right" length="10" bold="true">${payments.printSalesTaxes()}</text>
             
         </line>

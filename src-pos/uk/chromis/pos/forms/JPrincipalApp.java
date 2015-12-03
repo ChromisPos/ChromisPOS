@@ -114,8 +114,8 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
             menu_close = new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/menu-right.png"));
         }
         assignMenuButtonIcon();
-
-        // m_jPanelTitle.setBorder(RoundedBorder.createGradientBorder());  - JG 2 Sept 2013 commented-out (for flat look)
+// to look at
+        // m_jPanelTitle.setBorder(RoundedBorder.createGradientBorder()); 
         m_jPanelTitle.setVisible(false);
 
         m_jPanelContainer.add(new JPanel(), "<NULL>");
@@ -622,7 +622,6 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
     }// </editor-fold>//GEN-END:initComponents
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
     setMenuVisible(!m_jPanelLeft.isVisible());
 
 }//GEN-LAST:event_jButton1ActionPerformed

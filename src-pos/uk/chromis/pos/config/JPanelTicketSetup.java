@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.config;
 
 import java.awt.Component;
@@ -26,12 +25,12 @@ import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
- *   
+ *
  */
 public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig {
-    
+
     private DirtyManager dirty = new DirtyManager();
-    private String receipt="1";
+    private String receipt = "1";
     private Integer x = 0;
     private String receiptSize;
     private String pickupSize;
@@ -41,20 +40,17 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
      *
      */
     public JPanelTicketSetup() {
-        
+
         initComponents();
-                          
+
         jReceiptSize.addChangeListener(dirty);
         jPickupSize.addChangeListener(dirty);
         jTextReceiptPrefix.getDocument().addDocumentListener(dirty);
         m_jReceiptPrintOff.addActionListener(dirty);
-        
-/** Added: JG 23 July 13 */        
         jchkSCOnOff.addActionListener(dirty);
-        jchkSCRestaurant.addActionListener(dirty);        
-        jTextSCRate.getDocument().addDocumentListener(dirty);        
-/** - */  
-        
+        jchkSCRestaurant.addActionListener(dirty);
+        jTextSCRate.getDocument().addDocumentListener(dirty);
+
     }
 
     /**
@@ -65,7 +61,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     public boolean hasChanged() {
         return dirty.isDirty();
     }
-    
+
     /**
      *
      * @return
@@ -74,93 +70,85 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     public Component getConfigComponent() {
         return this;
     }
-   
+
     /**
      *
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
 
-        receiptSize =(config.getProperty("till.receiptsize"));
-        if (receiptSize == null || "".equals(receiptSize)){
-            jReceiptSize.setModel(new SpinnerNumberModel(1,1,20,1));
-        } else {            
-            jReceiptSize.setModel(new SpinnerNumberModel(Integer.parseInt(receiptSize),1,20,1));
-        }                
+        receiptSize = (AppConfig.getInstance().getProperty("till.receiptsize"));
+        if (receiptSize == null || "".equals(receiptSize)) {
+            jReceiptSize.setModel(new SpinnerNumberModel(1, 1, 20, 1));
+        } else {
+            jReceiptSize.setModel(new SpinnerNumberModel(Integer.parseInt(receiptSize), 1, 20, 1));
+        }
 
-        pickupSize =(config.getProperty("till.pickupsize"));
-        if (pickupSize == null || "".equals(pickupSize)){
-            jPickupSize.setModel(new SpinnerNumberModel(1,1,20,1));
-        } else {            
-            jPickupSize.setModel(new SpinnerNumberModel(Integer.parseInt(pickupSize),1,20,1));
-        }        
-        
-        jTextReceiptPrefix.setText(config.getProperty("till.receiptprefix"));        
-// build the example receipt using the loaded details        
-        receipt="";
-        x=1;
-        while (x < (Integer)jReceiptSize.getValue()){
+        pickupSize = (AppConfig.getInstance().getProperty("till.pickupsize"));
+        if (pickupSize == null || "".equals(pickupSize)) {
+            jPickupSize.setModel(new SpinnerNumberModel(1, 1, 20, 1));
+        } else {
+            jPickupSize.setModel(new SpinnerNumberModel(Integer.parseInt(pickupSize), 1, 20, 1));
+        }
+
+        jTextReceiptPrefix.setText(AppConfig.getInstance().getProperty("till.receiptprefix"));      
+        receipt = "";
+        x = 1;
+        while (x < (Integer) jReceiptSize.getValue()) {
             receipt += "0";
-        x++; 
-    }
-         
-        receipt += "1";
-         jTicketExample.setText(jTextReceiptPrefix.getText()+receipt);  
-         m_jReceiptPrintOff.setSelected(Boolean.valueOf(config.getProperty("till.receiptprintoff")).booleanValue()); 
-        
-        dirty.setDirty(false);
+            x++;
+        }
 
-/** Added: JG 23 July 13 */      
-        String SCCheck =(config.getProperty("till.SCRate"));
-        if (SCCheck == null){
-            config.setProperty("till.SCRate","0");
-        }                
-        jTextSCRate.setText(config.getProperty("till.SCRate").toString());
-        jchkSCOnOff.setSelected(Boolean.valueOf(config.getProperty("till.SCOnOff")).booleanValue());    
-        jchkSCRestaurant.setSelected(Boolean.valueOf(config.getProperty("till.SCRestaurant")).booleanValue());
-        
-        if (jchkSCOnOff.isSelected()){
-                jchkSCRestaurant.setVisible(true);
-                jLabelSCRate.setVisible(true);
-                jTextSCRate.setVisible(true);
-                jLabelSCRatePerCent.setVisible(true);
-        }else{    
-                jchkSCRestaurant.setVisible(false);
-                jLabelSCRate.setVisible(false);
-                jTextSCRate.setVisible(false);
-                jLabelSCRatePerCent.setVisible(false);
-        }            
-/** - */        
-                
-        
+        receipt += "1";
+        jTicketExample.setText(jTextReceiptPrefix.getText() + receipt);
+        m_jReceiptPrintOff.setSelected(AppConfig.getInstance().getBoolean("till.receiptprintoff"));
+
+        String SCCheck = (AppConfig.getInstance().getProperty("till.SCRate"));
+        if (SCCheck == null) {
+            AppConfig.getInstance().setProperty("till.SCRate", "0");
+        }
+        jTextSCRate.setText(AppConfig.getInstance().getProperty("till.SCRate").toString());
+        jchkSCOnOff.setSelected(AppConfig.getInstance().getBoolean("till.SCOnOff"));
+        jchkSCRestaurant.setSelected(AppConfig.getInstance().getBoolean("till.SCRestaurant"));
+
+        if (jchkSCOnOff.isSelected()) {
+            jchkSCRestaurant.setVisible(true);
+            jLabelSCRate.setVisible(true);
+            jTextSCRate.setVisible(true);
+            jLabelSCRatePerCent.setVisible(true);
+        } else {
+            jchkSCRestaurant.setVisible(false);
+            jLabelSCRate.setVisible(false);
+            jTextSCRate.setVisible(false);
+            jLabelSCRatePerCent.setVisible(false);
+        }
+
+        dirty.setDirty(false);
     }
-   
+
     /**
      *
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
-        
-        config.setProperty("till.receiptprefix", jTextReceiptPrefix.getText());
-        config.setProperty("till.receiptsize", jReceiptSize.getValue().toString());
-        config.setProperty("till.pickupsize", jPickupSize.getValue().toString());        
-        config.setProperty("till.receiptprintoff",Boolean.toString(m_jReceiptPrintOff.isSelected()));
-        
-/** Added: JG 23 July 13 */
-        config.setProperty("till.SCOnOff",Boolean.toString(jchkSCOnOff.isSelected()));
-        config.setProperty("till.SCRate",jTextSCRate.getText());
-        config.setProperty("till.SCRestaurant",Boolean.toString(jchkSCRestaurant.isSelected()));
-/** - */             
-        
+    public void saveProperties() {
+
+        AppConfig.getInstance().setProperty("till.receiptprefix", jTextReceiptPrefix.getText());
+        AppConfig.getInstance().setProperty("till.receiptsize", jReceiptSize.getValue().toString());
+        AppConfig.getInstance().setProperty("till.pickupsize", jPickupSize.getValue().toString());
+        AppConfig.getInstance().setBoolean("till.receiptprintoff", m_jReceiptPrintOff.isSelected());
+        AppConfig.getInstance().setBoolean("till.SCOnOff", jchkSCOnOff.isSelected());
+        AppConfig.getInstance().setProperty("till.SCRate", jTextSCRate.getText());
+        AppConfig.getInstance().setBoolean("till.SCRestaurant",jchkSCRestaurant.isSelected());
+
         dirty.setDirty(false);
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -174,7 +162,8 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jTicketExample = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jPickupSize = new javax.swing.JSpinner();
-        m_jReceiptPrintOff = new javax.swing.JCheckBox();
+        jPanel6 = new javax.swing.JPanel();
+        m_jReceiptPrintOff = new eu.hansolo.custom.SteelCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jchkSCOnOff = new javax.swing.JCheckBox();
         jchkSCRestaurant = new javax.swing.JCheckBox();
@@ -194,7 +183,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jPanel1.setLayout(null);
 
         jReceiptSize.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jReceiptSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jReceiptSize.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         jReceiptSize.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jReceiptSizeStateChanged(evt);
@@ -207,7 +196,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText(bundle.getString("Label.ticketsetupnumber")); // NOI18N
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(10, 20, 160, 40);
+        jLabel1.setBounds(20, 20, 160, 40);
 
         jTextReceiptPrefix.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTextReceiptPrefix.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -234,10 +223,10 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(bundle.getString("label.pickupcodesize")); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(10, 70, 160, 40);
+        jLabel2.setBounds(20, 70, 160, 40);
 
         jPickupSize.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jPickupSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jPickupSize.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         jPickupSize.setToolTipText("");
         jPickupSize.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -247,18 +236,17 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jPanel1.add(jPickupSize);
         jPickupSize.setBounds(190, 70, 50, 40);
 
-        m_jReceiptPrintOff.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        m_jReceiptPrintOff.setBorder(null);
         m_jReceiptPrintOff.setText(bundle.getString("label.receiptprint")); // NOI18N
-        m_jReceiptPrintOff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jReceiptPrintOffActionPerformed(evt);
-            }
-        });
-        jPanel1.add(m_jReceiptPrintOff);
-        m_jReceiptPrintOff.setBounds(10, 120, 180, 30);
+        jPanel6.add(m_jReceiptPrintOff, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, -1));
+
+        jPanel1.add(jPanel6);
+        jPanel6.setBounds(20, 120, 540, 30);
 
         add(jPanel1);
-        jPanel1.setBounds(10, 10, 730, 160);
+        jPanel1.setBounds(10, 10, 730, 170);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), bundle.getString("label.SChargepanel"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
         jPanel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -317,25 +305,25 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jLabel4.setBounds(380, 10, 290, 70);
 
         add(jPanel5);
-        jPanel5.setBounds(10, 180, 730, 90);
+        jPanel5.setBounds(10, 190, 730, 90);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextReceiptPrefixKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextReceiptPrefixKeyReleased
 
-        jTicketExample.setText(jTextReceiptPrefix.getText()+ receipt);
+        jTicketExample.setText(jTextReceiptPrefix.getText() + receipt);
     }//GEN-LAST:event_jTextReceiptPrefixKeyReleased
 
     private void jReceiptSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jReceiptSizeStateChanged
 
-        receipt="";
-        x=1;
-        while (x < (Integer)jReceiptSize.getValue()){
+        receipt = "";
+        x = 1;
+        while (x < (Integer) jReceiptSize.getValue()) {
             receipt += "0";
-        x++; 
-    }
+            x++;
+        }
         receipt += "1";
-         jTicketExample.setText(jTextReceiptPrefix.getText()+receipt);
-         
+        jTicketExample.setText(jTextReceiptPrefix.getText() + receipt);
+
     }//GEN-LAST:event_jReceiptSizeStateChanged
 
     private void jPickupSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jPickupSizeStateChanged
@@ -343,12 +331,12 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     }//GEN-LAST:event_jPickupSizeStateChanged
 
     private void jchkSCOnOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkSCOnOffActionPerformed
-        if (jchkSCOnOff.isSelected()){
+        if (jchkSCOnOff.isSelected()) {
             jchkSCRestaurant.setVisible(true);
             jLabelSCRate.setVisible(true);
             jTextSCRate.setVisible(true);
             jLabelSCRatePerCent.setVisible(true);
-        }else{
+        } else {
             jchkSCRestaurant.setVisible(false);
             jLabelSCRate.setVisible(false);
             jTextSCRate.setVisible(false);
@@ -356,11 +344,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         }
     }//GEN-LAST:event_jchkSCOnOffActionPerformed
 
-    private void m_jReceiptPrintOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jReceiptPrintOffActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_m_jReceiptPrintOffActionPerformed
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -370,6 +354,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     private javax.swing.JLabel jLabelSCRatePerCent;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JSpinner jPickupSize;
     private javax.swing.JSpinner jReceiptSize;
     private javax.swing.JTextField jTextField2;
@@ -378,7 +363,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     private javax.swing.JTextField jTicketExample;
     private javax.swing.JCheckBox jchkSCOnOff;
     private javax.swing.JCheckBox jchkSCRestaurant;
-    private javax.swing.JCheckBox m_jReceiptPrintOff;
+    private eu.hansolo.custom.SteelCheckBox m_jReceiptPrintOff;
     // End of variables declaration//GEN-END:variables
-    
+
 }

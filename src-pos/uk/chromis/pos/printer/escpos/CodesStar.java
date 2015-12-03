@@ -222,7 +222,6 @@ public class CodesStar extends Codes {
             index += getImageHeader().length;
 
             // Line Dimension
-            // JG note: nested ++'s not good construct need change later            
             bData[index++] = (byte) (iWidth % 256);
             bData[index++] = (byte) (iWidth / 256);
 

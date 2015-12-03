@@ -46,7 +46,7 @@ public class PanelReportBean extends JPanelReport {
     private String sentence;
 
     
-// JG 16 May 12 use diamond inference
+
     private List<Datas> fielddatas = new ArrayList<>();
     private List<String> fieldnames = new ArrayList<>();
     

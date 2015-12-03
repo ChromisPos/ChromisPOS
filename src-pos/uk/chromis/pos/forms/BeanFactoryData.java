@@ -47,7 +47,6 @@ public class BeanFactoryData implements BeanFactoryApp {
             }
             bf = (BeanFactoryApp) Class.forName(sfactoryname + app.getSession().DB.getName()).newInstance();
             bf.init(app);                     
-// JG 16 May use multicatch
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | BeanFactoryException ex) {
             throw new BeanFactoryException(ex);
         }

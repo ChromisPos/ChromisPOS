@@ -46,7 +46,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     protected Session s;
     protected Datas[] auxiliarDatas;
     protected Datas[] stockdiaryDatas;
-    // protected Datas[] productcatDatas;
+    protected SentenceExec m_sellvoucher;
     protected Datas[] paymenttabledatas;
     protected Datas[] stockdatas;
     protected Row productsRow;
@@ -228,6 +228,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.INT
         }));
 
+        m_sellvoucher = new StaticSentence(s, "INSERT INTO VOUCHERS ( VOUCHER, SOLDTICKETID) "
+                + "VALUES (?, ?)", new SerializerWriteBasic(new Datas[]{
+            Datas.STRING,
+            Datas.STRING}));
     }
 
     /**
@@ -275,8 +279,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                  + getSelectFieldList()
 
-                + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE CODE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
+                 + "WHERE CODE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
     }
 
     /**
@@ -297,12 +300,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList( )
                 + "FROM PRODUCTS P WHERE P.ID = ? "
                 + "ORDER BY P.ID, P.REFERENCE, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
-    }
+     }
 
-    // Catalogo de productos
-    // ADDED JDL 13.04.13 texttip to category
-    // added display name on icon option 14.04.13
-// JG 3 Oct 2013 - Add Catalgue Status (temp holder for eCommerce links)
     /**
      *
      * @return @throws BasicException
@@ -314,12 +313,46 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES "
                 + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead()).list();
     }
 
+    /**
+     *
+     * @return @throws BasicException
+     */
+    public final List<CategoryInfo> getRootCategoriesByCatOrder() throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES "
+                + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " AND CATORDER IS NOT NULL "
+                + "ORDER BY CATORDER", null, CategoryInfo.getSerializerRead()).list();
+                   }
+
+    public final List<CategoryInfo> getRootCategoriesByName() throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES "
+                + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " AND CATORDER IS NULL "
+                + "ORDER BY NAME", null, CategoryInfo.getSerializerRead()).list();
+                   }    
+    
+    
     /**
      *
      * @param category
@@ -333,10 +366,36 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES WHERE PARENTID = ? ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
     }
 
+    public final List<CategoryInfo> getSubcategoriesByCatOrder(String category) throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES WHERE PARENTID = ? AND CATORDER IS NOT NULL ORDER BY CATORDER", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);                
+    }
+    
+    public final List<CategoryInfo> getSubcategoriesByName(String category) throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "NAME, "
+                + "IMAGE, "
+                + "TEXTTIP, "
+                + "CATSHOWNAME, "
+                + "COLOUR, "
+                + "CATORDER "
+                + "FROM CATEGORIES WHERE PARENTID = ? AND CATORDER IS NULL ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);                
+    }
+    
+    
     /**
      *
      * @param category
@@ -387,7 +446,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
 
-    // JG uniCenta June 2014 includes StockUnits  
     /**
      *
      * @param category
@@ -443,7 +501,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES "
                 + "WHERE ID = ? "
                 + "ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).find(id);
@@ -464,7 +523,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     Datas.OBJECT, Datas.STRING,
                     Datas.OBJECT, Datas.DOUBLE,}), ProductInfoExt.getSerializerRead());
     }
-
 
     public SentenceList getProductListNormal() {
         return new StaticSentence(s, new QBFBuilder(
@@ -490,13 +548,15 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList( )
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE", new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}),
+                + "ORDER BY P.REFERENCE",
+                new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}), 
                 new SerializerWriteBasic(new Datas[]{
                     Datas.OBJECT, Datas.STRING,
                     Datas.OBJECT, Datas.DOUBLE,
                     Datas.OBJECT, Datas.DOUBLE,
                     Datas.OBJECT, Datas.STRING,
-                    Datas.OBJECT, Datas.STRING}), ProductInfoExt.getSerializerRead());
+                    Datas.OBJECT, Datas.STRING}),
+                ProductInfoExt.getSerializerRead());
     }
 
     //Tickets and Receipt list
@@ -527,13 +587,13 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "C.NAME "
                 + "ORDER BY R.DATENEW DESC, T.TICKETID",
                 new String[]{"T.TICKETID", "T.TICKETTYPE", "PM.TOTAL", "R.DATENEW", "R.DATENEW", "P.NAME", "C.NAME"}), new SerializerWriteBasic(new Datas[]{
-                    Datas.OBJECT, Datas.INT,
-                    Datas.OBJECT, Datas.INT,
-                    Datas.OBJECT, Datas.DOUBLE,
-                    Datas.OBJECT, Datas.TIMESTAMP,
-                    Datas.OBJECT, Datas.TIMESTAMP,
-                    Datas.OBJECT, Datas.STRING,
-                    Datas.OBJECT, Datas.STRING}), new SerializerReadClass(FindTicketsInfo.class));
+            Datas.OBJECT, Datas.INT,
+            Datas.OBJECT, Datas.INT,
+            Datas.OBJECT, Datas.DOUBLE,
+            Datas.OBJECT, Datas.TIMESTAMP,
+            Datas.OBJECT, Datas.TIMESTAMP,
+            Datas.OBJECT, Datas.STRING,
+            Datas.OBJECT, Datas.STRING}), new SerializerReadClass(FindTicketsInfo.class));
     }
 
     //User list
@@ -547,13 +607,13 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "NAME "
                 + "FROM PEOPLE "
                 + "ORDER BY NAME", null, new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new TaxCategoryInfo(
-                                dr.getString(1),
-                                dr.getString(2));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new TaxCategoryInfo(
+                        dr.getString(1),
+                        dr.getString(2));
+            }
+        });
     }
 
     // Listados para combo
@@ -573,22 +633,21 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "RATEORDER "
                 + "FROM TAXES "
                 + "ORDER BY NAME", null, new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new TaxInfo(
-                                dr.getString(1),
-                                dr.getString(2),
-                                dr.getString(3),
-                                dr.getString(4),
-                                dr.getString(5),
-                                dr.getDouble(6),
-                                dr.getBoolean(7),
-                                dr.getInt(8));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new TaxInfo(
+                        dr.getString(1),
+                        dr.getString(2),
+                        dr.getString(3),
+                        dr.getString(4),
+                        dr.getString(5),
+                        dr.getDouble(6),
+                        dr.getBoolean(7),
+                        dr.getInt(8));
+            }
+        });
     }
 
-// JG 3 Oct 2013 - Add Catalogue Status (temp holder for eCommerce links)
     /**
      *
      * @return
@@ -600,7 +659,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "IMAGE, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
-                + "COLOUR "
+                + "COLOUR, "
+                + "CATORDER "
                 + "FROM CATEGORIES "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
     }
@@ -624,6 +684,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 });
     }
 
+      
     /**
      *
      * @return
@@ -634,20 +695,20 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "NAME "
                 + "FROM TAXCUSTCATEGORIES "
                 + "ORDER BY NAME", null, new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new TaxCustCategoryInfo(dr.getString(1), dr.getString(2));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new TaxCustCategoryInfo(dr.getString(1), dr.getString(2));
+            }
+        });
     }
 
-// JG Oct 2013 - add for CustomerView>Tranx table
     /**
      *
      * @return @throws BasicException
      */
+
     @SuppressWarnings("unchecked")
-    public final List<CustomerTransaction> getCustomersTransactionList() throws BasicException {
+    public final List<CustomerTransaction> getCustomersTransactionList(String name) throws BasicException {
         return new PreparedSentence(s,
                 "SELECT TICKETS.TICKETID, PRODUCTS.NAME AS PNAME, "
                 + "SUM(TICKETLINES.UNITS) AS UNITS, "
@@ -658,6 +719,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "LEFT OUTER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID "
                 + "LEFT OUTER JOIN TAXES ON TICKETLINES.TAXID = TAXES.ID  "
                 + "WHERE CUSTOMERS.ID = TICKETS.CUSTOMER AND TICKETLINES.PRODUCT = PRODUCTS.ID AND RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET "
+                + "AND CUSTOMERS.NAME = \"" + name + "\" "
                 + "GROUP BY CUSTOMERS.NAME, RECEIPTS.DATENEW, TICKETS.TICKETID, PRODUCTS.NAME, TICKETS.TICKETTYPE "
                 + "ORDER BY RECEIPTS.DATENEW DESC, PRODUCTS.NAME",
                 null,
@@ -674,11 +736,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "NAME "
                 + "FROM TAXCATEGORIES "
                 + "ORDER BY NAME", null, new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new TaxCategoryInfo(dr.getString(1), dr.getString(2));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new TaxCategoryInfo(dr.getString(1), dr.getString(2));
+            }
+        });
     }
 
     /**
@@ -691,11 +753,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "NAME "
                 + "FROM ATTRIBUTESET "
                 + "ORDER BY NAME", null, new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new AttributeSetInfo(dr.getString(1), dr.getString(2));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new AttributeSetInfo(dr.getString(1), dr.getString(2));
+            }
+        });
     }
 
     /**
@@ -844,8 +906,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
             ticket.setLines(new PreparedSentence(s, "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES, L.REFUNDQTY  "
                     + "FROM TICKETLINES L, TAXES T WHERE L.TAXID = T.ID AND L.TICKET = ? ORDER BY L.LINE", SerializerWriteString.INSTANCE, new SerializerReadClass(TicketLineInfo.class)).list(ticket.getId()));
-            ticket.setPayments(new PreparedSentence(s // JG 10 Oct 13 Bug Fix + Add Cardname 20 Oct  
-                    //                    , "SELECT PAYMENT, TOTAL, TRANSID TENDERED FROM PAYMENTS WHERE RECEIPT = ?" 
+            ticket.setPayments(new PreparedSentence(s //                    , "SELECT PAYMENT, TOTAL, TRANSID TENDERED FROM PAYMENTS WHERE RECEIPT = ?" 
                     , "SELECT PAYMENT, TOTAL, TRANSID, TENDERED, CARDNAME FROM PAYMENTS WHERE RECEIPT = ?", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentInfoTicket.class)).list(ticket.getId()));
         }
         return ticket;
@@ -865,27 +926,27 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             public Object transact() throws BasicException {
 
                 // Set Receipt Id
-                if (ticket.getTicketId() == 0) {
-                    switch (ticket.getTicketType()) {
-                        case TicketInfo.RECEIPT_NORMAL:
-                            ticket.setTicketId(getNextTicketIndex());
-                            break;
-                        case TicketInfo.RECEIPT_REFUND:
-                            ticket.setTicketId(getNextTicketRefundIndex());
-                            break;
-                        case TicketInfo.RECEIPT_PAYMENT:
-                            ticket.setTicketId(getNextTicketPaymentIndex());
-                            break;
-                        case TicketInfo.RECEIPT_NOSALE:
-                            ticket.setTicketId(getNextTicketPaymentIndex());
-                            break;
-                        default:
-                            throw new BasicException();
-                    }
+                switch (ticket.getTicketType()) {
+                    case NORMAL:
+                        ticket.setTicketId(getNextTicketIndex());
+                        break;
+                    case REFUND:
+                        ticket.setTicketId(getNextTicketRefundIndex());
+                        break;
+                    case PAYMENT:
+                        ticket.setTicketId(getNextTicketPaymentIndex());
+                        break;
+                    case NOSALE:
+                        ticket.setTicketId(getNextTicketPaymentIndex());
+                        break;
+                    case INVOICE:
+                        ticket.setTicketId(getNextTicketInvoiceIndex());
+                        break;
+
+                    default:
+                        throw new BasicException();
                 }
 
-                // new receipt
-                // Modified JG Aug 2011 - person
                 new PreparedSentence(s, "INSERT INTO RECEIPTS (ID, MONEY, DATENEW, ATTRIBUTES, PERSON) VALUES (?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE
                 ).exec(new DataParams() {
                     @Override
@@ -911,7 +972,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     @Override
                     public void writeValues() throws BasicException {
                         setString(1, ticket.getId());
-                        setInt(2, ticket.getTicketType());
+                        setInt(2, ticket.getTicketType().getId());
                         setInt(3, ticket.getTicketId());
                         setString(4, ticket.getUser().getId());
                         setString(5, ticket.getCustomerId());
@@ -942,8 +1003,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                 }
                 final Payments payments = new Payments();
-                SentenceExec paymentinsert = new PreparedSentence(s //JG 22 Oct CCardName
-                        //            , "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                SentenceExec paymentinsert = new PreparedSentence(s
                         , "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE);
 
                 for (final PaymentInfo p : ticket.getPayments()) {
@@ -968,7 +1028,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             setString(5, ticket.getTransactionID());
                             setBytes(6, (byte[]) Formats.BYTEA.parseValue(getRetMsg));
                             setDouble(7, getTendered);
-// JG 22 Oct 13 - CCard Name
                             setString(8, getCardName);
                             payments.removeFirst(pName);
                         }
@@ -1089,6 +1148,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return (Integer) s.DB.getSequenceSentence(s, "TICKETSNUM").find();
     }
 
+    public final Integer getNextTicketInvoiceIndex() throws BasicException {
+        return (Integer) s.DB.getSequenceSentence(s, "TICKETSNUM_INVOICE").find();
+    }
+
     /**
      *
      * @return @throws BasicException
@@ -1118,11 +1181,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY P.REFERENCE",
                 new String[]{
                     "P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}), new SerializerWriteBasic(new Datas[]{
-                    Datas.OBJECT, Datas.STRING,
-                    Datas.OBJECT, Datas.DOUBLE,
-                    Datas.OBJECT, Datas.DOUBLE,
-                    Datas.OBJECT, Datas.STRING,
-                    Datas.OBJECT, Datas.STRING}), productsRow.getSerializerRead());
+            Datas.OBJECT, Datas.STRING,
+            Datas.OBJECT, Datas.DOUBLE,
+            Datas.OBJECT, Datas.DOUBLE,
+            Datas.OBJECT, Datas.STRING,
+            Datas.OBJECT, Datas.STRING}), productsRow.getSerializerRead());
     }
 
     /**
@@ -1163,25 +1226,25 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             }
         };
     }
-
+   
     public final SentenceList getPackProductList() {
         return new StaticSentence(s, "SELECT "
                 + "ID, "
                 + "NAME "
                 + "FROM PRODUCTS "
                 + "ORDER BY NAME", null, new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new PackProductInfo(dr.getString(1), dr.getString(2));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new PackProductInfo(dr.getString(1), dr.getString(2));
+            }
+        });
     }
 
     /**
      *
      * @return
      */
-    public final SentenceExec getProductCatUpdate() {
+ public final SentenceExec getProductCatUpdate() {
         return new SentenceExecTransaction(s) {
             @Override
             public int execInTransaction(Object params) throws BasicException {
@@ -1290,12 +1353,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final SentenceExec getPaymentMovementInsert() {
         return new SentenceExecTransaction(s) {
-// ADDED JG 03.07.11 Payment Notes
             @Override
             public int execInTransaction(Object params) throws BasicException {
                 new PreparedSentence(s, "INSERT INTO RECEIPTS (ID, MONEY, DATENEW) VALUES (?, ?, ?)", new SerializerWriteBasicExt(paymenttabledatas, new int[]{0, 1, 2})).exec(params);
-                return new PreparedSentence(s // JG Modified: ? to Array
-                        , "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, NOTES) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(paymenttabledatas, new int[]{3, 0, 4, 5, 6})).exec(params);
+                return new PreparedSentence(s, "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, NOTES) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(paymenttabledatas, new int[]{3, 0, 4, 5, 6})).exec(params);
             }
         };
     }
@@ -1348,20 +1409,16 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new StaticSentence(s, "UPDATE PRODUCTS SET ISCATALOG = " + s.DB.FALSE() + " WHERE CATEGORY = ?", SerializerWriteString.INSTANCE);
     }
 
-// JG 3 Oct 2013 - Add Catalgue Status (temp holder for eCommerce links)
     /**
      *
      * @return
      */
     public final TableDefinition getTableCategories() {
         return new TableDefinition(s,
-                "CATEGORIES", new String[]{
-                    "ID", "NAME", "PARENTID", "IMAGE", "TEXTTIP", "CATSHOWNAME", "COLOUR"},
-                new String[]{"ID", AppLocal.getIntString("Label.Name"), "", AppLocal.getIntString("label.image")},
-                new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.IMAGE, Datas.STRING, Datas.BOOLEAN, Datas.STRING},
-                new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.NULL, Formats.STRING, Formats.BOOLEAN, Formats.STRING},
-                new int[]{0},
-                "NAME"
+                "CATEGORIES", new String[]{"ID", "NAME", "PARENTID", "IMAGE", 
+                    "TEXTTIP", "CATSHOWNAME", "COLOUR", "CATORDER"}, 
+                new String[]{"ID", AppLocal.getIntString("Label.Name"), "", 
+                    AppLocal.getIntString("label.image")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.IMAGE, Datas.STRING, Datas.BOOLEAN, Datas.STRING, Datas.INT}, new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING, Formats.NULL, Formats.STRING, Formats.BOOLEAN, Formats.STRING, Formats.INT}, new int[]{0}
         );
     }
 
@@ -1429,6 +1486,18 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
     public final void updateRefundQty(Double qty, String ticket, Integer line) throws BasicException {
         m_updateRefund.exec(qty, ticket, line);
+    }
+
+    public final boolean getVoucher(String id) throws BasicException {
+        return new PreparedSentence(s,
+                "SELECT SOLDTICKETID FROM VOUCHERS WHERE VOUCHER = ?",
+                SerializerWriteString.INSTANCE,
+                SerializerReadString.INSTANCE).find(id)
+                != null;
+    }
+
+    public final void sellVoucher(Object[] voucher) throws BasicException {
+        m_sellvoucher.exec(voucher);
     }
 
     /**

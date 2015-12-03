@@ -20,6 +20,7 @@
 package uk.chromis.pos.scale;
 
 import java.awt.Component;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.StringParser;
@@ -36,7 +37,7 @@ public class DeviceScale {
      * @param parent
      * @param props */
     public DeviceScale(Component parent, AppProperties props) {
-        StringParser sd = new StringParser(props.getProperty("machine.scale"));
+        StringParser sd = new StringParser(AppConfig.getInstance().getProperty("machine.scale"));
         String sScaleType = sd.nextToken(':');
         String sScaleParam1 = sd.nextToken(',');
         // String sScaleParam2 = sd.nextToken(',');

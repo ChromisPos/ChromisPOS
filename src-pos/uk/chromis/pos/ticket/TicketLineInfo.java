@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.ticket;
 
 import java.io.ByteArrayInputStream;
@@ -113,6 +112,12 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
 
             attributes.setProperty("product.discounted", product.getDiscounted() == null ? "no" : product.getDiscounted());
             attributes.setProperty("product.candiscount", product.getCanDiscount() ? "true" : "false");
+            attributes.setProperty("product.ispack", product.getIsPack() ? "true" : "false");
+
+            if (product.getPackProduct() != null) {
+                attributes.setProperty("product.packproduct", product.getPackProduct());
+            }
+
             
             if( product.getPromotionID() != null ) {
                 attributes.setProperty("product.promotionid", product.getPromotionID() );
@@ -151,15 +156,15 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         m_iLine = line;
     }
 
-    public String getTicket(){
+    public String getTicket() {
         return m_sTicket;
     }
-   
+
     public void setRefundTicket(String ticket, int line) {
         m_sTicket = ticket;
         m_iLine = line;
     }
-    
+
     @Override
     public void writeValues(DataWrite dp) throws BasicException {
         dp.setString(1, m_sTicket);
@@ -176,7 +181,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         } catch (IOException e) {
             dp.setBytes(8, null);
         }
-        dp.setDouble(9, refundQty);       
+        dp.setDouble(9, refundQty);
     }
 
     @Override
@@ -246,9 +251,9 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public void setTicketLine(int line) {
-       m_iLine = line;
+        m_iLine = line;
     }
-    
+
     public Double getRefundQty() {
         return refundQty;
     }

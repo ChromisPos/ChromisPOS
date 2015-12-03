@@ -152,7 +152,6 @@ public class CustomerInfoExt extends CustomerInfo {
     public void updateCurDebt(Double amount, Date d) {
         
         curdebt = curdebt == null ? amount : curdebt + amount;
-// JG Aug 2014
         curdate =  (new Date());
         
         if (RoundUtils.compare(curdebt, 0.0) > 0) {

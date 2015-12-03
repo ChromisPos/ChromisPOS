@@ -98,39 +98,24 @@ public class ParametersPrinter extends javax.swing.JPanel implements ParametersC
     private void initComponents() {
 
         jPrinters = new javax.swing.JComboBox();
-        jReceiptPrinter = new javax.swing.JCheckBox();
+        jReceiptPrinter = new eu.hansolo.custom.SteelCheckBox();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPrinters.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jPrinters.setMinimumSize(new java.awt.Dimension(29, 24));
         jPrinters.setPreferredSize(new java.awt.Dimension(200, 23));
         jPrinters.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPrintersActionPerformed(evt);
             }
         });
+        add(jPrinters, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 2, -1, -1));
 
-        jReceiptPrinter.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jReceiptPrinter.setSelected(true);
-        jReceiptPrinter.setText(AppLocal.getIntString("label.receiptprinter")); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jReceiptPrinter)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jReceiptPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        jReceiptPrinter.setBorder(null);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jReceiptPrinter.setText(bundle.getString("label.receiptprinter")); // NOI18N
+        add(jReceiptPrinter, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, -1, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPrintersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPrintersActionPerformed
@@ -140,7 +125,7 @@ public class ParametersPrinter extends javax.swing.JPanel implements ParametersC
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox jPrinters;
-    private javax.swing.JCheckBox jReceiptPrinter;
+    private eu.hansolo.custom.SteelCheckBox jReceiptPrinter;
     // End of variables declaration//GEN-END:variables
 
 }

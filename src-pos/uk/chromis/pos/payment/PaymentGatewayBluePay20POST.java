@@ -32,6 +32,7 @@ import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.StringUtils;
@@ -59,13 +60,13 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
      * @param props */
     public PaymentGatewayBluePay20POST(AppProperties props) {
         // Grab some configuration variables
-        BP_AccountID = props.getProperty("payment.BluePay20POST.accountID");
+        BP_AccountID = AppConfig.getInstance().getProperty("payment.BluePay20POST.accountID");
         
-        this.BP_SecretKey = props.getProperty("payment.BluePay20POST.secretKey");
+        this.BP_SecretKey = AppConfig.getInstance().getProperty("payment.BluePay20POST.secretKey");
 
-        BP_TestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        BP_TestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         
-        ENDPOINTADDRESS = props.getProperty( "payment.BluePay20POST.URL" );
+        ENDPOINTADDRESS = AppConfig.getInstance().getProperty( "payment.BluePay20POST.URL" );
     }
 
     /**
@@ -84,7 +85,6 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
     {
         StringUtils.getCardNumber();
 
-// JG 16 May 12 use StringBuilder in place of StringBuilder
         StringBuilder sb = new StringBuilder();
         try {
             sb.append("ACCOUNT_ID=");    
@@ -191,7 +191,6 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
             connection.setUseCaches(false);
 
             // not necessarily required but fixes a bug with some servers
-            // JG May 12 added try-with-resources
             connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
             try (DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
                 out.write(sb.toString().getBytes());
@@ -243,7 +242,6 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
                  */
             }
             
-// JG 16 May 12 use multicatch
         } catch (UnsupportedEncodingException | MalformedURLException eUE) {
             payinfo.paymentError(AppLocal.getIntString("message.paymentexceptionservice"), eUE.getMessage());
         } catch(IOException e) // Throw but buffered reader when the server returns a 400 header

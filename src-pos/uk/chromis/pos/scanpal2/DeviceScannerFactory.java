@@ -19,6 +19,7 @@
 
 package uk.chromis.pos.scanpal2;
 
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.StringParser;
 
@@ -39,7 +40,7 @@ public class DeviceScannerFactory {
      */
     public static DeviceScanner createInstance(AppProperties props) {
         
-        StringParser sd = new StringParser(props.getProperty("machine.scanner"));
+        StringParser sd = new StringParser(AppConfig.getInstance().getProperty("machine.scanner"));
         String sScannerType = sd.nextToken(':');
         String sScannerParam1 = sd.nextToken(',');
         // String sScannerParam2 = sd.nextToken(',');

@@ -23,7 +23,6 @@ import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.user.DirtyManager;
-import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DriverWrapper;
 import uk.chromis.pos.util.AltEncrypter;
@@ -39,6 +38,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.io.IOException;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
@@ -53,13 +53,12 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         
         initComponents();
         
-        
+        jbtnDbDriverLib.addActionListener(new DirectoryEvent(jtxtDbDriverLib));
         jtxtDbDriverLib.getDocument().addDocumentListener(dirty);
         jtxtDbDriver.getDocument().addDocumentListener(dirty);
         jtxtDbURL.getDocument().addDocumentListener(dirty);
         jtxtDbPassword.getDocument().addDocumentListener(dirty);
-        jtxtDbUser.getDocument().addDocumentListener(dirty);
-        jbtnDbDriverLib.addActionListener(new DirectoryEvent(jtxtDbDriverLib));
+        jtxtDbUser.getDocument().addDocumentListener(dirty);        
         jcboDBDriver.addActionListener(dirty);
 
 
@@ -98,15 +97,15 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
       
-        jcboDBDriver.setSelectedItem(config.getProperty("db.engine"));
-        jtxtDbDriverLib.setText(config.getProperty("db.driverlib"));
-        jtxtDbDriver.setText(config.getProperty("db.driver"));
-        jtxtDbURL.setText(config.getProperty("db.URL"));
+        jcboDBDriver.setSelectedItem(AppConfig.getInstance().getProperty("db.engine"));
+        jtxtDbDriverLib.setText(AppConfig.getInstance().getProperty("db.driverlib"));
+        jtxtDbDriver.setText(AppConfig.getInstance().getProperty("db.driver"));
+        jtxtDbURL.setText(AppConfig.getInstance().getProperty("db.URL"));
         
-        String sDBUser = config.getProperty("db.user");
-        String sDBPassword = config.getProperty("db.password");        
+        String sDBUser = AppConfig.getInstance().getProperty("db.user");
+        String sDBPassword = AppConfig.getInstance().getProperty("db.password");        
         if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
             // La clave esta encriptada.
             AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
@@ -123,15 +122,15 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
         
-        config.setProperty("db.engine", comboValue(jcboDBDriver.getSelectedItem()));
-        config.setProperty("db.driverlib", jtxtDbDriverLib.getText());
-        config.setProperty("db.driver", jtxtDbDriver.getText());
-        config.setProperty("db.URL", jtxtDbURL.getText());
-        config.setProperty("db.user", jtxtDbUser.getText());
+        AppConfig.getInstance().setProperty("db.engine", comboValue(jcboDBDriver.getSelectedItem()));
+        AppConfig.getInstance().setProperty("db.driverlib", jtxtDbDriverLib.getText());
+        AppConfig.getInstance().setProperty("db.driver", jtxtDbDriver.getText());
+        AppConfig.getInstance().setProperty("db.URL", jtxtDbURL.getText());
+        AppConfig.getInstance().setProperty("db.user", jtxtDbUser.getText());
         AltEncrypter cypher = new AltEncrypter("cypherkey" + jtxtDbUser.getText());       
-        config.setProperty("db.password", "crypt:" + cypher.encrypt(new String(jtxtDbPassword.getPassword())));
+        AppConfig.getInstance().setProperty("db.password", "crypt:" + cypher.encrypt(new String(jtxtDbPassword.getPassword())));
 
         dirty.setDirty(false);
     }
@@ -345,7 +344,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
     }//GEN-LAST:event_jtxtDbDriverActionPerformed
 
     private void jcboDBDriverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboDBDriverActionPerformed
-//  JG 31 Aug 13 - Added DB Defaults
+
         String dirname = System.getProperty("dirname.path");
         dirname = dirname == null ? "./" : dirname;
         
@@ -387,7 +386,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         }
     }//GEN-LAST:event_jcboDBDriverActionPerformed
 
-//  JG 3 Oct 13 - Test DB Connection
+
     private void jButtonTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTestActionPerformed
         try {
             String driverlib = jtxtDbDriverLib.getText();

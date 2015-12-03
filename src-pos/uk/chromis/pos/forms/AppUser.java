@@ -158,7 +158,6 @@ public class AppUser {
      */
     public void fillPermissions(DataLogicSystem dlSystem) {
         
-        // JG 16 May use diamond inference
         m_apermissions = new HashSet<>();
         // Y lo que todos tienen permisos
         m_apermissions.add("uk.chromis.pos.forms.JPanelMenu");
@@ -211,7 +210,6 @@ public class AppUser {
     }
     
     private static void initOldClasses() {
-        // JG 16 May use diamond inference       
         m_oldclasses = new HashMap<>();
         
         // update permissions from 0.0.24 to 2.20    

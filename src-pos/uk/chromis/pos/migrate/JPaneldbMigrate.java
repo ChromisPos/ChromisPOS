@@ -63,11 +63,9 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 public class JPaneldbMigrate extends JPanel implements JPanelView {
 
     private DirtyManager dirty = new DirtyManager();
-    private AppConfig config;
     private Connection con;
     private String sdbmanager;
     private Session session;
-    private AppProperties m_props;
     private Connection con2;
     private String sdbmanager2;
     private Session session2;
@@ -106,13 +104,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
         initComponents();
         jPanel2.setPreferredSize(new java.awt.Dimension(645, 209));
-        config = new AppConfig(props.getConfigFile());
-        m_props = props;
+        //    m_props = props;
         m_panelconfig = new ArrayList<>();
-        config.load();
-        for (PanelConfig c : m_panelconfig) {
-            c.loadProperties(config);
-        }
 
         jtxtDbDriverLib.getDocument().addDocumentListener(dirty);
         jtxtDbDriver.getDocument().addDocumentListener(dirty);
@@ -140,8 +133,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         }
 
         try {
-            ClassLoader cloader = new URLClassLoader(new URL[]{new File(m_props.getProperty("db.driverlib")).toURI().toURL()});
-            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(m_props.getProperty("db.driver"), true, cloader).newInstance()));
+            ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
             changelog = "uk/chromis/pos/liquibase/migratelog.xml";
 
@@ -165,8 +158,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     public Boolean addFKeys() {
 
         try {
-            ClassLoader cloader = new URLClassLoader(new URL[]{new File(m_props.getProperty("db.driverlib")).toURI().toURL()});
-            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(m_props.getProperty("db.driver"), true, cloader).newInstance()));
+            ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
             changelog = "uk/chromis/pos/liquibase/createfkslog.xml";
 
@@ -239,9 +232,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     @Override
     public void activate() throws BasicException {
         // connect to the database
-        String db_user = (m_props.getProperty("db.user"));
-        String db_url = (m_props.getProperty("db.URL"));
-        String db_password = (m_props.getProperty("db.password"));
+        String db_user = (AppConfig.getInstance().getProperty("db.user"));
+        String db_url = (AppConfig.getInstance().getProperty("db.URL"));
+        String db_password = (AppConfig.getInstance().getProperty("db.password"));
 
         if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
             // the password is encrypted
@@ -250,7 +243,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         }
 
         try {
-            session = AppViewConnection.createSession(m_props);
+            session = AppViewConnection.createSession();
             con = DriverManager.getConnection(db_url, db_user, db_password);
             sdbmanager = con.getMetaData().getDatabaseProductName();
         } catch (BasicException | SQLException e) {
@@ -823,17 +816,17 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     SQL = "SELECT * FROM PAYMENTS";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
-                        SQL = "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, NOTES, CARDNAME) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        SQL = "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, NOTES, TENDERED, CARDNAME, RETURNMSG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("RECEIPT"));
                         pstmt.setString(3, rs.getString("PAYMENT"));
                         pstmt.setDouble(4, rs.getDouble("TOTAL"));
                         pstmt.setString(5, rs.getString("TRANSID"));
-                        pstmt.setBytes(6, rs.getBytes("RETURNMSG"));
-                        pstmt.setString(7, rs.getString("NOTES"));
-                        pstmt.setDouble(8, rs.getDouble("TENDERED"));
-                        pstmt.setString(9, rs.getString("CARDNAME"));
+                        pstmt.setString(6, rs.getString("NOTES"));
+                        pstmt.setDouble(7, rs.getDouble("TENDERED"));
+                        pstmt.setString(8, rs.getString("CARDNAME"));
+                        pstmt.setBytes(9, rs.getBytes("RETURNMSG"));
                         pstmt.executeUpdate();
                     }
 
@@ -1215,6 +1208,20 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.executeUpdate();
                     }
 
+// copy TICKETS table       
+                    SQL = "SELECT * FROM VOUCHERS";
+                    rs = stmt.executeQuery(SQL);
+                    while (rs.next()) {
+                        SQL = "INSERT INTO VOUCHERS (VOUCHER, SOLDDATE, REDEEMDATE, SOLDTICKETID, REDEEMTICKETID) VALUES (?, ?, ?, ?, ?)";
+                        pstmt = con2.prepareStatement(SQL);
+                        pstmt.setString(1, rs.getString("VOUCHER"));
+                        pstmt.setTimestamp(2, rs.getTimestamp("SOLDDATE"));
+                        pstmt.setTimestamp(3, rs.getTimestamp("REDEEMDATE"));
+                        pstmt.setString(4, rs.getString("SOLDTICKETID"));
+                        pstmt.setString(5, rs.getString("REDEEMTICKETID"));
+                        pstmt.executeUpdate();
+                    }
+
 // GET THE SEQUENCE NUMBERS
                     if (("Apache Derby".equals(sdbmanager)) || ("MySQL".equals(sdbmanager))) {
                         SQL = "SELECT * FROM TICKETSNUM";
@@ -1278,27 +1285,25 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     addFKeys();
 
 // Write new database settings to properties file
-//JG Aug 2014 - added to .properties
                     if ("MySQL".equals(sdbmanager2)) {
-                        config.setProperty("db.engine", "MySQL");
+                        AppConfig.getInstance().setProperty("db.engine", "MySQL");
                     } else {
-                        config.setProperty("db.engine", "PostgreSQL");
+                        AppConfig.getInstance().setProperty("db.engine", "PostgreSQL");
                     }
-//                    
-                    config.setProperty("db.driverlib", jtxtDbDriverLib.getText());
-                    config.setProperty("db.driver", jtxtDbDriver.getText());
-                    config.setProperty("db.URL", jtxtDbURL.getText());
-                    config.setProperty("db.user", jtxtDbUser.getText());
+                    AppConfig.getInstance().setProperty("db.driverlib", jtxtDbDriverLib.getText());
+                    AppConfig.getInstance().setProperty("db.driver", jtxtDbDriver.getText());
+                    AppConfig.getInstance().setProperty("db.URL", jtxtDbURL.getText());
+                    AppConfig.getInstance().setProperty("db.user", jtxtDbUser.getText());
                     AltEncrypter cypher = new AltEncrypter("cypherkey" + jtxtDbUser.getText());
-                    config.setProperty("db.password", "crypt:" + cypher.encrypt(new String(jtxtDbPassword.getPassword())));
+                    AppConfig.getInstance().setProperty("db.password", "crypt:" + cypher.encrypt(new String(jtxtDbPassword.getPassword())));
                     dirty.setDirty(false);
 
                     for (PanelConfig c : m_panelconfig) {
-                        c.saveProperties(config);
+                        c.saveProperties();
                     }
 
                     try {
-                        config.save();
+                        AppConfig.getInstance().save();
                         JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.restartchanges"), AppLocal.getIntString("message.title"), JOptionPane.INFORMATION_MESSAGE);
                     } catch (IOException e) {
                         JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotsaveconfig"), e));

@@ -692,14 +692,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="Chromis Pos" id="Add column to Lineremoved Table" dbms="hypersql, hsqldb">
-        <sql>ALTER TABLE LINEREMOVED ADD COLUMN REMOVEDDATE TIMESTAMP</sql>
-    </changeSet>
 
-
-    <changeSet author="Chromis Pos" id="Add column to Lineremoved Table" dbms="oracle, postgresql, mysql" >
-        <sql>ALTER TABLE LINEREMOVED ADD COLUMN REMOVEDDATE TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP </sql>
-    </changeSet>
 
     <changeSet author="Chromis Pos" id="Create PAYMENTS Table">
         <createTable tableName="PAYMENTS">
@@ -1088,6 +1081,26 @@
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
     </changeSet>
 
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE" dbms="postgresql, hypersql, hsqldb">  
+        <sql>CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1</sql>  
+    </changeSet>  
+
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE mysql" dbms="mysql">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
+    </changeSet>
+
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE oracle" dbms="oracle">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
+    </changeSet>
+
+    <changeSet author="Chromis Pos" id="CCreate TICKETSNUM Sequence INVOICE  derby" dbms="derby">
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
+    </changeSet
+
+
     <changeSet author="Chromis Pos" id="add derby from migrate">
         <sql>
             INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, EXECTYPE, MD5SUM, DESCRIPTION, LIQUIBASE) 
@@ -1103,10 +1116,7 @@
             '3.5.0-Chromis Mod')                
         </sql>
     </changeSet>
- 
-    
        
-          
     <changeSet author="Chromis POS" id="Create Orders Table">
         <createTable tableName="ORDERS">
             <column name="ID" type="varchar(50)">
@@ -1122,6 +1132,18 @@
             <column name="DISPLAYID" type="int"/>                                    
         </createTable>                         
     </changeSet>             
-                   
+ 
+    <changeSet author="Chromis POS" id="Create Voucher Table">                  
+        <createTable tableName="VOUCHERS">
+            <column name="VOUCHER" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>           
+            <column name="SOLDDATE" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="REDEEMDATE" type="timestamp" />            
+            <column name="SOLDTICKETID" type="varchar(50)"/>
+            <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
+        </createTable>       
+    </changeSet>            
+          
 </databaseChangeLog>
 

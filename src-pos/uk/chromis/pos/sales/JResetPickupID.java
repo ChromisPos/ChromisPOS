@@ -48,7 +48,7 @@ public class JResetPickupID extends javax.swing.JFrame {
      *
      * @param props
      */
-    public JResetPickupID(AppProperties props) {
+    public JResetPickupID() {
         
         initComponents();
         
@@ -60,7 +60,7 @@ public class JResetPickupID extends javax.swing.JFrame {
         
         addWindowListener(new MyFrameListener()); 
         
-       config = new JPanelResetPickupId(props);
+       config = new JPanelResetPickupId();
         
         getContentPane().add(config, BorderLayout.CENTER);
        
@@ -105,23 +105,21 @@ public class JResetPickupID extends javax.swing.JFrame {
             @Override
             public void run() {
                 
-                AppConfig config = new AppConfig(args);
-                config.load();    
+                AppConfig config = AppConfig.getInstance();
+                
                 
 // Set the look and feel.
-// JG 6 May 2013 to Multicatch                
                 try {                    
-                    Object laf = Class.forName(config.getProperty("swing.defaultlaf")).newInstance();                    
+                    Object laf = Class.forName(AppConfig.getInstance().getProperty("swing.defaultlaf")).newInstance();                    
                     if (laf instanceof LookAndFeel){
                         UIManager.setLookAndFeel((LookAndFeel) laf);
                     } else if (laf instanceof SubstanceSkin) {                      
                         SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);                   
                     }
-// JG 6 May 2013 to multicatch
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
                 }
                 
-                JResetPickupID resetFrame = new JResetPickupID(config);//
+                JResetPickupID resetFrame = new JResetPickupID();//
                 resetFrame.setSize(360, 120);
                 resetFrame.setVisible(true);
                 

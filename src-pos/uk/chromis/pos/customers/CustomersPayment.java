@@ -44,6 +44,7 @@ import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
 import uk.chromis.pos.ticket.TicketInfo;
+import uk.chromis.pos.ticket.TicketType;
 
 /**
  *
@@ -241,7 +242,6 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
                 script.put("ticket", ticket);
                 script.put("customer", customer);
                 ttp.printTicket(script.eval(resource).toString());
-// JG 6 May use multicatch
             } catch (    ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(this);
@@ -554,7 +554,8 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
 
             // Save the ticket
             TicketInfo ticket = new TicketInfo();
-            ticket.setTicketType(TicketInfo.RECEIPT_PAYMENT);
+          //  ticket.setTicketType(TicketInfo.RECEIPT_PAYMENT);
+            ticket.setTicketType(TicketType.PAYMENT);
 
             List<PaymentInfo> payments = paymentdialog.getSelectedPayments();
 

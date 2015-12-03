@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,15 +56,11 @@ import uk.chromis.pos.util.StringUtils;
 public final class TicketInfo implements SerializableRead, Externalizable {
 
     private static final long serialVersionUID = 2765650092387265178L;
-    public static final int RECEIPT_NORMAL = 0;
-    public static final int RECEIPT_REFUND = 1;
-    public static final int RECEIPT_PAYMENT = 2;
-    public static final int RECEIPT_NOSALE = 3;
     private static final DateFormat m_dateformat = new SimpleDateFormat("hh:mm");
 
     private String m_sHost;
     private String m_sId;
-    private int tickettype;
+    private TicketType tickettype;
     private int m_iTicketId;
     private int m_iPickupId;
     private java.util.Date m_dDate;
@@ -79,7 +76,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     private String loyaltyCardNumber;
     private Boolean oldTicket;
 
-    // JG July 2014 Ticket creator Host - for ticket print
     private static String Hostname;
 
     public static void setHostname(String name) {
@@ -95,7 +91,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
      */
     public TicketInfo() {
         m_sId = UUID.randomUUID().toString();
-        tickettype = RECEIPT_NORMAL;
+        tickettype = TicketType.NORMAL;
         m_iTicketId = 0; // incrementamos
         m_dDate = new Date();
         attributes = new Properties();
@@ -115,7 +111,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(m_sId);
-        out.writeInt(tickettype);
+        out.writeInt(tickettype.id);
         out.writeInt(m_iTicketId);
         out.writeObject(m_Customer);
         out.writeObject(m_dDate);
@@ -126,7 +122,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         m_sId = (String) in.readObject();
-        tickettype = in.readInt();
+        tickettype = TicketType.get(in.readInt()); 
         m_iTicketId = in.readInt();
         m_Customer = (CustomerInfoExt) in.readObject();
         m_dDate = (Date) in.readObject();
@@ -146,7 +142,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     @Override
     public void readValues(DataRead dr) throws BasicException {
         m_sId = dr.getString(1);
-        tickettype = dr.getInt(2);
+        tickettype = TicketType.get(dr.getInt(2)); 
         m_iTicketId = dr.getInt(3);
         m_dDate = dr.getTimestamp(4);
         m_sActiveCash = dr.getString(5);
@@ -159,9 +155,9 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
-        m_aLines = new ArrayList<>(); // JG June 2102 diamond inference
+        m_aLines = new ArrayList<>(); 
 
-        payments = new ArrayList<>(); // JG June 2102 diamond inference
+        payments = new ArrayList<>(); 
         taxes = null;
 
     }
@@ -181,13 +177,13 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         t.m_User = m_User;
         t.m_Customer = m_Customer;
 
-        t.m_aLines = new ArrayList<>(); // JG June 2102 diamond inference
+        t.m_aLines = new ArrayList<>(); 
         for (TicketLineInfo l : m_aLines) {
             t.m_aLines.add(l.copyTicketLine());
         }
         t.refreshLines();
 
-        t.payments = new LinkedList<>(); // JG June 2102 diamond inference
+        t.payments = new LinkedList<>(); 
         for (PaymentInfo p : payments) {
             t.payments.add(p.copyPayment());
         }
@@ -208,7 +204,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
      *
      * @return
      */
-    public int getTicketType() {
+    public TicketType getTicketType() {
         return tickettype;
     }
 
@@ -216,8 +212,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
      *
      * @param tickettype
      */
-    public void setTicketType(int tickettype) {
-        this.tickettype = tickettype;
+   public void setTicketType(final TicketType _tickettype) { 
+        this.tickettype = _tickettype;
     }
 
     /**
@@ -259,7 +255,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
      * @return
      */
     public String getName(Object info) {
-// JG Aug 2014 - Add User info
         StringBuilder name = new StringBuilder();
 
         if (m_User != null) {
@@ -504,7 +499,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public void resetPayments() {
-        payments = new ArrayList<>(); // JG June 2102 diamond inference
+        payments = new ArrayList<>(); 
     }
 
     public List<TicketTaxInfo> getTaxes() {
@@ -533,7 +528,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public TicketTaxInfo[] getTaxLines() {
-        Map<String, TicketTaxInfo> m = new HashMap<>(); // JG June 2102 diamond inference
+        Map<String, TicketTaxInfo> m = new HashMap<>(); 
 
         TicketLineInfo oLine;
         for (Iterator<TicketLineInfo> i = m_aLines.iterator(); i.hasNext();) {
@@ -551,13 +546,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public String printId() {
-// We need acces to the config file        
-        AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
-        String receiptSize = (m_config.getProperty("till.receiptsize"));
-        String receiptPrefix = (m_config.getProperty("till.receiptprefix"));
-// we have finished with m_config so unload it      
-        m_config = null;
+
+        String receiptSize = (AppConfig.getInstance().getProperty("till.receiptsize"));
+        String receiptPrefix = (AppConfig.getInstance().getProperty("till.receiptprefix"));
+
 
         if (m_iTicketId > 0) {
             String tmpTicketId = Integer.toString(m_iTicketId);

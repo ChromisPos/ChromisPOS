@@ -17,6 +17,7 @@ import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.util.AltEncrypter;
@@ -46,12 +47,12 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
         Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
             
         // Configuracion del pago
-        m_sCommerceID = props.getProperty("payment.commerceid");
+        m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
         
         AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
         this.m_sCommercePassword = cypher.decrypt(props.getProperty("payment.commercepassword").substring(6));
         
-        m_bTestMode = Boolean.valueOf(props.getProperty("payment.testmode")).booleanValue();
+        m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         m_sCurrency = (Locale.getDefault().getCountry().isEmpty())
             ? Currency.getInstance("EUR").getCurrencyCode()
             : Currency.getInstance(Locale.getDefault()).getCurrencyCode();
@@ -135,7 +136,6 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
                 payinfo.paymentOK((String) props.get("auth_code"), (String) props.get("trans_id"), returned);
             } else {
                 String sCode = (String) props.get("code");
-// JG 16 May 12 use switch
                 switch (sCode) {
                         case "N":
                             // N Transaction not authorised. Failure message text available to merchant
@@ -211,7 +211,6 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
                     }
             }
         }
-// JG 16 May 12 use multictach
         } catch (UnknownHostException | UnsupportedEncodingException | ServiceException eUH) {
             payinfo.paymentError(AppLocal.getIntString("message.paymentexceptionservice"), eUH.getMessage());
         } catch (RemoteException remoteException) {

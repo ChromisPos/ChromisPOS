@@ -20,7 +20,6 @@
 package uk.chromis.pos.payment;
 
 import javax.swing.JPanel;
-import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
@@ -47,7 +46,7 @@ public class ConfigPaymentPanelEmpty extends javax.swing.JPanel implements Payme
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
         
     }
     
@@ -56,7 +55,7 @@ public class ConfigPaymentPanelEmpty extends javax.swing.JPanel implements Payme
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
         
     }
     

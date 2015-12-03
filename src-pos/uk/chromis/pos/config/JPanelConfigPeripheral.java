@@ -136,7 +136,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter1.addItem("epson");
         jcboMachinePrinter1.addItem("tmu220");
         jcboMachinePrinter1.addItem("star");
-        jcboMachinePrinter1.addItem("ODP1000");
         jcboMachinePrinter1.addItem("ithaca");
         jcboMachinePrinter1.addItem("surepos");
         jcboMachinePrinter1.addItem("plain");
@@ -153,8 +152,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter2.addItem("printer");
         jcboMachinePrinter2.addItem("epson");
         jcboMachinePrinter2.addItem("tmu220");
-        jcboMachinePrinter2.addItem("star");
-        jcboMachinePrinter2.addItem("ODP1000");
+        jcboMachinePrinter2.addItem("star");        
         jcboMachinePrinter2.addItem("ithaca");
         jcboMachinePrinter2.addItem("surepos");
         jcboMachinePrinter2.addItem("plain");
@@ -172,7 +170,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter3.addItem("epson");
         jcboMachinePrinter3.addItem("tmu220");
         jcboMachinePrinter3.addItem("star");
-        jcboMachinePrinter3.addItem("ODP1000");
         jcboMachinePrinter3.addItem("ithaca");
         jcboMachinePrinter3.addItem("surepos");
         jcboMachinePrinter3.addItem("plain");
@@ -190,7 +187,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter4.addItem("epson");
         jcboMachinePrinter4.addItem("tmu220");
         jcboMachinePrinter4.addItem("star");
-        jcboMachinePrinter4.addItem("ODP1000");
         jcboMachinePrinter4.addItem("ithaca");
         jcboMachinePrinter4.addItem("surepos");
         jcboMachinePrinter4.addItem("plain");
@@ -208,7 +204,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter5.addItem("epson");
         jcboMachinePrinter5.addItem("tmu220");
         jcboMachinePrinter5.addItem("star");
-        jcboMachinePrinter5.addItem("ODP1000");
         jcboMachinePrinter5.addItem("ithaca");
         jcboMachinePrinter5.addItem("surepos");
         jcboMachinePrinter5.addItem("plain");
@@ -226,7 +221,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter6.addItem("epson");
         jcboMachinePrinter6.addItem("tmu220");
         jcboMachinePrinter6.addItem("star");
-        jcboMachinePrinter6.addItem("ODP1000");
         jcboMachinePrinter6.addItem("ithaca");
         jcboMachinePrinter6.addItem("surepos");
         jcboMachinePrinter6.addItem("plain");
@@ -270,7 +264,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialDisplay.addItem("/dev/ttyS5");
 
         // Scale
-// JG 20 Aug 13 Add Casio PD1 Scale        
         jcboMachineScale.addItem("Not defined");
         jcboMachineScale.addItem("screen");
         jcboMachineScale.addItem("casiopd1");
@@ -352,10 +345,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
      * @param config
      */
     @Override
-    public void loadProperties(AppConfig config) {
+    public void loadProperties() {
 
-// JG 6 May 2013 to switch
-        StringParser p = new StringParser(config.getProperty("machine.printer"));
+
+        StringParser p = new StringParser(AppConfig.getInstance().getProperty("machine.printer"));
         String sparam = unifySerialInterface(p.nextToken(':'));
 
         switch (sparam) {
@@ -381,8 +374,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch
-        p = new StringParser(config.getProperty("machine.printer.2"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.printer.2"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
             case "serial":
@@ -407,8 +399,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch
-        p = new StringParser(config.getProperty("machine.printer.3"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.printer.3"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
             case "serial":
@@ -434,7 +425,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         }
 
 // new printers add jdl 10.11.12
-        p = new StringParser(config.getProperty("machine.printer.4"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.printer.4"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
             case "serial":
@@ -459,7 +450,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-        p = new StringParser(config.getProperty("machine.printer.5"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.printer.5"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
             case "serial":
@@ -484,7 +475,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-        p = new StringParser(config.getProperty("machine.printer.6"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.printer.6"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
             case "serial":
@@ -509,8 +500,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 6 May 2013 to switch        
-        p = new StringParser(config.getProperty("machine.display"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.display"));
         sparam = unifySerialInterface(p.nextToken(':'));
         switch (sparam) {
             case "serial":
@@ -530,22 +520,21 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
         }
 
-// JG 20 Aug 13 Add Casio PD1 Scale
-        p = new StringParser(config.getProperty("machine.scale"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.scale"));
         sparam = p.nextToken(':');
         jcboMachineScale.setSelectedItem(sparam);
         if ("casiopd1".equals(sparam) || "Adam Equipment".equals(sparam) || "dialog1".equals(sparam) || "samsungesp".equals(sparam)) {
             jcboSerialScale.setSelectedItem(p.nextToken(','));
         }
 
-        p = new StringParser(config.getProperty("machine.scanner"));
+        p = new StringParser(AppConfig.getInstance().getProperty("machine.scanner"));
         sparam = p.nextToken(':');
         jcboMachineScanner.setSelectedItem(sparam);
         if ("scanpal2".equals(sparam)) {
             jcboSerialScanner.setSelectedItem(p.nextToken(','));
         }
 
-        cboPrinters.setSelectedItem(config.getProperty("machine.printername"));
+        cboPrinters.setSelectedItem(AppConfig.getInstance().getProperty("machine.printername"));
 
         dirty.setDirty(false);
     }
@@ -555,9 +544,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
      * @param config
      */
     @Override
-    public void saveProperties(AppConfig config) {
+    public void saveProperties() {
 
-// JG 6 May 2013 to switch
         String sMachinePrinter = comboValue(jcboMachinePrinter1.getSelectedItem());
         switch (sMachinePrinter) {
             case "epson":
@@ -566,19 +554,19 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             case "ODP1000":
             case "ithaca":
             case "surepos":
-                config.setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter1.getSelectedItem()) + "," + comboValue(jcboSerialPrinter1.getSelectedItem()));
+                AppConfig.getInstance().setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter1.getSelectedItem()) + "," + comboValue(jcboSerialPrinter1.getSelectedItem()));
                 break;
             case "javapos":
-                config.setProperty("machine.printer", sMachinePrinter + ":" + m_jtxtJPOSPrinter1.getText() + "," + m_jtxtJPOSDrawer1.getText());
+                AppConfig.getInstance().setProperty("machine.printer", sMachinePrinter + ":" + m_jtxtJPOSPrinter1.getText() + "," + m_jtxtJPOSDrawer1.getText());
                 break;
             case "printer":
-                config.setProperty("machine.printer", sMachinePrinter + ":" + printer1printerparams.getParameters());
+                AppConfig.getInstance().setProperty("machine.printer", sMachinePrinter + ":" + printer1printerparams.getParameters());
                 break;
             default:
-                config.setProperty("machine.printer", sMachinePrinter);
+                AppConfig.getInstance().setProperty("machine.printer", sMachinePrinter);
                 break;
         }
-// JG 6 May 2013 to switch
+
         String sMachinePrinter2 = comboValue(jcboMachinePrinter2.getSelectedItem());
         switch (sMachinePrinter2) {
             case "epson":
@@ -587,20 +575,19 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             case "ODP1000":
             case "ithaca":
             case "surepos":
-                config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + comboValue(jcboConnPrinter2.getSelectedItem()) + "," + comboValue(jcboSerialPrinter2.getSelectedItem()));
+                AppConfig.getInstance().setProperty("machine.printer.2", sMachinePrinter2 + ":" + comboValue(jcboConnPrinter2.getSelectedItem()) + "," + comboValue(jcboSerialPrinter2.getSelectedItem()));
                 break;
             case "javapos":
-                config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + m_jtxtJPOSPrinter2.getText() + "," + m_jtxtJPOSDrawer2.getText());
+                AppConfig.getInstance().setProperty("machine.printer.2", sMachinePrinter2 + ":" + m_jtxtJPOSPrinter2.getText() + "," + m_jtxtJPOSDrawer2.getText());
                 break;
             case "printer":
-                config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + printer2printerparams.getParameters());
+                AppConfig.getInstance().setProperty("machine.printer.2", sMachinePrinter2 + ":" + printer2printerparams.getParameters());
                 break;
             default:
-                config.setProperty("machine.printer.2", sMachinePrinter2);
+                AppConfig.getInstance().setProperty("machine.printer.2", sMachinePrinter2);
                 break;
         }
 
-// JG 6 May 2013 to switch
         String sMachinePrinter3 = comboValue(jcboMachinePrinter3.getSelectedItem());
         switch (sMachinePrinter3) {
             case "epson":
@@ -609,16 +596,16 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             case "ODP1000":
             case "ithaca":
             case "surepos":
-                config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + comboValue(jcboConnPrinter3.getSelectedItem()) + "," + comboValue(jcboSerialPrinter3.getSelectedItem()));
+                AppConfig.getInstance().setProperty("machine.printer.3", sMachinePrinter3 + ":" + comboValue(jcboConnPrinter3.getSelectedItem()) + "," + comboValue(jcboSerialPrinter3.getSelectedItem()));
                 break;
             case "javapos":
-                config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + m_jtxtJPOSPrinter3.getText() + "," + m_jtxtJPOSDrawer3.getText());
+                AppConfig.getInstance().setProperty("machine.printer.3", sMachinePrinter3 + ":" + m_jtxtJPOSPrinter3.getText() + "," + m_jtxtJPOSDrawer3.getText());
                 break;
             case "printer":
-                config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + printer3printerparams.getParameters());
+                AppConfig.getInstance().setProperty("machine.printer.3", sMachinePrinter3 + ":" + printer3printerparams.getParameters());
                 break;
             default:
-                config.setProperty("machine.printer.3", sMachinePrinter3);
+                AppConfig.getInstance().setProperty("machine.printer.3", sMachinePrinter3);
                 break;
         }
 // new printers added 10.11.12
@@ -630,16 +617,16 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             case "ODP1000":
             case "ithaca":
             case "surepos":
-                config.setProperty("machine.printer.4", sMachinePrinter4 + ":" + comboValue(jcboConnPrinter4.getSelectedItem()) + "," + comboValue(jcboSerialPrinter4.getSelectedItem()));
+                AppConfig.getInstance().setProperty("machine.printer.4", sMachinePrinter4 + ":" + comboValue(jcboConnPrinter4.getSelectedItem()) + "," + comboValue(jcboSerialPrinter4.getSelectedItem()));
                 break;
             case "javapos":
-                config.setProperty("machine.printer.4", sMachinePrinter4 + ":" + m_jtxtJPOSPrinter4.getText() + "," + m_jtxtJPOSDrawer4.getText());
+                AppConfig.getInstance().setProperty("machine.printer.4", sMachinePrinter4 + ":" + m_jtxtJPOSPrinter4.getText() + "," + m_jtxtJPOSDrawer4.getText());
                 break;
             case "printer":
-                config.setProperty("machine.printer.4", sMachinePrinter4 + ":" + printer4printerparams.getParameters());
+                AppConfig.getInstance().setProperty("machine.printer.4", sMachinePrinter4 + ":" + printer4printerparams.getParameters());
                 break;
             default:
-                config.setProperty("machine.printer.4", sMachinePrinter4);
+                AppConfig.getInstance().setProperty("machine.printer.4", sMachinePrinter4);
                 break;
         }
 
@@ -651,16 +638,16 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             case "ODP1000":
             case "ithaca":
             case "surepos":
-                config.setProperty("machine.printer.5", sMachinePrinter5 + ":" + comboValue(jcboConnPrinter5.getSelectedItem()) + "," + comboValue(jcboSerialPrinter5.getSelectedItem()));
+                AppConfig.getInstance().setProperty("machine.printer.5", sMachinePrinter5 + ":" + comboValue(jcboConnPrinter5.getSelectedItem()) + "," + comboValue(jcboSerialPrinter5.getSelectedItem()));
                 break;
             case "javapos":
-                config.setProperty("machine.printer.5", sMachinePrinter5 + ":" + m_jtxtJPOSPrinter5.getText() + "," + m_jtxtJPOSDrawer5.getText());
+                AppConfig.getInstance().setProperty("machine.printer.5", sMachinePrinter5 + ":" + m_jtxtJPOSPrinter5.getText() + "," + m_jtxtJPOSDrawer5.getText());
                 break;
             case "printer":
-                config.setProperty("machine.printer.5", sMachinePrinter5 + ":" + printer5printerparams.getParameters());
+                AppConfig.getInstance().setProperty("machine.printer.5", sMachinePrinter5 + ":" + printer5printerparams.getParameters());
                 break;
             default:
-                config.setProperty("machine.printer.5", sMachinePrinter5);
+                AppConfig.getInstance().setProperty("machine.printer.5", sMachinePrinter5);
                 break;
         }
 
@@ -672,54 +659,52 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             case "ODP1000":
             case "ithaca":
             case "surepos":
-                config.setProperty("machine.printer.6", sMachinePrinter6 + ":" + comboValue(jcboConnPrinter6.getSelectedItem()) + "," + comboValue(jcboSerialPrinter6.getSelectedItem()));
+                AppConfig.getInstance().setProperty("machine.printer.6", sMachinePrinter6 + ":" + comboValue(jcboConnPrinter6.getSelectedItem()) + "," + comboValue(jcboSerialPrinter6.getSelectedItem()));
                 break;
             case "javapos":
-                config.setProperty("machine.printer.6", sMachinePrinter6 + ":" + m_jtxtJPOSPrinter6.getText() + "," + m_jtxtJPOSDrawer6.getText());
+                AppConfig.getInstance().setProperty("machine.printer.6", sMachinePrinter6 + ":" + m_jtxtJPOSPrinter6.getText() + "," + m_jtxtJPOSDrawer6.getText());
                 break;
             case "printer":
-                config.setProperty("machine.printer.6", sMachinePrinter6 + ":" + printer6printerparams.getParameters());
+                AppConfig.getInstance().setProperty("machine.printer.6", sMachinePrinter6 + ":" + printer6printerparams.getParameters());
                 break;
             default:
-                config.setProperty("machine.printer.6", sMachinePrinter6);
+                AppConfig.getInstance().setProperty("machine.printer.6", sMachinePrinter6);
                 break;
         }
 
-// JG 6 May 2013 to switch
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
         switch (sMachineDisplay) {
             case "epson":
             case "ld200":
             case "surepos":
-                config.setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()));
+                AppConfig.getInstance().setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()));
                 break;
             case "javapos":
-                config.setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
+                AppConfig.getInstance().setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
                 break;
             default:
-                config.setProperty("machine.display", sMachineDisplay);
+                AppConfig.getInstance().setProperty("machine.display", sMachineDisplay);
                 break;
         }
 
-//JG 20 Aug 2013 Add Casio PD1 Scale
         String sMachineScale = comboValue(jcboMachineScale.getSelectedItem());
         if ("casiopd1".equals(sMachineScale) || "Adam Equipment".equals(sMachineScale)
                 || "dialog1".equals(sMachineScale)
                 || "samsungesp".equals(sMachineScale)) {
-            config.setProperty("machine.scale", sMachineScale + ":" + comboValue(jcboSerialScale.getSelectedItem()));
+            AppConfig.getInstance().setProperty("machine.scale", sMachineScale + ":" + comboValue(jcboSerialScale.getSelectedItem()));
         } else {
-            config.setProperty("machine.scale", sMachineScale);
+            AppConfig.getInstance().setProperty("machine.scale", sMachineScale);
         }
 
         // El scanner
         String sMachineScanner = comboValue(jcboMachineScanner.getSelectedItem());
         if ("scanpal2".equals(sMachineScanner)) {
-            config.setProperty("machine.scanner", sMachineScanner + ":" + comboValue(jcboSerialScanner.getSelectedItem()));
+            AppConfig.getInstance().setProperty("machine.scanner", sMachineScanner + ":" + comboValue(jcboSerialScanner.getSelectedItem()));
         } else {
-            config.setProperty("machine.scanner", sMachineScanner);
+            AppConfig.getInstance().setProperty("machine.scanner", sMachineScanner);
         }
 
-        config.setProperty("machine.printername", comboValue(cboPrinters.getSelectedItem()));
+        AppConfig.getInstance().setProperty("machine.printername", comboValue(cboPrinters.getSelectedItem()));
 
         dirty.setDirty(false);
     }
@@ -889,7 +874,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboSerialScanner = new javax.swing.JComboBox();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        setPreferredSize(new java.awt.Dimension(700, 400));
+        setPreferredSize(new java.awt.Dimension(700, 500));
 
         jPanel13.setPreferredSize(new java.awt.Dimension(700, 400));
 
@@ -1984,8 +1969,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboMachineScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineScaleActionPerformed
         CardLayout cl = (CardLayout) (m_jScaleParams.getLayout());
 
-        // JG 29 Aug 13 - Add Casio PD1 Scale
-        if ("casiopd1".equals(jcboMachineScale.getSelectedItem())
+               if ("casiopd1".equals(jcboMachineScale.getSelectedItem())
                 || "dialog1".equals(jcboMachineScale.getSelectedItem())
                 || "Adam Equipment".equals(jcboMachineScale.getSelectedItem())
                 || "samsungesp".equals(jcboMachineScale.getSelectedItem())) {

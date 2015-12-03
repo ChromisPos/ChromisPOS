@@ -51,6 +51,7 @@ import uk.chromis.pos.sales.SharedTicketInfo;
 import uk.chromis.pos.sales.TicketsEditor;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
+import uk.chromis.pos.util.AutoLogoff;
 
 /**
  *
@@ -80,11 +81,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     private JTicketsBagRestaurantRes m_jreservations;
 
     private Place m_PlaceCurrent;
-
-// TODO - Add Server JG 03.07.2011
     private ServerCurrent m_ServerCurrent;
-
-    // State vars
     private Place m_PlaceClipboard;
     private CustomerInfo customer;
 
@@ -110,10 +107,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         super(app, panelticket);
 
         restDB = new RestaurantDBUtils(app);
-
-        AppConfig m_config = new AppConfig(new File((System.getProperty("user.home")), AppLocal.APP_ID + ".properties"));
-        m_config.load();
-        transparentButtons = Boolean.valueOf(m_config.getProperty("table.transparentbuttons"));
+        transparentButtons = AppConfig.getInstance().getBoolean("table.transparentbuttons");
 
         dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
         dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
@@ -137,7 +131,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         try {
             SentenceList sent = new StaticSentence(
                     app.getSession(),
-                    // "SELECT ID, NAME, X, Y, FLOOR, CUSTOMER FROM PLACES ORDER BY FLOOR", 
                     "SELECT ID, NAME, X, Y, FLOOR, CUSTOMER, WAITER, TICKETID, TABLEMOVED FROM PLACES ORDER BY FLOOR",
                     null,
                     new SerializerReadClass(Place.class));
@@ -211,7 +204,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             currfloor.getContainer().add(pl.getButton());
             pl.setButtonBounds();
 
-// Added JDL 14/04/14 Transparent buttons on tables            
             if (transparentButtons) {
                 pl.getButton().setOpaque(false);
                 pl.getButton().setContentAreaFilled(false);
@@ -276,6 +268,8 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             printState();
             m_panelticket.setActiveTicket(null, null);
 
+            AutoLogoff.getInstance().deactivateTimer();
+            
             return true;
         } else {
             return false;
@@ -432,7 +426,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_panelticket.setActiveTicket(null, null);
     }
 
-// Added JG 03.07.2011 - TODO - Change Server Dialog here
     /**
      *
      */
@@ -483,47 +476,46 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     place.getButton().setEnabled(true);
 // get the customer details form the database
 // We have set the option show details on table.   
-                    if (m_App.getProperties().getProperty("table.tablecolour") == null) {
+                    if (AppConfig.getInstance().getProperty("table.tablecolour") == null) {
                         tableName = "<style=font-size:9px;font-weight:bold;><font color = black>" + place.getName() + "</font></style>";
                     } else {
-                        tableName = "<style=font-size:9px;font-weight:bold;><font color =" + m_App.getProperties().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
+                        tableName = "<style=font-size:9px;font-weight:bold;><font color =" + AppConfig.getInstance().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
                     }
 
-                    if (Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue()) {
-                        if (m_App.getProperties().getProperty("table.waitercolour") == null) {
+                    if (AppConfig.getInstance().getBoolean("table.showwaiterdetails")) {
+                        if (AppConfig.getInstance().getProperty("table.waitercolour") == null) {
                             waiterDetails = (restDB.getWaiterNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color = red>"
                                     + restDB.getWaiterNameInTableById(place.getId()) + "</font></style><br>";
                         } else {
                             waiterDetails = (restDB.getWaiterNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color ="
-                                    + m_App.getProperties().getProperty("table.waitercolour") + ">" + restDB.getWaiterNameInTableById(place.getId()) + "</font></style><br>";
+                                    + AppConfig.getInstance().getProperty("table.waitercolour") + ">" + restDB.getWaiterNameInTableById(place.getId()) + "</font></style><br>";
                         }
                         place.getButton().setIcon(ICO_OCU_SM);
                     } else {
                         waiterDetails = "";
                     }
 
-                    if (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")).booleanValue()) {
-                        place.getButton().setIcon((Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue() && (restDB.getCustomerNameInTable(place.getName()) != null)) ? ICO_WAITER : ICO_OCU_SM);
-                        if (m_App.getProperties().getProperty("table.customercolour") == null) {
+                    if (AppConfig.getInstance().getBoolean("table.showcustomerdetails")) {
+                        place.getButton().setIcon(((AppConfig.getInstance().getBoolean("table.showwaiterdetails")) && (restDB.getCustomerNameInTable(place.getName()) != null)) ? ICO_WAITER : ICO_OCU_SM);
+                        if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
                             customerDetails = (restDB.getCustomerNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color = blue>"
                                     + restDB.getCustomerNameInTableById(place.getId()) + "</font></style><br>";
                         } else {
                             customerDetails = (restDB.getCustomerNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color ="
-                                    + m_App.getProperties().getProperty("table.customercolour") + ">" + restDB.getCustomerNameInTableById(place.getId()) + "</font></style><br>";
+                                    + AppConfig.getInstance().getProperty("table.customercolour") + ">" + restDB.getCustomerNameInTableById(place.getId()) + "</font></style><br>";
                         }
                     } else {
                         customerDetails = "";
                     }
 
-                    if ((Boolean.valueOf(m_App.getProperties().getProperty("table.showwaiterdetails")).booleanValue())
-                            || (Boolean.valueOf(m_App.getProperties().getProperty("table.showcustomerdetails")).booleanValue())) {
+                    if ((AppConfig.getInstance().getBoolean("table.showwaiterdetails"))
+                            || (AppConfig.getInstance().getBoolean("table.showcustomerdetails"))) {
                         place.getButton().setText("<html><center>" + customerDetails + waiterDetails + tableName + "</html>");
-//  JG 29 Aug 13 Bug fix }else{;
                     } else {
-                        if (m_App.getProperties().getProperty("table.tablecolour") == null) {
+                        if (AppConfig.getInstance().getProperty("table.tablecolour") == null) {
                             tableName = "<style=font-size:10px;font-weight:bold;><font color = black>" + place.getName() + "</font></style>";
                         } else {
-                            tableName = "<style=font-size:10px;font-weight:bold;><font color =" + m_App.getProperties().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
+                            tableName = "<style=font-size:10px;font-weight:bold;><font color =" +AppConfig.getInstance().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
                         }
 
                         place.getButton().setText("<html><center>" + tableName + "</html>");

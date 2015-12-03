@@ -44,6 +44,7 @@ import uk.chromis.data.loader.SerializerWriteBasic;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppUser;import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.BeanFactoryApp;
@@ -64,13 +65,10 @@ import uk.chromis.pos.scripting.ScriptFactory;
 public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryApp {
     
     private AppView m_App;
-    private DataLogicSystem m_dlSystem;
-    
-    private PaymentsModel m_PaymentsToClose = null;   
-    
+    private DataLogicSystem m_dlSystem;    
+    private PaymentsModel m_PaymentsToClose = null;      
     private TicketParser m_TTP;
-    private final DateFormat df= new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");   
-    
+    private final DateFormat df= new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");       
     private Session s;
     private Connection con;  
     private Statement stmt;
@@ -94,7 +92,6 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
     @Override
     public void init(AppView app) throws BeanFactoryException {
         
-//        m_User.getName();  //JG June 2014
         m_App = app;        
         m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
         m_TTP = new TicketParser(m_App.getDeviceTicket(), m_dlSystem);
@@ -116,17 +113,14 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
         m_jsalestable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         
-        jPanelTop.setVisible(false);        
-        if (m_App.getProperties().getProperty("screen.600800") != null) {           
-            if (Boolean.valueOf(m_App.getProperties().getProperty("screen.600800")) == true) {             
+        jPanelTop.setVisible(false);                         
+            if (AppConfig.getInstance().getBoolean("screen.600800")) {             
                    jPanelTop.setVisible(true);
                    jPanelBottom.setVisible(false);
             } else {
                    jPanelTop.setVisible(false);
                    jPanelBottom.setVisible(true);
-            }        
-    
-        }
+            }           
     }
     
     /**
@@ -284,7 +278,6 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
                 script.put("payments", m_PaymentsToClose);
                 script.put("nosales",result.toString());                
                 m_TTP.printTicket(script.eval(sresource).toString());
-// JG 16 May 2012 use multicatch
             } catch (ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(this);
