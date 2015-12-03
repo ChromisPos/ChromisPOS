@@ -149,7 +149,7 @@
         </addColumn>
         <sql>
             UPDATE PEOPLE SET VISIBLE='TRUE' WHERE JDL_TMP=1;
-            UPDATE PEOPLE SET VISIBLE='FALSE' WHERE JDL_TMP=0
+PRODUCTS_CAT
         </sql>
         
         <dropColumn 
@@ -787,7 +787,7 @@
         </update>               
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" dbms="postgresql, hypersql, hsqldb">    
+    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" >    
         <preConditions onFail="MARK_RAN">
             <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
         </preConditions> 
@@ -817,7 +817,30 @@
             <column name="CHANGES_PROCESSED" type="int"/>
         </createTable>       
    </changeSet>   
-                  
+   
+     <changeSet author="Chromis POS" id="Remove PRODUCTS_CAT table" >    
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions> 
+                       
+        <addColumn tableName="PRODUCTS">
+            
+            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATORDER" type="integer"/>
+        </addColumn>     
+        
+        <sql>
+            UPDATE PRODUCTS SET P.ISCATALOG = 0   
+        </sql>  uk.chromis.pos.printer.TicketPrinterException:
+        <sql>
+            UPDATE PRODUCTS P, PRODUCTS_CAT C SET P.ISCATALOG = 1, P.CATORDER = C.CATORDER WHERE P.ID = C.PRODUCT   
+        </sql>  
+
+        <dropTable tableName="PRODUCTS_CAT"/>
+    </changeSet> 
+                 
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
