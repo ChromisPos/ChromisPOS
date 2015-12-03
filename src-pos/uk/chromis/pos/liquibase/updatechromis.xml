@@ -645,8 +645,34 @@ PRODUCTS_CAT
             <column name="CHANGES_PROCESSED" type="int"/>
         </createTable>       
    </changeSet>   
-   
-     <changeSet author="Chromis POS" id="Remove PRODUCTS_CAT table" >    
+
+
+   <changeSet author="Chromis POS" id="Create Promotion Table">
+       
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PROMOTIONS"/>
+            </not>
+        </preConditions> 
+        
+        <createTable tableName="PROMOTIONS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)" >
+                <constraints nullable="false" />                
+            </column>
+            <column name="CRITERIA"  type="${blob.type}"/>           
+            <column name="SCRIPT"  type="${blob.type}" >
+                <constraints nullable="false" />
+            </column>
+            <column name="ISENABLED" type="${boolean.type}" 
+                    defaultValueNumeric="1"/>
+        </createTable>      
+    </changeSet>  
+    
+ 
+     <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS" >    
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="PRODUCTS_CAT"/>
         </preConditions> 
@@ -660,13 +686,10 @@ PRODUCTS_CAT
         </addColumn>     
         
         <sql>
-            UPDATE PRODUCTS SET P.ISCATALOG = 0   
-        </sql>  uk.chromis.pos.printer.TicketPrinterException:
-        <sql>
-            UPDATE PRODUCTS P, PRODUCTS_CAT C SET P.ISCATALOG = 1, P.CATORDER = C.CATORDER WHERE P.ID = C.PRODUCT   
+            UPDATE PRODUCTS SET ISCATALOG = 0; 
+            UPDATE PRODUCTS P, PRODUCTS_CAT C SET P.ISCATALOG = 1, P.CATORDER = C.CATORDER WHERE P.ID = C.PRODUCT;  
         </sql>  
 
-        <dropTable tableName="PRODUCTS_CAT"/>
     </changeSet> 
     
     <!-- End of new tables sections -->
@@ -782,6 +805,26 @@ PRODUCTS_CAT
             <column name="CATORDER" type="integer"/>
         </addColumn>        
     </changeSet>
+    
+     <changeSet author="Chromis POS" id="Promotions added to PRODUCTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="PROMOTIONID" tableName="PRODUCTS" />
+            </not>
+        </preConditions>     
+               
+        <addColumn tableName="PRODUCTS">
+            <column name="PROMOTIONID" type="varchar(50)" /> 
+        </addColumn>     
+                       
+        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
+                         constraintName ="FK_PRODUCT_PROMOTIONID"
+                         referencedColumnNames = "ID"
+                         baseTableName="PRODUCTS"
+                         referencedTableName="PROMOTIONS"/>
+      
+    </changeSet>
+            
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -848,6 +891,55 @@ PRODUCTS_CAT
             <where>NAME='sql.ActionStockChanges'</where>      
         </update> 
     </changeSet>   
+
+   <changeSet author="Chromis POS" id="Add promotion scripts to resources">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'help.promotion'</sqlCheck>
+        </preConditions> 
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6700"/>
+            <column name="NAME" value="help.promotion"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Help.Promotion.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6701"/>
+            <column name="NAME" value="promotion.bogof"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.bogof.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6702"/>
+            <column name="NAME" value="promotion.threefortwo"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.multibuy.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6703"/>
+            <column name="NAME" value="promotion.mealdeal"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.mealdeal.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6704"/>
+            <column name="NAME" value="promotion.percentoff"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.percentoff.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6705"/>
+            <column name="NAME" value="promotion.coupon"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
+        </insert>
+    </changeSet> 
+
                  
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
@@ -971,6 +1063,22 @@ PRODUCTS_CAT
         <sql>ALTER TABLE VOUCHERS ENGINE=InnoDB</sql>
     </changeSet> 
     <!-- End of InnoDB section --> 
+    
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->   
+    <!-- Drop any unused tables - must be done last        
+    -->
+    <changeSet author="Chromis POS" id="Drop PRODUCTS_CAT table" >    
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions> 
+                       
+        <dropTable tableName="PRODUCTS_CAT"/>
+    </changeSet> 
+    <!-- End of Drop Tables section --> 
+    
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->

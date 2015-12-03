@@ -612,49 +612,6 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.ReprintLastTicket.xml"/>
         </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6700"/>
-            <column name="NAME" value="help.promotion"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Help.Promotion.txt"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6701"/>
-            <column name="NAME" value="promotion.bogof"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.bogof.txt"/>
-        </insert>
-
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6702"/>
-            <column name="NAME" value="promotion.threefortwo"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.multibuy.txt"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6703"/>
-            <column name="NAME" value="promotion.mealdeal"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.mealdeal.txt"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6704"/>
-            <column name="NAME" value="promotion.percentoff"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.percentoff.txt"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6705"/>
-            <column name="NAME" value="promotion.coupon"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
-        </insert>
-        
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create TaxCustCategories Table">
@@ -1055,25 +1012,6 @@
                                  referencedTableName="ATTRIBUTE"/>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Promotion Table">
-
-        <createTable tableName="PROMOTIONS">
-            <column name="ID" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="NAME" type="varchar(255)" >
-                <constraints nullable="false" />                
-            </column>
-            <column name="CRITERIA"  type="${blob.type}"/>           
-            <column name="SCRIPT"  type="${blob.type}" >
-                <constraints nullable="false" />
-            </column>
-            <column name="ISENABLED" type="${boolean.type}" 
-                    defaultValueNumeric="1"/>
-        </createTable>      
-
-    </changeSet>  
-
     <changeSet author="Chromis POS" id="Create Products Table">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1152,11 +1090,6 @@
             <column name="CANDISCOUNT" type="${boolean.type}" defaultValueBoolean="true" >
                 <constraints nullable="false"/>  
             </column>                   
-             <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true">
-               <constraints nullable="false"/>
-            </column>
-            <column name="CATORDER" type="integer" />
-            <column name="PROMOTIONID" type="varchar(50)" /> 
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="CATEGORY"
@@ -1177,12 +1110,6 @@
                                  baseTableName="PRODUCTS"
                                  referencedTableName="ATTRIBUTESET"/>
 
-        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
-                         constraintName ="FK_PRODUCT_PROMOTIONID"
-                         referencedColumnNames = "ID"
-                         baseTableName="PRODUCTS"
-                                 referencedTableName="PROMOTIONS"/>
-    </createTable>
         <createIndex tableName="PRODUCTS"
                      indexName="PRODUCTS_INX_0"
                      unique="true">
@@ -1236,6 +1163,40 @@
             <column name="PRICEBUY" valueNumeric="0.0"/>
             <column name="PRICESELL" valueNumeric="0.0"/>
         </insert>          
+    </changeSet>
+
+
+    <changeSet author="Chromis POS" id="Create Products_cat Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PRODUCTS_CAT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="PRODUCTS_CAT">
+            <column name="PRODUCT" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CATORDER" type="integer"/>
+        </createTable>
+
+
+
+        <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                                 constraintName ="PRODUCTS_CAT_FK_1"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="PRODUCTS_CAT"
+                                 referencedTableName="PRODUCTS"/>
+
+        <createIndex tableName="PRODUCTS_CAT"
+                     indexName="PRODUCTS_CAT_INX_1">
+            <column name="CATORDER"/>
+        </createIndex>
+
+
+        <insert tableName="PRODUCTS_CAT">
+            <column name="PRODUCT" value="xxx999_999xxx_x9x9x9"/>
+        </insert>
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create PRODUCTS_COM Table">
@@ -2406,32 +2367,7 @@
         </createTable>       
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="Create StockChanges Table">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="STOCKCHANGES"/>
-            </not>
-        </preConditions>
-
-        <createTable tableName="STOCKCHANGES">
-            <column name="ID" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="LOCATION" type="varchar(255)"/>                
-            <column name="USERNAME" type="varchar(50)"/>           
-            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="CHANGES_PRODUCT" type="varchar(255)"/>
-            <column name="CHANGES_TYPE" type="int"/>
-            <column name="CHANGES_PROCESSED" type="int"/>
-            <column name="CHANGES_FIELD" type="varchar(50)"/>
-            <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
-            <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
-        </createTable>                         
-    </changeSet>  
-    
-            
     <changeSet author="Chromis POS" id="derby10.10.20">    
     </changeSet>   
      
 </databaseChangeLog>
-
