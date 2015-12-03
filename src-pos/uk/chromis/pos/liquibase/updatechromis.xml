@@ -614,6 +614,61 @@ PRODUCTS_CAT
         <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
             INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
     </changeSet>
+
+    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" >    
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
+        </preConditions> 
+        <dropTable tableName="STOCKCHANGES"/>
+    </changeSet> 
+                           
+    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="STOCKCHANGES"/>
+            </not>
+        </preConditions>
+        
+        <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(100)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
+            <column name="CHANGES_PROCESSED" type="int"/>
+        </createTable>       
+   </changeSet>   
+   
+     <changeSet author="Chromis POS" id="Remove PRODUCTS_CAT table" >    
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions> 
+                       
+        <addColumn tableName="PRODUCTS">
+            
+            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATORDER" type="integer"/>
+        </addColumn>     
+        
+        <sql>
+            UPDATE PRODUCTS SET P.ISCATALOG = 0   
+        </sql>  uk.chromis.pos.printer.TicketPrinterException:
+        <sql>
+            UPDATE PRODUCTS P, PRODUCTS_CAT C SET P.ISCATALOG = 1, P.CATORDER = C.CATORDER WHERE P.ID = C.PRODUCT   
+        </sql>  
+
+        <dropTable tableName="PRODUCTS_CAT"/>
+    </changeSet> 
+    
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -787,59 +842,12 @@ PRODUCTS_CAT
         </update>               
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" >    
-        <preConditions onFail="MARK_RAN">
-            <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
-        </preConditions> 
-        <dropTable tableName="STOCKCHANGES"/>
-    </changeSet> 
-                 
-    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="STOCKCHANGES"/>
-            </not>
-        </preConditions>
-        
-        <createTable tableName="STOCKCHANGES">
-            <column name="ID" type="varchar(100)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="LOCATION" type="varchar(255)"/>                
-            <column name="USERNAME" type="varchar(50)"/>           
-            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="PRODUCTID" type="varchar(255)"/>
-            <column name="CHANGETYPE" type="int"/>
-            <column name="DISPLAY" type="varchar(255)"/>
-            <column name="FIELD" type="varchar(50)"/>
-            <column name="TEXTVALUE" type="varchar(255)"/> 
-            <column name="BLOBVALUE" type="${blob.type}"/>                                    
-            <column name="CHANGES_PROCESSED" type="int"/>
-        </createTable>       
-   </changeSet>   
-   
-     <changeSet author="Chromis POS" id="Remove PRODUCTS_CAT table" >    
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="PRODUCTS_CAT"/>
-        </preConditions> 
-                       
-        <addColumn tableName="PRODUCTS">
-            
-            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true" >
-                <constraints nullable="false"/>
-            </column>
-            <column name="CATORDER" type="integer"/>
-        </addColumn>     
-        
-        <sql>
-            UPDATE PRODUCTS SET P.ISCATALOG = 0   
-        </sql>  uk.chromis.pos.printer.TicketPrinterException:
-        <sql>
-            UPDATE PRODUCTS P, PRODUCTS_CAT C SET P.ISCATALOG = 1, P.CATORDER = C.CATORDER WHERE P.ID = C.PRODUCT   
-        </sql>  
-
-        <dropTable tableName="PRODUCTS_CAT"/>
-    </changeSet> 
+    <changeSet author="Chromis POS" id="update 2 sql.ActionStockChanges to resources">        
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>  
+            <where>NAME='sql.ActionStockChanges'</where>      
+        </update> 
+    </changeSet>   
                  
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
