@@ -269,8 +269,11 @@ public class PromotionSupport {
             int index, PromotionInfo promotion ) {
         
         TicketLineInfo productline = ticket.getLine( index );
-        if( promotion.getID().contentEquals( productline.getPromotionId() ) ) {
-            return true;
+        if( productline != null && promotion != null ) {
+            String id = productline.getPromotionId();
+            if( id != null && promotion.getID().contentEquals( id ) ) { 
+                return true;
+            }
         }
         return false;
     }

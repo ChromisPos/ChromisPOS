@@ -71,10 +71,6 @@ public class ProductInfoExt {
     protected Double m_packquantity;
     protected String m_packproduct;
     
-    protected Boolean m_ispack;
-    protected Double m_packquantity;
-    protected String m_packproduct;
-
     public ProductInfoExt() {
         m_ID = null;
         m_sRef = "0000";
@@ -110,37 +106,6 @@ public class ProductInfoExt {
         m_bPack = false;
         m_packquantity = 0.0;
         m_packproduct = null;
-        m_ID = null;                    //1
-        m_sRef = "0000";                //2
-        m_sCode = "0000";               //3
-        m_sCodetype = null;             //4
-        m_sName = null;                 //5
-        m_bCom = false;                 //6
-        m_bScale = false;               //7
-        categoryid = null;              //8
-        taxcategoryid = null;           //9
-        attributesetid = null;          //10
-        m_dPriceBuy = 0.0;              //11
-        m_dPriceSell = 0.0;             //12
-        m_stockCost = 0.0;              //13
-        m_stockVolume = 0.0;            //14
-        m_Image = null;                 //15
-        m_bKitchen = false;             //16
-        m_bService = false;             //17
-        m_sDisplay = null;              //18
-        attributes = new Properties();  //19
-        m_bVprice = false;              //10
-        m_bVerpatrib = false;           //21
-        m_sTextTip = null;              //22
-        m_bWarranty = false;            //23
-        m_dStockUnits = 0.0;            //24
-        m_sAlias = null;                //25
-        m_bAlwaysAvailable = false;     //26
-        m_canDiscount = true;           //27
-        m_discounted = "no";            //28
-        m_ispack = false;               //29
-        m_packquantity = null;          //30    
-        m_packproduct = null;           //31
     }
 
     /**
@@ -392,11 +357,11 @@ public class ProductInfoExt {
     }
 
     public final boolean getIsPack() {
-        return m_ispack;
+        return m_bPack;
     }
 
     public void setIsPack(Boolean ispack) {
-        m_ispack = ispack; 
+        m_bPack = ispack; 
     }
 
     public final double getPackQuantity() {

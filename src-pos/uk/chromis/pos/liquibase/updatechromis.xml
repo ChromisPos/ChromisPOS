@@ -17,6 +17,7 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
+  
     <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>  
  
     
@@ -632,30 +633,6 @@
     </changeSet>
     
     <changeSet author="Chromis POS" id="check for Stockunits column">
-    </changeSet>   
-                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                                             
-    <changeSet author="Chromis POS" id="Insert into RESOURCES Table">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE ID='63'</sqlCheck>
-        </preConditions>
-
-        <insert tableName="RESOURCES">
-            <column name="ID" value="63"/>
-            <column name="NAME" value="Printer.TicketRefundPreview"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.TicketRefundPreview.xml"/>
-        </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-        
-    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" dbms="postgresql, hypersql, hsqldb">    
-        <preConditions onFail="MARK_RAN">
-            <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
-        </preConditions> 
-        <dropTable tableName="STOCKCHANGES"/>
-    </changeSet> 
-                 
-    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="STOCKUNITS" tableName="PRODUCTS"/>
@@ -667,80 +644,6 @@
         </addColumn>
     </changeSet>
 
-        </preConditions>
-        
-        <createTable tableName="STOCKCHANGES">
-            <column name="ID" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="LOCATION" type="varchar(255)"/>                
-            <column name="USERNAME" type="varchar(50)"/>           
-            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="PRODUCTID" type="varchar(255)"/>
-            <column name="CHANGETYPE" type="int"/>
-            <column name="DISPLAY" type="varchar(255)"/>
-            <column name="FIELD" type="varchar(50)"/>
-            <column name="TEXTVALUE" type="varchar(255)"/> 
-            <column name="BLOBVALUE" type="${blob.type}"/>                                    
-            <column name="CHANGES_PROCESSED" type="int"/>
-        </createTable> 
-        
-        <sql>ALTER TABLE STOCKCHANGES ENGINE=InnoDB</sql>                          
-   </changeSet>   
-   
-    <changeSet author="Chromis POS" id="Add Pack Products permissions "> 
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
-        </preConditions>
-              
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname117"/>
-            <column name="DESCRIPTION" value="##label.description117"/>
-        </insert>
-        
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname118"/>
-            <column name="DESCRIPTION" value="##label.description118"/>
-        </insert>		         
-    </changeSet> 
-   
-    <changeSet author="Chromis POS" id="Add StockChanges to permissions">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description119'</sqlCheck>
-        </preConditions>   
-            
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
-            <column name="SECTION" value="##label.sectiontools"/>
-            <column name="DISPLAYNAME" value="##label.displayname119"/>
-            <column name="DESCRIPTION" value="##label.description119"/>
-        </insert>
-        		
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/stockchanges.bs"/>
-            <column name="SECTION" value="##label.sectiontools"/>
-            <column name="DISPLAYNAME" value="##label.displayname120"/>
-            <column name="DESCRIPTION" value="##label.description120"/>
-        </insert>		                 
-    </changeSet>           
-    
-    <changeSet author="Chromis POS" id="Add reportlogo to resources">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'img.reportlogo'</sqlCheck>
-        </preConditions> 
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="62"/>
-            <column name="NAME" value="img.reportlogo"/>
-            <column name="RESTYPE" valueNumeric="1"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
-        </insert>
-    </changeSet>                    
-  
     <changeSet author="Chromis POS" id="Add Pack Products details p" dbms="postgresql, hypersql, hsqldb">    
         <preConditions onFail="MARK_RAN">
             <not>
@@ -881,124 +784,46 @@
         <update tableName="RESOURCES">
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
             <where>NAME='Menu.Root'</where>      
-           
-    </changeSet>    
-           
-    <changeSet author="Chromis POS" id="Create Promotion Table">
-          <preConditions onFail="MARK_RAN">
+        </update>               
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" dbms="postgresql, hypersql, hsqldb">    
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
+        </preConditions> 
+        <dropTable tableName="STOCKCHANGES"/>
+    </changeSet> 
+                 
+    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
+        <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="PROMOTIONS"/>
+                <tableExists tableName="STOCKCHANGES"/>
             </not>
         </preConditions>
         
-        <createTable tableName="PROMOTIONS">
-            <column name="ID" type="varchar(50)">
+        <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(100)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="NAME" type="varchar(255)" >
-                <constraints nullable="false" />                
-            </column>
-            <column name="CRITERIA"  type="${blob.type}"/>           
-            <column name="SCRIPT"  type="${blob.type}" >
-                <constraints nullable="false" />
-            </column>
-            <column name="ISENABLED" type="${boolean.type}" 
-                    defaultValueNumeric="1"/>
-        </createTable> 
-        
-        <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>                          
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6700"/>
-            <column name="NAME" value="help.promotion"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Help.Promotion.txt"/>
-        </insert>
-                
-       <insert tableName="RESOURCES">
-            <column name="ID" value="6701"/>
-            <column name="NAME" value="promotion.bogof"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.bogof.txt"/>
-        </insert>
-
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6702"/>
-            <column name="NAME" value="promotion.threefortwo"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.multibuy.txt"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6703"/>
-            <column name="NAME" value="promotion.mealdeal"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.mealdeal.txt"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6704"/>
-            <column name="NAME" value="promotion.percentoff"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.percentoff.txt"/>
-        </insert>
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="6705"/>
-            <column name="NAME" value="promotion.coupon"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
-        </insert>
-        
-       <addColumn tableName="PRODUCTS">
-            <column name="PROMOTIONID" type="varchar(50)"
-                    defaultValue="NULL" />                                              
-        </addColumn>  
-      
-        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
-                                 constraintName ="PRODUCTS_PROMOTIONID_FK"
-                                 referencedColumnNames = "ID"
-                                 baseTableName="PRODUCTS"
-                                 referencedTableName="PROMOTIONS"/>  
-                                                                                                      
-    </changeSet>   
-
-    <changeSet author="Chromis POS" id="update to v0.53">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53"/>          
-        </update>               
-    </changeSet>               
- 
-    <changeSet author="Chromis POS" id="update to v0.53.1">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.1"/>          
-        </update>               
-    </changeSet>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
+            <column name="CHANGES_PROCESSED" type="int"/>
+        </createTable>       
+   </changeSet>   
+                  
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->              
     <!-- Add any new dbpermission changesets to this section -->   
-    <changeSet author="Chromis POS" id="Add Pack Products permissions "> 
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
-        </preConditions>
-              
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname117"/>
-            <column name="DESCRIPTION" value="##label.description117"/>
-        </insert>
-        
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname118"/>
-            <column name="DESCRIPTION" value="##label.description118"/>
-        </insert>		         
-    </changeSet>
     
     <changeSet author="Chromis POS" id="Add StockChanges to permissions">
         <preConditions onFail="MARK_RAN">
@@ -1028,6 +853,27 @@
             <column name="DESCRIPTION" value="##label.description121"/>
         </insert>
     </changeSet>
+    
+    <changeSet author="Chromis POS" id="Add Pack Products permissions"> 
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
+        </preConditions>
+              
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname117"/>
+            <column name="DESCRIPTION" value="##label.description117"/>
+        </insert>
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname118"/>
+            <column name="DESCRIPTION" value="##label.description118"/>
+        </insert>		         
+    </changeSet> 
+        
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1100,56 +946,11 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to v0.53.2">    
+    <changeSet author="Chromis POS" id="Update to v0.54">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.2"/>          
+            <column name="VERSION" value="0.54"/>          
         </update>               
     </changeSet> 
-    <!-- ***************************************************************************************** -->      
-    
-    <changeSet author="Chromis POS" id="Add Catalog to PRODUCTS table">
-         <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="ISCATALOG" tableName="PRODUCTS"/>
-            </not>
-        </preConditions>   
-        
-       <addColumn tableName="PRODUCTS">
-            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true">
-               <constraints nullable="false"/>
-            </column>
-            <column name="CATORDER" type="integer" />
-        </addColumn>
-        
-    </changeSet>
-
-    <changeSet author="Chromis POS" id="Migrate PRODUCTS_CAT table">
-          <preConditions onFail="MARK_RAN">
-            <tableExists tableName="PRODUCTS_CAT"/>
-        </preConditions>
-        
-        <update tableName="PRODUCTS">
-            <column name="ISCATALOG" valueBoolean="false"/>          
-        </update>               
-        
-        <sql>UPDATE PRODUCTS P LEFT JOIN PRODUCTS_CAT O ON P.ID=O.PRODUCT SET P.ISCATALOG=1, P.CATORDER = O.CATORDER</sql>
-
-    </changeSet>
-
-    <changeSet author="Chromis POS" id="Remove PRODUCTS_CAT table">
-          <preConditions onFail="MARK_RAN">
-            <tableExists tableName="PRODUCTS_CAT"/>
-        </preConditions>
-        
-        <dropTable tableName="PRODUCTS_CAT" />
-
-    </changeSet>
-    
-    <changeSet author="Chromis POS" id="update to v0.53.1.1">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.1.1"/>          
-        </update>               
-    </changeSet>
-    
+    <!-- ***************************************************************************************** -->   
+   
 </databaseChangeLog>
-
