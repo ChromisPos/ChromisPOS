@@ -978,7 +978,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
     @SuppressWarnings("unchecked")
     public final List<CustomerTransaction> getCustomersTransactionList(String name) throws BasicException {
-        return new PreparedSentence(s,
+        return (List<CustomerTransaction>) new PreparedSentence(s,
                 "SELECT TICKETS.TICKETID, PRODUCTS.NAME AS PNAME, "
                 + "SUM(TICKETLINES.UNITS) AS UNITS, "
                 + "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS AMOUNT, "
@@ -988,11 +988,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "LEFT OUTER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID "
                 + "LEFT OUTER JOIN TAXES ON TICKETLINES.TAXID = TAXES.ID  "
                 + "WHERE CUSTOMERS.ID = TICKETS.CUSTOMER AND TICKETLINES.PRODUCT = PRODUCTS.ID AND RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET "
-                + "AND CUSTOMERS.NAME = \"" + name + "\" "
+                + "AND CUSTOMERS.NAME = ?"
                 + "GROUP BY CUSTOMERS.NAME, RECEIPTS.DATENEW, TICKETS.TICKETID, PRODUCTS.NAME, TICKETS.TICKETTYPE "
                 + "ORDER BY RECEIPTS.DATENEW DESC, PRODUCTS.NAME",
-                null,
-                CustomerTransaction.getSerializerRead()).list();
+                SerializerWriteString.INSTANCE,
+                CustomerTransaction.getSerializerRead()).list(name);
     }
 
     /**
