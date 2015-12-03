@@ -911,9 +911,9 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to v0.53.2">    
+    <changeSet author="Chromis POS" id="Update to v0.53.3">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.2"/>          
+            <column name="VERSION" value="0.53.3"/>          
         </update>               
     </changeSet> 
     <!-- ***************************************************************************************** -->      

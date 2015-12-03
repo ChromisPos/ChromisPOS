@@ -186,6 +186,10 @@ public class JRootApp extends JPanel implements AppView {
         m_props = props;
         m_jPanelDown.setVisible(!AppConfig.getInstance().getBoolean("till.hideinfo"));
 
+        if (!AppConfig.getInstance().getBoolean("chromis.tickettype")) {
+            UpdateTicketType.updateTicketType();
+        }
+
         // support for different component orientation languages.
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
@@ -564,9 +568,9 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private static void initOldClasses() {
-        
+
         m_oldclasses = new HashMap<>();
-/*
+        /*
         // update bean names from 2.00 to 2.20    
         m_oldclasses.put("uk.chromis.pos.reports.JReportCustomers", "/uk/chromis/reports/customers.bs");
         m_oldclasses.put("uk.chromis.pos.reports.JReportCustomersB", "/uk/chromis/reports/customersb.bs");
@@ -586,7 +590,7 @@ public class JRootApp extends JPanel implements AppView {
  
         // update bean names from 2.10 to 2.20
         m_oldclasses.put("uk.chromis.pos.panels.JPanelTax", "uk.chromis.pos.inventory.TaxPanel");
-*/
+         */
     }
 
     /**
