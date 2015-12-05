@@ -21,6 +21,7 @@ package uk.chromis.pos.mant;
 import javax.swing.ListCellRenderer;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ListCellRendererBasic;
+import uk.chromis.data.loader.ComparatorCreator;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.TableDefinition;
 import uk.chromis.data.loader.Vectorer;
@@ -57,7 +58,8 @@ public class JPanelPlaces extends JPanelTable {
         dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
 
         tplaces = new TableDefinition(app.getSession(),
-                "PLACES", new String[]{"ID", "NAME", "X", "Y", "FLOOR"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "X", "Y", AppLocal.getIntString("label.placefloor")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.NULL}, new int[]{0}
+                // "PLACES", new String[]{"ID", "NAME", "X", "Y", "FLOOR"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "X", "Y", AppLocal.getIntString("label.placefloor")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.NULL}, new int[]{0}
+                "PLACES", new String[]{"ID", "NAME", "X", "Y", "(SELECT NAME from FLOORS WHERE FLOORS.ID=FLOOR)"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "X", "Y", AppLocal.getIntString("label.placefloor")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.STRING}, new int[]{0}
         );
         jeditor = new PlacesEditor(dlSales, dirty);
         AppLocal.LIST_BY_RIGHTS = "";
@@ -87,7 +89,14 @@ public class JPanelPlaces extends JPanelTable {
      */
     @Override
     public Vectorer getVectorer() {
-        return tplaces.getVectorerBasic(new int[]{1});
+        //    return tplaces.getVectorerBasic(new int[]{1});
+        return tplaces.getVectorerBasic(new int[]{1, 2, 3, 4});
+    }
+
+    @Override
+    public ComparatorCreator getComparatorCreator() {
+        return tplaces.getComparatorCreator(new int[]{1, 2, 3, 4});
+
     }
 
     /**
@@ -96,7 +105,8 @@ public class JPanelPlaces extends JPanelTable {
      */
     @Override
     public ListCellRenderer getListCellRenderer() {
-        return new ListCellRendererBasic(tplaces.getRenderStringBasic(new int[]{1}));
+     //   return new ListCellRendererBasic(tplaces.getRenderStringBasic(new int[]{1}));
+     return new ListCellRendererBasic(tplaces.getRenderStringBasic(new int[]{4,1,2,3}));
     }
 
     /**

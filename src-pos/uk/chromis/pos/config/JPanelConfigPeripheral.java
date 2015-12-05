@@ -59,6 +59,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboConnDisplay.addActionListener(dirty);
         jcboSerialDisplay.addActionListener(dirty);
         m_jtxtJPOSName.getDocument().addDocumentListener(dirty);
+        jCustomerScreen.addActionListener(dirty);
 
 // Printer 1
         jcboMachinePrinter1.addActionListener(dirty);
@@ -152,7 +153,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jcboMachinePrinter2.addItem("printer");
         jcboMachinePrinter2.addItem("epson");
         jcboMachinePrinter2.addItem("tmu220");
-        jcboMachinePrinter2.addItem("star");        
+        jcboMachinePrinter2.addItem("star");
         jcboMachinePrinter2.addItem("ithaca");
         jcboMachinePrinter2.addItem("surepos");
         jcboMachinePrinter2.addItem("plain");
@@ -347,7 +348,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     @Override
     public void loadProperties() {
 
-
         StringParser p = new StringParser(AppConfig.getInstance().getProperty("machine.printer"));
         String sparam = unifySerialInterface(p.nextToken(':'));
 
@@ -513,10 +513,14 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 jcboMachineDisplay.setSelectedItem(sparam);
                 m_jtxtJPOSName.setText(p.nextToken(','));
                 break;
+            case "Not defined":
+                jCustomerScreen.setVisible(false);
+                break;
             default:
                 jcboMachineDisplay.setSelectedItem(sparam);
                 jcboConnDisplay.setSelectedItem(unifySerialInterface(p.nextToken(',')));
                 jcboSerialDisplay.setSelectedItem(p.nextToken(','));
+                jCustomerScreen.setSelected(AppConfig.getInstance().getBoolean("machine.customerdisplay"));
                 break;
         }
 
@@ -673,6 +677,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         }
 
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
+        AppConfig.getInstance().setBoolean("machine.customerdisplay", false);
         switch (sMachineDisplay) {
             case "epson":
             case "ld200":
@@ -681,6 +686,12 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
             case "javapos":
                 AppConfig.getInstance().setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
+                break;
+            case "screen":
+            case "window":
+                AppConfig.getInstance().setProperty("machine.display", sMachineDisplay);
+                System.out.println(jCustomerScreen.isSelected());
+                AppConfig.getInstance().setBoolean("machine.customerdisplay", jCustomerScreen.isSelected());
                 break;
             default:
                 AppConfig.getInstance().setProperty("machine.display", sMachineDisplay);
@@ -782,6 +793,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         cboPrinters = new javax.swing.JComboBox();
         m_jDisplayParams = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jCustomerScreen = new eu.hansolo.custom.SteelCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jlblConnDisplay = new javax.swing.JLabel();
         jcboConnDisplay = new javax.swing.JComboBox();
@@ -1005,6 +1017,13 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         m_jDisplayParams.setPreferredSize(new java.awt.Dimension(200, 25));
         m_jDisplayParams.setLayout(new java.awt.CardLayout());
+
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jCustomerScreen.setText(bundle.getString("label.customerscreen")); // NOI18N
+        jPanel2.add(jCustomerScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 30));
+
         m_jDisplayParams.add(jPanel2, "empty");
 
         jlblConnDisplay.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1863,7 +1882,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -1969,7 +1988,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboMachineScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineScaleActionPerformed
         CardLayout cl = (CardLayout) (m_jScaleParams.getLayout());
 
-               if ("casiopd1".equals(jcboMachineScale.getSelectedItem())
+        if ("casiopd1".equals(jcboMachineScale.getSelectedItem())
                 || "dialog1".equals(jcboMachineScale.getSelectedItem())
                 || "Adam Equipment".equals(jcboMachineScale.getSelectedItem())
                 || "samsungesp".equals(jcboMachineScale.getSelectedItem())) {
@@ -1986,7 +2005,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             cl.show(m_jDisplayParams, "comm");
         } else if ("javapos".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "javapos");
+        } else if ("Not defined".equals(jcboMachineDisplay.getSelectedItem())) {
+            jCustomerScreen.setVisible(false);
         } else {
+            jCustomerScreen.setVisible(true);
             cl.show(m_jDisplayParams, "empty");
         }
     }//GEN-LAST:event_jcboMachineDisplayActionPerformed
@@ -2054,6 +2076,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboPrinters;
+    private eu.hansolo.custom.SteelCheckBox jCustomerScreen;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

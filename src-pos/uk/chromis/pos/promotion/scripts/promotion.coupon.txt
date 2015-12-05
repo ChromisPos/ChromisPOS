@@ -1,0 +1,9 @@
+// promotion.coupon
+//
+//  Add a coupon to the sales receipt
+//
+// This is a template script for creating promotion scripts
+
+// Variables needed by this script
+// $VARIABLE( name, field, format, defaultvalue );
+

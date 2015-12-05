@@ -227,7 +227,11 @@ public class JRootApp extends JPanel implements AppView {
                     } catch (DatabaseException | MalformedURLException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                         Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (LiquibaseException ex) {
-                        MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, "Liquibase Error", ex.getCause().toString().replace("liquibase.exception.DatabaseException:", ""));
+                        String txt = ex.getMessage();
+                        if( ex.getCause() != null ) {
+                            txt = ex.getCause().toString().replace("liquibase.exception.DatabaseException:", "");
+                        }
+                        MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, "Liquibase Error", txt );
                         msg.show(this);
                     } finally {
                         if (con != null) {

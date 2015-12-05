@@ -17,6 +17,7 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
+  
     <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>  
  
     
@@ -613,6 +614,97 @@
         <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
             INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
     </changeSet>
+
+    <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" >    
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
+        </preConditions> 
+        <dropTable tableName="STOCKCHANGES"/>
+    </changeSet> 
+                           
+    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="STOCKCHANGES"/>
+            </not>
+        </preConditions>
+        
+        <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(100)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
+            <column name="CHANGES_PROCESSED" type="int"/>
+        </createTable>       
+    </changeSet>   
+
+    <changeSet author="Chromis POS" id="Create Promotion Table">       
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PROMOTIONS"/>
+            </not>
+        </preConditions> 
+        
+        <createTable tableName="PROMOTIONS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)" >
+                <constraints nullable="false" />                
+            </column>
+            <column name="CRITERIA"  type="${blob.type}"/>           
+            <column name="SCRIPT"  type="${blob.type}" >
+                <constraints nullable="false" />
+            </column>
+            <column name="ISENABLED" type="${boolean.type}" 
+                    defaultValueNumeric="1"/>
+        </createTable>      
+    </changeSet>  
+     
+    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS" >    
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions> 
+                       
+        <addColumn tableName="PRODUCTS">
+            
+            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATORDER" type="integer"/>
+        </addColumn>     
+      
+        <addColumn tableName="PRODUCTS_CAT">
+            <column name="flag" type="${boolean.type}" />
+        </addColumn>                                          
+    </changeSet>   
+    
+    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS d " dbms="derby, postgresql, hypersql, hsqldb" > 
+        <sql>   
+            UPDATE PRODUCTS SET ISCATALOG = false; 
+            UPDATE PRODUCTS_CAT SET FLAG = true;        
+            UPDATE PRODUCTS SET ISCATALOG = (SELECT FLAG FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT),
+            CATORDER = (SELECT CATORDER FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT);  
+        </sql>       
+    </changeSet>
+   
+    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS m " dbms="mysql, oracle ">
+        <sql>
+            UPDATE PRODUCTS SET ISCATALOG = 0; 
+            UPDATE PRODUCTS_CAT SET FLAG = 1; 
+            UPDATE PRODUCTS SET ISCATALOG = (SELECT FLAG FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT), 
+            CATORDER = (SELECT CATORDER FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT);    
+        </sql>  
+    </changeSet> 
+                                                           
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -726,6 +818,25 @@
             <column name="CATORDER" type="integer"/>
         </addColumn>        
     </changeSet>
+    
+    <changeSet author="Chromis POS" id="Promotions added to PRODUCTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="PROMOTIONID" tableName="PRODUCTS" />
+            </not>
+        </preConditions>     
+               
+        <addColumn tableName="PRODUCTS">
+            <column name="PROMOTIONID" type="varchar(50)" /> 
+        </addColumn>     
+                       
+        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
+                                 constraintName ="FK_PRODUCT_PROMOTIONID"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="PRODUCTS"
+                                 referencedTableName="PROMOTIONS"/>
+      
+    </changeSet>            
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -744,8 +855,7 @@
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.TicketRefundPreview.xml"/>
         </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-        
-    
+            
     <changeSet author="Chromis POS" id="Add reportlogo to resources">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'img.reportlogo'</sqlCheck>
@@ -785,32 +895,80 @@
             <where>NAME='Menu.Root'</where>      
         </update>               
     </changeSet>
+
+    <changeSet author="Chromis POS" id="update 2 sql.ActionStockChanges to resources">        
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>  
+            <where>NAME='sql.ActionStockChanges'</where>      
+        </update> 
+    </changeSet>   
+
+    <changeSet author="Chromis POS" id="Add promotion scripts to resources">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'help.promotion'</sqlCheck>
+        </preConditions> 
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6700"/>
+            <column name="NAME" value="help.promotion"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Help.Promotion.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6701"/>
+            <column name="NAME" value="promotion.bogof"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.bogof.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6702"/>
+            <column name="NAME" value="promotion.threefortwo"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.multibuy.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6703"/>
+            <column name="NAME" value="promotion.mealdeal"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.mealdeal.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6704"/>
+            <column name="NAME" value="promotion.percentoff"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.percentoff.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6705"/>
+            <column name="NAME" value="promotion.coupon"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
+        </insert>
+    </changeSet>        
+    
+    <changeSet author="Chromis POS" id="Add display.message scripts to resources">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'Display.Message'</sqlCheck>
+        </preConditions> 
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="70"/>
+            <column name="NAME" value="Display.Message"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Display.Message.xml"/>
+        </insert>
+    </changeSet>                                      
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->              
-    <!-- Add any new dbpermission changesets to this section -->   
-    <changeSet author="Chromis POS" id="Add Pack Products permissions "> 
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
-        </preConditions>
-              
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname117"/>
-            <column name="DESCRIPTION" value="##label.description117"/>
-        </insert>
-        
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname118"/>
-            <column name="DESCRIPTION" value="##label.description118"/>
-        </insert>		         
-    </changeSet>
-    
+    <!-- Add any new dbpermission changesets to this section -->       
     <changeSet author="Chromis POS" id="Add StockChanges to permissions">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description119'</sqlCheck>
@@ -839,6 +997,42 @@
             <column name="DESCRIPTION" value="##label.description121"/>
         </insert>
     </changeSet>
+    
+    <changeSet author="Chromis POS" id="Add Pack Products permissions"> 
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
+        </preConditions>
+              
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname117"/>
+            <column name="DESCRIPTION" value="##label.description117"/>
+        </insert>
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname118"/>
+            <column name="DESCRIPTION" value="##label.description118"/>
+        </insert>		         
+    </changeSet> 
+  
+    <changeSet author="Chromis POS" id="Add Promotions permissions">                                                                  
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.promotion.PromotionPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname122"/>
+            <column name="DESCRIPTION" value="##label.description122"/>
+        </insert>
+        		
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/promotions.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname123"/>
+            <column name="DESCRIPTION" value="##label.description123"/>
+        </insert> 
+    </changeSet>                       
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -904,16 +1098,34 @@
         <sql>ALTER TABLE ORDERS ENGINE=InnoDB</sql>
         <sql>ALTER TABLE VOUCHERS ENGINE=InnoDB</sql>
     </changeSet> 
-    <!-- End of InnoDB section --> 
+    
+    <changeSet author="Chromis POS" id="change Mysql promotions table to InnoDB (if required)" dbms="mysql">       
+        <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>
+    </changeSet> 
+    <!-- End of InnoDB section -->     
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->   
+    <!-- Drop any unused tables - must be done last        
+    -->
+    <changeSet author="Chromis POS" id="Drop PRODUCTS_CAT table" >    
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions> 
+                       
+        <dropTable tableName="PRODUCTS_CAT"/>
+    </changeSet> 
+    <!-- End of Drop Tables section -->    
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to v0.53.3">    
+    <changeSet author="Chromis POS" id="Update to v0.53.4">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.3"/>          
+            <column name="VERSION" value="0.53.4"/>          
         </update>               
     </changeSet> 
     <!-- ***************************************************************************************** -->      

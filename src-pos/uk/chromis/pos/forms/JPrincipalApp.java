@@ -504,9 +504,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
                 try {
                     m_jMyView.activate();
                 } catch (BasicException e) {
-                    JOptionPane.showMessageDialog(null,
-                            AppLocal.getIntString("message.notactive"),
-                            "Load Error", JOptionPane.WARNING_MESSAGE);
+                    JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.notactive"), e));
                 }
 
                 m_jLastView = m_jMyView;

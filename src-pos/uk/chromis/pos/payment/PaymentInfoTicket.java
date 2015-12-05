@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.payment;
 
 import uk.chromis.basic.BasicException;
@@ -26,26 +25,30 @@ import uk.chromis.format.Formats;
 
 /**
  *
- *   
+ *
  */
-public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  {
-    
+public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
+
     private static final long serialVersionUID = 8865238639097L;
     private double m_dTicket;
     private String m_sName;
     private String m_transactionID;
     private double m_dTendered;
-    private double m_change;
-    private String m_dCardName =null;    
-    
-    /** Creates a new instance of PaymentInfoCash
+    //  private double m_change;
+    private double m_dChange;
+    private String m_dCardName = null;
+
+    /**
+     * Creates a new instance of PaymentInfoCash
+     *
      * @param dTicket
-     * @param sName */
+     * @param sName
+     */
     public PaymentInfoTicket(double dTicket, String sName) {
         m_sName = sName;
         m_dTicket = dTicket;
     }
-    
+
     /**
      *
      * @param dTicket
@@ -57,7 +60,7 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
         m_dTicket = dTicket;
         m_transactionID = transactionID;
     }
-    
+
     /**
      *
      */
@@ -66,8 +69,8 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
         m_dTicket = 0.0;
         m_transactionID = null;
         m_dTendered = 0.00;
-     }
-    
+    }
+
     /**
      *
      * @param dr
@@ -79,16 +82,18 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
         m_dTicket = dr.getDouble(2);
         m_transactionID = dr.getString(3);
         if (dr.getDouble(4) != null) {
-            m_dTendered = dr.getDouble(4);}
-        m_dCardName = dr.getString(5);        
-     }
-    
+            m_dTendered = dr.getDouble(4);
+        }
+        m_dCardName = dr.getString(5);
+        m_dChange = m_dTendered - m_dTicket;
+    }
+
     /**
      *
      * @return
      */
     @Override
-    public PaymentInfo copyPayment(){
+    public PaymentInfo copyPayment() {
         return new PaymentInfoTicket(m_dTicket, m_sName);
     }
 
@@ -99,7 +104,7 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
     @Override
     public String getName() {
         return m_sName;
-    }   
+    }
 
     /**
      *
@@ -115,17 +120,8 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
      * @return
      */
     @Override
-    public String getTransactionID(){
+    public String getTransactionID() {
         return m_transactionID;
-    }   
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public double getPaid() {
-        return (0.0); 
     }
 
     /**
@@ -133,17 +129,32 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
      * @return
      */
     @Override
-    public double getChange(){
-       return m_dTendered - m_dTicket;
-   }
-    
+    public double getPaid() {
+        //  return (0.0); 
+        if (m_dTendered != 0) {
+            return m_dTendered;
+        } else {
+            return m_dTicket;
+        }
+
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public double getChange() {
+        return m_dTendered - m_dTicket;
+    }
+
     /**
      *
      * @return
      */
     @Override
     public double getTendered() {
-        return (0.00); 
+        return (0.00);
     }
 
     /**
@@ -152,25 +163,24 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
      */
     @Override
     public String getCardName() {
-       return m_dCardName;
-   } 
-   
-    /**
-     *
-     * @return
-     */
-        
-    public String printPaid() {
-        return Formats.CURRENCY.formatValue(m_dTicket);
+        return m_dCardName;
     }
-    
-    // Especificas
 
     /**
      *
      * @return
      */
-        public String printPaperTotal() {
+    public String printPaid() {
+     //   return Formats.CURRENCY.formatValue(m_dTicket);
+        return Formats.CURRENCY.formatValue(getPaid());
+    }
+
+    // Especificas
+    /**
+     *
+     * @return
+     */
+    public String printPaperTotal() {
         // En una devolucion hay que cambiar el signo al total
         return Formats.CURRENCY.formatValue(-m_dTicket);
     }
@@ -189,7 +199,6 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead  
      */
     public String printTendered() {
         return Formats.CURRENCY.formatValue(m_dTendered);
-    }  
-    
-}
+    }
 
+}

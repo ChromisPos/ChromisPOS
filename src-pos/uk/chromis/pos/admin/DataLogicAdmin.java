@@ -80,6 +80,7 @@ public class DataLogicAdmin extends BeanFactoryDataSingle {
             , new Datas[] {Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.BOOLEAN, Datas.STRING, Datas.IMAGE}
             , new Formats[] {Formats.STRING, Formats.STRING, Formats.STRING, Formats.STRING, Formats.BOOLEAN, Formats.STRING, Formats.NULL}
             , new int[] {0}
+            , "NAME"
         );   
                         
         m_troles = new TableDefinition(s,
@@ -89,6 +90,7 @@ public class DataLogicAdmin extends BeanFactoryDataSingle {
             , new Datas[] {Datas.STRING, Datas.STRING, Datas.BYTES, Datas.INT}
             , new Formats[] {Formats.STRING, Formats.STRING, Formats.NULL, Formats.INT }  
             , new int[] {0}
+            , "NAME"
         );  
         
         m_tresources = new TableDefinition(s,
@@ -98,6 +100,7 @@ public class DataLogicAdmin extends BeanFactoryDataSingle {
             , new Datas[] {Datas.STRING, Datas.STRING, Datas.INT, Datas.BYTES}
             , new Formats[] {Formats.STRING, Formats.STRING, Formats.INT, Formats.NULL}
             , new int[] {0}
+            , "NAME"
         );           
   
         

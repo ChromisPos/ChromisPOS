@@ -136,14 +136,12 @@
                                      referencedColumnNames = "ID"
                                      baseTableName="PRODUCTS"
                                      referencedTableName="PRODUCTS"/> 
-    </changeSet>
-
-    <changeSet author="Chromis Pos" id="Products_cat Table FKs">
-        <addForeignKeyConstraint baseColumnNames="PRODUCT"
-                                 constraintName ="PRODUCTS_CAT_FK_1"
-                                 referencedColumnNames = "ID"
-                                 baseTableName="PRODUCTS_CAT"
-                                 referencedTableName="PRODUCTS"/>
+        
+        <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
+                         constraintName ="FK_PRODUCT_PROMOTIONID"
+                         referencedColumnNames = "ID"
+                         baseTableName="PRODUCTS"
+                         referencedTableName="PROMOTIONS"/>
     </changeSet>
 
     <changeSet author="Chromis Pos" id="PRODUCTS_COM Table FKs">

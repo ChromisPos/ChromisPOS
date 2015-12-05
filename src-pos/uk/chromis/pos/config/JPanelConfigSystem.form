@@ -716,18 +716,6 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="eu.hansolo.custom.SteelCheckBox" name="jCustomerScreen">
-              <Properties>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="pos_messages.properties" key="label.customerscreen" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                </Property>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="200" y="90" width="190" height="-1"/>
-                </Constraint>
-              </Constraints>
-            </Component>
             <Component class="eu.hansolo.custom.SteelCheckBox" name="jCategoiesBynumber">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -736,7 +724,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="410" y="90" width="170" height="-1"/>
+                  <AbsoluteConstraints x="200" y="90" width="170" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>

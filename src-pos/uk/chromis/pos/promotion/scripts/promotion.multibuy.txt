@@ -1,0 +1,9 @@
+// promotion.multibuy
+//
+// Free product when making multiple purchases
+//
+// This is a template script for creating promotion scripts
+
+// Variables needed by this script
+// $VARIABLE( name, field, format, defaultvalue );
+

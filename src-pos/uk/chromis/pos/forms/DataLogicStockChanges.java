@@ -174,8 +174,6 @@ public class DataLogicStockChanges extends BeanFactoryDataSingle {
     }
 
      public final PreparedSentence getChangesListbyDate( SerializerWrite serializerWrite) {
-         
-        String[] fields =  new String[] { "UPLOADTIME", "UPLOADTIME" };
         
  	return new PreparedSentence(m_session,
             "SELECT C.ID, C.LOCATION, C.USERNAME, C.UPLOADTIME, "

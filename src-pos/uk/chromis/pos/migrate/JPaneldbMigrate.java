@@ -868,8 +868,11 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     SQL = "SELECT * FROM PRODUCTS";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
-                        SQL = "INSERT INTO PRODUCTS (ID, REFERENCE, CODE, CODETYPE, NAME, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, ATTRIBUTESET_ID, STOCKCOST, STOCKVOLUME, IMAGE, ISCOM, ISSCALE, ISKITCHEN, PRINTKB, SENDSTATUS, ISSERVICE, DISPLAY, ATTRIBUTES, ISVPRICE, ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, CANDISCOUNT, ISPACK, PACKQUANTITY, PACKPRODUCT )"
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        SQL = "INSERT INTO PRODUCTS (ID, REFERENCE, CODE, CODETYPE, NAME, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, ATTRIBUTESET_ID,"
+                                + " STOCKCOST, STOCKVOLUME, IMAGE, ISCOM, ISSCALE, ISKITCHEN, PRINTKB, SENDSTATUS, ISSERVICE, DISPLAY, ATTRIBUTES,"
+                                + " ISVPRICE, ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, CANDISCOUNT, ISPACK, PACKQUANTITY, "
+                                + " PACKPRODUCT, ISCATALOG, CATORDER, PROMOTIONID )"
+                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("REFERENCE"));
@@ -903,20 +906,10 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setBoolean(30, rs.getBoolean("ISPACK"));
                         pstmt.setDouble(31, rs.getDouble("PACKQUANTITY"));
                         pstmt.setString(32, rs.getString("PACKPRODUCT"));
+                        pstmt.setString(33, rs.getString("ISCATALOG"));
+                        pstmt.setString(34, rs.getString("CATORDER"));
+                        pstmt.setString(35, rs.getString("PROMOTIONID"));
 
-                        if (!"xxx999_999xxx_x9x9x9".equals(rs.getString(1))) {
-                            pstmt.executeUpdate();
-                        }
-                    }
-
-// copy PRODUCTS_CAT table       
-                    SQL = "SELECT * FROM PRODUCTS_CAT";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO PRODUCTS_CAT(PRODUCT, CATORDER) VALUES (?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("PRODUCT"));
-                        pstmt.setInt(2, rs.getInt("CATORDER"));
                         if (!"xxx999_999xxx_x9x9x9".equals(rs.getString(1))) {
                             pstmt.executeUpdate();
                         }

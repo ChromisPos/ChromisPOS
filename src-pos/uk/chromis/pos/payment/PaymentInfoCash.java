@@ -22,18 +22,19 @@ import uk.chromis.format.Formats;
 
 /**
  *
- *   
+ *
  */
 public class PaymentInfoCash extends PaymentInfo {
 
     private double prePayAmount = 0.0;
     private double m_dPaid;
     private double m_dTotal;
-    private double m_dTendered;
-    private String m_dCardName =null;
-    
+//    private double m_dTendered;
+    private String m_dCardName = null;
+
     /**
      * Creates a new instance of PaymentInfoCash
+     *
      * @param dTotal
      * @param dPaid
      * @param dTendered
@@ -41,11 +42,12 @@ public class PaymentInfoCash extends PaymentInfo {
     public PaymentInfoCash(double dTotal, double dPaid, double dTendered) {
         m_dTotal = dTotal;
         m_dPaid = dPaid;
-        m_dTendered = dTendered;
+        //      m_dTendered = dTendered;
     }
 
     /**
      * Creates a new instance of PaymentInfoCash
+     *
      * @param dTotal
      * @param dPaid
      * @param dTendered
@@ -62,8 +64,8 @@ public class PaymentInfoCash extends PaymentInfo {
      */
     @Override
     public PaymentInfo copyPayment() {
-       return new PaymentInfoCash(m_dTotal, m_dPaid, m_dTendered, prePayAmount);
-//        return new PaymentInfoCash(m_dTotal, m_dPaid, prePayAmount);        
+        //    return new PaymentInfoCash(m_dTotal, m_dPaid, m_dTendered, prePayAmount);
+        return new PaymentInfoCash(m_dTotal, m_dPaid, prePayAmount);
     }
 
     /**
@@ -74,7 +76,7 @@ public class PaymentInfoCash extends PaymentInfo {
     public String getTransactionID() {
         return "no ID";
     }
-    
+
     /**
      *
      * @return
@@ -92,7 +94,7 @@ public class PaymentInfoCash extends PaymentInfo {
     public double getTotal() {
         return m_dTotal;
     }
-    
+
     /**
      *
      * @return
@@ -108,7 +110,8 @@ public class PaymentInfoCash extends PaymentInfo {
      */
     @Override
     public double getTendered() {
-        return m_dTendered;
+        //   return m_dTendered;
+        return m_dPaid;
     }
 
     /**
@@ -116,9 +119,9 @@ public class PaymentInfoCash extends PaymentInfo {
      * @return
      */
     @Override
-   public double getChange(){
-       return m_dPaid - m_dTotal;
-   }
+    public double getChange() {
+        return m_dPaid - m_dTotal;
+    }
 
     /**
      *
@@ -127,8 +130,8 @@ public class PaymentInfoCash extends PaymentInfo {
     @Override
 
     public String getCardName() {
-       return m_dCardName;
-   }     
+        return m_dCardName;
+    }
 
     /**
      *
@@ -137,7 +140,7 @@ public class PaymentInfoCash extends PaymentInfo {
     public boolean hasPrePay() {
         return prePayAmount > 0;
     }
-    
+
     /**
      *
      * @return
@@ -151,8 +154,9 @@ public class PaymentInfoCash extends PaymentInfo {
      * @return
      */
     public String printTendered() {
-       return Formats.CURRENCY.formatValue(m_dTendered);
-   }    
+        //     return Formats.CURRENCY.formatValue(m_dTendered);
+        return printPaid();
+    }
 
     /**
      *

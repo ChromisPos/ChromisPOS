@@ -1,0 +1,9 @@
+// promotion.mealdeal
+//
+// Get multiple items from a range of products for a single price
+//
+// This is a template script for creating promotion scripts
+
+// Variables needed by this script
+// $VARIABLE( name, field, format, defaultvalue );
+

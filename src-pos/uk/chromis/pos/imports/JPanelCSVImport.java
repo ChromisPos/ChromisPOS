@@ -838,40 +838,41 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             propBlob = null;
         }
 
-        Object[] myprod = new Object[33];
-        myprod[0] = UUID.randomUUID().toString();                               // ID string
-        myprod[1] = productReference;                                           // Reference string
-        myprod[2] = productBarcode;                                             // Barcode String
-        myprod[3] = BarcodeValidator.BarcodeValidate(productBarcode);           // Barcode Type
-        myprod[4] = productName;                                                // Name string        
-        myprod[5] = ((aux != null) && !aux.isEmpty() && (aux.equals("1") || aux.equalsIgnoreCase("yes")));  // IScondiment flag (Auxiliary modifier)
-        myprod[6] = false;                                     // ISscale flag
-        myprod[7] = productBuyPrice;                                            // Buy price double
-        myprod[8] = productSellPrice;                                           // Sell price double
-        myprod[9] = dCategory;                                                  // Category string
-        myprod[10] = taxcatmodel.getSelectedKey();                               // Tax string
-        myprod[11] = null;                                                      // Attributeset string
-        myprod[12] = null;                                                      // Image
-        myprod[13] = (double) 0;                                                // Stock cost double
-        myprod[14] = (double) 0;                                                // Stock volume double
-        myprod[15] = jCheckInCatalogue.isSelected();                            // In catalog flag
-        myprod[16] = null;                                                      // catalog order        
-        myprod[17] = ((propBlob == null) ? null : propBlob);        // Attributes (Product Properites)
-        myprod[18] = ((remotePrint != null) && !remotePrint.isEmpty() && (remotePrint.equals("1") || remotePrint.equalsIgnoreCase("yes"))); // IsKitchen flag
-        myprod[19] = ((service != null) && !service.isEmpty() && (service.equals("1") || service.equalsIgnoreCase("yes"))); // isService flag
-        myprod[20] = ((buttonText != null) && !buttonText.isEmpty()) ? buttonText : "<HTML>" + productName; // Button Text     
-        myprod[21] = ((varPrice != null) && !varPrice.isEmpty() && (varPrice.equals("1") || varPrice.equalsIgnoreCase("yes"))); // isVariable price flag
-        myprod[22] = false;                                                     // Compulsory Att flag
-        myprod[23] = ((textTip.isEmpty()) ? productName : textTip);                                               // Text tip string
-        myprod[24] = ((warranty != null) && !warranty.isEmpty() && (warranty.equals("1") || warranty.equalsIgnoreCase("yes"))); // Warranty flag
-        myprod[25] = 0.0;
-        myprod[26] = shortName;                                                 // Alias
-        myprod[27] = false;                                                     // AlwaysAvailable flag
-        myprod[28] = "no";
-        myprod[29] = false;
-        myprod[30] = ((isPack != null) && !isPack.isEmpty() && (isPack.equals("1") || isPack.equalsIgnoreCase("yes"))); // Is a pack        
-        myprod[31] = packSize;                                                 // PackQuantity
-        myprod[32] = (("".equals(packOf)) ? null : packOf);                                                         // Pack Product
+        Object[] myprod = new Object[DataLogicSales.FIELD_COUNT];
+        myprod[DataLogicSales.INDEX_ID] = UUID.randomUUID().toString();                               // ID string
+        myprod[DataLogicSales.INDEX_REFERENCE] = productReference;                                           // Reference string
+        myprod[DataLogicSales.INDEX_CODE] = productBarcode;                                             // Barcode String
+        myprod[DataLogicSales.INDEX_CODETYPE] = BarcodeValidator.BarcodeValidate(productBarcode);           // Barcode Type
+        myprod[DataLogicSales.INDEX_NAME] = productName;                                                // Name string        
+        myprod[DataLogicSales.INDEX_ISCOM] = ((aux != null) && !aux.isEmpty() && (aux.equals("1") || aux.equalsIgnoreCase("yes")));  // IScondiment flag (Auxiliary modifier)
+        myprod[DataLogicSales.INDEX_ISSCALE] = false;                                     // ISscale flag
+        myprod[DataLogicSales.INDEX_PRICEBUY] = productBuyPrice;                                            // Buy price double
+        myprod[DataLogicSales.INDEX_PRICESELL] = productSellPrice;                                           // Sell price double
+        myprod[DataLogicSales.INDEX_CATEGORY] = dCategory;                                                  // Category string
+        myprod[DataLogicSales.INDEX_TAXCAT] = taxcatmodel.getSelectedKey();                               // Tax string
+        myprod[DataLogicSales.INDEX_ATTRIBUTESET_ID] = null;                                                      // Attributeset string
+        myprod[DataLogicSales.INDEX_IMAGE] = null;                                                      // Image
+        myprod[DataLogicSales.INDEX_STOCKCOST] = (double) 0;                                                // Stock cost double
+        myprod[DataLogicSales.INDEX_STOCKVOLUME] = (double) 0;                                                // Stock volume double
+        myprod[DataLogicSales.INDEX_ISCATALOG] = jCheckInCatalogue.isSelected();                            // In catalog flag
+        myprod[DataLogicSales.INDEX_CATORDER] = null;                                                      // catalog order        
+        myprod[DataLogicSales.INDEX_ATTRIBUTES] = ((propBlob == null) ? null : propBlob);        // Attributes (Product Properites)
+        myprod[DataLogicSales.INDEX_ISKITCHEN] = ((remotePrint != null) && !remotePrint.isEmpty() && (remotePrint.equals("1") || remotePrint.equalsIgnoreCase("yes"))); // IsKitchen flag
+        myprod[DataLogicSales.INDEX_ISSERVICE] = ((service != null) && !service.isEmpty() && (service.equals("1") || service.equalsIgnoreCase("yes"))); // isService flag
+        myprod[DataLogicSales.INDEX_DISPLAY] = ((buttonText != null) && !buttonText.isEmpty()) ? buttonText : "<HTML>" + productName; // Button Text     
+        myprod[DataLogicSales.INDEX_ISVPRICE] = ((varPrice != null) && !varPrice.isEmpty() && (varPrice.equals("1") || varPrice.equalsIgnoreCase("yes"))); // isVariable price flag
+        myprod[DataLogicSales.INDEX_ISVERPATRIB] = false;                                                     // Compulsory Att flag
+        myprod[DataLogicSales.INDEX_TEXTTIP] = ((textTip.isEmpty()) ? productName : textTip);                                               // Text tip string
+        myprod[DataLogicSales.INDEX_WARRANTY] = ((warranty != null) && !warranty.isEmpty() && (warranty.equals("1") || warranty.equalsIgnoreCase("yes"))); // Warranty flag
+        myprod[DataLogicSales.INDEX_STOCKUNITS] = 0.0;
+        myprod[DataLogicSales.INDEX_ALIAS] = shortName;                                                 // Alias
+        myprod[DataLogicSales.INDEX_ALWAYSAVAILABLE] = false;                                                     // AlwaysAvailable flag
+        myprod[DataLogicSales.INDEX_DISCOUNTED] = "no";
+        myprod[DataLogicSales.INDEX_CANDISCOUNT] = false;
+        myprod[DataLogicSales.INDEX_ISPACK] = ((isPack != null) && !isPack.isEmpty() && (isPack.equals("1") || isPack.equalsIgnoreCase("yes"))); // Is a pack
+        myprod[DataLogicSales.INDEX_PACKQUANTITY] = packSize;                                                 // PackQuantity
+        myprod[DataLogicSales.INDEX_PACKPRODUCT] = packOf;                                                     // Pack Product
+        myprod[DataLogicSales.INDEX_PROMOTIONID] = null;
 
         try {
             if ("new".equals(pType)) {

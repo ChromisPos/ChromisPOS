@@ -28,6 +28,7 @@ import javax.swing.ListModel;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.user.BrowsableEditableData;
 import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.scanpal2.DeviceScanner;
 import uk.chromis.pos.scanpal2.DeviceScannerException;
 
@@ -172,9 +173,9 @@ public class JDlgUploadProducts extends javax.swing.JDialog {
             for (int i = 0; i < l.getSize(); i++) {
                 Object[] myprod = (Object[]) l.getElementAt(i);
                 m_scanner.sendProduct( 
-                    (String) myprod[3], // name
-                    (String) myprod[2], // barcode
-                    (Double) myprod[6]  // buy price
+                    (String) myprod[DataLogicSales.INDEX_NAME], // name
+                    (String) myprod[DataLogicSales.INDEX_CODE], // barcode
+                    (Double) myprod[DataLogicSales.INDEX_PRICEBUY]  // buy price
                 );           
             }
             m_scanner.stopUploadProduct();
