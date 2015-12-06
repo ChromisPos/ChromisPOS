@@ -22,7 +22,7 @@
 
 boolean kitchen = false;
 
-if (ticket.getTicketType() != 1) {
+if (ticket.getTicketType() != "REFUND") {
 for(int i= 0; i < ticket.getLinesCount(); i++){
 	line = ticket.getLine(i);
 
