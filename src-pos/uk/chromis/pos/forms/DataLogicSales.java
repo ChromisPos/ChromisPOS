@@ -515,7 +515,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE, P.NAME",
-                new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "P.UNITS"}), new SerializerWriteBasic(new Datas[]{
+                new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}), new SerializerWriteBasic(new Datas[]{
                     Datas.OBJECT, Datas.STRING,
                     Datas.OBJECT, Datas.DOUBLE,
                     Datas.OBJECT, Datas.DOUBLE,
@@ -531,7 +531,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCOM = " + s.DB.FALSE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE, P.NAME",
-                new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "P.UNITS"}),
+                new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}),
                 new SerializerWriteBasic(new Datas[]{
                     Datas.OBJECT, Datas.STRING,
                     Datas.OBJECT, Datas.DOUBLE,
