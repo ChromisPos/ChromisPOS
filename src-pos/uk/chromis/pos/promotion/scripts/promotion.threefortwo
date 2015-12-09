@@ -1,0 +1,46 @@
+// promotion.threefortwo
+//
+// Discounts when making multiple purchases across a range of products
+// Cheapest products are discounted
+//
+
+// START OF USER EDITABLE VARIABLES
+
+Double QTY_FOR_EVERY = 3.0;
+Double QTY_FREE = 1.0;
+Boolean WHOLE_PRODUCTS_ONLY = true;
+
+// END OF USER EDITABLE VARIABLES
+
+//
+//
+// DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
+//      
+
+// To debug scripts in a proper debugging environment,
+// cut and paste this entire script into PromotionSupport.testcode then change
+// DEBUGMODE = true in this script ONLY - not in the testcode function.
+// When you have it working, you can cut and paste your code back into this script
+Boolean DEBUGMODE = false;
+
+   // Supported events: 
+    //  Event                  
+    //  promotion.addline    
+    //  promotion.changeline   
+    //  promotion.removeline   
+
+if( DEBUGMODE ) {
+    support.testcode( promotion, event, ticket, selectedindex, dlsales,
+              dlpromotions, support, effectedindex, productid );
+} else {
+    //
+    // Your code goes here
+    //
+    if( support.isProductInPromotion( ticket, selectedindex, promotion ) ) {
+        // Remove discounts and recalculate them
+        support.UpdateBuySomeGetSomeFree( ticket,  productid,
+                promotion, "  *" + promotion.getName(),
+                QTY_FOR_EVERY, QTY_FREE,
+                WHOLE_PRODUCTS_ONLY );
+    }
+}

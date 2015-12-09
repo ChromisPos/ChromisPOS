@@ -675,6 +675,10 @@ PRODUCTS_CAT
      <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS" >    
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="PRODUCTS_CAT"/>
+            <not>
+                <columnExists columnName="ISCATALOG" tableName="PRODUCTS"/>
+            </not>
+
         </preConditions> 
                        
         <addColumn tableName="PRODUCTS">
@@ -938,6 +942,14 @@ PRODUCTS_CAT
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
         </insert>
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6706"/>
+            <column name="NAME" value="promotion.threefortwo"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.threefortwo.txt"/>
+        </insert>
+        
     </changeSet> 
 
                  

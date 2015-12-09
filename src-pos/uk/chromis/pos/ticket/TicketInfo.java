@@ -72,6 +72,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     private List<TicketLineInfo> m_aLines;
     private List<PaymentInfo> payments;
     private List<TicketTaxInfo> taxes;
+    private List<String> m_CouponLines;
     private final String m_sResponse;
     private String loyaltyCardNumber;
     private Boolean oldTicket;
@@ -99,7 +100,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_Customer = null;
         m_sActiveCash = null;
         m_aLines = new ArrayList<>();
-
+        m_CouponLines= new ArrayList<>();
+        
         payments = new ArrayList<>();
         taxes = null;
         m_sResponse = null;
@@ -117,6 +119,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         out.writeObject(m_dDate);
         out.writeObject(attributes);
         out.writeObject(m_aLines);
+        out.writeObject(m_CouponLines);
     }
 
     @Override
@@ -128,6 +131,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_dDate = (Date) in.readObject();
         attributes = (Properties) in.readObject();
         m_aLines = (List<TicketLineInfo>) in.readObject();
+        m_CouponLines = (List<String>) in.readObject();
         m_User = null;
         m_sActiveCash = null;
         payments = new ArrayList<>();
@@ -156,7 +160,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
         m_aLines = new ArrayList<>(); 
-
+        m_CouponLines = new ArrayList<>();
+        
         payments = new ArrayList<>(); 
         taxes = null;
 
@@ -181,6 +186,12 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         for (TicketLineInfo l : m_aLines) {
             t.m_aLines.add(l.copyTicketLine());
         }
+        
+        t.m_CouponLines = new ArrayList<>(); 
+        for (String s : m_CouponLines) {
+            t.m_CouponLines.add(s);
+        }
+        
         t.refreshLines();
 
         t.payments = new LinkedList<>(); 
@@ -385,6 +396,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_aLines.add(oLine);
     }
 
+    public void addCouponLine( String line) {
+        m_CouponLines.add(line);
+    }
+
     public int checkAndAddLine(TicketLineInfo oLine, boolean flag) {
         // returns index of product in the ticket list or -1 if new product
         if (m_aLines.size() == 0 || !flag) {
@@ -480,6 +495,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
 
     public double getTendered() {
         return getTotalPaid();
+    }
+
+    public List<String> getCouponLines() {
+        return m_CouponLines;
     }
 
     public List<TicketLineInfo> getLines() {

@@ -1,9 +1,38 @@
-// promotion.coupon
-//
-//  Add a coupon to the sales receipt
-//
-// This is a template script for creating promotion scripts
 
-// Variables needed by this script
-// $VARIABLE( name, field, format, defaultvalue );
+ArrayList LINES = new ArrayList();
+
+// START OF USER EDITABLE VARIABLES
+
+LINES.add( "" );
+LINES.add( "*********************************" );
+LINES.add( "* 10p off your next shop        *" );
+LINES.add( "*                               *" );
+LINES.add( "* Cannot be used with any       *" );
+LINES.add( "* other offer                   *" );
+LINES.add( "* Valid till 31st December 2016 *" );
+LINES.add( "*********************************" );
+
+
+// END OF USER EDITABLE VARIABLES
+
+//
+//
+// DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
+//      
+
+// To debug scripts in a proper debugging environment,
+// cut and paste this entire script into PromotionSupport.testcode then change
+// DEBUGMODE = true in this script ONLY - not in the testcode function.
+// When you have it working, you can cut and paste your code back into this script
+Boolean DEBUGMODE = false;
+
+if( DEBUGMODE ) {
+    support.testcode( promotion, event, ticket, selectedindex, dlsales,
+              dlpromotions, support, effectedindex, productid );
+} else {
+    //
+    // Your code goes here
+    //
+    support.UpdateCoupon( ticket, promotion, LINES );
+}
 

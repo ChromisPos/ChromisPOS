@@ -562,7 +562,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_ticketlines.setTicketLine(index, oLine);
             m_ticketlines.setSelectedIndex(index);
 
-            updatePromotions( "promotion.changeline", index );
+            updatePromotions( "promotion.changeline", index, null );
             
             visorTicketLine(oLine);
             printPartialTotals();
@@ -672,7 +672,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
 
             executeEventAndRefresh("ticket.pretotals");
-            updatePromotions( "promotion.addline", oLine.getTicketLine() );
+            updatePromotions( "promotion.addline", oLine.getTicketLine(), null );
 
             visorTicketLine(oLine);
             printPartialTotals();
@@ -692,6 +692,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             if (executeEventAndRefresh("ticket.removeline", new ScriptArg("index", i)) == null) {
 
                 String ticketID = Integer.toString(m_oTicket.getTicketId());
+                String productID = m_oTicket.getLine(i).getProductID();
+                
                 if (m_oTicket.getTicketId() == 0) {
                     ticketID = "No Sale";
                 }
@@ -726,7 +728,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                 }
 
-                updatePromotions( "promotion.removeline", i );
+                updatePromotions( "promotion.removeline", i, productID );
                 
                 visorTicketLine(null); // borro el visor 
                 printPartialTotals(); // pinto los totales parciales...                           
@@ -1715,7 +1717,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         printTicket(resource, m_oTicket, m_oTicketExt);
     }
 
-    private void updatePromotions( String eventkey, int effectedIndex ) {
+    private void updatePromotions( String eventkey, int effectedIndex, String productID ) {
         try {
             int selectedIndex = m_ticketlines.getSelectedIndex();
             if( selectedIndex >= m_oTicket.getLinesCount()  ) {
@@ -1723,8 +1725,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 selectedIndex = 9999;
             }
             
+            if( productID == null )
+                productID = m_oTicket.getLine(effectedIndex).getProductID();
+            
             if( m_promotionSupport.checkPromotions(eventkey, true, m_oTicket,
-                    selectedIndex, effectedIndex ) ) {
+                    selectedIndex, effectedIndex, productID ) ) {
                 refreshTicket();
                 setSelectedIndex( selectedIndex );
             }

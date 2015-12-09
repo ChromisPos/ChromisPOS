@@ -22,7 +22,11 @@ package uk.chromis.pos.promotion;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -35,6 +39,7 @@ import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
+import uk.chromis.pos.ticket.TaxInfo;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
 
@@ -88,7 +93,8 @@ public class PromotionSupport {
             Boolean bwithActions,
             TicketInfo ticket,
             int selectedindex, 
-            int effectedIndex ) throws ScriptException {
+            int effectedIndex,
+            String productID ) throws ScriptException {
  
         if( ticket == null || event == null  )
             return false;
@@ -116,7 +122,7 @@ public class PromotionSupport {
             // Promotion scripts need running
             for( String promotionID : promotions.keySet() ) {
                 evalScript( promotions.get(promotionID), event,
-                        ticket, selectedindex, effectedIndex );
+                        ticket, selectedindex, effectedIndex, productID );
             }
         }
         
@@ -128,12 +134,13 @@ public class PromotionSupport {
     
     public Object evalScript( PromotionInfo promotion, String event, 
               TicketInfo ticket, int selectedindex,
-              int effectedIndex ) throws ScriptException {
+              int effectedIndex, String productID ) throws ScriptException {
 
         Logger.getLogger( PromotionSupport.class.getName()).log(Level.INFO, "Running script for: {0}", promotion.getName() );
 
         ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
 
+        // These are the variables available inside the script
         script.put("ticket", ticket);
         script.put("dlsales", m_salesLogic);
         script.put("dlpromotions", m_DataLogicPromotions);
@@ -141,7 +148,8 @@ public class PromotionSupport {
         script.put("promotion", promotion);
         script.put("event", event );
         script.put("selectedindex", selectedindex);
-        script.put("effectedIndex", effectedIndex);
+        script.put("effectedindex", effectedIndex);
+        script.put("productid",  productID);
         
         return script.eval( promotion.getScript());
     }
@@ -169,7 +177,7 @@ public class PromotionSupport {
     }
 
     // Count products in this promotion currently on the ticket
-    public int CountProduct( PromotionInfo promotion,
+    public int CountProductsInPromotion( PromotionInfo promotion,
             TicketInfo ticket,
             boolean bIncludePromotionAdded ) {
         int count = 0;
@@ -183,6 +191,89 @@ public class PromotionSupport {
         }
         return count;
     }
+    
+    public class LineList implements Comparable<LineList> {
+        private int m_index;
+        TicketLineInfo m_line;
+        
+        public LineList( int index, TicketLineInfo line) {
+            m_index = index;
+            m_line = line;
+        }
+
+        public int getIndex() { return m_index; }
+        public void setIndex( int idx ) { m_index = idx ; }
+        public TicketLineInfo getLine()  { return m_line;  }
+        public Double getPrice() { return m_line.getPrice(); }
+        
+        public boolean equals(Object o) {
+            if (!(o instanceof LineList))
+                return false;
+            LineList l = (LineList) o;
+            return l.m_index == m_index;
+        }
+
+        public int hashCode() {
+            return m_index;
+        }
+
+        public String toString() {
+            return "Index: " + m_index + " Line: " + m_line;
+        }
+
+        // Compare on price
+        public int compareTo(LineList l) {
+            if( l.getPrice() == getPrice() )
+                return 0;
+
+            int diff = (int) intPart( l.getPrice() - getPrice() );
+            
+            if( l.getPrice() < getPrice() ) 
+                return diff + 1;
+
+            return diff - 1;
+        }
+    }
+    
+     // Find products in this promotion currently on the ticket
+    // returns an array of indexes into ticket.getLines()
+    public List<LineList> FindProductsInPromotion( PromotionInfo promotion,
+            TicketInfo ticket,
+            boolean bIncludePromotionAdded ) {
+        List<LineList> aIndexes = new ArrayList<LineList>();
+
+        for ( int i = 0; i < ticket.getLinesCount(); ++i) {
+            TicketLineInfo line = ticket.getLines().get(i);
+            if( bIncludePromotionAdded || line.isPromotionAdded() == false ) {
+                String id = line.getPromotionId();
+                if( id != null && id.contentEquals(promotion.getID()) ) {
+                    aIndexes.add( new LineList(i, line ) );
+                }
+            }
+        }
+
+        return aIndexes;
+    }
+
+    // Find all instances of the given product currently on the ticket
+    // returns an array of indexes into ticket.getLines()
+    public List<LineList> FindProductsInTicket( String productID,
+            TicketInfo ticket,
+            boolean bIncludePromotionAdded ) {
+        List<LineList> aIndexes = new ArrayList<LineList>();
+
+        for ( int i = 0; i < ticket.getLinesCount(); ++i) {
+            TicketLineInfo line = ticket.getLines().get(i);
+            if( bIncludePromotionAdded || line.isPromotionAdded() == false ) {
+                String id = line.getProductID();
+                if( id != null && id.contentEquals( productID ) ) {
+                    aIndexes.add( new LineList(i, line ) );
+                }
+            }
+        }
+
+        return aIndexes;
+    }
 
     // Discount all products in this ticket having the given promotion ID
     public void DiscountProducts( TicketInfo ticket,
@@ -195,7 +286,8 @@ public class PromotionSupport {
                 String id = line.getPromotionId();
                 if( id != null ) {
                     if( id.contentEquals(promotionid) ) {
-                        RemoveDiscount( ticket, i );
+                        RemovePromotionAddedLine( ticket, i+1 );
+                        line.setDiscounted("no");
                     }
                 }
             }
@@ -206,7 +298,7 @@ public class PromotionSupport {
             String id = line.getPromotionId();
             if( id != null ) {
                 if( id.contentEquals(promotionid) ) {
-                    DiscountProduct( ticket, i, sDiscountMessage, discountrate );
+                    DiscountProductPercent( ticket, i, sDiscountMessage, discountrate );
                 }
             }
         }
@@ -214,16 +306,16 @@ public class PromotionSupport {
     
     private static String sYes = new String("yes");
     
-    // Discount a product
-    public void DiscountProduct( TicketInfo ticket, int lineIndex,
-            String sDiscountMessage, Double discountrate ) {
+    // Discount a product by adding a line below the product
+    public void DiscountProductPercent( TicketInfo ticket, int lineIndex,
+        String sDiscountMessage, Double discountrate ) {
 
         TicketLineInfo productline = ticket.getLine(lineIndex);
         if( productline.isPromotionAdded() == false &&
             sYes.contentEquals(productline.getDiscounted() ) == false ) {
                 
-            double discount = Math.rint(productline.getPrice()*-1)
-                                * (discountrate /100d);
+        double discount = ( intPart(productline.getPrice()*discountrate)
+                            /-100d );
 
             TicketLineInfo discountline = new TicketLineInfo(
                     productline.getProductID(),
@@ -239,13 +331,125 @@ public class PromotionSupport {
             productline.setDiscounted("yes");
         }
     }
+
+    // Discount a product by adding a line below the product
+    // If fixedPrice is used to calculate a discount based on the original
+    // price and qty is set to 1.
+    // If not, the qty and discount rate are applied
+    public void DiscountProductQty( TicketInfo ticket, int lineIndex,
+        String sDiscountMessage, Double qty,
+        Double discountrate, Double fixedPrice ) {
+
+        TicketLineInfo productline = ticket.getLine(lineIndex);
+        if( productline.isPromotionAdded() == false &&
+            sYes.contentEquals(productline.getDiscounted() ) == false ) {
+            
+            Double setPrice;
+            Double setQty;
+            
+            if( fixedPrice > 0 ) {
+                setQty = 1d;
+                setPrice = (productline.getPrice() * productline.getMultiply()  * -1 )
+                            + fixedPrice;
+            } else {
+                setPrice = ( intPart(productline.getPrice()*discountrate)
+                            /-100d );
+                setQty = qty;
+            }
+            
+            TicketLineInfo discountline = new TicketLineInfo(
+                    productline.getProductID(),
+                    sDiscountMessage,
+                    productline.getProductTaxCategoryID(),
+                    setQty,
+                    setPrice,
+                    productline.getTaxInfo()); 
+            discountline.setPromotionAdded( true );
+            discountline.setProperty( "product.promotionid", productline.getPromotionId());
+
+            ticket.insertLine(lineIndex+1, discountline );
+            productline.setDiscounted("yes");
+        }
+    }
+    
+    // Discount a group of products by adding a single discount 
+    // to the end of the ticket.
+    public void DiscountProductGroup( TicketInfo ticket, PromotionInfo promotion,
+            String sDiscountMessage, 
+            Double qty, Double price, TaxInfo tax ) {
+
+        String tcID = null;
+        if( tax != null ) {
+            tcID = tax.getTaxCategoryID();
+        }
+        
+        TicketLineInfo discountline = new TicketLineInfo(
+                null,
+                sDiscountMessage,
+                tcID,
+                qty, price, tax );
+                
+        discountline.setPromotionAdded( true );
+        discountline.setProperty( "product.promotionid", promotion.getID() );
+
+        ticket.addLine( discountline );
+    }
+  
     
     // Remove discount on a product
-    // Pass in the index of the product, subsequent promotion discount lines
-    // will be removed
-    public void RemoveDiscount( TicketInfo ticket, int lineIndex ) {
+    // Pass in the id product, all promotion discount lines for that
+    // product anywhere on the ticket will be removed
+    public void RemoveDiscountProduct( TicketInfo ticket, String productID ) {
 
-        int index = lineIndex+1;
+        if( productID == null )
+            return;
+        
+        // Start looking from the end of the ticket to cope with re-indexing 
+        // after a line delete
+        int index = ticket.getLines().size() - 1;
+        while( index >= 0 ) {
+            
+            TicketLineInfo line = ticket.getLine( index );
+            if(  !line.isPromotionAdded() && productID.contentEquals( line.getProductID() ) ) {
+                RemovePromotionAddedLine( ticket, index+1 );
+                line.setDiscounted("no");
+            }
+            --index;
+        }
+    }
+    
+    // Remove discount on a promotion
+    // Pass in the id of the promotion, all promotion discount lines for that
+    // promotion anywhere on the ticket will be removed
+    public void RemoveDiscountPromotion( TicketInfo ticket, String promotionID ) {
+
+        if( promotionID == null )
+            return;
+        
+        // Start looking from the end of the ticket to cope with re-indexing 
+        // after a line delete
+        int index = ticket.getLines().size() - 1;
+        while( index >= 0 ) {
+            
+            TicketLineInfo line = ticket.getLine( index );
+            String p = line.getPromotionId();
+            if( p != null && promotionID.contentEquals( p ) ) {
+                if( line.isPromotionAdded() ) {
+                    RemovePromotionAddedLine( ticket, index);
+                } else {
+                    line.setDiscounted("no");
+                }
+            }
+            --index;
+        }
+    }
+    
+    // Remove a line added by a promotion on the ticket line at the given index
+    // Pass in the index of the line, subsequent promotion lines
+    // will also be removed
+    public void RemovePromotionAddedLine( TicketInfo ticket, int lineIndex ) {
+
+        int index = lineIndex;
         TicketLineInfo productline = null;
         
         if( index < ticket.getLines().size() ) {
@@ -261,7 +465,6 @@ public class PromotionSupport {
             }
         }
         
-        ticket.getLine(lineIndex).setDiscounted("no");
     }
     
     // See if the indexed line is in the given promotion
@@ -277,54 +480,381 @@ public class PromotionSupport {
         }
         return false;
     }
+
+    double intPart( double d ) {
+        int i = (int) d;
+        return (double) i;
+    }
+    
+    // Add discounts to the ticket for the products in aLine
+    // The discounts are added as sufficient products are found while
+    // going through the list. If you want cheapest products discounted first,
+    // ensure you call Collections.sort(aLines) first
+    public void addDiscounts( TicketInfo ticket, List<LineList> aLines,
+            String sDiscountMessage,
+            Double qtyBuy, Double qtyToDiscount,
+            Double discountrate, Double fixedPrice,
+            Boolean bWholeUnitsOnly ) {
+    
+        // Count the number of items in the ticket
+        Double qty = 0.0;
+        for( LineList l: aLines ) {
+            TicketLineInfo productline = ticket.getLine( l.getIndex() );
+            qty += productline.getMultiply();
+        }
+        if( bWholeUnitsOnly )
+            qty = intPart(qty);
+        
+        // Calculate the total number of free items
+        Double qtyFree = qty / qtyBuy;
+        if( bWholeUnitsOnly )
+            qtyFree = intPart(qtyFree);
+        qtyFree = qtyFree * qtyToDiscount;
+                
+        if( qtyFree > 0 ) {
+            // Step through discounting items until qtyFree is reached
+            int newLines = 0;
+            Double totalDiscount = 0.0;
+            Double qtyFound = 0.0;
+            for( LineList l: aLines ) {
+                int itemIndex =  l.getIndex() + newLines;
+                Double itemqty = ticket.getLine( itemIndex ).getMultiply();
+
+                qtyFound += itemqty;
+                if( qtyFound >= qtyBuy ) {
+                                     
+                    Double qtyDiscount = qtyFound / qtyToDiscount;
+                    if( bWholeUnitsOnly )
+                        qtyDiscount = intPart(qtyDiscount);
+                    if( totalDiscount + qtyDiscount > qtyFree)
+                        qtyDiscount = qtyFree - totalDiscount;
+                    
+                    DiscountProductQty( ticket, itemIndex, sDiscountMessage, qtyDiscount, discountrate, fixedPrice );
+                    ++newLines;
+                    
+                    totalDiscount += qtyDiscount;
+                    qtyFound -= qtyBuy;
+                }
+                
+                if( totalDiscount >= qtyFree )
+                    break;
+            }   
+        }
+    }
+   
+    // For every forEvery products you buy, you get qtyDiscounted products discounted
+    // This version is for when any product in the promotion can be used in the
+    // calculation, i.e. mix and match from a range.
+    // bWholeUnitsOnly should be true to calculate the discounts on whole units
+    // only or false to calculate the discounts on partial products such as weighed
+    // items.
+    public void UpdateMutibuyGroup(
+        TicketInfo ticket,
+        PromotionInfo promotion,
+        String sDiscountMessage, Double forEvery, Double qtyDiscounted,
+        Double discountrate,
+        Boolean bWholeUnitsOnly ) {
+        
+         // Remove existing discount
+        RemoveDiscountPromotion( ticket, promotion.getID() );
+      
+        // Get list of products in this promotion
+        List<LineList> aLines = FindProductsInPromotion( promotion, ticket, false );
+
+        if( aLines.size() > 0 ) {
+            // Convert to a price ordered list so cheapest items discounted first
+            Collections.sort(aLines);
+
+            addDiscounts( ticket, aLines, sDiscountMessage, forEvery, qtyDiscounted, 
+                    discountrate, 0d, bWholeUnitsOnly );
+        }
+    }
+
+    // For every forEvery products you buy, you get qtyDiscounted products discounted
+    // This version is for when all products must be the same.
+    // bWholeUnitsOnly should be true to calculate the discounts on whole units
+    // only or false to calculate the discounts on partial products such as weighed
+    // items.
+      public void UpdateMutibuySingleProduct(
+        TicketInfo ticket, String productID,
+        PromotionInfo promotion,
+        String sDiscountMessage, Double forEvery, Double qtyDiscounted,
+        Double discountrate,
+        Boolean bWholeUnitsOnly ) 
+    {
+        // Remove existing discount
+        RemoveDiscountProduct( ticket, productID );
+      
+        // Get list of products in this ticket
+        List<LineList> aLines = FindProductsInTicket( productID, ticket, false );
+       
+        if( aLines.size() > 0 ) {
+            addDiscounts( ticket, aLines, sDiscountMessage, forEvery, qtyDiscounted, 
+                discountrate, 0d, bWholeUnitsOnly );
+        }           
+    }
+ 
+    // For every qtyBuy products you buy, you get qtySomeFree products free
+    // This version is for when all products must be the same.
+    // bWholeUnitsOnly should be true to calculate the discounts on whole units
+    // only or false to calculate the discounts on partial products such as weighed
+    // items.
+    public void UpdateBuySomeGetSomeFreeSingleProduct(
+        TicketInfo ticket, String productID,
+        PromotionInfo promotion,
+        String sDiscountMessage,
+        Double qtyBuy, Double qtySomeFree,
+        Boolean bWholeUnitsOnly ) 
+    {
+        // Remove existing discount
+        RemoveDiscountProduct( ticket, productID );
+      
+        // Get list of products in this ticket
+        List<LineList> aLines = FindProductsInTicket( productID, ticket, false );
+       
+        if( aLines.size() > 0 ) {
+            addDiscounts( ticket, aLines, sDiscountMessage, qtyBuy, qtySomeFree, 
+                0d, 0d, bWholeUnitsOnly );
+        }    
+    }
+ 
+    
+    // For every qtyBuy products you buy, you get qtySomeFree products free
+    // This version is for when any product in the promotion can be used in the
+    // calculation, i.e. mix and match from a range.
+    // bWholeUnitsOnly should be true to calculate the discounts on whole units
+    // only or false to calculate the discounts on partial products such as weighed
+    // items.
+    public void UpdateBuySomeGetSomeGroup(
+        TicketInfo ticket,
+        PromotionInfo promotion,
+        String sDiscountMessage,
+        Double qtyBuy, Double qtySomeFree,
+        Boolean bWholeUnitsOnly ) 
+    {
+        // Remove existing discount
+        RemoveDiscountPromotion( ticket, promotion.getID() );
+      
+        // Get list of products in this promotion
+        List<LineList> aLines = FindProductsInPromotion( promotion, ticket, false );
+
+        if( aLines.size() > 0 ) {
+
+            // Convert to a price ordered list so cheapest items discounted first
+            Collections.sort(aLines);
+
+            addDiscounts( ticket, aLines, sDiscountMessage, qtyBuy, qtySomeFree, 
+                    0d, 0d, bWholeUnitsOnly );
+        }        
+    }
+    
+    // Buy qtyBuy products at the given price
+    // This version is for when all products must be the same.
+    // bWholeUnitsOnly should be true to calculate the discounts on whole units
+    // only or false to calculate the discounts on partial products such as weighed
+    // items.
+    public void UpdateFixedPriceSingleProduct(
+        TicketInfo ticket, String productID,
+        PromotionInfo promotion,
+        String sDiscountMessage,
+        Double qtyBuy, Double price,
+        Boolean bWholeUnitsOnly ) 
+    {
+        // Remove existing discount
+        RemoveDiscountProduct( ticket, productID );
+      
+        // Get list of products in this ticket
+        List<LineList> aLines = FindProductsInTicket( productID, ticket, false );
+       
+        if( aLines.size() > 0 ) {
+            addDiscounts( ticket, aLines, sDiscountMessage, qtyBuy, qtyBuy, 
+                0d, price, bWholeUnitsOnly );
+        }    
+    }
+
+    // Buy qtyBuy products at the given price
+    // This version is for when any product in the promotion can be used in the
+    // calculation, i.e. mix and match from a range.
+    // bWholeUnitsOnly should be true to calculate the discounts on whole units
+    // only or false to calculate the discounts on partial products such as weighed
+    // items.
+    public void UpdateFixedPriceGroup(
+        TicketInfo ticket,
+        PromotionInfo promotion,
+        String sDiscountMessage,
+        Double qtyBuy, Double price,
+        Boolean bWholeUnitsOnly ) 
+    {
+          // Remove existing discount
+        RemoveDiscountPromotion( ticket, promotion.getID() );
+      
+        // Get list of products in this promotion
+        List<LineList> aLines = FindProductsInPromotion( promotion, ticket, false );
+
+        if( aLines.size() > 0 ) {
+
+            // Convert to a price ordered list so cheapest items discounted first
+            Collections.sort(aLines);
+
+            addDiscounts( ticket, aLines, sDiscountMessage, qtyBuy, qtyBuy, 
+                    0d, price, bWholeUnitsOnly );
+        }        
+    }
+    
+    // Buy two or more different products at a fixed price
+    // An array or properties is passed in, at least one product with each
+    // property must be in the ticket to qualify. i.e
+    //  List<String> properties = new String [] = {"meal.snack", "meal.drink", "meal.sandwich"};
+    //
+    //
+    public void UpdateMealDeal(
+        TicketInfo ticket,
+        PromotionInfo promotion,
+        String sDiscountMessage,
+        List<String> properties,
+        String productKeyName,
+        Double price ) 
+    {
+          // Remove existing discount
+        RemoveDiscountPromotion( ticket, promotion.getID() );
+      
+        // Get list of products in this promotion
+        List<LineList> aLines = FindProductsInPromotion( promotion, ticket, false );
+
+        // Lowest price items first
+        Collections.sort(aLines);
+        
+        if( aLines.size() > 0 ) {
             
+            // Count how many products of each type in the ticket
+            Double [] count = new Double[ properties.size()];
+
+            for( int i = 0; i < properties.size(); ++i ) {
+                count[i] = 0d;
+            }       
+
+            // Go through products counting how many of each type
+            for( LineList l : aLines ) {
+                // Get the product property and compare it with the ones we are looking for
+                String prop = l.getLine().getProperty(productKeyName);
+                if( prop != null ) {
+                    for( int j = 0; j < properties.size(); ++j ) {
+                        if( prop.contentEquals(properties.get(j)) ) {
+                            // Found a match - count it
+                            count[j] += l.getLine().getMultiply();
+                        }
+                    }       
+                }
+            }
+            
+            // Number of discounts to give is the smallest number of the product
+            // type counters
+            Double smallest = -1d;
+            for( int j = 0; j < properties.size(); ++j ) {
+                if( smallest == -1 || count[j] < smallest ) {
+                    smallest = intPart(count[j]);
+                }
+            }
+
+            if( smallest > 0 ) {
+                // So now discount the correct number of each type of product
+                // starting at the highest value items
+                for( int j = 0; j < properties.size(); ++j ) {
+                    count[j] = smallest;
+                }
+
+                // Tax is chargable at the highest item tax rate so need to
+                // keep track of that.
+                TaxInfo tax = null;
+                
+                int itemIndex = 0;
+                
+                // Go through products discounting each type in turn
+                for( int j = 0; j < properties.size(); ++j ) {
+                    itemIndex = aLines.size() -1; // Start at the end (highest value)
+                    while( itemIndex >= 0 && count[j] > 0 ) {
+                        int ticketIndex =  aLines.get(itemIndex).getIndex();
+                        TicketLineInfo info = ticket.getLine(ticketIndex);
+                        String prop = info.getProperty(productKeyName);
+                        
+                        if( !info.isPromotionAdded() && prop != null ) {
+                            
+                            if( prop.contentEquals(properties.get(j)) ) {
+
+                                // Discount this item
+                                Double qty = count[j];
+                                if( qty > info.getMultiply())
+                                    qty = info.getMultiply();
+                                count[j] -= qty;
+
+                                DiscountProductQty( ticket, ticketIndex, sDiscountMessage, qty,
+                                    100d, 0d );
+                                
+                                // ticketindexes need adjusting to accomodate the new line
+                                for( int l = 0; l < aLines.size(); ++l ) {
+                                    if( aLines.get(l).getIndex() > ticketIndex ) {
+                                        aLines.get(l).setIndex( aLines.get(l).getIndex()+ 1);
+                                    }
+                                }
+                                
+                                // Save the highest tax rate - we must charge that rate
+                                // on the final price (UK tax laws)
+                                if( tax == null || 
+                                    tax.getRate() < info.getTaxInfo().getRate() ) {
+                                    tax = info.getTaxInfo();
+                                }
+                            }
+                        }
+                        --itemIndex;
+                    }
+                }  
+                
+                // We have now discounted all products involved the deal to zero,
+                // Now add a line to the end of the ticket for the meal deal's
+                // actual price, use the highest tax rate we found
+                DiscountProductGroup( ticket, promotion, sDiscountMessage, 
+                    smallest, price, tax );
+            }
+        }        
+    }
+    
+    public void UpdateCoupon(
+    TicketInfo ticket,
+    PromotionInfo promotion,
+    List<String> couponLines ) {
+        
+         // Remove existing coupon
+        RemoveDiscountPromotion( ticket, promotion.getID() );
+      
+        // Get list of products in this promotion
+        List<LineList> aLines = FindProductsInPromotion( promotion, ticket, false );
+
+        if( aLines.size() > 0 ) {
+            // At least one qualifying product so add the coupon
+            for( String line: couponLines ) {
+                ticket.addCouponLine(line );
+            }
+        }
+    }
+
+    
+    // To debug scripts in a proper debugging environment,
+    // cut and paste the entire script into the function below, removing
+    // any existing function code first, then edit your script in the
+    // database using the resource editor to change DEBUGMODE to true
+    // The script will now divert to the function below.
+    //  Note that DEBUGMODE needs to be set to false in the function below.
+    //
+    // When you have it all working, you can cut and paste your code back into
+    // the script. Make sure you remove the code from the function below and
+    // that DEBUGMODE is false in the resource script.
+
     public void testcode( PromotionInfo promotion, String event, 
               TicketInfo ticket, int selectedindex,
               DataLogicSales dlsales,
               DataLogicPromotions dlpromotions,
               PromotionSupport support,
-              int effectedIndex ) {
-
-// promotion.percentoff
-//
-// Percentage off the price
-//
-
-// START OF USER EDITABLE VARIABLES
-
-Double PERCENT_DISCOUNT = 10.0;
-
-// END OF USER EDITABLE VARIABLES
-
-//
-//
-// DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
-//      
-   // Supported events: 
-    //  Event                  
-    //  promotion.addline    
-    //  promotion.changeline   
-    //  promotion.removeline   
-
-// Called after a new line added to a ticket
-if( new String("promotion.addline").contentEquals(event) ) {
-    // Add discounts
-    support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), PERCENT_DISCOUNT, false );
-}
-
-// Called after a line is deleted
-// The ticket line and the promotion added lines are already deleted by the
-// time we get here
-if( new String("promotion.removeline").contentEquals(event) ) {
-    // Do nothing
-}
-
-// Called when a ticket line is changed
-if( new String("promotion.changeline").contentEquals(event) ) {
-    if( support.isProductInPromotion( ticket, selectedindex, promotion ) ) {
-        // Remove discounts and recalculate them
-        support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), PERCENT_DISCOUNT, true );
-    }
-}
+              int effectedindex,  String productid ) {
+        
     }
 }
