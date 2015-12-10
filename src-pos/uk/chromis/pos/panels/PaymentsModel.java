@@ -652,7 +652,8 @@ public class PaymentsModel {
          * @return
          */
         public String printCategoryName() {
-            return m_CategoryName;
+            //return m_CategoryName;
+            return StringUtils.encodeXML(m_CategoryName); 
         }
 
         /**
@@ -881,7 +882,8 @@ public class PaymentsModel {
          * @return
          */
         public String printTaxName() {
-            return m_SalesTaxName;
+           // return m_SalesTaxName;
+           return StringUtils.encodeXML(m_SalesTaxName);
         }      
 
         /**
@@ -1030,7 +1032,8 @@ public class PaymentsModel {
          * @return
          */
         public String printReason() {
-            return s_PaymentReason;
+            //return s_PaymentReason;
+            return StringUtils.encodeXML(s_PaymentReason);
         }
 
         /**

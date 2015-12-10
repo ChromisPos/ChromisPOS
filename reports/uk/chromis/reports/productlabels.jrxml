@@ -155,9 +155,9 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 				<imageExpression><![CDATA[($F{CODETYPE}.equals("EAN-13") ? uk.chromis.pos.util.BarcodeImage.getBarcodeEAN13($F{CODE}) :
     ($F{CODETYPE}.equals("EAN-8") ? uk.chromis.pos.util.BarcodeImage.getBarcodeEAN8($F{CODE}) :
         ($F{CODETYPE}.equals("UPC-A") ? uk.chromis.pos.util.BarcodeImage.getBarcodeUPCA($F{CODE}) :
-            ($F{CODETYPE}.equals("UPC-E") ? uk.chromis.pos.util.BarcodeImage.getBarcodeUPCE($F{CODE}) :
+            ($F{CODETYPE}.equals("UPC-A") ? uk.chromis.pos.util.BarcodeImage.getBarcodeUPCE($F{CODE}) :
                 ($F{CODETYPE}.equals("CODE128") ? uk.chromis.pos.util.BarcodeImage.getBarcode128($F{CODE}) :
-                    uk.chromis.pos.util.BarcodeImage.badBarcode()
+                    uk.chromis.pos.util.BarcodeImage.getBarcodeUPCE($F{CODE})
                 )
             )
         )

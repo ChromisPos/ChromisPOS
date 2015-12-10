@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -63,6 +64,7 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import org.apache.commons.io.FileUtils;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.JFlowPanel;
 import uk.chromis.beans.JPasswordDialog;
@@ -228,10 +230,10 @@ public class JRootApp extends JPanel implements AppView {
                         Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (LiquibaseException ex) {
                         String txt = ex.getMessage();
-                        if( ex.getCause() != null ) {
+                        if (ex.getCause() != null) {
                             txt = ex.getCause().toString().replace("liquibase.exception.DatabaseException:", "");
                         }
-                        MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, "Liquibase Error", txt );
+                        MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, "Liquibase Error", txt);
                         msg.show(this);
                     } finally {
                         if (con != null) {
@@ -362,6 +364,32 @@ public class JRootApp extends JPanel implements AppView {
                 jLabel1.setMaximumSize(new java.awt.Dimension(800, 1024));
                 jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
             }
+        }
+
+// Lets copy any database specific reports to the reports folder
+// Get the database version first
+        File dbReportsSource = null;
+        switch (getDbVersion()) {
+            case "d":
+                dbReportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\derby");
+                break;
+            case "m":
+                dbReportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\mysql");
+                break;
+            case "p":
+                dbReportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\postgresql");
+                break;
+        }
+
+        File reportsDestination = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\reports");
+        try {
+            File reportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\default");
+            FileUtils.copyDirectory(reportsSource, new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\reports"));
+            if ((dbReportsSource) != null) {
+                FileUtils.copyDirectory(dbReportsSource, new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\reports"));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         showLogin();

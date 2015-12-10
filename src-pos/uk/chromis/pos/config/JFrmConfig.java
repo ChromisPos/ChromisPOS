@@ -77,7 +77,7 @@ public class JFrmConfig extends javax.swing.JFrame {
             }
         }
         @Override
-        public void windowClosed(WindowEvent evt) {
+        public void windowClosed(WindowEvent evt) {            
             System.exit(0);
         }
     }    

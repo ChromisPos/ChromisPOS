@@ -143,7 +143,6 @@ public class JPaymentPaper extends javax.swing.JPanel implements JPaymentInterfa
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         m_jMoneyEuros = new javax.swing.JLabel();
-        jVoucherNo = new javax.swing.JTextField();
         jPanel11 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         m_jKeys = new uk.chromis.editor.JEditorKeys();
@@ -168,10 +167,6 @@ public class JPaymentPaper extends javax.swing.JPanel implements JPaymentInterfa
         m_jMoneyEuros.setPreferredSize(new java.awt.Dimension(180, 30));
         jPanel4.add(m_jMoneyEuros);
         m_jMoneyEuros.setBounds(120, 4, 180, 30);
-
-        jVoucherNo.setText("jTextField1");
-        jPanel4.add(jVoucherNo);
-        jVoucherNo.setBounds(120, 60, 170, 20);
 
         add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -200,7 +195,6 @@ public class JPaymentPaper extends javax.swing.JPanel implements JPaymentInterfa
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jVoucherNo;
     private uk.chromis.editor.JEditorKeys m_jKeys;
     private javax.swing.JLabel m_jMoneyEuros;
     private uk.chromis.editor.JEditorCurrencyPositive m_jTendered;

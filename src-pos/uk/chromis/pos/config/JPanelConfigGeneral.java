@@ -20,6 +20,7 @@ package uk.chromis.pos.config;
 
 import java.awt.Component;
 import java.util.Map;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
@@ -57,8 +58,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboTicketsBag.addActionListener(dirty);
         jchkHideInfo.addActionListener(dirty);
         jtxtStartupText.getDocument().addDocumentListener(dirty);
-
-        jtxtStartupLogo.getDocument().addDocumentListener(dirty);
+        jRed.addActionListener(dirty);
+        jBlue.addActionListener(dirty);
+        jGreen.addActionListener(dirty);
+        jBlack.addActionListener(dirty);
+        jOrange.addActionListener(dirty);
+        jRoyalBlue.addActionListener(dirty);
 
         // Installed skins
         LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
@@ -135,6 +140,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jtxtStartupLogo.setText(AppConfig.getInstance().getProperty("start.logo"));
         jtxtStartupText.setText(AppConfig.getInstance().getProperty("start.text"));
 
+        setIconColour();
         dirty.setDirty(false);
     }
 
@@ -163,6 +169,37 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
     private String comboValue(Object value) {
         return value == null ? "" : value.toString();
+    }
+
+    private void setIconColour() {
+        if (AppConfig.getInstance().getProperty("icon.colour") != null) {
+            switch (AppConfig.getInstance().getProperty("icon.colour")) {
+                case "red":
+                    jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/reduser.png")));
+                    jRed.setSelected(true);
+                    break;
+                case "blue":
+                    jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/blueuser.png")));
+                    jBlue.setSelected(true);
+                    break;
+                case "green":
+                    jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/greenuser.png")));
+                    jGreen.setSelected(true);
+                    break;
+                case "orange":
+                    jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/orangeuser.png")));
+                    jOrange.setSelected(true);
+                    break;
+                case "black":
+                    jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/blackuser.png")));
+                    jBlack.setSelected(true);
+                    break;
+                case "royalblue":
+                    jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/rblueuser.png")));
+                    jRoyalBlue.setSelected(true);
+                    break;
+            }
+        }
     }
 
     private void changeLAF() {
@@ -224,6 +261,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jColourGroup = new javax.swing.ButtonGroup();
         jPanel11 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -242,6 +280,14 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jbtnLogoText = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jchkHideInfo = new eu.hansolo.custom.SteelCheckBox();
+        jPanel2 = new javax.swing.JPanel();
+        jRed = new javax.swing.JRadioButton();
+        jGreen = new javax.swing.JRadioButton();
+        jBlack = new javax.swing.JRadioButton();
+        jBlue = new javax.swing.JRadioButton();
+        jOrange = new javax.swing.JRadioButton();
+        jRoyalBlue = new javax.swing.JRadioButton();
+        jIconColour = new javax.swing.JLabel();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setPreferredSize(new java.awt.Dimension(650, 450));
@@ -272,11 +318,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboLAF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jcboLAF.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jcboLAF.setPreferredSize(new java.awt.Dimension(200, 30));
-        jcboLAF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcboLAFActionPerformed(evt);
-            }
-        });
 
         jcboMachineScreenmode.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jcboMachineScreenmode.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -317,11 +358,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jtxtStartupText.setMaximumSize(new java.awt.Dimension(0, 25));
         jtxtStartupText.setMinimumSize(new java.awt.Dimension(0, 0));
         jtxtStartupText.setPreferredSize(new java.awt.Dimension(350, 30));
-        jtxtStartupText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtxtStartupTextActionPerformed(evt);
-            }
-        });
         jtxtStartupText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtxtStartupTextjTetxtStartupTextFocusGained(evt);
@@ -357,12 +393,76 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jchkHideInfo.setText(bundle.getString("label.Infopanel")); // NOI18N
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bundle.getString("label.iconcolour"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jColourGroup.add(jRed);
+        jRed.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRed.setText("Red");
+        jRed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jColourActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jRed, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 60, -1));
+
+        jColourGroup.add(jGreen);
+        jGreen.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jGreen.setText("Green");
+        jGreen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jColourActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jGreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, -1, -1));
+
+        jColourGroup.add(jBlack);
+        jBlack.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jBlack.setText("Black");
+        jBlack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jColourActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jBlack, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
+
+        jColourGroup.add(jBlue);
+        jBlue.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jBlue.setText("Blue");
+        jBlue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jColourActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jBlue, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, -1, -1));
+
+        jColourGroup.add(jOrange);
+        jOrange.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jOrange.setText("Orange");
+        jOrange.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jColourActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jOrange, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, -1, -1));
+
+        jColourGroup.add(jRoyalBlue);
+        jRoyalBlue.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRoyalBlue.setText("Royal Blue");
+        jRoyalBlue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jColourActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jRoyalBlue, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, -1, -1));
+        jPanel2.add(jIconColour, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 70, 60));
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -383,10 +483,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jchkHideInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jcboTicketsBag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(0, 293, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 563, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(84, 84, 84))
+                                    .addComponent(jcboTicketsBag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(84, 128, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -411,7 +511,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jchkHideInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(227, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -430,18 +532,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jcboLAFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboLAFActionPerformed
-
-    }//GEN-LAST:event_jcboLAFActionPerformed
-
-    private void jtxtStartupTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtStartupTextActionPerformed
-
-    }//GEN-LAST:event_jtxtStartupTextActionPerformed
-
     private void jtxtStartupTextjTetxtStartupTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtStartupTextjTetxtStartupTextFocusGained
 
         transferFocus();
-
         JOptionPane.showMessageDialog(jPanel1, "<html>Changing default Startup Text content may violate the <br>"
                 + " Free Software Foundation's GNU General Public License GPL", "GNU GPL Warning", JOptionPane.WARNING_MESSAGE);
 
@@ -451,16 +544,56 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jtxtStartupText.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jColourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jColourActionPerformed
+        // TODO add your handling code here:
+        String colour = evt.getActionCommand();
+        switch (colour) {
+            case "Red":
+                jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/reduser.png")));
+                AppConfig.getInstance().setProperty("icon.colour", "red");
+                break;
+            case "Blue":
+                jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/blueuser.png")));
+                AppConfig.getInstance().setProperty("icon.colour", "blue");
+                break;
+            case "Green":
+                jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/greenuser.png")));
+                AppConfig.getInstance().setProperty("icon.colour", "green");
+                break;
+            case "Orange":
+                jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/orangeuser.png")));
+                AppConfig.getInstance().setProperty("icon.colour", "orange");
+                break;
+            case "Black":
+                jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/blackuser.png")));
+                AppConfig.getInstance().setProperty("icon.colour", "black");
+                break;
+            case "Royal Blue":
+                jIconColour.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/rblueuser.png")));
+                AppConfig.getInstance().setProperty("icon.colour", "royalblue");
+                break;
+        }
+    }//GEN-LAST:event_jColourActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton jBlack;
+    private javax.swing.JRadioButton jBlue;
     private javax.swing.JButton jButton1;
+    private javax.swing.ButtonGroup jColourGroup;
+    private javax.swing.JRadioButton jGreen;
+    private javax.swing.JLabel jIconColour;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JRadioButton jOrange;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton jRed;
+    private javax.swing.JRadioButton jRoyalBlue;
     private javax.swing.JButton jbtnLogoName;
     private javax.swing.JButton jbtnLogoText;
     private javax.swing.JComboBox jcboLAF;

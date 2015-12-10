@@ -34,7 +34,6 @@ import uk.chromis.format.Formats;
 import uk.chromis.pos.instance.InstanceQuery;
 import uk.chromis.pos.ticket.TicketInfo;
 
-
 public class StartPOS {
 
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.StartPOS");
@@ -73,10 +72,10 @@ public class StartPOS {
     public static void main(final String args[]) {
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
-      //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
+        //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
 
         if (!chromis.exists()) {
-            if (file.exists()) /*|| (openbravo.exists()))*/{
+            if (file.exists()) /*|| (openbravo.exists()))*/ {
                 Thread t1 = new Thread(new Runnable() {
                     public void run() {
                         Conversion convert = new Conversion() {
@@ -105,9 +104,8 @@ public class StartPOS {
                 if (!registerApp()) {
                     System.exit(1);
                 }
-                
-               AppConfig config = AppConfig.getInstance();
 
+                AppConfig config = AppConfig.getInstance();
                 // set Locale.
                 String slang = AppConfig.getInstance().getProperty("user.language");
                 String scountry = AppConfig.getInstance().getProperty("user.country");
@@ -115,7 +113,7 @@ public class StartPOS {
                 if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
                     Locale.setDefault(new Locale(slang, scountry, svariant));
                 }
-
+                
                 // Set the format patterns
                 Formats.setIntegerPattern(AppConfig.getInstance().getProperty("format.integer"));
                 Formats.setDoublePattern(AppConfig.getInstance().getProperty("format.double"));

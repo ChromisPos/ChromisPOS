@@ -46,7 +46,7 @@
 						key="image-1"/>
 					<box></box>
 					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA["uk/chromis/fixedimages/chromis.png"]]></imageExpression>
+					<imageExpression class="java.lang.String"><![CDATA["reports/uk/chromis/reports/logo.png"]]></imageExpression>
 				</image>
 			</band>
 		</title>

@@ -7,7 +7,11 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+<!-- 
+    This is the base liquibase xml for a new database. This file should not be changed.
+    Any new tables etc should added to the update xml. When a new database is created it
+    executes this xml and the update xml to ensure that the database is consistent.
+-->
 
 
     <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>

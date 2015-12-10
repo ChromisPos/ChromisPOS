@@ -404,11 +404,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     protected abstract JTicketsBag getJTicketsBag();
-
     protected abstract Component getSouthComponent();
-
     protected abstract void resetSouthComponent();
-
     protected abstract void reLoadCatalog();
 
     @SuppressWarnings("empty-statement")
@@ -438,7 +435,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 // Set some of the table details here if in restaurant mode
             if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag")) && !oTicket.getOldTicket()) {
 // Check if there is a customer name in the database for this table
-
                 if (restDB.getCustomerNameInTable(oTicketExt.toString()) == null) {
                     if (m_oTicket.getCustomer() != null) {
                         restDB.setCustomerNameInTable(m_oTicket.getCustomer().toString(), oTicketExt.toString());
@@ -449,7 +445,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     restDB.setWaiterNameInTable(m_App.getAppUserView().getUser().getName(), oTicketExt.toString());
                 }
                 restDB.setTicketIdInTable(m_oTicket.getId(), oTicketExt.toString());
-
             }
         }
 
@@ -736,9 +731,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         } else {
             JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.cannotdeletesentline"), "Notice", JOptionPane.INFORMATION_MESSAGE);
-
         }
-
     }
 
     private ProductInfoExt getInputProduct() {
@@ -746,7 +739,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         oProduct.setID("xxx999_999xxx_x9x9x9");
         oProduct.setReference(null);
         oProduct.setCode(null);
-        oProduct.setName("");
+        oProduct.setName("Sale");
         oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
         oProduct.setPriceSell(includeTaxes(oProduct.getTaxCategoryID(), getInputValue()));
         return oProduct;
@@ -770,8 +763,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private double getInputValue() {
         try {
-            // Double ret = Double.parseDouble(m_jPrice.getText());
-            // return priceWith00 ? ret / 100 : ret;
             return Double.parseDouble(m_jPrice.getText());
         } catch (NumberFormatException e) {
             return 0.0;
@@ -797,8 +788,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void incProductByCode(String sCode) {
-        // precondicion: sCode != null
-
 // Modify to allow number x with scanned products. JDL 8.8.2015        
         int count = 1;
         if (sCode.contains("*")) {
@@ -1096,13 +1085,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                             if (oProduct.getPriceSell() != 0.0) {
+                            {
+                                if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
+                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1407,9 +1398,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         //read resource ticket.save and execute
                         if (executeEvent(ticket, ticketext, "ticket.save") == null) {
                             // Save the receipt and assign a receipt number
-                            if (!paymentdialog.isPrintSelected()) {
-                                ticket.setTicketType(TicketType.INVOICE);
-                            }
+                  //          if (!paymentdialog.isPrintSelected()) {
+                  //              ticket.setTicketType(TicketType.INVOICE);
+                  //          }
 
                             try {
                                 dlSales.saveTicket(ticket, m_App.getInventoryLocation());
@@ -1478,42 +1469,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
             } else {
                 try {
-                  TicketParser m_TTP2 = new TicketParser(m_TP, dlSystem);
+                    TicketParser m_TTP2 = new TicketParser(m_TP, dlSystem);
                     m_TTP2.printTicket(sresource);
                 } catch (TicketPrinterException eTP) {
                     m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
                 }
             }
         }
-        
-        
-        /*
-        
-                String sresource = m_dlSystem.getResourceAsXML("Printer.Start");
-        if (sresource == null) {
-            m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
-        } else {
-            try {
-                m_TTP.printTicket(sresource);
-            } catch (TicketPrinterException eTP) {
-                m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
-            }
-        }
-        
-        */
-        
-        
-        
-        // cancelled the ticket.total script
-        // or canceled the payment dialog
-        // or canceled the ticket.close script
+
         AutoLogoff.getInstance().activateTimer();
         return resultok;
     }
 
     private boolean checkVoucherCurrentTicket(String voucher) {
         for (TicketLineInfo line : m_oTicket.getLines()) {
-            if (line.getProperty("vCode").equals(voucher)) {
+            if ((line.getProperty("vCode") != null) && (line.getProperty("vCode").equals(voucher))) {
                 return (true);
             }
         }

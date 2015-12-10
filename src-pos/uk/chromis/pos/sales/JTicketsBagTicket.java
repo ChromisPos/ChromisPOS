@@ -431,7 +431,19 @@ public class JTicketsBagTicket extends JTicketsBag {
                 ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
                 script.put("ticket", m_ticket);
                 script.put("taxes", m_ticket.getTaxLines());
-                m_TTP2.printTicket(script.eval(m_dlSystem.getResourceAsXML("Printer.TicketPreview")).toString());
+                switch (m_ticket.getTicketType()) {
+                    case NORMAL:
+                    case REFUND:
+                        m_TTP2.printTicket(script.eval(m_dlSystem.getResourceAsXML("Printer.Ticket")).toString());
+                        break;
+                    case INVOICE:
+                        m_TTP2.printTicket(script.eval(m_dlSystem.getResourceAsXML("Printer.Ticket2")).toString());
+                        break;
+                    case NOSALE:
+                    default:
+                        m_TTP2.printTicket(script.eval(m_dlSystem.getResourceAsXML("Printer.TicketPreview")).toString());
+                        break;
+                }
             } catch (ScriptException e) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotprint"), e));
             } catch (TicketPrinterException e) {
@@ -464,7 +476,7 @@ public class JTicketsBagTicket extends JTicketsBag {
             m_TicketsBagTicketBag.showRefund();
             m_panelticketedit.showRefundLines(aRefundLines);
             TicketInfo refundticket = new TicketInfo();
-            refundticket.setTicketType(TicketType.REFUND); 
+            refundticket.setTicketType(TicketType.REFUND);
             refundticket.setCustomer(m_ticket.getCustomer());
             refundticket.setPayments(m_ticket.getPayments());
             refundticket.setOldTicket(true);

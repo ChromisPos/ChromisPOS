@@ -95,12 +95,12 @@ public class DataLogicAdmin extends BeanFactoryDataSingle {
         
         m_tresources = new TableDefinition(s,
             "RESOURCES"
-            , new String[] {"ID", "NAME", "RESTYPE", "CONTENT"}
+            , new String[] {"ID", "NAME", "RESTYPE", "CONTENT" }
             , new String[] {"ID", AppLocal.getIntString("Label.Name"), AppLocal.getIntString("label.type"), "CONTENT"}
             , new Datas[] {Datas.STRING, Datas.STRING, Datas.INT, Datas.BYTES}
             , new Formats[] {Formats.STRING, Formats.STRING, Formats.INT, Formats.NULL}
             , new int[] {0}
-            , "NAME"
+            , "LOWER(NAME) "
         );           
   
         

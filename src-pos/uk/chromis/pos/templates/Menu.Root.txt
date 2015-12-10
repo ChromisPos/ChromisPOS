@@ -147,9 +147,5 @@ submenu.addTitle("Menu.StockManagement.Edit");
     group.addPanel("/uk/chromis/images/printer.png", "Menu.Printer", "uk.chromis.pos.panels.JPanelPrinter");
     group.addPanel("/uk/chromis/images/timer.png", "Menu.CheckInCheckOut", "uk.chromis.pos.epm.JPanelEmployeePresence");
 
-// Deprecated options. Only required with Openbravo ERP software
-//       submenu.addTitle("Menu.Maintenance.ERP");
-//       submenu.addExecution("/uk/chromis/images/openbravo.png", "Menu.ERPProducts", "uk.chromis.possync.ProductsSyncCreate");
-//       submenu.addExecution("/uk/chromis/images/openbravo.png", "Menu.ERPOrders", "uk.chromis.possync.OrdersSyncCreate");
 
     group.addExitAction();

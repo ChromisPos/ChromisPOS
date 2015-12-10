@@ -171,7 +171,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
 
         m_getsuperuser = new PreparedSentence(s, "SELECT ID, NAME, APPPASSWORD, CARD, ROLE, IMAGE FROM PEOPLE WHERE NAME = 'SuperAdminUser' ", null, peopleread);
 
-        m_resourcebytes = new PreparedSentence(s, "SELECT CONTENT FROM RESOURCES WHERE NAME = ?", SerializerWriteString.INSTANCE, SerializerReadBytes.INSTANCE);
+        m_resourcebytes = new PreparedSentence(s, "SELECT CONTENT FROM RESOURCES WHERE NAME = ? ", SerializerWriteString.INSTANCE, SerializerReadBytes.INSTANCE);
 
         Datas[] resourcedata = new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.BYTES};
         m_resourcebytesinsert = new PreparedSentence(s, "INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES (?, ?, ?, ?)", new SerializerWriteBasic(resourcedata));

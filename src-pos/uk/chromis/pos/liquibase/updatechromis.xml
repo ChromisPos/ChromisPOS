@@ -16,7 +16,6 @@
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
-
   
     <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>  
  
@@ -676,24 +675,24 @@
                        
         <addColumn tableName="PRODUCTS">
             
-            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true" >
-                <constraints nullable="false"/>
-            </column>
+            <column name="ISCATALOG" type="${boolean.type}" />
             <column name="CATORDER" type="integer"/>
         </addColumn>     
       
         <addColumn tableName="PRODUCTS_CAT">
-            <column name="flag" type="${boolean.type}" />
+            <column name="flag" type="${boolean.type}"  />
         </addColumn>                                          
     </changeSet>   
     
     <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS d " dbms="derby, postgresql, hypersql, hsqldb" > 
         <sql>   
-            UPDATE PRODUCTS SET ISCATALOG = false; 
-            UPDATE PRODUCTS_CAT SET FLAG = true;        
+            UPDATE PRODUCTS SET ISCATALOG = FALSE; 
+            UPDATE PRODUCTS_CAT SET FLAG = TRUE;        
             UPDATE PRODUCTS SET ISCATALOG = (SELECT FLAG FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT),
-            CATORDER = (SELECT CATORDER FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT);  
-        </sql>       
+            CATORDER = (SELECT CATORDER FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT); 
+            UPDATE PRODUCTS SET ISCATALOG = FALSE WHERE ISCATALOG IS NULL;                                    
+        </sql>          
+        <addDefaultValue tableName="PRODUCTS" columnName="ISCATALOG" defaultValueBoolean="true" />                  
     </changeSet>
    
     <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS m " dbms="mysql, oracle ">
@@ -701,8 +700,10 @@
             UPDATE PRODUCTS SET ISCATALOG = 0; 
             UPDATE PRODUCTS_CAT SET FLAG = 1; 
             UPDATE PRODUCTS SET ISCATALOG = (SELECT FLAG FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT), 
-            CATORDER = (SELECT CATORDER FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT);    
+            CATORDER = (SELECT CATORDER FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT);  
+             UPDATE PRODUCTS SET ISCATALOG = 0 WHERE ISCATALOG IS NULL;     
         </sql>  
+        <addDefaultValue tableName="PRODUCTS" columnName="ISCATALOG" defaultValueNumeric="1" />  
     </changeSet> 
                                                            
     <!-- End of new tables sections -->
@@ -989,7 +990,11 @@
         </insert>		                 
     </changeSet>    
     
-    <changeSet author="Chromis POS" id="Add button.refundeditsale to permissions">        
+    <changeSet author="Chromis POS" id="Add button.refundeditsale to permissions">   
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname121'  </sqlCheck>
+        </preConditions>    
+         
         <insert tableName="DBPERMISSIONS">
             <column name="CLASSNAME" value="button.refundeditsale"/>
             <column name="SECTION" value="##label.sectionbuttons"/>
@@ -1123,9 +1128,9 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to v0.53.4">    
+    <changeSet author="Chromis POS" id="Update to v0.53.4 beta">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.4"/>          
+            <column name="VERSION" value="0.53.4 - beta only version"/>          
         </update>               
     </changeSet> 
     <!-- ***************************************************************************************** -->      
