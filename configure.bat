@@ -1,26 +1,23 @@
 @echo off
-REM    Chromis POS  - The New Face of Open Source POS
-REM    Copyright (c) 2015 
-REM    http://www.chromis.co.uk
-REM
-REM    This file is part of Chromis POS
-REM
-REM    Chromis POS is free software: you can redistribute it and/or modify
-REM    it under the terms of the GNU General Public License as published by
-REM    the Free Software Foundation, either version 3 of the License, or
-REM    (at your option) any later version.
-REM
-REM    Chromis POS is distributed in the hope that it will be useful,
-REM    but WITHOUT ANY WARRANTY; without even the implied warranty of
-REM    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-REM    GNU General Public License for more details.
-REM
-REM    You should have received a copy of the GNU General Public License
-REM    along with Chromis POS.  If not, see <http:REMwww.gnu.org/licenses/>
-
 
 set DIRNAME=%~dp0
 set CP="%DIRNAME%chromispos.jar"
 set CP=%CP%;"%DIRNAME%locales/"
+set CP=%CP%;"%DIRNAME%locales/Albanian"
+set CP=%CP%;"%DIRNAME%locales/American"
+set CP=%CP%;"%DIRNAME%locales/Arabic"
+set CP=%CP%;"%DIRNAME%locales/Argentinian"
+set CP=%CP%;"%DIRNAME%locales/Brazilian"
+set CP=%CP%;"%DIRNAME%locales/Croatian"
+set CP=%CP%;"%DIRNAME%locales/Dutch"
+set CP=%CP%;"%DIRNAME%locales/English"
+set CP=%CP%;"%DIRNAME%locales/Estonian"
+set CP=%CP%;"%DIRNAME%locales/French"
+set CP=%CP%;"%DIRNAME%locales/German"
+set CP=%CP%;"%DIRNAME%locales/Italian"
+set CP=%CP%;"%DIRNAME%locales/Mexican"
+set CP=%CP%;"%DIRNAME%locales/Portuguese"
+set CP=%CP%;"%DIRNAME%locales/Spanish"
+
 set CP=%CP%;"%DIRNAME%lib/substance.jar"
 start /B javaw -cp %CP% uk.chromis.pos.config.JFrmConfig
