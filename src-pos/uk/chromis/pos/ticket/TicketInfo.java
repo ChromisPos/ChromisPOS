@@ -20,11 +20,9 @@ package uk.chromis.pos.ticket;
 
 import java.io.ByteArrayInputStream;
 import java.io.Externalizable;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +42,6 @@ import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.payment.PaymentInfo;
 import uk.chromis.pos.payment.PaymentInfoMagcard;
 import uk.chromis.pos.util.StringUtils;
@@ -72,7 +69,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     private List<TicketLineInfo> m_aLines;
     private List<PaymentInfo> payments;
     private List<TicketTaxInfo> taxes;
-    private List<String> m_CouponLines;
+    private CouponSet m_CouponLines;
     private final String m_sResponse;
     private String loyaltyCardNumber;
     private Boolean oldTicket;
@@ -100,7 +97,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_Customer = null;
         m_sActiveCash = null;
         m_aLines = new ArrayList<>();
-        m_CouponLines= new ArrayList<>();
+        m_CouponLines= new CouponSet();
         
         payments = new ArrayList<>();
         taxes = null;
@@ -131,7 +128,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_dDate = (Date) in.readObject();
         attributes = (Properties) in.readObject();
         m_aLines = (List<TicketLineInfo>) in.readObject();
-        m_CouponLines = (List<String>) in.readObject();
+        m_CouponLines = (CouponSet) in.readObject();
         m_User = null;
         m_sActiveCash = null;
         payments = new ArrayList<>();
@@ -160,7 +157,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
         m_aLines = new ArrayList<>(); 
-        m_CouponLines = new ArrayList<>();
+        m_CouponLines = (CouponSet) dr.getObject(10);
         
         payments = new ArrayList<>(); 
         taxes = null;
@@ -187,10 +184,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             t.m_aLines.add(l.copyTicketLine());
         }
         
-        t.m_CouponLines = new ArrayList<>(); 
-        for (String s : m_CouponLines) {
-            t.m_CouponLines.add(s);
-        }
+        t.m_CouponLines = new CouponSet();
+        t.m_CouponLines.copyAll(m_CouponLines);
         
         t.refreshLines();
 
@@ -396,10 +391,24 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_aLines.add(oLine);
     }
 
-    public void addCouponLine( String line) {
-        m_CouponLines.add(line);
+    public void addCouponLine( String id, int line, String text ) {
+        m_CouponLines.add( id, line, text );
     }
 
+    public void removeCouponLine( String id, int line ) {
+        m_CouponLines.remove( id, line );
+    }
+    
+    public void removeCoupon( String id ) {
+        
+        if( id == null ) {
+            // Remove all coupons
+            m_CouponLines.clear();
+        } else {
+            m_CouponLines.remove( id );
+        }
+    }
+    
     public int checkAndAddLine(TicketLineInfo oLine, boolean flag) {
         // returns index of product in the ticket list or -1 if new product
         if (m_aLines.size() == 0 || !flag) {
@@ -498,7 +507,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public List<String> getCouponLines() {
-        return m_CouponLines;
+        return m_CouponLines.getCouponLines();
     }
 
     public List<TicketLineInfo> getLines() {

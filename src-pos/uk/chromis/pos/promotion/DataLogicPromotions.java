@@ -19,6 +19,7 @@
 
 package uk.chromis.pos.promotion;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,7 @@ import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.model.Field;
 import uk.chromis.data.model.Row;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.customers.CustomerTransaction;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.ticket.CategoryInfo;
@@ -54,24 +56,25 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
     // to access the columns, do not hard code array indexes.
     // If you add a new field, all arrays need a new entry.
     protected String[] m_PromotionFieldNames = new String[] {
-                "ID", "NAME", "CRITERIA", "SCRIPT", "ISENABLED"
+                "ID", "NAME", "CRITERIA", "SCRIPT", "ISENABLED", "ALLPRODUCTS"
             };          
     
-    protected int INDEX_ID = 0;
-    protected int INDEX_NAME = 1;
-    protected int INDEX_CRITERIA = 2;
-    protected int INDEX_SCRIPT = 3;
-    protected int INDEX_ISENABLED = 4;
-    protected int FIELD_COUNT = 5;
+    protected static int INDEX_ID = 0;
+    protected static int INDEX_NAME = 1;
+    protected static int INDEX_CRITERIA = 2;
+    protected static int INDEX_SCRIPT = 3;
+    protected static int INDEX_ISENABLED = 4;
+    protected static int INDEX_ALLPRODUCTS = 5;
+    protected static int FIELD_COUNT = 6;
     
     private Datas[] m_PromotionFieldDataTypes = new Datas[] 
         {Datas.STRING, Datas.STRING, Datas.SERIALIZABLE,
-                Datas.SERIALIZABLE, Datas.BOOLEAN
+                Datas.SERIALIZABLE, Datas.BOOLEAN,  Datas.BOOLEAN
             };
     
     private Formats[] m_PromotionFieldFormat = 
             new Formats[] {Formats.STRING, Formats.STRING, Formats.BYTEA,
-                Formats.BYTEA, Formats.BOOLEAN
+                Formats.BYTEA, Formats.BOOLEAN, Formats.BOOLEAN
             };
     
     /** Creates a new instance of DataLogicPromotions */
@@ -81,7 +84,8 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
                 new Field(m_PromotionFieldNames[1], m_PromotionFieldDataTypes[1], m_PromotionFieldFormat[1], true, true, true ), 
                 new Field(m_PromotionFieldNames[2], m_PromotionFieldDataTypes[2], m_PromotionFieldFormat[2] ), 
                 new Field(m_PromotionFieldNames[3], m_PromotionFieldDataTypes[3], m_PromotionFieldFormat[3] ), 
-                new Field(m_PromotionFieldNames[4], m_PromotionFieldDataTypes[4], m_PromotionFieldFormat[4] ) 
+                new Field(m_PromotionFieldNames[4], m_PromotionFieldDataTypes[4], m_PromotionFieldFormat[4] ),
+                new Field(m_PromotionFieldNames[5], m_PromotionFieldDataTypes[5], m_PromotionFieldFormat[5] ) 
                 );
 
     }
@@ -164,7 +168,7 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
     
     public final PreparedSentence getListSentence() {
  	return new PreparedSentence(m_session,
-            "SELECT ID, NAME, CRITERIA, SCRIPT, ISENABLED FROM PROMOTIONS",
+            "SELECT ID, NAME, CRITERIA, SCRIPT, ISENABLED, ALLPRODUCTS FROM PROMOTIONS",
             null,
             m_PromotionRow.getSerializerRead()
         );
@@ -210,13 +214,13 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
             public int execInTransaction(Object params) throws BasicException {
                 String[] fields = new String[] {
                             "ID", "NAME", "CRITERIA", "SCRIPT",
-                            "ISENABLED"
+                            "ISENABLED", "ALLPRODUCTS"
                         };
                 
 		return new PreparedSentence(m_session
                     , "INSERT INTO PROMOTIONS ( "
-                    + "ID, NAME, CRITERIA, SCRIPT, ISENABLED ) "
-                    + "VALUES (?, ?, ?, ?, ?)", 
+                    + "ID, NAME, CRITERIA, SCRIPT, ISENABLED, ALLPRODUCTS ) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)", 
                     new SerializerWriteBasicExt(
                             m_PromotionRow.getDatas(), namesToIndexes( fields ) )
                          ).exec(params);
@@ -234,13 +238,13 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
             public int execInTransaction(Object params) throws BasicException {
                 String[] fields = new String[] {
                             "NAME", "CRITERIA", "SCRIPT",
-                            "ISENABLED", "ID"
+                            "ISENABLED", "ALLPRODUCTS", "ID"
                         };
                 
 		return new PreparedSentence(m_session
                    , "UPDATE PROMOTIONS SET "
                     + "NAME = ?, CRITERIA = ?, "
-                    + "SCRIPT = ?, ISENABLED = ? "
+                    + "SCRIPT = ?, ISENABLED = ?, ALLPRODUCTS = ? "
                     + "WHERE ID = ? ",
                     new SerializerWriteBasicExt(
                             m_PromotionRow.getDatas(), namesToIndexes( fields ) )
@@ -294,13 +298,25 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
         return new SerializerRead() {@Override
         public Object readValues(DataRead dr) throws BasicException {
             
-            return new PromotionInfo(dr.getString(1), dr.getString(2),
-                    Formats.BYTEA.formatValue( Datas.SERIALIZABLE.getValue(dr, 3) ),
-                    Formats.BYTEA.formatValue( Datas.SERIALIZABLE.getValue(dr, 4) ),
-                    dr.getBoolean(5) );
-        }};
+            return new PromotionInfo(
+                    dr.getString(INDEX_ID+1), dr.getString(INDEX_NAME+1),
+                    Formats.BYTEA.formatValue( Datas.SERIALIZABLE.getValue(dr, INDEX_CRITERIA+1) ),
+                    Formats.BYTEA.formatValue( Datas.SERIALIZABLE.getValue(dr, INDEX_SCRIPT+1) ),
+                    dr.getBoolean(INDEX_ISENABLED+1), dr.getBoolean(INDEX_ALLPRODUCTS+1) );
+            }
+        };
     }    
 
+    // Get the promotion IDs for all enabled promotions that act on all products
+    public List<PromotionInfo> getAllProductPromotions() throws BasicException {
+        return new PreparedSentence( m_session,
+                "SELECT ID, NAME, CRITERIA, SCRIPT, ISENABLED, ALLPRODUCTS FROM PROMOTIONS "
+                + "WHERE ISENABLED = " + m_session.DB.TRUE()
+                + " AND ALLPRODUCTS = " + m_session.DB.TRUE(),
+                null,
+                getPromotionsSerializerRead() ).list();
+    }
+       
     /**
         *
         * @param id
@@ -309,7 +325,7 @@ public class DataLogicPromotions extends BeanFactoryDataSingle {
         */
        public final PromotionInfo getPromotionInfo(String id) throws BasicException {
            return (PromotionInfo) new PreparedSentence( m_session, "SELECT "
-                    + "ID, NAME, CRITERIA, SCRIPT, ISENABLED "
+                    + "ID, NAME, CRITERIA, SCRIPT, ISENABLED, ALLPRODUCTS "
                     + "FROM PROMOTIONS "
                     + "WHERE ID = ?",
                    SerializerWriteString.INSTANCE, 

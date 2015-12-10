@@ -1,16 +1,17 @@
 // promotion.multibuy
 //
-// Free product when making multiple purchases
-// Cheapest product is free
+// Discounts when making multiple purchases across a range of products
+// Cheapest products are discounted
 //
 
 // START OF USER EDITABLE VARIABLES
 
 // For every 'QTY_FOR_EVERY' products you buy, you get 'QTY_DISCOUNTED' at
 // PERCENT_DISCOUNT - cheapest products are discounted
-Double QTY_FOR_EVERY = 10.0;
+Double QTY_FOR_EVERY = 12.0;
 Double QTY_DISCOUNTED = 2.0;
-Double PERCENT_DISCOUNT = 100.0;
+Double PERCENT_DISCOUNT = 25.0;
+Boolean WHOLE_PRODUCTS_ONLY = true;
 
 // END OF USER EDITABLE VARIABLES
 
@@ -18,28 +19,23 @@ Double PERCENT_DISCOUNT = 100.0;
 //
 // DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
 //      
-   // Supported events: 
-    //  Event                  
-    //  promotion.addline    
-    //  promotion.changeline   
-    //  promotion.removeline   
-
+ 
 // To debug scripts in a proper debugging environment,
-// cut and paste this entire script into PromotionSupport.testcode
+// cut and paste this entire script into PromotionSupport.testcode then change
+// DEBUGMODE = true in this script ONLY - not in the testcode function.
 // When you have it working, you can cut and paste your code back into this script
-Boolean DEBUGMODE = true;
+Boolean DEBUGMODE = false;
 
 if( DEBUGMODE ) {
     support.testcode( promotion, event, ticket, selectedindex, dlsales,
-              dlpromotions, support, effectedIndex );
+              dlpromotions, support, effectedindex, productid );
 } else {
     //
     // Your code goes here
     //
-    if( support.isProductInPromotion( ticket, selectedindex, promotion ) ) {
-        // Remove discounts and recalculate them
-        support.UpdateMutibuy( event, ticket, promotion.getID(), "  *" + promotion.getName(),
-                        QTY_FOR_EVERY, QTY_DISCOUNTED, PERCENT_DISCOUNT );
-    }
+    support.UpdateMutibuyGroup( ticket,
+                promotion, "  *" + promotion.getName(),
+                QTY_FOR_EVERY, QTY_DISCOUNTED, PERCENT_DISCOUNT,
+                WHOLE_PRODUCTS_ONLY );
 }
 

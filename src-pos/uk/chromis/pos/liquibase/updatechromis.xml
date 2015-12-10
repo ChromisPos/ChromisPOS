@@ -666,6 +666,8 @@ PRODUCTS_CAT
             <column name="SCRIPT"  type="${blob.type}" >
                 <constraints nullable="false" />
             </column>
+            <column name="ALLPRODUCTS" type="${boolean.type}" 
+                    defaultValueNumeric="0"/>
             <column name="ISENABLED" type="${boolean.type}" 
                     defaultValueNumeric="1"/>
         </createTable>      

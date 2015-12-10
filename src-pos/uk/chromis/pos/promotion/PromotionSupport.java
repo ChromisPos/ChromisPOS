@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -49,6 +48,7 @@ public class PromotionSupport {
     protected DataLogicSales m_salesLogic;
     protected DataLogicPromotions m_DataLogicPromotions;
     HashMap< String, PromotionInfo> m_promotionCache;
+    List<String> m_AllProductPromotions;
     private Component m_Parent;
 
     public PromotionSupport( Component parent,
@@ -58,12 +58,36 @@ public class PromotionSupport {
         m_salesLogic = salesLogic;
         m_DataLogicPromotions = logicPromotions;
         m_promotionCache = new HashMap();
+        m_AllProductPromotions = null;
     }
     
      public void clearPromotionCache() {
         m_promotionCache.clear();
+        m_AllProductPromotions = null;
     } 
-     
+  
+    // Get promotions that are enabled and operate on all products
+    private List<String> getAllProductPromotionsIds() {
+        
+        if( m_AllProductPromotions == null ) {
+            try {
+                m_AllProductPromotions = new ArrayList<String>();
+                
+                List<PromotionInfo> promos = m_DataLogicPromotions.getAllProductPromotions();
+                 
+                for( PromotionInfo p : promos ) {
+                    // Add to the cache and store the ID
+                    m_AllProductPromotions.add( p.getID() );
+                    m_promotionCache.putIfAbsent( p.getID(), p);
+                }
+            } catch (BasicException ex) {
+                Logger.getLogger(PromotionSupport.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+                
+        return m_AllProductPromotions;
+    } 
+    
     private PromotionInfo getCachedPromotion( String id ) {
         
         PromotionInfo promotion = m_promotionCache.get(id);
@@ -104,6 +128,7 @@ public class PromotionSupport {
 
         HashMap< String, PromotionInfo> promotions  = new HashMap();
         
+        // Get product specific promotions for this ticket
         for (TicketLineInfo line: ticket.getLines()) {
             String id = line.getPromotionId();
             if( id != null ) {
@@ -118,6 +143,15 @@ public class PromotionSupport {
             }
         }
         
+        // Now add promotions that are run for all products
+        List<String> ids = getAllProductPromotionsIds();
+        for (String id: ids ) {
+            PromotionInfo p = getCachedPromotion(id);
+            if( p != null && p.getIsEnabled() ) {
+                promotions.putIfAbsent(id, p );
+            }
+        }
+        
         if( !(promotions.isEmpty()) && bwithActions ) {
             // Promotion scripts need running
             for( String promotionID : promotions.keySet() ) {
@@ -126,9 +160,6 @@ public class PromotionSupport {
             }
         }
         
-        if( selectedindex >= ticket.getLines().size() ) {
-            selectedindex = ticket.getLines().size();
-        }
         return !(promotions.isEmpty());
     }
     
@@ -245,9 +276,13 @@ public class PromotionSupport {
         for ( int i = 0; i < ticket.getLinesCount(); ++i) {
             TicketLineInfo line = ticket.getLines().get(i);
             if( bIncludePromotionAdded || line.isPromotionAdded() == false ) {
-                String id = line.getPromotionId();
-                if( id != null && id.contentEquals(promotion.getID()) ) {
-                    aIndexes.add( new LineList(i, line ) );
+                if( promotion.getAllProducts() ) {
+                    aIndexes.add( new LineList(i, line ) );                    
+                } else {
+                    String id = line.getPromotionId();
+                    if( id != null && id.contentEquals(promotion.getID()) ) {
+                        aIndexes.add( new LineList(i, line ) );
+                    }
                 }
             }
         }
@@ -417,6 +452,15 @@ public class PromotionSupport {
             --index;
         }
     }
+
+    // Remove a coupon for a promotion
+    // Pass in the id of the promotion, all promotion coupon lines for that
+    // promotion anywhere on the ticket will be removed
+    // If promotionID is null, ALL coupons in the ticket are removed
+    public void RemoveCouponPromotion( TicketInfo ticket, String promotionID ) {
+        ticket.removeCoupon( promotionID );
+    }
+    
     
     // Remove discount on a promotion
     // Pass in the id of the promotion, all promotion discount lines for that
@@ -470,6 +514,12 @@ public class PromotionSupport {
     // See if the indexed line is in the given promotion
     public Boolean isProductInPromotion( TicketInfo ticket, 
             int index, PromotionInfo promotion ) {
+       
+        if( promotion == null )
+            return false;
+        
+        if( promotion.getAllProducts() == true )
+            return true;
         
         TicketLineInfo productline = ticket.getLine( index );
         if( productline != null && promotion != null ) {
@@ -818,22 +868,14 @@ public class PromotionSupport {
         }        
     }
     
-    public void UpdateCoupon(
+    public void AddCoupon(
     TicketInfo ticket,
     PromotionInfo promotion,
     List<String> couponLines ) {
-        
-         // Remove existing coupon
-        RemoveDiscountPromotion( ticket, promotion.getID() );
-      
-        // Get list of products in this promotion
-        List<LineList> aLines = FindProductsInPromotion( promotion, ticket, false );
+        int line = 0;
 
-        if( aLines.size() > 0 ) {
-            // At least one qualifying product so add the coupon
-            for( String line: couponLines ) {
-                ticket.addCouponLine(line );
-            }
+        for( String text: couponLines ) {
+            ticket.addCouponLine( promotion.getID(), line++, text );
         }
     }
 
@@ -855,6 +897,6 @@ public class PromotionSupport {
               DataLogicPromotions dlpromotions,
               PromotionSupport support,
               int effectedindex,  String productid ) {
-        
+       
     }
 }

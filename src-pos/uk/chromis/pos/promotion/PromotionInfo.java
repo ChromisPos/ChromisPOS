@@ -44,35 +44,19 @@ public class PromotionInfo implements IKeyed {
     private String m_sCriteria;
     private String m_sScript;
     private Boolean m_bIsEnabled;
+    private Boolean m_bAllProducts;
 
     /** Creates a new instance of PromotionInfo */
     public PromotionInfo( String sID, String sName, String sCriteria,
-            String sScript, Boolean bIsEnabled )
+            String sScript, Boolean bIsEnabled, Boolean bAllProducts )
     {
         m_sID = sID;
         m_sName = sName;
         m_sCriteria = sCriteria;
         m_sScript = sScript;
         m_bIsEnabled = bIsEnabled;
+        m_bAllProducts = bAllProducts;
     }
-   
-        /** Creates a new instance of PromotionInfo */
-    public PromotionInfo( String sID, String sName, byte [] aCriteria,
-            byte [] aScript, Boolean bIsEnabled )
-    {
-        m_sID = sID;
-        m_sName = sName;
-        
-        try {
-            m_sCriteria = new String(aCriteria, "UTF-8");
-            m_sScript = new String(aScript, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(PromotionInfo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        m_bIsEnabled = bIsEnabled;
-    }
-    
     
     /**
      *
@@ -146,7 +130,6 @@ public class PromotionInfo implements IKeyed {
         m_sScript = sScript;
     } 
 
-
     /**
      *
      * @return
@@ -162,10 +145,25 @@ public class PromotionInfo implements IKeyed {
     public void setIsEnabled(Boolean sIsEnabled) {
         m_bIsEnabled = sIsEnabled;
     } 
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getAllProducts() {
+        return m_bAllProducts;
+    }
+    
+    /**
+     *
+     * @param bAllProducts
+     */
+    public void setAllProducts(Boolean bAllProducts) {
+        m_bAllProducts = bAllProducts;
+    } 
+    
          
     public String toString(){
         return m_sName;
     }    
-
-
 }

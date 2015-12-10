@@ -1,7 +1,13 @@
+// promotion.coupon
+//
+// Add a single coupon to the end of the ticket if a qualifying product
+// is present
 
 ArrayList LINES = new ArrayList();
 
 // START OF USER EDITABLE VARIABLES
+
+Double SPEND_AT_LEAST = 5.00;
 
 LINES.add( "" );
 LINES.add( "*********************************" );
@@ -33,6 +39,15 @@ if( DEBUGMODE ) {
     //
     // Your code goes here
     //
-    support.UpdateCoupon( ticket, promotion, LINES );
-}
-
+    if( ticket.getTotal() < SPEND_AT_LEAST ) { 
+        // Remove existing coupon
+        support.RemoveCouponPromotion( ticket, promotion.getID() );
+    } else {        
+        if ( event.contentEquals( "promotion.changeline" ) ||
+             event.contentEquals( "promotion.addline" ) ) {
+            if( support.isProductInPromotion( ticket, effectedindex, promotion ) ) {
+                support.AddCoupon( ticket, promotion, LINES );
+            }
+        }
+    }
+} 

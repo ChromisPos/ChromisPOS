@@ -1,30 +1,28 @@
-// promotion.bogoff
+// promotion.bogof
 //
-//   Buy one, get one free
-//   This script can also be used for buy some, get some free
-//   such as buy 2 get 1 free, buy 10, get 2 free etc.
+// Buy one get one free
 //
-// This is a template script for creating promotion scripts
+
+Boolean WHOLE_PRODUCTS_ONLY = true;
+
 //
-// START OF USER EDITABLE VARIABLES
-// For every qty_buy and customer buys, the customer can have qty_free for free
-int qty_buy = 1;
-int qty_free = 1;
-// END OF USER EDITABLE VARIABLES
+//
+// DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
+//      
 
-import uk.chromis.pos.forms.DataLogicSales;
-import uk.chromis.pos.forms.DataLogicPromotions;
+// To debug scripts in a proper debugging environment,
+// cut and paste this entire script into PromotionSupport.testcode then change
+// DEBUGMODE = true in this script ONLY - not in the testcode function.
+// When you have it working, you can cut and paste your code back into this script
+Boolean DEBUGMODE = false;
 
-DataLogicSales saleslogic = new DataLogicSales();
-DataLogicPromotions promotionlogic = new DataLogicPromotions();
-saleslogic.init(session);
-promotionlogic.init(session);
-
-index = ticket.getLinesCount();
-if(index == null){
-    index = 0;
+if( DEBUGMODE ) {
+    support.testcode( promotion, event, ticket, selectedindex, dlsales,
+              dlpromotions, support, effectedindex, productid );
+} else {
+    //
+    // Your code goes here
+    //
+    support.UpdateBuySomeGetSomeFreeSingleProduct(
+        ticket, productid, promotion,  promotion, "  *" + promotion.getName(), 1d, 1d, WHOLE_PRODUCTS_ONLY  );
 }
-initialcount = index;
-indexinit = sales.getSelectedIndex();
-
-javax.swing.JOptionPane.showMessageDialog(null, "lines :"+ticket.getLinesCount(), "Product", JOptionPane.WARNING_MESSAGE);

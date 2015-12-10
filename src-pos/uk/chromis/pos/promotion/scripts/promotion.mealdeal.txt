@@ -23,7 +23,7 @@
 
  End of lines to add to product properties - do NOT add this line */
 
-ArrayList LINES = new ArrayList();
+ArrayList LIST_TYPES = new ArrayList();
 
 // START OF USER EDITABLE VARIABLES
 

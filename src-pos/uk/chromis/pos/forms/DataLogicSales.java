@@ -671,7 +671,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final SentenceList getPromotionsList() {
          return new StaticSentence(s, "SELECT "
-                + "ID, NAME, CRITERIA, SCRIPT, ISENABLED "
+                + "ID, NAME, CRITERIA, SCRIPT, ISENABLED, ALLPRODUCTS "
                 + "FROM PROMOTIONS "
                 + "ORDER BY NAME", null, 
                 new SerializerRead() {@Override
@@ -679,7 +679,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     return new PromotionInfo(dr.getString(1), dr.getString(2), 
                                 Formats.BYTEA.formatValue(dr.getBytes(3)),
                                 Formats.BYTEA.formatValue(dr.getBytes(4)),
-                                dr.getBoolean(5) );
+                                dr.getBoolean(5), dr.getBoolean(6) );
                     }
                 });
     }

@@ -60,6 +60,7 @@ public class PromotionEditor extends javax.swing.JPanel
     private final int m_IndexCriteria;
     private final int m_IndexScript;
     private final int m_IndexEnabled;
+    private final int m_IndexAllProducts;
     
     private SentenceList m_SentenceProducts;
     private ListValModel m_ModelProducts;
@@ -134,7 +135,8 @@ public class PromotionEditor extends javax.swing.JPanel
         m_IndexCriteria = m_dlPromotions.getIndexOf("CRITERIA");
         m_IndexScript = m_dlPromotions.getIndexOf("SCRIPT");
         m_IndexEnabled = m_dlPromotions.getIndexOf("ISENABLED");       
-
+        m_IndexAllProducts = m_dlPromotions.getIndexOf("ALLPRODUCTS"); 
+        
         m_ModelResource = new ComboBoxValModel();
         jComboBoxResources.setModel(m_ModelResource);
 
@@ -172,6 +174,7 @@ public class PromotionEditor extends javax.swing.JPanel
         m_jTextCriteria.getDocument().addDocumentListener(m_Dirty);
         m_jTextScript.getDocument().addDocumentListener(m_Dirty);
         jCheckBoxEnabled.addActionListener(m_Dirty);
+        jCheckBoxAllProducts.addActionListener(m_Dirty);
 
     }
 
@@ -232,10 +235,9 @@ public class PromotionEditor extends javax.swing.JPanel
     private void enableAll( boolean b ) {
         m_jName.setEnabled(b);
         jCheckBoxEnabled.setEnabled(b);
-        m_jTextCriteria.setEnabled(b);
         m_jTextScript.setEnabled(b);
         jComboBoxResources.setEnabled(b);
-
+        jCheckBoxAllProducts.setEnabled(b);
     }
 
     /**
@@ -252,6 +254,7 @@ public class PromotionEditor extends javax.swing.JPanel
         m_jTextScript.setText(null);
         jCheckBoxEnabled.setSelected(false);
         m_ModelResource.setSelectedKey(null);
+        jCheckBoxAllProducts.setSelected(false);
         
         enableAll( false );
         jButtonScript.setEnabled(false);
@@ -271,8 +274,8 @@ public class PromotionEditor extends javax.swing.JPanel
         m_jTextScript.setText(null);
         jCheckBoxEnabled.setSelected(false);
         m_ModelResource.setSelectedKey(null);
+        jCheckBoxAllProducts.setSelected(false);
         SelectAllProducts( false );
- 
         enableAll( true );
        jButtonScript.setEnabled(false);
     }
@@ -318,6 +321,7 @@ public class PromotionEditor extends javax.swing.JPanel
         m_ID =  m_dlPromotions.getFormatOf( m_IndexID ).formatValue(attrset[ m_IndexID ]);
         m_jName.setText( m_dlPromotions.getFormatOf( m_IndexName ).formatValue(attrset[ m_IndexName ]));
         m_jTextCriteria.setText( m_dlPromotions.getFormatOf( m_IndexCriteria ).formatValue(attrset[ m_IndexCriteria ]));
+        
         m_jTextCriteria.setCaretPosition(0);
         m_criteria = m_jTextCriteria.getText();
         
@@ -325,7 +329,10 @@ public class PromotionEditor extends javax.swing.JPanel
         m_jTextScript.setCaretPosition(0);
         jCheckBoxEnabled.setSelected( (Boolean) (attrset[ m_IndexEnabled ]) );
         m_ModelResource.setSelectedKey(null);
-
+        
+        Boolean bAll = (Boolean) (attrset[ m_IndexAllProducts ]);
+        jCheckBoxAllProducts.setSelected( bAll );
+        SetProductSelection( bAll == false );
         showProducts();
     }
 
@@ -370,10 +377,17 @@ public class PromotionEditor extends javax.swing.JPanel
 
         attrset[m_IndexID] = m_ID;
         attrset[m_IndexName] = m_jName.getText();
-        attrset[m_IndexCriteria] = m_dlPromotions.getFormatOf( m_IndexCriteria ).parseValue(m_jTextCriteria.getText());
         attrset[m_IndexScript] =  m_dlPromotions.getFormatOf( m_IndexScript ).parseValue(m_jTextScript.getText());
         attrset[m_IndexEnabled] = jCheckBoxEnabled.isSelected();
-        
+        if( jCheckBoxAllProducts.isSelected() ) {
+            attrset[m_IndexAllProducts] = true;
+            attrset[m_IndexCriteria] = null;
+            SelectAllProducts( false );
+            refresh();
+        } else {
+            attrset[m_IndexAllProducts] = false;
+            attrset[m_IndexCriteria] = m_dlPromotions.getFormatOf( m_IndexCriteria ).parseValue(m_jTextCriteria.getText());            
+        }
         return attrset;
     }
 
@@ -398,6 +412,18 @@ public class PromotionEditor extends javax.swing.JPanel
         return result;
     }           
     
+    private void SetProductSelection( Boolean bEnable ) {
+        // Enable/Disable the other product selection controls
+        jLabel1.setEnabled(bEnable);
+        jButtonHelp.setEnabled(bEnable);
+        m_jTextCriteria.setEnabled(bEnable);
+        jButtonTest.setEnabled(bEnable);
+        jLabel5.setEnabled(bEnable);
+        jButtonSelect.setEnabled(bEnable);
+        jButtonDeselect.setEnabled(bEnable);
+        jListProducts.setEnabled(bEnable);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -428,6 +454,7 @@ public class PromotionEditor extends javax.swing.JPanel
         jScrollPaneScript = new javax.swing.JScrollPane();
         m_jTextScript = new javax.swing.JTextArea();
         jButtonScript = new javax.swing.JButton();
+        jCheckBoxAllProducts = new javax.swing.JCheckBox();
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(AppLocal.getIntString("Label.Name")); // NOI18N
@@ -491,39 +518,42 @@ public class PromotionEditor extends javax.swing.JPanel
                     .addGroup(jPanelProductsLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonHelp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonHelp))
+                    .addComponent(jScrollPaneCriteria))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelProductsLayout.createSequentialGroup()
+                        .addComponent(jButtonTest)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelProductsLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(48, 48, 48)
                         .addComponent(jButtonSelect)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonDeselect))
-                    .addGroup(jPanelProductsLayout.createSequentialGroup()
-                        .addComponent(jScrollPaneCriteria)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonTest)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jButtonDeselect))))
         );
         jPanelProductsLayout.setVerticalGroup(
             jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelProductsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonDeselect)
                         .addComponent(jButtonSelect)
-                        .addComponent(jLabel5))
-                    .addGroup(jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButtonHelp)
-                        .addComponent(jLabel1)))
+                        .addComponent(jLabel5)
+                        .addComponent(jButtonHelp))
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonTest)
-                    .addComponent(jScrollPaneCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelProductsLayout.createSequentialGroup()
+                        .addGroup(jPanelProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPaneCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonTest))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jLabel3.setText("Script");
@@ -582,9 +612,16 @@ public class PromotionEditor extends javax.swing.JPanel
                     .addComponent(jLabel4)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneScript, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addComponent(jScrollPaneScript, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jCheckBoxAllProducts.setText("All Products");
+        jCheckBoxAllProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxAllProductsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -600,8 +637,11 @@ public class PromotionEditor extends javax.swing.JPanel
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBoxEnabled, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(66, 66, 66)
+                        .addComponent(jCheckBoxAllProducts)
+                        .addGap(18, 18, 18)
+                        .addComponent(jCheckBoxEnabled, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanelScript, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
@@ -610,9 +650,10 @@ public class PromotionEditor extends javax.swing.JPanel
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBoxEnabled))
+                    .addComponent(jCheckBoxEnabled)
+                    .addComponent(jCheckBoxAllProducts))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelProducts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelScript, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -670,6 +711,10 @@ public class PromotionEditor extends javax.swing.JPanel
        SelectAllProducts(false);
     }//GEN-LAST:event_jButtonDeselectActionPerformed
 
+    private void jCheckBoxAllProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAllProductsActionPerformed
+        SetProductSelection( !(jCheckBoxAllProducts.isSelected() ) );
+    }//GEN-LAST:event_jCheckBoxAllProductsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDeselect;
@@ -677,6 +722,7 @@ public class PromotionEditor extends javax.swing.JPanel
     private javax.swing.JButton jButtonScript;
     private javax.swing.JButton jButtonSelect;
     private javax.swing.JButton jButtonTest;
+    private javax.swing.JCheckBox jCheckBoxAllProducts;
     private javax.swing.JCheckBox jCheckBoxEnabled;
     private javax.swing.JComboBox jComboBoxResources;
     private javax.swing.JLabel jLabel1;
