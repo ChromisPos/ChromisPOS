@@ -1,9 +1,16 @@
-// promotion.bogof
+// promotion.threefortwo
 //
-// Buy one get one free
+// Discounts when making multiple purchases across a range of products
+// Cheapest products are discounted
 //
 
+// START OF USER EDITABLE VARIABLES
+
+Double QTY_FOR_EVERY = 3.0;
+Double QTY_FREE = 1.0;
 Boolean WHOLE_PRODUCTS_ONLY = true;
+
+// END OF USER EDITABLE VARIABLES
 
 //
 //
@@ -14,7 +21,7 @@ Boolean WHOLE_PRODUCTS_ONLY = true;
 // cut and paste this entire script into PromotionSupport.testcode then change
 // DEBUGMODE = true in this script ONLY - not in the testcode function.
 // When you have it working, you can cut and paste your code back into this script
-Boolean DEBUGMODE = false;
+Boolean DEBUGMODE = false;  
 
 if( DEBUGMODE ) {
     support.testcode( promotion, event, ticket, selectedindex, dlsales,
@@ -23,7 +30,9 @@ if( DEBUGMODE ) {
     //
     // Your code goes here
     //
-    support.UpdateBuySomeGetSomeFreeSingleProduct(
-        ticket, productid, promotion,  promotion, "  *" + promotion.getName(), 1d, 1d, WHOLE_PRODUCTS_ONLY  );
+    support.UpdateBuySomeGetSomeGroup( ticket,  promotion,
+                "  *" + promotion.getName(),
+                QTY_FOR_EVERY, QTY_FREE,
+                WHOLE_PRODUCTS_ONLY );
 }
 

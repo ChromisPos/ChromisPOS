@@ -663,8 +663,10 @@
             <column name="SCRIPT"  type="${blob.type}" >
                 <constraints nullable="false" />
             </column>
+            <column name="ALLPRODUCTS" type="${boolean.type}"   
+                    defaultValueBoolean="false"/>  
             <column name="ISENABLED" type="${boolean.type}" 
-                    defaultValueNumeric="1"/>
+                    defaultValueBoolean="true"/>
         </createTable>      
     </changeSet>  
      
@@ -680,7 +682,8 @@
         </addColumn>     
       
         <addColumn tableName="PRODUCTS_CAT">
-            <column name="flag" type="${boolean.type}"  />
+            <column name="flag" type="${boolean.type}" 
+                    defaultValueBoolean="true"/>
         </addColumn>                                          
     </changeSet>   
     
@@ -701,7 +704,7 @@
             UPDATE PRODUCTS_CAT SET FLAG = 1; 
             UPDATE PRODUCTS SET ISCATALOG = (SELECT FLAG FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT), 
             CATORDER = (SELECT CATORDER FROM PRODUCTS_CAT WHERE PRODUCTS.ID = PRODUCTS_CAT.PRODUCT);  
-             UPDATE PRODUCTS SET ISCATALOG = 0 WHERE ISCATALOG IS NULL;     
+            UPDATE PRODUCTS SET ISCATALOG = 0 WHERE ISCATALOG IS NULL;     
         </sql>  
         <addDefaultValue tableName="PRODUCTS" columnName="ISCATALOG" defaultValueNumeric="1" />  
     </changeSet> 
@@ -951,7 +954,7 @@
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
         </insert>
     </changeSet>        
-    
+        
     <changeSet author="Chromis POS" id="Add display.message scripts to resources">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'Display.Message'</sqlCheck>
@@ -1037,7 +1040,11 @@
             <column name="DISPLAYNAME" value="##label.displayname123"/>
             <column name="DESCRIPTION" value="##label.description123"/>
         </insert> 
-    </changeSet>                       
+    </changeSet> 
+      
+    <changeSet author="Chromis POS" id="drop top10salesMysql">  
+             <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
+    </changeSet>                                                             
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->

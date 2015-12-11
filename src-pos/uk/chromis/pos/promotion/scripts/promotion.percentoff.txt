@@ -2,8 +2,54 @@
 //
 // Percentage off the price
 //
-// This is a template script for creating promotion scripts
 
-// Variables needed by this script
-// $VARIABLE( name, field, format, defaultvalue );
+// START OF USER EDITABLE VARIABLES
+
+Double PERCENT_DISCOUNT = 10.0;
+
+// END OF USER EDITABLE VARIABLES
+
+//
+//
+// DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
+//      
+
+// To debug scripts in a proper debugging environment,
+// cut and paste this entire script into PromotionSupport.testcode then change
+// DEBUGMODE = true in this script ONLY - not in the testcode function.
+// When you have it working, you can cut and paste your code back into this script
+Boolean DEBUGMODE = false;
+
+if( DEBUGMODE ) {
+    support.testcode( promotion, event, ticket, selectedindex, dlsales,
+              dlpromotions, support, effectedindex, productid );
+} else {
+
+   // Supported events: 
+    //  Event                  
+    //  promotion.addline    
+    //  promotion.changeline   
+    //  promotion.removeline   
+
+    // Called after a new line added to a ticket
+    if( new String("promotion.addline").contentEquals(event) ) {
+        // Add discounts
+        support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), PERCENT_DISCOUNT, false );
+    }
+
+    // Called after a line is deleted
+    // The ticket line and the promotion added lines are already deleted by the
+    // time we get here
+    if( new String("promotion.removeline").contentEquals(event) ) {
+        // Do nothing
+    }
+
+    // Called when a ticket line is changed
+    if( new String("promotion.changeline").contentEquals(event) ) {
+        if( support.isProductInPromotion( ticket, selectedindex, promotion ) ) {
+            // Remove discounts and recalculate them
+            support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), PERCENT_DISCOUNT, true );
+        }
+    }
+}
 
