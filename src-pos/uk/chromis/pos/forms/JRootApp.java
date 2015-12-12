@@ -126,7 +126,8 @@ public class JRootApp extends JPanel implements AppView {
         public void actionPerformed(ActionEvent evt) {
             m_clock = getLineTimer();
             m_date = getLineDate();
-            m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
+           m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
+          //  m_jLblTitle.setText("Chromis POS - v0.53.4 Beta ONLY VERSION");
             m_jLblTitle.repaint();
             jLabel2.setText("  " + m_date + "  " + m_clock);
         }
