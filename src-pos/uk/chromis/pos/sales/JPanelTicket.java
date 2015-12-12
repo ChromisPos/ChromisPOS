@@ -917,7 +917,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             oProduct = dlSales.getProductInfoByCode("05V");
                             if (oProduct != null) {
                                 oProduct.setCode("05V");
-                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setName(oProduct.getName());
                                 oProduct.setProperty("vCode", sCode);
                                 oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
                                 addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
@@ -946,7 +946,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             oProduct = dlSales.getProductInfoByCode("10V");
                             if (oProduct != null) {
                                 oProduct.setCode("10V");
-                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setName(oProduct.getName());
                                 oProduct.setProperty("vCode", sCode);
                                 oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
                                 addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
@@ -976,7 +976,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             if (oProduct != null) {
                                 oProduct.setProperty("vCode", sCode);
                                 oProduct.setCode("20V");
-                                oProduct.setName(oProduct.getName() + sCode);
+                                oProduct.setName(oProduct.getName());
                                 oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
                                 addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
                             } else {
@@ -1502,7 +1502,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private boolean checkVoucherCurrentTicket(String voucher) {
         for (TicketLineInfo line : m_oTicket.getLines()) {
-            if (line.getProperty("vCode").equals(voucher)) {
+            if (line.getProperty("vCode") != null && line.getProperty("vCode").equals(voucher)) {
                 return (true);
             }
         }

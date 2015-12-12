@@ -19,6 +19,7 @@
 package uk.chromis.pos.forms;
 
 import java.io.File;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Locale;
@@ -27,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.io.FileUtils;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import uk.chromis.convert.Conversion;
@@ -69,7 +71,7 @@ public class StartPOS {
      *
      * @param args
      */
-    public static void main(final String args[]) {
+    public static void main(final String args[]) {              
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
         //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
@@ -113,7 +115,7 @@ public class StartPOS {
                 if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
                     Locale.setDefault(new Locale(slang, scountry, svariant));
                 }
-                
+
                 // Set the format patterns
                 Formats.setIntegerPattern(AppConfig.getInstance().getProperty("format.integer"));
                 Formats.setDoublePattern(AppConfig.getInstance().getProperty("format.double"));

@@ -372,22 +372,22 @@ public class JRootApp extends JPanel implements AppView {
         File dbReportsSource = null;
         switch (getDbVersion()) {
             case "d":
-                dbReportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\derby");
+                dbReportsSource = new File(System.getProperty("user.dir") + "/reports/uk//chromis/derby");
                 break;
             case "m":
-                dbReportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\mysql");
+                dbReportsSource = new File(System.getProperty("user.dir") + "/reports/uk/chromis/mysql");
                 break;
             case "p":
-                dbReportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\postgresql");
+                dbReportsSource = new File(System.getProperty("user.dir") + "/reports/uk/chromis/postgresql");
                 break;
         }
 
-        File reportsDestination = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\reports");
+        File reportsDestination = new File(System.getProperty("user.dir") + "/reports/uk/chromis/reports");
         try {
-            File reportsSource = new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\default");
-            FileUtils.copyDirectory(reportsSource, new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\reports"));
+            File reportsSource = new File(System.getProperty("user.dir") + "/reports/uk/chromis/default");
+            FileUtils.copyDirectory(reportsSource, new File(System.getProperty("user.dir") + "/reports/uk/chromis/reports"));
             if ((dbReportsSource) != null) {
-                FileUtils.copyDirectory(dbReportsSource, new File(System.getProperty("user.dir") + "\\reports\\uk\\chromis\\reports"));
+                FileUtils.copyDirectory(dbReportsSource, new File(System.getProperty("user.dir") + "/reports/uk/chromis/reports"));
             }
         } catch (IOException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);

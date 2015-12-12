@@ -215,6 +215,44 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return sel;
     }
 
+    private String getSelectFieldList2() {
+        String sel = "ID, "
+                + "REFERENCE, "
+                + "CODE, "
+                + "CODETYPE, "
+                + "NAME, "
+                + "ISCOM, "
+                + "ISSCALE, "
+                + "PRICEBUY, "
+                + "PRICESELL, "
+                + "CATEGORY, "
+                + "TAXCAT, "
+                + "ATTRIBUTESET_ID, "
+                + "IMAGE, "
+                + "ATTRIBUTES, "
+                + "STOCKCOST, "
+                + "STOCKVOLUME, "
+                + "ISCATALOG, "
+                + "CATORDER, "
+                + "ISKITCHEN, "
+                + "ISSERVICE, "
+                + "DISPLAY, "
+                + "ISVPRICE, "
+                + "ISVERPATRIB, "
+                + "TEXTTIP, "
+                + "WARRANTY, "
+                + "STOCKUNITS, "
+                + "ALIAS, "
+                + "ALWAYSAVAILABLE, "
+                + "DISCOUNTED, "
+                + "CANDISCOUNT, "
+                + "ISPACK, "
+                + "PACKQUANTITY, "
+                + "PACKPRODUCT, "
+                + "PROMOTIONID ";
+        return sel;
+    }
+
     /**
      *
      * @param s
@@ -279,7 +317,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public final ProductInfoExt getProductInfoByCode(String sCode) throws BasicException {
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "WHERE CODE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
+                + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + " WHERE CODE = ? ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
     }
 
     /**
