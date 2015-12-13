@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
@@ -79,6 +80,7 @@ import uk.chromis.pos.scale.DeviceScale;
 import uk.chromis.pos.scanpal2.DeviceScanner;
 import uk.chromis.pos.scanpal2.DeviceScannerFactory;
 import uk.chromis.pos.util.AltEncrypter;
+import uk.chromis.pos.util.OSValidator;
 
 public class JRootApp extends JPanel implements AppView {
 
@@ -126,8 +128,8 @@ public class JRootApp extends JPanel implements AppView {
         public void actionPerformed(ActionEvent evt) {
             m_clock = getLineTimer();
             m_date = getLineDate();
-           m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
-          //  m_jLblTitle.setText("Chromis POS - v0.53.4 Beta ONLY VERSION");
+            m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
+            //  m_jLblTitle.setText("Chromis POS - v0.53.4 Beta ONLY VERSION");
             m_jLblTitle.repaint();
             jLabel2.setText("  " + m_date + "  " + m_clock);
         }
@@ -370,24 +372,36 @@ public class JRootApp extends JPanel implements AppView {
 // Lets copy any database specific reports to the reports folder
 // Get the database version first
         File dbReportsSource = null;
+        String currentPath = new File("").getAbsolutePath();
+        if (OSValidator.isMac()) {
+            try {
+                currentPath = new File(JRootApp.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).toString();
+                currentPath = currentPath.replaceAll("/chromispos.jar", "");
+            } catch (URISyntaxException ex) {
+                currentPath = "/Applications/chromispos";
+            }
+        } else {
+            currentPath = System.getProperty("user.dir");
+        }
+
         switch (getDbVersion()) {
             case "d":
-                dbReportsSource = new File(System.getProperty("user.dir") + "/reports/uk//chromis/derby");
+                dbReportsSource = new File(currentPath + "/reports/uk//chromis/derby");
                 break;
             case "m":
-                dbReportsSource = new File(System.getProperty("user.dir") + "/reports/uk/chromis/mysql");
+                dbReportsSource = new File(currentPath + "/reports/uk/chromis/mysql");
                 break;
             case "p":
-                dbReportsSource = new File(System.getProperty("user.dir") + "/reports/uk/chromis/postgresql");
+                dbReportsSource = new File(currentPath + "/reports/uk/chromis/postgresql");
                 break;
         }
 
-        File reportsDestination = new File(System.getProperty("user.dir") + "/reports/uk/chromis/reports");
+        File reportsDestination = new File(currentPath + "/reports/uk/chromis/reports");
         try {
-            File reportsSource = new File(System.getProperty("user.dir") + "/reports/uk/chromis/default");
-            FileUtils.copyDirectory(reportsSource, new File(System.getProperty("user.dir") + "/reports/uk/chromis/reports"));
+            File reportsSource = new File(currentPath + "/reports/uk/chromis/default");
+            FileUtils.copyDirectory(reportsSource, new File(currentPath + "/reports/uk/chromis/reports"));
             if ((dbReportsSource) != null) {
-                FileUtils.copyDirectory(dbReportsSource, new File(System.getProperty("user.dir") + "/reports/uk/chromis/reports"));
+                FileUtils.copyDirectory(dbReportsSource, new File(currentPath + "/reports/uk/chromis/reports"));
             }
         } catch (IOException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);

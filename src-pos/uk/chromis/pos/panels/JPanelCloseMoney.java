@@ -181,7 +181,7 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
         m_jPrintCashTop.setEnabled(false);
         m_jCloseCashTop.setEnabled(false);
         
-        m_jCount.setText(null); // AppLocal.getIntString("label.noticketstoclose");
+        m_jCount.setText(null); 
         m_jCash.setText(null);
 
         m_jSales.setText(null);
