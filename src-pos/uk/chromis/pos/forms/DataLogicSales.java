@@ -49,6 +49,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     protected Datas[] stockdiaryDatas;
     protected SentenceExec m_sellvoucher;
     protected Datas[] paymenttabledatas;
+    private SentenceFind m_productname;
     protected Datas[] stockdatas;
     protected Row productsRow;
     private String pName;
@@ -215,44 +216,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return sel;
     }
 
-    private String getSelectFieldList2() {
-        String sel = "ID, "
-                + "REFERENCE, "
-                + "CODE, "
-                + "CODETYPE, "
-                + "NAME, "
-                + "ISCOM, "
-                + "ISSCALE, "
-                + "PRICEBUY, "
-                + "PRICESELL, "
-                + "CATEGORY, "
-                + "TAXCAT, "
-                + "ATTRIBUTESET_ID, "
-                + "IMAGE, "
-                + "ATTRIBUTES, "
-                + "STOCKCOST, "
-                + "STOCKVOLUME, "
-                + "ISCATALOG, "
-                + "CATORDER, "
-                + "ISKITCHEN, "
-                + "ISSERVICE, "
-                + "DISPLAY, "
-                + "ISVPRICE, "
-                + "ISVERPATRIB, "
-                + "TEXTTIP, "
-                + "WARRANTY, "
-                + "STOCKUNITS, "
-                + "ALIAS, "
-                + "ALWAYSAVAILABLE, "
-                + "DISCOUNTED, "
-                + "CANDISCOUNT, "
-                + "ISPACK, "
-                + "PACKQUANTITY, "
-                + "PACKPRODUCT, "
-                + "PROMOTIONID ";
-        return sel;
-    }
-
     /**
      *
      * @param s
@@ -271,6 +234,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "VALUES (?, ?)", new SerializerWriteBasic(new Datas[]{
             Datas.STRING,
             Datas.STRING}));
+
+        m_productname = new StaticSentence(s, "SELECT NAME FROM PRODUCTS WHERE ID = ?",
+                SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
+
     }
 
     /**
@@ -1550,6 +1517,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 SerializerWriteString.INSTANCE,
                 SerializerReadString.INSTANCE).find(id)
                 != null;
+    }
+
+    public final String getProductNameByCode(String sCode) throws BasicException {
+        return (String) m_productname.find(sCode);
     }
 
     public final void sellVoucher(Object[] voucher) throws BasicException {
