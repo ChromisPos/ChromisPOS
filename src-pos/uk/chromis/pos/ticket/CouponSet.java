@@ -68,7 +68,7 @@ public class CouponSet implements SerializableWrite, SerializableRead, Serializa
             CouponLine line = iterator.next();
             if(line.getid().contentEquals(id) &&             
                 line.getlinenumber() == linenumber ) {        
-                lines.remove( line );
+                iterator.remove();
             }
         }
     }
@@ -80,7 +80,7 @@ public class CouponSet implements SerializableWrite, SerializableRead, Serializa
         while(iterator.hasNext()) {
             CouponLine line = iterator.next();
             if(line.getid().contentEquals(id)) {        
-                lines.remove( line );
+                iterator.remove();
             }
         }
     }

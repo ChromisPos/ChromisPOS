@@ -26,7 +26,7 @@
             <text align="right" length="10">${ticket.printTotalPaid()}</text>
         </line>
         <line>
-            <text align="center" length="20">Thank You</text>
+            <text align="center" length="20">Thank you</text>
         </line>
     </display>
     <ticket>

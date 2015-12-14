@@ -129,7 +129,7 @@ public class JRootApp extends JPanel implements AppView {
             m_clock = getLineTimer();
             m_date = getLineDate();
             //     m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
-            m_jLblTitle.setText("Chromis POS - v0.53.4 Beta ONLY VERSION");
+            m_jLblTitle.setText("Chromis POS - v0.53.41 Beta ONLY VERSION");
             //   m_jLblTitle.repaint();
             jLabel2.setText("  " + m_date + "  " + m_clock);
         }
@@ -299,7 +299,7 @@ public class JRootApp extends JPanel implements AppView {
             m_dlSystem.setResourceAsProperties(AppConfig.getInstance().getHost() + "/properties", m_propsdb);
         }
 
-        // Inicializo la impresora...
+        // setup the display
         m_TP = new DeviceTicket(this, m_props);
 
         // Inicializamos 
@@ -405,7 +405,7 @@ public class JRootApp extends JPanel implements AppView {
             }
         } catch (IOException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+        }
         showLogin();
 
         return true;
@@ -676,7 +676,7 @@ public class JRootApp extends JPanel implements AppView {
             }
         }
     }
-
+      
     private void listPeople() {
         try {
             jScrollPane1.getViewport().setView(null);

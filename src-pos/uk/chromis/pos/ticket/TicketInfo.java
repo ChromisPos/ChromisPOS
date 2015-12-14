@@ -97,8 +97,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_Customer = null;
         m_sActiveCash = null;
         m_aLines = new ArrayList<>();
-        m_CouponLines= new CouponSet();
-        
+        m_CouponLines = new CouponSet();
+
         payments = new ArrayList<>();
         taxes = null;
         m_sResponse = null;
@@ -122,7 +122,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         m_sId = (String) in.readObject();
-        tickettype = TicketType.get(in.readInt()); 
+        tickettype = TicketType.get(in.readInt());
         m_iTicketId = in.readInt();
         m_Customer = (CustomerInfoExt) in.readObject();
         m_dDate = (Date) in.readObject();
@@ -143,7 +143,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     @Override
     public void readValues(DataRead dr) throws BasicException {
         m_sId = dr.getString(1);
-        tickettype = TicketType.get(dr.getInt(2)); 
+        tickettype = TicketType.get(dr.getInt(2));
         m_iTicketId = dr.getInt(3);
         m_dDate = dr.getTimestamp(4);
         m_sActiveCash = dr.getString(5);
@@ -156,10 +156,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
-        m_aLines = new ArrayList<>(); 
+        m_aLines = new ArrayList<>();
         m_CouponLines = (CouponSet) dr.getObject(10);
-        
-        payments = new ArrayList<>(); 
+
+        payments = new ArrayList<>();
         taxes = null;
 
     }
@@ -179,17 +179,17 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         t.m_User = m_User;
         t.m_Customer = m_Customer;
 
-        t.m_aLines = new ArrayList<>(); 
+        t.m_aLines = new ArrayList<>();
         for (TicketLineInfo l : m_aLines) {
             t.m_aLines.add(l.copyTicketLine());
         }
-        
+
         t.m_CouponLines = new CouponSet();
         t.m_CouponLines.copyAll(m_CouponLines);
-        
+
         t.refreshLines();
 
-        t.payments = new LinkedList<>(); 
+        t.payments = new LinkedList<>();
         for (PaymentInfo p : payments) {
             t.payments.add(p.copyPayment());
         }
@@ -218,7 +218,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
      *
      * @param tickettype
      */
-   public void setTicketType(final TicketType _tickettype) { 
+    public void setTicketType(final TicketType _tickettype) {
         this.tickettype = _tickettype;
     }
 
@@ -391,24 +391,24 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_aLines.add(oLine);
     }
 
-    public void addCouponLine( String id, int line, String text ) {
-        m_CouponLines.add( id, line, text );
+    public void addCouponLine(String id, int line, String text) {
+        m_CouponLines.add(id, line, text);
     }
 
-    public void removeCouponLine( String id, int line ) {
-        m_CouponLines.remove( id, line );
+    public void removeCouponLine(String id, int line) {
+        m_CouponLines.remove(id, line);
     }
-    
-    public void removeCoupon( String id ) {
-        
-        if( id == null ) {
+
+    public void removeCoupon(String id) {
+
+        if (id == null) {
             // Remove all coupons
             m_CouponLines.clear();
         } else {
-            m_CouponLines.remove( id );
+            m_CouponLines.remove(id);
         }
     }
-    
+
     public int checkAndAddLine(TicketLineInfo oLine, boolean flag) {
         // returns index of product in the ticket list or -1 if new product
         if (m_aLines.size() == 0 || !flag) {
@@ -527,7 +527,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public void resetPayments() {
-        payments = new ArrayList<>(); 
+        payments = new ArrayList<>();
     }
 
     public List<TicketTaxInfo> getTaxes() {
@@ -556,7 +556,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public TicketTaxInfo[] getTaxLines() {
-        Map<String, TicketTaxInfo> m = new HashMap<>(); 
+        Map<String, TicketTaxInfo> m = new HashMap<>();
 
         TicketLineInfo oLine;
         for (Iterator<TicketLineInfo> i = m_aLines.iterator(); i.hasNext();) {
@@ -577,7 +577,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
 
         String receiptSize = (AppConfig.getInstance().getProperty("till.receiptsize"));
         String receiptPrefix = (AppConfig.getInstance().getProperty("till.receiptprefix"));
-
 
         if (m_iTicketId > 0) {
             String tmpTicketId = Integer.toString(m_iTicketId);
@@ -672,4 +671,3 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
 }
-

@@ -708,7 +708,14 @@
         </sql>  
         <addDefaultValue tableName="PRODUCTS" columnName="ISCATALOG" defaultValueNumeric="1" />  
     </changeSet> 
-                                                           
+    <!--                    
+        <changeSet author="Chromis POS" id="add new index to products" >                                                    
+            <createIndex tableName="PRODUCTS"
+                               indexName="PRODUCTS_CATEGORY_INX">                           
+                <column name="CATEGORY" type="varchar(255)"/>
+            </createIndex>                                                                                                                                                                                                                               
+        </changeSet>                                                                                                                                                                   
+    -->                                                                                                                                                                                                                                                    
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -840,7 +847,30 @@
                                  baseTableName="PRODUCTS"
                                  referencedTableName="PROMOTIONS"/>
       
-    </changeSet>            
+    </changeSet>     
+      
+    <changeSet author="Chromis POS" id="Add Allproducts column if it does not exist" >    
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="ALLPRODUCTS" tableName="PRODUCTS"/>
+        </preConditions> 
+        
+        <addColumn tableName="PRODUCTS">
+            <column name="ALLPRODUCTS" type="${boolean.type}"   
+                    defaultValueBoolean="false"/>  
+        </addColumn>        
+    </changeSet>     
+    
+    
+    <changeSet author="Chromis POS" id="Remove change timestamp when updating" dbms="mysql"> 
+        
+            
+        <sql>ALTER TABLE SHIFT_BREAKS CHANGE STARTTIME STARTTIME TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
+        <sql>ALTER TABLE CLOSEDCASH CHANGE DATESTART DATESTART TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
+        <sql>ALTER TABLE SHIFTS CHANGE STARTSHIFT STARTSHIFT TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
+        <sql>ALTER TABLE LEAVES CHANGE STARTDATE STARTDATE TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql> 
+    </changeSet> 
+    
+    
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1043,7 +1073,7 @@
     </changeSet> 
       
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
-             <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
+        <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet>                                                             
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
@@ -1124,8 +1154,7 @@
     <changeSet author="Chromis POS" id="Drop PRODUCTS_CAT table" >    
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="PRODUCTS_CAT"/>
-        </preConditions> 
-                       
+        </preConditions>                        
         <dropTable tableName="PRODUCTS_CAT"/>
     </changeSet> 
     <!-- End of Drop Tables section -->    
@@ -1135,9 +1164,9 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to v0.53.4 beta">    
+    <changeSet author="Chromis POS" id="Update to v0.53.41 beta">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.4 - beta only version"/>          
+            <column name="VERSION" value="0.53.41 - beta only version"/>          
         </update>               
     </changeSet> 
     <!-- ***************************************************************************************** -->      

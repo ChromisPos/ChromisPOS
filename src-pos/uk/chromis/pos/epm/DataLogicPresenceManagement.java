@@ -129,7 +129,7 @@ public class DataLogicPresenceManagement extends BeanFactoryDataSingle {
                 , new SerializerWriteBasic(new Datas[] {Datas.STRING, Datas.TIMESTAMP, Datas.STRING}));
 
         m_checkout = new StaticSentence(s
-                , "UPDATE SHIFTS SET ENDSHIFT = ?, STARTSHIFT = STARTSHIFT WHERE ENDSHIFT IS NULL AND PPLID = ?"
+                , "UPDATE SHIFTS SET ENDSHIFT = ? WHERE ENDSHIFT IS NULL AND PPLID = ?"
                 ,new SerializerWriteBasic(new Datas[] {Datas.TIMESTAMP, Datas.STRING}));
 
         m_checkdate = new StaticSentence(s

@@ -24,6 +24,7 @@ import javax.swing.plaf.FontUIResource;
 import uk.chromis.pos.payment.PaymentInfo;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
+import uk.chromis.pos.forms.AppConfig;
 
 boolean isCash = false;
 String change = "";
@@ -51,9 +52,14 @@ if(isCash) {
     new Thread(new Runnable() {
          void run() {
             dialog.show();
-        } 
+                    try {
+                        m_TTP.printTicket(dlSystem.getResourceAsXML("Display.Message"));
+                    } catch (TicketPrinterException ex) {
+                        m_App.getDeviceTicket().getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
+                    }
+       } 
     }).start();
 }
 
-// Return to default settings
-UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(),originalFont.getStyle(),originalFont.getSize())));
+
+System.out.println(AppConfig.getInstance().getBoolean("till.marineoption"));

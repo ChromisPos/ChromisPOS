@@ -235,7 +235,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.STRING,
             Datas.STRING}));
 
-        m_productname = new StaticSentence(s, "SELECT NAME FROM PRODUCTS WHERE ID = ?",
+        m_productname = new StaticSentence(s, "SELECT NAME FROM PRODUCTS WHERE ID = ? LIMIT 1",
                 SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
 
     }
@@ -410,7 +410,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM PRODUCTS P "
-                + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " AND P.CATEGORY = ? "
+                + "WHERE (P.ISCATALOG = " + s.DB.TRUE() + " AND P.CATEGORY = ?) OR (P.ALWAYSAVAILABLE = " + s.DB.TRUE() + ") "
                 + "ORDER BY P.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
     }
 
@@ -935,7 +935,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         }
         return ticket;
     }
-
+    
     /**
      *
      * @param ticket

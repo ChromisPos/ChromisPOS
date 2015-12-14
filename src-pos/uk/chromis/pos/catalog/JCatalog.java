@@ -69,6 +69,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private java.util.List<CategoryInfo> categories;
 
     private CategoryInfo showingcategory = null;
+    private Long startTime;
 
     private boolean b;
 
@@ -266,6 +267,8 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                     categories = m_dlSales.getSubcategories(catid);
                 }
 
+    //            startTime = System.nanoTime();
+
                 for (CategoryInfo cat : categories) {
 // these the sub categories displayed in the main products Panel    
 
@@ -276,11 +279,13 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                     }
                 }
 
+                /*
                 java.util.List<ProductInfoExt> prods = m_dlSales.getProductCatalogAlways();
                 for (ProductInfoExt prod : prods) {
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
                 }
 
+                 */
 // Add products
                 java.util.List<ProductInfoExt> products = m_dlSales.getProductCatalog(catid);
                 for (ProductInfoExt prod : products) {
@@ -295,6 +300,10 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         } catch (BasicException e) {
             JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.notactive"), e));
         }
+
+        //       Long elapsedTime = System.nanoTime() - startTime;
+        //       double seconds = (double)elapsedTime / 1000000000.0;
+        //       System.out.println("Time take = " + seconds);
     }
 
     private String getProductLabel(ProductInfoExt product) {
