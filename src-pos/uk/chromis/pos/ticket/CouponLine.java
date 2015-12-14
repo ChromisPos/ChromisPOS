@@ -68,7 +68,7 @@ class CouponLine implements Comparable<CouponLine>, SerializableWrite, Serializa
 
         if( c==0 ) {
             // Same id so compare line numbers
-            c = o.m_LineNumber - m_LineNumber;
+            c = m_LineNumber - o.m_LineNumber;
         }
         return c;
     }        
