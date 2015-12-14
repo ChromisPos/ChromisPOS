@@ -20,8 +20,8 @@
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
-report.setTitleKey("Menu.Closing2");
-report.setReport("/uk/chromis/reports/closedpos_1");
+report.setTitleKey("Menu.Closing");
+report.setReport("/uk/chromis/reports/closedpos");
 report.setResourceBundle("uk/chromis/reports/closedpos_messages");
 
 report.setSentence("SELECT " + 

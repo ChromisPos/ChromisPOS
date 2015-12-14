@@ -128,9 +128,9 @@ public class JRootApp extends JPanel implements AppView {
         public void actionPerformed(ActionEvent evt) {
             m_clock = getLineTimer();
             m_date = getLineDate();
-            m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
-            //  m_jLblTitle.setText("Chromis POS - v0.53.4 Beta ONLY VERSION");
-            m_jLblTitle.repaint();
+            //     m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
+            m_jLblTitle.setText("Chromis POS - v0.53.4 Beta ONLY VERSION");
+            //   m_jLblTitle.repaint();
             jLabel2.setText("  " + m_date + "  " + m_clock);
         }
     }
@@ -405,8 +405,7 @@ public class JRootApp extends JPanel implements AppView {
             }
         } catch (IOException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        }  
         showLogin();
 
         return true;
@@ -927,7 +926,7 @@ public class JRootApp extends JPanel implements AppView {
             "<br>" +
             "Chromis POS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.<br>" +
             "<br>" +
-            "You should have received a copy of the GNU General Public License along with uniCenta oPOS.  If not, see http://www.gnu.org/licenses/<br>" +
+            "You should have received a copy of the GNU General Public License along with Chromis POS.  If not, see http://www.gnu.org/licenses/<br>" +
             "</center>");
         jLabel1.setAlignmentX(0.5F);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

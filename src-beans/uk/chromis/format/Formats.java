@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.format;
 
 import java.text.DateFormat;
@@ -29,10 +28,10 @@ import uk.chromis.basic.BasicException;
 
 /**
  *
- *   
+ *
  */
 public abstract class Formats {
-    
+
     /**
      *
      */
@@ -81,6 +80,11 @@ public abstract class Formats {
     /**
      *
      */
+    public final static Formats TIMEDIFFERENCE = new FormatsTIMEDIFFERENCE();
+
+    /**
+     *
+     */
     public final static Formats TIME = new FormatsTIME();
 
     /**
@@ -92,23 +96,28 @@ public abstract class Formats {
      *
      */
     public final static Formats HOURMIN = new FormatsHOURMIN();
-/** Added; Thanks  TSirwani 3 Mar 11 */
+    /**
+     * Added; Thanks TSirwani 3 Mar 11
+     */
     public final static Formats SIMPLEDATE = new FormatsSIMPLEDATE();
     private static NumberFormat m_integerformat = NumberFormat.getIntegerInstance();
     private static NumberFormat m_doubleformat = NumberFormat.getNumberInstance();
     private static NumberFormat m_currencyformat = NumberFormat.getCurrencyInstance();
     private static NumberFormat m_percentformat = new DecimalFormat("#,##0.##%");
-    
+
     private static DateFormat m_dateformat = DateFormat.getDateInstance();
     private static DateFormat m_timeformat = DateFormat.getTimeInstance();
     private static DateFormat m_datetimeformat = DateFormat.getDateTimeInstance();
-   
+
     private static final DateFormat m_hourminformat = new SimpleDateFormat("H:mm:ss");
     private static final DateFormat m_simpledate = new SimpleDateFormat("dd-MM-yyyy");
-    /** Creates a new instance of Formats */
+
+    /**
+     * Creates a new instance of Formats
+     */
     protected Formats() {
     }
-    
+
     /**
      *
      * @return
@@ -117,7 +126,7 @@ public abstract class Formats {
 
         return m_currencyformat.getMaximumFractionDigits();
     }
-    
+
     /**
      *
      * @param value
@@ -127,10 +136,10 @@ public abstract class Formats {
         if (value == null) {
             return "";
         } else {
-        return formatValueInt(value);
+            return formatValueInt(value);
         }
     }
-    
+
     /**
      *
      * @param value
@@ -147,9 +156,9 @@ public abstract class Formats {
             } catch (ParseException e) {
                 throw new BasicException(e.getMessage(), e);
             }
-        }  
+        }
     }
-    
+
     /**
      *
      * @param value
@@ -194,7 +203,7 @@ public abstract class Formats {
         } else {
             m_currencyformat = new DecimalFormat(pattern);
         }
-    }    
+    }
 
     /**
      *
@@ -219,7 +228,7 @@ public abstract class Formats {
             m_dateformat = new SimpleDateFormat(pattern);
         }
     }
-    
+
     /**
      *
      * @param pattern
@@ -231,7 +240,7 @@ public abstract class Formats {
             m_timeformat = new SimpleDateFormat(pattern);
         }
     }
-    
+
     /**
      *
      * @param pattern
@@ -243,7 +252,7 @@ public abstract class Formats {
             m_datetimeformat = new SimpleDateFormat(pattern);
         }
     }
-    
+
     /**
      *
      * @param value
@@ -265,67 +274,85 @@ public abstract class Formats {
      */
     public abstract int getAlignment();
 
-    private static final class FormatsNULL extends Formats {       
+    private static final class FormatsNULL extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return null;
-        }       
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             return null;
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.LEFT;
         }
     }
-    private static final class FormatsINT extends Formats {       
+
+    private static final class FormatsINT extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return m_integerformat.format(((Number) value).longValue());
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             return m_integerformat.parse(value).intValue();
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.RIGHT;
         }
     }
-    private static final class FormatsSTRING extends Formats {       
+
+    private static final class FormatsSTRING extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return (String) value;
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             return value;
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.LEFT;
         }
-    }    
-    private static final class FormatsDOUBLE extends Formats {       
+    }
+
+    private static final class FormatsDOUBLE extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return m_doubleformat.format(DoubleUtils.fixDecimals((Number) value)); // quickfix for 3838
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             return m_doubleformat.parse(value).doubleValue();
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.RIGHT;
         }
-    }    
-    private static final class FormatsPERCENT extends Formats {       
+    }
+
+    private static final class FormatsPERCENT extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return m_percentformat.format(DoubleUtils.fixDecimals((Number) value)); // quickfix for 3838
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             try {
@@ -335,16 +362,20 @@ public abstract class Formats {
                 return m_doubleformat.parse(value).doubleValue() / 100;
             }
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.RIGHT;
         }
-    }  
-    private static final class FormatsCURRENCY extends Formats {       
+    }
+
+    private static final class FormatsCURRENCY extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return m_currencyformat.format(DoubleUtils.fixDecimals((Number) value)); // quickfix for 3838
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             try {
@@ -354,30 +385,38 @@ public abstract class Formats {
                 return m_doubleformat.parse(value).doubleValue();
             }
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.RIGHT;
         }
-    }  
-    private static final class FormatsBOOLEAN extends Formats {       
+    }
+
+    private static final class FormatsBOOLEAN extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return ((Boolean) value).toString();
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             return Boolean.valueOf(value);
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.CENTER;
         }
-    }    
-    private static final class FormatsTIMESTAMP extends Formats {       
+    }
+
+    private static final class FormatsTIMESTAMP extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return m_datetimeformat.format((Date) value);
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             try {
@@ -387,40 +426,81 @@ public abstract class Formats {
                 return m_dateformat.parse(value);
             }
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.CENTER;
         }
     }
-    private static final class FormatsDATE extends Formats {       
+
+    private static final class FormatsTIMEDIFFERENCE extends Formats {
+
+        @Override
+        protected String formatValueInt(Object value) {
+            Double tmp = Double.parseDouble((String) value);
+            int time = tmp.intValue();
+            DecimalFormat df = new DecimalFormat("00");
+            int hours = (time / 3600);
+            int minutes = (time - (hours * 3600)) / 60;
+            int seconds = (time - (hours * 3600) - (minutes * 60));
+            return df.format(hours).toString() + ":" + df.format(minutes).toString() + ":" + df.format(seconds).toString();
+        }
+
+        @Override
+        protected Object parseValueInt(String value) throws ParseException {
+            Double tmp = Double.parseDouble((String) value);
+            int time = tmp.intValue();
+            DecimalFormat df = new DecimalFormat("00");
+            int hours = (time / 3600);
+            int minutes = (time - (hours * 3600)) / 60;
+            int seconds = (time - (hours * 3600) - (minutes * 60));
+            return df.format(hours).toString() + ":" + df.format(minutes).toString() + ":" + df.format(seconds).toString();
+        }
+
+        @Override
+        public int getAlignment() {
+            return javax.swing.SwingConstants.CENTER;
+        }
+    }
+
+    private static final class FormatsDATE extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return m_dateformat.format((Date) value);
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             return m_dateformat.parse(value);
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.CENTER;
         }
-    }  
-    private static final class FormatsTIME extends Formats {       
+    }
+
+    private static final class FormatsTIME extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             return m_timeformat.format((Date) value);
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             return m_timeformat.parse(value);
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.CENTER;
         }
-    }    
-    private static final class FormatsBYTEA extends Formats {       
+    }
+
+    private static final class FormatsBYTEA extends Formats {
+
         @Override
         protected String formatValueInt(Object value) {
             try {
@@ -428,61 +508,69 @@ public abstract class Formats {
             } catch (java.io.UnsupportedEncodingException eu) {
                 return "";
             }
-        }   
+        }
+
         @Override
         protected Object parseValueInt(String value) throws ParseException {
             try {
-               return value.getBytes("UTF-8");
+                return value.getBytes("UTF-8");
             } catch (java.io.UnsupportedEncodingException eu) {
-               return new byte[0];
+                return new byte[0];
             }
         }
+
         @Override
         public int getAlignment() {
             return javax.swing.SwingConstants.LEADING;
         }
-    }     
-		     private static final class FormatsHOURMIN extends Formats {
-                         @Override
-	protected String formatValueInt(Object value) {
-	return m_hourminformat.format(value);
-}
-                         @Override
-	protected Date parseValueInt(String value) throws ParseException {
-	 return m_hourminformat.parse(value);
-	 }
-                         @Override
-                         public int getAlignment() {
+    }
 
-             return javax.swing.SwingConstants.CENTER;
+    private static final class FormatsHOURMIN extends Formats {
 
-         }
+        @Override
+        protected String formatValueInt(Object value) {
+            return m_hourminformat.format(value);
+        }
 
-     }
+        @Override
+        protected Date parseValueInt(String value) throws ParseException {
+            return m_hourminformat.parse(value);
+        }
 
-/** Added; Thanks  TSirwani 3 Mar 11 */
-         private static final class FormatsSIMPLEDATE extends Formats {
+        @Override
+        public int getAlignment() {
 
-             @Override
-         protected String formatValueInt(Object value) {
+            return javax.swing.SwingConstants.CENTER;
 
-             return m_simpledate.format(value);
+        }
 
- }
+    }
 
-             @Override
-         protected Date parseValueInt(String value) throws ParseException {
+    /**
+     * Added; Thanks TSirwani 3 Mar 11
+     */
+    private static final class FormatsSIMPLEDATE extends Formats {
 
-             return m_simpledate.parse(value);
+        @Override
+        protected String formatValueInt(Object value) {
 
-         }
+            return m_simpledate.format(value);
 
-             @Override
-         public int getAlignment() {
+        }
 
-             return javax.swing.SwingConstants.CENTER;
+        @Override
+        protected Date parseValueInt(String value) throws ParseException {
 
-         }
+            return m_simpledate.parse(value);
 
-     }
+        }
+
+        @Override
+        public int getAlignment() {
+
+            return javax.swing.SwingConstants.CENTER;
+
+        }
+
+    }
 }

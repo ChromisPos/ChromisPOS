@@ -304,7 +304,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            System.out.println("In logoff action");
             switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
                 case "restaurant":
                     if (!autoLogoffToTables && autoLogoffEnabled) {
@@ -420,7 +419,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         switch (AppConfig.getInstance().getProperty("machine.ticketsbag")) {
             case "restaurant":
                 if (autoLogoffEnabled && autoLogoffInactivity) {
-                    System.out.println("setActive ticket");
                     if (!AutoLogoff.getInstance().isTimerRunning()) {
                         AutoLogoff.getInstance().activateTimer();
                     }

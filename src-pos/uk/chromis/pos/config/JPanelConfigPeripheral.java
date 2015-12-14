@@ -690,7 +690,6 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             case "screen":
             case "window":
                 AppConfig.getInstance().setProperty("machine.display", sMachineDisplay);
-                System.out.println(jCustomerScreen.isSelected());
                 AppConfig.getInstance().setBoolean("machine.customerdisplay", jCustomerScreen.isSelected());
                 break;
             default:
