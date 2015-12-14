@@ -163,7 +163,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             // Ignore error - may be editing a ticket saved pre-coupon support  
             m_CouponLines= new CouponSet();  
        }  
-
         payments = new ArrayList<>();
         taxes = null;
 

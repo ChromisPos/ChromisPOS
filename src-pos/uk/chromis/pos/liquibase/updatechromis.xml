@@ -996,6 +996,19 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Display.Message.xml"/>
         </insert>
+    </changeSet> 
+    
+    <changeSet author="Chromis POS" id="Add advanncedisplay.ticketline scripts to resources">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'Ticket.LineDisplay'</sqlCheck>
+        </preConditions> 
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="71"/>
+            <column name="NAME" value="Ticket.LineDisplay"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Ticket.LineDisplay.xml"/>
+        </insert>
     </changeSet>                                      
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
