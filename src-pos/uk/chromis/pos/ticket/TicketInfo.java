@@ -157,7 +157,12 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
         m_aLines = new ArrayList<>();
-        m_CouponLines = (CouponSet) dr.getObject(10);
+        try {  
+            m_CouponLines = (CouponSet) dr.getObject(10);  
+        } catch (BasicException e) {  
+            // Ignore error - may be editing a ticket saved pre-coupon support  
+            m_CouponLines= new CouponSet();  
+       }  
 
         payments = new ArrayList<>();
         taxes = null;
