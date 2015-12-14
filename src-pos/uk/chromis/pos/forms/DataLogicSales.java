@@ -402,12 +402,21 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @return
      * @throws BasicException
      */
-    public List<ProductInfoExt> getProductCatalog(String category) throws BasicException {
+    public List<ProductInfoExt> getProductCatalog(String category, Boolean bWithAlwaysAvailable) throws BasicException {
+        String wherealways = "";
+        String orderalways = "";
+        if( bWithAlwaysAvailable ) {
+            wherealways = " OR P.ALWAYSAVAILABLE = " + s.DB.TRUE() + " ";
+            orderalways = "P.ALWAYSAVAILABLE DESC, ";
+        }
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList( )
                 + "FROM PRODUCTS P "
-                + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " AND P.CATEGORY = ? "
-                + "ORDER BY P.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
+                + "WHERE (P.ISCATALOG = " + s.DB.TRUE() + " AND P.CATEGORY = ?) "
+                + wherealways
+                + "ORDER BY "
+                + orderalways 
+                +"P.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
     }
 
     /**

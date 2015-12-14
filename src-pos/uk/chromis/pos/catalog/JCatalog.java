@@ -275,14 +275,14 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                         jcurrTab.addButton(new ImageIcon(tnbsubcat.getThumbNailText(cat.getImage(), "")), new SelectedCategory(cat), cat.getTextTip(), "");
                     }
                 }
-
+/*
                 java.util.List<ProductInfoExt> prods = m_dlSales.getProductCatalogAlways();
                 for (ProductInfoExt prod : prods) {
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
                 }
-
+*/
 // Add products
-                java.util.List<ProductInfoExt> products = m_dlSales.getProductCatalog(catid);
+                java.util.List<ProductInfoExt> products = m_dlSales.getProductCatalog(catid, true);
                 for (ProductInfoExt prod : products) {
 // These are the products selection panel                   
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
