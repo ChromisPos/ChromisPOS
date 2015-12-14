@@ -1977,8 +1977,8 @@
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="STARTSHIFT" type="timestamp"/>
-            <constraints nullable="false">
+            <column name="STARTSHIFT" type="timestamp">
+                <constraints nullable="false"/>
             </column> 
             <column name="ENDSHIFT" type="timestamp"/>
             <column name="PPLID" type="varchar(255)"/>

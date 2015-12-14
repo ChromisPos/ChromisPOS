@@ -15,9 +15,8 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-//		added by g.irura @ 27/03/2010. 
-// 		CALCULATES PROFIT FOR EACH ITEM THAT IS SOLD AS WELL AS QUANTITY OF ITEMS OCCURRING IN THE PARTICULAR SALE
-//		IF A PRICE ADJUSTMENT OCCURS, IT IS REFLECTED IN THE TRAIL OF RECEIPTS ON DATES. THE REPORT ALSO SHOWS THE TOTAL PROFITS MADE ON PRODUCTS/SERVICES SOLD
+//
+//    MySQL version 
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
@@ -25,8 +24,6 @@ report.setTitleKey("Menu.SalesProfit");
 report.setReport("/uk/chromis/reports/productsalesprofit");
 report.setResourceBundle("uk/chromis/reports/productsalesprofit_messages");
 
-
-  
 
 report.setSentence("SELECT PRODUCTS.REFERENCE, " +
        "PRODUCTS.NAME, " +
@@ -49,6 +46,7 @@ report.setSentence("SELECT PRODUCTS.REFERENCE, " +
     "WHERE ?(QBF_FILTER) " +
     "GROUP BY TICKETLINES.PRODUCT " +
     "ORDER BY PRODUCTS.REFERENCE ASC");
+
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
