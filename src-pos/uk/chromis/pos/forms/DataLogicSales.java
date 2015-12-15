@@ -235,7 +235,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.STRING,
             Datas.STRING}));
 
-        m_productname = new StaticSentence(s, "SELECT NAME FROM PRODUCTS WHERE ID = ? LIMIT 1",
+        m_productname = new StaticSentence(s, "SELECT NAME FROM PRODUCTS WHERE ID = ? ",
                 SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
 
     }
@@ -1569,3 +1569,4 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         }
     }
 }
+

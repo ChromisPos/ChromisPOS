@@ -267,8 +267,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                     categories = m_dlSales.getSubcategories(catid);
                 }
 
-    //            startTime = System.nanoTime();
-
+                //            startTime = System.nanoTime();
                 for (CategoryInfo cat : categories) {
 // these the sub categories displayed in the main products Panel    
 
@@ -284,7 +283,6 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                 for (ProductInfoExt prod : prods) {
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
                 }
-
                  */
 // Add products
                 java.util.List<ProductInfoExt> products = m_dlSales.getProductCatalog(catid);

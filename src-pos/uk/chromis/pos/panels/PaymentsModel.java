@@ -1032,7 +1032,6 @@ public class PaymentsModel {
          * @return
          */
         public String printReason() {
-            //return s_PaymentReason;
             return StringUtils.encodeXML(s_PaymentReason);
         }
 

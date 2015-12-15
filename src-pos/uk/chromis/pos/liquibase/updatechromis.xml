@@ -996,19 +996,6 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Display.Message.xml"/>
         </insert>
-    </changeSet> 
-    
-    <changeSet author="Chromis POS" id="Add advanncedisplay.ticketline scripts to resources">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'Ticket.LineDisplay'</sqlCheck>
-        </preConditions> 
-        
-        <insert tableName="RESOURCES">
-            <column name="ID" value="71"/>
-            <column name="NAME" value="Ticket.LineDisplay"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Ticket.LineDisplay.xml"/>
-        </insert>
     </changeSet>                                      
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
@@ -1016,6 +1003,26 @@
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->              
     <!-- Add any new dbpermission changesets to this section -->       
+     <changeSet author="Chromis POS" id="Add Pack Products permissions"> 
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
+        </preConditions>
+              
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname117"/>
+            <column name="DESCRIPTION" value="##label.description117"/>
+        </insert>
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname118"/>
+            <column name="DESCRIPTION" value="##label.description118"/>
+        </insert>		         
+    </changeSet>   
+    
     <changeSet author="Chromis POS" id="Add StockChanges to permissions">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description119'</sqlCheck>
@@ -1048,27 +1055,7 @@
             <column name="DESCRIPTION" value="##label.description121"/>
         </insert>
     </changeSet>
-    
-    <changeSet author="Chromis POS" id="Add Pack Products permissions"> 
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
-        </preConditions>
-              
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname117"/>
-            <column name="DESCRIPTION" value="##label.description117"/>
-        </insert>
-        
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname118"/>
-            <column name="DESCRIPTION" value="##label.description118"/>
-        </insert>		         
-    </changeSet> 
-  
+     
     <changeSet author="Chromis POS" id="Add Promotions permissions">                                                                  
         <insert tableName="DBPERMISSIONS">		
             <column name="CLASSNAME" value="uk.chromis.pos.promotion.PromotionPanel"/>
@@ -1177,7 +1164,7 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to v0.53.41 beta">    
+    <changeSet author="Chromis POS" id="Update to 0.53.41 - beta only version">    
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.53.41 - beta only version"/>          
         </update>               

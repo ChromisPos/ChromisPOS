@@ -116,4 +116,3 @@ public class CouponSet implements SerializableWrite, SerializableRead, Serializa
         lines = (Set<CouponLine>) dr.getObject(1);
     }
 }
-

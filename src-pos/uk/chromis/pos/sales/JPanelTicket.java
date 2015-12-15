@@ -16,6 +16,8 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
+
 package uk.chromis.pos.sales;
 
 import bsh.EvalError;
@@ -238,7 +240,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && (app.getDeviceTicket().getDeviceDisplay() instanceof DeviceDisplayAdvance)) {
                 DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance) m_App.getDeviceTicket().getDeviceDisplay();
                 if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
-                    m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.LineDisplay"));
+                    m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.Line"));
                    advDisplay.setTicketLines(m_ticketlines2);
                 }
                 m_ticketlines.addListSelectionListener(new ListSelectionListener() {
@@ -743,7 +745,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private ProductInfoExt getInputProduct() {
         ProductInfoExt oProduct = new ProductInfoExt();
-
         try {
             oProduct.setName(dlSales.getProductNameByCode("xxx999_999xxx_x9x9x9"));
         } catch (BasicException ex) {
@@ -903,7 +904,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                  * ******************************************************************************
                  */
                 if (sCode.startsWith("05V")) {
-// £5.00 voucher                           
+// Â£5.00 voucher                           
                     try {
                         if (dlSales.getVoucher(sCode)) {
                             stateToZero();
@@ -932,7 +933,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else if (sCode.startsWith("10V")) {
-// £10.00 voucher   
+// Â£10.00 voucher   
                     try {
                         if (dlSales.getVoucher(sCode)) {
                             stateToZero();
@@ -961,7 +962,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else if (sCode.startsWith("20V")) {
-// £20.00 voucher     
+// Â£20.00 voucher     
                     try {
                         if (dlSales.getVoucher(sCode)) {
                             stateToZero();
@@ -2758,3 +2759,4 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     // End of variables declaration//GEN-END:variables
 
 }
+

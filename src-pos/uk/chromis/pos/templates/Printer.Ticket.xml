@@ -173,6 +173,12 @@
 #end
 
 
+#foreach ($couponline in $ticket.getCouponLines())
+	<line>
+            <text align ="left" length="42">${couponline}</text>
+        </line>
+#end
+
 	<line></line>
 	<line><text align="center" length="42">Thank You</text></line>
 	<line><text align="center" length="42">Please Call Again</text></line>

@@ -30,7 +30,9 @@ import uk.chromis.data.loader.SerializableWrite;
  *
  * @author John Barrett
  */
+
 public class CouponLine implements Comparable<CouponLine>, SerializableWrite, SerializableRead, Serializable{
+
     protected String m_Id;
     protected int m_LineNumber;
     protected String m_LineText;

@@ -112,13 +112,12 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
 
             attributes.setProperty("product.discounted", product.getDiscounted() == null ? "no" : product.getDiscounted());
             attributes.setProperty("product.candiscount", product.getCanDiscount() ? "true" : "false");
-            
+
             attributes.setProperty("product.ispack", product.getIsPack() ? "true" : "false");
 
             if (product.getPackProduct() != null) {
                 attributes.setProperty("product.packproduct", product.getPackProduct());
             }
-          
             if( product.getPromotionID() != null ) {
                 attributes.setProperty("product.promotionid", product.getPromotionID() );
             }
