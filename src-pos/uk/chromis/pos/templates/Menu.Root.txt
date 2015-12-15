@@ -114,7 +114,6 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.UserSells", "/uk/chromis/reports/usersales.bs");
 
 // EPM
-//** Reporting only tested with MySQL.  Using with Derby (Default) DB will result in errors
     submenu = group.addSubmenu("/uk/chromis/images/users.png", "Menu.PresenceManagement", "uk.chromis.pos.forms.MenuEmployees");
     submenu.addTitle("Menu.PresenceManagement");
         submenu.addPanel("/uk/chromis/images/coffee.png", "Menu.Breaks", "uk.chromis.pos.epm.BreaksPanel");

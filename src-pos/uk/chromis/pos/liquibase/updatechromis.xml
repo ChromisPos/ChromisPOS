@@ -996,14 +996,22 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Display.Message.xml"/>
         </insert>
-    </changeSet>                                      
+    </changeSet>   
+    
+    <changeSet author="Chromis POS" id="Update menu.root for promotions engine">
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
+            <where>NAME='Menu.Root'</where>      
+        </update>         
+    </changeSet>
+                                                                          
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->              
     <!-- Add any new dbpermission changesets to this section -->       
-     <changeSet author="Chromis POS" id="Add Pack Products permissions"> 
+    <changeSet author="Chromis POS" id="Add Pack Products permissions"> 
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
         </preConditions>
@@ -1164,9 +1172,9 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to 0.53.41 - beta only version">    
+    <changeSet author="Chromis POS" id="Update to 0.53.42 - beta only version">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.41 - beta only version"/>          
+            <column name="VERSION" value="0.53.42 - beta only version"/>          
         </update>               
     </changeSet> 
     <!-- ***************************************************************************************** -->      
