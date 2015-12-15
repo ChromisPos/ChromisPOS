@@ -1018,7 +1018,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     stateToZero();
 // lets look at variable price barcodes thhat conform to GS1 standard
 // For more details see Chromis docs
-                } else if (((sCode.length() == 13) && (sCode.startsWith("2"))) || ((sCode.length() == 12) && (sCode.startsWith("02")))) {
+                } else if (((sCode.length() == 13) && (sCode.startsWith("2"))) || ((sCode.length() == 12) && (sCode.startsWith("2")))) {
 // we now have a variable barcode being passed   
 // get the variable type   
                     ProductInfoExt oProduct = null;
@@ -1075,8 +1075,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                     break;
                             }
                         } else if (sCode.length() == 12) {
-                            switch (sVariableTypePrefix) {
-                                case "02":
+                            switch (sCode.substring(0, 1)) {
+                                case "2":
                                     sVariableNum = sCode.substring(6, 11);
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                     break;
@@ -1417,10 +1417,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             // Save the receipt and assign a receipt number
                             //    if (!paymentdialog.isPrintSelected()) {
                             //        ticket.setTicketType(TicketType.INVOICE);
-                            //    }
-
-                            executeEvent(ticket, ticketext, "ticket.save");
-
+                            //    
+                        
                             try {
                                 dlSales.saveTicket(ticket, m_App.getInventoryLocation());
 
