@@ -36,13 +36,13 @@ import uk.chromis.pos.panels.JPanelTable;
  *
  * @author adrianromero
  */
-public class CustomersPanel extends JPanelTable {
+public class CustomersPanelNoTrans extends JPanelTable {
     
     private TableDefinition tcustomers;
-    private CustomersView jeditor;
+    private CustomersViewNoTrans jeditor;
     
     /** Creates a new instance of CustomersPanel */
-    public CustomersPanel() {    
+    public CustomersPanelNoTrans() {    
         CustomerInfoGlobal.getInstance().setEditableData(bd);
     }
     
@@ -53,7 +53,7 @@ public class CustomersPanel extends JPanelTable {
     protected void init() {        
         DataLogicCustomers dlCustomers  = (DataLogicCustomers) app.getBean("uk.chromis.pos.customers.DataLogicCustomers");
         tcustomers = dlCustomers.getTableCustomers();
-        jeditor = new CustomersView(app, dirty);    
+        jeditor = new CustomersViewNoTrans(app, dirty);    
         AppLocal.LIST_BY_RIGHTS="";                
     }
     

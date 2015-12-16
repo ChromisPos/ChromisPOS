@@ -16,8 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
-
 package uk.chromis.pos.sales;
 
 import bsh.EvalError;
@@ -241,7 +239,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance) m_App.getDeviceTicket().getDeviceDisplay();
                 if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
                     m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.Line"));
-                   advDisplay.setTicketLines(m_ticketlines2);
+                    advDisplay.setTicketLines(m_ticketlines2);
                 }
                 m_ticketlines.addListSelectionListener(new ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
@@ -1102,15 +1100,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                            {
-                                if (oProduct.getPriceSell() != 0.0) {
+                             if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
-                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1418,7 +1414,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             //    if (!paymentdialog.isPrintSelected()) {
                             //        ticket.setTicketType(TicketType.INVOICE);
                             //    
-                        
+
                             try {
                                 dlSales.saveTicket(ticket, m_App.getInventoryLocation());
 
@@ -1446,7 +1442,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             }
                             //read resource ticket.close and execute
                             executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
-                            
+
                             printTicket(paymentdialog.isPrintSelected() || warrantyPrint
                                     ? "Printer.Ticket"
                                     : "Printer.Ticket2", ticket, ticketext);
@@ -2592,9 +2588,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         AutoLogoff.getInstance().activateTimer();
 // Show the custmer panel - this does deactivate
-        {
-            m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
-        }
+        m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
         AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -2757,4 +2751,3 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     // End of variables declaration//GEN-END:variables
 
 }
-

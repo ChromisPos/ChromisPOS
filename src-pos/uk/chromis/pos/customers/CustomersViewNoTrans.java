@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.customers;
 
 import java.awt.Component;
@@ -41,61 +42,58 @@ import uk.chromis.pos.util.StringUtils;
 
 /**
  *
- * @author adrianromero
+ * @author  adrianromero
  */
-public final class CustomersView extends javax.swing.JPanel implements EditorRecord {
+public final class CustomersViewNoTrans extends javax.swing.JPanel implements EditorRecord {
 
     private static final long serialVersionUID = 1L;
     private Object m_oId;
-
+    
     private SentenceList m_sentcat;
     private List<CustomerTransaction> customerTransactionList;
     private TransactionTableModel transactionModel;
     private ComboBoxValModel m_CategoryModel;
-
+    
     private DirtyManager m_Dirty;
     private DataLogicSales dlSales;
-
-    /**
-     * Creates new form CustomersView
-     *
+    
+    /** Creates new form CustomersView
      * @param app
-     * @param dirty
-     */
-    public CustomersView(AppView app, DirtyManager dirty) {
+     * @param dirty */
+    public CustomersViewNoTrans(AppView app, DirtyManager dirty) {
         try {
             dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
-
-            initComponents();
-
-            m_sentcat = dlSales.getTaxCustCategoriesList();
-            m_CategoryModel = new ComboBoxValModel();
-
-            m_Dirty = dirty;
-            m_jTaxID.getDocument().addDocumentListener(dirty);
-            m_jSearchkey.getDocument().addDocumentListener(dirty);
-            m_jName.getDocument().addDocumentListener(dirty);
-            m_jCategory.addActionListener(dirty);
-            m_jNotes.getDocument().addDocumentListener(dirty);
-            txtMaxdebt.getDocument().addDocumentListener(dirty);
-            m_jVisible.addActionListener(dirty);
-
-            txtFirstName.getDocument().addDocumentListener(dirty);
-            txtLastName.getDocument().addDocumentListener(dirty);
-            txtEmail.getDocument().addDocumentListener(dirty);
-            txtPhone.getDocument().addDocumentListener(dirty);
-            txtPhone2.getDocument().addDocumentListener(dirty);
-            txtFax.getDocument().addDocumentListener(dirty);
-            m_jImage.addPropertyChangeListener("image", dirty);
-
-            txtAddress.getDocument().addDocumentListener(dirty);
-            txtAddress2.getDocument().addDocumentListener(dirty);
-            //           txtAddress3.getDocument().addDocumentListener(dirty);
-            txtPostal.getDocument().addDocumentListener(dirty);
-            txtCity.getDocument().addDocumentListener(dirty);
-            txtRegion.getDocument().addDocumentListener(dirty);
-            txtCountry.getDocument().addDocumentListener(dirty);
-
+        
+        initComponents();
+        
+        m_sentcat = dlSales.getTaxCustCategoriesList();
+        m_CategoryModel = new ComboBoxValModel();
+        
+        m_Dirty = dirty;        
+        m_jTaxID.getDocument().addDocumentListener(dirty);
+        m_jSearchkey.getDocument().addDocumentListener(dirty);
+        m_jName.getDocument().addDocumentListener(dirty);
+        m_jCategory.addActionListener(dirty);
+        m_jNotes.getDocument().addDocumentListener(dirty);
+        txtMaxdebt.getDocument().addDocumentListener(dirty);
+        m_jVisible.addActionListener(dirty);
+        
+        txtFirstName.getDocument().addDocumentListener(dirty);
+        txtLastName.getDocument().addDocumentListener(dirty);
+        txtEmail.getDocument().addDocumentListener(dirty);
+        txtPhone.getDocument().addDocumentListener(dirty);
+        txtPhone2.getDocument().addDocumentListener(dirty);
+        txtFax.getDocument().addDocumentListener(dirty);
+        m_jImage.addPropertyChangeListener("image",dirty);
+        
+        txtAddress.getDocument().addDocumentListener(dirty);
+        txtAddress2.getDocument().addDocumentListener(dirty);
+ //           txtAddress3.getDocument().addDocumentListener(dirty);
+        txtPostal.getDocument().addDocumentListener(dirty);
+        txtCity.getDocument().addDocumentListener(dirty);
+        txtRegion.getDocument().addDocumentListener(dirty);
+        txtCountry.getDocument().addDocumentListener(dirty);   
+       
             init();
         } catch (Exception ex) {
             Logger.getLogger(CustomersView.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,32 +101,29 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
     }
 
     private void init() {
-        writeValueEOF();
+            writeValueEOF(); 
     }
-
+    
     /**
      * Instantiate object
-     *
      * @throws BasicException
      */
     @SuppressWarnings("unchecked")
     public void activate() throws BasicException {
-
+        
         List a = m_sentcat.list();
         a.add(0, null); // The null item
         m_CategoryModel = new ComboBoxValModel(a);
-        m_jCategory.setModel(m_CategoryModel);
-
-        //customerTransactionList = dlSales.getCustomersTransactionList();
+        m_jCategory.setModel(m_CategoryModel);         
     }
-
+    
     /**
      * Refresh object
      */
     @Override
     public void refresh() {
     }
-
+    
     /**
      * Write EOF
      */
@@ -146,7 +141,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCurdate.setText(null);
         m_jVisible.setSelected(false);
         jcard.setText(null);
-
+        
         txtFirstName.setText(null);
         txtLastName.setText(null);
         txtEmail.setText(null);
@@ -154,7 +149,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtPhone2.setText(null);
         txtFax.setText(null);
         m_jImage.setImage(null);
-
+       
         txtAddress.setText(null);
         txtAddress2.setText(null);
 //       txtAddress3.setText(null);
@@ -162,7 +157,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCity.setText(null);
         txtRegion.setText(null);
         txtCountry.setText(null);
-
+        
         m_jTaxID.setEnabled(false);
         m_jSearchkey.setEnabled(false);
         m_jName.setEnabled(false);
@@ -173,7 +168,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCurdate.setEnabled(false);
         m_jVisible.setEnabled(false);
         jcard.setEnabled(false);
-
+        
         txtFirstName.setEnabled(false);
         txtLastName.setEnabled(false);
         txtEmail.setEnabled(false);
@@ -181,7 +176,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtPhone2.setEnabled(false);
         txtFax.setEnabled(false);
         m_jImage.setEnabled(false);
-
+       
         txtAddress.setEnabled(false);
         txtAddress2.setEnabled(false);
 //        txtAddress3.setEnabled(false);
@@ -189,12 +184,10 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCity.setEnabled(false);
         txtRegion.setEnabled(false);
         txtCountry.setEnabled(false);
-
+        
         jButton2.setEnabled(false);
         jButton3.setEnabled(false);
-
-        jTable1.setEnabled(false);
-        jTable1.setVisible(false);
+        
 
     }
 
@@ -211,10 +204,10 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         m_jNotes.setText(null);
         txtMaxdebt.setText(null);
         txtCurdebt.setText(null);
-        txtCurdate.setText(null);
+        txtCurdate.setText(null);        
         m_jVisible.setSelected(true);
         jcard.setText(null);
-
+        
         txtFirstName.setText(null);
         txtLastName.setText(null);
         txtEmail.setText(null);
@@ -222,7 +215,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtPhone2.setText(null);
         txtFax.setText(null);
         m_jImage.setImage(null);
-
+       
         txtAddress.setText(null);
         txtAddress2.setText(null);
 //        txtAddress3.setText(null);
@@ -230,7 +223,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCity.setText(null);
         txtRegion.setText(null);
         txtCountry.setText(null);
-
+        
         m_jTaxID.setEnabled(true);
         m_jSearchkey.setEnabled(true);
         m_jName.setEnabled(true);
@@ -241,7 +234,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCurdate.setEnabled(true);
         m_jVisible.setEnabled(true);
         jcard.setEnabled(true);
-
+               
         txtFirstName.setEnabled(true);
         txtLastName.setEnabled(true);
         txtEmail.setEnabled(true);
@@ -249,7 +242,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtPhone2.setEnabled(true);
         txtFax.setEnabled(true);
         m_jImage.setEnabled(true);
-
+       
         txtAddress.setEnabled(true);
         txtAddress2.setEnabled(true);
 //        txtAddress3.setEnabled(true);
@@ -257,22 +250,18 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCity.setEnabled(true);
         txtRegion.setEnabled(true);
         txtCountry.setEnabled(true);
-
+        
         jButton2.setEnabled(true);
         jButton3.setEnabled(true);
-
-        jTable1.setEnabled(false);
-        jTable1.setVisible(false);
-
     }
 
     /**
      * Delete from object
-     *
      * @param value
      */
     @Override
     public void writeValueDelete(Object value) {
+
         Object[] customer = (Object[]) value;
         m_oId = customer[0];
         m_jTaxID.setText((String) customer[1]);
@@ -282,27 +271,27 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         m_jVisible.setSelected(((Boolean) customer[5]));
         jcard.setText((String) customer[6]);
         txtMaxdebt.setText(Formats.CURRENCY.formatValue(customer[7]));
-        txtCurdate.setText(Formats.DATE.formatValue(customer[8]));
-        txtCurdebt.setText(Formats.CURRENCY.formatValue(customer[9]));
-
+        txtCurdate.setText(Formats.DATE.formatValue(customer[8]));        
+        txtCurdebt.setText(Formats.CURRENCY.formatValue(customer[9]));    
+        
         txtFirstName.setText(Formats.STRING.formatValue(customer[10]));
         txtLastName.setText(Formats.STRING.formatValue(customer[11]));
         txtEmail.setText(Formats.STRING.formatValue(customer[12]));
         txtPhone.setText(Formats.STRING.formatValue(customer[13]));
         txtPhone2.setText(Formats.STRING.formatValue(customer[14]));
         txtFax.setText(Formats.STRING.formatValue(customer[15]));
-
+       
         txtAddress.setText(Formats.STRING.formatValue(customer[16]));
         txtAddress2.setText(Formats.STRING.formatValue(customer[17]));
         txtPostal.setText(Formats.STRING.formatValue(customer[18]));
         txtCity.setText(Formats.STRING.formatValue(customer[19]));
         txtRegion.setText(Formats.STRING.formatValue(customer[20]));
-        txtCountry.setText(Formats.STRING.formatValue(customer[21]));
-
+        txtCountry.setText(Formats.STRING.formatValue(customer[21]));      
+        
         m_CategoryModel.setSelectedKey(customer[22]);
 // JG 3 Oct 2013 - Customer Image
         m_jImage.setImage((BufferedImage) customer[23]);
-
+        
         m_jTaxID.setEnabled(false);
         m_jSearchkey.setEnabled(false);
         m_jName.setEnabled(false);
@@ -311,8 +300,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCurdebt.setEnabled(false);
         txtCurdate.setEnabled(false);
         m_jVisible.setEnabled(false);
-        jcard.setEnabled(false);
-
+        jcard.setEnabled(false);       
+        
         txtFirstName.setEnabled(false);
         txtLastName.setEnabled(false);
         txtEmail.setEnabled(false);
@@ -320,7 +309,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtPhone2.setEnabled(false);
         txtFax.setEnabled(false);
         m_jImage.setEnabled(true);
-
+       
         txtAddress.setEnabled(false);
         txtAddress2.setEnabled(false);
 //        txtAddress3.setEnabled(false);
@@ -328,22 +317,16 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCity.setEnabled(false);
         txtRegion.setEnabled(false);
         txtCountry.setEnabled(false);
-
+        
         m_jCategory.setEnabled(false);
-
+        
         jButton2.setEnabled(false);
         jButton3.setEnabled(false);
-
-// JG 3 Oct 2013 - for Transaction List table
-        transactionModel = new TransactionTableModel(getTransactionOfName((String) customer[3]));
-        jTable1.setModel(transactionModel);
-        jTable1.setEnabled(false);
-
+             
     }
 
     /**
      * Edit object
-     *
      * @param value
      */
     @Override
@@ -357,28 +340,28 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         m_jVisible.setSelected(((Boolean) customer[5]));
         jcard.setText((String) customer[6]);
         txtMaxdebt.setText(Formats.CURRENCY.formatValue(customer[7]));
-        txtCurdate.setText(Formats.DATE.formatValue(customer[8]));
-        txtCurdebt.setText(Formats.CURRENCY.formatValue(customer[9]));
-
+        txtCurdate.setText(Formats.DATE.formatValue(customer[8]));        
+        txtCurdebt.setText(Formats.CURRENCY.formatValue(customer[9]));    
+        
         txtFirstName.setText(Formats.STRING.formatValue(customer[10]));
         txtLastName.setText(Formats.STRING.formatValue(customer[11]));
         txtEmail.setText(Formats.STRING.formatValue(customer[12]));
         txtPhone.setText(Formats.STRING.formatValue(customer[13]));
         txtPhone2.setText(Formats.STRING.formatValue(customer[14]));
         txtFax.setText(Formats.STRING.formatValue(customer[15]));
-
+       
         txtAddress.setText(Formats.STRING.formatValue(customer[16]));
         txtAddress2.setText(Formats.STRING.formatValue(customer[17]));
         txtPostal.setText(Formats.STRING.formatValue(customer[18]));
         txtCity.setText(Formats.STRING.formatValue(customer[19]));
         txtRegion.setText(Formats.STRING.formatValue(customer[20]));
-        txtCountry.setText(Formats.STRING.formatValue(customer[21]));
-
+        txtCountry.setText(Formats.STRING.formatValue(customer[21]));   
+        
         m_CategoryModel.setSelectedKey(customer[22]);
 
 // JG 3 Oct 2013 - Customer image
         m_jImage.setImage((BufferedImage) customer[23]);
-
+        
         m_jTaxID.setEnabled(true);
         m_jSearchkey.setEnabled(true);
         m_jName.setEnabled(true);
@@ -388,7 +371,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCurdate.setEnabled(true);
         m_jVisible.setEnabled(true);
         jcard.setEnabled(true);
-
+               
         txtFirstName.setEnabled(true);
         txtLastName.setEnabled(true);
         txtEmail.setEnabled(true);
@@ -396,7 +379,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtPhone2.setEnabled(true);
         txtFax.setEnabled(true);
         m_jImage.setEnabled(true);
-
+       
         txtAddress.setEnabled(true);
         txtAddress2.setEnabled(true);
 //        txtAddress3.setEnabled(true);
@@ -404,31 +387,25 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCity.setEnabled(true);
         txtRegion.setEnabled(true);
         txtCountry.setEnabled(true);
-
+        
         m_jCategory.setEnabled(true);
-
+        
         jButton2.setEnabled(true);
         jButton3.setEnabled(true);
 
-        transactionModel = new TransactionTableModel(getTransactionOfName((String) customer[3]));
-        jTable1.setModel(transactionModel);
-        jTable1.setEnabled(true);
-        jTable1.setVisible(true);
-
         txtCurdate.repaint();
-        txtCurdebt.repaint();
+        txtCurdebt.repaint();        
         repaint();
-        refresh();
+        refresh();    
     }
-
+    
     /**
      * Create object
-     *
      * @return
      * @throws BasicException
      */
     @Override
-    public Object createValue() throws BasicException {        
+    public Object createValue() throws BasicException {
         Object[] customer = new Object[25];
         customer[0] = m_oId == null ? UUID.randomUUID().toString() : m_oId;
         customer[1] = m_jTaxID.getText();
@@ -440,50 +417,33 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         customer[7] = Formats.CURRENCY.parseValue(txtMaxdebt.getText(), 0.0);
         customer[8] = Formats.TIMESTAMP.parseValue(txtCurdate.getText()); // not saved
         customer[9] = Formats.CURRENCY.parseValue(txtCurdebt.getText()); // not saved
-
+        
         customer[10] = Formats.STRING.parseValue(txtFirstName.getText());
         customer[11] = Formats.STRING.parseValue(txtLastName.getText());
         customer[12] = Formats.STRING.parseValue(txtEmail.getText());
         customer[13] = Formats.STRING.parseValue(txtPhone.getText());
         customer[14] = Formats.STRING.parseValue(txtPhone2.getText());
         customer[15] = Formats.STRING.parseValue(txtFax.getText());
-
+       
         customer[16] = Formats.STRING.parseValue(txtAddress.getText());
         customer[17] = Formats.STRING.parseValue(txtAddress2.getText());
         customer[18] = Formats.STRING.parseValue(txtPostal.getText());
         customer[19] = Formats.STRING.parseValue(txtCity.getText());
         customer[20] = Formats.STRING.parseValue(txtRegion.getText());
-        customer[21] = Formats.STRING.parseValue(txtCountry.getText());
-
+        customer[21] = Formats.STRING.parseValue(txtCountry.getText()); 
+        
         customer[22] = m_CategoryModel.getSelectedKey();
 // JG 3 Oct 2013 - Customer image
-        customer[23] = m_jImage.getImage();
-
+        customer[23] = m_jImage.getImage();    
+        
         return customer;
     }
-
+    
     @Override
     public Component getComponent() {
         return this;
     }
-
-// JG 3 Oct 2013 - Customer Transaction List
-    private List<CustomerTransaction> getTransactionOfName(String name) {
-        
-        //   List<CustomerTransaction> customerList = new ArrayList<>();
-        try {
-            customerTransactionList = dlSales.getCustomersTransactionList(name);
-        } catch (BasicException ex) {
-            Logger.getLogger(CustomersView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        txtCurdate.repaint();
-        txtCurdebt.repaint();
-        repaint();
-        refresh();
-
-        return customerTransactionList;
-    }
+    
 
     class TransactionTableModel extends AbstractTableModel {
 
@@ -512,7 +472,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
             switch (column) {
 
                 case 0:
-                    return customerTransaction.getTicketId();
+                    return customerTransaction.getTicketId();                    
                 case 1:
                     Date transactionDate = customerTransaction.getTransactionDate();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -523,7 +483,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                 case 3:
                     return customerTransaction.getUnit();
                 case 4:
-                    return Formats.CURRENCY.formatValue(customerTransaction.getTotal()) + "  ";
+                    return Formats.CURRENCY.formatValue(customerTransaction.getTotal())+"  ";
                 default:
                     return "";
 
@@ -534,25 +494,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         public String getColumnName(int col) {
             return columnNames[col];
         }
-
-//                    Double Tamount;
-//                    Double amountT = amount;
-//                    Tamount = amountT + amount;
-//                    amountT = null;
-//System.out.println(Tamount);
-//txtTurnover.setText(Tamount.toString());
-//
-//        public Object GetData(TransactionTableModel jTable1, int row, int column){
-//              txtTurnover.setText(jTable1.GetData(jTable1, row, 4).toString());
-//            Double amountT;
-//            DecimalFormat dfT = new DecimalFormat("#.##"); 
-//            String famountT;            
-//            famountT = dfT.format(amountT);
-//            return jTable1.GetData(jTable1, row, column);              
-//        }
-//        public void SetData(TransactionTableModel jTable1, int row, int column) {
-//              jTable1.GetData(jTable1, row, 4).toString();
-//        }
     }
 
     /**
@@ -609,16 +550,11 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCity = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         txtRegion = new javax.swing.JTextField();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         m_jImage = new uk.chromis.data.gui.JImageEditor();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         m_jNotes = new javax.swing.JTextArea();
-        txtTurnover = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         m_jVisible = new eu.hansolo.custom.SteelCheckBox();
 
@@ -899,50 +835,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.location"), jPanel2); // NOI18N
 
-        jPanel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        jTable1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "TicketID", "Date", "Product", "Quantity", "Total"
-            }
-        ));
-        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jTable1.setOpaque(false);
-        jTable1.setRowHeight(20);
-        jTable1.setShowHorizontalLines(false);
-        jScrollPane2.setViewportView(jTable1);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
-        jTabbedPane1.addTab(bundle.getString("label.Transactions"), jPanel4); // NOI18N
-
         m_jImage.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -962,6 +854,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jTabbedPane1.addTab(bundle.getString("label.photo"), jPanel5); // NOI18N
 
         m_jNotes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -985,14 +878,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         );
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.notes"), jPanel3); // NOI18N
-
-        txtTurnover.setEditable(false);
-        txtTurnover.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtTurnover.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText(AppLocal.getIntString("label.customerTotalSales")); // NOI18N
 
         m_jVisible.setText(" ");
 
@@ -1018,9 +903,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1032,27 +916,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(m_jTaxID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(m_jSearchkey, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtMaxdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCurdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtTurnover, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jcard, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(m_jCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1061,8 +924,28 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)))))
-                .addGap(30, 30, 30))
+                                .addGap(57, 57, 57))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(m_jTaxID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(m_jSearchkey, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtMaxdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtCurdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(95, 95, 95))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1098,13 +981,10 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaxdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtTurnover, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtCurdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1133,7 +1013,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -1157,13 +1036,10 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jcard;
     private javax.swing.JComboBox m_jCategory;
     private uk.chromis.data.gui.JImageEditor m_jImage;
@@ -1187,7 +1063,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
     private javax.swing.JTextField txtPhone2;
     private javax.swing.JTextField txtPostal;
     private javax.swing.JTextField txtRegion;
-    private javax.swing.JTextField txtTurnover;
     // End of variables declaration//GEN-END:variables
 
 }

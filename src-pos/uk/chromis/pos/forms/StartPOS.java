@@ -19,16 +19,20 @@
 package uk.chromis.pos.forms;
 
 import java.io.File;
-import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.apache.commons.io.FileUtils;
+import net.miginfocom.swing.MigLayout;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import uk.chromis.convert.Conversion;
@@ -39,6 +43,8 @@ import uk.chromis.pos.ticket.TicketInfo;
 public class StartPOS {
 
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.StartPOS");
+    private static JLabel label;
+    private static JButton btnConvert;
 
     /**
      * Creates a new instance of StartPOS
@@ -51,8 +57,6 @@ public class StartPOS {
      * @return
      */
     public static boolean registerApp() {
-
-        // vemos si existe alguna instancia        
         InstanceQuery i = null;
         try {
             i = new InstanceQuery();
@@ -63,15 +67,30 @@ public class StartPOS {
         }
     }
 
-    private class OpenApp {
-
-    }
-
     /**
      *
      * @param args
      */
-    public static void main(final String args[]) {              
+    public static void main(final String args[]) {
+
+        String sJavaVersion = System.getProperty("java.version");
+        double dJavaVersion = Double.parseDouble(sJavaVersion.substring(0, sJavaVersion.indexOf('.', sJavaVersion.indexOf('.') + 1)));
+
+        if (dJavaVersion < 1.8) {
+            StartupDialog dialog = new StartupDialog();
+            JFrame frame = new JFrame("");
+            JPanel dialogPanel = new JPanel();
+
+            dialogPanel.add(dialog);
+            JOptionPane.showMessageDialog(frame,
+                    dialogPanel,
+                    "Incorrect Java version ",
+                    JOptionPane.PLAIN_MESSAGE);
+
+            System.exit(1);
+
+        }
+
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
         //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
@@ -96,6 +115,10 @@ public class StartPOS {
         } else {
             startApp(args);
         }
+    }
+
+    private static void startUpDialog() {
+
     }
 
     private static void startApp(final String args[]) {
