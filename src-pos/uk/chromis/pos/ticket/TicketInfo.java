@@ -121,7 +121,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         out.writeObject(attributes);
         out.writeObject(m_aLines);
         out.writeObject(m_CouponLines);
-        out.writeBoolean(m_sharedticket);
+       //out.writeBoolean(m_sharedticket);
     }
 
     @Override
@@ -135,7 +135,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         attributes = (Properties) in.readObject();
         m_aLines = (List<TicketLineInfo>) in.readObject();
         m_CouponLines = (CouponSet) in.readObject();
-        m_sharedticket = in.readBoolean();
+      //  m_sharedticket = in.readBoolean();
         //  m_User = null;
         m_sActiveCash = null;
         payments = new ArrayList<>();
@@ -172,11 +172,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             // Ignore error - may be editing a ticket saved pre-coupon support  
             m_CouponLines = new CouponSet();
         }
-                try{
-        m_sharedticket = dr.getBoolean(11);
-        }catch (BasicException s){
-            m_sharedticket = false;
-        }
+    //    try {
+    //        m_sharedticket = dr.getBoolean(11);
+    //   } catch (BasicException e) {
+     //       m_sharedticket = false;
+    //    }
         payments = new ArrayList<>();
         taxes = null;
         m_sharedticketUser = m_User;
@@ -213,7 +213,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             t.payments.add(p.copyPayment());
         }
         t.oldTicket = oldTicket;
-        t.m_sharedticket = m_sharedticket;
         // taxes are not copied, must be calculated again.
         return t;
     }

@@ -135,7 +135,7 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
             ticket.getName(),
             ticket,
             pickupid,
-            ticket.getUser().getName()
+            ticket.printUser()
         };
         Datas[] datas;
         datas = new Datas[]{
@@ -156,7 +156,6 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
     }
 
     public final void insertSharedTicketUsingPickUpID(final String id, final TicketInfo ticket, int pickupid) throws BasicException {
-
         Object[] values = new Object[]{
             id,
             "Pickup Id: " + getPickupString(pickupid),
@@ -188,7 +187,6 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public final void deleteSharedTicket(final String id) throws BasicException {
-
         new StaticSentence(s, "DELETE FROM SHAREDTICKETS WHERE ID = ?", SerializerWriteString.INSTANCE).exec(id);
     }
 
@@ -236,4 +234,9 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
         }
         return (tmpPickupId);
     }
+    
+    
+    
+    
+    
 }
