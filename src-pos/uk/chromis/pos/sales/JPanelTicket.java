@@ -511,8 +511,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 line.setTaxInfo(taxeslogic.getTaxInfo(line.getProductTaxCategoryID(), m_oTicket.getCustomer()));
             }
 
-            // The ticket name
-            m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
+            // The ticket name            
+            //  m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
+            setTicketName(m_oTicket.getName(m_oTicketExt));
 
             // Limpiamos todas las filas y anadimos las del ticket actual
             m_ticketlines.clearTicketLines();
@@ -538,6 +539,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             });
         }
+    }
+
+    public void setTicketName(String tName) {
+        m_jTicketId.setText(tName);
     }
 
     private void printPartialTotals() {
@@ -801,8 +806,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void incProductByCode(String sCode) {
-        // precondicion: sCode != null
-
 // Modify to allow number x with scanned products. JDL 8.8.2015        
         int count = 1;
         if (sCode.contains("*")) {

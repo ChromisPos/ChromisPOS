@@ -34,6 +34,7 @@ public interface TicketsEditor {
      */
     public void setActiveTicket(TicketInfo oTicket, Object oTicketExt); // el ticket mas informacion extra...
 
+    public void setTicketName(String tName);
     /**
      *
      * @return

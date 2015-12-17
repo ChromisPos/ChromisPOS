@@ -24,6 +24,7 @@ import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.PreparedSentence;
 import uk.chromis.data.loader.SerializerReadBasic;
 import uk.chromis.data.loader.SerializerReadClass;
+import uk.chromis.data.loader.SerializerReadString;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.SerializerWriteString;
 import uk.chromis.data.loader.Session;
@@ -76,19 +77,18 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
      */
     public final List<SharedTicketInfo> getSharedTicketList() throws BasicException {
 
-        return (List<SharedTicketInfo>) new StaticSentence(s 
-                //                , "SELECT ID, NAME, CONTENT PICKUPID FROM SHAREDTICKETS ORDER BY ID"                
+        return (List<SharedTicketInfo>) new StaticSentence(s //                , "SELECT ID, NAME, CONTENT PICKUPID FROM SHAREDTICKETS ORDER BY ID"                
                 , "SELECT ID, NAME, CONTENT, PICKUPID FROM SHAREDTICKETS ORDER BY ID", null, new SerializerReadClass(SharedTicketInfo.class)).list();
     }
 
     /**
-     *  Get shared ticket list for current logged in user only.
+     * Get shared ticket list for current logged in user only.
+     *
      * @return @throws BasicException
      */
     public final List<SharedTicketInfo> getSharedTicketListByUser(String User) throws BasicException {
 
-        return (List<SharedTicketInfo>) new StaticSentence(s 
-                //                , "SELECT ID, NAME, CONTENT PICKUPID FROM SHAREDTICKETS ORDER BY ID"                
+        return (List<SharedTicketInfo>) new StaticSentence(s //                , "SELECT ID, NAME, CONTENT PICKUPID FROM SHAREDTICKETS ORDER BY ID"                
                 , "SELECT ID, NAME, CONTENT, PICKUPID FROM SHAREDTICKETS WHERE NAME LIKE '%" + User + " -%' ", null, new SerializerReadClass(SharedTicketInfo.class)).list();
     }
 
@@ -133,22 +133,24 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
             id,
             ticket.getName(),
             ticket, pickupid,
-            ticket.getUser()
+            ticket.getUser().getName()
         };
         Datas[] datas;
         datas = new Datas[]{
             Datas.STRING,
             Datas.STRING,
             Datas.SERIALIZABLE,
-            Datas.INT
+            Datas.INT,
+            Datas.STRING
         };
-            
+
         new PreparedSentence(s, "INSERT INTO SHAREDTICKETS ("
                 + "ID, "
                 + "NAME, "
                 + "CONTENT, "
-                + "PICKUPID) "
-                + "VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(datas, new int[]{0, 1, 2, 3})).exec(values);
+                + "PICKUPID, "
+                + "APPUSER) "
+                + "VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(datas, new int[]{0, 1, 2, 3, 4})).exec(values);
     }
 
     /**
@@ -176,4 +178,14 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
             return record == null ? 0 : (Integer) record[0];
         }
     }
+
+    public final String getAppUser(String Id) throws BasicException {
+        if (Id == null) {
+            return null;
+        } else {
+            Object[] record = (Object[]) new StaticSentence(s, "SELECT APPUSER FROM SHAREDTICKETS WHERE ID = ? " , SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.STRING})).find(Id);
+            return record == null ? "" : (String) record[0];
+        }
+    }
+
 }

@@ -73,6 +73,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     private final String m_sResponse;
     private String loyaltyCardNumber;
     private Boolean oldTicket;
+    private Boolean m_sharedticket;
+    private UserInfo m_sharedticketUser;
 
     private static String Hostname;
 
@@ -104,6 +106,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_sResponse = null;
         oldTicket = false;
         multiply = 0.0;
+        m_sharedticket = false;
 
     }
 
@@ -114,9 +117,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         out.writeInt(m_iTicketId);
         out.writeObject(m_Customer);
         out.writeObject(m_dDate);
+        out.writeObject(m_User);
         out.writeObject(attributes);
         out.writeObject(m_aLines);
         out.writeObject(m_CouponLines);
+        out.writeBoolean(m_sharedticket);
     }
 
     @Override
@@ -126,13 +131,17 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_iTicketId = in.readInt();
         m_Customer = (CustomerInfoExt) in.readObject();
         m_dDate = (Date) in.readObject();
+        m_User = (UserInfo) in.readObject();
         attributes = (Properties) in.readObject();
         m_aLines = (List<TicketLineInfo>) in.readObject();
         m_CouponLines = (CouponSet) in.readObject();
-        m_User = null;
+        m_sharedticket = in.readBoolean();
+        //  m_User = null;
         m_sActiveCash = null;
         payments = new ArrayList<>();
         taxes = null;
+        m_sharedticketUser = m_User;
+
     }
 
     /**
@@ -157,14 +166,16 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
         m_aLines = new ArrayList<>();
-        try {  
-            m_CouponLines = (CouponSet) dr.getObject(10);  
-        } catch (BasicException e) {  
+        try {
+            m_CouponLines = (CouponSet) dr.getObject(10);
+        } catch (BasicException e) {
             // Ignore error - may be editing a ticket saved pre-coupon support  
-            m_CouponLines= new CouponSet();  
-       }  
+            m_CouponLines = new CouponSet();
+        }
+        m_sharedticket = dr.getBoolean(11);
         payments = new ArrayList<>();
         taxes = null;
+        m_sharedticketUser = m_User;
 
     }
 
@@ -198,6 +209,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             t.payments.add(p.copyPayment());
         }
         t.oldTicket = oldTicket;
+        t.m_sharedticket = m_sharedticket;
         // taxes are not copied, must be calculated again.
         return t;
     }
@@ -328,6 +340,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
 
     public UserInfo getUser() {
         return m_User;
+    }
+
+    public UserInfo getSharedTicketUser() {
+        return m_sharedticketUser;
     }
 
     public void setUser(UserInfo value) {
@@ -666,6 +682,22 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return (oldTicket);
     }
 
+    public void setSharedTicket(Boolean shared) {
+        m_sharedticket = shared;
+    }
+
+    public boolean isSharedTicket() {
+        return (m_sharedticket);
+    }
+
+    public void setdDate(java.util.Date m_date) {
+        m_dDate = m_date;
+    }
+
+    public java.util.Date getdDate() {
+        return m_dDate;
+    }
+
     /**
      *
      * @param otState
@@ -675,4 +707,3 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
 }
-

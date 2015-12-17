@@ -313,7 +313,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         if (m_PlaceCurrent != null) {
 
             try {
-                dlReceipts.updateSharedTicket(m_PlaceCurrent.getId(), m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
+                dlReceipts.updateSharedTicket(m_PlaceCurrent.getId(), m_panelticket.getActiveTicket(),m_panelticket.getActiveTicket().getPickupId());
             } catch (BasicException e) {
                 new MessageInf(e).show(this);
             }
@@ -366,7 +366,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         if (m_PlaceCurrent != null) {
 
             try {
-                dlReceipts.updateSharedTicket(m_PlaceCurrent.getId(), m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
+                dlReceipts.updateSharedTicket(m_PlaceCurrent.getId(), m_panelticket.getActiveTicket(),m_panelticket.getActiveTicket().getPickupId());
             } catch (BasicException e) {
                 new MessageInf(e).show(this); // maybe other guy deleted it
             }

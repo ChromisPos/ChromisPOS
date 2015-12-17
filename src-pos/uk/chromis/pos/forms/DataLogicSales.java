@@ -1503,7 +1503,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public final String getProductNameByCode(String sCode) throws BasicException {
         return (String) m_productname.find(sCode);
     }
-
+    
     public final void sellVoucher(Object[] voucher) throws BasicException {
         m_sellvoucher.exec(voucher);
     }

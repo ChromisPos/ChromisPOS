@@ -19,6 +19,7 @@
 package uk.chromis.pos.sales.shared;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.swing.JComponent;
@@ -36,6 +37,7 @@ import uk.chromis.pos.sales.JTicketsBag;
 import uk.chromis.pos.sales.SharedTicketInfo;
 import uk.chromis.pos.sales.TicketsEditor;
 import uk.chromis.pos.ticket.TicketInfo;
+import uk.chromis.pos.ticket.UserInfo;
 import uk.chromis.pos.util.AutoLogoff;
 
 /**
@@ -126,6 +128,7 @@ public class JTicketsBagShared extends JTicketsBag {
     private void saveCurrentTicket() {
         if (m_sCurrentTicket != null) {
             try {
+                m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
                 dlReceipts.insertSharedTicket(m_sCurrentTicket, m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
                 TicketInfo l = dlReceipts.getSharedTicket(m_sCurrentTicket);
                 if (l.getLinesCount() == 0) {
@@ -145,12 +148,17 @@ public class JTicketsBagShared extends JTicketsBag {
             m_jListTickets.setText("");
             throw new BasicException(AppLocal.getIntString("message.noticket"));
         } else {
-            dlReceipts.getPickupId(id);
+            Date tmpDate = ticket.getdDate();
+            UserInfo tmpUser = ticket.getSharedTicketUser();
             Integer pickUp = dlReceipts.getPickupId(id);
+            String tName = ticket.getName();
             dlReceipts.deleteSharedTicket(id);
             m_sCurrentTicket = id;
             m_panelticket.setActiveTicket(ticket, null);
             ticket.setPickupId(pickUp);
+            ticket.setdDate(tmpDate);
+            ticket.setUser(tmpUser);
+            m_panelticket.setTicketName(tName);
         }
         checkLayaways();
         // END TRANSACTION                 
@@ -324,7 +332,10 @@ public class JTicketsBagShared extends JTicketsBag {
 
                     if (id != null) {
                         saveCurrentTicket();
+                        m_sCurrentTicket = id;
                         setActiveTicket(id);
+                        // m_jTicketId.setText()
+
                     }
                 } catch (BasicException e) {
                     new MessageInf(e).show(JTicketsBagShared.this);
