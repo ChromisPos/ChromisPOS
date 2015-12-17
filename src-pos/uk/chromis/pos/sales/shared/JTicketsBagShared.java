@@ -32,6 +32,7 @@ import uk.chromis.pos.admin.DataLogicAdmin;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.sales.DataLogicReceipts;
 import uk.chromis.pos.sales.JTicketsBag;
 import uk.chromis.pos.sales.SharedTicketInfo;
@@ -49,6 +50,7 @@ public class JTicketsBagShared extends JTicketsBag {
     private String m_sCurrentTicket = null;
     private DataLogicReceipts dlReceipts = null;
     private DataLogicAdmin dlAdmin;
+    private DataLogicSales dlSales;
 
     /**
      * Creates new form JTicketsBagShared
@@ -62,6 +64,7 @@ public class JTicketsBagShared extends JTicketsBag {
 
         dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
         dlAdmin = (DataLogicAdmin) app.getBean("uk.chromis.pos.admin.DataLogicAdmin");
+        dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
         initComponents();
     }
 
@@ -128,8 +131,22 @@ public class JTicketsBagShared extends JTicketsBag {
     private void saveCurrentTicket() {
         if (m_sCurrentTicket != null) {
             try {
-                m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
-                dlReceipts.insertSharedTicket(m_sCurrentTicket, m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
+
+                if (AppConfig.getInstance().getBoolean("till.usepickupforlayaway")) {
+                    // test if ticket as pickupid
+                    System.out.println("Pickup Id :" + m_panelticket.getActiveTicket().getPickupId());
+                    if (m_panelticket.getActiveTicket().getPickupId() == 0) {
+                        //      m_panelticket.dlSales.getNextPickupIndex();
+                        m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
+                        dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(),dlSales.getNextPickupIndex());
+                    } else {
+                        m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
+                        dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
+                    }
+                } else {
+                    m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
+                    dlReceipts.insertSharedTicket(m_sCurrentTicket, m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
+                }
                 TicketInfo l = dlReceipts.getSharedTicket(m_sCurrentTicket);
                 if (l.getLinesCount() == 0) {
                     dlReceipts.deleteSharedTicket(m_sCurrentTicket);
@@ -151,7 +168,7 @@ public class JTicketsBagShared extends JTicketsBag {
             Date tmpDate = ticket.getdDate();
             UserInfo tmpUser = ticket.getSharedTicketUser();
             Integer pickUp = dlReceipts.getPickupId(id);
-            String tName = ticket.getName();
+            String tName = dlReceipts.getTicketName(id);
             dlReceipts.deleteSharedTicket(id);
             m_sCurrentTicket = id;
             m_panelticket.setActiveTicket(ticket, null);

@@ -29,6 +29,7 @@ import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.SerializerWriteString;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
 import uk.chromis.pos.ticket.TicketInfo;
 
@@ -132,7 +133,35 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
         Object[] values = new Object[]{
             id,
             ticket.getName(),
-            ticket, pickupid,
+            ticket,
+            pickupid,
+            ticket.getUser().getName()
+        };
+        Datas[] datas;
+        datas = new Datas[]{
+            Datas.STRING,
+            Datas.STRING,
+            Datas.SERIALIZABLE,
+            Datas.INT,
+            Datas.STRING
+        };
+
+        new PreparedSentence(s, "INSERT INTO SHAREDTICKETS ("
+                + "ID, "
+                + "NAME, "
+                + "CONTENT, "
+                + "PICKUPID, "
+                + "APPUSER) "
+                + "VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(datas, new int[]{0, 1, 2, 3, 4})).exec(values);
+    }
+
+    public final void insertSharedTicketUsingPickUpID(final String id, final TicketInfo ticket, int pickupid) throws BasicException {
+
+        Object[] values = new Object[]{
+            id,
+            "Pickup Id: " + getPickupString(pickupid),
+            ticket,
+            pickupid,
             ticket.getUser().getName()
         };
         Datas[] datas;
@@ -183,9 +212,28 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
         if (Id == null) {
             return null;
         } else {
-            Object[] record = (Object[]) new StaticSentence(s, "SELECT APPUSER FROM SHAREDTICKETS WHERE ID = ? " , SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.STRING})).find(Id);
+            Object[] record = (Object[]) new StaticSentence(s, "SELECT APPUSER FROM SHAREDTICKETS WHERE ID = ? ", SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.STRING})).find(Id);
             return record == null ? "" : (String) record[0];
         }
     }
 
+    public final String getTicketName(String Id) throws BasicException {
+        if (Id == null) {
+            return null;
+        } else {
+            Object[] record = (Object[]) new StaticSentence(s, "SELECT NAME FROM SHAREDTICKETS WHERE ID = ?", SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.STRING})).find(Id);
+            return record == null ? "" : (String) record[0];
+        }
+    }
+
+    private String getPickupString(int pickup) {
+        String tmpPickupId = Integer.toString(pickup);
+        String pickupSize = (AppConfig.getInstance().getProperty("till.pickupsize"));
+        if (pickupSize != null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())) {
+            while (tmpPickupId.length() < (Integer.parseInt(pickupSize))) {
+                tmpPickupId = "0" + tmpPickupId;
+            }
+        }
+        return (tmpPickupId);
+    }
 }

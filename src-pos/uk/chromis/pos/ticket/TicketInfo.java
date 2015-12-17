@@ -172,7 +172,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             // Ignore error - may be editing a ticket saved pre-coupon support  
             m_CouponLines = new CouponSet();
         }
+                try{
         m_sharedticket = dr.getBoolean(11);
+        }catch (BasicException s){
+            m_sharedticket = false;
+        }
         payments = new ArrayList<>();
         taxes = null;
         m_sharedticketUser = m_User;
