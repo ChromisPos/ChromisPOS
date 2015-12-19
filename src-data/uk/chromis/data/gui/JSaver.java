@@ -159,7 +159,7 @@ public class JSaver extends JPanel implements StateListener {
     private void jbtnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNewActionPerformed
         try {
             m_bd.actionInsert();
-            m_bd.refreshData();
+         //   m_bd.refreshData();
         } catch (BasicException eD) {
             MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, LocalRes.getIntString("message.nonew"), eD);
             msg.show(this);

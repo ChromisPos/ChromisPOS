@@ -1379,7 +1379,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (m_App.getAppUserView().getUser().hasPermission("sales.Total")) {
 // Check if we have a warranty to print                         
             warrantyCheck(ticket);
-
             try {
                 // reset the payment info
                 taxeslogic.calculateTaxes(ticket);
@@ -1475,17 +1474,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_oTicket.resetPayments();
         }
 
-// Reset the customer display here   
-/*
-        if (!AppConfig.getInstance().getBoolean("machine.customerdisplay")) {            
-            try {
-                m_TTP.printTicket(dlSystem.getResourceAsXML("Display.Message"));
-            } catch (TicketPrinterException ex) {
-                 m_App.getDeviceTicket().getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
-            }  
-        }
-       
-         */
         // cancelled the ticket.total script
         // or canceled the payment dialog
         // or canceled the ticket.close script
