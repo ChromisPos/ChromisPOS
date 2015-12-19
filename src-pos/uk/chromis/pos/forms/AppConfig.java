@@ -89,6 +89,10 @@ public class AppConfig implements AppProperties {
         return Boolean.valueOf(m_propsconfig.getProperty(sKey));
     }
 
+    public Double getDouble(String sKey) {
+        return Double.valueOf(m_propsconfig.getProperty(sKey));
+    }
+
     public String newgetProperty(String sKey) {
         getInstance();
         return m_propsconfig.getProperty(sKey);

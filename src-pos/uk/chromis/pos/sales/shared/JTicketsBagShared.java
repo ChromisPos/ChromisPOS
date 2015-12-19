@@ -134,7 +134,6 @@ public class JTicketsBagShared extends JTicketsBag {
 
                 if (AppConfig.getInstance().getBoolean("till.usepickupforlayaway")) {
                     // test if ticket as pickupid
-                    System.out.println("Pickup Id :" + m_panelticket.getActiveTicket().getPickupId());
                     if (m_panelticket.getActiveTicket().getPickupId() == 0) {
                         //      m_panelticket.dlSales.getNextPickupIndex();
                         m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);

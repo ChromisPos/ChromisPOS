@@ -19,35 +19,55 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 // **************************************************************************
-// This script applies UsersInput% or Fixed Service Charge for the Total Receipt value
+// This script runs automatically each time a product is added
 
-import uk.chromis.format.Formats;
+
+
+import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.ticket.TicketLineInfo;
-import uk.chromis.pos.ticket.TicketProductInfo;
-import java.util.Properties;
+import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.ticket.TaxInfo;
 
-//scper = JOptionPane.showInputDialog(null, "Input percentage.....");
-scper = "12.5";
 
-double scrate = Double.parseDouble(scper);
-scrate = scrate/100.00;
+if (AppConfig.getInstance ().getBoolean("till.SCOnOff")) {
+// check the receipt for a service and remove it if it exists
 
-total = ticket.getTotal(); 
-if (total > 0.0) { 
-    scval = Formats.PERCENT.formatValue(scrate); 
- 
-    taxes = ticket.getTaxLines(); 
-    for (int i = 0; i < taxes.length; i++) { 
-        taxline = taxes[i]; 
-        ticket.insertLine(ticket.getLinesCount(),
-            new TicketLineInfo(
-                "Service @  " + scval + " of " + taxline.printSubTotal(),  
-                taxline.getTaxInfo().getTaxCategoryID(),         
-                1.0,
-                +taxline.getSubTotal() * scrate,
-                taxline.getTaxInfo())); 
-    } 
-    sales.setSelectedIndex(ticket.getLinesCount() - 1);
-} else { 
-    java.awt.Toolkit.getDefaultToolkit().beep(); 
+for (int i = 0; i < ticket.getLinesCount(); i++) {
+    line = ticket.getLine(i);
+    if (line.getProductID().equals("sc999-001")) {
+        ticket.removeLine(i);
+    }
 }
+
+// Get the service charge rate
+SCRate = 0;
+SCRate = AppConfig.getInstance().getDouble("till.SCRate") / 100;
+
+Double orderTotal = 0;
+
+for (int i = 0; i < ticket.getLinesCount(); i++) {
+    line = ticket.getLine(i);
+        if (line.getProperty("product.nosc") =="0") {
+            orderTotal = orderTotal + line.getValue();
+        }
+    }
+
+// test if service charge is for restaurant mode only
+if (AppConfig.getInstance().getBoolean("till.SCRestaurant")) {
+    if ((AppConfig.getInstance().getProperty("machine.ticketsbag")).equals("restaurant")) {
+        if (orderTotal > 0.0) {
+            ProductInfoExt oProduct = dlSales.getProductInfoByCode("sc999-001");
+            TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID());
+            ticket.insertLine(ticket.getLinesCount(), new TicketLineInfo("sc999-001", "Service Charge", 1.0, orderTotal * SCRate, oProduct.getTaxCategoryID(), tax));
+        }
+    }
+    } else if (orderTotal > 0.0) {
+        ProductInfoExt oProduct = dlSales.getProductInfoByCode("sc999-001");
+        TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID());
+        ticket.insertLine(ticket.getLinesCount(), new TicketLineInfo("sc999-001", "Service Charge", 1.0, orderTotal * SCRate, oProduct.getTaxCategoryID(), tax));
+    }
+}
+
+
+
+

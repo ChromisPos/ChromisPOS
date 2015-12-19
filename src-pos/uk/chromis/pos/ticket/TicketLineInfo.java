@@ -55,6 +55,13 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         init(productid, null, dMultiply, dPrice, tax, new Properties(), 0.0);
     }
 
+    public TicketLineInfo(String productid, String productname, double dMultiply, double dPrice, String producttaxcategory, TaxInfo tax) {
+        Properties props = new Properties();
+        props.setProperty("product.name", productname);
+        props.setProperty("product.taxcategoryid", producttaxcategory);
+        init(productid, null, dMultiply, dPrice, tax, props, 0.0);
+    }
+
     public TicketLineInfo(String productid, String productname, String producttaxcategory, double dMultiply, double dPrice, TaxInfo tax) {
         Properties props = new Properties();
         props.setProperty("product.name", productname);
@@ -63,7 +70,6 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public TicketLineInfo(String productname, String producttaxcategory, double dMultiply, double dPrice, TaxInfo tax) {
-
         Properties props = new Properties();
         props.setProperty("product.name", productname);
         props.setProperty("product.taxcategoryid", producttaxcategory);
@@ -75,7 +81,6 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public TicketLineInfo(ProductInfoExt product, double dMultiply, double dPrice, TaxInfo tax, Properties attributes) {
-
         String pid;
 
         if (product == null) {
@@ -118,13 +123,14 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
             if (product.getPackProduct() != null) {
                 attributes.setProperty("product.packproduct", product.getPackProduct());
             }
-            if( product.getPromotionID() != null ) {
-                attributes.setProperty("product.promotionid", product.getPromotionID() );
+            if (product.getPromotionID() != null) {
+                attributes.setProperty("product.promotionid", product.getPromotionID());
             }
-            attributes.setProperty("product.promotionadded", "false" );
+            attributes.setProperty("product.promotionadded", "false");
+            attributes.setProperty("product.nosc", "0");
 
         }
-        init(pid, null, dMultiply, dPrice, tax, attributes, 0.0 );
+        init(pid, null, dMultiply, dPrice, tax, attributes, 0.0);
     }
 
     public TicketLineInfo(ProductInfoExt oProduct, double dPrice, TaxInfo tax, Properties attributes) {
@@ -133,11 +139,11 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
 
     public TicketLineInfo(TicketLineInfo line) {
         init(line.productid, line.attsetinstid, line.multiply, line.price,
-                line.tax, (Properties) line.attributes.clone(), line.refundQty );
+                line.tax, (Properties) line.attributes.clone(), line.refundQty);
     }
 
     private void init(String productid, String attsetinstid, double dMultiply,
-            double dPrice, TaxInfo tax, Properties attributes, double refund ) {
+            double dPrice, TaxInfo tax, Properties attributes, double refund) {
 
         this.productid = productid;
         this.attsetinstid = attsetinstid;
@@ -212,7 +218,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public TicketLineInfo copyTicketLine() {
-        TicketLineInfo l = new TicketLineInfo( );
+        TicketLineInfo l = new TicketLineInfo();
         // l.m_sTicket = null;
         // l.m_iLine = -1;
         l.productid = productid;
@@ -220,7 +226,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         l.multiply = multiply;
         l.price = price;
         l.tax = tax;
-        l.attributes = (Properties) attributes.clone();        
+        l.attributes = (Properties) attributes.clone();
         return l;
     }
 
@@ -229,7 +235,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     // The promotion script is also called when the ticket is totaled or
     // subtotaled.
     public String getPromotionId() {
-        return  attributes.getProperty("product.promotionid");
+        return attributes.getProperty("product.promotionid");
     }
 
     // PromotionAdded is a flag indicating this item has been 
@@ -240,11 +246,11 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     public Boolean isPromotionAdded() {
         return "true".equals(attributes.getProperty("product.promotionadded"));
     }
-    
-    public void setPromotionAdded( Boolean value ) {
-        attributes.setProperty("product.promotionadded", value ? "true" : "false" );
+
+    public void setPromotionAdded(Boolean value) {
+        attributes.setProperty("product.promotionadded", value ? "true" : "false");
     }
-    
+
     public int getTicketLine() {
         return m_iLine;
     }

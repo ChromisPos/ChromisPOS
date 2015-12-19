@@ -66,7 +66,7 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
      *
      * @param s
      */
-    @Override
+  @Override
     public void init(Session s) {
         this.s = s;
         tcustomers = new TableDefinition(s, "CUSTOMERS", new String[]{
@@ -165,16 +165,17 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             Formats.STRING,
             Formats.STRING,
             Formats.STRING,
-            Formats.NULL}, new int[]{0}
+            Formats.NULL}, new int[]{0},  " LOWER(NAME) "
         );
     }
+
 
     /**
      *
      * @return customer data
      */
     public SentenceList getCustomerList() {
-        return new StaticSentence(s, new QBFBuilder("SELECT ID, TAXID, SEARCHKEY, NAME, POSTAL, EMAIL, PHONE FROM CUSTOMERS WHERE VISIBLE = " + s.DB.TRUE() + " AND ?(QBF_FILTER) ORDER BY NAME", new String[]{"TAXID", "SEARCHKEY", "NAME", "POSTAL", "PHONE", "EMAIL"}), new SerializerWriteBasic(new Datas[]{
+        return new StaticSentence(s, new QBFBuilder("SELECT ID, TAXID, SEARCHKEY, NAME, POSTAL, EMAIL, PHONE FROM CUSTOMERS WHERE VISIBLE = " + s.DB.TRUE() + " AND ?(QBF_FILTER) ORDER BY LOWER (NAME)", new String[]{"TAXID", "SEARCHKEY", "NAME", "POSTAL", "PHONE", "EMAIL"}), new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,
             Datas.OBJECT, Datas.STRING,
             Datas.OBJECT, Datas.STRING,

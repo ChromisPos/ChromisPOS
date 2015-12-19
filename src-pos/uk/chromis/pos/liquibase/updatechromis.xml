@@ -861,9 +861,7 @@
     </changeSet>     
     
     
-    <changeSet author="Chromis POS" id="Remove change timestamp when updating" dbms="mysql"> 
-        
-            
+    <changeSet author="Chromis POS" id="Remove change timestamp when updating" dbms="mysql">     
         <sql>ALTER TABLE SHIFT_BREAKS CHANGE STARTTIME STARTTIME TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE CLOSEDCASH CHANGE DATESTART DATESTART TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE SHIFTS CHANGE STARTSHIFT STARTSHIFT TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
@@ -1004,7 +1002,46 @@
             <where>NAME='Menu.Root'</where>      
         </update>         
     </changeSet>
-                                                                          
+     
+    <changeSet author="Chromis POS" id="Update menu.root in to resources">
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
+            <where>NAME='Menu.Root'</where>      
+        </update> 
+    </changeSet>   
+    
+    <changeSet author="Chromis POS" id="Insert ServiceCharge into RESOURCES Table">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME='script.ServiceCharge'</sqlCheck>
+        </preConditions>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="72"/>
+            <column name="NAME" value="script.ServiceCharge"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.ServiceCharge.txt"/>
+        </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Update service charge script">
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.ServiceCharge.txt"/>  
+            <where>NAME='script.ServiceCharge'</where>      
+        </update>         
+    </changeSet>      
+    
+    <changeSet author="Chromis POS" id="Insert RemoveServiceCharge into RESOURCES Table">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME='script.RemoveServiceCharge'</sqlCheck>
+        </preConditions>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="71"/>
+            <column name="NAME" value="script.RemoveServiceCharge"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.RemoveServiceCharge.txt"/>
+        </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    </changeSet>                                                                
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1082,7 +1119,31 @@
       
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
-    </changeSet>                                                             
+    </changeSet> 
+    <!-- End of dbpermissions changeset section   -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->     
+    <!-- Add any new data to tables required in this section. -->                                                               
+    <changeSet author="Chromis POS" id="Add Service Charge product to table">   
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM PRODUCTS WHERE ID='sc999-001'  </sqlCheck>
+        </preConditions>    
+         
+        <insert tableName="PRODUCTS">
+            <column name="ID" value="sc999-001"/>
+            <column name="REFERENCE" value="sc999-001"/>
+            <column name="CODE" value="sc999-001"/>
+            <column name="NAME" value="Service Charge"/>
+            <column name="CATEGORY" value="000"/>
+            <column name="TAXCAT" value="001"/>
+            <column name="ISCATALOG" valueBoolean="false"/>
+            <column name="ISSERVICE" valueNumeric="1"/>
+            <column name="PRICEBUY" valueNumeric="0.0"/>
+            <column name="PRICESELL" valueNumeric="0.0"/>
+        </insert>
+    </changeSet>                                                                                                                                                                                                                                                                                                          
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1157,8 +1218,7 @@
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->   
-    <!-- Drop any unused tables - must be done last        
-    -->
+    <!-- Drop any unused tables - must be done last -->   
     <changeSet author="Chromis POS" id="Drop PRODUCTS_CAT table" >    
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="PRODUCTS_CAT"/>

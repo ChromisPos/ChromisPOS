@@ -222,7 +222,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_oTicket = null;
         m_oTicketExt = null;
-
 // get all the logoff flags        
         autoLogoffEnabled = AppConfig.getInstance().getBoolean("till.enableautologoff");
         autoLogoffInactivity = AppConfig.getInstance().getBoolean("till.autologoffinactivitytimer");
@@ -278,10 +277,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                 });
             }
-
-            /*
-        End of screen display
-             */
+// end of Screen display code
         }
     }
 
@@ -545,7 +541,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jTicketId.setText(tName);
     }
 
-    
     private void printPartialTotals() {
         if (m_oTicket.getLinesCount() == 0) {
             m_jSubtotalEuros.setText(null);
@@ -737,8 +732,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 visorTicketLine(null);
                 printPartialTotals();
                 stateToZero();
-
+                executeEventAndRefresh("ticket.pretotals");
                 executeEventAndRefresh("ticket.change");
+
             }
         } else {
             JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.cannotdeletesentline"), "Notice", JOptionPane.INFORMATION_MESSAGE);
@@ -1876,6 +1872,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             script.put("m_App", m_App);
             script.put("m_TTP", m_TTP);
             script.put("dlSystem", dlSystem);
+            script.put("dlSales", dlSales);
 
             // more arguments
             for (ScriptArg arg : args) {
