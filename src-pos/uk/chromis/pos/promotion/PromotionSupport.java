@@ -222,6 +222,24 @@ public class PromotionSupport {
         }
         return count;
     }
+ 
+   // Calculate the quantity of products in this promotion currently on the ticket
+    public Double CountProductsInPromotionQty( PromotionInfo promotion,
+            TicketInfo ticket,
+            boolean bIncludePromotionAdded ) {
+        Double count = 0.0;
+
+        for (TicketLineInfo line: ticket.getLines()) {
+            if( bIncludePromotionAdded || line.isPromotionAdded() == false ) {
+                String id = line.getPromotionId();
+                if( id != null && id.contentEquals(promotion.getID()) )
+                {
+                    count += line.getMultiply();
+                }
+            }
+        }
+        return count;
+    }
     
     public class LineList implements Comparable<LineList> {
         private int m_index;
@@ -313,7 +331,8 @@ public class PromotionSupport {
     // Discount all products in this ticket having the given promotion ID
     public void DiscountProducts( TicketInfo ticket,
         String promotionid,
-        String sDiscountMessage, Double discountrate, Boolean bWithReset ) {
+        String sDiscountMessage, Double minQuantity,
+        Double discountrate, Boolean bWithReset ) {
 
         if( bWithReset ) {
             for( int i = 0; i < ticket.getLines().size(); ++i) {
@@ -328,12 +347,20 @@ public class PromotionSupport {
             }
         }
         
-        for( int i = 0; i < ticket.getLines().size(); ++i) {
-            TicketLineInfo line = ticket.getLine(i);
-            String id = line.getPromotionId();
-            if( id != null ) {
-                if( id.contentEquals(promotionid) ) {
-                    DiscountProductPercent( ticket, i, sDiscountMessage, discountrate );
+        // Check quantity to ensure enough products on the ticket to qualify
+        PromotionInfo p = getCachedPromotion( promotionid);
+        if( minQuantity > CountProductsInPromotionQty( p, ticket, false ) ) {
+            // Insufficient products - remove any discounts
+            RemoveDiscountPromotion( ticket, promotionid );
+        } else {
+
+            for( int i = 0; i < ticket.getLines().size(); ++i) {
+                TicketLineInfo line = ticket.getLine(i);
+                String id = line.getPromotionId();
+                if( id != null ) {
+                    if( id.contentEquals(promotionid) ) {
+                        DiscountProductPercent( ticket, i, sDiscountMessage, discountrate );
+                    }
                 }
             }
         }

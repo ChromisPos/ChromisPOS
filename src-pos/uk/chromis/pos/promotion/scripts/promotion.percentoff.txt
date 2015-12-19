@@ -6,6 +6,7 @@
 // START OF USER EDITABLE VARIABLES
 
 Double PERCENT_DISCOUNT = 10.0;
+Double MINIMUM_QUANTITY = 1.0;   // Minimum quantity to qualify
 
 // END OF USER EDITABLE VARIABLES
 
@@ -34,7 +35,7 @@ if( DEBUGMODE ) {
     // Called after a new line added to a ticket
     if( new String("promotion.addline").contentEquals(event) ) {
         // Add discounts
-        support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), PERCENT_DISCOUNT, false );
+        support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), MINIMUM_QUANTITY, PERCENT_DISCOUNT, false );
     }
 
     // Called after a line is deleted
@@ -48,7 +49,7 @@ if( DEBUGMODE ) {
     if( new String("promotion.changeline").contentEquals(event) ) {
         if( support.isProductInPromotion( ticket, selectedindex, promotion ) ) {
             // Remove discounts and recalculate them
-            support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), PERCENT_DISCOUNT, true );
+            support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), MINIMUM_QUANTITY, PERCENT_DISCOUNT, true );
         }
     }
 }
