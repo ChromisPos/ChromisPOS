@@ -75,6 +75,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     private Boolean oldTicket;
     private Boolean m_sharedticket;
     private UserInfo m_sharedticketUser;
+    private String m_nosc;
 
     private static String Hostname;
 
@@ -107,6 +108,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         oldTicket = false;
         multiply = 0.0;
         m_sharedticket = false;
+        m_nosc = "0";
 
     }
 
@@ -121,7 +123,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         out.writeObject(attributes);
         out.writeObject(m_aLines);
         out.writeObject(m_CouponLines);
-       //out.writeBoolean(m_sharedticket);
+        out.writeObject(m_nosc);
+
     }
 
     @Override
@@ -135,8 +138,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         attributes = (Properties) in.readObject();
         m_aLines = (List<TicketLineInfo>) in.readObject();
         m_CouponLines = (CouponSet) in.readObject();
-      //  m_sharedticket = in.readBoolean();
-        //  m_User = null;
+        m_nosc = (String) in.readObject();
         m_sActiveCash = null;
         payments = new ArrayList<>();
         taxes = null;
@@ -172,11 +174,6 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             // Ignore error - may be editing a ticket saved pre-coupon support  
             m_CouponLines = new CouponSet();
         }
-    //    try {
-    //        m_sharedticket = dr.getBoolean(11);
-    //   } catch (BasicException e) {
-     //       m_sharedticket = false;
-    //    }
         payments = new ArrayList<>();
         taxes = null;
         m_sharedticketUser = m_User;
@@ -213,6 +210,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             t.payments.add(p.copyPayment());
         }
         t.oldTicket = oldTicket;
+        t.m_nosc = m_nosc;
         // taxes are not copied, must be calculated again.
         return t;
     }
@@ -339,6 +337,14 @@ public final class TicketInfo implements SerializableRead, Externalizable {
 
     public void setDate(java.util.Date dDate) {
         m_dDate = dDate;
+    }
+
+    public String getNoSC() {
+        return m_nosc;
+    }
+
+    public void setNoSC(String value) {
+        m_nosc = value;
     }
 
     public UserInfo getUser() {

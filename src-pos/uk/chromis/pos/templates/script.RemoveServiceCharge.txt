@@ -1,5 +1,4 @@
 // script.RemoveServiceCharge
-// This script applies UsersInput% Service for the Total Receipt value
 //
 //   Chromis POS - The New Face of Open Source POS 
 //   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   

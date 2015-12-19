@@ -106,8 +106,7 @@
     <!-- <event key="ticket.show" code="event.show"/> -->
     <!-- <event key="ticket.total" code="script.Event.Total"/> -->
     <!-- <event key="ticket.total" code="event.total"/> -->
-    <!-- <event key="ticket.close" code="event.close"/> -->
-    <!-- <event key="ticket.removeline" code="script.RemoveServiceCharge"/> -->
+    <!-- <event key="ticket.close" code="event.close"/> -->  
     <!-- <event key="ticket.pretotals" code="script.ServiceCharge" /> -->
 
     <!-- <taxcategoryid value="001"/> -->

@@ -1,5 +1,4 @@
 // script.ServiceCharge
-// This script applies UsersInput% Service for the Total Receipt value
 //
 //   Chromis POS - The New Face of Open Source POS 
 //   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
@@ -29,8 +28,11 @@ import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.ticket.TaxInfo;
 
 
-if (AppConfig.getInstance ().getBoolean("till.SCOnOff")) {
+if (AppConfig.getInstance ().getBoolean("till.SCOnOff") && (ticket.getNoSC().equals("0"))) {
 // check the receipt for a service and remove it if it exists
+
+
+System.out.println(ticket.getNoSC());
 
 for (int i = 0; i < ticket.getLinesCount(); i++) {
     line = ticket.getLine(i);
@@ -43,28 +45,20 @@ for (int i = 0; i < ticket.getLinesCount(); i++) {
 SCRate = 0;
 SCRate = AppConfig.getInstance().getDouble("till.SCRate") / 100;
 
-Double orderTotal = 0;
-
-for (int i = 0; i < ticket.getLinesCount(); i++) {
-    line = ticket.getLine(i);
-        if (line.getProperty("product.nosc") =="0") {
-            orderTotal = orderTotal + line.getValue();
-        }
-    }
 
 // test if service charge is for restaurant mode only
 if (AppConfig.getInstance().getBoolean("till.SCRestaurant")) {
     if ((AppConfig.getInstance().getProperty("machine.ticketsbag")).equals("restaurant")) {
-        if (orderTotal > 0.0) {
+        if (ticket.getTotal() > 0.0) {
             ProductInfoExt oProduct = dlSales.getProductInfoByCode("sc999-001");
             TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID());
-            ticket.insertLine(ticket.getLinesCount(), new TicketLineInfo("sc999-001", "Service Charge", 1.0, orderTotal * SCRate, oProduct.getTaxCategoryID(), tax));
+            ticket.insertLine(ticket.getLinesCount(), new TicketLineInfo("sc999-001", oProduct.getName(), 1.0, ticket.getTotal()  * SCRate, oProduct.getTaxCategoryID(), tax));
         }
     }
-    } else if (orderTotal > 0.0) {
+    } else if (ticket.getTotal()  > 0.0) {
         ProductInfoExt oProduct = dlSales.getProductInfoByCode("sc999-001");
         TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID());
-        ticket.insertLine(ticket.getLinesCount(), new TicketLineInfo("sc999-001", "Service Charge", 1.0, orderTotal * SCRate, oProduct.getTaxCategoryID(), tax));
+        ticket.insertLine(ticket.getLinesCount(), new TicketLineInfo("sc999-001",oProduct.getName(), 1.0, ticket.getTotal()  * SCRate, oProduct.getTaxCategoryID(), tax));
     }
 }
 

@@ -566,6 +566,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             printPartialTotals();
             stateToZero();
 
+            executeEventAndRefresh("ticket.pretotals");
             executeEventAndRefresh("ticket.change");
         }
     }
@@ -1260,7 +1261,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         newline.setMultiply(newline.getMultiply() - 1.0);
                         paintTicketLine(i, newline);
                     } else {
-                        newline.setMultiply(newline.getMultiply() + 1.0);
+                        newline.setMultiply(newline.getMultiply() + 1.0);                        
                         paintTicketLine(i, newline);
                     }
                 }
@@ -1276,7 +1277,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(newline.getMultiply() + 1.0);
                         if (newline.getMultiply() >= 0) {
-                            removeTicketLine(i);
+                            removeTicketLine(i);                            
                         } else {
                             paintTicketLine(i, newline);
                         }
@@ -2476,7 +2477,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jKeyFactoryKeyTyped
 
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
-        int i = m_ticketlines.getSelectedIndex();
+    int i = m_ticketlines.getSelectedIndex();
+       if  (m_oTicket.getLine(i).getProductID().equals("sc999-001")){
+            m_oTicket.setNoSC("1");
+       }
+        
+        
         if ((m_oTicket.getTicketType().equals(TicketType.REFUND)) && (!m_oTicket.getLine(i).isProductCom())) {
             JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice(), m_oTicket.getLine(i).getProperty("orgLine"));
             removeTicketLine(i);
