@@ -33,7 +33,7 @@ if( DEBUGMODE ) {
     //  promotion.removeline   
 
     // Called after a new line added to a ticket
-    if( new String("promotion.addline").contentEquals(event) ) {
+    if( new String("promotion.addline").contentEquals(event)) {
         // Add discounts
         support.DiscountProducts( ticket, promotion.getID(), "  *" + promotion.getName(), MINIMUM_QUANTITY, PERCENT_DISCOUNT, false );
     }
