@@ -1028,20 +1028,7 @@
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.ServiceCharge.txt"/>  
             <where>NAME='script.ServiceCharge'</where>      
         </update>         
-    </changeSet>      
-    
-    <changeSet author="Chromis POS" id="Insert RemoveServiceCharge into RESOURCES Table">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME='script.RemoveServiceCharge'</sqlCheck>
-        </preConditions>
-
-        <insert tableName="RESOURCES">
-            <column name="ID" value="71"/>
-            <column name="NAME" value="script.RemoveServiceCharge"/>
-            <column name="RESTYPE" valueNumeric="0"/>
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.RemoveServiceCharge.txt"/>
-        </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    </changeSet>                                                                
+    </changeSet>                                                                         
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1139,7 +1126,7 @@
             <column name="CATEGORY" value="000"/>
             <column name="TAXCAT" value="001"/>
             <column name="ISCATALOG" valueBoolean="false"/>
-            <column name="ISSERVICE" valueNumeric="1"/>
+            <column name="ISSERVICE" valueBoolean="true"/>
             <column name="PRICEBUY" valueNumeric="0.0"/>
             <column name="PRICESELL" valueNumeric="0.0"/>
         </insert>

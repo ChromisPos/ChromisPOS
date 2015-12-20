@@ -366,8 +366,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
     private void extractValues(Object[] myprod) {
         m_jTitle.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]) + " - "
-                + Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]) + " "
-                + AppLocal.getIntString("label.recorddeleted"));
+                + Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]));
         m_id = myprod[DataLogicSales.INDEX_ID];
         m_jRef.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]));
         m_jCode.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_CODE]));
@@ -423,6 +422,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         reportlock = true;
         Object[] myprod = (Object[]) value;
         extractValues(myprod);
+        m_jTitle.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]) + " - "
+                + Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]) + " "
+                + AppLocal.getIntString("label.recorddeleted"));
         txtAttributes.setCaretPosition(0);
 
         reportlock = false;
@@ -993,12 +995,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         jLabel27.setText("jLabel27");
 
-        setLayout(null);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         m_jTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         m_jTitle.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        add(m_jTitle);
-        m_jTitle.setBounds(310, 0, 240, 20);
+        add(m_jTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 330, 30));
 
         jTabbedPane1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
@@ -1466,8 +1467,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.properties"), jPanel3); // NOI18N
 
-        add(jTabbedPane1);
-        jTabbedPane1.setBounds(10, 10, 600, 420);
+        add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 600, 420));
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jTaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jTaxActionPerformed

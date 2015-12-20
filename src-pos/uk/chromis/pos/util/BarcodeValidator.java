@@ -48,7 +48,7 @@ public class BarcodeValidator {
                             + Character.getNumericValue(barcode.charAt(3))
                             + Character.getNumericValue(barcode.charAt(5));
 
-                    checkDigit = 10 - ((odd + even) % 10);
+                    checkDigit = (10 - ((odd + even) % 10)) % 10;
 
                     if (checkDigit == Character.getNumericValue(barcode.charAt(6))) {
                         return "UPC-E";
@@ -65,7 +65,7 @@ public class BarcodeValidator {
                             + Character.getNumericValue(barcode.charAt(3))
                             + Character.getNumericValue(barcode.charAt(5));
 
-                    checkDigit = 10 - ((odd + even) % 10);
+                    checkDigit = (10 - ((odd + even) % 10)) % 10;
 
                     if (checkDigit == Character.getNumericValue(barcode.charAt(7))) {
                         return "EAN-8";
@@ -87,7 +87,7 @@ public class BarcodeValidator {
                             + Character.getNumericValue(barcode.charAt(7))
                             + Character.getNumericValue(barcode.charAt(9));
 
-                    checkDigit = 10 - ((odd + even) % 10);
+                    checkDigit = (10 - ((odd + even) % 10))% 10;
 
                     if (checkDigit == Character.getNumericValue(barcode.charAt(11))) {
                         return "UPC-A";
@@ -135,7 +135,7 @@ public class BarcodeValidator {
                             + Character.getNumericValue(barcode.charAt(9))
                             + Character.getNumericValue(barcode.charAt(11));
 
-                    checkDigit = 10 - ((odd + even) % 10);
+                    checkDigit = (10 - ((odd + even) % 10)) % 10;
 
                     if (checkDigit == Character.getNumericValue(barcode.charAt(13))) {
                         return "GTIN";
