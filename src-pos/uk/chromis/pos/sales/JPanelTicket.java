@@ -1940,7 +1940,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jButton1.setMargin(new java.awt.Insets(0, 4, 0, 4));
         jButton1.setMaximumSize(new java.awt.Dimension(50, 40));
         jButton1.setMinimumSize(new java.awt.Dimension(50, 40));
-        jButton1.setPreferredSize(new java.awt.Dimension(50, 40));
+        jButton1.setPreferredSize(new java.awt.Dimension(52, 40));
         jButton1.setRequestFocusEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1955,7 +1955,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnCustomer.setMargin(new java.awt.Insets(0, 4, 0, 4));
         btnCustomer.setMaximumSize(new java.awt.Dimension(50, 40));
         btnCustomer.setMinimumSize(new java.awt.Dimension(50, 40));
-        btnCustomer.setPreferredSize(new java.awt.Dimension(50, 40));
+        btnCustomer.setPreferredSize(new java.awt.Dimension(52, 40));
         btnCustomer.setRequestFocusEnabled(false);
         btnCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1970,7 +1970,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnSplit.setMargin(new java.awt.Insets(0, 4, 0, 4));
         btnSplit.setMaximumSize(new java.awt.Dimension(50, 40));
         btnSplit.setMinimumSize(new java.awt.Dimension(50, 40));
-        btnSplit.setPreferredSize(new java.awt.Dimension(50, 40));
+        btnSplit.setPreferredSize(new java.awt.Dimension(52, 40));
         btnSplit.setRequestFocusEnabled(false);
         btnSplit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1985,7 +1985,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jbtnLogout.setMargin(new java.awt.Insets(0, 4, 0, 4));
         jbtnLogout.setMaximumSize(new java.awt.Dimension(50, 40));
         jbtnLogout.setMinimumSize(new java.awt.Dimension(50, 40));
-        jbtnLogout.setPreferredSize(new java.awt.Dimension(50, 40));
+        jbtnLogout.setPreferredSize(new java.awt.Dimension(52, 40));
         jbtnLogout.setRequestFocusEnabled(false);
         jbtnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2000,7 +2000,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnReprint1.setMargin(new java.awt.Insets(0, 4, 0, 4));
         btnReprint1.setMaximumSize(new java.awt.Dimension(50, 40));
         btnReprint1.setMinimumSize(new java.awt.Dimension(50, 40));
-        btnReprint1.setPreferredSize(new java.awt.Dimension(50, 40));
+        btnReprint1.setPreferredSize(new java.awt.Dimension(52, 40));
         btnReprint1.setRequestFocusEnabled(false);
         btnReprint1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2084,7 +2084,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         j_btnKitchenPrt.setMargin(new java.awt.Insets(0, 4, 0, 4));
         j_btnKitchenPrt.setMaximumSize(new java.awt.Dimension(50, 40));
         j_btnKitchenPrt.setMinimumSize(new java.awt.Dimension(50, 40));
-        j_btnKitchenPrt.setPreferredSize(new java.awt.Dimension(50, 40));
+        j_btnKitchenPrt.setPreferredSize(new java.awt.Dimension(52, 40));
         j_btnKitchenPrt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 j_btnKitchenPrtActionPerformed(evt);
@@ -2121,7 +2121,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jUp.setMargin(new java.awt.Insets(8, 14, 8, 14));
         m_jUp.setMaximumSize(new java.awt.Dimension(42, 36));
         m_jUp.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jUp.setPreferredSize(new java.awt.Dimension(50, 36));
+        m_jUp.setPreferredSize(new java.awt.Dimension(52, 36));
         m_jUp.setRequestFocusEnabled(false);
         m_jUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2137,7 +2137,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDown.setMargin(new java.awt.Insets(8, 14, 8, 14));
         m_jDown.setMaximumSize(new java.awt.Dimension(42, 36));
         m_jDown.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jDown.setPreferredSize(new java.awt.Dimension(50, 36));
+        m_jDown.setPreferredSize(new java.awt.Dimension(52, 36));
         m_jDown.setRequestFocusEnabled(false);
         m_jDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2153,7 +2153,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDelete.setMargin(new java.awt.Insets(8, 14, 8, 14));
         m_jDelete.setMaximumSize(new java.awt.Dimension(42, 36));
         m_jDelete.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jDelete.setPreferredSize(new java.awt.Dimension(50, 36));
+        m_jDelete.setPreferredSize(new java.awt.Dimension(52, 36));
         m_jDelete.setRequestFocusEnabled(false);
         m_jDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2169,7 +2169,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jList.setMargin(new java.awt.Insets(8, 14, 8, 14));
         m_jList.setMaximumSize(new java.awt.Dimension(42, 36));
         m_jList.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jList.setPreferredSize(new java.awt.Dimension(50, 36));
+        m_jList.setPreferredSize(new java.awt.Dimension(52, 36));
         m_jList.setRequestFocusEnabled(false);
         m_jList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2185,7 +2185,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jEditLine.setMargin(new java.awt.Insets(8, 14, 8, 14));
         m_jEditLine.setMaximumSize(new java.awt.Dimension(42, 36));
         m_jEditLine.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jEditLine.setPreferredSize(new java.awt.Dimension(50, 36));
+        m_jEditLine.setPreferredSize(new java.awt.Dimension(52, 36));
         m_jEditLine.setRequestFocusEnabled(false);
         m_jEditLine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2201,7 +2201,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jEditAttributes.setMargin(new java.awt.Insets(8, 14, 8, 14));
         jEditAttributes.setMaximumSize(new java.awt.Dimension(42, 36));
         jEditAttributes.setMinimumSize(new java.awt.Dimension(42, 36));
-        jEditAttributes.setPreferredSize(new java.awt.Dimension(50, 36));
+        jEditAttributes.setPreferredSize(new java.awt.Dimension(52, 36));
         jEditAttributes.setRequestFocusEnabled(false);
         jEditAttributes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

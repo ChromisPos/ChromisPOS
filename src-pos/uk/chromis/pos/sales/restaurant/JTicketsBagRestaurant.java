@@ -152,7 +152,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         m_DelTicket.setMargin(new java.awt.Insets(0, 4, 0, 4));
         m_DelTicket.setMaximumSize(new java.awt.Dimension(50, 40));
         m_DelTicket.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_DelTicket.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_DelTicket.setPreferredSize(new java.awt.Dimension(52, 40));
         m_DelTicket.setRequestFocusEnabled(false);
         m_DelTicket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,7 +168,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         m_MoveTable.setMargin(new java.awt.Insets(0, 4, 0, 4));
         m_MoveTable.setMaximumSize(new java.awt.Dimension(50, 40));
         m_MoveTable.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_MoveTable.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_MoveTable.setPreferredSize(new java.awt.Dimension(52, 40));
         m_MoveTable.setRequestFocusEnabled(false);
         m_MoveTable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,7 +184,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         m_TablePlan.setMargin(new java.awt.Insets(0, 4, 0, 4));
         m_TablePlan.setMaximumSize(new java.awt.Dimension(50, 40));
         m_TablePlan.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_TablePlan.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_TablePlan.setPreferredSize(new java.awt.Dimension(52, 40));
         m_TablePlan.setRequestFocusEnabled(false);
         m_TablePlan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -198,7 +198,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         m_KitchenPrint.setMargin(new java.awt.Insets(0, 4, 0, 4));
         m_KitchenPrint.setMaximumSize(new java.awt.Dimension(50, 40));
         m_KitchenPrint.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_KitchenPrint.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_KitchenPrint.setPreferredSize(new java.awt.Dimension(52, 40));
         m_KitchenPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_KitchenPrintActionPerformed(evt);

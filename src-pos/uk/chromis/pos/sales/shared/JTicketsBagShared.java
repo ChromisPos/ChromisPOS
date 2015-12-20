@@ -284,7 +284,7 @@ public class JTicketsBagShared extends JTicketsBag {
         m_jNewTicket.setMargin(new java.awt.Insets(0, 4, 0, 4));
         m_jNewTicket.setMaximumSize(new java.awt.Dimension(50, 40));
         m_jNewTicket.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jNewTicket.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_jNewTicket.setPreferredSize(new java.awt.Dimension(52, 40));
         m_jNewTicket.setRequestFocusEnabled(false);
         m_jNewTicket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -300,7 +300,7 @@ public class JTicketsBagShared extends JTicketsBag {
         m_jDelTicket.setMargin(new java.awt.Insets(0, 4, 0, 4));
         m_jDelTicket.setMaximumSize(new java.awt.Dimension(50, 40));
         m_jDelTicket.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jDelTicket.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_jDelTicket.setPreferredSize(new java.awt.Dimension(52, 40));
         m_jDelTicket.setRequestFocusEnabled(false);
         m_jDelTicket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
