@@ -65,7 +65,9 @@ public class JTicketsBagShared extends JTicketsBag {
         dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
         dlAdmin = (DataLogicAdmin) app.getBean("uk.chromis.pos.admin.DataLogicAdmin");
         dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
+
         initComponents();
+        checkLayaways();
     }
 
     /**
@@ -135,9 +137,8 @@ public class JTicketsBagShared extends JTicketsBag {
                 if (AppConfig.getInstance().getBoolean("till.usepickupforlayaway")) {
                     // test if ticket as pickupid
                     if (m_panelticket.getActiveTicket().getPickupId() == 0) {
-                        //      m_panelticket.dlSales.getNextPickupIndex();
                         m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
-                        dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(),dlSales.getNextPickupIndex());
+                        dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(), dlSales.getNextPickupIndex());
                     } else {
                         m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
                         dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
@@ -197,9 +198,11 @@ public class JTicketsBagShared extends JTicketsBag {
             if (nl.isEmpty()) {
                 m_jListTickets.setText("");
                 m_jListTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_pending.png")));
-            } else {
-                m_jListTickets.setText("*");
+                m_jListTickets.setEnabled(false);
+            } else {                
+                m_jListTickets.setText(""+Integer.toString(nl.size()));
                 m_jListTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sales_active.png")));
+                m_jListTickets.setEnabled(true);
             }
         } catch (BasicException e) {
         }
@@ -306,16 +309,18 @@ public class JTicketsBagShared extends JTicketsBag {
         });
         jPanel1.add(m_jDelTicket);
 
-        m_jListTickets.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jListTickets.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         m_jListTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_pending.png"))); // NOI18N
+        m_jListTickets.setText("99");
         m_jListTickets.setToolTipText("Layaways");
         m_jListTickets.setFocusPainted(false);
         m_jListTickets.setFocusable(false);
-        m_jListTickets.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        m_jListTickets.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        m_jListTickets.setIconTextGap(-3);
         m_jListTickets.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        m_jListTickets.setMaximumSize(new java.awt.Dimension(50, 40));
-        m_jListTickets.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jListTickets.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_jListTickets.setMaximumSize(new java.awt.Dimension(55, 40));
+        m_jListTickets.setMinimumSize(new java.awt.Dimension(55, 40));
+        m_jListTickets.setPreferredSize(new java.awt.Dimension(52, 40));
         m_jListTickets.setRequestFocusEnabled(false);
         m_jListTickets.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
