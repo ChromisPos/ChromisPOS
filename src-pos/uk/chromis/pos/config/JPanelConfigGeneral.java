@@ -358,11 +358,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jtxtStartupText.setMaximumSize(new java.awt.Dimension(0, 25));
         jtxtStartupText.setMinimumSize(new java.awt.Dimension(0, 0));
         jtxtStartupText.setPreferredSize(new java.awt.Dimension(350, 30));
-        jtxtStartupText.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtxtStartupTextjTetxtStartupTextFocusGained(evt);
-            }
-        });
         jPanel1.add(jtxtStartupText);
         jtxtStartupText.setBounds(110, 60, 350, 30);
 
@@ -531,14 +526,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jtxtStartupTextjTetxtStartupTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtStartupTextjTetxtStartupTextFocusGained
-
-        transferFocus();
-        JOptionPane.showMessageDialog(jPanel1, "<html>Changing default Startup Text content may violate the <br>"
-                + " Free Software Foundation's GNU General Public License GPL", "GNU GPL Warning", JOptionPane.WARNING_MESSAGE);
-
-    }//GEN-LAST:event_jtxtStartupTextjTetxtStartupTextFocusGained
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jtxtStartupText.setText("");

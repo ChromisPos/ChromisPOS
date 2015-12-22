@@ -51,7 +51,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jchkSCRestaurant.addActionListener(dirty);
         jTextSCRate.getDocument().addDocumentListener(dirty);
         jLayawayId.addActionListener(dirty);
-
+        jCreateOnOrderOnly.addActionListener(dirty);
     }
 
     /**
@@ -112,12 +112,13 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         } else {
             jTextSCRate.setText(AppConfig.getInstance().getProperty("till.SCRate").toString());
         }
-       // jTextSCRate.setText(AppConfig.getInstance().getProperty("till.SCRate").toString());
-        
+        // jTextSCRate.setText(AppConfig.getInstance().getProperty("till.SCRate").toString());
+
         jchkSCOnOff.setSelected(AppConfig.getInstance().getBoolean("till.SCOnOff"));
         jchkSCRestaurant.setSelected(AppConfig.getInstance().getBoolean("till.SCRestaurant"));
 
         jLayawayId.setSelected(AppConfig.getInstance().getBoolean("till.usepickupforlayaway"));
+        jCreateOnOrderOnly.setSelected(AppConfig.getInstance().getBoolean("till.createorder"));
 
         jchkSCOnOffActionPerformed(null);
 
@@ -138,7 +139,8 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         AppConfig.getInstance().setProperty("till.SCRate", jTextSCRate.getText());
         AppConfig.getInstance().setBoolean("till.SCRestaurant", jchkSCRestaurant.isSelected());
         AppConfig.getInstance().setBoolean("till.usepickupforlayaway", jLayawayId.isSelected());
-        
+        AppConfig.getInstance().setBoolean("till.createorder", jCreateOnOrderOnly.isSelected());
+
         dirty.setDirty(false);
     }
 
@@ -169,6 +171,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jchkSCRestaurant = new eu.hansolo.custom.SteelCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLayawayId = new eu.hansolo.custom.SteelCheckBox();
+        jCreateOnOrderOnly = new eu.hansolo.custom.SteelCheckBox();
 
         jTextField2.setText("jTextField2");
 
@@ -285,11 +288,14 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         add(jPanel5);
         jPanel5.setBounds(10, 190, 730, 90);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Layaway Identity", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Layaway details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLayawayId.setText(bundle.getString("label.layaway")); // NOI18N
-        jPanel2.add(jLayawayId, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 460, -1));
+        jPanel2.add(jLayawayId, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 300, -1));
+
+        jCreateOnOrderOnly.setText(bundle.getString("label.createonorder")); // NOI18N
+        jPanel2.add(jCreateOnOrderOnly, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 340, -1));
 
         add(jPanel2);
         jPanel2.setBounds(10, 290, 730, 60);
@@ -331,6 +337,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private eu.hansolo.custom.SteelCheckBox jCreateOnOrderOnly;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

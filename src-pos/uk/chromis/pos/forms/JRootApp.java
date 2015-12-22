@@ -438,9 +438,6 @@ public class JRootApp extends JPanel implements AppView {
         }
     }
 
-    /**
-     *
-     */
     public void tryToClose() {
         if (closeAppView()) {
             // success. continue with the shut down
@@ -451,74 +448,41 @@ public class JRootApp extends JPanel implements AppView {
         }
     }
 
-    // Interfaz de aplicacion
-    /**
-     *
-     * @return
-     */
     @Override
     public DeviceTicket getDeviceTicket() {
         return m_TP;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public DeviceScale getDeviceScale() {
         return m_Scale;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public DeviceScanner getDeviceScanner() {
         return m_Scanner;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Session getSession() {
         return session;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String getInventoryLocation() {
         return m_sInventoryLocation;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String getActiveCashIndex() {
         return m_sActiveCashIndex;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int getActiveCashSequence() {
         return m_iActiveCashSequence;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Date getActiveCashDateStart() {
         return m_dActiveCashDateStart;
@@ -981,12 +945,12 @@ public class JRootApp extends JPanel implements AppView {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(m_txtKeys, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(287, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                .add(0, 0, Short.MAX_VALUE)
-                .add(m_jClose, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(19, 19, 19))
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(m_txtKeys, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(m_jClose, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1001,9 +965,10 @@ public class JRootApp extends JPanel implements AppView {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .add(jScrollPane1))
                 .add(104, 104, 104)
                 .add(m_jLogonName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -1013,15 +978,13 @@ public class JRootApp extends JPanel implements AppView {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .add(15, 15, 15)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel5Layout.createSequentialGroup()
-                        .add(m_jLogonName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(434, 434, 434))
-                    .add(jPanel5Layout.createSequentialGroup()
-                        .add(jScrollPane1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                .add(m_jLogonName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(434, 565, Short.MAX_VALUE))
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(jScrollPane1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         m_jPanelLogin.add(jPanel5, java.awt.BorderLayout.EAST);

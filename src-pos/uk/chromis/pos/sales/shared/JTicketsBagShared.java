@@ -133,7 +133,6 @@ public class JTicketsBagShared extends JTicketsBag {
     private void saveCurrentTicket() {
         if (m_sCurrentTicket != null) {
             try {
-
                 if (AppConfig.getInstance().getBoolean("till.usepickupforlayaway")) {
                     // test if ticket as pickupid
                     if (m_panelticket.getActiveTicket().getPickupId() == 0) {
@@ -199,8 +198,8 @@ public class JTicketsBagShared extends JTicketsBag {
                 m_jListTickets.setText("");
                 m_jListTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_pending.png")));
                 m_jListTickets.setEnabled(false);
-            } else {                
-                m_jListTickets.setText(""+Integer.toString(nl.size()));
+            } else {
+                m_jListTickets.setText("" + Integer.toString(nl.size()));
                 m_jListTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sales_active.png")));
                 m_jListTickets.setEnabled(true);
             }
