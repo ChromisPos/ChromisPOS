@@ -101,10 +101,11 @@ public abstract class Codes {
 
         CenteredImage centeredimage = new CenteredImage(image, getImageWidth());
 
+        System.out.println(image.getTileWidth());
         // Imprimo los par\u00e1metros en cu\u00e1druple
         int iWidth = (centeredimage.getWidth() + 7) / 8; // n\u00famero de bytes
         int iHeight = centeredimage.getHeight();
-
+        
         // Array de datos
         byte[] bData = new byte[getImageHeader().length + 4 + iWidth * iHeight];
 

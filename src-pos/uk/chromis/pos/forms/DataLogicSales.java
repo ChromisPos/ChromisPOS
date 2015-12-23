@@ -48,6 +48,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     protected Datas[] auxiliarDatas;
     protected Datas[] stockdiaryDatas;
     protected SentenceExec m_sellvoucher;
+    protected SentenceExec m_insertcat;
     protected Datas[] paymenttabledatas;
     private SentenceFind m_productname;
     protected Datas[] stockdatas;
@@ -238,6 +239,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         m_productname = new StaticSentence(s, "SELECT NAME FROM PRODUCTS WHERE ID = ? ",
                 SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
 
+        m_insertcat = new StaticSentence(s, "INSERT INTO CATEGORIES ( ID, NAME, CATSHOWNAME ) "
+                + "VALUES (?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+            Datas.STRING,
+            Datas.STRING,
+            Datas.BOOLEAN}));
     }
 
     /**
@@ -711,7 +717,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      *
      * @return @throws BasicException
      */
-   
     @SuppressWarnings("unchecked")
     public final List<CustomerTransaction> getCustomersTransactionList(String name) throws BasicException {
         return (List<CustomerTransaction>) new PreparedSentence(s,
@@ -916,7 +921,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         }
         return ticket;
     }
-    
+
     /**
      *
      * @param ticket
@@ -1204,10 +1209,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 int i = new PreparedSentence(s, "INSERT INTO PRODUCTS (ID, "
                         + "REFERENCE, CODE, CODETYPE, NAME, ISCOM, "
                         + "ISSCALE, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, "
-                        + "ATTRIBUTESET_ID, IMAGE, STOCKCOST, STOCKVOLUME, "
+                        + "ATTRIBUTESET_ID, IMAGE, STOCKCOST, STOCKVOLUME, ISCATALOG, CATORDER, "
                         + "ATTRIBUTES, ISKITCHEN, ISSERVICE, DISPLAY, ISVPRICE, "
                         + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT, "
-                        + "ISPACK, PACKQUANTITY, PACKPRODUCT, PROMOTIONID, ISCATALOG, CATORDER  ) "
+                        + "ISPACK, PACKQUANTITY, PACKPRODUCT, PROMOTIONID  ) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{INDEX_ID,
@@ -1215,13 +1220,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                     INDEX_NAME, INDEX_ISCOM, INDEX_ISSCALE,
                                     INDEX_PRICEBUY, INDEX_PRICESELL, INDEX_CATEGORY,
                                     INDEX_TAXCAT, INDEX_ATTRIBUTESET_ID, INDEX_IMAGE,
-                                    INDEX_STOCKCOST, INDEX_STOCKVOLUME, INDEX_ATTRIBUTES,
+                                    INDEX_STOCKCOST, INDEX_STOCKVOLUME,
+                                    INDEX_ISCATALOG, INDEX_CATORDER, INDEX_ATTRIBUTES,
                                     INDEX_ISKITCHEN, INDEX_ISSERVICE, INDEX_DISPLAY,
                                     INDEX_ISVPRICE, INDEX_ISVERPATRIB, INDEX_TEXTTIP,
                                     INDEX_WARRANTY, INDEX_STOCKUNITS, INDEX_ALIAS,
                                     INDEX_ALWAYSAVAILABLE, INDEX_DISCOUNTED, INDEX_CANDISCOUNT,
                                     INDEX_ISPACK, INDEX_PACKQUANTITY, INDEX_PACKPRODUCT,
-                                    INDEX_PROMOTIONID, INDEX_ISCATALOG, INDEX_CATORDER})).exec(params);
+                                    INDEX_PROMOTIONID})).exec(params);
 
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)",
                         new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
@@ -1503,14 +1509,19 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public final String getProductNameByCode(String sCode) throws BasicException {
         return (String) m_productname.find(sCode);
     }
-    
+
     public final void sellVoucher(Object[] voucher) throws BasicException {
         m_sellvoucher.exec(voucher);
     }
 
+    public final void insertCategory(Object[] voucher) throws BasicException {
+        m_insertcat.exec(voucher);
+    }
+    
     /**
-     *
-     */
+             *
+             */
+
     protected static class CustomerExtRead implements SerializerRead {
 
         /**
@@ -1550,4 +1561,3 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         }
     }
 }
-

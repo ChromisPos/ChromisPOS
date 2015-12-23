@@ -365,8 +365,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     }
 
     private void extractValues(Object[] myprod) {
-        m_jTitle.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]) + " - "
-                + Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]));
+        m_jTitle.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]));
         m_id = myprod[DataLogicSales.INDEX_ID];
         m_jRef.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]));
         m_jCode.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_CODE]));

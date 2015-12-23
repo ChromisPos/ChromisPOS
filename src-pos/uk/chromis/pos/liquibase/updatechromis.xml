@@ -1113,7 +1113,7 @@
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->     
     <!-- Add any new data to tables required in this section. -->                                                               
-    <changeSet author="Chromis POS" id="Add Service Charge product to table">   
+    <changeSet author="Chromis POS" id="Add new Service Charge product to table">   
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(0) FROM PRODUCTS WHERE ID='sc999-001'  </sqlCheck>
         </preConditions>    
@@ -1229,9 +1229,9 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to 0.53.43 - beta only version">    
+    <changeSet author="Chromis POS" id="Update to 0.53.44 - beta only version">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.53.43 - beta only version"/>          
+            <column name="VERSION" value="0.53.44 - beta only version"/>          
         </update>               
     </changeSet> 
     <!-- ***************************************************************************************** -->      

@@ -476,7 +476,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public String printAlias() {
-        return attributes.getProperty("product.alias");
+         return StringUtils.encodeXML(attributes.getProperty("product.alias")); 
     }
 
     public void setUpdated(Boolean value) {

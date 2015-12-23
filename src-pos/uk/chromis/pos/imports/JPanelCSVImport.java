@@ -48,6 +48,7 @@ import uk.chromis.data.loader.PreparedSentence;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.Session;
+import uk.chromis.data.loader.TableDefinition;
 import uk.chromis.data.user.SaveProvider;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppConfig;
@@ -528,6 +529,30 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 return (cat);
             }
         }
+
+        if (jCreateCat.isSelected()) {
+            if (!Category.equals("")) {
+                // lets create the category if it does not exist.
+                Object[] newcat = new Object[3];
+                newcat[0] = UUID.randomUUID().toString();
+                newcat[1] = Category;
+                newcat[2] = true;
+
+                try {
+                    m_dlSales.insertCategory(newcat);
+                    cat_list = new HashMap<>();
+                    for (Object category : m_sentcat.list()) {
+                        m_CategoryModel.setSelectedItem(category);
+                        cat_list.put(category.toString(), m_CategoryModel.getSelectedKey().toString());
+                    }
+                    String cat = (String) cat_list.get(Category);
+                    return (cat);
+                } catch (BasicException ex) {
+                    Logger.getLogger(JPanelCSVImport.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
         if (!badCategories.contains(Category)) {
             badCategories.add(Category.trim()); // Save a list of the bad categories so we can tell the user later
         }
@@ -703,6 +728,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jCheckSellIncTax.setEnabled(false);
         jCheckAddStockLevels.setSelected(false);
         jCheckAddStockLevels.setEnabled(false);
+        jCreateCat.setSelected(false);
         jFileName.setText(null);
         csvFileName = "";
         jTextNew.setText("");
@@ -871,7 +897,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[DataLogicSales.INDEX_CANDISCOUNT] = false;
         myprod[DataLogicSales.INDEX_ISPACK] = ((isPack != null) && !isPack.isEmpty() && (isPack.equals("1") || isPack.equalsIgnoreCase("yes"))); // Is a pack
         myprod[DataLogicSales.INDEX_PACKQUANTITY] = packSize;                                                 // PackQuantity
-        myprod[DataLogicSales.INDEX_PACKPRODUCT] = packOf;                                                     // Pack Product
+        myprod[DataLogicSales.INDEX_PACKPRODUCT] = (packOf.equals("") ? null : packOf);                                                    // Pack Product
         myprod[DataLogicSales.INDEX_PROMOTIONID] = null;
 
         try {
@@ -1019,6 +1045,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jCheckAddStockLevels = new eu.hansolo.custom.SteelCheckBox();
         jCheckInCatalogue = new eu.hansolo.custom.SteelCheckBox();
         jCheckSellIncTax = new eu.hansolo.custom.SteelCheckBox();
+        jCreateCat = new eu.hansolo.custom.SteelCheckBox();
         jCustom = new javax.swing.JPanel();
         jCustom1 = new javax.swing.JPanel();
         jLabelButtonText = new javax.swing.JLabel();
@@ -1425,6 +1452,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
         jCheckSellIncTax.setText(bundle.getString("label.csvsellingintax")); // NOI18N
 
+        jCreateCat.setText(bundle.getString("label.createcat")); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1450,7 +1479,9 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                             .addComponent(jComboCategory, 0, 1, Short.MAX_VALUE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(114, 114, 114)
-                        .addComponent(jCheckAddStockLevels, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckAddStockLevels, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(jCreateCat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1468,7 +1499,9 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboTax, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                .addComponent(jCreateCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckAddStockLevels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckInCatalogue, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1921,7 +1954,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
                 .addComponent(jFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -2052,6 +2085,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     private javax.swing.JComboBox jComboSell;
     private javax.swing.JComboBox jComboSeparator;
     private javax.swing.JComboBox jComboTax;
+    private eu.hansolo.custom.SteelCheckBox jCreateCat;
     private javax.swing.JPanel jCustom;
     private javax.swing.JPanel jCustom1;
     private javax.swing.JPanel jCustom2;
