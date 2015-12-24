@@ -25,6 +25,7 @@ import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.JFrame;
 import uk.chromis.data.loader.LocalRes;
+import uk.chromis.pos.forms.AppLocal;
 /**
  *
  * @author  adrian
@@ -74,6 +75,9 @@ public class JMessageDialog extends javax.swing.JDialog {
         myMsg.jlblIcon.setIcon(inf.getSignalWordIcon());
         myMsg.jlblErrorCode.setText(inf.getErrorCodeMsg());
         myMsg.jlblMessage.setText("<html>" + inf.getMessageMsg());
+        
+        myMsg.setTitle(LocalRes.getIntString("title.message") + " - " + AppLocal.APP_VERSION);
+        
         
         // Capturamos el texto de la excepcion...
         if (inf.getCause() == null) {

@@ -22,6 +22,7 @@ import java.awt.CardLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -54,10 +55,14 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -65,6 +70,7 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import net.miginfocom.swing.MigLayout;
 import org.apache.commons.io.FileUtils;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.JFlowPanel;
@@ -102,7 +108,9 @@ public class JRootApp extends JPanel implements AppView {
     private Map<String, BeanFactory> m_aBeanFactories;
     private JPrincipalApp m_principalapp = null;
     private static HashMap<String, String> m_oldclasses; // This is for backwards compatibility purposes
-
+    private JFrame frame = new JFrame("");
+    private final JFrame sampleFrame = new JFrame();
+    
     private String m_clock;
     private String m_date;
     private Connection con;
@@ -640,7 +648,7 @@ public class JRootApp extends JPanel implements AppView {
             }
         }
     }
-      
+
     private void listPeople() {
         try {
             jScrollPane1.getViewport().setView(null);
@@ -1051,9 +1059,48 @@ public class JRootApp extends JPanel implements AppView {
 
 
     private void poweredbyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_poweredbyMouseClicked
-        if (SwingUtilities.isRightMouseButton(evt)) {
-            System.out.println("create system info box here");
-        }
+     //   if (SwingUtilities.isRightMouseButton(evt)) {
+
+            final Action exit = new AbstractAction("Exit") {
+                @Override
+                public final void actionPerformed(final ActionEvent e) {
+                    sampleFrame.setVisible(false);
+                    sampleFrame.dispose();
+                }
+            };
+
+            AboutDialog dialog = new AboutDialog();
+            JPanel dialogPanel = new JPanel();
+
+            MigLayout layout = new MigLayout("", "[fill]");
+
+            JPanel mainPanel = new JPanel(layout);
+            JLabel label = new JLabel();
+            JPanel btnPanel = new JPanel();
+
+            dialogPanel.add(dialog);
+            mainPanel.add(dialogPanel, "cell 0 0");
+            mainPanel.add(label, "wrap");
+
+            JButton btnExit = new JButton(exit);
+            btnPanel.add(btnExit, " width 100!");
+            mainPanel.add(btnPanel, "right, wrap");
+            mainPanel.add(new JLabel(), "wrap");
+
+            sampleFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            sampleFrame.setSize(425, 457);
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            sampleFrame.setLocation(dim.width / 2 - sampleFrame.getSize().width / 2, dim.height / 2 - sampleFrame.getSize().height / 2);
+
+            sampleFrame.setUndecorated(true);
+            mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
+
+            sampleFrame.add(mainPanel);
+            sampleFrame.pack();
+            sampleFrame.setVisible(true);
+
+    //    }
+
     }//GEN-LAST:event_poweredbyMouseClicked
 
 
