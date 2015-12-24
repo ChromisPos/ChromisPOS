@@ -137,7 +137,12 @@ public class JTicketsBagShared extends JTicketsBag {
                     // test if ticket as pickupid
                     if (m_panelticket.getActiveTicket().getPickupId() == 0) {
                         m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
-                        dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(), dlSales.getNextPickupIndex());
+                        // Only assign a pickupid if ticket has an article count
+                        if (m_panelticket.getActiveTicket().getArticlesCount() > 0) {
+                            dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(), dlSales.getNextPickupIndex());
+                        } else {
+                            dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(), 0);
+                        }
                     } else {
                         m_panelticket.getActiveTicket().setSharedTicket(Boolean.TRUE);
                         dlReceipts.insertSharedTicketUsingPickUpID(m_sCurrentTicket, m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
