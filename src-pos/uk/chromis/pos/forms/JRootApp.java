@@ -18,6 +18,7 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
 package uk.chromis.pos.forms;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
@@ -26,6 +27,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -60,9 +63,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -110,7 +116,7 @@ public class JRootApp extends JPanel implements AppView {
     private static HashMap<String, String> m_oldclasses; // This is for backwards compatibility purposes
     private JFrame frame = new JFrame("");
     private final JFrame sampleFrame = new JFrame();
-    
+
     private String m_clock;
     private String m_date;
     private Connection con;
@@ -136,8 +142,8 @@ public class JRootApp extends JPanel implements AppView {
         public void actionPerformed(ActionEvent evt) {
             m_clock = getLineTimer();
             m_date = getLineDate();
-            //     m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
-            m_jLblTitle.setText("Chromis POS - v0.53.43 Beta ONLY VERSION");
+            m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
+            // m_jLblTitle.setText("Chromis POS - v0.53.44 Beta ONLY VERSION");
             //   m_jLblTitle.repaint();
             jLabel2.setText("  " + m_date + "  " + m_clock);
         }
@@ -1059,47 +1065,85 @@ public class JRootApp extends JPanel implements AppView {
 
 
     private void poweredbyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_poweredbyMouseClicked
-     //   if (SwingUtilities.isRightMouseButton(evt)) {
 
-            final Action exit = new AbstractAction("Exit") {
-                @Override
-                public final void actionPerformed(final ActionEvent e) {
-                    sampleFrame.setVisible(false);
-                    sampleFrame.dispose();
-                }
-            };
+        final Action exit = new AbstractAction("Exit") {
+            @Override
+            public final void actionPerformed(final ActionEvent e) {
+                sampleFrame.setVisible(false);
+                sampleFrame.dispose();
+            }
+        };
 
-            AboutDialog dialog = new AboutDialog();
-            JPanel dialogPanel = new JPanel();
+        String currentPath = null;
+        if (OSValidator.isMac()) {
+            try {
+                currentPath = new File(JRootApp.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).toString();
+            } catch (URISyntaxException ex) {
+            }
+        } else {
+            currentPath = System.getProperty("user.dir") + "\\chromispos.jar";
+        }
 
-            MigLayout layout = new MigLayout("", "[fill]");
+        String md5 = null;
+        try {
+            FileInputStream fis = new FileInputStream(new File(currentPath));
+            md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
+            fis.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-            JPanel mainPanel = new JPanel(layout);
-            JLabel label = new JLabel();
-            JPanel btnPanel = new JPanel();
+        AboutDialog dialog = new AboutDialog();
+        JPanel dialogPanel = new JPanel();
+        MigLayout layout = new MigLayout("", "[fill]");
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = new JTable(model);
+        model.addColumn("Details");
+        model.addColumn("Value");
+        model.addRow(new Object[]{"Database Version", readDataBaseVersion()});
+        model.addRow(new Object[]{"Java Version", System.getProperty("java.version")});
+        model.addRow(new Object[]{"Jar MD5", md5});
+        model.addRow(new Object[]{"Operating System", System.getProperty("os.name")});
 
-            dialogPanel.add(dialog);
-            mainPanel.add(dialogPanel, "cell 0 0");
-            mainPanel.add(label, "wrap");
+        JScrollPane scrollPane = new JScrollPane(table);
+        JPanel mainPanel = new JPanel(layout);
+        JLabel label = new JLabel();
+        JPanel btnPanel = new JPanel();
 
-            JButton btnExit = new JButton(exit);
-            btnPanel.add(btnExit, " width 100!");
-            mainPanel.add(btnPanel, "right, wrap");
-            mainPanel.add(new JLabel(), "wrap");
+        dialogPanel.add(dialog);
 
-            sampleFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            sampleFrame.setSize(425, 457);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            sampleFrame.setLocation(dim.width / 2 - sampleFrame.getSize().width / 2, dim.height / 2 - sampleFrame.getSize().height / 2);
+        mainPanel.add(dialogPanel, "wrap");
+        mainPanel.add(scrollPane, "wrap");
 
-            sampleFrame.setUndecorated(true);
-            mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
+        JButton btnExit = new JButton(exit);
 
-            sampleFrame.add(mainPanel);
-            sampleFrame.pack();
-            sampleFrame.setVisible(true);
+        btnPanel.add(btnExit, "width 100!");
+        mainPanel.add(btnPanel, "right, wrap");
+        mainPanel.add(new JLabel(), "wrap");
 
-    //    }
+        sampleFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        sampleFrame.setPreferredSize(
+                new Dimension(500, 300));
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        sampleFrame.setLocation(dim.width
+                / 2 - 250, dim.height / 2 - 150);
+
+        sampleFrame.setUndecorated(
+                true);
+        mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
+
+        sampleFrame.add(mainPanel);
+
+        sampleFrame.pack();
+
+        sampleFrame.setVisible(
+                true);
+
+        //    }
 
     }//GEN-LAST:event_poweredbyMouseClicked
 

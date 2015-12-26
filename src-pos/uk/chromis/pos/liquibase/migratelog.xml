@@ -566,7 +566,9 @@
         <createIndex tableName="STOCKCURRENT"
                      indexName="STOCKCURRENT_INX"
                      unique="true">
+            <column name="LOCATION" type="varchar(255)"/>
             <column name="PRODUCT" type="varchar(255)"/>
+            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
         </createIndex>
     </changeSet>
 

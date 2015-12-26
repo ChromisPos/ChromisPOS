@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.sales;
 
 import bsh.EvalError;
@@ -615,14 +616,27 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     int i = m_ticketlines.getSelectedIndex();
                     TicketLineInfo line = m_oTicket.getLine(i);
                     if (line.isProductVerpatrib()) {
-                        JProductAttEdit attedit = JProductAttEdit.getAttributesEditor(this, m_App.getSession());
-                        attedit.editAttributes(line.getProductAttSetId(), line.getProductAttSetInstId());
-                        attedit.setVisible(true);
-                        if (attedit.isOK()) {
-                            line.setProductAttSetInstId(attedit.getAttributeSetInst());
-                            line.setProductAttSetInstDesc(attedit.getAttributeSetInstDescription());
-                            paintTicketLine(i, line);
-                        }
+                        if (Boolean.parseBoolean(m_App.getProperties().getProperty("attributes.showgui"))) {
+                            JProductAttEditNew attedit = JProductAttEditNew.getAttributesEditor(this, m_App.getSession());
+                            attedit.editAttributes(line.getProductAttSetId(), line.getProductAttSetInstId());
+                            attedit.setVisible(true);
+                            if (attedit.isOK()) {
+                                // The user pressed OK
+                                line.setProductAttSetInstId(attedit.getAttributeSetInst());
+                                line.setProductAttSetInstDesc(attedit.getAttributeSetInstDescription());
+                                paintTicketLine(i, line);
+                            }
+                        } else {
+                            JProductAttEdit attedit = JProductAttEdit.getAttributesEditor(this, m_App.getSession());
+                            attedit.editAttributes(line.getProductAttSetId(), line.getProductAttSetInstId());
+                            attedit.setVisible(true);
+                            if (attedit.isOK()) {
+                                // The user pressed OK
+                                line.setProductAttSetInstId(attedit.getAttributeSetInst());
+                                line.setProductAttSetInstDesc(attedit.getAttributeSetInstDescription());
+                                paintTicketLine(i, line);
+                            }
+                        } 
                     }
                 } catch (BasicException ex) {
                     MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindattributes"), ex);

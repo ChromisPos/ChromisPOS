@@ -16,47 +16,41 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.sales;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Insets;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import uk.chromis.basic.BasicException;
-import uk.chromis.data.loader.DataRead;
-import uk.chromis.data.loader.Datas;
-import uk.chromis.data.loader.PreparedSentence;
-import uk.chromis.data.loader.SentenceExec;
-import uk.chromis.data.loader.SentenceFind;
-import uk.chromis.data.loader.SentenceList;
-import uk.chromis.data.loader.SerializerRead;
-import uk.chromis.data.loader.SerializerReadString;
-import uk.chromis.data.loader.SerializerWriteBasic;
-import uk.chromis.data.loader.SerializerWriteString;
-import uk.chromis.data.loader.Session;
+import uk.chromis.beans.JFlowPanel;
+import uk.chromis.data.loader.*;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.inventory.AttributeSetInfo;
-import uk.chromis.pos.util.AutoLogoff;
 
-/**
- *
- * @author adrianromero
- */
-public class JProductAttEdit extends javax.swing.JDialog {
+public class JProductAttEditNew extends javax.swing.JDialog {
 
     private SentenceFind attsetSent;
     private SentenceList attvaluesSent;
     private SentenceList attinstSent;
     private SentenceList attinstSent2;
     private SentenceFind attsetinstExistsSent;
-
     private SentenceExec attsetSave;
     private SentenceExec attinstSave;
-
     private List<JProductAttEditI> itemslist;
     private String attsetid;
     private String attInstanceId;
@@ -64,22 +58,15 @@ public class JProductAttEdit extends javax.swing.JDialog {
 
     private boolean ok;
 
-    /**
-     * Creates new form JProductAttEdit
-     */
-    private JProductAttEdit(java.awt.Frame parent, boolean modal) {
+    private JProductAttEditNew(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
     }
 
-    /**
-     * Creates new form JProductAttEdit
-     */
-    JProductAttEdit(java.awt.Dialog parent, boolean modal) {
+    private JProductAttEditNew(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
     }
 
     private void init(Session s) {
-
         initComponents();
 
         attsetSave = new PreparedSentence(s,
@@ -93,11 +80,11 @@ public class JProductAttEdit extends javax.swing.JDialog {
                 "SELECT ID, NAME FROM ATTRIBUTESET WHERE ID = ?",
                 SerializerWriteString.INSTANCE,
                 new SerializerRead() {
-            @Override
-            public Object readValues(DataRead dr) throws BasicException {
-                return new AttributeSetInfo(dr.getString(1), dr.getString(2));
-            }
-        });
+                    @Override
+                    public Object readValues(DataRead dr) throws BasicException {
+                        return new AttributeSetInfo(dr.getString(1), dr.getString(2));
+                    }
+                });
         attsetinstExistsSent = new PreparedSentence(s,
                 "SELECT ID FROM ATTRIBUTESETINSTANCE WHERE ATTRIBUTESET_ID = ? AND DESCRIPTION = ?",
                 new SerializerWriteBasic(Datas.STRING, Datas.STRING),
@@ -109,76 +96,54 @@ public class JProductAttEdit extends javax.swing.JDialog {
                 + "ORDER BY AU.LINENO",
                 SerializerWriteString.INSTANCE,
                 new SerializerRead() {
-            @Override
-            public Object readValues(DataRead dr) throws BasicException {
-                return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
-            }
-        });
+                    @Override
+                    public Object readValues(DataRead dr) throws BasicException {
+                        return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
+                    }
+                });
         attinstSent2 = new PreparedSentence(s, "SELECT A.ID, A.NAME, AI.ID, AI.VALUE "
                 + "FROM ATTRIBUTEUSE AU JOIN ATTRIBUTE A ON AU.ATTRIBUTE_ID = A.ID LEFT OUTER JOIN ATTRIBUTEINSTANCE AI ON AI.ATTRIBUTE_ID = A.ID "
                 + "WHERE AU.ATTRIBUTESET_ID = ? AND AI.ATTRIBUTESETINSTANCE_ID = ?"
                 + "ORDER BY AU.LINENO",
                 new SerializerWriteBasic(Datas.STRING, Datas.STRING),
                 new SerializerRead() {
-            @Override
-            public Object readValues(DataRead dr) throws BasicException {
-                return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
-            }
-        });
+                    @Override
+                    public Object readValues(DataRead dr) throws BasicException {
+                        return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
+                    }
+                });
         attvaluesSent = new PreparedSentence(s, "SELECT VALUE FROM ATTRIBUTEVALUE WHERE ATTRIBUTE_ID = ?",
                 SerializerWriteString.INSTANCE,
                 SerializerReadString.INSTANCE);
-
-        getRootPane().setDefaultButton(m_jButtonOK);
     }
 
-    /**
-     *
-     * @param parent
-     * @param s
-     * @return
-     */
-    public static JProductAttEdit getAttributesEditor(Component parent, Session s) {
-       
+    public static JProductAttEditNew getAttributesEditor(Component parent, Session s) {
+
         Window window = SwingUtilities.getWindowAncestor(parent);
 
-        JProductAttEdit myMsg;
+        JProductAttEditNew myMsg;
         if (window instanceof Frame) {
-            myMsg = new JProductAttEdit((Frame) window, true);
+            myMsg = new JProductAttEditNew((Frame) window, true);
         } else {
-            myMsg = new JProductAttEdit((Dialog) window, true);
+            myMsg = new JProductAttEditNew((Dialog) window, true);
         }
         myMsg.init(s);
         myMsg.applyComponentOrientation(parent.getComponentOrientation());
-     
         return myMsg;
-                
     }
 
-    /**
-     *
-     * @param attsetid
-     * @param attsetinstid
-     * @throws BasicException
-     */
     public void editAttributes(String attsetid, String attsetinstid) throws BasicException {
-        AutoLogoff.getInstance().deactivateTimer();
         if (attsetid == null) {
-//            throw new BasicException(AppLocal.getIntString("message.attsetnotexists"));
             throw new BasicException(AppLocal.getIntString("message.cannotfindattributes"));
         } else {
-
             this.attsetid = attsetid;
             this.attInstanceId = null;
             this.attInstanceDescription = null;
-
             this.ok = false;
 
-            // get attsetinst values
             AttributeSetInfo asi = (AttributeSetInfo) attsetSent.find(attsetid);
 
             if (asi == null) {
-//                throw new BasicException(AppLocal.getIntString("message.attsetnotexists"));
                 throw new BasicException(AppLocal.getIntString("message.cannotfindattributes"));
             }
 
@@ -195,51 +160,83 @@ public class JProductAttEdit extends javax.swing.JDialog {
                 JProductAttEditI item;
 
                 List<String> values = attvaluesSent.list(aii.getAttid());
-                if (values.isEmpty()) {
-                    // Does not exist a list of values then a textfield
-                    item = new JProductAttEditItem(aii.getAttid(), aii.getAttname(), aii.getValue(), m_jKeys);
-                } else {
-                    // Does exist a list with the values
-                    item = new JProductAttListItem(aii.getAttid(), aii.getAttname(), aii.getValue(), values);
+                jPanel2 = new JFlowPanel();
+                JScrollPane scroll = new JScrollPane(jPanel2);
+                scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+                scroll.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
+                add(scroll, BorderLayout.CENTER);
+
+                for (String btnText : values) {
+                    JButton btn = new JButton();
+                    btn.applyComponentOrientation(getComponentOrientation());
+                    btn.setFocusPainted(false);
+                    btn.setText(btnText);
+                    btn.setFocusable(false);
+                    btn.setRequestFocusEnabled(false);
+                    btn.setHorizontalTextPosition(SwingConstants.CENTER);
+                    btn.setVerticalTextPosition(SwingConstants.BOTTOM);
+                    btn.setMargin(new Insets(2, 2, 2, 2));
+                    btn.setMaximumSize(new Dimension(120, 50));
+                    btn.setPreferredSize(new Dimension(120, 50));
+                    btn.setMinimumSize(new Dimension(120, 50));
+                    AL al = new AL();
+                    btn.setActionCommand(btnText);
+                    btn.addActionListener(al);
+                    jPanel2.add(btn);
                 }
-
-                itemslist.add(item);
-                jPanel2.add(item.getComponent());
-            }
-
-            if (itemslist.size() > 0) {
-                itemslist.get(0).assignSelection();
             }
         }
-     //   AutoLogoff.getInstance().activateTimer();
     }
 
-    /**
-     *
-     * @return
-     */
+    public class AL implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            StringBuilder description = new StringBuilder();
+            description.append(e.getActionCommand());
+            String id;
+
+            if (description.length() == 0) {
+                id = null;
+            } else {
+                try {                    
+                    id = (String) attsetinstExistsSent.find(attsetid, description.toString());
+                } catch (BasicException ex) {
+                    return;
+                }
+                if (id == null) {
+                    id = UUID.randomUUID().toString();
+                    try {
+                        attsetSave.exec(id, attsetid, description.toString());
+                        for (JProductAttEditI item : itemslist) {
+                            attinstSave.exec(UUID.randomUUID().toString(), id, item.getAttribute(), item.getValue());
+                        }
+                    } catch (BasicException ex) {
+                        return;
+                    }
+                }
+            }
+            ok = true;
+            attInstanceId = id;
+            attInstanceDescription = description.toString();
+            dispose();
+        }
+    }
+
     public boolean isOK() {
         return ok;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getAttributeSetInst() {
         return attInstanceId;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getAttributeSetInstDescription() {
         return attInstanceDescription;
     }
 
     private static class AttributeInstInfo {
-
         private String attid;
         private String attname;
         private String id;
@@ -252,44 +249,26 @@ public class JProductAttEdit extends javax.swing.JDialog {
             this.value = value;
         }
 
-        /**
-         * @return the attid
-         */
         public String getAttid() {
             return attid;
         }
 
-        /**
-         * @return the attname
-         */
         public String getAttname() {
             return attname;
         }
 
-        /**
-         * @return the id
-         */
         public String getId() {
             return id;
         }
 
-        /**
-         * @param id the id to set
-         */
         public void setId(String id) {
             this.id = id;
         }
 
-        /**
-         * @return the value
-         */
         public String getValue() {
             return value;
         }
 
-        /**
-         * @param value the value to set
-         */
         public void setValue(String value) {
             this.value = value;
         }
@@ -306,12 +285,11 @@ public class JProductAttEdit extends javax.swing.JDialog {
 
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        JPanel1 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        m_jButtonOK = new javax.swing.JButton();
-        m_jButtonCancel = new javax.swing.JButton();
+        JbtnPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        m_jKeys = new uk.chromis.editor.JEditorKeys();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -321,37 +299,16 @@ public class JProductAttEdit extends javax.swing.JDialog {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.PAGE_AXIS));
         jPanel5.add(jPanel2, java.awt.BorderLayout.NORTH);
 
+        JPanel1.setLayout(null);
+
+        jPanel1.setAutoscrolls(true);
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        JPanel1.add(jPanel1);
+        jPanel1.setBounds(240, 5, 10, 10);
+        JPanel1.add(JbtnPanel);
+        JbtnPanel.setBounds(0, 0, 320, 170);
 
-        m_jButtonOK.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        m_jButtonOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/ok.png"))); // NOI18N
-        m_jButtonOK.setText(AppLocal.getIntString("Button.OK")); // NOI18N
-        m_jButtonOK.setFocusPainted(false);
-        m_jButtonOK.setFocusable(false);
-        m_jButtonOK.setMargin(new java.awt.Insets(8, 16, 8, 16));
-        m_jButtonOK.setRequestFocusEnabled(false);
-        m_jButtonOK.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jButtonOKActionPerformed(evt);
-            }
-        });
-        jPanel1.add(m_jButtonOK);
-
-        m_jButtonCancel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        m_jButtonCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/cancel.png"))); // NOI18N
-        m_jButtonCancel.setText(AppLocal.getIntString("Button.Cancel")); // NOI18N
-        m_jButtonCancel.setFocusPainted(false);
-        m_jButtonCancel.setFocusable(false);
-        m_jButtonCancel.setMargin(new java.awt.Insets(8, 16, 8, 16));
-        m_jButtonCancel.setRequestFocusEnabled(false);
-        m_jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jButtonCancelActionPerformed(evt);
-            }
-        });
-        jPanel1.add(m_jButtonCancel);
-
-        jPanel5.add(jPanel1, java.awt.BorderLayout.SOUTH);
+        jPanel5.add(JPanel1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel5, java.awt.BorderLayout.CENTER);
 
@@ -359,83 +316,22 @@ public class JProductAttEdit extends javax.swing.JDialog {
         jPanel3.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.Y_AXIS));
-        jPanel4.add(m_jKeys);
-
         jPanel3.add(jPanel4, java.awt.BorderLayout.NORTH);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.EAST);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-609)/2, (screenSize.height-388)/2, 609, 388);
+        setSize(new java.awt.Dimension(334, 209));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void m_jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonOKActionPerformed
-
-        StringBuilder description = new StringBuilder();
-        for (JProductAttEditI item : itemslist) {
-            String value = item.getValue();
-            if (value != null && value.length() > 0) {
-                if (description.length() > 0) {
-                    description.append(", ");
-                }
-                description.append(value);
-            }
-        }
-
-        String id;
-
-        if (description.length() == 0) {
-            // No values then id is null
-            id = null;
-        } else {
-            // Some values then an instance should exists.
-            try {
-                // Exist an attribute set instance with these values for the attributeset selected
-                id = (String) attsetinstExistsSent.find(attsetid, description.toString());
-            } catch (BasicException ex) {
-                // Logger.getLogger(JProductAttEdit.class.getName()).log(Level.SEVERE, null, ex);
-                return;
-            }
-
-            if (id == null) {
-                // No, create a new ATTRIBUTESETINSTANCE and return the ID generated
-                // or return null... That means that that product does not exists....
-                // Maybe these two modes must be supported one for selection and other for creation....
-                id = UUID.randomUUID().toString();
-                try {
-                    attsetSave.exec(id, attsetid, description.toString());
-                    for (JProductAttEditI item : itemslist) {
-                        attinstSave.exec(UUID.randomUUID().toString(), id, item.getAttribute(), item.getValue());
-                    }
-
-                } catch (BasicException ex) {
-                    // Logger.getLogger(JProductAttEdit.class.getName()).log(Level.SEVERE, null, ex);
-                    return;
-                }
-            }
-        }
-
-        ok = true;
-        attInstanceId = id;
-        attInstanceDescription = description.toString();
-
-        dispose();
-    }//GEN-LAST:event_m_jButtonOKActionPerformed
-
-    private void m_jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonCancelActionPerformed
-
-        dispose();
-    }//GEN-LAST:event_m_jButtonCancelActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel JPanel1;
+    private javax.swing.JPanel JbtnPanel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JButton m_jButtonCancel;
-    private javax.swing.JButton m_jButtonOK;
-    private uk.chromis.editor.JEditorKeys m_jKeys;
     // End of variables declaration//GEN-END:variables
 
 }
