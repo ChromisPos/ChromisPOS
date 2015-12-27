@@ -595,21 +595,45 @@
         </createTable>                         
     </changeSet> 
     
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE" dbms="postgresql, hypersql, hsqldb">  
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE if not found" dbms="postgresql, hypersql, hsqldb">  
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TICKETSNUM_INVOICE"/>
+            </not>
+        </preConditions>
+        
         <sql>CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1</sql>  
     </changeSet>  
 
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE mysql" dbms="mysql">
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE mysql if not found" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TICKETSNUM_INVOICE"/>
+            </not>
+        </preConditions>
+        
         <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
     </changeSet>
 
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE oracle" dbms="oracle">
+    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE oracle if not found" dbms="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TICKETSNUM_INVOICE"/>
+            </not>
+        </preConditions>
+        
         <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL);
             INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
     </changeSet>
 
-    <changeSet author="Chromis Pos" id="CCreate TICKETSNUM Sequence INVOICE  derby" dbms="derby">
+    <changeSet author="Chromis Pos" id="CCreate TICKETSNUM Sequence INVOICE  derby if not found" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TICKETSNUM_INVOICE"/>
+            </not>
+        </preConditions>
+        
         <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
             INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
     </changeSet>
@@ -668,25 +692,40 @@
             <column name="ISENABLED" type="${boolean.type}" 
                     defaultValueBoolean="true"/>
         </createTable>      
-    </changeSet>  
-     
-    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS" >    
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    <!-- End of new tables sections -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->
+    <!-- ***************************************************************************************** -->   
+    <!-- Add any new columns or column data chnages required in this section --> 
+    <changeSet author="Chromis POS" id="Create ISCATALOG into PRODUCTS" >    
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="PRODUCTS_CAT"/>
+            <not>
+                <columnExists columnName="ISCATALOG" tableName="PRODUCTS"/>
+            </not>
         </preConditions> 
                        
-        <addColumn tableName="PRODUCTS">
-            
+        <addColumn tableName="PRODUCTS">            
             <column name="ISCATALOG" type="${boolean.type}" />
             <column name="CATORDER" type="integer"/>
-        </addColumn>     
-      
-        <addColumn tableName="PRODUCTS_CAT">
-            <column name="flag" type="${boolean.type}" 
-                    defaultValueBoolean="true"/>
-        </addColumn>                                          
-    </changeSet>   
+        </addColumn>                                                     
+    </changeSet>  
     
+    <changeSet author="Chromis POS" id="Create flag into PRODUCTS_CAT" >    
+        <preConditions onFail="MARK_RAN">         
+            <tableExists tableName="PRODUCTS_CAT"/>
+            <not>
+                <columnExists columnName="FLAG" tableName="PRODUCTS_CAT"/>                
+            </not>
+        </preConditions> 
+                       
+        <addColumn tableName="PRODUCTS_CAT">
+            <column name="FLAG" type="${boolean.type}" 
+                    defaultValueBoolean="true"/>
+        </addColumn>                                                       
+    </changeSet>
+ 
     <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS d " dbms="derby, postgresql, hypersql, hsqldb" > 
         <sql>   
             UPDATE PRODUCTS SET ISCATALOG = FALSE; 
@@ -707,21 +746,8 @@
             UPDATE PRODUCTS SET ISCATALOG = 0 WHERE ISCATALOG IS NULL;     
         </sql>  
         <addDefaultValue tableName="PRODUCTS" columnName="ISCATALOG" defaultValueNumeric="1" />  
-    </changeSet> 
-    <!--                    
-        <changeSet author="Chromis POS" id="add new index to products" >                                                    
-            <createIndex tableName="PRODUCTS"
-                               indexName="PRODUCTS_CATEGORY_INX">                           
-                <column name="CATEGORY" type="varchar(255)"/>
-            </createIndex>                                                                                                                                                                                                                               
-        </changeSet>                                                                                                                                                                   
-    -->                                                                                                                                                                                                                                                    
-    <!-- End of new tables sections -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->   
-    <!-- Add any new columns required in this section --> 
+    </changeSet>     
+          
     <changeSet author="Chromis POS" id="Add refund qty Ticketlines Table">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1088,7 +1114,11 @@
         </insert>
     </changeSet>
      
-    <changeSet author="Chromis POS" id="Add Promotions permissions">                                                                  
+    <changeSet author="Chromis POS" id="Add Promotions permissions.">    
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description122'</sqlCheck>
+        </preConditions>   
+                                                                           
         <insert tableName="DBPERMISSIONS">		
             <column name="CLASSNAME" value="uk.chromis.pos.promotion.PromotionPanel"/>
             <column name="SECTION" value="##label.sectionstock"/>
@@ -1113,7 +1143,7 @@
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->     
     <!-- Add any new data to tables required in this section. -->    
-     <changeSet author="Chromis POS" id="Check the default category still exists">   
+    <changeSet author="Chromis POS" id="Check the default category still exists">   
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(0) FROM CATEGORIES WHERE ID='000'  </sqlCheck>
         </preConditions>    

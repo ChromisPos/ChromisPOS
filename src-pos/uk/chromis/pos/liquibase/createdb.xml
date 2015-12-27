@@ -1367,7 +1367,7 @@
                                  referencedTableName="LOCATIONS"/>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Stock current Table">
+    <changeSet author="Chromis POS" id="Create Stock current Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="STOCKCURRENT"/>
@@ -1873,7 +1873,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create reservation_CUSTOMERS Table">
+    <changeSet author="Chromis POS" id="Create reservation_CUSTOMERS Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="RESERVATION_CUSTOMERS"/>
