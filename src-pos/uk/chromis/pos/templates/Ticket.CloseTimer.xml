@@ -25,6 +25,7 @@ import uk.chromis.pos.payment.PaymentInfo;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import uk.chromis.pos.forms.AppConfig;
+import javax.swing.Timer;
 
 boolean isCash = false;
 String change = "";
@@ -48,7 +49,18 @@ if(isCash) {
      JOptionPane pane = new JOptionPane();
      pane.setMessage(FontText);
      pane.setPreferredSize( new Dimension(450,150));
-     JDialog dialog = pane.createDialog("Cash payment");    
+     JDialog dialog = pane.createDialog("Cash payment");
+     dialog.addWindowListener(null);
+     dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+     
+     Timer timer = new Timer(10000, new ActionListener() { // 10 sec
+         public void actionPerformed(ActionEvent e) {
+            dialog.setVisible(false);
+              dialog.dispose();
+            }
+        });
+        timer.start();
+     
     new Thread(new Runnable() {
          void run() {
             dialog.show();
@@ -57,9 +69,6 @@ if(isCash) {
          } catch (TicketPrinterException ex) {
              m_App.getDeviceTicket().getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
          }
-
-
-
         } 
     }).start();
 }

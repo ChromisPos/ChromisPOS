@@ -1054,7 +1054,20 @@
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.ServiceCharge.txt"/>  
             <where>NAME='script.ServiceCharge'</where>      
         </update>         
-    </changeSet>                                                                         
+    </changeSet>   
+    
+      <changeSet author="Chromis POS" id="Insert Ticket.CloseTimer into RESOURCES Table">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME='Ticket.CloseTimer'</sqlCheck>
+        </preConditions>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="73"/>
+            <column name="NAME" value="Ticket.CloseTimer"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Ticket.CloseTimer.xml"/>
+        </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    </changeSet>                                                                                                                                                                                                                                                                                             
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->

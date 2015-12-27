@@ -16,40 +16,45 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
-
 package uk.chromis.pos.util;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.Timer;
 
 // this is a dialog that will dispose of itself after a given amount of time
-public class Test extends JDialog {
+// work in progress
 
-private int lifeTime = 0;
+public class JTimedDialog extends JDialog {
 
+    private int lifeTime = 0;
+
+ public JTimedDialog() {
+        super();   
+ }
+    
 // if lifeTime is set to zero, this behaves like a normal dialog
-public void setLifeTime(int millis) {
-lifeTime = millis;
-}
+    public void setLifeTime(int millis) {
+        lifeTime = millis;
+    }
 
-public void setVisible(boolean b) {
-System.out.println("setVisible(" + b + ")");
-super.setVisible(b);
-if(b && lifeTime != 0) {
-Action disposeAction = new AbstractAction() {
-public void actionPerformed(ActionEvent e) {
-System.out.println("disposing");
-dispose();
+    public void setVisible(boolean b) {
+        System.out.println("setVisible(" + b + ")");
+        super.setVisible(b);
+        if (b && lifeTime != 0) {
+            Action disposeAction = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("disposing");
+                    dispose();
+                }
+            };
+            Timer t = new Timer(lifeTime, disposeAction);
+            t.setRepeats(false);
+            t.start();
+        }
+    }
 }
-};
-Timer t = new Timer(lifeTime, disposeAction);
-t.setRepeats(false);
-t.start();
-}
-}
-}
-
