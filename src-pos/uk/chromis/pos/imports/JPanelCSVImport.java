@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,7 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -48,7 +50,6 @@ import uk.chromis.data.loader.PreparedSentence;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.Session;
-import uk.chromis.data.loader.TableDefinition;
 import uk.chromis.data.user.SaveProvider;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppConfig;
@@ -89,8 +90,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     private CsvReader products;
     private double oldSellPrice = 0;
     private double oldBuyPrice = 0;
-    private int currentRecord;
-    private int rowCount = 0;
+    private double currentRecord;
+    private double rowCount = 0.0;
     private String last_folder;
     private File config_file;
     private static String category_disable_text = "[ USE DEFAULT CATEGORY ]";
@@ -126,6 +127,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     private int noChanges = 0;
     private int badPrice = 0;
     private double dTaxRate;
+    private Integer progress = 0;
 
     // Addtional Items
     private String buttonText;
@@ -153,11 +155,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
         initComponents();
 
-        /*
-         * Create new datalogocsales & DataLogicSystem instances to allow access to sql routines.
-         */
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
-
         m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
 
         spr = new SaveProvider(
@@ -225,7 +223,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 products.close();
                 return;
             }
-            rowCount = 0;
+            rowCount = 0.0;
             int i = 0;
             Headers.clear();
             Headers.add("");
@@ -291,7 +289,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 ++rowCount;
             }
 
-            jTextRecords.setText(Long.toString(rowCount));
+            jTextRecords.setText(Integer.toString((int) rowCount));
             // close the file we will open again when required                        
             products.close();
 
@@ -346,157 +344,172 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
      * @param CSVFileName Name of the file (including path) to import.
      * @throws IOException If there are file reading issues.
      */
-    private void ImportCsvFile(String CSVFileName) throws IOException {
+    private class workProcess implements Runnable {
 
-        File f = new File(CSVFileName);
-        if (f.exists()) {
-
-            // Read file
-            //products = new CsvReader(CSVFileName);
-            products = new CsvReader(new InputStreamReader(new FileInputStream(CSVFileName), "UTF-8"));
-            products.setDelimiter(((String) jComboSeparator.getSelectedItem()).charAt(0));
-            products.readHeaders();
-
+        @Override
+        public void run() {
             try {
-                stockLocation = (String) ((Object[]) jParamsLocation.createValue())[1];
-            } catch (BasicException ex) {
-                jCheckAddStockLevels.setSelected(false);
+                ImportCsvFile(jFileName.getText());
+            } catch (IOException ex) {
+                Logger.getLogger(JPanelCSVImport.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            currentRecord = 0;
-            while (products.readRecord()) {
-                productReference = products.get((String) jComboReference.getSelectedItem());
-                productName = products.get((String) jComboName.getSelectedItem());
-                productBarcode = products.get((String) jComboBarcode.getSelectedItem());
-                String BuyPrice = products.get((String) jComboBuy.getSelectedItem());
-                String SellPrice = products.get((String) jComboSell.getSelectedItem());
-                Category = products.get((String) jComboCategory.getSelectedItem());
-                String StockSecurity = products.get((String) jComboSecurity.getSelectedItem());
-                String StockMaximum = products.get((String) jComboMaximum.getSelectedItem());
-                //additional items
-                buttonText = products.get((String) jComboBoxButtonText.getSelectedItem());
-                remotePrint = products.get((String) jComboBoxRemotePrint.getSelectedItem());
-                service = products.get((String) jComboBoxService.getSelectedItem());
-                varPrice = products.get((String) jComboBoxVarPrice.getSelectedItem());
-                warranty = products.get((String) jComboBoxWarranty.getSelectedItem());
-                textTip = products.get((String) jComboBoxTextTip.getSelectedItem());
-                prop = products.get((String) jComboBoxProp.getSelectedItem());
-                aux = products.get((String) jComboBoxAux.getSelectedItem());
-                shortName = products.get((String) jComboBoxShortName.getSelectedItem());
-                isPack = products.get((String) jComboBoxIspack.getSelectedItem());
-                String boxPackSize = products.get((String) jComboBoxPackSize.getSelectedItem());
-                packOf = products.get((String) jComboBoxPackOf.getSelectedItem());
-
-                currentRecord++;
-
-                // Strip Currency Symbols
-                BuyPrice = StringUtils.replaceChars(BuyPrice, "$", ""); // Remove Dolar, Euro and Pound sign Sign
-                SellPrice = StringUtils.replaceChars(SellPrice, "$", ""); // Remove Dolar, Euro and Pound Sign
-                BuyPrice = StringUtils.replaceChars(BuyPrice, "£", ""); // Remove Dolar, Euro and Pound sign Sign
-                SellPrice = StringUtils.replaceChars(SellPrice, "£", ""); // Remove Dolar, Euro and Pound Sign
-                BuyPrice = StringUtils.replaceChars(BuyPrice, "€", ""); // Remove Dolar, Euro and Pound sign Sign
-                SellPrice = StringUtils.replaceChars(SellPrice, "€", ""); // Remove Dolar, Euro and Pound Sign
-
-                dCategory = getCategory();
-
-                // set the csvMessage to a default value
-                if ("Bad Category".equals(dCategory)) {
-                    csvMessage = "Bad category details";
-                } else {
-                    csvMessage = "Missing data or Invalid number";
-                }
-
-                // Validate and convert the prices or change them to null
-                if (validateNumber(BuyPrice)) {
-                    productBuyPrice = Double.parseDouble(BuyPrice);
-                } else {
-                    productBuyPrice = null;
-                }
-
-                if (validateNumber(SellPrice)) {
-                    productSellPrice = getSellPrice(SellPrice);
-                } else {
-                    productSellPrice = null;
-                }
-
-                if (validateNumber(StockSecurity)) {
-                    stockSecurity = Double.parseDouble(StockSecurity);
-                } else {
-                    stockSecurity = null;
-                }
-
-                if (validateNumber(StockMaximum)) {
-                    stockMaximum = Double.parseDouble(StockMaximum);
-                } else {
-                    stockMaximum = null;
-                }
-
-                /**
-                 * Check to make sure our entries aren't bad or blank or the
-                 * category is not bad
-                 *
-                 */
-                if ("".equals(productReference)
-                        && "".equals(productName)
-                        && "".equals(productBarcode)
-                        && "".equals(BuyPrice)
-                        && "".equals(SellPrice)) {
-                    // Ignore blank lines in the import file
-                } else if ("".equals(productReference)
-                        | "".equals(productName)
-                        | "".equals(productBarcode)
-                        | "".equals(BuyPrice)
-                        | "".equals(SellPrice)
-                        | productBuyPrice == null
-                        | productSellPrice == null
-                        | "Bad Category".equals(dCategory)) {
-                    if (productBuyPrice == null | productSellPrice == null) {
-                        badPrice++;
-                    } else {
-                        missingData++;
-                    }
-                    createCSVEntry(csvMessage, null, null);
-                } else {
-// We know that the data passes the basic checks, so get more details about the product
-                    recordType = getRecord();
-                    switch (recordType) {
-                        case "new":
-                            createProduct("new");
-                            newRecords++;
-                            createCSVEntry("New product", null, null);
-                            break;
-                        case "name error":
-                        case "barcode error":
-                        case "reference error":
-                        case "Duplicate Reference found.":
-                        case "Duplicate Barcode found.":
-                        case "Duplicate Description found.":
-                        case "Exception":
-                            invalidRecords++;
-                            createCSVEntry(recordType, null, null);
-                            break;
-                        default:
-                            updateRecord(recordType);
-                            break;
-                    }
-                }
-            }
-            products.close();
-        } else {
-            JOptionPane.showMessageDialog(null, "Unable to locate " + CSVFileName, "File not found", JOptionPane.WARNING_MESSAGE);
         }
 
-        // update the record fields on the form
-        jTextNew.setText(Integer.toString(newRecords));
-        jTextUpdate.setText(Integer.toString(priceUpdates));
-        jTextInvalid.setText(Integer.toString(invalidRecords));
-        jTextMissing.setText(Integer.toString(missingData));
-        jTextNoChange.setText(Integer.toString(noChanges));
-        jTextBadPrice.setText(Integer.toString(badPrice));
-        if (badCategories.size() == 1 && badCategories.get(0) == "") {
-            jTextBadCats.setText("0");
-        } else {
-            jTextBadCats.setText(Integer.toString(badCategories.size()));
+        private void ImportCsvFile(String CSVFileName) throws IOException {
+
+            File f = new File(CSVFileName);
+            if (f.exists()) {
+
+                // Read file
+                //products = new CsvReader(CSVFileName);
+                products = new CsvReader(new InputStreamReader(new FileInputStream(CSVFileName), "UTF-8"));
+                products.setDelimiter(((String) jComboSeparator.getSelectedItem()).charAt(0));
+                products.readHeaders();
+
+                try {
+                    stockLocation = (String) ((Object[]) jParamsLocation.createValue())[1];
+                } catch (BasicException ex) {
+                    jCheckAddStockLevels.setSelected(false);
+                }
+
+                currentRecord = 0;
+                while (products.readRecord()) {
+                    productReference = products.get((String) jComboReference.getSelectedItem());
+                    productName = products.get((String) jComboName.getSelectedItem());
+                    productBarcode = products.get((String) jComboBarcode.getSelectedItem());
+                    String BuyPrice = products.get((String) jComboBuy.getSelectedItem());
+                    String SellPrice = products.get((String) jComboSell.getSelectedItem());
+                    Category = products.get((String) jComboCategory.getSelectedItem());
+                    String StockSecurity = products.get((String) jComboSecurity.getSelectedItem());
+                    String StockMaximum = products.get((String) jComboMaximum.getSelectedItem());
+                    //additional items
+                    buttonText = products.get((String) jComboBoxButtonText.getSelectedItem());
+                    remotePrint = products.get((String) jComboBoxRemotePrint.getSelectedItem());
+                    service = products.get((String) jComboBoxService.getSelectedItem());
+                    varPrice = products.get((String) jComboBoxVarPrice.getSelectedItem());
+                    warranty = products.get((String) jComboBoxWarranty.getSelectedItem());
+                    textTip = products.get((String) jComboBoxTextTip.getSelectedItem());
+                    prop = products.get((String) jComboBoxProp.getSelectedItem());
+                    aux = products.get((String) jComboBoxAux.getSelectedItem());
+                    shortName = products.get((String) jComboBoxShortName.getSelectedItem());
+                    isPack = products.get((String) jComboBoxIspack.getSelectedItem());
+                    String boxPackSize = products.get((String) jComboBoxPackSize.getSelectedItem());
+                    packOf = products.get((String) jComboBoxPackOf.getSelectedItem());
+
+                    currentRecord++;
+
+                    progress = ((int) ((currentRecord / rowCount) * 100));
+
+                    // Strip Currency Symbols
+                    BuyPrice = StringUtils.replaceChars(BuyPrice, "$", ""); // Remove Dolar, Euro and Pound sign Sign
+                    SellPrice = StringUtils.replaceChars(SellPrice, "$", ""); // Remove Dolar, Euro and Pound Sign
+                    BuyPrice = StringUtils.replaceChars(BuyPrice, "£", ""); // Remove Dolar, Euro and Pound sign Sign
+                    SellPrice = StringUtils.replaceChars(SellPrice, "£", ""); // Remove Dolar, Euro and Pound Sign
+                    BuyPrice = StringUtils.replaceChars(BuyPrice, "€", ""); // Remove Dolar, Euro and Pound sign Sign
+                    SellPrice = StringUtils.replaceChars(SellPrice, "€", ""); // Remove Dolar, Euro and Pound Sign
+
+                    dCategory = getCategory();
+
+                    // set the csvMessage to a default value
+                    if ("Bad Category".equals(dCategory)) {
+                        csvMessage = "Bad category details";
+                    } else {
+                        csvMessage = "Missing data or Invalid number";
+                    }
+
+                    // Validate and convert the prices or change them to null
+                    if (validateNumber(BuyPrice)) {
+                        productBuyPrice = Double.parseDouble(BuyPrice);
+                    } else {
+                        productBuyPrice = null;
+                    }
+
+                    if (validateNumber(SellPrice)) {
+                        productSellPrice = getSellPrice(SellPrice);
+                    } else {
+                        productSellPrice = null;
+                    }
+
+                    if (validateNumber(StockSecurity)) {
+                        stockSecurity = Double.parseDouble(StockSecurity);
+                    } else {
+                        stockSecurity = null;
+                    }
+
+                    if (validateNumber(StockMaximum)) {
+                        stockMaximum = Double.parseDouble(StockMaximum);
+                    } else {
+                        stockMaximum = null;
+                    }
+
+                    /**
+                     * Check to make sure our entries aren't bad or blank or the
+                     * category is not bad
+                     *
+                     */
+                    if ("".equals(productReference)
+                            && "".equals(productName)
+                            && "".equals(productBarcode)
+                            && "".equals(BuyPrice)
+                            && "".equals(SellPrice)) {
+                        // Ignore blank lines in the import file
+                    } else if ("".equals(productReference)
+                            | "".equals(productName)
+                            | "".equals(productBarcode)
+                            | "".equals(BuyPrice)
+                            | "".equals(SellPrice)
+                            | productBuyPrice == null
+                            | productSellPrice == null
+                            | "Bad Category".equals(dCategory)) {
+                        if (productBuyPrice == null | productSellPrice == null) {
+                            badPrice++;
+                        } else {
+                            missingData++;
+                        }
+                        createCSVEntry(csvMessage, null, null);
+                    } else {
+// We know that the data passes the basic checks, so get more details about the product
+                        recordType = getRecord();
+                        switch (recordType) {
+                            case "new":
+                                createProduct("new");
+                                newRecords++;
+                                createCSVEntry("New product", null, null);
+                                break;
+                            case "name error":
+                            case "barcode error":
+                            case "reference error":
+                            case "Duplicate Reference found.":
+                            case "Duplicate Barcode found.":
+                            case "Duplicate Description found.":
+                            case "Exception":
+                                invalidRecords++;
+                                createCSVEntry(recordType, null, null);
+                                break;
+                            default:
+                                updateRecord(recordType);
+                                break;
+                        }
+                    }
+                }
+                products.close();
+            } else {
+                JOptionPane.showMessageDialog(null, "Unable to locate " + CSVFileName, "File not found", JOptionPane.WARNING_MESSAGE);
+            }
+
+            // update the record fields on the form
+            jTextNew.setText(Integer.toString(newRecords));
+            jTextUpdate.setText(Integer.toString(priceUpdates));
+            jTextInvalid.setText(Integer.toString(invalidRecords));
+            jTextMissing.setText(Integer.toString(missingData));
+            jTextNoChange.setText(Integer.toString(noChanges));
+            jTextBadPrice.setText(Integer.toString(badPrice));
+            if (badCategories.size() == 1 && badCategories.get(0) == "") {
+                jTextBadCats.setText("0");
+            } else {
+                jTextBadCats.setText(Integer.toString(badCategories.size()));
+            }
         }
     }
 
@@ -669,6 +682,30 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jParamsLocation.activate();
     }
 
+    private void setWorker() {
+        progress = 0;
+        pb.setStringPainted(true);
+        final SwingWorker<Integer, Integer> backgroundWork = new SwingWorker<Integer, Integer>() {
+            @Override
+            protected final Integer doInBackground() throws Exception {
+                while ((progress >= 0) && (progress < 100)) {
+                    Thread.sleep(50);
+                    this.publish(progress);
+                }
+                this.publish(100);
+                this.done();
+                return 100;
+            }
+
+            @Override
+            protected final void process(final List<Integer> chunks) {
+                pb.setValue(chunks.get(0));
+                pb.setString("Processed " + progress +"% of import");
+            }
+        };
+        backgroundWork.execute();
+    }
+
     /**
      * Resets all the form fields, update 7.4.14 JDL To fix display error if
      * user does not exit before running next import
@@ -778,6 +815,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     @Override
     public boolean deactivate() {
         resetFields();
+        progress = -1;
         return (true);
     }
 
@@ -931,7 +969,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 // create a new csv entry and save it using DataLogicSystem
         Object[] myprod = new Object[11];
         myprod[0] = UUID.randomUUID().toString();                               // ID string
-        myprod[1] = Integer.toString(currentRecord);                            // Record number
+        myprod[1] = Integer.toString((int) currentRecord);                            // Record number
         myprod[2] = csvError;                                                   // Error description
         myprod[3] = productReference;                                           // Reference string
         myprod[4] = productBarcode;                                             // Barcode String        
@@ -1092,6 +1130,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jFooter = new javax.swing.JPanel();
         jParamsLocation = new uk.chromis.pos.reports.JParamsLocation();
         jImport = new javax.swing.JButton();
+        pb = new javax.swing.JProgressBar();
 
         setOpaque(false);
         setPreferredSize(new java.awt.Dimension(630, 430));
@@ -1911,22 +1950,20 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jFooterLayout.setHorizontalGroup(
             jFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFooterLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addComponent(jParamsLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 232, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
                 .addComponent(jImport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jFooterLayout.setVerticalGroup(
             jFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFooterLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jParamsLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jFooterLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(jImport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jImport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1941,10 +1978,12 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pb, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1954,9 +1993,11 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(159, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1972,11 +2013,9 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 // prevent any more key presses
         jImport.setEnabled(false);
 
-        try {
-            ImportCsvFile(jFileName.getText());
-        } catch (IOException ex) {
-            Logger.getLogger(JPanelCSVImport.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        workProcess work = new workProcess();
+        Thread thread2 = new Thread(work);
+        thread2.start();
 
     }//GEN-LAST:event_jImportActionPerformed
 
@@ -1987,7 +2026,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
     private void jbtnDbDriverLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDbDriverLibActionPerformed
         resetFields();
-
+        setWorker();
         // If CSV.last_file is null then use c:\ otherwise use saved dir
         JFileChooser chooser = new JFileChooser(last_folder == null ? "C:\\" : last_folder);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("csv files", "csv");
@@ -2144,5 +2183,6 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     private javax.swing.JTextField jTextUpdate;
     private javax.swing.JLabel jTextUpdates;
     private javax.swing.JButton jbtnDbDriverLib;
+    private javax.swing.JProgressBar pb;
     // End of variables declaration//GEN-END:variables
 }
