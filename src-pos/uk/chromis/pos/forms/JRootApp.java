@@ -114,8 +114,6 @@ public class JRootApp extends JPanel implements AppView {
     private Map<String, BeanFactory> m_aBeanFactories;
     private JPrincipalApp m_principalapp = null;
     private static HashMap<String, String> m_oldclasses; // This is for backwards compatibility purposes
-    private JFrame frame = new JFrame("");
-    private final JFrame sampleFrame = new JFrame();
 
     private String m_clock;
     private String m_date;
@@ -226,22 +224,20 @@ public class JRootApp extends JPanel implements AppView {
 
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
 // Lets check if this is a historic version of the jar and it is in the database  
-/*
             if (m_dlSystem.checkHistoricVersion(AppLocal.APP_VERSION) != 0) {
                 StartupDialog dialog = new StartupDialog();
                 JFrame frame = new JFrame("");
                 JPanel dialogPanel = new JPanel();
-
                 dialogPanel.add(dialog);
-                dialog.jTextArea1.setText("test");
+                dialog.jTextArea1.setText("\n Unable to run Chromis. \n \n You are trying to run an incompatible version of Chromis."
+                        + "\n\n The database found is v" + sDBVersion);
                 JOptionPane.showMessageDialog(frame,
                         dialogPanel,
-                        "Incorrect Jar version ",
+                        "Incompatible version ",
                         JOptionPane.PLAIN_MESSAGE);
-
                 System.exit(1);
             }
-*/
+
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
@@ -1083,6 +1079,7 @@ public class JRootApp extends JPanel implements AppView {
 
     private void poweredbyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_poweredbyMouseClicked
 
+        JFrame sampleFrame = new JFrame();
         final Action exit = new AbstractAction("Exit") {
             @Override
             public final void actionPerformed(final ActionEvent e) {
@@ -1144,39 +1141,22 @@ public class JRootApp extends JPanel implements AppView {
         JPanel mainPanel = new JPanel(layout);
         JLabel label = new JLabel();
         JPanel btnPanel = new JPanel();
-
         dialogPanel.add(dialog);
-
         mainPanel.add(dialogPanel, "wrap");
         mainPanel.add(scrollPane, "wrap");
-
         JButton btnExit = new JButton(exit);
-
         btnPanel.add(btnExit, "width 100!");
         mainPanel.add(btnPanel, "right, wrap");
         mainPanel.add(new JLabel(), "wrap");
-
         sampleFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        sampleFrame.setPreferredSize(
-                new Dimension(500, 300));
+        sampleFrame.setPreferredSize(new Dimension(500, 300));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-        sampleFrame.setLocation(dim.width
-                / 2 - 250, dim.height / 2 - 150);
-
-        sampleFrame.setUndecorated(
-                true);
+        sampleFrame.setLocation(dim.width / 2 - 250, dim.height / 2 - 150);
+        sampleFrame.setUndecorated(true);
         mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
-
         sampleFrame.add(mainPanel);
-
         sampleFrame.pack();
-
-        sampleFrame.setVisible(
-                true);
-
-        //    }
+        sampleFrame.setVisible(true);
 
     }//GEN-LAST:event_poweredbyMouseClicked
 
