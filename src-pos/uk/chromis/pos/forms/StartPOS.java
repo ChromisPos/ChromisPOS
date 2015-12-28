@@ -90,7 +90,7 @@ public class StartPOS {
             System.exit(1);
 
         }
-
+        
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
         //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");

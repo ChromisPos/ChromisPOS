@@ -1303,9 +1303,9 @@
     </changeSet>
 
     <changeSet author="Chromis POS" id="Update Hversions to 0.54"> 
-        <insert tableName="HVERSIONS">
-            <column name="VERSION" value="0.54"/>          
-        </insert>               
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.54"/>       
+        </insert>           
     </changeSet> 
     <!-- ***************************************************************************************** -->      
 </databaseChangeLog>

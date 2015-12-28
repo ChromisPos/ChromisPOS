@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.forms;
 
 import java.awt.image.BufferedImage;
@@ -28,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import uk.chromis.basic.BasicException;
@@ -82,7 +83,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     private SentenceFind m_getProductByName;
 
     private SentenceFind m_getRecordCount;
-
+    private SentenceFind m_checkHistoricVersion;
     private SentenceFind m_resourcebytes;
     private SentenceExec m_resourcebytesinsert;
     private SentenceExec m_resourcebytesupdate;
@@ -130,6 +131,9 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
                 return (dr.getString(1));
             }
         };
+
+        m_checkHistoricVersion = new PreparedSentence(s, "SELECT COUNT(*) FROM HVERSIONS WHERE VERSION = ? ", SerializerWriteString.INSTANCE, SerializerReadInteger.INSTANCE
+        );
 
         m_getProductAllFields = new PreparedSentence(s, "SELECT ID FROM PRODUCTS WHERE REFERENCE=? AND CODE=? AND NAME=? ", new SerializerWriteBasic(new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING}), productIdRead
         );
@@ -297,12 +301,21 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     }
 
     public final String findRolePermissions(String sRole) {
-
         try {
             return Formats.BYTEA.formatValue(m_rolepermissions.find(sRole));
         } catch (BasicException e) {
             return null;
         }
+    }
+
+    public final int checkHistoricVersion(String version) {
+        try {
+            Integer i = (Integer) m_checkHistoricVersion.find(version);
+            return (i == null) ? 0 : i;
+        } catch (BasicException ex) {
+            Logger.getLogger(DataLogicSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
     public final void execChangePassword(Object[] userdata) throws BasicException {
@@ -404,7 +417,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         return (Object[]) m_activecash.find(sActiveCashIndex);
     }
 
-    public final int getRecordCount(String money, String ticket ) throws BasicException {
+    public final int getRecordCount(String money, String ticket) throws BasicException {
         Integer i = (Integer) m_getRecordCount.find(money, ticket);
         return (i == null) ? 1 : i;
     }
