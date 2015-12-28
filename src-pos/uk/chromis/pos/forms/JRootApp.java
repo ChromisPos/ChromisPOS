@@ -224,7 +224,7 @@ public class JRootApp extends JPanel implements AppView {
 
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
 // Lets check if this is a historic version of the jar and it is in the database  
-            if (m_dlSystem.checkHistoricVersion(AppLocal.APP_VERSION) != 0) {
+/*            if (m_dlSystem.checkHistoricVersion(AppLocal.APP_VERSION) != 0) {
                 StartupDialog dialog = new StartupDialog();
                 JFrame frame = new JFrame("");
                 JPanel dialogPanel = new JPanel();
@@ -237,7 +237,7 @@ public class JRootApp extends JPanel implements AppView {
                         JOptionPane.PLAIN_MESSAGE);
                 System.exit(1);
             }
-
+*/
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));

@@ -18,7 +18,7 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
-    <include file="uk/chromis/pos/liquibase/createdb.xml"/>
+    
     <include file="uk/chromis/pos/liquibase/updatechromis.xml"/>
     <include file="uk/chromis/pos/liquibase/updatechromisbeta.xml"/>
 

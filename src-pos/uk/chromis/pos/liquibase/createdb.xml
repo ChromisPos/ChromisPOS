@@ -1567,7 +1567,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Lineremoved Table">
+    <changeSet author="Chromis POS" id="Create Lineremoved Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="LINEREMOVED"/>
