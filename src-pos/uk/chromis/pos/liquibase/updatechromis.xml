@@ -18,8 +18,7 @@
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
   
     <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>  
- 
-    
+     
     <!-- ***************************************************************************************** --> 
     <!-- ***************************************************************************************** --> 
     <!-- Using the liquibase scripts.
@@ -554,7 +553,6 @@
         </createTable>       
     </changeSet>   
   
-
     <changeSet author="Chromis POS" id="Create Voucher Table">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -692,7 +690,21 @@
             <column name="ISENABLED" type="${boolean.type}" 
                     defaultValueBoolean="true"/>
         </createTable>      
-    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    </changeSet>   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+    <changeSet author="Chromis POS" id="Create Historic Version Table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="HVERSIONS"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="HVERSIONS">
+            <column name="VERSION" type="varchar(50)"> 
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>       
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                              
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1056,7 +1068,7 @@
         </update>         
     </changeSet>   
     
-      <changeSet author="Chromis POS" id="Insert Ticket.CloseTimer into RESOURCES Table">
+    <changeSet author="Chromis POS" id="Insert Ticket.CloseTimer into RESOURCES Table">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME='Ticket.CloseTimer'</sqlCheck>
         </preConditions>
@@ -1287,7 +1299,13 @@
     <changeSet author="Chromis POS" id="Update to 0.54">    
         <update tableName="APPLICATIONS">
             <column name="VERSION" value="0.54"/>          
-        </update>               
+        </update>  
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Update Hversions to 0.54"> 
+        <insert tableName="HVERSIONS">
+            <column name="VERSION" value="0.54"/>          
+        </insert>               
     </changeSet> 
     <!-- ***************************************************************************************** -->      
 </databaseChangeLog>

@@ -225,6 +225,11 @@ public class JRootApp extends JPanel implements AppView {
         String sDBVersion = readDataBaseVersion();
 
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
+            
+            
+            
+            
+            
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
