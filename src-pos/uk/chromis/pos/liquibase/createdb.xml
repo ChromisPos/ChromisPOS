@@ -108,7 +108,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create People Table">
+    <changeSet author="Chromis POS" id="Create People Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PEOPLE"/>
@@ -150,7 +150,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into PEOPLE Table" dbms="mysql, oracle">
+    <changeSet author="Chromis POS" id="Insert into PEOPLE Table." dbms="mysql, oracle">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PEOPLE</sqlCheck>
         </preConditions>
@@ -181,7 +181,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into PEOPLE Table" dbms="derby, postgresql, hypersql, hsqldb">
+    <changeSet author="Chromis POS" id="Insert into PEOPLE Table." dbms="derby, postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PEOPLE</sqlCheck>
         </preConditions>
@@ -641,7 +641,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Customers Table">
+    <changeSet author="Chromis POS" id="Create Customers Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="CUSTOMERS"/>
@@ -713,7 +713,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Categories Table">
+    <changeSet author="Chromis POS" id="Create Categories Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="CATEGORIES"/>
@@ -791,7 +791,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Taxes Table">
+    <changeSet author="Chromis POS" id="Create Taxes Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="TAXES"/>
@@ -1016,7 +1016,7 @@
                                  referencedTableName="ATTRIBUTE"/>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Products Table">
+    <changeSet author="Chromis POS" id="Create Products Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PRODUCTS"/>
@@ -1697,7 +1697,7 @@
         </insert>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Create Places Table">
+    <changeSet author="Chromis POS" id="Create Places Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PLACES"/>
@@ -1837,7 +1837,7 @@
         </insert>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Create reservations Table">
+    <changeSet author="Chromis POS" id="Create reservations Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="RESERVATIONS"/>
@@ -2020,7 +2020,7 @@
                                  referencedTableName="PEOPLE"/>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create BREAKS Table">
+    <changeSet author="Chromis POS" id="Create BREAKS Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="BREAKS"/>
@@ -2041,7 +2041,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into BREAKS Table" dbms="mysql, oracle">
+    <changeSet author="Chromis POS" id="Insert into BREAKS Table." dbms="mysql, oracle">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM BREAKS </sqlCheck>
         </preConditions>
@@ -2065,7 +2065,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into BREAKS Table" dbms="derby, postgresql, hypersql, hsqldb">
+    <changeSet author="Chromis POS" id="Insert into BREAKS Table." dbms="derby, postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM BREAKS </sqlCheck>
         </preConditions>
@@ -2121,7 +2121,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create Moorers Table">
+    <changeSet author="Chromis POS" id="Create Moorers Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="MOORERS"/>

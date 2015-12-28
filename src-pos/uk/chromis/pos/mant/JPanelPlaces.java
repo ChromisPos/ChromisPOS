@@ -56,11 +56,27 @@ public class JPanelPlaces extends JPanelTable {
     protected void init() {
         DataLogicSales dlSales = null;
         dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
-
-        tplaces = new TableDefinition(app.getSession(),
-                // "PLACES", new String[]{"ID", "NAME", "X", "Y", "FLOOR"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "X", "Y", AppLocal.getIntString("label.placefloor")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.NULL}, new int[]{0}
-                "PLACES", new String[]{"ID", "NAME", "X", "Y", "(SELECT NAME from FLOORS WHERE FLOORS.ID=FLOOR)"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "X", "Y", AppLocal.getIntString("label.placefloor")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.STRING}, new int[]{0}
+        
+                tplaces = new TableDefinition(app.getSession(),
+                "PLACES", new String[]{"ID", "NAME", "X", "Y", "FLOOR"}, new String[]{"ID", AppLocal.getIntString("Label.Name"), "X", "Y", AppLocal.getIntString("label.placefloor")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.NULL}, new int[]{0}
         );
+        
+        
+/*
+        tplaces = new TableDefinition(app.getSession(),
+               // "PLACES", new String[]{"ID", "NAME", "X", "Y", "FLOOR"},
+               // new String[]{"ID", AppLocal.getIntString("Label.Name"), 
+               //     "X", "Y", AppLocal.getIntString("label.placefloor")}, 
+               //     new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, 
+               //     new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.NULL}, new int[]{0}
+                
+                "PLACES", new String[]{"ID", "NAME", "X", "Y", "(SELECT NAME from FLOORS WHERE FLOORS.ID = FLOOR)"},
+                new String[]{"ID", AppLocal.getIntString("Label.Name"), "X", "Y", AppLocal.getIntString("label.placefloor")},
+                new Datas[]{Datas.STRING, Datas.STRING, Datas.INT, Datas.INT, Datas.STRING}, 
+                new Formats[]{Formats.STRING, Formats.STRING, Formats.INT, Formats.INT, Formats.STRING}, new int[]{0}
+        );
+        
+        */
         jeditor = new PlacesEditor(dlSales, dirty);
         AppLocal.LIST_BY_RIGHTS = "";
     }
@@ -105,8 +121,8 @@ public class JPanelPlaces extends JPanelTable {
      */
     @Override
     public ListCellRenderer getListCellRenderer() {
-     //   return new ListCellRendererBasic(tplaces.getRenderStringBasic(new int[]{1}));
-     return new ListCellRendererBasic(tplaces.getRenderStringBasic(new int[]{4,1,2,3}));
+        return new ListCellRendererBasic(tplaces.getRenderStringBasic(new int[]{1}));
+     //return new ListCellRendererBasic(tplaces.getRenderStringBasic(new int[]{4,1,2,3}));
     }
 
     /**
