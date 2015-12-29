@@ -47,7 +47,7 @@
             <text>${ticket.printDate()}</text>
         </line>
 
-    #if ($ticket.getCustomer())
+        #if ($ticket.getCustomer())
         <line>
             <text align="left" length="15">Customer:</text>
             <text>${ticket.getCustomer().getName()}</text>
@@ -57,44 +57,45 @@
             <text align="left" length="15">Account #:</text>
             <text>${ticket.getCustomer().getTaxid()}</text>
         </line>
-    #end
+        #end
 
 
         #if (${tickettext.place} != ${place})
         <line>
-           <text align="left" length="15">Table:</text>
-           <text>${place}</text>
+            <text align="left" length="15">Table:</text>
+            <text>${place}</text>
         </line>
         #end
         
         <line></line>
         <line>
+            <text align ="right" length="5">Qty</text>
             <text align ="left" length="17">Item</text>
-            <text align ="right" length="5"></text>
+
         </line>
         <line>
             <text>------------------------------------------</text>
         </line>
-    #foreach ($ticketline in $ticket.getLines())
+        #foreach ($ticketline in $ticket.getLines())
         #if(($ticketline.isProductKitchen()) && ($ticketline.getProperty("sendstatus").equals("No")))
-            <line size = "1">
-                <text align ="left" length="5">${ticketline.printMultiply()}x</text>
-                #if ($ticketline.isProductCom())
-                    <text align ="left" length="37">--${ticketline.printName()}</text>
-                #else
-                    <text align ="left" length="37">${ticketline.printName()}</text>
-                #end
-            </line>
-            <!-- Add the following lines only for 2.30 Attributes -->
-              #if ($ticketline.productAttSetInstId)
-                <line>
-                    <text align ="left" length="42">    ${ticketline.productAttSetInstDesc}</text>
-                </line>
-                <line></line>
+        <line size = "1">
+            <text align ="left" length="5">${ticketline.printMultiply()}x</text>
+            #if ($ticketline.isProductCom())
+            <text align ="left" length="37">--${ticketline.printName()}</text>
+            #else
+            <text align ="left" length="37">${ticketline.printName()}</text>
             #end
-         #end
+        </line>
+        <!-- Add the following lines only for 2.30 Attributes -->
+        #if ($ticketline.productAttSetInstId)
+        <line>
+            <text align ="left" length="42">    ${ticketline.productAttSetInstDesc}</text>
+        </line>
+        <line></line>
+        #end
+        #end
 
-    #end
+        #end
         <line>
             <text>------------------------------------------</text>
         </line>

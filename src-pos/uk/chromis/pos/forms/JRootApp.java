@@ -853,8 +853,8 @@ public class JRootApp extends JPanel implements AppView {
         m_jPanelContainer = new javax.swing.JPanel();
         m_jPanelLogin = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 0));
+        jLabel1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         m_jLogonName = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -904,7 +904,10 @@ public class JRootApp extends JPanel implements AppView {
 
         m_jPanelLogin.setLayout(new java.awt.BorderLayout());
 
+        jPanel4.setMinimumSize(new java.awt.Dimension(518, 177));
+        jPanel4.setPreferredSize(new java.awt.Dimension(518, 177));
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.Y_AXIS));
+        jPanel4.add(filler2);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -922,9 +925,10 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setAlignmentX(0.5F);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setMaximumSize(new java.awt.Dimension(800, 1024));
+        jLabel1.setMinimumSize(new java.awt.Dimension(518, 177));
+        jLabel1.setPreferredSize(new java.awt.Dimension(518, 177));
         jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jPanel4.add(jLabel1);
-        jPanel4.add(filler2);
 
         m_jPanelLogin.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -974,10 +978,8 @@ public class JRootApp extends JPanel implements AppView {
             .add(jPanel1Layout.createSequentialGroup()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(m_txtKeys, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(m_jClose, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                    .add(m_jClose, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 289, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -992,10 +994,9 @@ public class JRootApp extends JPanel implements AppView {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jScrollPane1))
                 .add(104, 104, 104)
                 .add(m_jLogonName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)

@@ -259,7 +259,7 @@
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMEDIFFERENCE.formatValue($F{TOTAL})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

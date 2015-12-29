@@ -593,10 +593,10 @@
         </createTable>                         
     </changeSet> 
     
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE if not found" dbms="postgresql, hypersql, hsqldb">  
+    <changeSet author="Chromis POS" id="Create TICKETSNUM_INVOICE Sequence." dbms="postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="TICKETSNUM_INVOICE"/>
+                <sequenceExists sequenceName="TICKETSNUM_INVOICE"/>
             </not>
         </preConditions>
         
