@@ -176,7 +176,7 @@ public class JTicketsBagTicket extends JTicketsBag {
                 } catch (TaxesException ex) {
                 }
                 printTicket();
-                m_jEdit.setVisible((m_dlSystem.getRecordCount(m_App.getActiveCashIndex(), m_ticket.getId()) > 0) && m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
+                //m_jEdit.setVisible((m_dlSystem.getRecordCount(m_App.getActiveCashIndex(), m_ticket.getId()) > 0) && m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
             }
 
         } catch (BasicException e) {
