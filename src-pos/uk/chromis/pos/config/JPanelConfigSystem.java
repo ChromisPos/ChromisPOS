@@ -45,7 +45,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
 
         initComponents();
         jAutoLogoffTime.setText("100");
-
+        jMaxChange.setText("20");
+        
         jAutoLogoffTime.getDocument().addDocumentListener(dirty);
         jAutoLogoffAfterKitchen.addActionListener(dirty);
         jAutoLogoffAfterPrint.addActionListener(dirty);
@@ -71,6 +72,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jDisableDefaultProduct.addActionListener(dirty);
         jTaxIncluded.addActionListener(dirty);
         jCategoiesBynumber.addActionListener(dirty);
+        jMaxChange.getDocument().addDocumentListener(dirty);
     }
 
     /**
@@ -104,6 +106,11 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
             AppConfig.getInstance().setProperty("till.autologofftimerperiod", "100");
         }
 
+        String changeCheck = (AppConfig.getInstance().getProperty("till.changelimit"));
+        if (changeCheck == null) {
+            AppConfig.getInstance().setProperty("till.changelimit", "20");
+        }
+
         jEnableAutoLogoff.setSelected(AppConfig.getInstance().getBoolean("till.enableautologoff"));
         jInactivityTimer.setSelected(AppConfig.getInstance().getBoolean("till.autologoffinactivitytimer"));
         jAutoLogoffTime.setText(AppConfig.getInstance().getProperty("till.autologofftimerperiod"));
@@ -126,6 +133,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jDisableDefaultProduct.setSelected(AppConfig.getInstance().getBoolean("product.hidedefaultproductedit"));
         jTaxIncluded.setSelected(AppConfig.getInstance().getBoolean("till.taxincluded"));
         jCategoiesBynumber.setSelected(AppConfig.getInstance().getBoolean("till.categoriesbynumberorder"));
+        jMaxChange.setText(AppConfig.getInstance().getProperty("till.changelimit"));
 
 // hide some values until the code has been implmented        
         if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
@@ -203,9 +211,10 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         AppConfig.getInstance().setBoolean("db.productupdate", jUpdatedbprice.isSelected());
         AppConfig.getInstance().setBoolean("sales.newscreen", jChangeSalesScreen.isSelected());
         AppConfig.getInstance().setBoolean("display.consolidated", jConsolidate.isSelected());
-        AppConfig.getInstance().setBoolean("product.hidedefaultproductedit", jDisableDefaultProduct.isSelected());        
+        AppConfig.getInstance().setBoolean("product.hidedefaultproductedit", jDisableDefaultProduct.isSelected());
         AppConfig.getInstance().setBoolean("till.taxincluded", jTaxIncluded.isSelected());
         AppConfig.getInstance().setBoolean("till.categoriesbynumberorder", jCategoiesBynumber.isSelected());
+        AppConfig.getInstance().setProperty("till.changelimit", jMaxChange.getText());
 
         dirty.setDirty(false);
     }
@@ -257,6 +266,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jChangeSalesScreen = new eu.hansolo.custom.SteelCheckBox();
         jMoveAMountBoxToTop = new eu.hansolo.custom.SteelCheckBox();
         jCategoiesBynumber = new eu.hansolo.custom.SteelCheckBox();
+        jMaxChange = new javax.swing.JTextField();
+        jLabelMaxChange = new javax.swing.JLabel();
         jLabelInactiveTime = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(700, 500));
@@ -465,6 +476,13 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
 
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 20, 580, -1));
 
+        jMaxChange.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jMaxChange.setText("50.00");
+        jPanel4.add(jMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 60, 30));
+
+        jLabelMaxChange.setText(bundle.getString("label.maxchange")); // NOI18N
+        jPanel4.add(jLabelMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 160, 130, 30));
+
         jLabelInactiveTime.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabelInactiveTime.setText(bundle.getString("label.autolofftime")); // NOI18N
         jLabelInactiveTime.setMaximumSize(new java.awt.Dimension(0, 25));
@@ -478,15 +496,13 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addComponent(jLabelInactiveTime, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                        .addComponent(jLabelInactiveTime, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 492, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -571,10 +587,12 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelCustomerTextColour;
     private javax.swing.JLabel jLabelInactiveTime;
+    private javax.swing.JLabel jLabelMaxChange;
     private javax.swing.JLabel jLabelServerTextColour;
     private javax.swing.JLabel jLabelTableNameTextColour;
     private javax.swing.JLabel jLabelTimedMessage;
     private eu.hansolo.custom.SteelCheckBox jMarineOpt;
+    private javax.swing.JTextField jMaxChange;
     private eu.hansolo.custom.SteelCheckBox jMoveAMountBoxToTop;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

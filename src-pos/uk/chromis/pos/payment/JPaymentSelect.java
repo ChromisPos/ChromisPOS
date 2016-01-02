@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.forms.AppConfig;
@@ -619,22 +620,23 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     }//GEN-LAST:event_m_jTabPaymentStateChanged
 
     private void m_jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonOKActionPerformed
-        
+
         PaymentInfo returnPayment = ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).executePayment();
 
-// insert chnage check here
-
-
-        
-        
-        if (returnPayment != null) {
+        double change = Integer.parseInt(AppConfig.getInstance().getProperty("till.changelimit"));
+        if ((returnPayment.getTendered() - returnPayment.getTotal()) > change) {
+                                           Toolkit.getDefaultToolkit().beep();
+                                JOptionPane.showMessageDialog(null,
+                                          AppLocal.getIntString("message.largechange"),
+                                        "Check", JOptionPane.WARNING_MESSAGE);
+                                            
+        } else if (returnPayment != null) {
 
             m_aPaymentInfo.add(returnPayment);
             accepted = true;
 
             dispose();
         }
-
     }//GEN-LAST:event_m_jButtonOKActionPerformed
 
     private void m_jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonCancelActionPerformed
