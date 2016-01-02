@@ -624,14 +624,14 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         PaymentInfo returnPayment = ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).executePayment();
 
         double change = Integer.parseInt(AppConfig.getInstance().getProperty("till.changelimit"));
-        if ((returnPayment.getTendered() - returnPayment.getTotal()) > change) {
-                                           Toolkit.getDefaultToolkit().beep();
-                                JOptionPane.showMessageDialog(null,
-                                          AppLocal.getIntString("message.largechange"),
-                                        "Check", JOptionPane.WARNING_MESSAGE);
-                                            
+        if (returnPayment.getChange() > change) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,
+                    AppLocal.getIntString("message.largechange"),
+                    "Check", JOptionPane.WARNING_MESSAGE);
+            //Reset the payment tabs
+            addTabs();
         } else if (returnPayment != null) {
-
             m_aPaymentInfo.add(returnPayment);
             accepted = true;
 
