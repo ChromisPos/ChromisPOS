@@ -1079,7 +1079,14 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Ticket.CloseTimer.xml"/>
         </insert>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    </changeSet>                                                                                                                                                                                                                                                                                             
+    </changeSet>    
+    
+    <changeSet author="Chromis POS" id="Update refundit script">
+        <update tableName="RESOURCES">
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.Refundit.txt"/>  
+            <where>NAME='script.Refundit'</where>      
+        </update>         
+    </changeSet>                                                                                                                                                                                                                                                                                          
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1158,7 +1165,19 @@
             <column name="DESCRIPTION" value="##label.description123"/>
         </insert> 
     </changeSet> 
-      
+    
+    <changeSet author="Chromis POS" id="Add Supplier panel permissions">    
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description124'</sqlCheck>
+        </preConditions> 
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.suppliers.SuppliersPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname124"/>
+            <column name="DESCRIPTION" value="##label.description124"/>
+        </insert> 
+    </changeSet> 
+          
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 
@@ -1296,9 +1315,9 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to 0.54.1">    
+    <changeSet author="Chromis POS" id="Update to 0.54.2">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.54.1"/>          
+            <column name="VERSION" value="0.54.2"/>          
         </update>  
     </changeSet>
 

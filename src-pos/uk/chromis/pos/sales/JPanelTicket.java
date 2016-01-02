@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.sales;
 
 import bsh.EvalError;
@@ -419,6 +418,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                 }
         }
+        
+        m_jNumberKey.setEnabled(true);
+        jEditAttributes.setVisible(true);
+        m_jEditLine.setVisible(true);
+        m_jList.setVisible(true);
 
         m_oTicket = oTicket;
         m_oTicketExt = oTicketExt;
@@ -472,6 +476,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void refreshTicket() {
 
+        if (m_oTicket != null) {
+            m_jDelete.setVisible(m_oTicket.getTicketType() != TicketType.REFUND);
+        }
         CardLayout cl = (CardLayout) (getLayout());
 
         m_promotionSupport.clearPromotionCache();
@@ -497,7 +504,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         } else {
             btnSplit.setEnabled(false);
-            btnSplit.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total") && parseInt(m_oTicket.printArticlesCount()) > 1);
+            btnSplit.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total") && (m_oTicket.getArticlesCount()) > 1);
             if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                 //Make disable Search and Edit Buttons
                 m_jNumberKey.justEquals();
@@ -511,11 +518,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 line.setTaxInfo(taxeslogic.getTaxInfo(line.getProductTaxCategoryID(), m_oTicket.getCustomer()));
             }
 
-            // The ticket name            
-            //  m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
             setTicketName(m_oTicket.getName(m_oTicketExt));
 
-            // Limpiamos todas las filas y anadimos las del ticket actual
             m_ticketlines.clearTicketLines();
 
             for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
@@ -636,7 +640,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 line.setProductAttSetInstDesc(attedit.getAttributeSetInstDescription());
                                 paintTicketLine(i, line);
                             }
-                        } 
+                        }
                     }
                 } catch (BasicException ex) {
                     MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindattributes"), ex);
@@ -1352,7 +1356,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines") && m_sBarcode.length() < 2) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) { //  && m_sBarcode.length() < 2) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, 1.0, -product.getPriceSell());
             } else if (cTrans == '+'
@@ -1362,7 +1366,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 addTicketLine(product, getPorValue(), product.getPriceSell());
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERVALID
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines") && m_sBarcode.length() < 2) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) { // && m_sBarcode.length() < 2) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, getPorValue(), -product.getPriceSell());
             } else if (cTrans == ' ' || cTrans == '=') {
@@ -1372,7 +1376,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             try {
                                 JRefundLines.updateRefunds();
                             } catch (BasicException ex) {
-                                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                                //  Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                                System.out.println();
                             }
                         }
                         m_ticketsbag.deleteTicket();

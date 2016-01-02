@@ -16,9 +16,9 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
+
 package uk.chromis.pos.forms;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
@@ -62,7 +62,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -142,7 +141,6 @@ public class JRootApp extends JPanel implements AppView {
             m_date = getLineDate();
             m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
             // m_jLblTitle.setText("Chromis POS - v0.53.44 Beta ONLY VERSION");
-            //   m_jLblTitle.repaint();
             jLabel2.setText("  " + m_date + "  " + m_clock);
         }
     }
@@ -781,13 +779,10 @@ public class JRootApp extends JPanel implements AppView {
             jPanel3.remove(m_principalapp.getNotificator());
             jPanel3.revalidate();
             jPanel3.repaint();
-
-            // remove the card
             m_jPanelContainer.remove(m_principalapp);
             m_principalapp = null;
 
             showLogin();
-
             return true;
         }
     }
@@ -1084,8 +1079,8 @@ public class JRootApp extends JPanel implements AppView {
         final Action exit = new AbstractAction("Exit") {
             @Override
             public final void actionPerformed(final ActionEvent e) {
-                sampleFrame.setVisible(false);
-                sampleFrame.dispose();
+  //              sampleFrame.setVisible(false);
+ //               sampleFrame.dispose();
             }
         };
 

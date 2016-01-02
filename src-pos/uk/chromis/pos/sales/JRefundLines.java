@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.sales;
 
 import java.awt.BorderLayout;
@@ -85,9 +86,11 @@ public class JRefundLines extends javax.swing.JPanel {
     }
 
     public static void updateRefunds() throws BasicException {
+        if (m_aLines != null){
         for (Object m_aLine : m_aLines) {
             tmpTicketInfo = ((TicketLineInfo) m_aLine);
             dlSales.updateRefundQty(tmpTicketInfo.getRefundQty(), tmpTicketInfo.getTicket(), tmpTicketInfo.getTicketLine());
+        }
         }
     }
 

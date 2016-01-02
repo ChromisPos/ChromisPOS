@@ -23,6 +23,7 @@
 
 import java.util.Properties;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.ticket.TicketLineInfo;
 import uk.chromis.pos.ticket.TicketProductInfo;
 
@@ -33,6 +34,6 @@ if (index >= 0) {
 	        double value = -1.0;
         	row.setMultiply(value);
 
-	ticket.ticketType = 1;
+	ticket.ticketType = TicketType.REFUND;
        }
 }

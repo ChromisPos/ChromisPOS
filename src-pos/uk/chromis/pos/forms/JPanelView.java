@@ -27,28 +27,9 @@ import uk.chromis.basic.BasicException;
  * @author adrianromero
  */
 public interface JPanelView {
-       
-    /**
-     *
-     * @return
-     */
+
     public abstract String getTitle();
-
-    /**
-     *
-     * @throws BasicException
-     */
     public abstract void activate() throws BasicException;
-
-    /**
-     *
-     * @return
-     */
     public abstract boolean deactivate();
-
-    /**
-     *
-     * @return
-     */
     public abstract JComponent getComponent();
 }
