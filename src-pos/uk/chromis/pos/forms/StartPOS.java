@@ -72,7 +72,7 @@ public class StartPOS {
      * @param args
      */
     public static void main(final String args[]) {
-/*
+
         String sJavaVersion = System.getProperty("java.version");
         double dJavaVersion = Double.parseDouble(sJavaVersion.substring(0, sJavaVersion.indexOf('.', sJavaVersion.indexOf('.') + 1)));
 
@@ -90,7 +90,7 @@ public class StartPOS {
             System.exit(1);
 
         }
-       */ 
+    
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
         //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");

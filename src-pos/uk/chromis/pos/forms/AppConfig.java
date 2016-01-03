@@ -93,11 +93,6 @@ public class AppConfig implements AppProperties {
         return Double.valueOf(m_propsconfig.getProperty(sKey));
     }
 
-    public String newgetProperty(String sKey) {
-        getInstance();
-        return m_propsconfig.getProperty(sKey);
-    }
-
     public boolean delete() {
         loadDefault();
         return configFile.delete();
