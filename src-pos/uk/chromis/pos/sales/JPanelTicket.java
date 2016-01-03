@@ -166,6 +166,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private TicketInfo m_ticketCopy;
     private AppConfig m_config;
     private PromotionSupport m_promotionSupport = null;
+    private Boolean fromNumberPad = true;
 
     public JPanelTicket() {
         initComponents();
@@ -418,7 +419,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                 }
         }
-        
+
         m_jNumberKey.setEnabled(true);
         jEditAttributes.setVisible(true);
         m_jEditLine.setVisible(true);
@@ -909,7 +910,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void stateTransition(char cTrans) {
+        // if the user has pressed 'enter' or '?' read the number enter and check in barcodes
         if ((cTrans == '\n') || (cTrans == '?')) {
+
+            // Routine to handle negative qty add to allow barcodes with dashes    
+            if (m_sBarcode.substring(m_sBarcode.length() - 1).equals("-")) {
+
+                System.out.println(" last char is a minus");
+            }
 
             /**
              * ******************************************************************
@@ -1122,13 +1130,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                             if (oProduct.getPriceSell() != 0.0) {
+                            {
+                                if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
+                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1154,6 +1164,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
              */
         } else {
             m_sBarcode.append(cTrans);
+
             if (cTrans == '\u007f') {
                 stateToZero();
             } else if ((cTrans == '0') && (m_iNumberStatus == NUMBER_INPUTZERO)) {
@@ -1288,7 +1299,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {                
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
                     Toolkit.getDefaultToolkit().beep();
@@ -1332,7 +1343,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERVALID
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {              
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
                     Toolkit.getDefaultToolkit().beep();
@@ -1350,13 +1361,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, 1.0, product.getPriceSell());
-
                 if (!Boolean.parseBoolean(AppConfig.getInstance().getProperty("product.hidedefaultproductedit"))) {
                     m_jEditLine.doClick();
                 }
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) { //  && m_sBarcode.length() < 2) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines") && fromNumberPad) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, 1.0, -product.getPriceSell());
             } else if (cTrans == '+'
@@ -1366,7 +1376,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 addTicketLine(product, getPorValue(), product.getPriceSell());
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERVALID
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) { // && m_sBarcode.length() < 2) {
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) { // ) && m_sBarcode.length() < 2) {
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, getPorValue(), -product.getPriceSell());
             } else if (cTrans == ' ' || cTrans == '=') {
@@ -2482,8 +2492,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jNumberKeyKeyPerformed
 
     private void m_jKeyFactoryKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_jKeyFactoryKeyTyped
+        if (AppConfig.getInstance().getBoolean("scan.withdashes")) {
+            fromNumberPad = false;
+        }
+        
         m_jKeyFactory.setText(null);
         stateTransition(evt.getKeyChar());
+        fromNumberPad = true;
     }//GEN-LAST:event_m_jKeyFactoryKeyTyped
 
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
