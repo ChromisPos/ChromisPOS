@@ -464,6 +464,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 restDB.moveCustomer(oTicketExt.toString(), m_oTicket.getId());
             }
         }
+
+        // if there is a customer assign update the debt details
+        if (m_oTicket != null && m_oTicket.getCustomer() != null) {
+            try {                           
+              m_oTicket.getCustomer().setCurdebt(dlSales.getCustomerDebt(m_oTicket.getCustomer().getId()));
+            } catch (BasicException ex) {
+                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         // read resources ticket.show and execute
         executeEvent(m_oTicket, m_oTicketExt, "ticket.show");
         j_btnKitchenPrt.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintKitchen"));
@@ -1123,15 +1133,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                            {
-                                if (oProduct.getPriceSell() != 0.0) {
+                             if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
-                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1292,7 +1300,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {                
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
                     Toolkit.getDefaultToolkit().beep();
@@ -1336,7 +1344,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERVALID
-                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {              
+                    && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
                     Toolkit.getDefaultToolkit().beep();
@@ -2488,7 +2496,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (AppConfig.getInstance().getBoolean("scan.withdashes")) {
             fromNumberPad = false;
         }
-        
+
         m_jKeyFactory.setText(null);
         stateTransition(evt.getKeyChar());
         fromNumberPad = true;

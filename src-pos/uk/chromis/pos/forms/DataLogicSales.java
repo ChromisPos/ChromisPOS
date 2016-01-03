@@ -1324,7 +1324,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public final SentenceExec getStockDiaryInsert() {
         return new SentenceExecTransaction(s) {
             @Override
-            public int execInTransaction(Object params) throws BasicException {            
+            public int execInTransaction(Object params) throws BasicException {
                 int updateresult = ((Object[]) params)[5] == null // si ATTRIBUTESETINSTANCE_ID is null
                         ? new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{6, 3, 4})).exec(params)
                         : new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{6, 3, 4, 5})).exec(params);
@@ -1385,6 +1385,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         };
     }
 
+    public final Double getCustomerDebt(String id) throws BasicException {
+       return (Double) new PreparedSentence(s, "SELECT CURDEBT FROM CUSTOMERS WHERE ID = ? ", 
+              SerializerWriteString.INSTANCE, SerializerReadDouble.INSTANCE).find(id);
+
+    }
+   
     /**
      *
      * @param warehouse

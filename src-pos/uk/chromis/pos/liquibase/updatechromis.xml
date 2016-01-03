@@ -1293,6 +1293,10 @@
     <!-- ***************************************************************************************** -->   
     <!-- Drop any sharedtickets -->
     <!-- If required If it needs to be done after further updates increment number to make unique  -->   
+    <changeSet author="Chromis POS" id="drop hversions data" >       
+        <sql>DELETE FROM HVERSIONS</sql>
+    </changeSet> 
+
     <changeSet author="Chromis POS" id="drop shared tickets 1" >       
         <sql>DELETE FROM SHAREDTICKETS</sql>
     </changeSet>         
@@ -1321,10 +1325,16 @@
         </update>  
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Update Hversions to 0.54"> 
+    <changeSet author="Chromis POS" id="Update Hversions start"> 
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.54"/>       
-        </insert>           
+        </insert>                   
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.54.1"/>       
+        </insert> 
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.54.2"/>       
+        </insert>         
     </changeSet> 
     <!-- ***************************************************************************************** -->      
 </databaseChangeLog>

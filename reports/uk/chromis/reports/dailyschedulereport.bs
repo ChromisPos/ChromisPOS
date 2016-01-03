@@ -26,7 +26,7 @@ report.setSentence("SELECT " +
                 "PEOPLE.NAME, " +
                 "LEAVES.STARTDATE, " +
                 "LEAVES.ENDDATE, " +
-                "({fn TIMESTAMPDIFF(SQL_TSI_SECOND, LEAVES.STARTDATE, LEAVES.ENDDATE)}) AS TOTAL " +
+                "CONCAT('',DATEDIFF(LEAVES.ENDDATE, LEAVES.STARTDATE)) AS TOTAL " +
                 "FROM PEOPLE LEFT JOIN LEAVES ON LEAVES.PPLID = PEOPLE.ID " +
                 "WHERE ?(QBF_FILTER) " +
                 "ORDER BY LEAVES.STARTDATE DESC ");

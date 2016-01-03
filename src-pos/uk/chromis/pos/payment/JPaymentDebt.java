@@ -82,6 +82,7 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
             m_jNotes.setText(customerext.getNotes());
             txtMaxdebt.setText(Formats.CURRENCY.formatValue(RoundUtils.getValue(customerext.getMaxdebt())));
             txtCurdate.setText(Formats.DATE.formatValue(customerext.getCurdate()));
+       //     System.out.println(customerext.getCurdebt();
             txtCurdebt.setText(Formats.CURRENCY.formatValue(RoundUtils.getValue(customerext.getCurdebt())));
 
             if (RoundUtils.compare(RoundUtils.getValue(customerext.getCurdebt()), RoundUtils.getValue(customerext.getMaxdebt())) >= 0) {

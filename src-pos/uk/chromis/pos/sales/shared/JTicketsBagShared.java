@@ -344,7 +344,7 @@ public class JTicketsBagShared extends JTicketsBag {
             public void run() {
                 List<SharedTicketInfo> l;
                 try {
-                    if ("true".equals(AppConfig.getInstance().getProperty("sharedticket.currentuser"))) {
+                    if (AppConfig.getInstance().getBoolean("sharedticket.currentuser")) {
                         l = dlReceipts.getSharedTicketListByUser(m_App.getAppUserView().getUser().getName());
                     } else {
                         l = dlReceipts.getSharedTicketList();
