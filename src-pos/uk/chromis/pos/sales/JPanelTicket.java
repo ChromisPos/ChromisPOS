@@ -912,13 +912,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void stateTransition(char cTrans) {
         // if the user has pressed 'enter' or '?' read the number enter and check in barcodes
         if ((cTrans == '\n') || (cTrans == '?')) {
-
-            // Routine to handle negative qty add to allow barcodes with dashes    
-            if (m_sBarcode.substring(m_sBarcode.length() - 1).equals("-")) {
-
-                System.out.println(" last char is a minus");
-            }
-
             /**
              * ******************************************************************
              * Start of barcode handling routine
