@@ -146,7 +146,8 @@ public class JParamsCustomer extends javax.swing.JPanel implements ReportEditorC
         jTextField1.setBounds(140, 20, 200, 25);
 
         btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_sml.png"))); // NOI18N
-        btnCustomer.setToolTipText("Get Customers");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        btnCustomer.setToolTipText(bundle.getString("tiptext.getcustomers")); // NOI18N
         btnCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCustomerActionPerformed(evt);

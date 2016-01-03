@@ -190,7 +190,8 @@ public class ReceiptSplit extends javax.swing.JDialog {
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jBtnToRightAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/2rightarrow.png"))); // NOI18N
-        jBtnToRightAll.setToolTipText("Split All Line Items");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jBtnToRightAll.setToolTipText(bundle.getString("tiptext.splitall")); // NOI18N
         jBtnToRightAll.setFocusPainted(false);
         jBtnToRightAll.setFocusable(false);
         jBtnToRightAll.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -205,7 +206,7 @@ public class ReceiptSplit extends javax.swing.JDialog {
         jPanel4.add(jBtnToRightAll, gridBagConstraints);
 
         jBtnToRightOne.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1rightarrow.png"))); // NOI18N
-        jBtnToRightOne.setToolTipText("Split only one of the Line Items");
+        jBtnToRightOne.setToolTipText(bundle.getString("tiptext.splitoneitem")); // NOI18N
         jBtnToRightOne.setFocusPainted(false);
         jBtnToRightOne.setFocusable(false);
         jBtnToRightOne.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -221,7 +222,7 @@ public class ReceiptSplit extends javax.swing.JDialog {
         jPanel4.add(jBtnToRightOne, gridBagConstraints);
 
         jBtnToLeftOne.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1leftarrow.png"))); // NOI18N
-        jBtnToLeftOne.setToolTipText("Un-Split only one of the Line Items");
+        jBtnToLeftOne.setToolTipText(bundle.getString("tiptext.unsplititem")); // NOI18N
         jBtnToLeftOne.setFocusPainted(false);
         jBtnToLeftOne.setFocusable(false);
         jBtnToLeftOne.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -237,7 +238,7 @@ public class ReceiptSplit extends javax.swing.JDialog {
         jPanel4.add(jBtnToLeftOne, gridBagConstraints);
 
         jBtnToLeftAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/2leftarrow.png"))); // NOI18N
-        jBtnToLeftAll.setToolTipText("Un-Split All Line Items");
+        jBtnToLeftAll.setToolTipText(bundle.getString("tiptext.unsplitall")); // NOI18N
         jBtnToLeftAll.setFocusPainted(false);
         jBtnToLeftAll.setFocusable(false);
         jBtnToLeftAll.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -260,8 +261,8 @@ public class ReceiptSplit extends javax.swing.JDialog {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-730)/2, (screenSize.height-470)/2, 730, 470);
+        setSize(new java.awt.Dimension(730, 470));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonOKActionPerformed

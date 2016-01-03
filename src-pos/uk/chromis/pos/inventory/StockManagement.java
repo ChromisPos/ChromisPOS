@@ -470,7 +470,8 @@ public class StockManagement extends JPanel implements JPanelView {
         jPanel8.add(m_jdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 200, 25));
 
         m_jbtndate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/date.png"))); // NOI18N
-        m_jbtndate.setToolTipText("Open Calendar");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jbtndate.setToolTipText(bundle.getString("tiptext.opencalendar")); // NOI18N
         m_jbtndate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jbtndateActionPerformed(evt);
@@ -515,7 +516,7 @@ public class StockManagement extends JPanel implements JPanelView {
         jPanel8.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 110, -1, 150));
 
         m_jUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1uparrow.png"))); // NOI18N
-        m_jUp.setToolTipText("Scroll Up a Line");
+        m_jUp.setToolTipText(bundle.getString("tiptext.scrollup")); // NOI18N
         m_jUp.setFocusPainted(false);
         m_jUp.setFocusable(false);
         m_jUp.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -528,7 +529,7 @@ public class StockManagement extends JPanel implements JPanelView {
         jPanel8.add(m_jUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 110, -1, -1));
 
         m_jDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1downarrow.png"))); // NOI18N
-        m_jDown.setToolTipText("Scroll Down a Line");
+        m_jDown.setToolTipText(bundle.getString("tiptext.scrolldown")); // NOI18N
         m_jDown.setFocusPainted(false);
         m_jDown.setFocusable(false);
         m_jDown.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -541,7 +542,7 @@ public class StockManagement extends JPanel implements JPanelView {
         jPanel8.add(m_jDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
 
         m_jDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/editdelete.png"))); // NOI18N
-        m_jDelete.setToolTipText("Remove Line");
+        m_jDelete.setToolTipText(bundle.getString("tiptext.removeline")); // NOI18N
         m_jDelete.setFocusPainted(false);
         m_jDelete.setFocusable(false);
         m_jDelete.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -554,7 +555,7 @@ public class StockManagement extends JPanel implements JPanelView {
         jPanel8.add(m_jDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 160, -1, -1));
 
         jEditAttributes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/attributes.png"))); // NOI18N
-        jEditAttributes.setToolTipText("Attrubutes");
+        jEditAttributes.setToolTipText(bundle.getString("tiptext.attributes")); // NOI18N
         jEditAttributes.setFocusPainted(false);
         jEditAttributes.setFocusable(false);
         jEditAttributes.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -571,7 +572,7 @@ public class StockManagement extends JPanel implements JPanelView {
 
         btnDownloadProducts.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnDownloadProducts.setText("ScanPal");
-        btnDownloadProducts.setToolTipText("Download from Mobile Device");
+        btnDownloadProducts.setToolTipText(bundle.getString("tiptext.downfrommobile")); // NOI18N
         btnDownloadProducts.setPreferredSize(new java.awt.Dimension(115, 33));
         btnDownloadProducts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

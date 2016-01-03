@@ -142,7 +142,8 @@ public class JParamsDatesInterval extends javax.swing.JPanel implements ReportEd
         jTxtEndDate.setPreferredSize(new java.awt.Dimension(150, 25));
 
         btnDateStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/date.png"))); // NOI18N
-        btnDateStart.setToolTipText("Open Calendar");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        btnDateStart.setToolTipText(bundle.getString("tiptext.opencalendar")); // NOI18N
         btnDateStart.setMaximumSize(new java.awt.Dimension(40, 33));
         btnDateStart.setMinimumSize(new java.awt.Dimension(40, 33));
         btnDateStart.setPreferredSize(new java.awt.Dimension(40, 33));
@@ -153,7 +154,7 @@ public class JParamsDatesInterval extends javax.swing.JPanel implements ReportEd
         });
 
         btnDateEnd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/date.png"))); // NOI18N
-        btnDateEnd.setToolTipText("Open Calendar");
+        btnDateEnd.setToolTipText(bundle.getString("tiptext.opencalendar")); // NOI18N
         btnDateEnd.setMaximumSize(new java.awt.Dimension(40, 33));
         btnDateEnd.setMinimumSize(new java.awt.Dimension(40, 33));
         btnDateEnd.setPreferredSize(new java.awt.Dimension(40, 33));

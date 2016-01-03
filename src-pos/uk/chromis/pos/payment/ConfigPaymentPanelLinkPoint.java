@@ -160,7 +160,8 @@ public class ConfigPaymentPanelLinkPoint extends javax.swing.JPanel implements P
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/fileopen.png"))); // NOI18N
-        jButton1.setToolTipText("Open Folder");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jButton1.setToolTipText(bundle.getString("tiptext.openfolder")); // NOI18N
         jButton1.setMaximumSize(new java.awt.Dimension(64, 40));
         jButton1.setMinimumSize(new java.awt.Dimension(64, 40));
         jButton1.setPreferredSize(new java.awt.Dimension(64, 40));

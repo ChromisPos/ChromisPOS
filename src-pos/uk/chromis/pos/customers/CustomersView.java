@@ -653,7 +653,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         jcard.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/encrypted.png"))); // NOI18N
-        jButton2.setToolTipText("Create Key");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jButton2.setToolTipText(bundle.getString("tiptext.createkey")); // NOI18N
         jButton2.setMaximumSize(new java.awt.Dimension(64, 32));
         jButton2.setMinimumSize(new java.awt.Dimension(64, 32));
         jButton2.setPreferredSize(new java.awt.Dimension(64, 32));
@@ -664,7 +665,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/fileclose.png"))); // NOI18N
-        jButton3.setToolTipText("Clear Key");
+        jButton3.setToolTipText(bundle.getString("tiptext.clearkey")); // NOI18N
         jButton3.setMaximumSize(new java.awt.Dimension(64, 32));
         jButton3.setMinimumSize(new java.awt.Dimension(64, 32));
         jButton3.setPreferredSize(new java.awt.Dimension(64, 32));
@@ -940,7 +941,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                 .addContainerGap())
         );
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jTabbedPane1.addTab(bundle.getString("label.Transactions"), jPanel4); // NOI18N
 
         m_jImage.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N

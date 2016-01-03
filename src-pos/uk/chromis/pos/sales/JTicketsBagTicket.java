@@ -265,7 +265,8 @@ public class JTicketsBagTicket extends JTicketsBag {
         jButton2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
         jButton2.setText(AppLocal.getIntString("button.print")); // NOI18N
-        jButton2.setToolTipText("Search Tickets");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jButton2.setToolTipText(bundle.getString("tiptext.searchtickets")); // NOI18N
         jButton2.setFocusPainted(false);
         jButton2.setFocusable(false);
         jButton2.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -283,7 +284,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jEdit.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         m_jEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_editline.png"))); // NOI18N
         m_jEdit.setText(AppLocal.getIntString("button.print")); // NOI18N
-        m_jEdit.setToolTipText("Edit current Ticket");
+        m_jEdit.setToolTipText(bundle.getString("tiptext.editcurrentticket")); // NOI18N
         m_jEdit.setEnabled(false);
         m_jEdit.setFocusPainted(false);
         m_jEdit.setFocusable(false);
@@ -302,7 +303,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jRefund.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         m_jRefund.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/inbox.png"))); // NOI18N
         m_jRefund.setText(AppLocal.getIntString("button.print")); // NOI18N
-        m_jRefund.setToolTipText("Receipt Refund");
+        m_jRefund.setToolTipText(bundle.getString("tiptext.receiptrefund")); // NOI18N
         m_jRefund.setFocusPainted(false);
         m_jRefund.setFocusable(false);
         m_jRefund.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -320,7 +321,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jPrint.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         m_jPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/printer24.png"))); // NOI18N
         m_jPrint.setText(AppLocal.getIntString("button.print")); // NOI18N
-        m_jPrint.setToolTipText("Reprint Receipt");
+        m_jPrint.setToolTipText(bundle.getString("tiptext.reprintreceipt")); // NOI18N
         m_jPrint.setFocusPainted(false);
         m_jPrint.setFocusable(false);
         m_jPrint.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -362,7 +363,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/ok.png"))); // NOI18N
-        jButton1.setToolTipText("Enter Receipt and touch to Find by Number");
+        jButton1.setToolTipText(bundle.getString("tiptext.enterreceiptandfind")); // NOI18N
         jButton1.setFocusPainted(false);
         jButton1.setFocusable(false);
         jButton1.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -394,7 +395,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         buttonGroup1.add(jrbSales);
         jrbSales.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jrbSales.setText(AppLocal.getIntString("label.sales")); // NOI18N
-        jrbSales.setToolTipText("Show Sales Only");
+        jrbSales.setToolTipText(bundle.getString("tiptext.showsalesonly")); // NOI18N
         jrbSales.setFocusPainted(false);
         jrbSales.setFocusable(false);
         jrbSales.setRequestFocusEnabled(false);
@@ -404,7 +405,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         jrbRefunds.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jrbRefunds.setForeground(new java.awt.Color(255, 0, 0));
         jrbRefunds.setText(AppLocal.getIntString("label.refunds")); // NOI18N
-        jrbRefunds.setToolTipText("Show Refunds Only");
+        jrbRefunds.setToolTipText(bundle.getString("tiptext.showrefundsonly")); // NOI18N
         jrbRefunds.setFocusPainted(false);
         jrbRefunds.setFocusable(false);
         jrbRefunds.setRequestFocusEnabled(false);

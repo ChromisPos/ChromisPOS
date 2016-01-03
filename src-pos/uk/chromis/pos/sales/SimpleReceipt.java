@@ -380,7 +380,8 @@ public class SimpleReceipt extends javax.swing.JPanel {
         m_jButtons.add(m_jTicketId);
 
         btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_sml.png"))); // NOI18N
-        btnCustomer.setToolTipText("Show Customers");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        btnCustomer.setToolTipText(bundle.getString("tiptext.showcustomers")); // NOI18N
         btnCustomer.setFocusPainted(false);
         btnCustomer.setFocusable(false);
         btnCustomer.setMargin(new java.awt.Insets(8, 14, 8, 14));

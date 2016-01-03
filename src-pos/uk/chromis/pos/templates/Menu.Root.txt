@@ -92,8 +92,7 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/chart.png", "Menu.ProductSales", "/uk/chromis/reports/productsales.bs");
         submenu.addPanel("/uk/chromis/images/chart.png", "Menu.SalesChart", "/uk/chromis/reports/chartsales.bs");
         submenu.addPanel("/uk/chromis/images/chart.png", "Menu.TimeSeriesProduct", "/uk/chromis/reports/timeseriesproduct.bs");
-        submenu.addPanel("/uk/chromis/images/chart.png", "Menu.Top10Sales", "/uk/chromis/reports/top10sales.bs");
-        submenu.addPanel("/uk/chromis/images/chart.png", "Menu.Top10Sales", "/uk/chromis/reports/top10salesMySQL.bs");
+        submenu.addPanel("/uk/chromis/images/chart.png", "Menu.Top10Sales", "/uk/chromis/reports/top10sales.bs");      
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.SalesProfit", "/uk/chromis/reports/productsalesprofit.bs");
         submenu.addPanel("/uk/chromis/images/chart.png", "Menu.ProductCategorySalesPieChart", "/uk/chromis/reports/piesalescat.bs");
     

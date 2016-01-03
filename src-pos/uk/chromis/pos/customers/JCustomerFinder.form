@@ -354,7 +354,9 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="pos_messages.properties" key="button.reset" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Clear Filter"/>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="pos_messages.properties" key="tiptext.clearfilter" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                         <Property name="actionCommand" type="java.lang.String" value="Reset "/>
                         <Property name="focusable" type="boolean" value="false"/>
                       </Properties>
@@ -376,7 +378,9 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="pos_messages.properties" key="button.executefilter" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Execute Filter"/>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="pos_messages.properties" key="tiptext.executefilter" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                         <Property name="focusPainted" type="boolean" value="false"/>
                       </Properties>
                       <AccessibilityProperties>

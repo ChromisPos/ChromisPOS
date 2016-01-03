@@ -282,7 +282,8 @@ public class JTicketsBagShared extends JTicketsBag {
         setLayout(new java.awt.BorderLayout());
 
         m_jNewTicket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_new.png"))); // NOI18N
-        m_jNewTicket.setToolTipText("New Sale");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jNewTicket.setToolTipText(bundle.getString("tiptext.newsale")); // NOI18N
         m_jNewTicket.setFocusPainted(false);
         m_jNewTicket.setFocusable(false);
         m_jNewTicket.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -298,7 +299,7 @@ public class JTicketsBagShared extends JTicketsBag {
         jPanel1.add(m_jNewTicket);
 
         m_jDelTicket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_delete.png"))); // NOI18N
-        m_jDelTicket.setToolTipText("Cancel Sale");
+        m_jDelTicket.setToolTipText(bundle.getString("tiptext.cancelsale")); // NOI18N
         m_jDelTicket.setFocusPainted(false);
         m_jDelTicket.setFocusable(false);
         m_jDelTicket.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -316,7 +317,7 @@ public class JTicketsBagShared extends JTicketsBag {
         m_jListTickets.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         m_jListTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_pending.png"))); // NOI18N
         m_jListTickets.setText("99");
-        m_jListTickets.setToolTipText("Layaways");
+        m_jListTickets.setToolTipText(bundle.getString("tiptext.layaways")); // NOI18N
         m_jListTickets.setFocusPainted(false);
         m_jListTickets.setFocusable(false);
         m_jListTickets.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

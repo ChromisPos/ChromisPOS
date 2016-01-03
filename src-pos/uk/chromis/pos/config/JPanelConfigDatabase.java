@@ -185,6 +185,8 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         jtxtDbDriverLib.setPreferredSize(new java.awt.Dimension(450, 25));
 
         jbtnDbDriverLib.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/fileopen.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jbtnDbDriverLib.setToolTipText(bundle.getString("tiptext.openfolder")); // NOI18N
         jbtnDbDriverLib.setMaximumSize(new java.awt.Dimension(64, 32));
         jbtnDbDriverLib.setMinimumSize(new java.awt.Dimension(64, 32));
         jbtnDbDriverLib.setPreferredSize(new java.awt.Dimension(64, 40));
@@ -217,7 +219,6 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
 
         jButtonTest.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButtonTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/database.png"))); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jButtonTest.setText(bundle.getString("Button.Test")); // NOI18N
         jButtonTest.setActionCommand(bundle.getString("Button.Test")); // NOI18N
         jButtonTest.addActionListener(new java.awt.event.ActionListener() {

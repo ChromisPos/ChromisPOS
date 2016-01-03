@@ -291,7 +291,8 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_sml.png"))); // NOI18N
-        btnCustomer.setToolTipText("Customer Account");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        btnCustomer.setToolTipText(bundle.getString("tiptext.customeraccount")); // NOI18N
         btnCustomer.setFocusPainted(false);
         btnCustomer.setFocusable(false);
         btnCustomer.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -304,7 +305,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         jPanel6.add(btnCustomer);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/filesave.png"))); // NOI18N
-        btnSave.setToolTipText("Save");
+        btnSave.setToolTipText(bundle.getString("tiptext.save")); // NOI18N
         btnSave.setFocusPainted(false);
         btnSave.setFocusable(false);
         btnSave.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -320,7 +321,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         btnPay.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/pay.png"))); // NOI18N
         btnPay.setText(AppLocal.getIntString("button.pay")); // NOI18N
-        btnPay.setToolTipText("Pay Account");
+        btnPay.setToolTipText(bundle.getString("tiptext.payaccount")); // NOI18N
         btnPay.setFocusPainted(false);
         btnPay.setFocusable(false);
         btnPay.setMargin(new java.awt.Insets(8, 14, 8, 14));

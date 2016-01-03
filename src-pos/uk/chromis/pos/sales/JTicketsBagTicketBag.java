@@ -78,7 +78,8 @@ public class JTicketsBagTicketBag extends javax.swing.JPanel {
         m_jBtnDelete.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         m_jBtnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_delete.png"))); // NOI18N
         m_jBtnDelete.setText(AppLocal.getIntString("Button.DeleteTicket")); // NOI18N
-        m_jBtnDelete.setToolTipText("Delete current Ticket");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jBtnDelete.setToolTipText(bundle.getString("tiptext.deletecurrent")); // NOI18N
         m_jBtnDelete.setFocusPainted(false);
         m_jBtnDelete.setFocusable(false);
         m_jBtnDelete.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -96,7 +97,7 @@ public class JTicketsBagTicketBag extends javax.swing.JPanel {
         m_jBtnCancel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         m_jBtnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/cancel.png"))); // NOI18N
         m_jBtnCancel.setText(AppLocal.getIntString("Button.Cancel")); // NOI18N
-        m_jBtnCancel.setToolTipText("Cancel Action");
+        m_jBtnCancel.setToolTipText(bundle.getString("tiptext.cancelaction")); // NOI18N
         m_jBtnCancel.setFocusPainted(false);
         m_jBtnCancel.setFocusable(false);
         m_jBtnCancel.setMargin(new java.awt.Insets(0, 4, 0, 4));

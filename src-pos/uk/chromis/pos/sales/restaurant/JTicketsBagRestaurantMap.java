@@ -780,10 +780,14 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_jbtnReservations.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbtnReservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/date.png"))); // NOI18N
         m_jbtnReservations.setText(AppLocal.getIntString("button.reservations")); // NOI18N
-        m_jbtnReservations.setToolTipText("Open Reservations screen");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jbtnReservations.setToolTipText(bundle.getString("tiptext.openreservationsscreen")); // NOI18N
         m_jbtnReservations.setFocusPainted(false);
         m_jbtnReservations.setFocusable(false);
         m_jbtnReservations.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jbtnReservations.setMaximumSize(new java.awt.Dimension(133, 40));
+        m_jbtnReservations.setMinimumSize(new java.awt.Dimension(133, 40));
+        m_jbtnReservations.setPreferredSize(new java.awt.Dimension(133, 40));
         m_jbtnReservations.setRequestFocusEnabled(false);
         m_jbtnReservations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -795,10 +799,13 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_jbtnRefresh.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbtnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/reload.png"))); // NOI18N
         m_jbtnRefresh.setText(AppLocal.getIntString("button.reloadticket")); // NOI18N
-        m_jbtnRefresh.setToolTipText("Reload table information");
+        m_jbtnRefresh.setToolTipText(bundle.getString("tiptext.reloadtabledata")); // NOI18N
         m_jbtnRefresh.setFocusPainted(false);
         m_jbtnRefresh.setFocusable(false);
         m_jbtnRefresh.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jbtnRefresh.setMaximumSize(new java.awt.Dimension(100, 40));
+        m_jbtnRefresh.setMinimumSize(new java.awt.Dimension(100, 40));
+        m_jbtnRefresh.setPreferredSize(new java.awt.Dimension(100, 40));
         m_jbtnRefresh.setRequestFocusEnabled(false);
         m_jbtnRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

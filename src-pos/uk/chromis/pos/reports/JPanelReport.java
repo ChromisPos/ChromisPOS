@@ -288,7 +288,8 @@ public abstract class JPanelReport extends JPanel implements JPanelView, BeanFac
 
         jToggleFilter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1downarrow.png"))); // NOI18N
         jToggleFilter.setSelected(true);
-        jToggleFilter.setToolTipText("Hide/Show Filter");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jToggleFilter.setToolTipText(bundle.getString("tiptext.hideshowfilter")); // NOI18N
         jToggleFilter.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1uparrow.png"))); // NOI18N
         jToggleFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -300,7 +301,7 @@ public abstract class JPanelReport extends JPanel implements JPanelView, BeanFac
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/ok.png"))); // NOI18N
         jButton1.setText(AppLocal.getIntString("Button.ExecuteReport")); // NOI18N
-        jButton1.setToolTipText("Execute Report");
+        jButton1.setToolTipText(bundle.getString("tiptext.executereport")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

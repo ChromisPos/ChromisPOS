@@ -367,7 +367,7 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
         jcmdReset.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jcmdReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/reload.png"))); // NOI18N
         jcmdReset.setText(bundle.getString("button.reset")); // NOI18N
-        jcmdReset.setToolTipText("Clear Filter");
+        jcmdReset.setToolTipText(bundle.getString("tiptext.clearfilter")); // NOI18N
         jcmdReset.setActionCommand("Reset ");
         jcmdReset.setFocusable(false);
         jcmdReset.addActionListener(new java.awt.event.ActionListener() {
@@ -381,7 +381,7 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
         jcmdExecute.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jcmdExecute.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/ok.png"))); // NOI18N
         jcmdExecute.setText(AppLocal.getIntString("button.executefilter")); // NOI18N
-        jcmdExecute.setToolTipText("Execute Filter");
+        jcmdExecute.setToolTipText(bundle.getString("tiptext.executefilter")); // NOI18N
         jcmdExecute.setFocusPainted(false);
         jcmdExecute.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

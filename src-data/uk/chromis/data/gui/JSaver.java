@@ -96,7 +96,8 @@ public class JSaver extends JPanel implements StateListener {
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jbtnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/editnew.png"))); // NOI18N
-        jbtnNew.setToolTipText("Add New");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jbtnNew.setToolTipText(bundle.getString("tiptext.addnew")); // NOI18N
         jbtnNew.setFocusPainted(false);
         jbtnNew.setFocusable(false);
         jbtnNew.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -109,7 +110,7 @@ public class JSaver extends JPanel implements StateListener {
         add(jbtnNew);
 
         jbtnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_delete.png"))); // NOI18N
-        jbtnDelete.setToolTipText("Delete");
+        jbtnDelete.setToolTipText(bundle.getString("tiptext.delete")); // NOI18N
         jbtnDelete.setFocusPainted(false);
         jbtnDelete.setFocusable(false);
         jbtnDelete.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -123,7 +124,7 @@ public class JSaver extends JPanel implements StateListener {
         add(jSeparator1);
 
         jbtnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/filesave.png"))); // NOI18N
-        jbtnSave.setToolTipText("Save");
+        jbtnSave.setToolTipText(bundle.getString("tiptext.save")); // NOI18N
         jbtnSave.setFocusPainted(false);
         jbtnSave.setFocusable(false);
         jbtnSave.setMargin(new java.awt.Insets(2, 8, 2, 8));

@@ -256,7 +256,8 @@ public class PeopleView extends JPanel implements EditorRecord {
         setPreferredSize(new java.awt.Dimension(531, 400));
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/fileclose.png"))); // NOI18N
-        jButton3.setToolTipText("Clear Key");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jButton3.setToolTipText(bundle.getString("tiptext.clearkey")); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -294,7 +295,7 @@ public class PeopleView extends JPanel implements EditorRecord {
         jcard.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/encrypted.png"))); // NOI18N
-        jButton2.setToolTipText("Create Key");
+        jButton2.setToolTipText(bundle.getString("tiptext.createkey")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);

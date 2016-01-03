@@ -505,7 +505,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         jPanel6.add(m_jRemaininglEuros);
 
         m_jButtonAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/btnplus.png"))); // NOI18N
-        m_jButtonAdd.setToolTipText("Add Part Payment");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jButtonAdd.setToolTipText(bundle.getString("tiptext.addpartpayment")); // NOI18N
         m_jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jButtonAddActionPerformed(evt);
@@ -514,7 +515,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         jPanel6.add(m_jButtonAdd);
 
         m_jButtonRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/btnminus.png"))); // NOI18N
-        m_jButtonRemove.setToolTipText("Delete Part Payment");
+        m_jButtonRemove.setToolTipText(bundle.getString("tiptext.deletepartpayment")); // NOI18N
         m_jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jButtonRemoveActionPerformed(evt);
@@ -577,7 +578,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         m_jButtonPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/printer24_off.png"))); // NOI18N
         m_jButtonPrint.setSelected(true);
-        m_jButtonPrint.setToolTipText("Print Receipt");
+        m_jButtonPrint.setToolTipText(bundle.getString("tiptext.printreceipt")); // NOI18N
         m_jButtonPrint.setFocusPainted(false);
         m_jButtonPrint.setFocusable(false);
         m_jButtonPrint.setMargin(new java.awt.Insets(8, 16, 8, 16));

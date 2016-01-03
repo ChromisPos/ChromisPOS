@@ -146,7 +146,8 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         m_DelTicket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_delete.png"))); // NOI18N
-        m_DelTicket.setToolTipText("Delete Current Order");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_DelTicket.setToolTipText(bundle.getString("tiptext.deletecurrentorder")); // NOI18N
         m_DelTicket.setFocusPainted(false);
         m_DelTicket.setFocusable(false);
         m_DelTicket.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -162,7 +163,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         add(m_DelTicket);
 
         m_MoveTable.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/movetable.png"))); // NOI18N
-        m_MoveTable.setToolTipText("Move Table");
+        m_MoveTable.setToolTipText(bundle.getString("tiptext.movetable")); // NOI18N
         m_MoveTable.setFocusPainted(false);
         m_MoveTable.setFocusable(false);
         m_MoveTable.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -178,7 +179,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         add(m_MoveTable);
 
         m_TablePlan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/tables.png"))); // NOI18N
-        m_TablePlan.setToolTipText("Go to Table Plan");
+        m_TablePlan.setToolTipText(bundle.getString("tiptext.gototableplan")); // NOI18N
         m_TablePlan.setFocusPainted(false);
         m_TablePlan.setFocusable(false);
         m_TablePlan.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -194,7 +195,7 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
         add(m_TablePlan);
 
         m_KitchenPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/printer24.png"))); // NOI18N
-        m_KitchenPrint.setToolTipText("Send to Kichen Printer");
+        m_KitchenPrint.setToolTipText(bundle.getString("tiptext.sendtokitchen")); // NOI18N
         m_KitchenPrint.setMargin(new java.awt.Insets(0, 4, 0, 4));
         m_KitchenPrint.setMaximumSize(new java.awt.Dimension(50, 40));
         m_KitchenPrint.setMinimumSize(new java.awt.Dimension(50, 40));

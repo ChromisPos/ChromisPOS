@@ -102,7 +102,8 @@ public class JTicketsBagSimple extends JTicketsBag {
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         m_jDelTicket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_delete.png"))); // NOI18N
-        m_jDelTicket.setToolTipText("Delete current Sale");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jDelTicket.setToolTipText(bundle.getString("tiptext.deletecurrentsale")); // NOI18N
         m_jDelTicket.setFocusPainted(false);
         m_jDelTicket.setFocusable(false);
         m_jDelTicket.setMargin(new java.awt.Insets(0, 4, 0, 4));

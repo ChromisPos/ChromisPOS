@@ -1959,7 +1959,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jOptions.setLayout(new java.awt.BorderLayout());
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_add_sml.png"))); // NOI18N
-        jButton1.setToolTipText("Go to Customers");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jButton1.setToolTipText(bundle.getString("tiptext.gotocustomers")); // NOI18N
         jButton1.setFocusPainted(false);
         jButton1.setFocusable(false);
         jButton1.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -1974,7 +1975,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         });
 
         btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_sml.png"))); // NOI18N
-        btnCustomer.setToolTipText("Find Customers");
+        btnCustomer.setToolTipText(bundle.getString("tiptext.findcustomers")); // NOI18N
         btnCustomer.setFocusPainted(false);
         btnCustomer.setFocusable(false);
         btnCustomer.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -1989,7 +1990,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         });
 
         btnSplit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_split_sml.png"))); // NOI18N
-        btnSplit.setToolTipText("Split Sale");
+        btnSplit.setToolTipText(bundle.getString("tiptext.splitsale")); // NOI18N
         btnSplit.setFocusPainted(false);
         btnSplit.setFocusable(false);
         btnSplit.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -2004,7 +2005,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         });
 
         jbtnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/logout.png"))); // NOI18N
-        jbtnLogout.setToolTipText("Logout");
+        jbtnLogout.setToolTipText(bundle.getString("tiptext.logout")); // NOI18N
         jbtnLogout.setFocusPainted(false);
         jbtnLogout.setFocusable(false);
         jbtnLogout.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -2019,7 +2020,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         });
 
         btnReprint1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/reprint.png"))); // NOI18N
-        btnReprint1.setToolTipText("Reprint Last Ticket");
+        btnReprint1.setToolTipText(bundle.getString("tiptext.reprintlastticket")); // NOI18N
         btnReprint1.setFocusPainted(false);
         btnReprint1.setFocusable(false);
         btnReprint1.setMargin(new java.awt.Insets(0, 4, 0, 4));
@@ -2074,7 +2075,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jbtnScale.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         m_jbtnScale.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/scale.png"))); // NOI18N
         m_jbtnScale.setText(AppLocal.getIntString("button.scale")); // NOI18N
-        m_jbtnScale.setToolTipText("Scale");
+        m_jbtnScale.setToolTipText(bundle.getString("tiptext.scale")); // NOI18N
         m_jbtnScale.setFocusPainted(false);
         m_jbtnScale.setFocusable(false);
         m_jbtnScale.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -2090,7 +2091,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel1.add(m_jbtnScale);
 
         jbtnMooring.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jbtnMooring.setText(bundle.getString("button.moorings")); // NOI18N
         jbtnMooring.setMargin(new java.awt.Insets(8, 14, 8, 14));
         jbtnMooring.setMaximumSize(new java.awt.Dimension(80, 40));
@@ -2105,7 +2105,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         j_btnKitchenPrt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/printer24.png"))); // NOI18N
         j_btnKitchenPrt.setText(bundle.getString("button.sendorder")); // NOI18N
-        j_btnKitchenPrt.setToolTipText("Send to Kichen Printer");
+        j_btnKitchenPrt.setToolTipText(bundle.getString("tiptext.sendtokitchen")); // NOI18N
         j_btnKitchenPrt.setMargin(new java.awt.Insets(0, 4, 0, 4));
         j_btnKitchenPrt.setMaximumSize(new java.awt.Dimension(50, 40));
         j_btnKitchenPrt.setMinimumSize(new java.awt.Dimension(50, 40));
@@ -2140,7 +2140,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel2.setLayout(new java.awt.GridLayout(0, 1, 5, 5));
 
         m_jUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1uparrow.png"))); // NOI18N
-        m_jUp.setToolTipText("Scroll Up a Line");
+        m_jUp.setToolTipText(bundle.getString("tiptext.scrollup")); // NOI18N
         m_jUp.setFocusPainted(false);
         m_jUp.setFocusable(false);
         m_jUp.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -2156,7 +2156,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel2.add(m_jUp);
 
         m_jDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1downarrow.png"))); // NOI18N
-        m_jDown.setToolTipText("Scroll Down a Line");
+        m_jDown.setToolTipText(bundle.getString("tiptext.scrolldown")); // NOI18N
         m_jDown.setFocusPainted(false);
         m_jDown.setFocusable(false);
         m_jDown.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -2172,7 +2172,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel2.add(m_jDown);
 
         m_jDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/editdelete.png"))); // NOI18N
-        m_jDelete.setToolTipText("Remove Line");
+        m_jDelete.setToolTipText(bundle.getString("tiptext.removeline")); // NOI18N
         m_jDelete.setFocusPainted(false);
         m_jDelete.setFocusable(false);
         m_jDelete.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -2188,7 +2188,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel2.add(m_jDelete);
 
         m_jList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search32.png"))); // NOI18N
-        m_jList.setToolTipText("Product Search");
+        m_jList.setToolTipText(bundle.getString("tiptext.productsearch")); // NOI18N
         m_jList.setFocusPainted(false);
         m_jList.setFocusable(false);
         m_jList.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -2204,7 +2204,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel2.add(m_jList);
 
         m_jEditLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_editline.png"))); // NOI18N
-        m_jEditLine.setToolTipText("Edit Line");
+        m_jEditLine.setToolTipText(bundle.getString("tiptext.editline")); // NOI18N
         m_jEditLine.setFocusPainted(false);
         m_jEditLine.setFocusable(false);
         m_jEditLine.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -2220,7 +2220,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel2.add(m_jEditLine);
 
         jEditAttributes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/attributes.png"))); // NOI18N
-        jEditAttributes.setToolTipText("Choose Attributes");
+        jEditAttributes.setToolTipText(bundle.getString("tiptext.chooseattributes")); // NOI18N
         jEditAttributes.setFocusPainted(false);
         jEditAttributes.setFocusable(false);
         jEditAttributes.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -2372,7 +2372,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel9.add(m_jPor, gridBagConstraints);
 
         m_jEnter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
-        m_jEnter.setToolTipText("Get Barcode");
+        m_jEnter.setToolTipText(bundle.getString("tiptext.getbarcode")); // NOI18N
         m_jEnter.setFocusPainted(false);
         m_jEnter.setFocusable(false);
         m_jEnter.setRequestFocusEnabled(false);

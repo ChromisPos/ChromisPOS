@@ -122,7 +122,8 @@ public class JRefundLines extends javax.swing.JPanel {
 
         m_jbtnAddOne.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbtnAddOne.setText(AppLocal.getIntString("button.refundone")); // NOI18N
-        m_jbtnAddOne.setToolTipText("Refund An Item");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jbtnAddOne.setToolTipText(bundle.getString("tiptext.refundanitem")); // NOI18N
         m_jbtnAddOne.setFocusPainted(false);
         m_jbtnAddOne.setFocusable(false);
         m_jbtnAddOne.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -136,7 +137,7 @@ public class JRefundLines extends javax.swing.JPanel {
 
         m_jbtnAddLine.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbtnAddLine.setText(AppLocal.getIntString("button.refundline")); // NOI18N
-        m_jbtnAddLine.setToolTipText("Refund A Line");
+        m_jbtnAddLine.setToolTipText(bundle.getString("tiptext.refundaline")); // NOI18N
         m_jbtnAddLine.setFocusPainted(false);
         m_jbtnAddLine.setFocusable(false);
         m_jbtnAddLine.setMargin(new java.awt.Insets(8, 14, 8, 14));
@@ -150,7 +151,7 @@ public class JRefundLines extends javax.swing.JPanel {
 
         m_jbtnAddAll.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbtnAddAll.setText(AppLocal.getIntString("button.refundall")); // NOI18N
-        m_jbtnAddAll.setToolTipText("Refund Everything");
+        m_jbtnAddAll.setToolTipText(bundle.getString("tiptext.refundeverything")); // NOI18N
         m_jbtnAddAll.setFocusPainted(false);
         m_jbtnAddAll.setFocusable(false);
         m_jbtnAddAll.setMargin(new java.awt.Insets(8, 14, 8, 14));

@@ -222,7 +222,8 @@ public class AuxiliarFilter extends javax.swing.JPanel implements ReportEditorCr
         });
 
         Enter1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/products24.png"))); // NOI18N
-        Enter1.setToolTipText("Enter Product ID");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        Enter1.setToolTipText(bundle.getString("tiptext.enterproductid")); // NOI18N
         Enter1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Enter1ActionPerformed(evt);
@@ -242,7 +243,7 @@ public class AuxiliarFilter extends javax.swing.JPanel implements ReportEditorCr
         });
 
         Enter2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
-        Enter2.setToolTipText("Get Barcode");
+        Enter2.setToolTipText(bundle.getString("tiptext.getbarcode")); // NOI18N
         Enter2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Enter2ActionPerformed(evt);
@@ -257,7 +258,7 @@ public class AuxiliarFilter extends javax.swing.JPanel implements ReportEditorCr
         m_jSearch.setRequestFocusEnabled(false);
 
         search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
-        search.setToolTipText("Search Products");
+        search.setToolTipText(bundle.getString("tiptext.searchproduct")); // NOI18N
         search.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchActionPerformed(evt);

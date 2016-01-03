@@ -430,7 +430,8 @@ public class JTicketsBagRestaurantRes extends javax.swing.JPanel implements Edit
         m_jbtnTables.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbtnTables.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/tables.png"))); // NOI18N
         m_jbtnTables.setText(AppLocal.getIntString("button.tables")); // NOI18N
-        m_jbtnTables.setToolTipText("Go to Table Plan");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jbtnTables.setToolTipText(bundle.getString("tiptext.gototableplan")); // NOI18N
         m_jbtnTables.setFocusPainted(false);
         m_jbtnTables.setFocusable(false);
         m_jbtnTables.setRequestFocusEnabled(false);
@@ -444,7 +445,7 @@ public class JTicketsBagRestaurantRes extends javax.swing.JPanel implements Edit
         m_jbtnReceive.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbtnReceive.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/receive.png"))); // NOI18N
         m_jbtnReceive.setText(AppLocal.getIntString("button.receive")); // NOI18N
-        m_jbtnReceive.setToolTipText("Receive pre-Booked Customer");
+        m_jbtnReceive.setToolTipText(bundle.getString("tiptext.prebooked")); // NOI18N
         m_jbtnReceive.setFocusPainted(false);
         m_jbtnReceive.setFocusable(false);
         m_jbtnReceive.setRequestFocusEnabled(false);
@@ -510,7 +511,7 @@ public class JTicketsBagRestaurantRes extends javax.swing.JPanel implements Edit
         txtCustomer.setBounds(90, 160, 220, 25);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_add_sml.png"))); // NOI18N
-        jButton1.setToolTipText("Show Customers");
+        jButton1.setToolTipText(bundle.getString("tiptext.showcustomers")); // NOI18N
         jButton1.setFocusPainted(false);
         jButton1.setFocusable(false);
         jButton1.setMaximumSize(new java.awt.Dimension(40, 33));
