@@ -1079,8 +1079,8 @@ public class JRootApp extends JPanel implements AppView {
         final Action exit = new AbstractAction("Exit") {
             @Override
             public final void actionPerformed(final ActionEvent e) {
-  //              sampleFrame.setVisible(false);
- //               sampleFrame.dispose();
+                sampleFrame.setVisible(false);
+                sampleFrame.dispose();
             }
         };
 
