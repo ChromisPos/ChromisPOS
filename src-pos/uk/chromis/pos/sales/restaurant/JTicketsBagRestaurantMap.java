@@ -23,10 +23,11 @@ import java.awt.CardLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -52,6 +53,7 @@ import uk.chromis.pos.sales.TicketsEditor;
 import uk.chromis.pos.ticket.TicketInfo;
 import uk.chromis.pos.ticket.TicketLineInfo;
 import uk.chromis.pos.util.AutoLogoff;
+import uk.chromis.pos.util.AutoRefresh;
 
 /**
  *
@@ -62,9 +64,6 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     /**
      *
      */
-    public static void newticket() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 
     private static class ServerCurrent {
 
@@ -105,6 +104,10 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     public JTicketsBagRestaurantMap(AppView app, TicketsEditor panelticket) {
 
         super(app, panelticket);
+        
+        // create a refresh timer action if required
+        Action refreshTables = new refreshTables();
+        AutoRefresh.getInstance().setTimer(5 * 1000, refreshTables);
 
         restDB = new RestaurantDBUtils(app);
         transparentButtons = AppConfig.getInstance().getBoolean("table.transparentbuttons");
@@ -218,12 +221,24 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         add(m_jreservations, "res");
     }
 
+    private class refreshTables extends AbstractAction {
+        public refreshTables() {
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            m_jbtnRefreshActionPerformed(null);
+          //  AutoRefresh.getInstance().activateTimer();
+        }
+    }
+
     /**
      *
      */
     @Override
     public void activate() {
 
+        AutoRefresh.getInstance().activateTimer();
         // precondicion es que no tenemos ticket activado ni ticket en el panel
         m_PlaceClipboard = null;
         customer = null;
@@ -245,6 +260,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     @Override
     public boolean deactivate() {
 
+        AutoRefresh.getInstance().deactivateTimer();
         // precondicion es que tenemos ticket activado aqui y ticket en el panel
         if (viewTables()) {
 
@@ -358,6 +374,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      *
      */
     public void newTicket() {
+        AutoRefresh.getInstance().activateTimer();
         if (AppConfig.getInstance().getBoolean("till.createorder") && m_panelticket.getActiveTicket().getArticlesCount() == 0) {
             deleteTicket();
         } else if (m_PlaceCurrent != null) {
@@ -443,6 +460,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      */
     public void loadTickets() {
 
+        AutoRefresh.getInstance().activateTimer();
         Set<String> atickets = new HashSet<>();
 
         try {
@@ -572,7 +590,10 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-
+            
+            //disable table refresh
+            AutoRefresh.getInstance().deactivateTimer();
+            
             if (m_PlaceClipboard == null) {
 
                 if (customer == null) {
@@ -658,7 +679,8 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     customer = null;
                     printState();
                 } else // tenemos que copiar el ticket del clipboard
-                 if (m_PlaceClipboard == m_place) {
+                {
+                    if (m_PlaceClipboard == m_place) {
                         // the same button. Canceling.
                         Place placeclip = m_PlaceClipboard;
                         m_PlaceClipboard = null;
@@ -702,7 +724,8 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                             new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tableempty")).show(JTicketsBagRestaurantMap.this);
                             m_place.setPeople(false); // fixed                        
                         } else //asks if you want to merge tables
-                         if (JOptionPane.showConfirmDialog(JTicketsBagRestaurantMap.this, AppLocal.getIntString("message.mergetablequestion"), AppLocal.getIntString("message.mergetable"), JOptionPane.YES_NO_OPTION)
+                        {
+                            if (JOptionPane.showConfirmDialog(JTicketsBagRestaurantMap.this, AppLocal.getIntString("message.mergetablequestion"), AppLocal.getIntString("message.mergetable"), JOptionPane.YES_NO_OPTION)
                                     == JOptionPane.YES_OPTION) {
                                 // merge lines ticket
 
@@ -740,7 +763,9 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                                 printState();
                                 setActivePlace(placeclip, ticketclip);
                             }
+                        }
                     }
+                }
             }
         }
     }
@@ -817,13 +842,13 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_START);
 
-        m_jPanelMap.add(jPanel1, java.awt.BorderLayout.NORTH);
+        m_jPanelMap.add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         add(m_jPanelMap, "map");
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jbtnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnRefreshActionPerformed
-
+        System.out.println("refreshing");
         m_PlaceClipboard = null;
         customer = null;
         loadTickets();

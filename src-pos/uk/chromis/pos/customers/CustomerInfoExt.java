@@ -23,11 +23,6 @@ import java.util.Date;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.util.RoundUtils;
 
-/**
- *
- * @author adrianromero
- *    
- */
 public class CustomerInfoExt extends CustomerInfo {
     
     protected String taxcustomerid;
@@ -68,10 +63,6 @@ public class CustomerInfoExt extends CustomerInfo {
         this.taxcustomerid = taxcustomerid;
     }
     
-    /**
-     *
-     * @return notes string
-     */
     public String getNotes() {
         return notes;
     }
@@ -79,10 +70,6 @@ public class CustomerInfoExt extends CustomerInfo {
         this.notes = notes;
     }
 
-    /**
-     *
-     * @return Is visible Y/N? boolean
-     */
     public boolean isVisible() {
         return visible;
     }
@@ -90,10 +77,6 @@ public class CustomerInfoExt extends CustomerInfo {
         this.visible = visible;
     }
 
-    /**
-     *
-     * @return customer's hashed member/loyalty card string
-     */
     public String getCard() {
         return card;
     }
@@ -101,10 +84,6 @@ public class CustomerInfoExt extends CustomerInfo {
         this.card = card;
     }
 
-    /**
-     *
-     * @return customer's maximum allowed debt value
-     */
     public Double getMaxdebt() {
         return maxdebt;
     }
@@ -115,10 +94,6 @@ public class CustomerInfoExt extends CustomerInfo {
         return Formats.CURRENCY.formatValue(RoundUtils.getValue(getMaxdebt()));
     }
     
-    /**
-     *
-     * @return customer's last ticket transaction date
-     */
     public Date getCurdate() {
         return curdate;
     }
@@ -168,216 +143,112 @@ public class CustomerInfoExt extends CustomerInfo {
         
     }
 
-    /**
-     *
-     * @return customer's firstname string
-     */
     public String getFirstname() {
         return firstname;
     }
 
-    /**
-     *
-     * @param firstname
-     */
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
-    /**
-     *
-     * @return customer's lastname string
-     */
     public String getLastname() {
         return lastname;
     }
 
-    /**
-     *
-     * @param lastname
-     */
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
-    /**
-     *
-     * @return customer's email string
-     */
     @Override
     public String getEmail() {
         return email;
     }
 
-    /**
-     *
-     * @param email
-     */
     @Override
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     *
-     * @return customer's Primary telephone string
-     */
     @Override
     public String getPhone() {
         return phone;
     }
 
-    /**
-     *
-     * @param phone
-     */
     @Override
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    /**
-     *
-     * @return customer's Secondary telephone string
-     */
     public String getPhone2() {
         return phone2;
     }
 
-    /**
-     *
-     * @param phone2
-     */
     public void setPhone2(String phone2) {
         this.phone2 = phone2;
     }
 
-    /**
-     *
-     * @return customer's fax number string
-     */
     public String getFax() {
         return fax;
     }
 
-    /**
-     *
-     * @param fax
-     */
     public void setFax(String fax) {
         this.fax = fax;
     }
 
-    /**
-     *
-     * @return customer's address line 1 string
-     */
     public String getAddress() {
         return address;
     }
 
-    /**
-     *
-     * @param address
-     */
     public void setAddress(String address) {
         this.address = address;
     }
 
-    /**
-     *
-     * @return customer's address line 2 string
-     */
     public String getAddress2() {
         return address2;
     }
 
-    /**
-     *
-     * @param address2
-     */
     public void setAddress2(String address2) {
         this.address2 = address2;
     }
 
-    /**
-     *
-     * @return customer's postal/zip code string
-     */
     @Override
     public String getPostal() {
         return postal;
     }
 
-    /**
-     *
-     * @param postal
-     */
     @Override
     public void setPostal(String postal) {
         this.postal = postal;
     }
 
-    /**
-     *
-     * @return customer's address city string
-     */
     public String getCity() {
         return city;
     }
 
-    /**
-     *
-     * @param city
-     */
     public void setCity(String city) {
         this.city = city;
     }
 
-    /**
-     *
-     * @return customer's address region/state/county string
-     */
     public String getRegion() {
         return region;
     }
 
-    /**
-     *
-     * @param region
-     */
     public void setRegion(String region) {
         this.region = region;
     }
 
-    /**
-     *
-     * @return customer's address country string
-     */
     public String getCountry() {
         return country;
     }
 
-    /**
-     *
-     * @param country
-     */
     public void setCountry(String country) {
         this.country = country;
     }
 
-    /**
-     *
-     * @return customer's photograph / image
-     */
     public String getImage() {
         return image;
     }
 
-    /**
-     *
-     * @param image
-     */
     public void setImage(String image) {
         this.image = image;
     }
