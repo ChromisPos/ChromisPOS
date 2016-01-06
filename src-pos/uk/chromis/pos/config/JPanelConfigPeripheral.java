@@ -2016,8 +2016,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter2ActionPerformed
         jcboSerialPrinter2.removeAllItems();
         if (("raw".equals(jcboConnPrinter2.getSelectedItem())) || ("usb".equals(jcboConnPrinter2.getSelectedItem()))) {
+            jlblPrinterPort2.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter2);
         } else {
+            jlblPrinterPort2.setText("Port");
             buildPrinterList(jcboSerialPrinter2);
         }
         jcboSerialPrinter2.setSelectedItem(null);
@@ -2026,8 +2028,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter1ActionPerformed
         jcboSerialPrinter1.removeAllItems();
         if (("raw".equals(jcboConnPrinter1.getSelectedItem())) || ("usb".equals(jcboConnPrinter1.getSelectedItem()))) {
+            jlblPrinterPort.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter1);
         } else {
+            jlblPrinterPort.setText("Port");
             buildPrinterList(jcboSerialPrinter1);
         }
         jcboSerialPrinter1.setSelectedItem(null);
@@ -2036,8 +2040,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter3ActionPerformed
         jcboSerialPrinter3.removeAllItems();
         if (("raw".equals(jcboConnPrinter3.getSelectedItem())) || ("usb".equals(jcboConnPrinter3.getSelectedItem()))) {
+            jlblPrinterPort3.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter3);
         } else {
+            jlblPrinterPort3.setText("Port");
             buildPrinterList(jcboSerialPrinter3);
         }
         jcboSerialPrinter3.setSelectedItem(null);
@@ -2046,8 +2052,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter4ActionPerformed
         jcboSerialPrinter4.removeAllItems();
         if (("raw".equals(jcboConnPrinter4.getSelectedItem())) || ("usb".equals(jcboConnPrinter4.getSelectedItem()))) {
+            jlblPrinterPort4.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter4);
         } else {
+            jlblPrinterPort4.setText("Port");
             buildPrinterList(jcboSerialPrinter4);
         }
         jcboSerialPrinter4.setSelectedItem(null);
@@ -2056,8 +2064,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter5ActionPerformed
         jcboSerialPrinter5.removeAllItems();
         if (("raw".equals(jcboConnPrinter5.getSelectedItem())) || ("usb".equals(jcboConnPrinter5.getSelectedItem()))) {
+            jlblPrinterPort5.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter5);
         } else {
+            jlblPrinterPort5.setText("Port");
             buildPrinterList(jcboSerialPrinter5);
         }
         jcboSerialPrinter5.setSelectedItem(null);
@@ -2066,8 +2076,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter6ActionPerformed
         jcboSerialPrinter6.removeAllItems();
         if (("raw".equals(jcboConnPrinter6.getSelectedItem())) || ("usb".equals(jcboConnPrinter6.getSelectedItem()))) {
+            jlblPrinterPort6.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter6);
         } else {
+            jlblPrinterPort6.setText("Port");
             buildPrinterList(jcboSerialPrinter6);
         }
         jcboSerialPrinter6.setSelectedItem(null);
