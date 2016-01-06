@@ -1743,96 +1743,96 @@
         <insert tableName="PLACES">
             <column name="ID" value="1"/>
             <column name="NAME" value="Table 1"/>
-            <column name="X" valueNumeric="80"/>
-            <column name="Y" valueNumeric="70"/>
+            <column name="X" valueNumeric="126"/>
+            <column name="Y" valueNumeric="96"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="2"/>
             <column name="NAME" value="Table 2"/>
-            <column name="X" valueNumeric="250"/>
-            <column name="Y" valueNumeric="75"/>
+            <column name="X" valueNumeric="384"/>
+            <column name="Y" valueNumeric="105"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="3"/>
             <column name="NAME" value="Table 3"/>
-            <column name="X" valueNumeric="400"/>
-            <column name="Y" valueNumeric="75"/>
+            <column name="X" valueNumeric="628"/>
+            <column name="Y" valueNumeric="105"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="4"/>
             <column name="NAME" value="Table 4"/>
-            <column name="X" valueNumeric="80"/>
-            <column name="Y" valueNumeric="200"/>
+            <column name="X" valueNumeric="131"/>
+            <column name="Y" valueNumeric="287"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="5"/>
             <column name="NAME" value="Table 5"/>
-            <column name="X" valueNumeric="260"/>
-            <column name="Y" valueNumeric="210"/>
+            <column name="X" valueNumeric="425"/>
+            <column name="Y" valueNumeric="318"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="6"/>
             <column name="NAME" value="Table 6"/>
-            <column name="X" valueNumeric="430"/>
-            <column name="Y" valueNumeric="210"/>
+            <column name="X" valueNumeric="683"/>
+            <column name="Y" valueNumeric="311"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="7"/>
             <column name="NAME" value="Table 7"/>
-            <column name="X" valueNumeric="80"/>
-            <column name="Y" valueNumeric="330"/>
+            <column name="X" valueNumeric="127"/>
+            <column name="Y" valueNumeric="476"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="8"/>
             <column name="NAME" value="Table 8"/>
-            <column name="X" valueNumeric="190"/>
-            <column name="Y" valueNumeric="350"/>
+            <column name="X" valueNumeric="295"/>
+            <column name="Y" valueNumeric="508"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="9"/>
             <column name="NAME" value="Table 9"/>
-            <column name="X" valueNumeric="295"/>
-            <column name="Y" valueNumeric="350"/>
+            <column name="X" valueNumeric="466"/>
+            <column name="Y" valueNumeric="515"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="10"/>
             <column name="NAME" value="Table 10"/>
-            <column name="X" valueNumeric="430"/>
-            <column name="Y" valueNumeric="345"/>
+            <column name="X" valueNumeric="690"/>
+            <column name="Y" valueNumeric="504"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="11"/>
             <column name="NAME" value="Table 11"/>
-            <column name="X" valueNumeric="550"/>
-            <column name="Y" valueNumeric="135"/>
+            <column name="X" valueNumeric="838"/>
+            <column name="Y" valueNumeric="143"/>
             <column name="FLOOR" value="0"/>
         </insert>
 
         <insert tableName="PLACES">
             <column name="ID" value="12"/>
             <column name="NAME" value="Table 12"/>
-            <column name="X" valueNumeric="550"/>
-            <column name="Y" valueNumeric="290"/>
+            <column name="X" valueNumeric="865"/>
+            <column name="Y" valueNumeric="461"/>
             <column name="FLOOR" value="0"/>
         </insert>
     </changeSet>

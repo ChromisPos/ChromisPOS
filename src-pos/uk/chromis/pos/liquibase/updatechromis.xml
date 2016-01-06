@@ -867,26 +867,37 @@
             <column name="CATORDER" type="integer"/>
         </addColumn>        
     </changeSet>
-    
-    <changeSet author="Chromis POS" id="Promotions added to PRODUCTS">
+          
+    <changeSet author="Chromis POS" id="Promotions added to PRODUCTS table">
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="PROMOTIONID" tableName="PRODUCTS" />
             </not>
-        </preConditions>     
-               
+        </preConditions>   
+        
         <addColumn tableName="PRODUCTS">
             <column name="PROMOTIONID" type="varchar(50)" /> 
-        </addColumn>     
-                       
+        </addColumn>                
+    </changeSet> 
+    
+    <changeSet author="Chromis POS" id="Ensure collation" dbms="mysql">
+        <sql>ALTER TABLE PROMOTIONS CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</sql>
+    </changeSet>
+     
+    <changeSet author="Chromis POS" id="Add FK to products">  
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_PRODUCT_PROMOTIONID" foreignKeyTableName="PROMOTIONS" />
+            </not>
+        </preConditions>
+                 
         <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
                                  constraintName ="FK_PRODUCT_PROMOTIONID"
                                  referencedColumnNames = "ID"
                                  baseTableName="PRODUCTS"
                                  referencedTableName="PROMOTIONS"/>
-      
-    </changeSet>     
-      
+    </changeSet> 
+         
     <changeSet author="Chromis POS" id="Add Allproducts column if it does not exist" >    
         <preConditions onFail="MARK_RAN">
             <columnExists columnName="ALLPRODUCTS" tableName="PRODUCTS"/>
@@ -897,16 +908,13 @@
                     defaultValueBoolean="false"/>  
         </addColumn>        
     </changeSet>     
-    
-    
+        
     <changeSet author="Chromis POS" id="Remove change timestamp when updating" dbms="mysql">     
         <sql>ALTER TABLE SHIFT_BREAKS CHANGE STARTTIME STARTTIME TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE CLOSEDCASH CHANGE DATESTART DATESTART TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE SHIFTS CHANGE STARTSHIFT STARTSHIFT TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE LEAVES CHANGE STARTDATE STARTDATE TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql> 
-    </changeSet> 
-    
-    
+    </changeSet>         
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1224,7 +1232,7 @@
     <!-- ***************************************************************************************** -->   
     <!-- Mysql change to InnoDB if required 
          All new tables should be followed by the InnDB change for that table.         
-    -->
+    -->    
     <changeSet author="Chromis POS" id="change Mysql tables to InnoDB (if required)" dbms="mysql">            
         <sql>ALTER TABLE APPLICATIONS ENGINE=InnoDB</sql>
         <sql>ALTER TABLE ATTRIBUTE ENGINE=InnoDB</sql>
