@@ -43,7 +43,7 @@ public class AutoRefresh implements ActionListener, AWTEventListener {
 
     // create a basic timer instance
     private AutoRefresh() {
-        LogoffTimer = new Timer(10000, action);
+        LogoffTimer = new Timer(5000, action);
         this.eventMask = 0;
         LogoffTimer.setInitialDelay(100);
     }

@@ -94,6 +94,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     protected SentenceExec m_updatepermissions;
     protected SentenceExec m_lineremoved;
     private SentenceExec m_addOrder;
+    private SentenceExec m_updatePlaces;
 
     private String SQL;
     private Map<String, byte[]> resourcescache;
@@ -131,6 +132,12 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
                 return (dr.getString(1));
             }
         };
+
+        m_updatePlaces = new StaticSentence(s, "UPDATE PLACES SET X = ?, Y = ? WHERE ID = ?   ", new SerializerWriteBasic(new Datas[]{            
+            Datas.INT,
+            Datas.INT,
+            Datas.STRING
+        }));
 
         m_checkHistoricVersion = new PreparedSentence(s, "SELECT COUNT(*) FROM HVERSIONS WHERE VERSION = ? ", SerializerWriteString.INSTANCE, SerializerReadInteger.INSTANCE
         );
@@ -498,6 +505,10 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         }
 
         return "new";
+    }
+
+    public final void updatePlaces(int x, int y, String id) throws BasicException {
+        m_updatePlaces.exec(x, y, id);
     }
 
     public final void addOrder(String id, String orderId, Integer qty, String details, String attributes, String notes, String ticketId, Integer displayId, Integer auxiliaryId) throws BasicException {

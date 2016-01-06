@@ -29,7 +29,6 @@ import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.ListKeyed;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.SentenceList;
-import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSystem;
@@ -38,6 +37,9 @@ import uk.chromis.pos.printer.DeviceTicket;
 import uk.chromis.pos.printer.TicketParser;
 import uk.chromis.pos.printer.TicketPrinterException;
 import uk.chromis.pos.sales.JPanelTicket;
+import static uk.chromis.pos.sales.JPanelTicket.autoLogoffAfterKitchen;
+import static uk.chromis.pos.sales.JPanelTicket.autoLogoffEnabled;
+import static uk.chromis.pos.sales.JPanelTicket.autoLogoffToTables;
 import uk.chromis.pos.sales.TaxesLogic;
 import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
@@ -254,9 +256,9 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
                 Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }
             // Autologoff after printing to kitchen                                
-            if (JPanelTicket.autoLogoffEnabled && JPanelTicket.autoLogoffAfterKitchen) {
+            if (autoLogoffEnabled && autoLogoffAfterKitchen) {
                 // check how far to logoof to ie tables or application
-                if (JPanelTicket.autoLogoffToTables) {
+                if (autoLogoffToTables) {
                     m_restaurant.newTicket();
                 } else {
                     ((JRootApp) m_App).closeAppView();

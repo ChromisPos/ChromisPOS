@@ -93,10 +93,10 @@ public class StartPOS {
     
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
-        //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
+        File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
 
         if (!chromis.exists()) {
-            if (file.exists()) /*|| (openbravo.exists()))*/ {
+            if ((file.exists()) || (openbravo.exists())){
                 Thread t1 = new Thread(new Runnable() {
                     public void run() {
                         Conversion convert = new Conversion() {

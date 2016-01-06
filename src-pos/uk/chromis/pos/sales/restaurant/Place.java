@@ -114,6 +114,18 @@ public class Place implements SerializableRead, java.io.Serializable {
 
     /**
      *
+     */
+    public void setX(int x) { m_ix = x ; }
+
+    /**
+     *
+     */
+    public void setY(int y) { m_iy = y ; }  
+    
+    
+    
+    /**
+     *
      * @return
      */
     public String getFloor() { return m_sfloor; }

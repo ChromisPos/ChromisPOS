@@ -23,9 +23,13 @@ import java.awt.CardLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -46,6 +50,7 @@ import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.sales.DataLogicReceipts;
 import uk.chromis.pos.sales.JTicketsBag;
 import uk.chromis.pos.sales.SharedTicketInfo;
@@ -64,28 +69,26 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     /**
      *
      */
-
     private static class ServerCurrent {
-
+        
         public ServerCurrent() {
         }
     }
-
-//    private static final Icon ICO_OCU = new ImageIcon(JTicketsBag.class.getResource("/uk/chromis/images/edit_group.png"));
-//    private static final Icon ICO_FRE = new NullIcon(22, 22);
+    
     private java.util.List<Place> m_aplaces;
     private java.util.List<Floor> m_afloors;
-
+    
     private JTicketsBagRestaurant m_restaurantmap;
     private JTicketsBagRestaurantRes m_jreservations;
-
+    
     private Place m_PlaceCurrent;
     private ServerCurrent m_ServerCurrent;
     private Place m_PlaceClipboard;
     private CustomerInfo customer;
-
+    
     private DataLogicReceipts dlReceipts = null;
     private DataLogicSales dlSales = null;
+    private DataLogicSystem dlSystem = null;
     private final RestaurantDBUtils restDB;
     private static final Icon ICO_OCU_SM = new ImageIcon(Place.class.getResource("/uk/chromis/images/edit_group_sm.png"));
     private static final Icon ICO_WAITER = new NullIcon(1, 1);
@@ -94,6 +97,9 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     private String customerDetails;
     private String tableName;
     private Boolean transparentButtons;
+    private Boolean actionEnabled = true;
+    private int newX;
+    private int newY;
 
     /**
      * Creates new form JTicketsBagRestaurant
@@ -102,24 +108,28 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      * @param panelticket
      */
     public JTicketsBagRestaurantMap(AppView app, TicketsEditor panelticket) {
-
-        super(app, panelticket);
         
+        super(app, panelticket);
+
         // create a refresh timer action if required
         Action refreshTables = new refreshTables();
-        AutoRefresh.getInstance().setTimer(5 * 1000, refreshTables);
-
+        if (AppConfig.getInstance().getBoolean("tables.autorefresh")) {
+            AutoRefresh.getInstance().setTimer(5 * 1000, refreshTables);
+            AutoRefresh.getInstance().activateTimer();
+        }
+        
         restDB = new RestaurantDBUtils(app);
         transparentButtons = AppConfig.getInstance().getBoolean("table.transparentbuttons");
-
+        
         dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
         dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
-
+        dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
+        
         m_restaurantmap = new JTicketsBagRestaurant(app, this);
         m_PlaceCurrent = null;
         m_PlaceClipboard = null;
         customer = null;
-
+        
         try {
             SentenceList sent = new StaticSentence(
                     app.getSession(),
@@ -127,7 +137,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     null,
                     new SerializerReadClass(Floor.class));
             m_afloors = sent.list();
-
+            
         } catch (BasicException eD) {
             m_afloors = new ArrayList<>();
         }
@@ -141,7 +151,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         } catch (BasicException eD) {
             m_aplaces = new ArrayList<>();
         }
-
+        
         initComponents();
 
         // add the Floors containers
@@ -154,15 +164,15 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             jTabFloors.setFocusable(false);
             jTabFloors.setRequestFocusEnabled(false);
             m_jPanelMap.add(jTabFloors, BorderLayout.CENTER);
-
+            
             for (Floor f : m_afloors) {
                 f.getContainer().applyComponentOrientation(getComponentOrientation());
-
+                
                 JScrollPane jScrCont = new JScrollPane();
                 jScrCont.applyComponentOrientation(getComponentOrientation());
                 JPanel jPanCont = new JPanel();
                 jPanCont.applyComponentOrientation(getComponentOrientation());
-
+                
                 jTabFloors.addTab(f.getName(), f.getIcon(), jScrCont);
                 jScrCont.setViewportView(jPanCont);
                 jPanCont.add(f.getContainer());
@@ -171,14 +181,14 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             // Just a frame for 1 floor
             Floor f = m_afloors.get(0);
             f.getContainer().applyComponentOrientation(getComponentOrientation());
-
+            
             JPanel jPlaces = new JPanel();
             jPlaces.applyComponentOrientation(getComponentOrientation());
             jPlaces.setLayout(new BorderLayout());
             jPlaces.setBorder(new javax.swing.border.CompoundBorder(
                     new javax.swing.border.EmptyBorder(new Insets(5, 5, 5, 5)),
                     new javax.swing.border.TitledBorder(f.getName())));
-
+            
             JScrollPane jScrCont = new JScrollPane();
             jScrCont.applyComponentOrientation(getComponentOrientation());
             JPanel jPanCont = new JPanel();
@@ -193,26 +203,42 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
 
         // Add all the Table buttons.
         Floor currfloor = null;
-
+        
         for (Place pl : m_aplaces) {
             int iFloor = 0;
-
+            
             if (currfloor == null || !currfloor.getID().equals(pl.getFloor())) {
                 // Look for a new floor
                 do {
                     currfloor = m_afloors.get(iFloor++);
                 } while (!currfloor.getID().equals(pl.getFloor()));
             }
-
+            
             currfloor.getContainer().add(pl.getButton());
             pl.setButtonBounds();
-
+            
             if (transparentButtons) {
                 pl.getButton().setOpaque(false);
                 pl.getButton().setContentAreaFilled(false);
                 pl.getButton().setBorderPainted(false);
             }
-
+            
+            Integer plHeight = pl.getButton().getHeight();
+            Integer plWidth = pl.getButton().getWidth();
+            
+            pl.getButton().addMouseMotionListener(new MouseAdapter() {
+                
+                public void mouseDragged(MouseEvent E) {
+                    if (!actionEnabled) {
+                        newX = E.getX() + pl.getButton().getX();
+                        newY = E.getY() + pl.getButton().getY();
+                        pl.getButton().setBounds(newX, newY, plWidth, plHeight);
+                        pl.setX(newX);
+                        pl.setY(newY);
+                    }
+                }
+            });
+            
             pl.getButton().addActionListener(new MyActionListener(pl));
         }
 
@@ -220,15 +246,16 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_jreservations = new JTicketsBagRestaurantRes(app, this);
         add(m_jreservations, "res");
     }
-
+    
     private class refreshTables extends AbstractAction {
+        
         public refreshTables() {
         }
-
+        
         @Override
         public void actionPerformed(ActionEvent ae) {
             m_jbtnRefreshActionPerformed(null);
-          //  AutoRefresh.getInstance().activateTimer();
+            //  AutoRefresh.getInstance().activateTimer();
         }
     }
 
@@ -237,20 +264,16 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      */
     @Override
     public void activate() {
-
-        AutoRefresh.getInstance().activateTimer();
         // precondicion es que no tenemos ticket activado ni ticket en el panel
         m_PlaceClipboard = null;
         customer = null;
         loadTickets();
         printState();
-
+        
         m_panelticket.setActiveTicket(null, null);
         m_restaurantmap.activate();
-
+        
         showView("map"); // arrancamos en la vista de las mesas.
-
-        // postcondicion es que tenemos ticket activado aqui y ticket en el panel
     }
 
     /**
@@ -259,39 +282,32 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      */
     @Override
     public boolean deactivate() {
-
+        
         AutoRefresh.getInstance().deactivateTimer();
         // precondicion es que tenemos ticket activado aqui y ticket en el panel
         if (viewTables()) {
-
-            // borramos el clipboard
             m_PlaceClipboard = null;
             customer = null;
-
-            // guardamos el ticket
+            
             if (m_PlaceCurrent != null) {
-
+                
                 try {
                     dlReceipts.updateSharedTicket(m_PlaceCurrent.getId(), m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
                 } catch (BasicException e) {
                     new MessageInf(e).show(this);
                 }
-
+                
                 m_PlaceCurrent = null;
             }
-
-            // desactivamos cositas.
             printState();
             m_panelticket.setActiveTicket(null, null);
-
+            
             AutoLogoff.getInstance().deactivateTimer();
-
+            
             return true;
         } else {
             return false;
         }
-
-        // postcondicion es que no tenemos ticket activado
     }
 
     /**
@@ -324,23 +340,20 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      *
      */
     public void moveTicket() {
-
-        // guardamos el ticket
         if (m_PlaceCurrent != null) {
-
+            
             try {
                 dlReceipts.updateSharedTicket(m_PlaceCurrent.getId(), m_panelticket.getActiveTicket(), m_panelticket.getActiveTicket().getPickupId());
             } catch (BasicException e) {
                 new MessageInf(e).show(this);
             }
-
-            // me guardo el ticket que quiero copiar.
+            
             m_PlaceClipboard = m_PlaceCurrent;
-
+            
             customer = null;
             m_PlaceCurrent = null;
         }
-
+        
         printState();
         m_panelticket.setActiveTicket(null, null);
     }
@@ -418,21 +431,20 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      */
     @Override
     public void deleteTicket() {
-
+        
         if (m_PlaceCurrent != null) {
-
             String id = m_PlaceCurrent.getId();
             try {
                 dlReceipts.deleteSharedTicket(id);
             } catch (BasicException e) {
                 new MessageInf(e).show(this);
             }
-
+            
             m_PlaceCurrent.setPeople(false);
-
+            
             m_PlaceCurrent = null;
         }
-
+        
         printState();
         m_panelticket.setActiveTicket(null, null);
     }
@@ -441,7 +453,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      *
      */
     public void changeServer() {
-
+        
         if (m_ServerCurrent != null) {
 
 //          Show list of Users
@@ -459,10 +471,10 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      *
      */
     public void loadTickets() {
-
+        
         AutoRefresh.getInstance().activateTimer();
         Set<String> atickets = new HashSet<>();
-
+        
         try {
             java.util.List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
             for (SharedTicketInfo ticket : l) {
@@ -471,14 +483,14 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         } catch (BasicException e) {
             new MessageInf(e).show(this);
         }
-
+        
         for (Place table : m_aplaces) {
             table.setPeople(atickets.contains(table.getId()));
         }
     }
-
+    
     private void printState() {
-
+        
         if (m_PlaceClipboard == null) {
             if (customer == null) {
                 // Select a table
@@ -493,7 +505,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     } else {
                         tableName = "<style=font-size:9px;font-weight:bold;><font color =" + AppConfig.getInstance().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
                     }
-
+                    
                     if (AppConfig.getInstance().getBoolean("table.showwaiterdetails")) {
                         if (AppConfig.getInstance().getProperty("table.waitercolour") == null) {
                             waiterDetails = (restDB.getWaiterNameInTable(place.getName()) == null) ? "" : "<style=font-size:9px;font-weight:bold;><font color = red>"
@@ -506,7 +518,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     } else {
                         waiterDetails = "";
                     }
-
+                    
                     if (AppConfig.getInstance().getBoolean("table.showcustomerdetails")) {
                         place.getButton().setIcon(((AppConfig.getInstance().getBoolean("table.showwaiterdetails")) && (restDB.getCustomerNameInTable(place.getName()) != null)) ? ICO_WAITER : ICO_OCU_SM);
                         if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
@@ -519,7 +531,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                     } else {
                         customerDetails = "";
                     }
-
+                    
                     if ((AppConfig.getInstance().getBoolean("table.showwaiterdetails"))
                             || (AppConfig.getInstance().getBoolean("table.showcustomerdetails"))) {
                         place.getButton().setText("<html><center>" + customerDetails + waiterDetails + tableName + "</html>");
@@ -529,15 +541,15 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
                         } else {
                             tableName = "<style=font-size:10px;font-weight:bold;><font color =" + AppConfig.getInstance().getProperty("table.tablecolour") + ">" + place.getName() + "</font></style>";
                         }
-
+                        
                         place.getButton().setText("<html><center>" + tableName + "</html>");
-
+                        
                     }
                     if (!place.hasPeople()) {
                         place.getButton().setIcon(ICO_FRE);
                     }
                 }
-
+                
                 m_jbtnReservations.setEnabled(true);
             } else {
                 // receive a customer
@@ -557,11 +569,11 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             }
             m_jbtnReservations.setEnabled(false);
         }
-
+        
     }
-
+    
     private TicketInfo getTicketInfo(Place place) {
-
+        
         try {
             return dlReceipts.getSharedTicket(place.getId());
         } catch (BasicException e) {
@@ -569,199 +581,202 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             return null;
         }
     }
-
+    
     private void setActivePlace(Place place, TicketInfo ticket) {
         m_PlaceCurrent = place;
         m_panelticket.setActiveTicket(ticket, m_PlaceCurrent.getName());
     }
-
+    
     private void showView(String view) {
         CardLayout cl = (CardLayout) (getLayout());
         cl.show(this, view);
     }
-
+    
     private class MyActionListener implements ActionListener {
-
+        
         private final Place m_place;
-
+        
         public MyActionListener(Place place) {
             m_place = place;
         }
-
+        
         @Override
         public void actionPerformed(ActionEvent evt) {
-            
-            //disable table refresh
-            AutoRefresh.getInstance().deactivateTimer();
-            
-            if (m_PlaceClipboard == null) {
 
-                if (customer == null) {
-                    // tables
+            // disable the action if edit mode
+            if (actionEnabled) {
+                //disable table refresh
+                AutoRefresh.getInstance().deactivateTimer();
+                
+                if (m_PlaceClipboard == null) {
+                    
+                    if (customer == null) {
+                        // tables
 
-                    // check if the sharedticket is the same
-                    TicketInfo ticket = getTicketInfo(m_place);
-
-                    // check
-                    if (ticket == null && !m_place.hasPeople()) {
-                        // Empty table and checked
-
-                        // table occupied
-                        ticket = new TicketInfo();
-                        try {
-//Create a new pickup code because this is a new ticket                            
-                            dlReceipts.insertSharedTicket(m_place.getId(), ticket, ticket.getPickupId());
-                        } catch (BasicException e) {
-                            new MessageInf(e).show(JTicketsBagRestaurantMap.this); // Glup. But It was empty.
-                        }
-                        m_place.setPeople(true);
-                        setActivePlace(m_place, ticket);
-
-                    } else if (ticket == null && m_place.hasPeople()) {
-                        // The table is now empty
-                        new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tableempty")).show(JTicketsBagRestaurantMap.this);
-                        m_place.setPeople(false); // fixed  
-                    } else if (ticket != null && !m_place.hasPeople()) {
-                        // The table is now full
-                        new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tablefull")).show(JTicketsBagRestaurantMap.this);
-                        m_place.setPeople(true);
-
-                    } else { // both != null
-                        // Full table                
-                        // m_place.setPeople(true); // already true                           
-                        setActivePlace(m_place, ticket);
-
-                    }
-                } else {
-                    // receiving customer.
-
-                    // check if the sharedticket is the same
-                    TicketInfo ticket = getTicketInfo(m_place);
-                    if (ticket == null) {
-                        // receive the customer
-                        // table occupied
-                        ticket = new TicketInfo();
-
-                        try {
-                            ticket.setCustomer(customer.getId() == null
-                                    ? null
-                                    : dlSales.loadCustomerExt(customer.getId()));
-                        } catch (BasicException e) {
-                            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindcustomer"), e);
-                            msg.show(JTicketsBagRestaurantMap.this);
-                        }
-
-                        try {
-                            dlReceipts.insertSharedTicket(m_place.getId(), ticket, ticket.getPickupId());
-                        } catch (BasicException e) {
-                            new MessageInf(e).show(JTicketsBagRestaurantMap.this); // Glup. But It was empty.
-                        }
-                        m_place.setPeople(true);
-                        m_PlaceClipboard = null;
-                        customer = null;
-
-                        setActivePlace(m_place, ticket);
-                    } else {
-                        // TODO: msg: The table is now full
-                        new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tablefull")).show(JTicketsBagRestaurantMap.this);
-                        m_place.setPeople(true);
-                        m_place.getButton().setEnabled(false);
-                    }
-                }
-            } else {
-                // check if the sharedticket is the same
-                TicketInfo ticketclip = getTicketInfo(m_PlaceClipboard);
-
-                if (ticketclip == null) {
-                    new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tableempty")).show(JTicketsBagRestaurantMap.this);
-                    m_PlaceClipboard.setPeople(false);
-                    m_PlaceClipboard = null;
-                    customer = null;
-                    printState();
-                } else // tenemos que copiar el ticket del clipboard
-                {
-                    if (m_PlaceClipboard == m_place) {
-                        // the same button. Canceling.
-                        Place placeclip = m_PlaceClipboard;
-                        m_PlaceClipboard = null;
-                        customer = null;
-                        printState();
-                        setActivePlace(placeclip, ticketclip);
-                    } else if (!m_place.hasPeople()) {
-                        // Moving the receipt to an empty table
+                        // check if the sharedticket is the same
                         TicketInfo ticket = getTicketInfo(m_place);
-////
-                        if (ticket == null) {
+
+                        // check
+                        if (ticket == null && !m_place.hasPeople()) {
+                            // Empty table and checked
+
+                            // table occupied
+                            ticket = new TicketInfo();
                             try {
-                                dlReceipts.insertSharedTicket(m_place.getId(), ticketclip, ticketclip.getPickupId());//dlSales.getNextPickupIndex());
-                                m_place.setPeople(true);
-                                dlReceipts.deleteSharedTicket(m_PlaceClipboard.getId());
-                                m_PlaceClipboard.setPeople(false);
+//Create a new pickup code because this is a new ticket                            
+                                dlReceipts.insertSharedTicket(m_place.getId(), ticket, ticket.getPickupId());
                             } catch (BasicException e) {
                                 new MessageInf(e).show(JTicketsBagRestaurantMap.this); // Glup. But It was empty.
                             }
+                            m_place.setPeople(true);
+                            setActivePlace(m_place, ticket);
+                            
+                        } else if (ticket == null && m_place.hasPeople()) {
+                            // The table is now empty
+                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tableempty")).show(JTicketsBagRestaurantMap.this);
+                            m_place.setPeople(false); // fixed  
+                        } else if (ticket != null && !m_place.hasPeople()) {
+                            // The table is now full
+                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tablefull")).show(JTicketsBagRestaurantMap.this);
+                            m_place.setPeople(true);
+                            
+                        } else { // both != null
+                            // Full table                
+                            // m_place.setPeople(true); // already true                           
+                            setActivePlace(m_place, ticket);
+                            
+                        }
+                    } else {
+                        // receiving customer.
 
+                        // check if the sharedticket is the same
+                        TicketInfo ticket = getTicketInfo(m_place);
+                        if (ticket == null) {
+                            // receive the customer
+                            // table occupied
+                            ticket = new TicketInfo();
+                            
+                            try {
+                                ticket.setCustomer(customer.getId() == null
+                                        ? null
+                                        : dlSales.loadCustomerExt(customer.getId()));
+                            } catch (BasicException e) {
+                                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindcustomer"), e);
+                                msg.show(JTicketsBagRestaurantMap.this);
+                            }
+                            
+                            try {
+                                dlReceipts.insertSharedTicket(m_place.getId(), ticket, ticket.getPickupId());
+                            } catch (BasicException e) {
+                                new MessageInf(e).show(JTicketsBagRestaurantMap.this); // Glup. But It was empty.
+                            }
+                            m_place.setPeople(true);
+                            m_PlaceClipboard = null;
+                            customer = null;
+                            
+                            setActivePlace(m_place, ticket);
+                        } else {
+                            // TODO: msg: The table is now full
+                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tablefull")).show(JTicketsBagRestaurantMap.this);
+                            m_place.setPeople(true);
+                            m_place.getButton().setEnabled(false);
+                        }
+                    }
+                } else {
+                    // check if the sharedticket is the same
+                    TicketInfo ticketclip = getTicketInfo(m_PlaceClipboard);
+                    
+                    if (ticketclip == null) {
+                        new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tableempty")).show(JTicketsBagRestaurantMap.this);
+                        m_PlaceClipboard.setPeople(false);
+                        m_PlaceClipboard = null;
+                        customer = null;
+                        printState();
+                    } else // tenemos que copiar el ticket del clipboard
+                    {
+                        if (m_PlaceClipboard == m_place) {
+                            // the same button. Canceling.
+                            Place placeclip = m_PlaceClipboard;
                             m_PlaceClipboard = null;
                             customer = null;
                             printState();
-
-                            // No hace falta preguntar si estaba bloqueado porque ya lo estaba antes
-                            // activamos el ticket seleccionado
-                            setActivePlace(m_place, ticketclip);
-
-                        } else {
-                            // Full table
-                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tablefull")).show(JTicketsBagRestaurantMap.this);
-                            m_PlaceClipboard.setPeople(true);
-                            printState();
-                        }
-                    } else {
-                        // Merge the lines with the receipt of the table
-                        TicketInfo ticket = getTicketInfo(m_place);
-
-                        if (ticket == null) {
-                            // The table is now empty
-                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tableempty")).show(JTicketsBagRestaurantMap.this);
-                            m_place.setPeople(false); // fixed                        
-                        } else //asks if you want to merge tables
-                        {
-                            if (JOptionPane.showConfirmDialog(JTicketsBagRestaurantMap.this, AppLocal.getIntString("message.mergetablequestion"), AppLocal.getIntString("message.mergetable"), JOptionPane.YES_NO_OPTION)
-                                    == JOptionPane.YES_OPTION) {
-                                // merge lines ticket
-
+                            setActivePlace(placeclip, ticketclip);
+                        } else if (!m_place.hasPeople()) {
+                            // Moving the receipt to an empty table
+                            TicketInfo ticket = getTicketInfo(m_place);
+////
+                            if (ticket == null) {
                                 try {
+                                    dlReceipts.insertSharedTicket(m_place.getId(), ticketclip, ticketclip.getPickupId());//dlSales.getNextPickupIndex());
+                                    m_place.setPeople(true);
                                     dlReceipts.deleteSharedTicket(m_PlaceClipboard.getId());
                                     m_PlaceClipboard.setPeople(false);
-                                    if (ticket.getCustomer() == null) {
-                                        ticket.setCustomer(ticketclip.getCustomer());
-                                    }
-                                    for (TicketLineInfo line : ticketclip.getLines()) {
-                                        ticket.addLine(line);
-                                    }
-                                    dlReceipts.updateSharedTicket(m_place.getId(), ticket, ticket.getPickupId());
                                 } catch (BasicException e) {
                                     new MessageInf(e).show(JTicketsBagRestaurantMap.this); // Glup. But It was empty.
                                 }
-
+                                
                                 m_PlaceClipboard = null;
                                 customer = null;
-//clear the original table data
-                                restDB.clearCustomerNameInTable(restDB.getTableDetails(ticketclip.getId()));
-                                restDB.clearWaiterNameInTable(restDB.getTableDetails(ticketclip.getId()));
-                                restDB.clearTableMovedFlag(restDB.getTableDetails(ticketclip.getId()));
-                                restDB.clearTicketIdInTable(restDB.getTableDetails(ticketclip.getId()));
-
-                                //           restDB.clearTableMovedFlag("");
                                 printState();
 
-                                setActivePlace(m_place, ticket);
+                                // No hace falta preguntar si estaba bloqueado porque ya lo estaba antes
+                                // activamos el ticket seleccionado
+                                setActivePlace(m_place, ticketclip);
+                                
                             } else {
-                                // Cancel merge operations
-                                Place placeclip = m_PlaceClipboard;
-                                m_PlaceClipboard = null;
-                                customer = null;
+                                // Full table
+                                new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tablefull")).show(JTicketsBagRestaurantMap.this);
+                                m_PlaceClipboard.setPeople(true);
                                 printState();
-                                setActivePlace(placeclip, ticketclip);
+                            }
+                        } else {
+                            // Merge the lines with the receipt of the table
+                            TicketInfo ticket = getTicketInfo(m_place);
+                            
+                            if (ticket == null) {
+                                // The table is now empty
+                                new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.tableempty")).show(JTicketsBagRestaurantMap.this);
+                                m_place.setPeople(false); // fixed                        
+                            } else //asks if you want to merge tables
+                            {
+                                if (JOptionPane.showConfirmDialog(JTicketsBagRestaurantMap.this, AppLocal.getIntString("message.mergetablequestion"), AppLocal.getIntString("message.mergetable"), JOptionPane.YES_NO_OPTION)
+                                        == JOptionPane.YES_OPTION) {
+                                    // merge lines ticket
+
+                                    try {
+                                        dlReceipts.deleteSharedTicket(m_PlaceClipboard.getId());
+                                        m_PlaceClipboard.setPeople(false);
+                                        if (ticket.getCustomer() == null) {
+                                            ticket.setCustomer(ticketclip.getCustomer());
+                                        }
+                                        for (TicketLineInfo line : ticketclip.getLines()) {
+                                            ticket.addLine(line);
+                                        }
+                                        dlReceipts.updateSharedTicket(m_place.getId(), ticket, ticket.getPickupId());
+                                    } catch (BasicException e) {
+                                        new MessageInf(e).show(JTicketsBagRestaurantMap.this); // Glup. But It was empty.
+                                    }
+                                    
+                                    m_PlaceClipboard = null;
+                                    customer = null;
+//clear the original table data
+                                    restDB.clearCustomerNameInTable(restDB.getTableDetails(ticketclip.getId()));
+                                    restDB.clearWaiterNameInTable(restDB.getTableDetails(ticketclip.getId()));
+                                    restDB.clearTableMovedFlag(restDB.getTableDetails(ticketclip.getId()));
+                                    restDB.clearTicketIdInTable(restDB.getTableDetails(ticketclip.getId()));
+
+                                    //           restDB.clearTableMovedFlag("");
+                                    printState();
+                                    
+                                    setActivePlace(m_place, ticket);
+                                } else {
+                                    // Cancel merge operations
+                                    Place placeclip = m_PlaceClipboard;
+                                    m_PlaceClipboard = null;
+                                    customer = null;
+                                    printState();
+                                    setActivePlace(placeclip, ticketclip);
+                                }
                             }
                         }
                     }
@@ -792,6 +807,8 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_jbtnReservations = new javax.swing.JButton();
         m_jbtnRefresh = new javax.swing.JButton();
         m_jText = new javax.swing.JLabel();
+        m_btnSetupMode = new javax.swing.JButton();
+        m_btnSavePlaces = new javax.swing.JButton();
 
         setLayout(new java.awt.CardLayout());
 
@@ -812,7 +829,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_jbtnReservations.setMargin(new java.awt.Insets(8, 14, 8, 14));
         m_jbtnReservations.setMaximumSize(new java.awt.Dimension(133, 40));
         m_jbtnReservations.setMinimumSize(new java.awt.Dimension(133, 40));
-        m_jbtnReservations.setPreferredSize(new java.awt.Dimension(133, 40));
+        m_jbtnReservations.setPreferredSize(new java.awt.Dimension(150, 40));
         m_jbtnReservations.setRequestFocusEnabled(false);
         m_jbtnReservations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -830,7 +847,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         m_jbtnRefresh.setMargin(new java.awt.Insets(8, 14, 8, 14));
         m_jbtnRefresh.setMaximumSize(new java.awt.Dimension(100, 40));
         m_jbtnRefresh.setMinimumSize(new java.awt.Dimension(100, 40));
-        m_jbtnRefresh.setPreferredSize(new java.awt.Dimension(100, 40));
+        m_jbtnRefresh.setPreferredSize(new java.awt.Dimension(150, 40));
         m_jbtnRefresh.setRequestFocusEnabled(false);
         m_jbtnRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -839,6 +856,42 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         });
         jPanel2.add(m_jbtnRefresh);
         jPanel2.add(m_jText);
+
+        m_btnSetupMode.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_btnSetupMode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/movetable.png"))); // NOI18N
+        m_btnSetupMode.setText(AppLocal.getIntString("button.layout")); // NOI18N
+        m_btnSetupMode.setToolTipText("");
+        m_btnSetupMode.setFocusPainted(false);
+        m_btnSetupMode.setFocusable(false);
+        m_btnSetupMode.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_btnSetupMode.setMaximumSize(new java.awt.Dimension(100, 40));
+        m_btnSetupMode.setMinimumSize(new java.awt.Dimension(100, 40));
+        m_btnSetupMode.setPreferredSize(new java.awt.Dimension(150, 40));
+        m_btnSetupMode.setRequestFocusEnabled(false);
+        m_btnSetupMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_btnSetupModeActionPerformed(evt);
+            }
+        });
+        jPanel2.add(m_btnSetupMode);
+
+        m_btnSavePlaces.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_btnSavePlaces.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/filesave.png"))); // NOI18N
+        m_btnSavePlaces.setText(AppLocal.getIntString("Button.Save")); // NOI18N
+        m_btnSavePlaces.setToolTipText("");
+        m_btnSavePlaces.setFocusPainted(false);
+        m_btnSavePlaces.setFocusable(false);
+        m_btnSavePlaces.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_btnSavePlaces.setMaximumSize(new java.awt.Dimension(100, 40));
+        m_btnSavePlaces.setMinimumSize(new java.awt.Dimension(100, 40));
+        m_btnSavePlaces.setPreferredSize(new java.awt.Dimension(100, 40));
+        m_btnSavePlaces.setRequestFocusEnabled(false);
+        m_btnSavePlaces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_btnSavePlacesActionPerformed(evt);
+            }
+        });
+        jPanel2.add(m_btnSavePlaces);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_START);
 
@@ -857,16 +910,56 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     }//GEN-LAST:event_m_jbtnRefreshActionPerformed
 
     private void m_jbtnReservationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnReservationsActionPerformed
-
+        
         showView("res");
         m_jreservations.activate();
 
     }//GEN-LAST:event_m_jbtnReservationsActionPerformed
 
+    private void m_btnSetupModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_btnSetupModeActionPerformed
+        
+        if (java.util.ResourceBundle.getBundle("pos_messages").getString("button.layout").equals(m_btnSetupMode.getText())) {
+            actionEnabled = false;
+            m_btnSetupMode.setText(java.util.ResourceBundle.getBundle("pos_messages").getString("button.disablelayout"));
+            
+            for (Place pl : m_aplaces) {
+                if (transparentButtons) {
+                    pl.getButton().setOpaque(true);
+                    pl.getButton().setContentAreaFilled(true);
+                    pl.getButton().setBorderPainted(true);
+                }
+            }
+        } else {
+            actionEnabled = true;
+            m_btnSetupMode.setText(java.util.ResourceBundle.getBundle("pos_messages").getString("button.layout"));
+            
+            for (Place pl : m_aplaces) {
+                if (transparentButtons) {
+                    pl.getButton().setOpaque(false);
+                    pl.getButton().setContentAreaFilled(false);
+                    pl.getButton().setBorderPainted(false);
+                }
+            }
+        }
+    }//GEN-LAST:event_m_btnSetupModeActionPerformed
+
+    private void m_btnSavePlacesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_btnSavePlacesActionPerformed
+        
+        for (Place pl : m_aplaces) {
+            try {
+                dlSystem.updatePlaces(pl.getX(), pl.getY(), pl.getId());
+            } catch (BasicException ex) {
+                Logger.getLogger(JTicketsBagRestaurantMap.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_m_btnSavePlacesActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton m_btnSavePlaces;
+    private javax.swing.JButton m_btnSetupMode;
     private javax.swing.JPanel m_jPanelMap;
     private javax.swing.JLabel m_jText;
     private javax.swing.JButton m_jbtnRefresh;

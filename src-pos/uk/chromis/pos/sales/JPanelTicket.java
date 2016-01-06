@@ -94,7 +94,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
-import uk.chromis.pos.printer.DeviceTicket;
 import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
 import uk.chromis.pos.promotion.PromotionSupport;
@@ -117,12 +116,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private final static int NUMBER_PORZERODEC = 5;
     private final static int NUMBER_PORINT = 6;
     private final static int NUMBER_PORDEC = 7;
-
-    public static Boolean autoLogoffEnabled;
-    public static Boolean autoLogoffInactivity;
-    public static Boolean autoLogoffAfterSales;
-    public static Boolean autoLogoffToTables;
-    public static Boolean autoLogoffAfterKitchen;
 
     private final String m_sCurrentTicket = null;
     private final String temp_jPrice = "";
@@ -168,13 +161,29 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private PromotionSupport m_promotionSupport = null;
     private Boolean fromNumberPad = true;
 
+    // Public variables
+    public static Boolean autoLogoffEnabled;
+    public static Boolean autoLogoffInactivity;
+    public static Boolean autoLogoffAfterSales;
+    public static Boolean autoLogoffToTables;
+    public static Boolean autoLogoffAfterKitchen;    
+
     public JPanelTicket() {
         initComponents();
     }
 
     @Override
     public void init(AppView app) throws BeanFactoryException {
+
+        autoLogoffEnabled = AppConfig.getInstance().getBoolean("till.enableautologoff");
+        autoLogoffInactivity = AppConfig.getInstance().getBoolean("till.autologoffinactivitytimer");
+        autoLogoffAfterSales = AppConfig.getInstance().getBoolean("till.autologoffaftersale");
+        autoLogoffToTables = AppConfig.getInstance().getBoolean("till.autologofftotables");
+        autoLogoffAfterKitchen = AppConfig.getInstance().getBoolean("till.autologoffafterkitchen");
+       
+
         m_App = app;
+
         restDB = new RestaurantDBUtils(m_App);
 
         dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
@@ -223,12 +232,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_oTicket = null;
         m_oTicketExt = null;
-// get all the logoff flags        
-        autoLogoffEnabled = AppConfig.getInstance().getBoolean("till.enableautologoff");
-        autoLogoffInactivity = AppConfig.getInstance().getBoolean("till.autologoffinactivitytimer");
-        autoLogoffAfterSales = AppConfig.getInstance().getBoolean("till.autologoffaftersale");
-        autoLogoffToTables = AppConfig.getInstance().getBoolean("till.autologofftotables");
-        autoLogoffAfterKitchen = AppConfig.getInstance().getBoolean("till.autologoffafterkitchen");
 
         /*
         Code to drive full screen display
@@ -331,6 +334,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public void activate() throws BasicException {
 // if the autologoff and inactivity is configured the setup the timer with action
         Action logout = new logout();
+
         if (autoLogoffEnabled && autoLogoffInactivity) {
             try {
                 delay = Integer.parseInt(AppConfig.getInstance().getProperty("till.autologofftimerperiod"));
@@ -467,8 +471,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         // if there is a customer assign update the debt details
         if (m_oTicket != null && m_oTicket.getCustomer() != null) {
-            try {                           
-              m_oTicket.getCustomer().setCurdebt(dlSales.getCustomerDebt(m_oTicket.getCustomer().getId()));
+            try {
+                m_oTicket.getCustomer().setCurdebt(dlSales.getCustomerDebt(m_oTicket.getCustomer().getId()));
             } catch (BasicException ex) {
                 Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1133,13 +1137,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                             if (oProduct.getPriceSell() != 0.0) {
+                            {
+                                if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
+                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
