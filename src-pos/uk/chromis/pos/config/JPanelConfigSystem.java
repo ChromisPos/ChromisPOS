@@ -46,7 +46,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         initComponents();
         jAutoLogoffTime.setText("100");
         jMaxChange.setText("20");
-        
+
         jAutoLogoffTime.getDocument().addDocumentListener(dirty);
         jAutoLogoffAfterKitchen.addActionListener(dirty);
         jAutoLogoffAfterPrint.addActionListener(dirty);
@@ -73,6 +73,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jTaxIncluded.addActionListener(dirty);
         jCategoiesBynumber.addActionListener(dirty);
         jMaxChange.getDocument().addDocumentListener(dirty);
+        jMaxChangeEnable.addActionListener(dirty);
     }
 
     /**
@@ -134,6 +135,9 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jTaxIncluded.setSelected(AppConfig.getInstance().getBoolean("till.taxincluded"));
         jCategoiesBynumber.setSelected(AppConfig.getInstance().getBoolean("till.categoriesbynumberorder"));
         jMaxChange.setText(AppConfig.getInstance().getProperty("till.changelimit"));
+        jMaxChangeEnable.setSelected(AppConfig.getInstance().getBoolean("till.enablechangelimit"));
+        
+        jMaxChangeEnableActionPerformed(null);
 
 // hide some values until the code has been implmented        
         if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
@@ -214,7 +218,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         AppConfig.getInstance().setBoolean("product.hidedefaultproductedit", jDisableDefaultProduct.isSelected());
         AppConfig.getInstance().setBoolean("till.taxincluded", jTaxIncluded.isSelected());
         AppConfig.getInstance().setBoolean("till.categoriesbynumberorder", jCategoiesBynumber.isSelected());
-        AppConfig.getInstance().setProperty("till.changelimit", jMaxChange.getText());
+        AppConfig.getInstance().setProperty("till.changelimit", jMaxChange.getText());        
+        AppConfig.getInstance().setBoolean("till.enablechangelimit", jMaxChangeEnable.isSelected());
 
         dirty.setDirty(false);
     }
@@ -266,6 +271,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jChangeSalesScreen = new eu.hansolo.custom.SteelCheckBox();
         jMoveAMountBoxToTop = new eu.hansolo.custom.SteelCheckBox();
         jCategoiesBynumber = new eu.hansolo.custom.SteelCheckBox();
+        jMaxChangeEnable = new eu.hansolo.custom.SteelCheckBox();
         jMaxChange = new javax.swing.JTextField();
         jLabelMaxChange = new javax.swing.JLabel();
         jLabelInactiveTime = new javax.swing.JLabel();
@@ -474,6 +480,14 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jCategoiesBynumber.setText(bundle.getString("label.categoryorder")); // NOI18N
         jPanel5.add(jCategoiesBynumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, 170, -1));
 
+        jMaxChangeEnable.setText(bundle.getString("message.enablechange")); // NOI18N
+        jMaxChangeEnable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMaxChangeEnableActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jMaxChangeEnable, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 160, -1));
+
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 20, 580, -1));
 
         jMaxChange.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -556,6 +570,16 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         }
     }//GEN-LAST:event_jInactivityTimerActionPerformed
 
+    private void jMaxChangeEnableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMaxChangeEnableActionPerformed
+        if (jMaxChangeEnable.isSelected()) {
+            jMaxChange.setVisible(true);
+            jLabelMaxChange.setVisible(true);
+        } else {
+            jMaxChange.setVisible(false);
+            jLabelMaxChange.setVisible(false);
+        }
+    }//GEN-LAST:event_jMaxChangeEnableActionPerformed
+
     private void jTableRetainStateChanged(javax.swing.event.ChangeEvent evt) {
         // TODO add your handling code here:
         retain = "";
@@ -593,6 +617,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
     private javax.swing.JLabel jLabelTimedMessage;
     private eu.hansolo.custom.SteelCheckBox jMarineOpt;
     private javax.swing.JTextField jMaxChange;
+    private eu.hansolo.custom.SteelCheckBox jMaxChangeEnable;
     private eu.hansolo.custom.SteelCheckBox jMoveAMountBoxToTop;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

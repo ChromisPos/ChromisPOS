@@ -625,7 +625,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         PaymentInfo returnPayment = ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).executePayment();
 
         double change = Integer.parseInt(AppConfig.getInstance().getProperty("till.changelimit"));
-        if (returnPayment.getChange() > change) {
+        if (returnPayment.getChange() > change && AppConfig.getInstance().getBoolean("till.enablechangelimit")) {
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,
                     AppLocal.getIntString("message.largechange"),

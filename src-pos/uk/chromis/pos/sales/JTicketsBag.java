@@ -32,20 +32,9 @@ import uk.chromis.pos.sales.simple.JTicketsBagSimple;
  *   
  */
 public abstract class JTicketsBag extends JPanel {
-    
-    /**
-     *
-     */
+
     protected AppView m_App;     
-
-    /**
-     *
-     */
     protected DataLogicSales m_dlSales;
-
-    /**
-     *
-     */
     protected TicketsEditor m_panelticket;    
     
     /** Creates new form JTicketsBag
@@ -57,41 +46,12 @@ public abstract class JTicketsBag extends JPanel {
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
     }
     
-    /**
-     *
-     */
     public abstract void activate();
-
-    /**
-     *
-     * @return
-     */
     public abstract boolean deactivate();
-
-    /**
-     *
-     */
     public abstract void deleteTicket();
-    
-    /**
-     *
-     * @return
-     */
     protected abstract JComponent getBagComponent();
-
-    /**
-     *
-     * @return
-     */
     protected abstract JComponent getNullComponent();
     
-    /**
-     *
-     * @param sName
-     * @param app
-     * @param panelticket
-     * @return
-     */
     public static JTicketsBag createTicketsBag(String sName, AppView app, TicketsEditor panelticket) {
         switch (sName) {
             case "standard":
