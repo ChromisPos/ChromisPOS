@@ -34,28 +34,11 @@ import uk.chromis.data.loader.LocalRes;
  */
 public class BrowsableEditableData {
     
-    /**
-     * Ticket Type = Debit
-     */
     public static final int ST_NORECORD = 0;
-
-    /**
-     * Ticket Type = Credit (Refund)
-     */
     public static final int ST_UPDATE = 1;
-
-    /**
-     * Payment Type = Debit (On Account)
-     */
     public static final int ST_DELETE = 2;
-
-    /**
-     * Payment Type = Credit (On Account)
-     */
     public static final int ST_INSERT = 3;
-    
     private final static int INX_EOF = -1;
-    
     private BrowsableData m_bd;
     
     protected EventListenerList listeners = new EventListenerList();

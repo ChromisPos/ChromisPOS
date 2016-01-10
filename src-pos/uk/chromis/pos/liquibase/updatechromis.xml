@@ -868,7 +868,7 @@
         </addColumn>        
     </changeSet>
           
-    <changeSet author="Chromis POS" id="Promotions added to PRODUCTS table">
+    <changeSet author="Chromis POS" id="Promotions added to PRODUCTS table ">
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="PROMOTIONID" tableName="PRODUCTS" />
@@ -878,16 +878,6 @@
         <addColumn tableName="PRODUCTS">
             <column name="PROMOTIONID" type="varchar(50)" /> 
         </addColumn>                
-    </changeSet> 
-    
-
-     
-    <changeSet author="Chromis POS" id="Add FK to products">  
-        <preConditions>
-            <not>
-                <foreignKeyConstraintExists foreignKeyName="FK_PRODUCT_PROMOTIONID" foreignKeyTableName="PROMOTIONS" />
-            </not>
-        </preConditions>
                  
         <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
                                  constraintName ="FK_PRODUCT_PROMOTIONID"
@@ -896,9 +886,11 @@
                                  referencedTableName="PROMOTIONS"/>
     </changeSet> 
          
-    <changeSet author="Chromis POS" id="Add Allproducts column if it does not exist" >    
+    <changeSet author="Chromis POS" id="Add Allproducts column if it does not exist." >    
         <preConditions onFail="MARK_RAN">
-            <columnExists columnName="ALLPRODUCTS" tableName="PRODUCTS"/>
+            <not>
+                <columnExists columnName="ALLPRODUCTS" tableName="PRODUCTS"/>
+            </not>
         </preConditions> 
         
         <addColumn tableName="PRODUCTS">
@@ -912,7 +904,20 @@
         <sql>ALTER TABLE CLOSEDCASH CHANGE DATESTART DATESTART TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE SHIFTS CHANGE STARTSHIFT STARTSHIFT TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE LEAVES CHANGE STARTDATE STARTDATE TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql> 
-    </changeSet>         
+    </changeSet>   
+  <!--  
+    <changeSet author="Chromis POS" id="Add tableopen column in sharedtickets if it does not exist" >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="TABLEOPEN" tableName="SHAREDTICKETS"/>
+            </not>    
+        </preConditions> 
+        
+        <addColumn tableName="SHAREDTICKETS">
+            <column name="TABLEOPEN" type="${boolean.type}"   
+                    defaultValueBoolean="false"/>  
+        </addColumn>        
+    </changeSet>     -->           
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1219,8 +1224,8 @@
             <column name="TAXCAT" value="001"/>
             <column name="ISCATALOG" valueBoolean="false"/>
             <column name="ISSERVICE" valueBoolean="true"/>
-            <column name="PRICEBUY" valueNumeric="0.0"/>
-            <column name="PRICESELL" valueNumeric="0.0"/>
+            <column name="PRICEBUY" valueNumeric="0.00"/>
+            <column name="PRICESELL" valueNumeric="0.00"/>
         </insert>
     </changeSet>                                                                                                                                                                                                                                                                                                          
     <!-- End of dbpermissions changeset section   -->

@@ -166,7 +166,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public static Boolean autoLogoffInactivity;
     public static Boolean autoLogoffAfterSales;
     public static Boolean autoLogoffToTables;
-    public static Boolean autoLogoffAfterKitchen;    
+    public static Boolean autoLogoffAfterKitchen;
 
     public JPanelTicket() {
         initComponents();
@@ -180,7 +180,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         autoLogoffAfterSales = AppConfig.getInstance().getBoolean("till.autologoffaftersale");
         autoLogoffToTables = AppConfig.getInstance().getBoolean("till.autologofftotables");
         autoLogoffAfterKitchen = AppConfig.getInstance().getBoolean("till.autologoffafterkitchen");
-       
 
         m_App = app;
 
@@ -1546,14 +1545,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (pTicket == null) {
             return ("0");
         }
-        String tmpPickupId = Integer.toString(pTicket.getPickupId());
-        String pickupSize = (AppConfig.getInstance().getProperty("till.pickupsize"));
-        if (pickupSize != null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())) {
-            while (tmpPickupId.length() < (Integer.parseInt(pickupSize))) {
-                tmpPickupId = "0" + tmpPickupId;
+            String tmpPickupId = Integer.toString(pTicket.getPickupId());
+            String pickupSize = (AppConfig.getInstance().getProperty("till.pickupsize"));
+            if (pickupSize != null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())) {
+                while (tmpPickupId.length() < (Integer.parseInt(pickupSize))) {
+                    tmpPickupId = "0" + tmpPickupId;
+                }
             }
-        }
-        return (tmpPickupId);
+            return (tmpPickupId);
     }
 
     private void printTicket(String sresourcename, TicketInfo ticket, Object ticketext) {

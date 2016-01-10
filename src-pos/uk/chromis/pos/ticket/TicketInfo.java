@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.ticket;
 
 import java.io.ByteArrayInputStream;
@@ -110,6 +109,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         multiply = 0.0;
         m_sharedticket = false;
         m_nosc = "0";
+        m_iPickupId = 0;
 
     }
 

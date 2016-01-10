@@ -27,10 +27,6 @@ import uk.chromis.pos.sales.restaurant.JTicketsBagRestaurantMap;
 import uk.chromis.pos.sales.shared.JTicketsBagShared;
 import uk.chromis.pos.sales.simple.JTicketsBagSimple;
 
-/**
- *
- *   
- */
 public abstract class JTicketsBag extends JPanel {
 
     protected AppView m_App;     

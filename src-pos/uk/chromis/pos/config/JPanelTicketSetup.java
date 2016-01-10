@@ -52,6 +52,8 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jTextSCRate.getDocument().addDocumentListener(dirty);
         jLayawayId.addActionListener(dirty);
         jCreateOnOrderOnly.addActionListener(dirty);
+        jLayawayPopup.addActionListener(dirty);
+
     }
 
     /**
@@ -116,10 +118,9 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
 
         jchkSCOnOff.setSelected(AppConfig.getInstance().getBoolean("till.SCOnOff"));
         jchkSCRestaurant.setSelected(AppConfig.getInstance().getBoolean("till.SCRestaurant"));
-
         jLayawayId.setSelected(AppConfig.getInstance().getBoolean("till.usepickupforlayaway"));
         jCreateOnOrderOnly.setSelected(AppConfig.getInstance().getBoolean("till.createorder"));
-
+        jLayawayPopup.setSelected(AppConfig.getInstance().getBoolean("till.layawaypopup"));
         jchkSCOnOffActionPerformed(null);
 
         dirty.setDirty(false);
@@ -140,7 +141,8 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         AppConfig.getInstance().setBoolean("till.SCRestaurant", jchkSCRestaurant.isSelected());
         AppConfig.getInstance().setBoolean("till.usepickupforlayaway", jLayawayId.isSelected());
         AppConfig.getInstance().setBoolean("till.createorder", jCreateOnOrderOnly.isSelected());
-
+        AppConfig.getInstance().setBoolean("till.layawaypopup", jLayawayPopup.isSelected());
+        
         dirty.setDirty(false);
     }
 
@@ -172,6 +174,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jPanel2 = new javax.swing.JPanel();
         jLayawayId = new eu.hansolo.custom.SteelCheckBox();
         jCreateOnOrderOnly = new eu.hansolo.custom.SteelCheckBox();
+        jLayawayPopup = new eu.hansolo.custom.SteelCheckBox();
 
         jTextField2.setText("jTextField2");
 
@@ -297,8 +300,11 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
         jCreateOnOrderOnly.setText(bundle.getString("label.createonorder")); // NOI18N
         jPanel2.add(jCreateOnOrderOnly, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 340, -1));
 
+        jLayawayPopup.setText(bundle.getString("label.layawaypopup")); // NOI18N
+        jPanel2.add(jLayawayPopup, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 260, -1));
+
         add(jPanel2);
-        jPanel2.setBounds(10, 290, 730, 60);
+        jPanel2.setBounds(10, 290, 730, 110);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextReceiptPrefixKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextReceiptPrefixKeyReleased
@@ -344,6 +350,7 @@ public class JPanelTicketSetup extends javax.swing.JPanel implements PanelConfig
     private javax.swing.JLabel jLabelSCRate;
     private javax.swing.JLabel jLabelSCRatePerCent;
     private eu.hansolo.custom.SteelCheckBox jLayawayId;
+    private eu.hansolo.custom.SteelCheckBox jLayawayPopup;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;

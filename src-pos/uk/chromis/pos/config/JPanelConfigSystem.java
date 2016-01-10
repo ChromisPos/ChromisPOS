@@ -56,11 +56,6 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jAutoLogoffToTables.addActionListener(dirty);
         jMarineOpt.addActionListener(dirty);
         jchkTextOverlay.addActionListener(dirty);
-        jchkShowCustomerDetails.addActionListener(dirty);
-        jchkShowWaiterDetails.addActionListener(dirty);
-        jCustomerColour.addActionListener(dirty);
-        jWaiterColour.addActionListener(dirty);
-        jTableNameColour.addActionListener(dirty);
         jMoveAMountBoxToTop.addActionListener(dirty);
         jCheckPrice00.addActionListener(dirty);
         jMoveAMountBoxToTop.addActionListener(dirty);
@@ -74,6 +69,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jCategoiesBynumber.addActionListener(dirty);
         jMaxChange.getDocument().addDocumentListener(dirty);
         jMaxChangeEnable.addActionListener(dirty);
+        JlongNames.addActionListener(dirty);
     }
 
     /**
@@ -120,14 +116,11 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jAutoLogoffAfterKitchen.setSelected(AppConfig.getInstance().getBoolean("till.autologoffafterkitchen"));
         jAutoLogoffAfterPrint.setSelected(AppConfig.getInstance().getBoolean("till.autologoffafterprint"));
         jMarineOpt.setSelected(AppConfig.getInstance().getBoolean("till.marineoption"));
-        jchkShowCustomerDetails.setSelected(AppConfig.getInstance().getBoolean("table.showcustomerdetails"));
-        jchkShowWaiterDetails.setSelected(AppConfig.getInstance().getBoolean("table.showwaiterdetails"));
         jchkTextOverlay.setSelected(AppConfig.getInstance().getBoolean("payments.textoverlay"));
         jMoveAMountBoxToTop.setSelected(AppConfig.getInstance().getBoolean("till.taxincluded"));
         jCheckPrice00.setSelected(AppConfig.getInstance().getBoolean("till.pricewith00"));
         jMoveAMountBoxToTop.setSelected(AppConfig.getInstance().getBoolean("till.amountattop"));
         jCloseCashbtn.setSelected(AppConfig.getInstance().getBoolean("screen.600800"));
-        jTableButtons.setSelected(AppConfig.getInstance().getBoolean("table.transparentbuttons"));
         jUpdatedbprice.setSelected(AppConfig.getInstance().getBoolean("db.productupdate"));
         jChangeSalesScreen.setSelected(AppConfig.getInstance().getBoolean("sales.newscreen"));
         jConsolidate.setSelected(AppConfig.getInstance().getBoolean("display.consolidated"));
@@ -136,26 +129,11 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jCategoiesBynumber.setSelected(AppConfig.getInstance().getBoolean("till.categoriesbynumberorder"));
         jMaxChange.setText(AppConfig.getInstance().getProperty("till.changelimit"));
         jMaxChangeEnable.setSelected(AppConfig.getInstance().getBoolean("till.enablechangelimit"));
-        
+        JlongNames.setSelected(AppConfig.getInstance().getBoolean("display.longnames"));
+
         jMaxChangeEnableActionPerformed(null);
 
 // hide some values until the code has been implmented        
-        if (AppConfig.getInstance().getProperty("table.customercolour") == null) {
-            jCustomerColour.setSelectedItem("blue");
-        } else {
-            jCustomerColour.setSelectedItem(AppConfig.getInstance().getProperty("table.customercolour"));
-        }
-        if (AppConfig.getInstance().getProperty("table.waitercolour") == null) {
-            jWaiterColour.setSelectedItem("red");
-        } else {
-            jWaiterColour.setSelectedItem(AppConfig.getInstance().getProperty("table.waitercolour"));
-        }
-        if (AppConfig.getInstance().getProperty("table.tablecolour") == null) {
-            jTableNameColour.setSelectedItem("black");
-        } else {
-            jTableNameColour.setSelectedItem((AppConfig.getInstance().getProperty("table.tablecolour")));
-        }
-
         jAutoLogoffAfterPrint.setVisible(false);
         if (jEnableAutoLogoff.isSelected()) {
             jAutoLogoffToTables.setEnabled(true);
@@ -200,17 +178,11 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         AppConfig.getInstance().setBoolean("till.autologoffafterkitchen", jAutoLogoffAfterKitchen.isSelected());
         AppConfig.getInstance().setBoolean("till.autologoffafterprint", jAutoLogoffAfterPrint.isSelected());
         AppConfig.getInstance().setBoolean("till.marineoption", jMarineOpt.isSelected());
-        AppConfig.getInstance().setBoolean("table.showcustomerdetails", jchkShowCustomerDetails.isSelected());
-        AppConfig.getInstance().setBoolean("table.showwaiterdetails", jchkShowWaiterDetails.isSelected());
         AppConfig.getInstance().setBoolean("payments.textoverlay", jchkTextOverlay.isSelected());
-        AppConfig.getInstance().setProperty("table.customercolour", jCustomerColour.getSelectedItem().toString());
-        AppConfig.getInstance().setProperty("table.waitercolour", jWaiterColour.getSelectedItem().toString());
-        AppConfig.getInstance().setProperty("table.tablecolour", jTableNameColour.getSelectedItem().toString());
         AppConfig.getInstance().setBoolean("till.taxincluded", jMoveAMountBoxToTop.isSelected());
         AppConfig.getInstance().setBoolean("till.pricewith00", jCheckPrice00.isSelected());
         AppConfig.getInstance().setBoolean("till.amountattop", jMoveAMountBoxToTop.isSelected());
         AppConfig.getInstance().setBoolean("screen.600800", jCloseCashbtn.isSelected());
-        AppConfig.getInstance().setBoolean("table.transparentbuttons", jTableButtons.isSelected());
         AppConfig.getInstance().setProperty("dbtable.retaindays", jTableRetain.getValue().toString());
         AppConfig.getInstance().setBoolean("db.productupdate", jUpdatedbprice.isSelected());
         AppConfig.getInstance().setBoolean("sales.newscreen", jChangeSalesScreen.isSelected());
@@ -218,8 +190,9 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         AppConfig.getInstance().setBoolean("product.hidedefaultproductedit", jDisableDefaultProduct.isSelected());
         AppConfig.getInstance().setBoolean("till.taxincluded", jTaxIncluded.isSelected());
         AppConfig.getInstance().setBoolean("till.categoriesbynumberorder", jCategoiesBynumber.isSelected());
-        AppConfig.getInstance().setProperty("till.changelimit", jMaxChange.getText());        
+        AppConfig.getInstance().setProperty("till.changelimit", jMaxChange.getText());
         AppConfig.getInstance().setBoolean("till.enablechangelimit", jMaxChangeEnable.isSelected());
+        AppConfig.getInstance().setBoolean("display.longnames", JlongNames.isSelected());
 
         dirty.setDirty(false);
     }
@@ -245,17 +218,6 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jAutoLogoffTime = new javax.swing.JTextField();
         jLabelTimedMessage = new javax.swing.JLabel();
         jInactivityTimer = new eu.hansolo.custom.SteelCheckBox();
-        jPanel3 = new javax.swing.JPanel();
-        jLabelCustomerTextColour = new javax.swing.JLabel();
-        jCustomerColour = new javax.swing.JComboBox();
-        jLabelServerTextColour = new javax.swing.JLabel();
-        jWaiterColour = new javax.swing.JComboBox();
-        jLabelTableNameTextColour = new javax.swing.JLabel();
-        jTableNameColour = new javax.swing.JComboBox();
-        jPanel1 = new javax.swing.JPanel();
-        jchkShowCustomerDetails = new eu.hansolo.custom.SteelCheckBox();
-        jchkShowWaiterDetails = new eu.hansolo.custom.SteelCheckBox();
-        jTableButtons = new eu.hansolo.custom.SteelCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jTableRetain = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
@@ -271,6 +233,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jChangeSalesScreen = new eu.hansolo.custom.SteelCheckBox();
         jMoveAMountBoxToTop = new eu.hansolo.custom.SteelCheckBox();
         jCategoiesBynumber = new eu.hansolo.custom.SteelCheckBox();
+        JlongNames = new eu.hansolo.custom.SteelCheckBox();
         jMaxChangeEnable = new eu.hansolo.custom.SteelCheckBox();
         jMaxChange = new javax.swing.JTextField();
         jLabelMaxChange = new javax.swing.JLabel();
@@ -347,82 +310,6 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jPanel2.add(jPanel9);
         jPanel9.setBounds(10, 50, 580, 30);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), bundle.getString("label.tabledisplayoptions"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
-        jPanel3.setLayout(null);
-
-        jLabelCustomerTextColour.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabelCustomerTextColour.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelCustomerTextColour.setText(bundle.getString("label.textcolourcustomer")); // NOI18N
-        jLabelCustomerTextColour.setMaximumSize(new java.awt.Dimension(0, 25));
-        jLabelCustomerTextColour.setMinimumSize(new java.awt.Dimension(0, 0));
-        jLabelCustomerTextColour.setPreferredSize(new java.awt.Dimension(0, 25));
-        jPanel3.add(jLabelCustomerTextColour);
-        jLabelCustomerTextColour.setBounds(240, 20, 130, 25);
-
-        jCustomerColour.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jCustomerColour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "black", "blue", "grey", "green", "orange", "red", "white", "yellow" }));
-        jCustomerColour.setMaximumSize(new java.awt.Dimension(0, 25));
-        jCustomerColour.setMinimumSize(new java.awt.Dimension(0, 0));
-        jCustomerColour.setPreferredSize(new java.awt.Dimension(0, 25));
-        jCustomerColour.setSelectedItem("blue");
-        jPanel3.add(jCustomerColour);
-        jCustomerColour.setBounds(380, 20, 200, 30);
-
-        jLabelServerTextColour.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabelServerTextColour.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelServerTextColour.setText(bundle.getString("label.textcolourwaiter")); // NOI18N
-        jLabelServerTextColour.setMaximumSize(new java.awt.Dimension(0, 25));
-        jLabelServerTextColour.setMinimumSize(new java.awt.Dimension(0, 0));
-        jLabelServerTextColour.setPreferredSize(new java.awt.Dimension(0, 25));
-        jPanel3.add(jLabelServerTextColour);
-        jLabelServerTextColour.setBounds(240, 60, 130, 25);
-
-        jWaiterColour.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jWaiterColour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "black", "blue", "grey", "green", "orange", "red", "white", "yellow" }));
-        jWaiterColour.setMaximumSize(new java.awt.Dimension(0, 25));
-        jWaiterColour.setMinimumSize(new java.awt.Dimension(0, 0));
-        jWaiterColour.setPreferredSize(new java.awt.Dimension(0, 25));
-        jPanel3.add(jWaiterColour);
-        jWaiterColour.setBounds(380, 60, 200, 30);
-
-        jLabelTableNameTextColour.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabelTableNameTextColour.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelTableNameTextColour.setText(bundle.getString("label.textclourtablename")); // NOI18N
-        jLabelTableNameTextColour.setMaximumSize(new java.awt.Dimension(0, 25));
-        jLabelTableNameTextColour.setMinimumSize(new java.awt.Dimension(0, 0));
-        jLabelTableNameTextColour.setPreferredSize(new java.awt.Dimension(0, 25));
-        jPanel3.add(jLabelTableNameTextColour);
-        jLabelTableNameTextColour.setBounds(230, 100, 140, 30);
-
-        jTableNameColour.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jTableNameColour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "black", "blue", "grey", "green", "orange", "red", "white", "yellow" }));
-        jTableNameColour.setMaximumSize(new java.awt.Dimension(0, 25));
-        jTableNameColour.setMinimumSize(new java.awt.Dimension(0, 0));
-        jTableNameColour.setPreferredSize(new java.awt.Dimension(0, 25));
-        jPanel3.add(jTableNameColour);
-        jTableNameColour.setBounds(380, 100, 200, 30);
-
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jchkShowCustomerDetails.setText(bundle.getString("label.tableshowcustomerdetails")); // NOI18N
-        jPanel1.add(jchkShowCustomerDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 220, -1));
-
-        jchkShowWaiterDetails.setText(bundle.getString("label.tableshowwaiterdetails")); // NOI18N
-        jPanel1.add(jchkShowWaiterDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 220, -1));
-
-        jTableButtons.setBorder(null);
-        jTableButtons.setText(bundle.getString("label.tablebuttons")); // NOI18N
-        jTableButtons.setUi(null);
-        jTableButtons.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTableButtonsActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTableButtons, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 220, -1));
-
-        jPanel3.add(jPanel1);
-        jPanel1.setBounds(10, 20, 220, 140);
-
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), bundle.getString("label.general"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -432,11 +319,11 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
                 jTableRetainStateChanged(evt);
             }
         });
-        jPanel4.add(jTableRetain, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 50, 40));
+        jPanel4.add(jTableRetain, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 50, 40));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText(bundle.getString("label.cleardrawertable")); // NOI18N
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 370, -1));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 370, -1));
 
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -480,22 +367,25 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jCategoiesBynumber.setText(bundle.getString("label.categoryorder")); // NOI18N
         jPanel5.add(jCategoiesBynumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, 170, -1));
 
+        JlongNames.setText(bundle.getString("label.allowlongnames")); // NOI18N
+        jPanel5.add(JlongNames, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 250, -1));
+
         jMaxChangeEnable.setText(bundle.getString("message.enablechange")); // NOI18N
         jMaxChangeEnable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMaxChangeEnableActionPerformed(evt);
             }
         });
-        jPanel5.add(jMaxChangeEnable, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 160, -1));
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 20, 580, -1));
+        jPanel5.add(jMaxChangeEnable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 160, -1));
 
         jMaxChange.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jMaxChange.setText("50.00");
-        jPanel4.add(jMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 60, 30));
+        jPanel5.add(jMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 60, 30));
 
         jLabelMaxChange.setText(bundle.getString("label.maxchange")); // NOI18N
-        jPanel4.add(jLabelMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 160, 130, 30));
+        jPanel5.add(jLabelMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 150, 130, 30));
+
+        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 20, 670, 240));
 
         jLabelInactiveTime.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabelInactiveTime.setText(bundle.getString("label.autolofftime")); // NOI18N
@@ -514,7 +404,6 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
                         .addComponent(jLabelInactiveTime, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 492, Short.MAX_VALUE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -523,10 +412,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(75, 75, 75)
                 .addComponent(jLabelInactiveTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(69, Short.MAX_VALUE))
         );
@@ -553,10 +440,6 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
             jAutologoffAfterSale.setEnabled(false);
         }
     }//GEN-LAST:event_jEnableAutoLogoffActionPerformed
-
-    private void jTableButtonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTableButtonsActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTableButtonsActionPerformed
 
     private void jInactivityTimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jInactivityTimerActionPerformed
         Integer delay = 100;
@@ -594,6 +477,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private eu.hansolo.custom.SteelCheckBox JlongNames;
     private eu.hansolo.custom.SteelCheckBox jAutoLogoffAfterKitchen;
     private eu.hansolo.custom.SteelCheckBox jAutoLogoffAfterPrint;
     private javax.swing.JTextField jAutoLogoffTime;
@@ -604,38 +488,27 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
     private eu.hansolo.custom.SteelCheckBox jCheckPrice00;
     private eu.hansolo.custom.SteelCheckBox jCloseCashbtn;
     private eu.hansolo.custom.SteelCheckBox jConsolidate;
-    private javax.swing.JComboBox jCustomerColour;
     private eu.hansolo.custom.SteelCheckBox jDisableDefaultProduct;
     private eu.hansolo.custom.SteelCheckBox jEnableAutoLogoff;
     private eu.hansolo.custom.SteelCheckBox jInactivityTimer;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabelCustomerTextColour;
     private javax.swing.JLabel jLabelInactiveTime;
     private javax.swing.JLabel jLabelMaxChange;
-    private javax.swing.JLabel jLabelServerTextColour;
-    private javax.swing.JLabel jLabelTableNameTextColour;
     private javax.swing.JLabel jLabelTimedMessage;
     private eu.hansolo.custom.SteelCheckBox jMarineOpt;
     private javax.swing.JTextField jMaxChange;
     private eu.hansolo.custom.SteelCheckBox jMaxChangeEnable;
     private eu.hansolo.custom.SteelCheckBox jMoveAMountBoxToTop;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private eu.hansolo.custom.SteelCheckBox jTableButtons;
-    private javax.swing.JComboBox jTableNameColour;
     private javax.swing.JSpinner jTableRetain;
     private eu.hansolo.custom.SteelCheckBox jTaxIncluded;
     private eu.hansolo.custom.SteelCheckBox jUpdatedbprice;
-    private javax.swing.JComboBox jWaiterColour;
-    private eu.hansolo.custom.SteelCheckBox jchkShowCustomerDetails;
-    private eu.hansolo.custom.SteelCheckBox jchkShowWaiterDetails;
     private eu.hansolo.custom.SteelCheckBox jchkTextOverlay;
     // End of variables declaration//GEN-END:variables
 

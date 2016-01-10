@@ -182,7 +182,7 @@ public class JTicketsBagShared extends JTicketsBag {
             m_panelticket.setTicketName(tName);
         }
         checkLayaways();
-        // END TRANSACTION                 
+
     }
 
     private void checkLayaways() {
@@ -240,20 +240,21 @@ public class JTicketsBagShared extends JTicketsBag {
             newTicket();
         }*/
         newTicket();
-        /*
-        try {
-            List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
-            if (l.isEmpty()) {
-                m_jListTickets.setText("");                
-                 newTicket();
-            } else {
-                m_jListTickets.doClick(); 
+
+        if (AppConfig.getInstance().getBoolean("till.layawaypopup")) {
+            try {
+                List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
+                if (l.isEmpty()) {
+                    m_jListTickets.setText("");
+                    newTicket();
+                } else {
+                    m_jListTicketsActionPerformed(null);
+                }
+            } catch (BasicException e) {
+                new MessageInf(e).show(this);
+                newTicket();
             }
-        } catch (BasicException e) {
-            new MessageInf(e).show(this);
-            newTicket();
-        }  
-         */
+        }
 
     }
 

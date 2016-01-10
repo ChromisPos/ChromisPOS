@@ -938,7 +938,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 // Set Receipt Id
                 switch (ticket.getTicketType()) {
                     case NORMAL:
-                        ticket.setTicketId(getNextTicketIndex());
+                        if (ticket.getTicketId()== 0) {
+                            ticket.setTicketId(getNextTicketIndex());
+                        }
                         break;
                     case REFUND:
                         ticket.setTicketId(getNextTicketRefundIndex());
@@ -1386,11 +1388,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     }
 
     public final Double getCustomerDebt(String id) throws BasicException {
-       return (Double) new PreparedSentence(s, "SELECT CURDEBT FROM CUSTOMERS WHERE ID = ? ", 
-              SerializerWriteString.INSTANCE, SerializerReadDouble.INSTANCE).find(id);
+        return (Double) new PreparedSentence(s, "SELECT CURDEBT FROM CUSTOMERS WHERE ID = ? ",
+                SerializerWriteString.INSTANCE, SerializerReadDouble.INSTANCE).find(id);
 
     }
-   
+
     /**
      *
      * @param warehouse
