@@ -905,19 +905,7 @@
         <sql>ALTER TABLE SHIFTS CHANGE STARTSHIFT STARTSHIFT TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE LEAVES CHANGE STARTDATE STARTDATE TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql> 
     </changeSet>   
-  <!--  
-    <changeSet author="Chromis POS" id="Add tableopen column in sharedtickets if it does not exist" >    
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="TABLEOPEN" tableName="SHAREDTICKETS"/>
-            </not>    
-        </preConditions> 
         
-        <addColumn tableName="SHAREDTICKETS">
-            <column name="TABLEOPEN" type="${boolean.type}"   
-                    defaultValueBoolean="false"/>  
-        </addColumn>        
-    </changeSet>     -->           
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1330,9 +1318,9 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to 0.54.3">    
+    <changeSet author="Chromis POS" id="Update to 0.54.4">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.54.3"/>          
+            <column name="VERSION" value="0.54.4"/>          
         </update>  
     </changeSet>
 
@@ -1344,8 +1332,14 @@
             <column name="VERSION" value="0.54.1"/>       
         </insert> 
         <insert tableName="HVERSIONS"> 
-            <column name="VERSION" value="0.54.2"/>       
-        </insert>         
+            <column name="VERSION" value="0.54.2"/> 
+        </insert>  
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.54.3"/>       
+        </insert>
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.54.4"/>       
+        </insert>                         
     </changeSet> 
     <!-- ***************************************************************************************** -->      
 </databaseChangeLog>
