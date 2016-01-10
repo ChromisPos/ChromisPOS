@@ -905,7 +905,19 @@
         <sql>ALTER TABLE SHIFTS CHANGE STARTSHIFT STARTSHIFT TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE LEAVES CHANGE STARTDATE STARTDATE TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql> 
     </changeSet>   
+  <!--  
+    <changeSet author="Chromis POS" id="Add tableopen column in sharedtickets if it does not exist" >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="TABLEOPEN" tableName="SHAREDTICKETS"/>
+            </not>    
+        </preConditions> 
         
+        <addColumn tableName="SHAREDTICKETS">
+            <column name="TABLEOPEN" type="${boolean.type}"   
+                    defaultValueBoolean="false"/>  
+        </addColumn>        
+    </changeSet>     -->           
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1292,7 +1304,7 @@
     <!-- ***************************************************************************************** -->   
     <!-- Drop any sharedtickets -->
     <!-- If required If it needs to be done after further updates increment number to make unique  -->   
-    <changeSet author="Chromis POS" id="drop hversions data" >       
+    <changeSet author="Chromis POS" id="drop hversions data v0.54.4" >       
         <sql>DELETE FROM HVERSIONS</sql>
     </changeSet> 
 
@@ -1324,7 +1336,7 @@
         </update>  
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Update Hversions start"> 
+    <changeSet author="Chromis POS" id="Update Hversions start v0.54.4"> 
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.54"/>       
         </insert>                   

@@ -361,3 +361,4 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
     // End of variables declaration//GEN-END:variables
 
 }
+
