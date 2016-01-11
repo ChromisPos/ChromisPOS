@@ -240,19 +240,21 @@ public class JTicketsBagShared extends JTicketsBag {
             newTicket();
         }*/
         newTicket();
-
+        AutoLogoff.getInstance().deactivateTimer();
         if (AppConfig.getInstance().getBoolean("till.layawaypopup")) {
             try {
                 List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
                 if (l.isEmpty()) {
                     m_jListTickets.setText("");
                     newTicket();
+                    AutoLogoff.getInstance().activateTimer();
                 } else {
                     m_jListTicketsActionPerformed(null);
                 }
             } catch (BasicException e) {
                 new MessageInf(e).show(this);
                 newTicket();
+                AutoLogoff.getInstance().activateTimer();
             }
         }
 
@@ -370,7 +372,6 @@ public class JTicketsBagShared extends JTicketsBag {
                 }
             }
         });
-        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_m_jListTicketsActionPerformed
 
     private void m_jDelTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDelTicketActionPerformed
