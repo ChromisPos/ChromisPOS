@@ -41,7 +41,7 @@ import uk.chromis.pos.util.AutoLogoff;
 public class JTicketsBagSharedList extends javax.swing.JDialog {
 
     private String m_sDialogTicket;
-
+    
     /**
      * Creates new form JTicketsBagSharedList
      */
@@ -95,6 +95,7 @@ public class JTicketsBagSharedList extends javax.swing.JDialog {
         mydialog.jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
         mydialog.jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(25, 25));
 
+        AutoLogoff.getInstance().setActiveFrame(mydialog);
         return mydialog;
     }
 

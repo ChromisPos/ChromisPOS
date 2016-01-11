@@ -24,6 +24,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Action;
+import javax.swing.JDialog;
 import javax.swing.Timer;
 
 public class AutoLogoff implements ActionListener, AWTEventListener {
@@ -37,6 +38,7 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
     private final long eventMask;
     private Boolean running = false;
     private Timer LogoffTimer;
+    private JDialog m_object = null;
 
     private static AutoLogoff INSTANCE = new AutoLogoff();
     public static Boolean timer = false;
@@ -124,16 +126,24 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
     }
 
     public void activateTimer() {
-        // System.out.println("activate");
+         System.out.println("activate");
         this.timer = true;
         this.running = true;
         this.start();
     }
 
     public void deactivateTimer() {
-        // System.out.println("deactivate");
+         System.out.println("deactivate");
         this.stop();
         this.running = false;
         this.timer = false;
+    }
+
+    public void setActiveFrame(JDialog frame) {
+        m_object = frame;
+    }
+
+    public JDialog getActiveFrame() {
+        return m_object;
     }
 }

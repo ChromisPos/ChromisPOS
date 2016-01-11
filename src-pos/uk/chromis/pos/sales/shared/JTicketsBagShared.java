@@ -240,7 +240,7 @@ public class JTicketsBagShared extends JTicketsBag {
             newTicket();
         }*/
         newTicket();
-        AutoLogoff.getInstance().deactivateTimer();
+       // AutoLogoff.getInstance().deactivateTimer();
         if (AppConfig.getInstance().getBoolean("till.layawaypopup")) {
             try {
                 List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
@@ -341,7 +341,7 @@ public class JTicketsBagShared extends JTicketsBag {
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jListTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jListTicketsActionPerformed
-        AutoLogoff.getInstance().deactivateTimer();
+  //      AutoLogoff.getInstance().deactivateTimer();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

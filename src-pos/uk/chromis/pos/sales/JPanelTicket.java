@@ -310,9 +310,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                     deactivate();
                     setActiveTicket(null, null);
+                    if (AutoLogoff.getInstance().getActiveFrame() != null) {
+                        AutoLogoff.getInstance().getActiveFrame().dispose();
+                        AutoLogoff.getInstance().setActiveFrame(null);
+                    }
                     break;
                 default:
                     deactivate();
+                    if (AutoLogoff.getInstance().getActiveFrame() != null) {
+                        AutoLogoff.getInstance().getActiveFrame().dispose();
+                        AutoLogoff.getInstance().setActiveFrame(null);
+                    }
                     ((JRootApp) m_App).closeAppView();
             }
         }
@@ -1136,15 +1144,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         break;
                                 }
                             } else // Handle UPC code, get the product base price if zero then it is a price passed otherwise it is a weight                                
-                            {
-                                if (oProduct.getPriceSell() != 0.0) {
+                             if (oProduct.getPriceSell() != 0.0) {
                                     weight = Double.parseDouble(sVariableNum) / 100;
                                     oProduct.setProperty("product.weight", Double.toString(weight));
                                     dPriceSell = oProduct.getPriceSell();
                                 } else {
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                 }
-                            }
                             if (m_jaddtax.isSelected()) {
                                 addTicketLine(oProduct, weight, dPriceSell);
                             } else {
@@ -1545,14 +1551,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (pTicket == null) {
             return ("0");
         }
-            String tmpPickupId = Integer.toString(pTicket.getPickupId());
-            String pickupSize = (AppConfig.getInstance().getProperty("till.pickupsize"));
-            if (pickupSize != null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())) {
-                while (tmpPickupId.length() < (Integer.parseInt(pickupSize))) {
-                    tmpPickupId = "0" + tmpPickupId;
-                }
+        String tmpPickupId = Integer.toString(pTicket.getPickupId());
+        String pickupSize = (AppConfig.getInstance().getProperty("till.pickupsize"));
+        if (pickupSize != null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())) {
+            while (tmpPickupId.length() < (Integer.parseInt(pickupSize))) {
+                tmpPickupId = "0" + tmpPickupId;
             }
-            return (tmpPickupId);
+        }
+        return (tmpPickupId);
     }
 
     private void printTicket(String sresourcename, TicketInfo ticket, Object ticketext) {
