@@ -26,7 +26,7 @@ public class AppLocal {
     public static final String APP_ID = "chromispos";
     public static final String APP_VERSION = "0.54.4";
     public static final String APP_DEMO = "";
-    // public static final String APP_DEMO = " - Test Edition";
+   //  public static final String APP_DEMO = " - Test Edition";
 
     private static final LocaleResources m_resources;
     public static String LIST_BY_RIGHTS = "";

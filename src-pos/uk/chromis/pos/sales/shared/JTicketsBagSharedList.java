@@ -41,7 +41,7 @@ import uk.chromis.pos.util.AutoLogoff;
 public class JTicketsBagSharedList extends javax.swing.JDialog {
 
     private String m_sDialogTicket;
-    
+
     /**
      * Creates new form JTicketsBagSharedList
      */
@@ -90,8 +90,9 @@ public class JTicketsBagSharedList extends javax.swing.JDialog {
 
         mydialog.getRootPane().setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
         mydialog.setUndecorated(true);
-        mydialog.initComponents();
 
+        mydialog.initComponents();
+     
         mydialog.jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
         mydialog.jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(25, 25));
 
@@ -162,7 +163,7 @@ public class JTicketsBagSharedList extends javax.swing.JDialog {
         m_jButtonCancel = new javax.swing.JButton();
 
         setTitle(AppLocal.getIntString("caption.tickets")); // NOI18N
-        setPreferredSize(new java.awt.Dimension(400, 100));
+        setPreferredSize(new java.awt.Dimension(500, 100));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -201,7 +202,7 @@ public class JTicketsBagSharedList extends javax.swing.JDialog {
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
-        setSize(new java.awt.Dimension(411, 335));
+        setSize(new java.awt.Dimension(512, 335));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

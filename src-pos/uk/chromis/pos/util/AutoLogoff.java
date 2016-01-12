@@ -126,14 +126,14 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
     }
 
     public void activateTimer() {
-         System.out.println("activate");
+        // System.out.println("activate");
         this.timer = true;
         this.running = true;
         this.start();
     }
 
     public void deactivateTimer() {
-         System.out.println("deactivate");
+        // System.out.println("deactivate");
         this.stop();
         this.running = false;
         this.timer = false;
