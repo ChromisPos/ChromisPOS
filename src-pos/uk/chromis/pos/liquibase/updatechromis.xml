@@ -704,7 +704,49 @@
                 <constraints primaryKey="true"/>
             </column>
         </createTable>       
-    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                              
+    </changeSet>            
+    
+    <changeSet author="Chromis POS" id="Create recipes table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PRODUCTS_KIT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="PRODUCTS_KIT">
+            <column name="ID" type="varchar(50)" > 
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="PRODUCT" type="varchar(255)" > 
+                <constraints nullable="false" />
+            </column>
+            <column name="PRODUCT_KIT" type="varchar(50)" >   
+                <constraints nullable="false" />
+            </column>         
+            <column name="QUANTITY" type="double precision" >       
+               <constraints nullable="false" />
+            </column>            
+        </createTable>                        
+                          
+        <addForeignKeyConstraint baseColumnNames="PRODUCT"
+                                 constraintName ="PRODUCTS_KIT_FK_1"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="PRODUCTS_KIT"
+                                 referencedTableName="PRODUCTS"/>
+
+        <addForeignKeyConstraint baseColumnNames="PRODUCT_KIT"
+                                 constraintName ="PRODUCTS_KIT_FK_2"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="PRODUCTS_KIT"
+                                 referencedTableName="PRODUCTS"/>
+          
+        <createIndex tableName="PRODUCTS_KIT"
+                     indexName="PKIT_INX_PROD"
+                     unique="true">
+            <column name="PRODUCT" type="varchar(255)"/>
+            <column name="PRODUCT_KIT" type="varchar(255)"/>
+        </createIndex>                                                          
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1189,6 +1231,19 @@
         </insert> 
     </changeSet> 
           
+    <changeSet author="Chromis POS" id="Add PRODUCTS_KIT panel permissions.">    
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
+        </preConditions> 
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.RecipePanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname125"/>
+            <column name="DESCRIPTION" value="##label.description125"/>
+        </insert> 
+    </changeSet>
+
+                    
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 
@@ -1295,6 +1350,9 @@
     </changeSet> 
     
     <changeSet author="Chromis POS" id="change Mysql promotions table to InnoDB (if required)" dbms="mysql">       
+        <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>
+    </changeSet> 
+    <changeSet author="Chromis POS" id="change Mysql PRODUCTS_KIT table to InnoDB (if required)" dbms="mysql">       
         <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>
     </changeSet> 
     <!-- End of InnoDB section -->     
