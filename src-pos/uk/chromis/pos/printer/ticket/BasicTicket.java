@@ -27,19 +27,8 @@ import java.util.ArrayList;
 
 public abstract class BasicTicket implements PrintItem {
 
-    /**
-     *
-     */
     protected java.util.List<PrintItem> m_aCommands;
-
-    /**
-     *
-     */
     protected PrintItemLine pil;
-
-    /**
-     *
-     */
     protected int m_iBodyHeight;
    
        /** Creates a new instance of AbstractTicket */
@@ -49,28 +38,10 @@ public abstract class BasicTicket implements PrintItem {
            m_iBodyHeight = 0;
        }
 
-    /**
-     *
-     * @return
-     */
     protected abstract Font getBaseFont();
-
-    /**
-     *
-     * @return
-     */
     protected abstract int getFontHeight();
-
-    /**
-     *
-     * @return
-     */
     protected abstract double getImageScale();
 
-    /**
-     *
-     * @return
-     */
     @Override
        public int getHeight() {
           return m_iBodyHeight;

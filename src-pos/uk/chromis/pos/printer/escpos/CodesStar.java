@@ -24,7 +24,7 @@ import uk.chromis.pos.printer.DeviceTicket;
 
 /**
  *
- *   
+ *
  */
 public class CodesStar extends Codes {
 
@@ -255,7 +255,7 @@ public class CodesStar extends Codes {
      * @param code
      */
     @Override
-    public void printBarcode(PrinterWritter out, String type, String position, String code) {
+    public Boolean printBarcode(PrinterWritter out, String type, String position, String code) {
         if (DevicePrinter.BARCODE_EAN13.equals(type)) {
             out.write(getNewLine());
             out.write(ESCPOS.BAR_HEIGHT);
@@ -266,15 +266,14 @@ public class CodesStar extends Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_CODE02);
-            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code,13).substring(0,12)));
-            out.write(new byte[] { 0x00 });
+            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 13).substring(0, 12)));
+            out.write(new byte[]{0x00});
             out.write(getNewLine());
+            return true;
         }
+        return false;
     }
 
-       
-    
-    
     @Override
     public byte[] setPageMode() {
         return PAGEMODE;

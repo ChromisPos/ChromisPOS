@@ -25,14 +25,7 @@ package uk.chromis.pos.printer;
  */
 public class NullAnimator implements DisplayAnimator {
     
-    /**
-     *
-     */
     protected String currentLine1;
-
-    /**
-     *
-     */
     protected String currentLine2;
 
     /**

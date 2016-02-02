@@ -704,9 +704,30 @@
                 <constraints primaryKey="true"/>
             </column>
         </createTable>       
-    </changeSet>            
-    
-    <changeSet author="Chromis POS" id="Create recipes table">
+    </changeSet>        
+
+
+    <changeSet author="Chromis POS" id="Create recipes table d" dbms="derby">
+            <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PRODUCTS_KIT"/>
+            </not>
+        </preConditions>        
+        
+        <sql>
+            CREATE TABLE PRODUCTS_KIT (
+            ID VARCHAR(255) NOT NULL,
+            PRODUCT VARCHAR(255) NOT NULL,
+            PRODUCT_KIT VARCHAR(255) NOT NULL,
+            QUANTITY DOUBLE NOT NULL,
+            PRIMARY KEY (ID));
+            ALTER TABLE PRODUCTS_KIT ADD CONSTRAINT PRODUCTS_KIT_FK_1 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID);
+            ALTER TABLE PRODUCTS_KIT ADD CONSTRAINT PRODUCTS_KIT_FK_2 FOREIGN KEY (PRODUCT_KIT) REFERENCES PRODUCTS(ID);
+            CREATE UNIQUE INDEX PKIT_INX_PROD ON PRODUCTS_KIT(PRODUCT, PRODUCT_KIT)
+        </sql>
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                          
+  
+    <changeSet author="Chromis POS" id="Create recipes table" >
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PRODUCTS_KIT"/>
@@ -714,13 +735,13 @@
         </preConditions>
 
         <createTable tableName="PRODUCTS_KIT">
-            <column name="ID" type="varchar(50)" > 
+            <column name="ID" type="varchar(255)" > 
                 <constraints primaryKey="true"/>
             </column>
             <column name="PRODUCT" type="varchar(255)" > 
                 <constraints nullable="false" />
             </column>
-            <column name="PRODUCT_KIT" type="varchar(50)" >   
+            <column name="PRODUCT_KIT" type="varchar(255)" >   
                 <constraints nullable="false" />
             </column>         
             <column name="QUANTITY" type="double precision" >       
@@ -745,8 +766,8 @@
                      unique="true">
             <column name="PRODUCT" type="varchar(255)"/>
             <column name="PRODUCT_KIT" type="varchar(255)"/>
-        </createIndex>                                                          
-    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        </createIndex>                                               
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -826,7 +847,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add Pack Products details p" dbms="postgresql, hypersql, hsqldb">    
+    <changeSet author="Chromis POS" id="Add Pack Products details dphh" dbms="derby, postgresql, hypersql, hsqldb">    
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="ISPACK" tableName="PRODUCTS"/>
@@ -840,15 +861,12 @@
             <column name="PACKQUANTITY" type="double precision"/>
             <column name="PACKPRODUCT" type="varchar(255)"/>
         </addColumn>
-    
-        <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
-                                 constraintName ="PRODUCTS_PACKPRODUCT_FK"
-                                 referencedColumnNames = "ID"
-                                 baseTableName="PRODUCTS"
-                                 referencedTableName="PRODUCTS"/>    
+   
     </changeSet>           
   
-    <changeSet author="Chromis POS" id="Add Pack Products details m" dbms="mysql, oracle">    
+
+ 
+    <changeSet author="Chromis POS" id="Add Pack Products details mo" dbms="mysql, oracle">    
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="ISPACK" tableName="PRODUCTS"/>
@@ -863,29 +881,24 @@
             <column name="PACKPRODUCT" type="varchar(255)"/>
         </addColumn>        
         
-        <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
-                                 constraintName ="PRODUCTS_PACKPRODUCT_FK"
-                                 referencedColumnNames = "ID"
-                                 baseTableName="PRODUCTS"
-                                 referencedTableName="PRODUCTS"/>  
+
     </changeSet>        
-  
-    <changeSet author="Chromis POS" id="Add Pack Products details d" dbms="derby">    
+   
+     
+    <changeSet author="Chromis POS" id="check for packproduct FK">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists columnName="ISPACK" tableName="PRODUCTS"/>
-            </not>
-        </preConditions> 
-    
-        <addColumn tableName="PRODUCTS">
-            <column name="ISPACK" type="${boolean.type}" defaultValueBoolean="false" >
-                <constraints nullable="false"/>
-            </column>
-            <column name="PACKQUANTITY" type="double precision"/>
-            <column name="PACKPRODUCT" type="varchar(255)"/>
-        </addColumn>
+                <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS" foreignKeyName="PRODUCTS_PACKPRODUCT_FK"/>    
+            </not>        
+        </preConditions>  
+        
+        <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
+                         constraintName ="PRODUCTS_PACKPRODUCT_FK"
+                         referencedColumnNames = "ID"
+                         baseTableName="PRODUCTS"
+                         referencedTableName="PRODUCTS"/>          
     </changeSet>
-    
+      
     <changeSet author="Chromis POS" id="Add Auxiliary Column to Orders Table">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1230,10 +1243,10 @@
             <column name="DESCRIPTION" value="##label.description124"/>
         </insert> 
     </changeSet> 
-          
-    <changeSet author="Chromis POS" id="Add PRODUCTS_KIT panel permissions.">    
+
+    <changeSet author="Chromis POS" id="Add PRODUCTS_KIT panel permissions:">    
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
         </preConditions> 
         <insert tableName="DBPERMISSIONS">		
             <column name="CLASSNAME" value="uk.chromis.pos.inventory.RecipePanel"/>
@@ -1241,9 +1254,8 @@
             <column name="DISPLAYNAME" value="##label.displayname125"/>
             <column name="DESCRIPTION" value="##label.description125"/>
         </insert> 
-    </changeSet>
-
-                    
+    </changeSet>          
+    
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 
@@ -1265,7 +1277,7 @@
         </insert>
     </changeSet>   
                                                                                                                                                                                                                                                                                                                                                                                                                                       
-    <changeSet author="Chromis POS" id="Add new Service Charge product to table">   
+    <changeSet author="Chromis POS" id="Add new Service Charge product to table.">   
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(0) FROM PRODUCTS WHERE ID='sc999-001'  </sqlCheck>
         </preConditions>    
@@ -1277,8 +1289,18 @@
             <column name="NAME" value="Service Charge"/>
             <column name="CATEGORY" value="000"/>
             <column name="TAXCAT" value="001"/>
+            <column name="ISCOM" valueBoolean="false"/>
             <column name="ISCATALOG" valueBoolean="false"/>
             <column name="ISSERVICE" valueBoolean="true"/>
+            <column name="ISKITCHEN" valueBoolean="false"/>
+            <column name="SENDSTATUS" valueBoolean="false"/>
+            <column name="PRINTKB" valueBoolean="false"/>         
+            <column name="ISSCALE" valueBoolean="false"/>
+            <column name="ISVERPATRIB" valueBoolean="false"/> 
+            <column name="WARRANTY" valueBoolean="false"/>         
+            <column name="CANDISCOUNT" valueBoolean="false"/>
+            <column name="ISVPRICE" valueBoolean="false"/> 
+            <column name="ALWAYSAVAILABLE" valueBoolean="false"/>             
             <column name="PRICEBUY" valueNumeric="0.00"/>
             <column name="PRICESELL" valueNumeric="0.00"/>
         </insert>
@@ -1353,8 +1375,8 @@
         <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>
     </changeSet> 
     <changeSet author="Chromis POS" id="change Mysql PRODUCTS_KIT table to InnoDB (if required)" dbms="mysql">       
-        <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>
-    </changeSet> 
+        <sql>ALTER TABLE PRODUCTS_KIT ENGINE=InnoDB</sql>
+    </changeSet>
     <!-- End of InnoDB section -->     
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1362,7 +1384,7 @@
     <!-- ***************************************************************************************** -->   
     <!-- Drop any sharedtickets -->
     <!-- If required If it needs to be done after further updates increment number to make unique  -->   
-    <changeSet author="Chromis POS" id="drop hversions data v0.54.4" >       
+    <changeSet author="Chromis POS" id="drop hversions data v0.55" >       
         <sql>DELETE FROM HVERSIONS</sql>
     </changeSet> 
 
@@ -1388,13 +1410,13 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to 0.54.4">    
+    <changeSet author="Chromis POS" id="Update to 0.55">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.54.4"/>          
+            <column name="VERSION" value="0.55"/>          
         </update>  
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Update Hversions start v0.54.4"> 
+    <changeSet author="Chromis POS" id="Update Hversions start v0.55"> 
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.54"/>       
         </insert>                   
@@ -1409,7 +1431,10 @@
         </insert>
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.54.4"/>       
-        </insert>                         
+        </insert>  
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.55"/>       
+        </insert>                       
     </changeSet> 
     <!-- ***************************************************************************************** -->      
 </databaseChangeLog>

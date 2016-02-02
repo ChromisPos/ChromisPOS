@@ -40,24 +40,9 @@ public class PrintItemBarcode implements PrintItem {
      */
     protected AbstractBarcodeBean m_barcode;
 
-    /**
-     *
-     */
     protected String m_sCode;
-
-    /**
-     *
-     */
     protected int m_iWidth;
-
-    /**
-     *
-     */
     protected int m_iHeight;
-
-    /**
-     *
-     */
     protected double scale;
 
     /** Creates a new instance of PrinterItemBarcode

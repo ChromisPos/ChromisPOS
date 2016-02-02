@@ -77,9 +77,9 @@
     </changeSet>
             
                   
-    <changeSet author="Chromis POS" id="Insert into Roles Table">  
+    <changeSet author="Chromis POS" id="Insert into Roles Table.">  
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM ROLES</sqlCheck>  
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM ROLES</sqlCheck>  
         </preConditions>        
                                           
         <insert tableName="ROLES">
@@ -150,9 +150,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into PEOPLE Table." dbms="mysql, oracle">
+    <changeSet author="Chromis POS" id="Insert into PEOPLE Table:" dbms="mysql, oracle">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PEOPLE</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM PEOPLE</sqlCheck>
         </preConditions>
 
         <insert tableName="PEOPLE">
@@ -181,9 +181,9 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into PEOPLE Table." dbms="derby, postgresql, hypersql, hsqldb">
+    <changeSet author="Chromis POS" id="Insert into PEOPLE Table:" dbms="derby, postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PEOPLE</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM PEOPLE</sqlCheck>
         </preConditions>
 
         <insert tableName="PEOPLE">
@@ -239,9 +239,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into RESOURCES Table">
+    <changeSet author="Chromis POS" id="Insert into RESOURCES Table.">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM RESOURCES</sqlCheck>
         </preConditions>
 
         <insert tableName="RESOURCES">
@@ -1133,9 +1133,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert default product into table m" dbms="mysql, oracle">   
+    <changeSet author="Chromis POS" id="Insert default product into table m." dbms="mysql, oracle">   
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PRODUCTS WHERE ID='xxx999_999xxx_x9x9x9'</sqlCheck>  
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM PRODUCTS WHERE ID='xxx999_999xxx_x9x9x9'</sqlCheck>  
         </preConditions> 
              
         <insert tableName="PRODUCTS">
@@ -1151,9 +1151,9 @@
         </insert>           
     </changeSet>            
 
-    <changeSet author="Chromis POS" id="Insert default product into table" dbms="derby, postgresql, hypersql, hsqldb">  
+    <changeSet author="Chromis POS" id="Insert default product into table." dbms="derby, postgresql, hypersql, hsqldb">  
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM PRODUCTS WHERE ID='xxx999_999xxx_x9x9x9'</sqlCheck>  
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM PRODUCTS WHERE ID='xxx999_999xxx_x9x9x9'</sqlCheck>  
         </preConditions>                
               
         <insert tableName="PRODUCTS">
@@ -1538,7 +1538,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create TICKETLINES Table">
+    <changeSet author="Chromis POS" id="Create TICKETLINES table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="TICKETLINES"/>
@@ -1565,6 +1565,15 @@
             </column>
             <column name="ATTRIBUTES" type="${blob.type}"/>
         </createTable>
+        
+        <sql>
+            ALTER TABLE TICKETLINES ADD PRIMARY KEY (TICKET, LINE);  
+            ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_FK_TICKET FOREIGN KEY (TICKET) REFERENCES TICKETS(ID);
+            ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_FK_2 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID);
+            ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_ATTSETINST FOREIGN KEY (ATTRIBUTESETINSTANCE_ID) REFERENCES ATTRIBUTESETINSTANCE(ID);
+            ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_FK_3 FOREIGN KEY (TAXID) REFERENCES TAXES(ID);   
+        </sql>
+        
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create Lineremoved Table.">
@@ -2041,9 +2050,9 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into BREAKS Table." dbms="mysql, oracle">
+    <changeSet author="Chromis POS" id="Insert into BREAKS Table:" dbms="mysql, oracle">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM BREAKS </sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM BREAKS </sqlCheck>
         </preConditions>
 
         <insert tableName="BREAKS">
@@ -2065,9 +2074,9 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Insert into BREAKS Table." dbms="derby, postgresql, hypersql, hsqldb">
+    <changeSet author="Chromis POS" id="Insert into BREAKS Table:" dbms="derby, postgresql, hypersql, hsqldb">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM BREAKS </sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM BREAKS </sqlCheck>
         </preConditions>
 
         <insert tableName="BREAKS">
@@ -2348,10 +2357,8 @@
         <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             INSERT INTO PICKUP_NUMBER VALUES(1)</sql>
     </changeSet>      
-        
-    
+            
     <changeSet author="Chromis POS" id="derby10.10.20">    
-    </changeSet>   
-     
+    </changeSet>        
 </databaseChangeLog>
 

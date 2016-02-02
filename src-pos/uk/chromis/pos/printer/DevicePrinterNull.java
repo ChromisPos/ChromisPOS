@@ -90,7 +90,8 @@ public class DevicePrinterNull implements DevicePrinter {
      * @param code
      */
     @Override
-    public void printBarCode(String type, String position, String code) {        
+    public Boolean printBarCode(String type, String position, String code) {        
+        return true;
     }    
 
     /**

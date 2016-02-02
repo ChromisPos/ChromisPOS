@@ -197,8 +197,9 @@ public class DevicePrinterPrinter implements DevicePrinter {
      * @param code
      */
     @Override
-    public void printBarCode(String type, String position, String code) {
+    public Boolean printBarCode(String type, String position, String code) {
         m_ticketcurrent.printBarCode(type, position, code);
+        return true;
     }
 
     /**

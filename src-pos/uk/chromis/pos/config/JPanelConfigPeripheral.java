@@ -243,6 +243,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         jcboConnDisplay.addItem("serial");
         jcboConnDisplay.addItem("file");
+        jcboConnDisplay.addItem("raw");
+        jcboConnDisplay.addItem("usb");
 
         jcboSerialDisplay.addItem("COM1");
         jcboSerialDisplay.addItem("COM2");

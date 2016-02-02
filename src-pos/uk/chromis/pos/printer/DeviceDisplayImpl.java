@@ -19,14 +19,8 @@
 
 package uk.chromis.pos.printer;
 
-/**
- *
- *   
- */
+
 public interface DeviceDisplayImpl {
     
-    /**
-     *
-     */
     public void repaintLines();
 }

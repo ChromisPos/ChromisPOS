@@ -48,9 +48,9 @@
         </createIndex> 
     </changeSet>   
      
-    <changeSet author="Chromis POS" id="Insert into Permissions Table">
+    <changeSet author="Chromis POS" id="Insert into Permissions Table.">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS</sqlCheck>
         </preConditions>
 
         <insert tableName="DBPERMISSIONS">

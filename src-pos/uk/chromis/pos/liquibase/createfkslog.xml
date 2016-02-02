@@ -131,17 +131,18 @@
                                  referencedColumnNames = "ID"
                                  baseTableName="PRODUCTS"
                                  referencedTableName="ATTRIBUTESET"/>
+        
         <addForeignKeyConstraint baseColumnNames="PACKPRODUCT"
-                                     constraintName ="PRODUCTS_PACKPRODUCT_FK"
-                                     referencedColumnNames = "ID"
-                                     baseTableName="PRODUCTS"
-                                     referencedTableName="PRODUCTS"/> 
+                                 constraintName ="PRODUCTS_PACKPRODUCT_FK"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="PRODUCTS"
+                                 referencedTableName="PRODUCTS"/> 
         
         <addForeignKeyConstraint baseColumnNames="PROMOTIONID"
-                         constraintName ="FK_PRODUCT_PROMOTIONID"
-                         referencedColumnNames = "ID"
-                         baseTableName="PRODUCTS"
-                         referencedTableName="PROMOTIONS"/>
+                                 constraintName ="FK_PRODUCT_PROMOTIONID"
+                                 referencedColumnNames = "ID"
+                                 baseTableName="PRODUCTS"
+                                 referencedTableName="PROMOTIONS"/>
     </changeSet>
 
     <changeSet author="Chromis Pos" id="PRODUCTS_COM Table FKs">

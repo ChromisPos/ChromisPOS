@@ -17,7 +17,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //    BarCode generator John L 07.03.2015 uses zxing.jar
-
 package uk.chromis.pos.qrcode;
 
 import com.google.zxing.BarcodeFormat;
@@ -77,6 +76,7 @@ public class BarCode {
     }
 
     public BufferedImage getBarcode(String codeText, String codeType, Integer bcWidth, Integer bcHeight) {
+        bcWidth = (codeText.length() >= 8) ? 200 : bcWidth;
         bcWidth = (bcWidth == 0) ? 150 : bcWidth;
         bcHeight = (bcHeight == 0) ? 20 : bcHeight;
 
@@ -88,18 +88,22 @@ public class BarCode {
                 case "QR_CODE":
                     return getQRCode(codeText, bcWidth);
                 case "CODE_39":
+                case "CODE39":
                     Code39Writer codeWriter = new Code39Writer();
                     byteMatrix = codeWriter.encode(codeText, BarcodeFormat.CODE_39, bcWidth, bcHeight, hintMap);
                     return createBC();
                 case "CODE_128":
+                case "CODE128":
                     Code128Writer code128Writer = new Code128Writer();
                     byteMatrix = code128Writer.encode(codeText, BarcodeFormat.CODE_128, bcWidth, bcHeight, hintMap);
                     return createBC();
                 case "EAN_13":
+                case "EAN13":
                     EAN13Writer ean13Writer = new EAN13Writer();
                     byteMatrix = ean13Writer.encode(codeText, BarcodeFormat.EAN_13, bcWidth, bcHeight, hintMap);
                     return createBC();
                 case "EAN_8":
+                case "EAN8":
                     EAN8Writer ean8Writer = new EAN8Writer();
                     byteMatrix = ean8Writer.encode(codeText, BarcodeFormat.EAN_8, bcWidth, bcHeight, hintMap);
                     return createBC();
@@ -108,6 +112,7 @@ public class BarCode {
                     byteMatrix = CodaBarWriter.encode(codeText, BarcodeFormat.CODABAR, bcWidth, bcHeight, hintMap);
                     return createBC();
                 case "UPC_A":
+                case "UPCA":
                     UPCAWriter UPCAWriter = new UPCAWriter();
                     byteMatrix = UPCAWriter.encode(codeText, BarcodeFormat.UPC_A, bcWidth, bcHeight, hintMap);
                     return createBC();

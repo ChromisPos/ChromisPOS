@@ -50,20 +50,9 @@ import uk.chromis.pos.forms.JPanelView;
  * @author adrianromero
  */
 public abstract class JPanelTable extends JPanel implements JPanelView, BeanFactoryApp {
-    
-    /**
-     *
-     */
+
     protected BrowsableEditableData bd;    
-
-    /**
-     *
-     */
     protected DirtyManager dirty;    
-
-    /**
-     *
-     */
     protected AppView app;
     
     protected int m_ListWidth = 0;
