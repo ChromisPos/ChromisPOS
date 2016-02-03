@@ -21,6 +21,7 @@ package uk.chromis.pos.dialogs;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -112,11 +113,16 @@ public class JProcessingDlg extends JDialog {
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/chromis_main.png")));
         mainPanel.add(logoLabel, "wrap");
 
+        dialogPanel.setBackground(Color.white);
+
         JTextArea messageArea = new JTextArea();
         messageArea.setEditable(false);
         messageArea.setColumns(38);
         messageArea.setRows(4);
         messageArea.setText(message);
+
+        Font font = new Font("Arial", Font.BOLD, 12);
+        messageArea.setFont(font);
         messageArea.setDisabledTextColor(new java.awt.Color(0, 0, 255));
         messageArea.setEnabled(false);
         messageArea.setFocusable(false);

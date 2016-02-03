@@ -82,11 +82,11 @@
         <dropForeignKeyConstraint baseTableName="CUSTOMERS" constraintName="CUSTOMERS_TAXCAT"/>
     </changeSet>
         
-    <changeSet author="Chromis POS" id="Drop lEAVES_PPLID">
+    <changeSet author="Chromis POS" id="Drop LEAVES_PPLID">
         <preConditions onFail="MARK_RAN">
-            <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="lEAVES_PPLID"/>            
+            <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="LEAVES_PPLID"/>            
         </preConditions>  
-        <dropForeignKeyConstraint baseTableName="LEAVES" constraintName="lEAVES_PPLID"/>
+        <dropForeignKeyConstraint baseTableName="LEAVES" constraintName="LEAVES_PPLID"/>
     </changeSet>
     
     <changeSet author="Chromis POS" id="Drop PAYMENTS_FK_RECEIPT">
