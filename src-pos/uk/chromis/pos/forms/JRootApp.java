@@ -236,6 +236,7 @@ public class JRootApp extends JPanel implements AppView {
                 System.exit(1);
             }
 */
+            boolean bFailed = true;
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
@@ -253,7 +254,7 @@ public class JRootApp extends JPanel implements AppView {
                         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
                         liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                         liquibase.update("implement");
-
+                        bFailed = false;
                     } catch (DatabaseException | MalformedURLException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                         Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (LiquibaseException ex) {
@@ -273,7 +274,9 @@ public class JRootApp extends JPanel implements AppView {
                             }
                         }
                     }
-                } else {
+                }
+                
+                if( bFailed ) {
                     session.close();
                     return false;
                 }
