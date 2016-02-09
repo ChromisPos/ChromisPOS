@@ -50,7 +50,9 @@ public abstract class QBFCompareEnum {
      *
      */
     public final static QBFCompareEnum COMP_RE = new QBFCompareEnum(3, "qbf.re") {
-        public String getExpression(String sField, String sSQLValue) { return sField + " LIKE " + sSQLValue; }
+        public String getExpression(String sField, String sSQLValue) { 
+            String search = sSQLValue.replaceAll("'","");
+            return sField + " LIKE '%" + search + "%'"; }
     };
 
     /**
