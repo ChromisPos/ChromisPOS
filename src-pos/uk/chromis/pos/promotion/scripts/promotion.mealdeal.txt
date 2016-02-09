@@ -1,5 +1,3 @@
-// promotion.mealdeal
-//
 // Get multiple items from a range of products for a fixed price
 // To qualify, there must be at least one product from all the types listed
 // in the ticket. If a product type is missing, the deal is not activated.
@@ -42,22 +40,8 @@ String PROPERTY_KEY = "deal.producttype";   // Key name in product properties
 // DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
 //      
 
-// To debug scripts in a proper debugging environment,
-// cut and paste this entire script into PromotionSupport.testcode then change
-// DEBUGMODE = true in this script ONLY - not in the testcode function.
-// When you have it working, you can cut and paste your code back into this script
-Boolean DEBUGMODE = false;
-
-if( DEBUGMODE ) {
-    support.testcode( promotion, event, ticket, selectedindex, dlsales,
-              dlpromotions, support, effectedindex, productid );
-} else {
-    //
-    // Your code goes here
-    //
     support.UpdateMealDeal( ticket, promotion,
         "  *" + promotion.getName(),
         LIST_TYPES, PROPERTY_KEY,
         DEAL_PRICE );
-}
 

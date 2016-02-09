@@ -1,5 +1,3 @@
-// promotion.bogof
-//
 // Buy one get one free
 //
 
@@ -10,19 +8,6 @@ Boolean WHOLE_PRODUCTS_ONLY = true;
 // DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
 //      
 
-// To debug scripts in a proper debugging environment,
-// cut and paste this entire script into PromotionSupport.testcode then change
-// DEBUGMODE = true in this script ONLY - not in the testcode function.
-// When you have it working, you can cut and paste your code back into this script
-Boolean DEBUGMODE = false;
-
-if( DEBUGMODE ) {
-    support.testcode( promotion, event, ticket, selectedindex, dlsales,
-              dlpromotions, support, effectedindex, productid );
-} else {
-    //
-    // Your code goes here
-    //
     support.UpdateBuySomeGetSomeFreeSingleProduct(
         ticket, productid, promotion, "  *" + promotion.getName(), 1d, 1d, WHOLE_PRODUCTS_ONLY  );
-}
+

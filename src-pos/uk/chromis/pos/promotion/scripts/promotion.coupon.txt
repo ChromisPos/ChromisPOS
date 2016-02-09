@@ -1,5 +1,3 @@
-// promotion.coupon
-//
 // Add a single coupon to the end of the ticket if a qualifying product
 // is present
 
@@ -26,19 +24,6 @@ LINES.add( "*********************************" );
 // DO NOT EDIT THE CODE BELOW UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
 //      
 
-// To debug scripts in a proper debugging environment,
-// cut and paste this entire script into PromotionSupport.testcode then change
-// DEBUGMODE = true in this script ONLY - not in the testcode function.
-// When you have it working, you can cut and paste your code back into this script
-Boolean DEBUGMODE = false;
-
-if( DEBUGMODE ) {
-    support.testcode( promotion, event, ticket, selectedindex, dlsales,
-              dlpromotions, support, effectedindex, productid );
-} else {
-    //
-    // Your code goes here
-    //
     if( ticket.getTotal() < SPEND_AT_LEAST ) { 
         // Remove existing coupon
         support.RemoveCouponPromotion( ticket, promotion.getID() );
@@ -50,4 +35,3 @@ if( DEBUGMODE ) {
             }
         }
     }
-} 
