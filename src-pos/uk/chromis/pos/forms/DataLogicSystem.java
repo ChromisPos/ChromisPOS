@@ -107,6 +107,14 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         m_sInitScript = "/uk/chromis/pos/scripts/" + s.DB.getName();
         m_dbVersion = s.DB.getName();
 
+        // Easure we use innodb as the default engine
+        if ("MySQL".equals(m_dbVersion)) {
+            try {
+                new StaticSentence(s, "SET storage_engine=INNODB" ).exec();
+            } catch (BasicException ex) {
+            }
+        }
+         
         m_version = new PreparedSentence(s, "SELECT VERSION FROM APPLICATIONS WHERE ID = ?", SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
         m_dummy = new StaticSentence(s, "SELECT * FROM PEOPLE WHERE 1 = 0");
 
