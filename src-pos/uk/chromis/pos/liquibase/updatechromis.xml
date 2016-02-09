@@ -1086,7 +1086,21 @@
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/script.Refundit.txt"/>  
             <where>NAME='script.Refundit'</where>      
         </update>         
-    </changeSet>                                                                                                                                                                                                                                                                                          
+    </changeSet>     
+
+    <changeSet author="Chromis POS" id="Add promotion.fixedpricegroup">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'promotion.fixedpricegroup'</sqlCheck>
+        </preConditions> 
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6706"/>
+            <column name="NAME" value="promotion.fixedpricegroup"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.fixedpricegroup.txt"/>
+        </insert>
+    </changeSet>     
+                                                                                                                                                                                                                                                                                     
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->

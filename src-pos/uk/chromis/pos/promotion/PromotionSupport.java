@@ -414,7 +414,7 @@ public class PromotionSupport {
     // If not, the qty and discount rate are applied
     public void DiscountProductQty(TicketInfo ticket, int lineIndex,
             String sDiscountMessage, Double qty,
-            Double discountrate, Double fixedPrice) {
+            Double discountrate ) {
 
         TicketLineInfo productline = ticket.getLine(lineIndex);
         if (productline.isPromotionAdded() == false
@@ -423,15 +423,8 @@ public class PromotionSupport {
             Double setPrice;
             Double setQty;
 
-            if (fixedPrice > 0) {
-                setQty = 1d;
-                setPrice = (productline.getPrice() * productline.getMultiply() * -1)
-                        + fixedPrice;
-            } else {
-                setPrice = (intPart(productline.getPrice() * discountrate)
-                        / -100d);
-                setQty = qty;
-            }
+            setPrice = productline.getPrice() * (discountrate / 100d) * -1;
+            setQty = qty;
 
             TicketLineInfo discountline = new TicketLineInfo(
                     productline.getProductID(),
@@ -583,10 +576,11 @@ public class PromotionSupport {
     // The discounts are added as sufficient products are found while
     // going through the list. If you want cheapest products discounted first,
     // ensure you call Collections.sort(aLines) first
-    public void addDiscounts(TicketInfo ticket, List<LineList> aLines,
+    public void addDiscounts(TicketInfo ticket,
+            List<LineList> aLines,
             String sDiscountMessage,
             Double qtyBuy, Double qtyToDiscount,
-            Double discountrate, Double fixedPrice,
+            Double discountrate,
             Boolean bWholeUnitsOnly) {
 
         // Count the number of items in the ticket
@@ -601,7 +595,7 @@ public class PromotionSupport {
 
         // Calculate the total number of free items
         Double qtyFree = qty / qtyBuy;
-        if (bWholeUnitsOnly) {
+                if (bWholeUnitsOnly) {
             qtyFree = intPart(qtyFree);
         }
         qtyFree = qtyFree * qtyToDiscount;
@@ -626,7 +620,7 @@ public class PromotionSupport {
                         qtyDiscount = qtyFree - totalDiscount;
                     }
 
-                    DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, discountrate, fixedPrice);
+                    DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, discountrate );
                     ++newLines;
 
                     totalDiscount += qtyDiscount;
@@ -637,6 +631,97 @@ public class PromotionSupport {
                     break;
                 }
             }
+        }
+    }
+
+        // Add discounts to the ticket for the products in aLine
+    // The discounts are added as sufficient products are found while
+    // going through the list. If you want cheapest products discounted first,
+    // ensure you call Collections.sort(aLines) first
+    public void addDiscountFixedPrice(TicketInfo ticket,
+            PromotionInfo promotion,
+            List<LineList> aLines,
+            String sDiscountMessage,
+            Double qtyBuy,
+            Double fixedPrice,
+            Boolean bWholeUnitsOnly) {
+
+        // Count the number of items in the ticket
+        Double qty = 0.0;
+        for (LineList l : aLines) {
+            TicketLineInfo productline = ticket.getLine(l.getIndex());
+            qty += productline.getMultiply();
+        }
+        if (bWholeUnitsOnly) {
+            qty = intPart(qty);
+        }
+
+        // Calculate the total number of free items
+        Double qtyFree = 0d;
+        while( qtyFree + qtyBuy <= qty ){
+            qtyFree = qtyFree + qtyBuy;
+        }
+        
+        if (bWholeUnitsOnly) {
+            qtyFree = intPart(qtyFree);
+        }
+
+        // Tax is chargable at the highest item tax rate so need to
+        // keep track of that.
+        TaxInfo tax = null;
+        
+        if (qtyFree > 0) {
+            // Step through discounting items until qtyFree is reached
+            Double totalDiscount = 0.0;
+            Double qtyFound = 0.0;
+            for (int i = 0; i < aLines.size(); ++i ) {
+                LineList l = aLines.get(i);
+                int itemIndex = l.getIndex();
+                Double itemqty = ticket.getLine(itemIndex).getMultiply();
+
+                qtyFound += itemqty;
+                    
+                Double qtyDiscount = itemqty;
+                if (bWholeUnitsOnly) {
+                    qtyDiscount = intPart(qtyDiscount);
+                }
+                if (totalDiscount + qtyDiscount > qtyFree) {
+                    qtyDiscount = qtyFree - totalDiscount;
+                }
+
+                DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, 100d );
+                
+                // A new line is added to the ticket so re-index ones after
+                for( int j = 0; j< aLines.size(); ++j ) {
+                    int index = aLines.get(j).getIndex();
+                    if(index > itemIndex) {
+                        aLines.get(j).setIndex( index+1 );
+                    }
+                }
+
+                totalDiscount += qtyDiscount;
+                qtyFound += qtyDiscount;
+
+                TicketLineInfo info = ticket.getLine(itemIndex);
+                // Save the highest tax rate - we must charge that rate
+                // on the final price (UK tax laws)
+                if (tax == null
+                        || tax.getRate() < info.getTaxInfo().getRate()) {
+                    tax = info.getTaxInfo();
+                }
+
+                if (totalDiscount >= qtyFree) {
+                    break;
+                }
+            }
+            
+            // We have now discounted all products involved the deal to zero,
+            // Now add a line to the end of the ticket for the
+            // actual price, use the highest tax rate we found
+            fixedPrice = fixedPrice / (1+tax.getRate());
+            
+            DiscountProductGroup(ticket, promotion, sDiscountMessage,
+                    qtyFree/qtyBuy, fixedPrice, tax);
         }
     }
 
@@ -664,7 +749,7 @@ public class PromotionSupport {
             Collections.sort(aLines);
 
             addDiscounts(ticket, aLines, sDiscountMessage, forEvery, qtyDiscounted,
-                    discountrate, 0d, bWholeUnitsOnly);
+                    discountrate, bWholeUnitsOnly);
         }
     }
 
@@ -687,7 +772,7 @@ public class PromotionSupport {
 
         if (aLines.size() > 0) {
             addDiscounts(ticket, aLines, sDiscountMessage, forEvery, qtyDiscounted,
-                    discountrate, 0d, bWholeUnitsOnly);
+                    discountrate, bWholeUnitsOnly);
         }
     }
 
@@ -710,7 +795,7 @@ public class PromotionSupport {
 
         if (aLines.size() > 0) {
             addDiscounts(ticket, aLines, sDiscountMessage, qtyBuy, qtySomeFree,
-                    0d, 0d, bWholeUnitsOnly);
+                    0d, bWholeUnitsOnly);
         }
     }
 
@@ -738,7 +823,7 @@ public class PromotionSupport {
             Collections.sort(aLines);
 
             addDiscounts(ticket, aLines, sDiscountMessage, qtyBuy, qtySomeFree,
-                    0d, 0d, bWholeUnitsOnly);
+                    0d, bWholeUnitsOnly);
         }
     }
 
@@ -760,8 +845,8 @@ public class PromotionSupport {
         List<LineList> aLines = FindProductsInTicket(productID, ticket, false);
 
         if (aLines.size() > 0) {
-            addDiscounts(ticket, aLines, sDiscountMessage, qtyBuy, qtyBuy,
-                    0d, price, bWholeUnitsOnly);
+            addDiscountFixedPrice(ticket, promotion, aLines, sDiscountMessage, qtyBuy,
+                    price, bWholeUnitsOnly);
         }
     }
 
@@ -788,8 +873,9 @@ public class PromotionSupport {
             // Convert to a price ordered list so cheapest items discounted first
             Collections.sort(aLines);
 
-            addDiscounts(ticket, aLines, sDiscountMessage, qtyBuy, qtyBuy,
-                    0d, price, bWholeUnitsOnly);
+            // Give discount on products qualifying
+            addDiscountFixedPrice(ticket, promotion, aLines, sDiscountMessage, qtyBuy,
+                    price, bWholeUnitsOnly);
         }
     }
 
@@ -880,7 +966,7 @@ public class PromotionSupport {
                                 count[j] -= qty;
 
                                 DiscountProductQty(ticket, ticketIndex, sDiscountMessage, qty,
-                                        100d, 0d);
+                                        100d );
 
                                 // ticketindexes need adjusting to accomodate the new line
                                 for (int l = 0; l < aLines.size(); ++l) {
