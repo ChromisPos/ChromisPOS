@@ -61,6 +61,8 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
      */
     protected DirtyManager dirty;    
 
+    protected boolean LoadOnActivation = true;
+    
     /**
      *
      */
@@ -76,6 +78,12 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
     
     public void setListWidth( int width ) {
        m_ListWidth = width;
+    }
+    
+    // Sets whether the data is loaded on first activation or loaded later
+    // after some filtering is set
+    public void setLoadOnActivation( boolean bLoad ) {
+        LoadOnActivation = bLoad;
     }
     
     /**
@@ -243,8 +251,11 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
     @Override
     public void activate() throws BasicException {
         startNavigation();
-        bd.actionLoad();
         
+        if( LoadOnActivation ) {
+            bd.actionLoad();
+        }
+    
         //HS insert new customer 20.03.2014
         if (CustomerInfoGlobal.getInstance()!=null){
             bd.actionInsert();
