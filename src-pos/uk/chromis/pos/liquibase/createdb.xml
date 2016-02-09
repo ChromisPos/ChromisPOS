@@ -22,7 +22,6 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
-    
     <changeSet author="Chromis POS" id="Create Applications Table">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1215,10 +1214,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="PRODUCT" type="varchar(255)">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="PRODUCT2" type="varchar(255)">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
         </createTable>
 
@@ -1235,11 +1234,10 @@
                                  referencedTableName="PRODUCTS"/>
 
         <createIndex tableName="PRODUCTS_COM"
-                     indexName="PCOM_INX_PROD"
-                     unique="true">
+                     indexName="PCOM_INX_PROD">
             <column name="PRODUCT" type="varchar(255)"/>
-            <column name="PRODUCT2" type="varchar(255)"/>
         </createIndex>
+        
     </changeSet>
 
 
@@ -1406,11 +1404,8 @@
                                  referencedTableName="LOCATIONS"/>
 
         <createIndex tableName="STOCKCURRENT"
-                     indexName="STOCKCURRENT_INX"
-                     unique="true">
-            <column name="LOCATION" type="varchar(255)"/>
+                     indexName="STOCKCURRENT_INX" >
             <column name="PRODUCT" type="varchar(255)"/>
-            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
         </createIndex>
     </changeSet>
 
