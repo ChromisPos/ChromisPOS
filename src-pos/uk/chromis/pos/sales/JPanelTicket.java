@@ -39,6 +39,10 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.PrintService;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -98,6 +102,7 @@ import uk.chromis.pos.printer.DeviceTicket;
 import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
 import uk.chromis.pos.promotion.PromotionSupport;
+import uk.chromis.pos.ticket.PlayWave;
 import uk.chromis.pos.util.AutoLogoff;
 
 /**
@@ -835,6 +840,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         repaint();
     }
 
+
     private void incProductByCode(String sCode) {
 // Modify to allow number x with scanned products. JDL 8.8.2015        
         int count = 1;
@@ -845,11 +851,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         try {
             ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
             if (oProduct == null) {
-                Toolkit.getDefaultToolkit().beep();
+//                Toolkit.getDefaultToolkit().beep();
+                new PlayWave("error.wav").start(); // playing WAVE file 
+ 
                 JOptionPane.showMessageDialog(null,
                         sCode + " - " + AppLocal.getIntString("message.noproduct"), "Check", JOptionPane.WARNING_MESSAGE);
                 stateToZero();
             } else {
+                new PlayWave("beep.wav").start(); // playing WAVE file 
+
                 incProduct(count, oProduct);
             }
         } catch (BasicException eData) {
