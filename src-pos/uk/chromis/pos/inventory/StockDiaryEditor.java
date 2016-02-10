@@ -43,12 +43,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.UUID;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author adrianromero
  */
-public final class StockDiaryEditor extends javax.swing.JPanel implements EditorRecord {
+public final class StockDiaryEditor extends javax.swing.JPanel 
+    implements EditorRecord, JDlgEditProduct.CompletionCallback {
     
     private final CatalogSelector m_cat;
 
@@ -71,6 +74,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
     private final AppView m_App;
     private final DataLogicSales m_dlSales;
     
+    private DirtyManager m_Dirty;
+    
     /** Creates new form StockDiaryEditor
      * @param app
      * @param dirty */
@@ -78,6 +83,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         
         m_App = app;
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
+        m_Dirty = dirty;
         
         initComponents();      
         
@@ -160,17 +166,18 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jbtndate.setEnabled(false);
         m_jreason.setEnabled(false);
         m_jreference.setEnabled(false);
-        m_jEnter1.setEnabled(false);
+        m_EditProduct.setEnabled(false);
         m_jcodebar.setEnabled(false);
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(false);
-        jEditProduct.setEnabled(false);
+        m_FindProduct.setEnabled(false);
         jattributes.setEnabled(false);
         jEditAttributes.setEnabled(false);
         m_junits.setEnabled(false);
         m_jprice.setEnabled(false);
         m_cat.setComponentEnabled(false);
+        m_EditProduct.setEnabled(false);
     }
     
     /**
@@ -200,12 +207,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jbtndate.setEnabled(true);
         m_jreason.setEnabled(true);
         m_jreference.setEnabled(true);
-        m_jEnter1.setEnabled(true);
         m_jcodebar.setEnabled(true);
         m_jEnter.setEnabled(true);
         m_jLocation.setEnabled(true);
         jproduct.setEnabled(true);
-        jEditProduct.setEnabled(true);
+        m_FindProduct.setEnabled(true);
         jattributes.setEnabled(true);
         jEditAttributes.setEnabled(true);
         m_junits.setEnabled(true);
@@ -241,12 +247,12 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jbtndate.setEnabled(false);
         m_jreason.setEnabled(false);
         m_jreference.setEnabled(false);
-        m_jEnter1.setEnabled(false);
+        m_EditProduct.setEnabled(false);
         m_jcodebar.setEnabled(false);
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(false);
-        jEditProduct.setEnabled(false);
+        m_FindProduct.setEnabled(false);
         jattributes.setEnabled(false);
         jEditAttributes.setEnabled(false);
         m_junits.setEnabled(false);
@@ -283,17 +289,18 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jbtndate.setEnabled(false);
         m_jreason.setEnabled(false);
         m_jreference.setEnabled(false);
-        m_jEnter1.setEnabled(false);
+        m_EditProduct.setEnabled(false);
         m_jcodebar.setEnabled(false);
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(true);
-        jEditProduct.setEnabled(true);
+        m_FindProduct.setEnabled(true);
         jattributes.setEnabled(false);
         jEditAttributes.setEnabled(false);
         m_junits.setEnabled(false);
         m_jprice.setEnabled(false);  
         m_cat.setComponentEnabled(false);
+        m_EditProduct.setEnabled(true);
     }
     
     /**
@@ -375,11 +382,12 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 m_jcodebar.setText(null);
                 m_jreference.setText(null);
                 jattributes.setText(null);
+                m_EditProduct.setEnabled(false);
             } else {
                 productid = prod.getID();
                 productref = prod.getReference();
                 productcode = prod.getCode();
-                productname = prod.toString();
+                productname = prod.getName();
                 attsetid = prod.getAttributeSetID();
                 attsetinstid = null;
                 attsetinstdesc = null;
@@ -387,6 +395,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 m_jcodebar.setText(productcode);
                 m_jreference.setText(productref);
                 jattributes.setText(null);
+                m_EditProduct.setEnabled(true);
 
                 // calculo el precio sugerido para la entrada.
                 MovementReason reason = (MovementReason)  m_ReasonModel.getSelectedItem();
@@ -394,6 +403,22 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 m_jprice.setText(Formats.CURRENCY.formatValue(dPrice));
             }
         }
+    }
+    
+    private void assignProductById( String Id ) {
+        try {
+            ProductInfoExt oProduct = m_dlSales.getProductInfo(Id);
+            if (oProduct == null) {       
+                assignProduct(null);
+                Toolkit.getDefaultToolkit().beep();                   
+            } else {
+                assignProduct(oProduct);
+            }
+        } catch (BasicException eData) {        
+            assignProduct(null);
+            MessageInf msg = new MessageInf(eData);
+            msg.show(this);            
+        }        
     }
     
     private void assignProductByCode() {
@@ -412,7 +437,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
             msg.show(this);            
         }        
     }
-    
+
     private void assignProductByReference() {
         try {
             ProductInfoExt oProduct = m_dlSales.getProductInfoByReference(m_jreference.getText());
@@ -428,6 +453,25 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
             MessageInf msg = new MessageInf(eData);
             msg.show(this);            
         }        
+    }
+
+    
+    private void editProduct() {
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
+        dlg.init( m_dlSales, m_Dirty, productid );
+        dlg.setCallbacks(this);
+        dlg.setVisible( true );
+    }
+    
+    @Override
+    public void notifyCompletionOk() {
+        // Force a re-load of product information
+        assignProductById(productid);
+    }
+
+    @Override
+    public void notifyCompletionCancel() {
     }
     
     private class CatalogListener implements ActionListener {
@@ -452,7 +496,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jreason = new javax.swing.JComboBox();
         jLabel8 = new javax.swing.JLabel();
         jproduct = new javax.swing.JTextField();
-        jEditProduct = new javax.swing.JButton();
+        m_FindProduct = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         m_jLocation = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
@@ -460,7 +504,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jEnter = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         m_jreference = new javax.swing.JTextField();
-        m_jEnter1 = new javax.swing.JButton();
+        m_EditProduct = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jattributes = new javax.swing.JTextField();
         jEditAttributes = new javax.swing.JButton();
@@ -524,14 +568,14 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         jproduct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jPanel1.add(jproduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 45, 200, 25));
 
-        jEditProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
-        jEditProduct.setToolTipText(bundle.getString("tiptext.searchproductlist")); // NOI18N
-        jEditProduct.addActionListener(new java.awt.event.ActionListener() {
+        m_FindProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
+        m_FindProduct.setToolTipText(bundle.getString("tiptext.searchproductlist")); // NOI18N
+        m_FindProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jEditProductActionPerformed(evt);
+                m_FindProductActionPerformed(evt);
             }
         });
-        jPanel1.add(jEditProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 38, 40, -1));
+        jPanel1.add(m_FindProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 38, 40, -1));
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Location");
@@ -575,7 +619,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         jLabel3.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel3.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel3.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 80, 25));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 80, 30));
 
         m_jreference.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jreference.addActionListener(new java.awt.event.ActionListener() {
@@ -585,20 +629,20 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         });
         jPanel1.add(m_jreference, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 115, 200, 25));
 
-        m_jEnter1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/products.png"))); // NOI18N
-        m_jEnter1.setToolTipText(bundle.getString("tiptext.enterproductid")); // NOI18N
-        m_jEnter1.setFocusPainted(false);
-        m_jEnter1.setFocusable(false);
-        m_jEnter1.setMaximumSize(new java.awt.Dimension(64, 33));
-        m_jEnter1.setMinimumSize(new java.awt.Dimension(64, 33));
-        m_jEnter1.setPreferredSize(new java.awt.Dimension(64, 33));
-        m_jEnter1.setRequestFocusEnabled(false);
-        m_jEnter1.addActionListener(new java.awt.event.ActionListener() {
+        m_EditProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/edit.png"))); // NOI18N
+        m_EditProduct.setToolTipText(bundle.getString("tiptext.enterproductid")); // NOI18N
+        m_EditProduct.setFocusPainted(false);
+        m_EditProduct.setFocusable(false);
+        m_EditProduct.setMaximumSize(new java.awt.Dimension(64, 33));
+        m_EditProduct.setMinimumSize(new java.awt.Dimension(64, 33));
+        m_EditProduct.setPreferredSize(new java.awt.Dimension(64, 33));
+        m_EditProduct.setRequestFocusEnabled(false);
+        m_EditProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jEnter1ActionPerformed(evt);
+                m_EditProductActionPerformed(evt);
             }
         });
-        jPanel1.add(m_jEnter1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 109, 40, -1));
+        jPanel1.add(m_EditProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, 40, -1));
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText(AppLocal.getIntString("label.attributes")); // NOI18N
@@ -653,11 +697,10 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         catcontainer.getAccessibleContext().setAccessibleParent(jPanel1);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void m_jEnter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEnter1ActionPerformed
+    private void m_EditProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_EditProductActionPerformed
 
-        assignProductByReference();
-        
-    }//GEN-LAST:event_m_jEnter1ActionPerformed
+        editProduct();
+    }//GEN-LAST:event_m_EditProductActionPerformed
 
     private void m_jreferenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jreferenceActionPerformed
 
@@ -717,17 +760,16 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         
     }//GEN-LAST:event_m_jbtndateActionPerformed
 
-    private void jEditProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditProductActionPerformed
+    private void m_FindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_FindProductActionPerformed
         
         assignProduct(JProductFinder.showMessage(this, m_dlSales));
 
-}//GEN-LAST:event_jEditProductActionPerformed
+}//GEN-LAST:event_m_FindProductActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel catcontainer;
     private javax.swing.JButton jEditAttributes;
-    private javax.swing.JButton jEditProduct;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -740,8 +782,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jattributes;
     private javax.swing.JTextField jproduct;
+    private javax.swing.JButton m_EditProduct;
+    private javax.swing.JButton m_FindProduct;
     private javax.swing.JButton m_jEnter;
-    private javax.swing.JButton m_jEnter1;
     private javax.swing.JComboBox m_jLocation;
     private javax.swing.JButton m_jbtndate;
     private javax.swing.JTextField m_jcodebar;

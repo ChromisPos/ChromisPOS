@@ -365,6 +365,9 @@ public class ProductInfoExt {
     }
 
     public final double getPackQuantity() {
+        if( m_packquantity == null ) {
+            m_packquantity = 0.0;
+        }
         return m_packquantity;
     }
 
