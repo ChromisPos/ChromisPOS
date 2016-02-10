@@ -41,11 +41,18 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
     private ProductsEditor jeditor;
     private ProductFilter jproductfilter;    
+    private String m_initialFilter = "";
     
     private DataLogicSales m_dlSales = null;
     
     /** Creates a new instance of ProductsPanel2 */
     public ProductsPanel() {
+    }
+    
+    /** Creates a new instance of ProductsPanel2 */
+    public ProductsPanel( String szFilter ) {
+        // Set initial filter
+        m_initialFilter = szFilter;
     }
     
     /**
@@ -134,6 +141,10 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
         
         jeditor.activate(); 
         jproductfilter.activate();
+        
+        // Speed up loading with large product sets - only load after refresh
+        // is hit which is usually after a filter is set up
+        setLoadOnActivation(false);
         
         super.activate();
     }
