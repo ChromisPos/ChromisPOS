@@ -47,7 +47,7 @@ public class JFrmMigrate extends javax.swing.JFrame {
             this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/fixedimages/smllogo.png")));
         } catch (IOException e) {
         }   
-        setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Configuration"));
+        setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Migration"));
         
         addWindowListener(new MyFrameListener()); 
         
@@ -84,8 +84,8 @@ public class JFrmMigrate extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-702)/2, (screenSize.height-325)/2, 702, 325);
+        setSize(new java.awt.Dimension(702, 368));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     
     /**
