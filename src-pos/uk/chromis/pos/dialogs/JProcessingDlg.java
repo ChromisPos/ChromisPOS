@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -32,7 +32,10 @@ import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -66,6 +69,7 @@ public class JProcessingDlg extends JDialog {
     public static final int YES = 0;
     public static final int NO = -1;
     public static int CHOICE = NO;
+    public static  Boolean DBFAILED =true;
     private Connection con;
     private JProgressBar pb;
 
@@ -181,6 +185,7 @@ public class JProcessingDlg extends JDialog {
 
             liquibase.update("implement");
 
+            DBFAILED = false;
         } catch (DatabaseException | MalformedURLException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LiquibaseException ex) {
@@ -200,6 +205,60 @@ public class JProcessingDlg extends JDialog {
                 }
             }
         }
-
+        insertMenuEntry(db_user, db_url, db_password); //insert in to menu.root
     }
+
+    private void insertMenuEntry(String db_user, String db_url, String db_password) {
+        try {
+            Connection con = DriverManager.getConnection(db_url, db_user, db_password);
+            String decodedData = "";
+            Statement stmt = (Statement) con.createStatement();
+            // get the menu from the resources table
+            String SQL = "SELECT * FROM RESOURCES WHERE NAME='Menu.Root'";
+            ResultSet rs = stmt.executeQuery(SQL);
+            while (rs.next()) {
+                byte[] bytesData = rs.getBytes("CONTENT");
+                decodedData = new String(bytesData);
+            }
+            // get the date from the menu entries table
+            SQL = "SELECT * FROM MENUENTRIES ";
+            rs = stmt.executeQuery(SQL);
+            // while we have some entries lets process them
+            while (rs.next()) {
+                // lets check if the entry is in the menu
+                int index1 = decodedData.indexOf(rs.getString("ENTRY"));
+                if (index1 == -1) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(rs.getString("FOLLOWS"));
+                    sb.append("\");\n        submenu.addPanel(\"");
+                    sb.append(rs.getString("GRAPHIC"));
+                    sb.append("\", \"");
+                    sb.append(rs.getString("TITLE"));
+                    sb.append("\", \"");
+                    sb.append(rs.getString("ENTRY"));
+                    decodedData = decodedData.replaceAll(rs.getString("FOLLOWS"), sb.toString());
+                    byte[] bytesData = decodedData.getBytes();
+                    String SQL2 = "UPDATE RESOURCES SET CONTENT = ? WHERE NAME = 'Menu.Root' ";
+                    PreparedStatement stmt2 = con.prepareStatement(SQL2);
+                    stmt2.setBytes(1, bytesData);
+                    stmt2.executeUpdate();
+                }
+            }
+
+            SQL = "DELETE FROM MENUENTRIES ";
+            PreparedStatement stmt2 = con.prepareStatement(SQL);
+            stmt2.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(JProcessingDlg.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+    }
+
 }

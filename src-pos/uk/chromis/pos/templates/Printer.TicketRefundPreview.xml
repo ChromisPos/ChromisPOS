@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
    Chromis POS - The New Face of Open Source POS 
-   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 
    This file is part of chromis oPOS
 
@@ -32,7 +32,7 @@
 
 	<line><text align="center" length="42">Chromis POS</text></line>
 	<line><text align="center" length="42">The New Face of Open source POS</text></line>
-	<line><text align="center" length="42">Copyright (c) 2015 Chromis</text></line>
+	<line><text align="center" length="42">Copyright (c) (c) 2015-2016Chromis</text></line>
 	<line><text align="center" length="42">Printer.TicketRefundPreview</text></line>
 	<line></line>
 

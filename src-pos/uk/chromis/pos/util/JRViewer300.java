@@ -35,7 +35,7 @@
 
 //    Portions:
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //    author adrian romero
 // This class is a copy of net.sf.jasperreports.view.JRViewer

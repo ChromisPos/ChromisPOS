@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -45,16 +45,12 @@ import uk.chromis.pos.forms.BeanFactoryApp;
 import uk.chromis.pos.forms.BeanFactoryException;
 import uk.chromis.pos.forms.JPanelView;
 
-/**
- *
- * @author adrianromero
- */
 public abstract class JPanelTable extends JPanel implements JPanelView, BeanFactoryApp {
-
+    
     protected BrowsableEditableData bd;    
     protected DirtyManager dirty;    
+    protected boolean LoadOnActivation = true;
     protected AppView app;
-    
     protected int m_ListWidth = 0;
     
     /** Creates new form JPanelTableEditor */
@@ -65,6 +61,12 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
     
     public void setListWidth( int width ) {
        m_ListWidth = width;
+    }
+    
+    // Sets whether the data is loaded on first activation or loaded later
+    // after some filtering is set
+    public void setLoadOnActivation( boolean bLoad ) {
+        LoadOnActivation = bLoad;
     }
     
     /**
@@ -82,18 +84,11 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
         init();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Object getBean() {
         return this;
     }
     
-    /**
-     *
-     */
     protected void startNavigation() {
         
         if (bd == null) {
@@ -115,7 +110,6 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
                 container.add(c, BorderLayout.CENTER);            
             }
 
-            // el panel este
             ListCellRenderer cr = getListCellRenderer();
             if (cr != null) {
                 JListNavigator nl = new JListNavigator(bd);
@@ -137,7 +131,6 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
                 toolbar.add(c);
             }
 
-            // La Toolbar
             c = new JLabelDirty(dirty);
             c.applyComponentOrientation(getComponentOrientation());
             toolbar.add(c);
@@ -153,88 +146,43 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
         }
     }
     
-    /**
-     *
-     * @return
-     */
     public Component getToolbarExtras() {
         return null;
     }
 
-    /**
-     *
-     * @return
-     */
     public Component getFilter() {    
         return null;
     }
     
-    /**
-     *
-     */
-    protected abstract void init();
-    
-    /**
-     *
-     * @return
-     */
-    public abstract EditorRecord getEditor();
-    
-    /**
-     *
-     * @return
-     */
-    public abstract ListProvider getListProvider();
-    
-    /**
-     *
-     * @return
-     */
+    protected abstract void init();   
+    public abstract EditorRecord getEditor();    
+    public abstract ListProvider getListProvider();    
     public abstract SaveProvider getSaveProvider();
-    
-    /**
-     *
-     * @return
-     */
     public Vectorer getVectorer() {
         return null;
     }
     
-    /**
-     *
-     * @return
-     */
     public ComparatorCreator getComparatorCreator() {
         return null;
     }
     
-    /**
-     *
-     * @return
-     */
     public ListCellRenderer getListCellRenderer() {
         return null;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public JComponent getComponent() {
         return this;
     }
 
-    /**
-     *
-     * @throws BasicException
-     */
     @Override
     public void activate() throws BasicException {
         startNavigation();
-        bd.actionLoad();
         
-        //HS insert new customer 20.03.2014
+        if( LoadOnActivation ) {
+            bd.actionLoad();
+        }
+    
         if (CustomerInfoGlobal.getInstance()!=null){
             bd.actionInsert();
     }    

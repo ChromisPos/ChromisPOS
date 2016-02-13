@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-//    BarCode generator John L 07.03.2015 uses zxing.jar
+//    BarCode generator John L 07.03.(c) 2015-2016uses zxing.jar
 package uk.chromis.pos.qrcode;
 
 import com.google.zxing.BarcodeFormat;

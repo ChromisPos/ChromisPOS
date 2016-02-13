@@ -959,63 +959,6 @@
         <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>			
     </changeSet>
-	
-    <changeSet author="Chromis POS" id="change Mysql tables to InnoDB (if required)" dbms="mysql">            
-        <sql>ALTER TABLE APPLICATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTEINSTANCE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTESET ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTESETINSTANCE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTEUSE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ATTRIBUTEVALUE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE BREAKS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CATEGORIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CLOSEDCASH ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CSVIMPORT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE CUSTOMERS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE DBPERMISSIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE DRAWEROPENED ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE FLOORS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE HVERSIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE LEAVES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE LINEREMOVED ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE LOCATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE MENUENTRIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE MOORERS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ORDERS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PAYMENTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PEOPLE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PICKUP_NUMBER ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PLACES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PRODUCTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PRODUCTS_COM ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PRODUCTS_KIT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE PROMOTIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RECEIPTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RESERVATION_CUSTOMERS	 ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RESERVATIONS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE RESOURCES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE ROLES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE SHAREDTICKETS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE SHIFT_BREAKS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE SHIFTS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE STOCKCHANGES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE STOCKCURRENT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE STOCKDIARY ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE STOCKLEVEL ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXCATEGORIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXCUSTCATEGORIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TAXLINES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE THIRDPARTIES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETLINES ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETS ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETSNUM ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETSNUM_INVOICE ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETSNUM_PAYMENT ENGINE=InnoDB</sql>
-        <sql>ALTER TABLE TICKETSNUM_REFUND ENGINE=InnoDB</sql>                     
-        <sql>ALTER TABLE VOUCHERS ENGINE=InnoDB</sql>
-    </changeSet>
     
     <changeSet author="Chromis POS" id="Create Primary keys">      
         <sql>ALTER TABLE APPLICATIONS ADD PRIMARY KEY (ID)</sql>

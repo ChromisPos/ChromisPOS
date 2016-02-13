@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -24,7 +24,7 @@ public class AppLocal {
 
     public static final String APP_NAME = "Chromis POS";
     public static final String APP_ID = "chromispos";
-    public static final String APP_VERSION = "0.55";
+    public static final String APP_VERSION = "0.55.1";
     public static final String APP_DEMO = "";
    //  public static final String APP_DEMO = " - Test Edition";
 

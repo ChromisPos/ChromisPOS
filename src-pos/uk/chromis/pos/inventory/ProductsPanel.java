@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -40,13 +40,18 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
     private ProductsEditor jeditor;
     private ProductFilter jproductfilter;
-
+    private String m_initialFilter = "";
     private DataLogicSales m_dlSales = null;
 
     /**
      * Creates a new instance of ProductsPanel2
      */
     public ProductsPanel() {
+    }
+
+    public ProductsPanel(String szFilter) {
+        // Set initial filter  
+        m_initialFilter = szFilter;
     }
 
     /**
@@ -71,7 +76,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
         // el panel del editor
         jeditor = new ProductsEditor(m_dlSales, dirty);
-        
+
         if (AppConfig.getInstance().getBoolean("display.longnames")) {
             setListWidth(300);
         }
@@ -138,6 +143,10 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
         jeditor.activate();
         jproductfilter.activate();
+
+        // Speed up loading with large product sets - only load after refresh  
+        // is hit which is usually after a filter is set up  
+        setLoadOnActivation(false);
 
         super.activate();
     }

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.panels;
 
 import java.text.SimpleDateFormat;
@@ -37,43 +36,37 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.util.StringUtils;
 
-/**
- *
- * @authors adrianromero, jackgerrard, janarnagel
- * 
- */
 public class PaymentsModel {
 
     private String m_sHost;
     private int m_iSeq;
     private Date m_dDateStart;
-    private Date m_dDateEnd;       
+    private Date m_dDateEnd;
     private Date rDate;
-            
+
     private Integer m_iPayments;
     private Double m_dPaymentsTotal;
     private java.util.List<PaymentsLine> m_lpayments;
-    
 
     private Integer m_iCategorySalesRows;
     private Double m_dCategorySalesTotalUnits;
     private Double m_dCategorySalesTotal;
     private java.util.List<CategorySalesLine> m_lcategorysales;
-    
+
     private Integer m_iProductSalesRows;
     private Double m_dProductSalesTotalUnits;
     private Double m_dProductSalesTotal;
     private java.util.List<ProductSalesLine> m_lproductsales;
     private java.util.List<RemovedProductLines> m_lremovedlines;
-   
+
     private final static String[] PAYMENTHEADERS = {"Label.Payment", "label.Money"};
-    
+
     private Integer m_iSales;
     private Double m_dSalesBase;
     private Double m_dSalesTaxes;
     private Double m_dSalesTaxNet;
     private java.util.List<SalesLine> m_lsales;
-    
+
     private final static String[] SALEHEADERS = {"label.taxcategory", "label.totaltax", "label.totalnet"};
 
     private PaymentsModel() {
@@ -84,34 +77,34 @@ public class PaymentsModel {
      * @return
      */
     public static PaymentsModel emptyInstance() {
-        
+
         PaymentsModel p = new PaymentsModel();
-        
+
         p.m_iPayments = 0;
         p.m_dPaymentsTotal = 0.0;
         p.m_lpayments = new ArrayList<>();
         p.m_iCategorySalesRows = 0;
         p.m_dCategorySalesTotalUnits = 0.0;
         p.m_dCategorySalesTotal = 0.0;
-        p.m_lcategorysales = new ArrayList<>();        
+        p.m_lcategorysales = new ArrayList<>();
         p.m_iSales = null;
         p.m_dSalesBase = null;
         p.m_dSalesTaxes = null;
         p.m_dSalesTaxNet = null;
-        
+
         p.m_iProductSalesRows = 0;
         p.m_dProductSalesTotalUnits = 0.0;
         p.m_dProductSalesTotal = 0.0;
         p.m_lproductsales = new ArrayList<>();
         // end
-        
+
         p.m_lremovedlines = new ArrayList<>();
-        
+
         p.m_lsales = new ArrayList<>();
 
         return p;
     }
-    
+
     /**
      *
      * @param app
@@ -119,24 +112,20 @@ public class PaymentsModel {
      * @throws BasicException
      */
     public static PaymentsModel loadInstance(AppView app) throws BasicException {
-        
+
         PaymentsModel p = new PaymentsModel();
-        
+
         // Propiedades globales
         p.m_sHost = app.getProperties().getHost();
         p.m_iSeq = app.getActiveCashSequence();
         p.m_dDateStart = app.getActiveCashDateStart();
         p.m_dDateEnd = null;
-        
 
-        Object[] valcategorysales = (Object []) new StaticSentence(app.getSession()
-            , "SELECT COUNT(*), SUM(TICKETLINES.UNITS), SUM((TICKETLINES.PRICE + TICKETLINES.PRICE * TAXES.RATE ) * TICKETLINES.UNITS) " +
-              "FROM TICKETLINES, TICKETS, RECEIPTS, TAXES " +
-              "WHERE TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND TICKETLINES.PRODUCT IS NOT NULL AND RECEIPTS.MONEY = ? " +
-              "GROUP BY RECEIPTS.MONEY"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadBasic(new Datas[] {Datas.INT, Datas.DOUBLE, Datas.DOUBLE}))
-            .find(app.getActiveCashIndex());
+        Object[] valcategorysales = (Object[]) new StaticSentence(app.getSession(), "SELECT COUNT(*), SUM(TICKETLINES.UNITS), SUM((TICKETLINES.PRICE + TICKETLINES.PRICE * TAXES.RATE ) * TICKETLINES.UNITS) "
+                + "FROM TICKETLINES, TICKETS, RECEIPTS, TAXES "
+                + "WHERE TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND TICKETLINES.PRODUCT IS NOT NULL AND RECEIPTS.MONEY = ? "
+                + "GROUP BY RECEIPTS.MONEY", SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.INT, Datas.DOUBLE, Datas.DOUBLE}))
+                .find(app.getActiveCashIndex());
 
         if (valcategorysales == null) {
             p.m_iCategorySalesRows = 0;
@@ -145,66 +134,57 @@ public class PaymentsModel {
         } else {
             p.m_iCategorySalesRows = (Integer) valcategorysales[0];
             p.m_dCategorySalesTotalUnits = (Double) valcategorysales[1];
-            p.m_dCategorySalesTotal= (Double) valcategorysales[2];
+            p.m_dCategorySalesTotal = (Double) valcategorysales[2];
         }
 
-        List categorys = new StaticSentence(app.getSession()
-            , "SELECT a.NAME, sum(c.UNITS), sum(c.UNITS * (c.PRICE + (c.PRICE * d.RATE))) " +
-              "FROM CATEGORIES as a " +
-              "LEFT JOIN PRODUCTS as b on a.id = b.CATEGORY " +
-              "LEFT JOIN TICKETLINES as c on b.id = c.PRODUCT " +
-              "LEFT JOIN TAXES as d on c.TAXID = d.ID " +
-              "LEFT JOIN RECEIPTS as e on c.TICKET = e.ID " +
-              "WHERE e.MONEY = ? " +
-              "GROUP BY a.NAME"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadClass(PaymentsModel.CategorySalesLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
-            .list(app.getActiveCashIndex());
+        List categorys = new StaticSentence(app.getSession(), "SELECT a.NAME, sum(c.UNITS), sum(c.UNITS * (c.PRICE + (c.PRICE * d.RATE))) "
+                + "FROM CATEGORIES as a "
+                + "LEFT JOIN PRODUCTS as b on a.id = b.CATEGORY "
+                + "LEFT JOIN TICKETLINES as c on b.id = c.PRODUCT "
+                + "LEFT JOIN TAXES as d on c.TAXID = d.ID "
+                + "LEFT JOIN RECEIPTS as e on c.TICKET = e.ID "
+                + "WHERE e.MONEY = ? "
+                + "GROUP BY a.NAME", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.CategorySalesLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
+                .list(app.getActiveCashIndex());
 
         if (categorys == null) {
             p.m_lcategorysales = new ArrayList();
         } else {
             p.m_lcategorysales = categorys;
-        }        
-        
+        }
+
         // Payments
-        Object[] valtickets = (Object []) new StaticSentence(app.getSession()
-            , "SELECT COUNT(*), SUM(PAYMENTS.TOTAL) " +
-              "FROM PAYMENTS, RECEIPTS " +
-              "WHERE PAYMENTS.RECEIPT = RECEIPTS.ID AND RECEIPTS.MONEY = ?"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadBasic(new Datas[] {Datas.INT, Datas.DOUBLE}))
-            .find(app.getActiveCashIndex());
-            
+        Object[] valtickets = (Object[]) new StaticSentence(app.getSession(), "SELECT COUNT(*), SUM(PAYMENTS.TOTAL) "
+                + "FROM PAYMENTS, RECEIPTS "
+                + "WHERE PAYMENTS.RECEIPT = RECEIPTS.ID AND RECEIPTS.MONEY = ?", SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.INT, Datas.DOUBLE}))
+                .find(app.getActiveCashIndex());
+
         if (valtickets == null) {
             p.m_iPayments = 0;
             p.m_dPaymentsTotal = 0.0;
         } else {
             p.m_iPayments = (Integer) valtickets[0];
             p.m_dPaymentsTotal = (Double) valtickets[1];
-        }  
-        
-        List l = new StaticSentence(app.getSession()            
-            , "SELECT PAYMENTS.PAYMENT, SUM(PAYMENTS.TOTAL), PAYMENTS.NOTES " +
-              "FROM PAYMENTS, RECEIPTS " +
-              "WHERE PAYMENTS.RECEIPT = RECEIPTS.ID AND RECEIPTS.MONEY = ? " +
-              "GROUP BY PAYMENTS.PAYMENT, PAYMENTS.NOTES"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadClass(PaymentsModel.PaymentsLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
-            .list(app.getActiveCashIndex()); 
-        
+        }
+
+        List l = new StaticSentence(app.getSession(), "SELECT PAYMENTS.PAYMENT, SUM(PAYMENTS.TOTAL), PAYMENTS.NOTES "
+                + "FROM PAYMENTS, RECEIPTS "
+                + "WHERE PAYMENTS.RECEIPT = RECEIPTS.ID AND RECEIPTS.MONEY = ? "
+                + "GROUP BY PAYMENTS.PAYMENT, PAYMENTS.NOTES", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.PaymentsLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
+                .list(app.getActiveCashIndex());
+
         if (l == null) {
             p.m_lpayments = new ArrayList();
         } else {
             p.m_lpayments = l;
-        }        
-        
+        }
+
         // Sales
-        Object[] recsales = (Object []) new StaticSentence(app.getSession(),
-                "SELECT COUNT(DISTINCT RECEIPTS.ID), SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) " +
-                        "FROM RECEIPTS, TICKETLINES WHERE RECEIPTS.ID = TICKETLINES.TICKET AND RECEIPTS.MONEY = ?",
+        Object[] recsales = (Object[]) new StaticSentence(app.getSession(),
+                "SELECT COUNT(DISTINCT RECEIPTS.ID), SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) "
+                + "FROM RECEIPTS, TICKETLINES WHERE RECEIPTS.ID = TICKETLINES.TICKET AND RECEIPTS.MONEY = ?",
                 SerializerWriteString.INSTANCE,
-                new SerializerReadBasic(new Datas[] {Datas.INT, Datas.DOUBLE}))
+                new SerializerReadBasic(new Datas[]{Datas.INT, Datas.DOUBLE}))
                 .find(app.getActiveCashIndex());
         if (recsales == null) {
             p.m_iSales = null;
@@ -212,23 +192,22 @@ public class PaymentsModel {
         } else {
             p.m_iSales = (Integer) recsales[0];
             p.m_dSalesBase = (Double) recsales[1];
-        }             
-        
+        }
+
         // Taxes
-        Object[] rectaxes = (Object []) new StaticSentence(app.getSession(),
-            "SELECT SUM(TAXLINES.AMOUNT), SUM(TAXLINES.BASE) " +
-            "FROM RECEIPTS, TAXLINES WHERE RECEIPTS.ID = TAXLINES.RECEIPT AND RECEIPTS.MONEY = ?"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadBasic(new Datas[] {Datas.DOUBLE, Datas.DOUBLE})) 
-            .find(app.getActiveCashIndex());            
+        Object[] rectaxes = (Object[]) new StaticSentence(app.getSession(),
+                "SELECT SUM(TAXLINES.AMOUNT), SUM(TAXLINES.BASE) "
+                + "FROM RECEIPTS, TAXLINES WHERE RECEIPTS.ID = TAXLINES.RECEIPT AND RECEIPTS.MONEY = ?", SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.DOUBLE, Datas.DOUBLE}))
+                .find(app.getActiveCashIndex());
         if (rectaxes == null) {
             p.m_dSalesTaxes = null;
             p.m_dSalesTaxNet = null;
         } else {
             p.m_dSalesTaxes = (Double) rectaxes[0];
             p.m_dSalesTaxNet = (Double) rectaxes[1];
-        } 
-                
+        }
+
+        /*
         List<SalesLine> asales = new StaticSentence(app.getSession(),
                 "SELECT TAXCATEGORIES.NAME, SUM(TAXLINES.AMOUNT), SUM(TAXLINES.BASE), SUM(TAXLINES.BASE + TAXLINES.AMOUNT) " +
                 "FROM RECEIPTS, TAXLINES, TAXES, TAXCATEGORIES WHERE RECEIPTS.ID = TAXLINES.RECEIPT AND TAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID " +
@@ -242,34 +221,49 @@ public class PaymentsModel {
         } else {
             p.m_lsales = asales;
         }
-         
+         */
+        List<SalesLine> asales = new StaticSentence(app.getSession(),
+                "SELECT TAXCATEGORIES.NAME, SUM(NEWTAXLINES.AMOUNT), SUM(NEWTAXLINES.BASE), SUM(NEWTAXLINES.BASE + NEWTAXLINES.AMOUNT) "
+                + "FROM RECEIPTS, "
+                + "(SELECT TAXLINES.ID,RECEIPT,TAXID,BASE,SUM(AMOUNT) as AMOUNT "
+                // + " FROM TAXLINES,TAXES where TAXLINES.TAXID=TAXES.ID and PARENTID is not null GROUP BY RECEIPT "
+                + " FROM TAXLINES,TAXES where TAXLINES.TAXID=TAXES.ID and PARENTID is not null GROUP BY RECEIPT,PARENTID "
+                + " union "
+                + " SELECT TAXLINES.ID,RECEIPT,TAXID,BASE,AMOUNT as AMOUNT "
+                + " FROM TAXLINES,TAXES "
+                + " where TAXLINES.TAXID=TAXES.ID and PARENTID is null) NEWTAXLINES, "
+                + " TAXES, TAXCATEGORIES "
+                + " WHERE RECEIPTS.ID = NEWTAXLINES.RECEIPT AND NEWTAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID "
+                + "AND RECEIPTS.MONEY = ?"
+                + "GROUP BY TAXCATEGORIES.NAME", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.SalesLine.class))
+                .list(app.getActiveCashIndex());
+        if (asales == null) {
+            p.m_lsales = new ArrayList<>();
+        } else {
+            p.m_lsales = asales;
+        }
+
         SimpleDateFormat ndf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String startDateFormatted = ndf.format(app.getActiveCashDateStart());
-        List removedLines = new StaticSentence(app.getSession()
-            , "SELECT LINEREMOVED.NAME, LINEREMOVED.TICKETID, LINEREMOVED.PRODUCTNAME, SUM(LINEREMOVED.UNITS) AS TOTAL_UNITS  " +
-              "FROM LINEREMOVED " +
-              "WHERE LINEREMOVED.REMOVEDDATE > ? " +
-              "GROUP BY LINEREMOVED.NAME, LINEREMOVED.TICKETID, LINEREMOVED.PRODUCTNAME"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadClass(PaymentsModel.RemovedProductLines.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
-            .list(startDateFormatted);
-        
+        List removedLines = new StaticSentence(app.getSession(), "SELECT LINEREMOVED.NAME, LINEREMOVED.TICKETID, LINEREMOVED.PRODUCTNAME, SUM(LINEREMOVED.UNITS) AS TOTAL_UNITS  "
+                + "FROM LINEREMOVED "
+                + "WHERE LINEREMOVED.REMOVEDDATE > ? "
+                + "GROUP BY LINEREMOVED.NAME, LINEREMOVED.TICKETID, LINEREMOVED.PRODUCTNAME", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.RemovedProductLines.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
+                .list(startDateFormatted);
+
         if (removedLines == null) {
             p.m_lremovedlines = new ArrayList();
         } else {
             p.m_lremovedlines = removedLines;
         }
-                
+
         // Product Sales
-        Object[] valproductsales = (Object []) new StaticSentence(app.getSession()
-            , "SELECT COUNT(*), SUM(TICKETLINES.UNITS), SUM((TICKETLINES.PRICE + TICKETLINES.PRICE * TAXES.RATE ) * TICKETLINES.UNITS) " +
-              "FROM TICKETLINES, TICKETS, RECEIPTS, TAXES " +
-              "WHERE TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND TICKETLINES.PRODUCT IS NOT NULL AND RECEIPTS.MONEY = ? " +
-              "GROUP BY RECEIPTS.MONEY"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadBasic(new Datas[] {Datas.INT, Datas.DOUBLE, Datas.DOUBLE}))
-            .find(app.getActiveCashIndex());
- 
+        Object[] valproductsales = (Object[]) new StaticSentence(app.getSession(), "SELECT COUNT(*), SUM(TICKETLINES.UNITS), SUM((TICKETLINES.PRICE + TICKETLINES.PRICE * TAXES.RATE ) * TICKETLINES.UNITS) "
+                + "FROM TICKETLINES, TICKETS, RECEIPTS, TAXES "
+                + "WHERE TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND TICKETLINES.PRODUCT IS NOT NULL AND RECEIPTS.MONEY = ? "
+                + "GROUP BY RECEIPTS.MONEY", SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.INT, Datas.DOUBLE, Datas.DOUBLE}))
+                .find(app.getActiveCashIndex());
+
         if (valproductsales == null) {
             p.m_iProductSalesRows = 0;
             p.m_dProductSalesTotalUnits = 0.0;
@@ -277,24 +271,21 @@ public class PaymentsModel {
         } else {
             p.m_iProductSalesRows = (Integer) valproductsales[0];
             p.m_dProductSalesTotalUnits = (Double) valproductsales[1];
-            p.m_dProductSalesTotal= (Double) valproductsales[2];
+            p.m_dProductSalesTotal = (Double) valproductsales[2];
         }
- 
-        List products = new StaticSentence(app.getSession()
-            , "SELECT PRODUCTS.NAME, SUM(TICKETLINES.UNITS), TICKETLINES.PRICE, TAXES.RATE " +
-              "FROM TICKETLINES, TICKETS, RECEIPTS, PRODUCTS, TAXES " +
-              "WHERE TICKETLINES.PRODUCT = PRODUCTS.ID AND TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND RECEIPTS.MONEY = ? " +
-              "GROUP BY PRODUCTS.NAME, TICKETLINES.PRICE, TAXES.RATE"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadClass(PaymentsModel.ProductSalesLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
-            .list(app.getActiveCashIndex());
- 
+
+        List products = new StaticSentence(app.getSession(), "SELECT PRODUCTS.NAME, SUM(TICKETLINES.UNITS), TICKETLINES.PRICE, TAXES.RATE "
+                + "FROM TICKETLINES, TICKETS, RECEIPTS, PRODUCTS, TAXES "
+                + "WHERE TICKETLINES.PRODUCT = PRODUCTS.ID AND TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND RECEIPTS.MONEY = ? "
+                + "GROUP BY PRODUCTS.NAME, TICKETLINES.PRICE, TAXES.RATE", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.ProductSalesLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
+                .list(app.getActiveCashIndex());
+
         if (products == null) {
             p.m_lproductsales = new ArrayList();
         } else {
             p.m_lproductsales = products;
         }
-        
+
         return p;
     }
 
@@ -353,16 +344,16 @@ public class PaymentsModel {
     public Date getDateEnd() {
         return m_dDateEnd;
     }
-    
+
     /**
      *
      * @return
      */
-    public String getDateStartDerby(){
+    public String getDateStartDerby() {
         SimpleDateFormat ndf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return ndf.format(m_dDateStart);
     }
-    
+
     /**
      *
      * @return
@@ -371,7 +362,7 @@ public class PaymentsModel {
 //        return m_sHost;
         return StringUtils.encodeXML(m_sHost);
     }
-    
+
     /**
      *
      * @return
@@ -419,14 +410,14 @@ public class PaymentsModel {
     public List<PaymentsLine> getPaymentLines() {
         return m_lpayments;
     }
-    
+
     /**
      *
      * @return
      */
     public int getSales() {
         return m_iSales == null ? 0 : m_iSales;
-    }    
+    }
 
     /**
      *
@@ -442,7 +433,7 @@ public class PaymentsModel {
      */
     public String printSalesBase() {
         return Formats.CURRENCY.formatValue(m_dSalesBase);
-    }     
+    }
 
     /**
      *
@@ -451,16 +442,16 @@ public class PaymentsModel {
     public String printSalesTaxes() {
         return Formats.CURRENCY.formatValue(m_dSalesTaxes);
     }
-    
-     /**
+
+    /**
      *
      * @return
      */
-    public String printSalesTotal() {            
+    public String printSalesTotal() {
         return Formats.CURRENCY.formatValue((m_dSalesBase == null || m_dSalesTaxes == null)
                 ? null
                 : m_dSalesBase + m_dSalesTaxes);
-    }     
+    }
 
     /**
      *
@@ -470,12 +461,11 @@ public class PaymentsModel {
         return m_lsales;
     }
 
-
     /**
      *
      * @return
      */
-        public double getCategorySalesRows() {
+    public double getCategorySalesRows() {
         return m_iCategorySalesRows;
     }
 
@@ -525,18 +515,17 @@ public class PaymentsModel {
      */
     public List<CategorySalesLine> getCategorySalesLines() {
         return m_lcategorysales;
-    }    
+    }
 // end
-    
 
     /**
      *
      * @return
      */
-        public double getProductSalesRows() {
+    public double getProductSalesRows() {
         return m_iProductSalesRows;
     }
-    
+
     /**
      *
      * @return
@@ -544,7 +533,7 @@ public class PaymentsModel {
     public String printProductSalesRows() {
         return Formats.INT.formatValue(m_iProductSalesRows);
     }
- 
+
     /**
      *
      * @return
@@ -552,7 +541,7 @@ public class PaymentsModel {
     public double getProductSalesTotalUnits() {
         return m_dProductSalesTotalUnits;
     }
- 
+
     /**
      *
      * @return
@@ -560,7 +549,7 @@ public class PaymentsModel {
     public String printProductSalesTotalUnits() {
         return Formats.DOUBLE.formatValue(m_dProductSalesTotalUnits);
     }
- 
+
     /**
      *
      * @return
@@ -568,7 +557,7 @@ public class PaymentsModel {
     public double getProductSalesTotal() {
         return m_dProductSalesTotal;
     }
- 
+
     /**
      *
      * @return
@@ -576,7 +565,7 @@ public class PaymentsModel {
     public String printProductSalesTotal() {
         return Formats.CURRENCY.formatValue(m_dProductSalesTotal);
     }
- 
+
     /**
      *
      * @return
@@ -585,16 +574,15 @@ public class PaymentsModel {
         return m_lproductsales;
     }
     // end
-    
 
     /**
      *
      * @return
      */
-        public List<RemovedProductLines> getRemovedProductLines() {
+    public List<RemovedProductLines> getRemovedProductLines() {
         return m_lremovedlines;
     }
-    
+
     /**
      *
      * @return
@@ -605,31 +593,36 @@ public class PaymentsModel {
             public String getColumnName(int column) {
                 return AppLocal.getIntString(PAYMENTHEADERS[column]);
             }
+
             @Override
             public int getRowCount() {
                 return m_lpayments.size();
             }
+
             @Override
             public int getColumnCount() {
                 return PAYMENTHEADERS.length;
             }
+
             @Override
             public Object getValueAt(int row, int column) {
                 PaymentsLine l = m_lpayments.get(row);
                 switch (column) {
-                case 0: return l.getType();
-                case 1: return l.getValue();
-                default: return null;
+                    case 0:
+                        return l.getType();
+                    case 1:
+                        return l.getValue();
+                    default:
+                        return null;
                 }
-            }  
+            }
         };
     }
-    
 
     /**
      *
      */
-        public static class CategorySalesLine implements SerializableRead {
+    public static class CategorySalesLine implements SerializableRead {
 
         private String m_CategoryName;
         private Double m_CategoryUnits;
@@ -653,7 +646,7 @@ public class PaymentsModel {
          */
         public String printCategoryName() {
             //return m_CategoryName;
-            return StringUtils.encodeXML(m_CategoryName); 
+            return StringUtils.encodeXML(m_CategoryName);
         }
 
         /**
@@ -687,17 +680,18 @@ public class PaymentsModel {
         public Double getCategorySum() {
             return m_CategorySum;
         }
-    }    
+    }
 
     /**
      *
      */
-        public static class RemovedProductLines implements SerializableRead {
+    public static class RemovedProductLines implements SerializableRead {
+
         private String m_Name;
         private String m_TicketId;
         private String m_ProductName;
         private Double m_TotalUnits;
-        
+
         /**
          *
          * @param dr
@@ -710,7 +704,7 @@ public class PaymentsModel {
             m_ProductName = dr.getString(3);
             m_TotalUnits = dr.getDouble(4);
         }
-          
+
         /**
          *
          * @return
@@ -718,7 +712,7 @@ public class PaymentsModel {
         public String printWorkerName() {
             return StringUtils.encodeXML(m_Name);
         }
-        
+
         /**
          *
          * @return
@@ -726,7 +720,7 @@ public class PaymentsModel {
         public String printTicketId() {
             return StringUtils.encodeXML(m_TicketId);
         }
-        
+
         /**
          *
          * @return
@@ -734,7 +728,7 @@ public class PaymentsModel {
         public String printProductName() {
             return StringUtils.encodeXML(m_ProductName);
         }
- 
+
         /**
          *
          * @return
@@ -742,21 +736,21 @@ public class PaymentsModel {
         public String printTotalUnits() {
             return Formats.DOUBLE.formatValue(m_TotalUnits);
         }
- 
+
     }
 
     /**
      *
      */
-        public static class ProductSalesLine implements SerializableRead {
- 
+    public static class ProductSalesLine implements SerializableRead {
+
         private String m_ProductName;
         private Double m_ProductUnits;
         private Double m_ProductPrice;
         private Double m_TaxRate;
         private Double m_ProductPriceTax;
-        private Double m_ProductPriceNet;  
- 
+        private Double m_ProductPriceNet;
+
         /**
          *
          * @param dr
@@ -768,11 +762,11 @@ public class PaymentsModel {
             m_ProductUnits = dr.getDouble(2);
             m_ProductPrice = dr.getDouble(3);
             m_TaxRate = dr.getDouble(4);
- 
-            m_ProductPriceTax = m_ProductPrice + m_ProductPrice*m_TaxRate;
+
+            m_ProductPriceTax = m_ProductPrice + m_ProductPrice * m_TaxRate;
             m_ProductPriceNet = m_ProductPrice * m_TaxRate;
         }
- 
+
         /**
          *
          * @return
@@ -780,7 +774,7 @@ public class PaymentsModel {
         public String printProductName() {
             return StringUtils.encodeXML(m_ProductName);
         }
- 
+
         /**
          *
          * @return
@@ -788,7 +782,7 @@ public class PaymentsModel {
         public String printProductUnits() {
             return Formats.DOUBLE.formatValue(m_ProductUnits);
         }
- 
+
         /**
          *
          * @return
@@ -796,7 +790,7 @@ public class PaymentsModel {
         public Double getProductUnits() {
             return m_ProductUnits;
         }
- 
+
         /**
          *
          * @return
@@ -804,7 +798,7 @@ public class PaymentsModel {
         public String printProductPrice() {
             return Formats.CURRENCY.formatValue(m_ProductPrice);
         }
- 
+
         /**
          *
          * @return
@@ -812,7 +806,7 @@ public class PaymentsModel {
         public Double getProductPrice() {
             return m_ProductPrice;
         }
- 
+
         /**
          *
          * @return
@@ -820,7 +814,7 @@ public class PaymentsModel {
         public String printTaxRate() {
             return Formats.PERCENT.formatValue(m_TaxRate);
         }
- 
+
         /**
          *
          * @return
@@ -828,7 +822,7 @@ public class PaymentsModel {
         public Double getTaxRate() {
             return m_TaxRate;
         }
- 
+
         /**
          *
          * @return
@@ -836,34 +830,35 @@ public class PaymentsModel {
         public String printProductPriceTax() {
             return Formats.CURRENCY.formatValue(m_ProductPriceTax);
         }
-        
+
         /**
          *
          * @return
          */
         public String printProductSubValue() {
-            return Formats.CURRENCY.formatValue(m_ProductPriceTax*m_ProductUnits);
+            return Formats.CURRENCY.formatValue(m_ProductPriceTax * m_ProductUnits);
         }
-        
+
         /**
          * @return
          */
         public String printProductPriceNet() {
-            return Formats.CURRENCY.formatValue(m_ProductPrice*m_ProductUnits);
+            return Formats.CURRENCY.formatValue(m_ProductPrice * m_ProductUnits);
         }
-        
+
     }
     // end
-    
+
     /**
      *
      */
     public static class SalesLine implements SerializableRead {
-        
+
         private String m_SalesTaxName;
         private Double m_SalesTaxes;
-        private Double m_SalesTaxNet;           
-        private Double m_SalesTaxGross;         
+        private Double m_SalesTaxNet;
+        private Double m_SalesTaxGross;
+
         /**
          *
          * @param dr
@@ -873,8 +868,8 @@ public class PaymentsModel {
         public void readValues(DataRead dr) throws BasicException {
             m_SalesTaxName = dr.getString(1);
             m_SalesTaxes = dr.getDouble(2);
-            m_SalesTaxNet = dr.getDouble(3);    
-            m_SalesTaxGross = dr.getDouble(4);  
+            m_SalesTaxNet = dr.getDouble(3);
+            m_SalesTaxGross = dr.getDouble(4);
         }
 
         /**
@@ -882,9 +877,9 @@ public class PaymentsModel {
          * @return
          */
         public String printTaxName() {
-           // return m_SalesTaxName;
-           return StringUtils.encodeXML(m_SalesTaxName);
-        }      
+            // return m_SalesTaxName;
+            return StringUtils.encodeXML(m_SalesTaxName);
+        }
 
         /**
          *
@@ -893,22 +888,21 @@ public class PaymentsModel {
         public String printTaxes() {
             return Formats.CURRENCY.formatValue(m_SalesTaxes);
         }
-        
-        /**        
+
+        /**
          * @return
          */
         public String printTaxNet() {
             return Formats.CURRENCY.formatValue(m_SalesTaxNet);
         }
 
-        /**        
+        /**
          * @return
          */
         public String printTaxGross() {
             return Formats.CURRENCY.formatValue(m_SalesTaxes + m_SalesTaxNet);
         }
-        
-        
+
         /**
          *
          * @return
@@ -924,23 +918,21 @@ public class PaymentsModel {
         public Double getTaxes() {
             return m_SalesTaxes;
         }
-        
+
         /**
          * @return
          */
         public Double getTaxNet() {
             return m_SalesTaxNet;
         }
-        
+
         /**
          * @return
          */
         public Double getTaxGross() {
             return m_SalesTaxGross;
         }
-        
 
-        
     }
 
     /**
@@ -953,36 +945,43 @@ public class PaymentsModel {
             public String getColumnName(int column) {
                 return AppLocal.getIntString(SALEHEADERS[column]);
             }
+
             @Override
             public int getRowCount() {
                 return m_lsales.size();
             }
+
             @Override
             public int getColumnCount() {
                 return SALEHEADERS.length;
             }
+
             @Override
             public Object getValueAt(int row, int column) {
                 SalesLine l = m_lsales.get(row);
                 switch (column) {
-                case 0: return l.getTaxName();
-                case 1: return l.getTaxes();
-                case 2: return l.getTaxNet(); 
-                default: return null;
+                    case 0:
+                        return l.getTaxName();
+                    case 1:
+                        return l.getTaxes();
+                    case 2:
+                        return l.getTaxNet();
+                    default:
+                        return null;
                 }
-            }  
+            }
         };
     }
-    
+
     /**
      *
      */
     public static class PaymentsLine implements SerializableRead {
-        
+
         private String m_PaymentType;
         private Double m_PaymentValue;
         private String s_PaymentReason;
-        
+
         /**
          *
          * @param dr
@@ -992,9 +991,9 @@ public class PaymentsModel {
         public void readValues(DataRead dr) throws BasicException {
             m_PaymentType = dr.getString(1);
             m_PaymentValue = dr.getDouble(2);
-            s_PaymentReason=dr.getString(3) == null ? "": dr.getString(3);            
+            s_PaymentReason = dr.getString(3) == null ? "" : dr.getString(3);
         }
-        
+
         /**
          *
          * @return
@@ -1040,7 +1039,7 @@ public class PaymentsModel {
          * @return
          */
         public String getReason() {
-            return s_PaymentReason;        
+            return s_PaymentReason;
+        }
     }
-  }
 }

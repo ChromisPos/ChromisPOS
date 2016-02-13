@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -98,11 +98,14 @@ import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
 import uk.chromis.pos.promotion.PromotionSupport;
 import uk.chromis.pos.util.AutoLogoff;
+import javax.sound.sampled.AudioFormat;  
+import javax.sound.sampled.AudioSystem;  
+import javax.sound.sampled.LineUnavailableException;  
+import javax.sound.sampled.SourceDataLine; 
+import uk.chromis.pos.ticket.PlayWave; 
 
-/**
- *
- * @author adrianromero
- */
+
+
 public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFactoryApp, TicketsEditor {
 
     // Variable numerica
@@ -847,7 +850,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void incProductByCode(String sCode) {
-// Modify to allow number x with scanned products. JDL 8.8.2015        
+// Modify to allow number x with scanned products. JDL 8.8.(c) 2015-2016       
         int count = 1;
         if (sCode.contains("*")) {
             count = (sCode.indexOf("*") == 0) ? 1 : parseInt(sCode.substring(0, sCode.indexOf("*")));
@@ -856,11 +859,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         try {
             ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
             if (oProduct == null) {
-                Toolkit.getDefaultToolkit().beep();
+              //  Toolkit.getDefaultToolkit().beep();
+             new PlayWave("error.wav").start(); // playing WAVE file 
                 JOptionPane.showMessageDialog(null,
                         sCode + " - " + AppLocal.getIntString("message.noproduct"), "Check", JOptionPane.WARNING_MESSAGE);
                 stateToZero();
             } else {
+                new PlayWave("beep.wav").start(); // playing WAVE file  
                 incProduct(count, oProduct);
             }
         } catch (BasicException eData) {

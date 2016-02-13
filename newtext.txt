@@ -1,5 +1,5 @@
 <html><center>Chromis POS - The New Face of Open source POS<br>
-Copyright 2015 Chromis <br>
+Copyright (c) 2015-2016Chromis <br>
 http://www.chromis.co.uk/<br>
 <br>
 Chromis POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>

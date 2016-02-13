@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -239,7 +239,7 @@ public class JRootApp extends JPanel implements AppView {
                 JProcessingDlg dlg = new JProcessingDlg( AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"),(sDBVersion == null ? true : false), changelog);
                 dlg.setModal(true);
                 dlg.setVisible(true);
-                if (dlg.CHOICE == -1) {
+                if (dlg.CHOICE == -1 || dlg.DBFAILED) {
                     session.close();
                     return false;
                 }
@@ -345,7 +345,7 @@ public class JRootApp extends JPanel implements AppView {
                 != null) {
             if (newText.equals("")) {
                 jLabel1.setText("<html><center>Chromis POS - The New Face of Open Source POS<br>"
-                        + "Copyright \u00A9 2015 Chromis <br>"
+                        + "Copyright \u00A9 (c) 2015-2016Chromis <br>"
                         + "<br>"
                         + "http://www.chromis.co.uk<br>"
                         + "<br>"
@@ -897,7 +897,7 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png"))); // NOI18N
         jLabel1.setText("<html><center>Chromis POS - The New Face of open source POS<br>" +
-            "Copyright \u00A9 2015 Chromis <br>" +
+            "Copyright \u00A9 (c) 2015-2016Chromis <br>" +
             "http://www.chromis.co.uk<br>" +
             "<br>" +
             "Chromis POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +

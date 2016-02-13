@@ -1597,7 +1597,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create PAYMENTS Table">
+    <changeSet author="Chromis POS" id="Create PAYMENTS Table.">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PAYMENTS"/>
@@ -1633,7 +1633,7 @@
                                  referencedTableName="RECEIPTS"/>
 
         <createIndex tableName="PAYMENTS"
-                     indexName="PAYMENTS_INX">
+                     indexName="PAYMENTS_INX_1">
             <column name="PAYMENT" type="varchar(255)"/>
         </createIndex>
     </changeSet>

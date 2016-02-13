@@ -1,6 +1,6 @@
 @echo off
 REM    Chromis POS  - The New Face of Open Source POS
-REM    Copyright (c) 2015 
+REM    Copyright (c) (c) 2015-2016 2016 
 REM    http://www.chromis.co.uk
 REM
 REM    This file is part of Chromis POS
