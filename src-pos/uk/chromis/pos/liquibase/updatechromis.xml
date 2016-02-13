@@ -1269,6 +1269,18 @@
         </insert> 
     </changeSet>          
     
+    <changeSet author="Chromis POS" id="Add Reset pickup ID panel permissions:">    
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description126'</sqlCheck>
+        </preConditions> 
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.sales.JPanelResetPickupId"/>
+            <column name="SECTION" value="##label.sectionmaintenance"/>
+            <column name="DISPLAYNAME" value="##label.displayname126"/>
+            <column name="DESCRIPTION" value="##label.description126"/>
+        </insert> 
+    </changeSet> 
+    
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 
@@ -1406,6 +1418,15 @@
             <column name="TITLE" value="Menu.Recipe" />   
         </insert>                                          
     </changeSet> 
+    
+    <changeSet author="Chromis POS" id="Create Dynamic table entries v0.55.1"> 
+        <insert tableName="MENUENTRIES"> 
+            <column name="ENTRY" value="uk.chromis.pos.sales.JPanelResetPickupId"/>   
+            <column name="FOLLOWS" value="uk.chromis.pos.mant.JPanelPlaces"/>
+            <column name="GRAPHIC" value="/uk/chromis/images/reload.png" />
+            <column name="TITLE" value="Menu.Resetpickup" />   
+        </insert>                                          
+    </changeSet>
     <!-- ***************************************************************************************** -->
 </databaseChangeLog>
 

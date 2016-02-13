@@ -18,8 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.config;
 
-import java.awt.Dimension;
-import java.io.File;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
@@ -27,10 +25,7 @@ import uk.chromis.pos.forms.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
-import org.apache.commons.io.FileUtils;
 
 /**
  *

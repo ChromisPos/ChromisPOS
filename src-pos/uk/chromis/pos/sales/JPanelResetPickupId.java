@@ -45,7 +45,6 @@ import uk.chromis.pos.util.AltEncrypter;
  */
 public class JPanelResetPickupId extends JPanel implements JPanelView {
 
-
     private Connection con;
     private String sdbmanager;
     private Session session;
@@ -53,21 +52,18 @@ public class JPanelResetPickupId extends JPanel implements JPanelView {
     private String SQL;
     private Statement stmt;
     
-    /** Creates new form JPaneldbUpdate
-     * @param oApp */
-  //  public JPanelResetPickupId(AppView oApp) {
- //       this(oApp.getProperties());       
- //   }
 
     /**
      *
      * @param props
      */
-    public JPanelResetPickupId() {
+    public JPanelResetPickupId(AppView oApp) {
         
         initComponents();
 
-
+        if (oApp != null) {
+            jbtnExit.setVisible(false);
+        }
         
     }
 
@@ -222,7 +218,7 @@ public class JPanelResetPickupId extends JPanel implements JPanelView {
                 .addComponent(jbtnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
                 .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,7 +234,7 @@ public class JPanelResetPickupId extends JPanel implements JPanelView {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

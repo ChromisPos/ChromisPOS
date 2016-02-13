@@ -108,6 +108,7 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/uk/chromis/images/location.png", "Menu.Locations", "uk.chromis.pos.inventory.LocationsPanel");
         submenu.addPanel("/uk/chromis/images/floors.png", "Menu.Floors", "uk.chromis.pos.mant.JPanelFloors");
         submenu.addPanel("/uk/chromis/images/tables.png", "Menu.Tables", "uk.chromis.pos.mant.JPanelPlaces");
+        submenu.addPanel("/uk/chromis/images/reload.png",  "Menu.Resetpickup", "uk.chromis.pos.sales.JPanelResetPickupId");
 
     submenu.addTitle("Menu.Maintenance.Reports");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.UsersReport", "/uk/chromis/reports/people.bs");

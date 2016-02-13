@@ -103,13 +103,10 @@ public class JFrmConfig extends javax.swing.JFrame {
     public static void main(final String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
-            public void run() {
+            public void run() { 
                 
-              // config = AppConfig.getInstance().getDefaultConfig();
-              // config.load();    
-                
+
 // Set the look and feel.
-   // Set the look and feel.
                 try {
 
                     Object laf = Class.forName(AppConfig.getInstance().getProperty("swing.defaultlaf")).newInstance();
