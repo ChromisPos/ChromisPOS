@@ -44,6 +44,7 @@ import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.sales.TaxesLogic;
 import uk.chromis.pos.util.BarcodeValidator;
 import uk.chromis.pos.ticket.ProductInfoExt;
+import uk.chromis.pos.util.AutoCompleteComboBox;
 
 /**
  *
@@ -183,6 +184,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         packproductmodel = new ComboBoxValModel(packproductsent.list());
         m_jPackProduct.setModel(packproductmodel);
 
+        AutoCompleteComboBox.enable(m_jPackProduct);
+
     }
 
 // Set the product to be edited.  
@@ -230,6 +233,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     // Save the currently edited product.  
     public void saveProduct() {
     }

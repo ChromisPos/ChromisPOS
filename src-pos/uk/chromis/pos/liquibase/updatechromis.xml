@@ -1363,12 +1363,6 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update to 0.55">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.55"/>          
-        </update>  
-    </changeSet>
-
     <changeSet author="Chromis POS" id="Update Hversions start v0.55"> 
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.54"/>       
@@ -1428,5 +1422,10 @@
         </insert>                                          
     </changeSet>
     <!-- ***************************************************************************************** -->
+    <changeSet author="Chromis POS" id="Update to 0.55.1">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="0.55.1"/>          
+        </update>  
+    </changeSet>
 </databaseChangeLog>
 
