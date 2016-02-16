@@ -44,7 +44,9 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.UUID;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import uk.chromis.pos.ticket.PlayWave;
 
 /**
  *
@@ -217,6 +219,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_junits.setEnabled(true);
         m_jprice.setEnabled(true);   
         m_cat.setComponentEnabled(true);
+        
+        getRootPane().setDefaultButton(m_jEnter);
+        m_jcodebar.requestFocusInWindow();
     }
 
     /**
@@ -410,7 +415,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
             ProductInfoExt oProduct = m_dlSales.getProductInfo(Id);
             if (oProduct == null) {       
                 assignProduct(null);
-                Toolkit.getDefaultToolkit().beep();                   
+                new PlayWave("error.wav").start(); // playing WAVE file 
             } else {
                 assignProduct(oProduct);
             }
@@ -425,10 +430,15 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         try {
             ProductInfoExt oProduct = m_dlSales.getProductInfoByCode(m_jcodebar.getText());
             if (oProduct == null) {       
-                assignProduct(null);
-                Toolkit.getDefaultToolkit().beep();                   
+                new PlayWave("error.wav").start(); // playing WAVE file 
+                                
+                if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString( "message.createproduct"),
+                        AppLocal.getIntString("message.title"),
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                    newProduct();
+                }
             } else {
-                // Se anade directamente una unidad con el precio y todo
                 assignProduct(oProduct);
             }
         } catch (BasicException eData) {        
@@ -443,7 +453,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
             ProductInfoExt oProduct = m_dlSales.getProductInfoByReference(m_jreference.getText());
             if (oProduct == null) {       
                 assignProduct(null);
-                Toolkit.getDefaultToolkit().beep();                   
+                new PlayWave("error.wav").start(); // playing WAVE file 
             } else {
                 // Se anade directamente una unidad con el precio y todo
                 assignProduct(oProduct);
@@ -459,15 +469,29 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private void editProduct() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
-        dlg.init( m_dlSales, m_Dirty, productid );
+        dlg.init( m_dlSales, m_Dirty, productid, null );
+        dlg.setCallbacks(this);
+        dlg.setVisible( true );
+    }
+      
+    private void newProduct() {
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
+        dlg.init( m_dlSales, m_Dirty, null, m_jcodebar.getText() );
         dlg.setCallbacks(this);
         dlg.setVisible( true );
     }
     
     @Override
-    public void notifyCompletionOk() {
-        // Force a re-load of product information
-        assignProductById(productid);
+    public void notifyCompletionOk( String reference ) {
+        // Try to assign product again
+        if( reference != null ) {
+            writeValueInsert();
+            m_jreference.setText( reference );
+
+            jproduct.setEnabled(true);
+            assignProductByReference();
+        }
     }
 
     @Override

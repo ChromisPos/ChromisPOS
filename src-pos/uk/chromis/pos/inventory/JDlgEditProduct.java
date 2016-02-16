@@ -45,10 +45,14 @@ public class JDlgEditProduct extends javax.swing.JDialog {
     private DirtyManager m_dirty;
     private SaveProvider m_SaveProvider;
     private CompletionCallback m_CallBacks;
+    static private int STATE_INSERT = 0;
+    static private int STATE_UPDATE = 1;
+    
+    private int state = STATE_INSERT;
     
     interface CompletionCallback 
     {
-        void notifyCompletionOk();
+        void notifyCompletionOk( String reference );
         void notifyCompletionCancel();
     }
  
@@ -62,7 +66,7 @@ public class JDlgEditProduct extends javax.swing.JDialog {
         m_CallBacks = callBacks;
     }
     
-    public void init( DataLogicSales dlSales, DirtyManager dirty, String productID ) {
+    public void init( DataLogicSales dlSales, DirtyManager dirty, String productID, String barcode ) {
         m_dlSales = dlSales;
         m_dirty = dirty;
         initComponents();
@@ -78,7 +82,14 @@ public class JDlgEditProduct extends javax.swing.JDialog {
         
         try {
             producteditor.activate();
-            producteditor.setProduct( productID );
+            
+            if( productID == null ) {
+                state = STATE_INSERT;
+            } else {
+                state = STATE_UPDATE;                
+            }
+
+            producteditor.setProduct( productID, barcode );
         } catch (BasicException ex) {
             Logger.getLogger(JDlgEditProduct.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,11 +151,11 @@ public class JDlgEditProduct extends javax.swing.JDialog {
 
         jPanel1.setLayout(null);
         jPanel1.add(jPanelEditor);
-        jPanelEditor.setBounds(0, 0, 620, 430);
+        jPanelEditor.setBounds(0, 0, 620, 480);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        setSize(new java.awt.Dimension(634, 513));
+        setSize(new java.awt.Dimension(634, 566));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -157,23 +168,36 @@ public class JDlgEditProduct extends javax.swing.JDialog {
 
     private void jcmdOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdOKActionPerformed
        boolean bOK = false;
-       
+        String reference = null;
+        
         if( producteditor != null ) {
             try {
                 Object values = producteditor.createValue();
-                if (m_SaveProvider.updateData(values) <= 0) {
-                    throw new BasicException(LocalRes.getIntString("exception.noupdate"));
+                if( state == STATE_INSERT ) {
+                    if (m_SaveProvider.insertData(values) > 0) {
+                        bOK = true;
+                    } else {
+                        throw new BasicException(LocalRes.getIntString("exception.noupdate"));
+                    }
                 } else {
-                    bOK = true;
+                    if (m_SaveProvider.updateData(values) > 0 ) {
+                        bOK = true;
+                    } else {
+                        throw new BasicException(LocalRes.getIntString("exception.noupdate"));
+                    }
                 }
+                
+                Object [] aValues = (Object [] ) values;
+                reference = (String) aValues[DataLogicSales.INDEX_REFERENCE];
+                
             } catch (BasicException ex) {
                 Logger.getLogger(JDlgEditProduct.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
         if( m_CallBacks != null ) {
-            if( bOK ) {
-                m_CallBacks.notifyCompletionOk();
+            if( bOK && producteditor != null ) {
+                m_CallBacks.notifyCompletionOk( reference );
             } else {
                 m_CallBacks.notifyCompletionCancel();                
             }

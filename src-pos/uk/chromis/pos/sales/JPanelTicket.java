@@ -626,7 +626,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     m_oTicket.insertLine(i, oLine);
                     m_ticketlines.insertTicketLine(i, oLine); // Pintamos la linea en la vista...                 
                 } else {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 }
             } else {
                 m_oTicket.addLine(oLine);
@@ -851,16 +851,30 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         try {
             ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
             if (oProduct == null) {
-//                Toolkit.getDefaultToolkit().beep();
                 new PlayWave("error.wav").start(); // playing WAVE file 
  
                 JOptionPane.showMessageDialog(null,
                         sCode + " - " + AppLocal.getIntString("message.noproduct"), "Check", JOptionPane.WARNING_MESSAGE);
                 stateToZero();
             } else {
-                new PlayWave("beep.wav").start(); // playing WAVE file 
 
-                incProduct(count, oProduct);
+                if (oProduct.isScale() && m_App.getDeviceScale().existsScale()) {
+                    try {
+                        Double value;
+                        value = m_App.getDeviceScale().readWeight();
+
+                        if (value != null) {
+                            new PlayWave("beep.wav").start(); // playing WAVE file 
+                            incProduct(value, oProduct);
+                        }
+                    } catch (ScaleException ex) {
+                        new PlayWave("error.wav").start(); // playing WAVE file 
+                        new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noweight"), ex).show(this);
+                        stateToZero();
+                    }
+                } else {
+                    incProduct(count, oProduct);
+                }
             }
         } catch (BasicException eData) {
             stateToZero();
@@ -872,7 +886,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         try {
             ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
             if (oProduct == null) {
-                Toolkit.getDefaultToolkit().beep();
+                new PlayWave("error.wav").start(); // playing WAVE file 
                 new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);
                 stateToZero();
             } else if (m_jaddtax.isSelected()) {
@@ -895,14 +909,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     incProduct(value, prod);
                 }
             } catch (ScaleException e) {
-                Toolkit.getDefaultToolkit().beep();
+                new PlayWave("error.wav").start(); // playing WAVE file 
                 new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noweight"), e).show(this);
                 stateToZero();
             }
         } else if (!prod.isVprice()) {
             incProduct(1.0, prod);
         } else {
-            Toolkit.getDefaultToolkit().beep();
+            new PlayWave("error.wav").start(); // playing WAVE file 
             JOptionPane.showMessageDialog(null,
                     AppLocal.getIntString("message.novprice"));
         }
@@ -925,7 +939,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else if (prod.isVprice()) {
             addTicketLine(prod, getPorValue(), getInputValue());
         } else {
-            Toolkit.getDefaultToolkit().beep();
+             new PlayWave("error.wav").start(); // playing WAVE file 
         }
     }
 
@@ -963,7 +977,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
                                 addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
                             } else {
-                                Toolkit.getDefaultToolkit().beep();
+                                new PlayWave("error.wav").start(); // playing WAVE file 
                                 JOptionPane.showMessageDialog(null,
                                         "Vocher code 05V - " + AppLocal.getIntString("message.noproduct"),
                                         "Check", JOptionPane.WARNING_MESSAGE);
@@ -992,7 +1006,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
                                 addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
                             } else {
-                                Toolkit.getDefaultToolkit().beep();
+                                new PlayWave("error.wav").start(); // playing WAVE file 
                                 JOptionPane.showMessageDialog(null,
                                         "Vocher code 10V - " + AppLocal.getIntString("message.noproduct"),
                                         "Check", JOptionPane.WARNING_MESSAGE);
@@ -1021,7 +1035,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 oProduct.setTaxCategoryID(((TaxCategoryInfo) taxcategoriesmodel.getSelectedItem()).getID());
                                 addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
                             } else {
-                                Toolkit.getDefaultToolkit().beep();
+                                new PlayWave("error.wav").start(); // playing WAVE file 
                                 JOptionPane.showMessageDialog(null,
                                         "Voucher code 20V - " + AppLocal.getIntString("message.noproduct"),
                                         "Check", JOptionPane.WARNING_MESSAGE);
@@ -1042,7 +1056,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     try {
                         CustomerInfoExt newcustomer = dlSales.findCustomerExt(sCode);
                         if (newcustomer == null) {
-                            Toolkit.getDefaultToolkit().beep();
+                            new PlayWave("error.wav").start(); // playing WAVE file 
                             JOptionPane.showMessageDialog(null,
                                     sCode + " - " + AppLocal.getIntString("message.nocustomer"),
                                     "Customer Not Found", JOptionPane.WARNING_MESSAGE);
@@ -1051,7 +1065,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
                         }
                     } catch (BasicException e) {
-                        Toolkit.getDefaultToolkit().beep();
+                        new PlayWave("error.wav").start(); // playing WAVE file 
                         JOptionPane.showMessageDialog(null,
                                 sCode + " - " + AppLocal.getIntString("message.nocustomer"),
                                 "Customer Not Found", JOptionPane.WARNING_MESSAGE);
@@ -1128,7 +1142,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         try {
                             oProduct = dlSales.getProductInfoByCode(prodCode);
                             if (oProduct == null) {
-                                Toolkit.getDefaultToolkit().beep();
+                                new PlayWave("error.wav").start(); // playing WAVE file 
                                 JOptionPane.showMessageDialog(null,
                                         prodCode + " - " + AppLocal.getIntString("message.noproduct"),
                                         "Check", JOptionPane.WARNING_MESSAGE);
@@ -1165,7 +1179,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     incProductByCode(sCode);
                 }
             } else {
-                Toolkit.getDefaultToolkit().beep();
+                new PlayWave("error.wav").start(); // playing WAVE file 
             }
 
             /**
@@ -1264,18 +1278,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             addTicketLine(product, value, product.getPriceSell());
                         }
                     } catch (ScaleException e) {
-                        Toolkit.getDefaultToolkit().beep();
+                        new PlayWave("error.wav").start(); // playing WAVE file 
                         new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noweight"), e).show(this);
                         stateToZero();
                     }
                 } else {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 }
             } else if (cTrans == '\u00a7'
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO) {
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 } else if (m_App.getDeviceScale().existsScale()) {
                     try {
                         Double value = m_App.getDeviceScale().readWeight();
@@ -1286,18 +1300,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             paintTicketLine(i, newline);
                         }
                     } catch (ScaleException e) {
-                        Toolkit.getDefaultToolkit().beep();
+                        new PlayWave("error.wav").start(); // playing WAVE file 
                         new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noweight"), e).show(this);
                         stateToZero();
                     }
                 } else {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 }
             } else if (cTrans == '+'
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO) {
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
                     if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
@@ -1313,7 +1327,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
                     //If it's a refund - button means one unit more
@@ -1338,7 +1352,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERVALID) {
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
@@ -1357,7 +1371,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && m_App.getAppUserView().getUser().hasPermission("sales.EditLines")) {
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
@@ -1409,7 +1423,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         refreshTicket();
                     }
                 } else {
-                    Toolkit.getDefaultToolkit().beep();
+                    new PlayWave("error.wav").start(); // playing WAVE file 
                 }
             }
         }
@@ -2476,7 +2490,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         AutoLogoff.getInstance().deactivateTimer();
         int i = m_ticketlines.getSelectedIndex();
         if (i < 0) {
-            Toolkit.getDefaultToolkit().beep(); // no line selected
+            new PlayWave("error.wav").start(); // playing WAVE file 
         } else {
             try {
                 TicketLineInfo newline = JProductLineEdit.showMessage(this, m_App, m_oTicket.getLine(i));
@@ -2526,12 +2540,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 removeTicketLine(i);
             }
         } else if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
-            Toolkit.getDefaultToolkit().beep();
+            new PlayWave("error.wav").start(); // playing WAVE file 
             JOptionPane.showMessageDialog(null,
                     AppLocal.getIntString("message.deleteauxiliaryitem"),
                     "auxiliary Item", JOptionPane.WARNING_MESSAGE);
         } else if (i < 0) {
-            Toolkit.getDefaultToolkit().beep();
+            new PlayWave("error.wav").start(); // playing WAVE file 
         } else {
             removeTicketLine(i); // elimino la linea           
         }
@@ -2605,7 +2619,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         // AutoLogoff.getInstance().deactivateTimer();
         int i = m_ticketlines.getSelectedIndex();
         if (i < 0) {
-            Toolkit.getDefaultToolkit().beep(); // no line selected
+            new PlayWave("error.wav").start(); // playing WAVE file 
         } else {
             try {
                 TicketLineInfo line = m_oTicket.getLine(i);
