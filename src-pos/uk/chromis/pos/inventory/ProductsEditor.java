@@ -607,8 +607,18 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         Object[] myprod = new Object[DataLogicSales.FIELD_COUNT];
         myprod[DataLogicSales.INDEX_ID] = m_id;
         myprod[DataLogicSales.INDEX_REFERENCE] = m_jRef.getText();
-        myprod[DataLogicSales.INDEX_CODE] = m_jCode.getText();
-        myprod[DataLogicSales.INDEX_CODETYPE] = BarcodeValidator.BarcodeValidate(m_jCode.getText());
+        
+        String code = m_jCode.getText();
+        if (code.startsWith("977")) {
+            // This is an ISSN barcode (news and magazines)
+            // the first 3 digits correspond to the 977 prefix assigned to serial publications,
+            // the next 7 digits correspond to the ISSN of the publication
+            // Anything after that is publisher dependant - we strip everything after 
+            // the 10th character
+            code = code.substring(0, 10);
+        }
+        myprod[DataLogicSales.INDEX_CODE] = code;
+        myprod[DataLogicSales.INDEX_CODETYPE] = BarcodeValidator.BarcodeValidate(code);
         myprod[DataLogicSales.INDEX_NAME] = m_jName.getText();
         myprod[DataLogicSales.INDEX_ISCOM] = m_jComment.isSelected();
         myprod[DataLogicSales.INDEX_ISSCALE] = m_jScale.isSelected();

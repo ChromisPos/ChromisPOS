@@ -477,7 +477,18 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private void newProduct() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
-        dlg.init( m_dlSales, m_Dirty, null, m_jcodebar.getText() );
+        
+        String code = m_jcodebar.getText();
+        if (code.startsWith("977")) {
+            // This is an ISSN barcode (news and magazines)
+            // the first 3 digits correspond to the 977 prefix assigned to serial publications,
+            // the next 7 digits correspond to the ISSN of the publication
+            // Anything after that is publisher dependant - we strip everything after 
+            // the 10th character
+            code = code.substring(0, 10);
+        }
+        
+        dlg.init( m_dlSales, m_Dirty, null, code );
         dlg.setCallbacks(this);
         dlg.setVisible( true );
     }

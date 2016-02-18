@@ -288,6 +288,16 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public final ProductInfoExt getProductInfoByCode(String sCode) throws BasicException {
+        
+        if (sCode.startsWith("977")) {
+            // This is an ISSN barcode (news and magazines)
+            // the first 3 digits correspond to the 977 prefix assigned to serial publications,
+            // the next 7 digits correspond to the ISSN of the publication
+            // Anything after that is publisher dependant - we strip everything after 
+            // the 10th character
+            sCode = sCode.substring(0, 10);
+        }
+
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
