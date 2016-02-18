@@ -259,6 +259,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
             return "/uk/chromis/images/ccard.png";
         }
     }
+    
+     public class JPaymentMagcardManualCreator implements JPaymentCreator {
+
+        @Override
+        public JPaymentInterface createJPayment() {
+            return new JPaymentMagcardManual(JPaymentSelect.this);
+        }
+
+        @Override
+        public String getKey() {
+            return "payment.magcardmanual";
+        }
+
+        @Override
+        public String getLabelKey() {
+            return "tab.magcard";
+        }
+
+        @Override
+        public String getIconKey() {
+            return "/uk/chromis/images/ccard.png";
+        }
+    }
 
     public class JPaymentFreeCreator implements JPaymentCreator {
 
