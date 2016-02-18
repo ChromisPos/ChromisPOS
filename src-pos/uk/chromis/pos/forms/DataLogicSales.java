@@ -1189,7 +1189,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE",
                 new String[]{
-                    "P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}), new SerializerWriteBasic(new Datas[]{
+                    "P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}, false), new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,
             Datas.OBJECT, Datas.DOUBLE,
             Datas.OBJECT, Datas.DOUBLE,

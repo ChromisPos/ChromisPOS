@@ -684,6 +684,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return Formats.CURRENCY.formatValue(getTendered());
     }
 
+    public String printChange() {
+        return Formats.CURRENCY.formatValue(getTendered()-getTotal());
+    }
+    
     public String VoucherReturned() {
         return Formats.CURRENCY.formatValue(getTotalPaid() - getTotal());
     }

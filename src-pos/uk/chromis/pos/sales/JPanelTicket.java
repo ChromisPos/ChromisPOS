@@ -1600,6 +1600,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 script.put("place", ticketext);
                 script.put("warranty", warrantyPrint);
                 script.put("pickupid", getPickupString(ticket));
+                script.put("ticketpanel", this );
 
                 refreshTicket();
 

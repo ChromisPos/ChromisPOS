@@ -27,11 +27,11 @@ import uk.chromis.basic.BasicException;
  */
 public class QBFBuilder implements ISQLBuilderStatic {
    
-    private final String m_sSentNullFilter;   // la sentencia que se devuelve cuando el filtro es vacio
-    private final String m_sSentBeginPart;  // La sentencia que se devuelve es m_sSentBeginPart + ( filtro ) + m_sSentEndPart
-    private final String m_sSentEndPart;
+    private String m_sSentNullFilter;   // la sentencia que se devuelve cuando el filtro es vacio
+    private String m_sSentBeginPart;  // La sentencia que se devuelve es m_sSentBeginPart + ( filtro ) + m_sSentEndPart
+    private String m_sSentEndPart;
     
-    private final String[] m_asFindFields;    
+    private String[] m_asFindFields;    
     
 //    /** Creates a new instance of QBFBuilder */
 //    public QBFBuilder(TableDefinition tb, String[] asFindFields) {
@@ -57,7 +57,20 @@ public class QBFBuilder implements ISQLBuilderStatic {
      * @param sSentence
      * @param asFindFields
      */
-        public QBFBuilder(String sSentence, String[] asFindFields) {
+    public QBFBuilder(String sSentence, String[] asFindFields ) {
+        CreateSentence( sSentence, asFindFields, true );
+    }
+        
+    /**
+     *
+     * @param sSentence
+     * @param asFindFields
+     */
+    public QBFBuilder(String sSentence, String[] asFindFields, boolean bNullFilterAll ) {
+            CreateSentence( sSentence, asFindFields, bNullFilterAll );
+    }
+
+    private void CreateSentence(String sSentence, String[] asFindFields, boolean bNullFilterAll ) {
         int iPos = sSentence.indexOf("?(QBF_FILTER)");
         if (iPos < 0) {
             m_sSentBeginPart = sSentence;
@@ -66,11 +79,13 @@ public class QBFBuilder implements ISQLBuilderStatic {
         } else {
             m_sSentBeginPart = sSentence.substring(0, iPos);
             m_sSentEndPart = sSentence.substring(iPos + 13);
-            m_sSentNullFilter = m_sSentBeginPart + "(1=1)" + m_sSentEndPart;
+            m_sSentNullFilter = m_sSentBeginPart + 
+                    ( bNullFilterAll ? "(1=1)" : "(1=0)" ) +
+                    m_sSentEndPart;
         }
         m_asFindFields = asFindFields;
     }
-
+        
     /**
      *
      * @param sw
