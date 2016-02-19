@@ -70,6 +70,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jMaxChange.getDocument().addDocumentListener(dirty);
         jMaxChangeEnable.addActionListener(dirty);
         JlongNames.addActionListener(dirty);
+        JCustomSounds.addActionListener(dirty);
     }
 
     /**
@@ -130,6 +131,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jMaxChange.setText(AppConfig.getInstance().getProperty("till.changelimit"));
         jMaxChangeEnable.setSelected(AppConfig.getInstance().getBoolean("till.enablechangelimit"));
         JlongNames.setSelected(AppConfig.getInstance().getBoolean("display.longnames"));
+        JCustomSounds.setSelected(AppConfig.getInstance().getBoolean("till.customsounds"));
 
         jMaxChangeEnableActionPerformed(null);
 
@@ -193,6 +195,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         AppConfig.getInstance().setProperty("till.changelimit", jMaxChange.getText());
         AppConfig.getInstance().setBoolean("till.enablechangelimit", jMaxChangeEnable.isSelected());
         AppConfig.getInstance().setBoolean("display.longnames", JlongNames.isSelected());
+        AppConfig.getInstance().setBoolean("till.customsounds", JCustomSounds.isSelected());
 
         dirty.setDirty(false);
     }
@@ -237,6 +240,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jMaxChangeEnable = new eu.hansolo.custom.SteelCheckBox();
         jMaxChange = new javax.swing.JTextField();
         jLabelMaxChange = new javax.swing.JLabel();
+        JCustomSounds = new eu.hansolo.custom.SteelCheckBox();
         jLabelInactiveTime = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(700, 500));
@@ -385,6 +389,9 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jLabelMaxChange.setText(bundle.getString("label.maxchange")); // NOI18N
         jPanel5.add(jLabelMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 150, 130, 30));
 
+        JCustomSounds.setText(bundle.getString("label.customerrorsounds")); // NOI18N
+        jPanel5.add(JCustomSounds, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 190, -1));
+
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 20, 670, 240));
 
         jLabelInactiveTime.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -477,6 +484,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private eu.hansolo.custom.SteelCheckBox JCustomSounds;
     private eu.hansolo.custom.SteelCheckBox JlongNames;
     private eu.hansolo.custom.SteelCheckBox jAutoLogoffAfterKitchen;
     private eu.hansolo.custom.SteelCheckBox jAutoLogoffAfterPrint;

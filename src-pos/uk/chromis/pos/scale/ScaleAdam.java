@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) (c) 2015-2016
+//    Copyright (c) 2015 
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -86,10 +86,10 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
         JLabel FontText = new JLabel(message);
         FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
 
-        JOptionPane newpane = new JOptionPane( );
-        newpane.setMessage(FontText);
+        JOptionPane newpane = new JOptionPane( FontText, JOptionPane.PLAIN_MESSAGE, JOptionPane.CANCEL_OPTION, null, new Object[]{"Cancel"} );
         newpane.setPreferredSize( new Dimension(450,150));
         m_Dialog = newpane.createDialog("Use Scales");
+        
         m_Dialog.setVisible( true );
 
         // Return to default settings
@@ -175,11 +175,11 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
             m_CommPort = null;
             m_PortId = null;
             
-            if (m_iStatusScale == SCALE_READY) {
+            if (m_iStatusScale == SCALE_READY && m_WeightBuffer != null && m_WeightBuffer.isEmpty() == false ) {
                 
                 logger.log(Level.INFO, "Scale ready", m_WeightBuffer );
                 
-                double dWeight = Double.parseDouble( m_WeightBuffer.toString() );
+                double dWeight = Double.parseDouble( m_WeightBuffer );
                 
                 return dWeight;
             } else {

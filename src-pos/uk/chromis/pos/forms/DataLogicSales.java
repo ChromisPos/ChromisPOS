@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
 package uk.chromis.pos.forms;
 
 import uk.chromis.pos.promotion.PromotionInfo;
@@ -295,6 +296,15 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public final ProductInfoExt getProductInfoByCode(String sCode) throws BasicException {
+        if (sCode.startsWith("977")) {
+            // This is an ISSN barcode (news and magazines) 
+            // the first 3 digits correspond to the 977 prefix assigned to serial publications, 
+            // the next 7 digits correspond to the ISSN of the publication 
+            // Anything after that is publisher dependant - we strip everything after  
+            // the 10th character 
+            sCode = sCode.substring(0, 10);
+        }
+
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
@@ -744,24 +754,20 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     }
 
     /**
-     * 
+     *
      * @param productId The product id to look for kit
      * @return List of products part of the searched product
-     * @throws BasicException 
+     * @throws BasicException
      */
     public final List<ProductsRecipeInfo> getProductsKit(String productId) throws BasicException {
-        return new PreparedSentence(s
-            , "SELECT "
+        return new PreparedSentence(s, "SELECT "
                 + "ID, "
                 + "PRODUCT, "
                 + "PRODUCT_KIT, "
                 + "QUANTITY "
-                + "FROM PRODUCTS_KIT WHERE PRODUCT = ? "
-            , SerializerWriteString.INSTANCE
-            , ProductsRecipeInfo.getSerializerRead()).list(productId);
+                + "FROM PRODUCTS_KIT WHERE PRODUCT = ? ", SerializerWriteString.INSTANCE, ProductsRecipeInfo.getSerializerRead()).list(productId);
     }
 
-    
     /**
      *
      * @return
