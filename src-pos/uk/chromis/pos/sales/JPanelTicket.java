@@ -932,7 +932,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void incProduct(double dPor, ProductInfoExt prod) {
-        if (prod.isVprice()) {
+        if (!prod.isScale() && prod.isVprice()) {
             addTicketLine(prod, getPorValue(), getInputValue());
         } else {
             addTicketLine(prod, dPor, prod.getPriceSell());
