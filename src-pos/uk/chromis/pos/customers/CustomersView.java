@@ -100,8 +100,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
             txtRegion.getDocument().addDocumentListener(dirty);
             txtCountry.getDocument().addDocumentListener(dirty);
             m_jShowDoB.getDocument().addDocumentListener(dirty);
-
-            
+            j_mDOB.setVisible(false);
+                    
             j_mDOB.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     updateDoB();
@@ -787,6 +787,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                 btnDoBActionPerformed(evt);
             }
         });
+
+        j_mDOB.setEditable(false);
 
         jAge.setEditable(false);
 

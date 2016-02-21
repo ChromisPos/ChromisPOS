@@ -685,6 +685,9 @@
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="j_mDOB">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jAge">
               <Properties>
