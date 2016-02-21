@@ -532,10 +532,34 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return sum;
     }
 
-    public double getTendered() {
-        return getTotalPaid();
+    public double getTotalChange() {
+        double sum = 0.0;
+        for (PaymentInfo p : payments) {
+            if (!"debtpaid".equals(p.getName())) {
+                sum += p.getChange();
+            }
+        }
+        return sum;
+    }
+    
+    public double getChange() {
+        return getTotalChange();
     }
 
+    public double getTotalTendered() {
+        double sum = 0.0;
+        for (PaymentInfo p : payments) {
+            if (!"debtpaid".equals(p.getName())) {
+                sum += p.getTendered();
+            }
+        }
+        return sum;
+    }
+    
+    public double getTendered() {
+        return getTotalTendered();
+    }
+    
     public List<String> getCouponLines() {
         return m_CouponLines.getCouponLines();
     }
@@ -685,7 +709,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
     public String printChange() {
-        return Formats.CURRENCY.formatValue(getTendered()-getTotal());
+        return Formats.CURRENCY.formatValue(getChange());
     }
     
     public String VoucherReturned() {
