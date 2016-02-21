@@ -848,17 +848,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             count = (sCode.indexOf("*") == 0) ? 1 : parseInt(sCode.substring(0, sCode.indexOf("*")));
             sCode = sCode.substring(sCode.indexOf("*") + 1, sCode.length());
         }
-        if (sCode.startsWith("977")) {
-            // This is an ISSN barcode (news and magazines)
-            // the first 3 digits correspond to the 977 prefix assigned to serial publications,
-            // the next 7 digits correspond to the ISSN of the publication
-            // Anything after that is publisher dependant - we strip everything after 
-            // the 10th character
-            sCode = sCode.substring(0, 10);
-        }
         
         try {
             ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
+
+            if (oProduct == null && sCode.startsWith("977")) {
+                // This is an ISSN barcode (news and magazines)
+                // the first 3 digits correspond to the 977 prefix assigned to serial publications,
+                // the next 7 digits correspond to the ISSN of the publication
+                // Anything after that is publisher dependant
+                // try to find again by stripping everything after 
+                // the 10th character
+                sCode = sCode.substring(0, 10);
+                oProduct = dlSales.getProductInfoByCode(sCode);
+            }
+
             if (oProduct == null) {
                 new PlayWave("error.wav").start(); // playing WAVE file 
  
@@ -1583,7 +1587,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         return (tmpPickupId);
     }
 
-    private void printTicket(String sresourcename, TicketInfo ticket, Object ticketext) {
+    public void printTicket(String sresourcename, TicketInfo ticket, Object ticketext) {
         String sresource = dlSystem.getResourceAsXML(sresourcename);
         if (sresource == null) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"));
