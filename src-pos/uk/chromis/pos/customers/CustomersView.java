@@ -101,6 +101,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
             txtCountry.getDocument().addDocumentListener(dirty);
             m_jShowDoB.getDocument().addDocumentListener(dirty);
 
+            
             j_mDOB.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     updateDoB();
@@ -232,7 +233,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtMaxdebt.setText(null);
         txtCurdebt.setText(null);
         txtCurdate.setText(null);
-        m_jVisible.setSelected(true);
+        m_jVisible.setSelected(false);
         jcard.setText(null);
 
         txtFirstName.setText(null);
