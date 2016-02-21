@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
 package uk.chromis.pos.customers;
 
 import javax.swing.ListCellRenderer;
@@ -88,7 +89,7 @@ public class CustomersPanel extends JPanelTable {
      */
     @Override
     public SaveProvider getSaveProvider() {
-        return new SaveProvider(tcustomers, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23});
+        return new SaveProvider(tcustomers, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24});
     }
 
     /**

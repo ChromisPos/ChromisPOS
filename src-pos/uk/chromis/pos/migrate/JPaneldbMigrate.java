@@ -718,6 +718,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     pb.setString("Migrating Draweropened table");
                     SQL = "SELECT * FROM DRAWEROPENED";
                     rs = stmt.executeQuery(SQL);
+                   /*
                     rs2 = stmt2.executeQuery(SQL);
                     rs2.moveToInsertRow();
                     while (rs.next()) {
@@ -726,6 +727,18 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         rs2.updateString("TICKETID", rs.getString("TICKETID"));
                         rs2.insertRow();
                     }
+                    
+                    */
+                    while (rs.next()) {
+                        SQL = "INSERT INTO DRAWEROPENED (OPENDATE, NAME, TICKETID) VALUES (?, ?, ?)";
+                        pstmt = con2.prepareStatement(SQL);
+                        pstmt.setString(1, rs.getString("OPENDATE"));
+                        pstmt.setString(2, rs.getString("NAME"));
+                        pstmt.setString(3, rs.getString("TICKETID"));
+                        pstmt.executeUpdate();
+                    }                    
+                  
+                    
 
 // copy FLOORS table    
                     pb.setString("Migrating Floors table");
@@ -1255,7 +1268,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     while (rs.next()) {
                         rs2.updateString("VOUCHER", rs.getString("VOUCHER"));
                         rs2.updateTimestamp("SOLDDATE", rs.getTimestamp("SOLDDATE"));
-                        rs2.updateTimestamp("REDEEMDATE", rs.getTimestamp("REDEEMDATE"));
+                        rs2.updateTimestamp("REDEEMDATE", rs.getTimestamp("REDDEMDATE"));
                         rs2.updateString("SOLDTICKETID", rs.getString("SOLDTICKETID"));
                         rs2.updateString("REDEEMTICKETID", rs.getString("REDEEMTICKETID"));
                         rs2.insertRow();

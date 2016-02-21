@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+
+
+     <changeSet author="Chromis POS" id="prepare Mysql tables to InnoDB (if required)" dbms="mysql">            
+        <sql>ALTER TABLE APPLICATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTEINSTANCE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTESET ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTESETINSTANCE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTEUSE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ATTRIBUTEVALUE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE BREAKS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CATEGORIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CLOSEDCASH ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CSVIMPORT ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE CUSTOMERS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DATABASECHANGELOG ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DATABASECHANGELOGLOCK ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DBPERMISSIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE DRAWEROPENED ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE FLOORS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE LEAVES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE LINEREMOVED ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE LOCATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE MOORERS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PAYMENTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PEOPLE ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PICKUP_NUMBER ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PLACES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PRODUCTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE PRODUCTS_COM ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RECEIPTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RESERVATION_CUSTOMERS	 ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RESERVATIONS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE RESOURCES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ROLES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE SHAREDTICKETS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE SHIFT_BREAKS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE SHIFTS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE STOCKCURRENT ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE STOCKDIARY ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE STOCKLEVEL ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXCATEGORIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXCUSTCATEGORIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TAXLINES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE THIRDPARTIES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETLINES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETSNUM ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETSNUM_PAYMENT ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE TICKETSNUM_REFUND ENGINE=InnoDB</sql>              
+        <sql>ALTER TABLE STOCKCHANGES ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE ORDERS ENGINE=InnoDB</sql>
+        <sql>ALTER TABLE VOUCHERS ENGINE=InnoDB</sql>
+    </changeSet> 
+   
+
+</databaseChangeLog>
+

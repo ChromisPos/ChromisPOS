@@ -1,5 +1,5 @@
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) (c) 2015-2016 2016 Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -15,6 +15,8 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
+//    MySQL version 
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
@@ -39,8 +41,8 @@ report.setSentence("SELECT " +
     "FROM RECEIPTS LEFT OUTER JOIN TICKETS ON RECEIPTS.ID = TICKETS.ID LEFT OUTER JOIN TICKETLINES ON " +
         "TICKETS.ID = TICKETLINES.TICKET, PRODUCTS LEFT OUTER JOIN CATEGORIES ON " +
         "PRODUCTS.CATEGORY = CATEGORIES.ID LEFT OUTER JOIN TAXCATEGORIES ON PRODUCTS.TAXCAT = TAXCATEGORIES.ID, " +
-        "PRODUCTS_CAT, PEOPLE " +
-    "WHERE PRODUCTS.ID = TICKETLINES.PRODUCT AND PEOPLE.ID = TICKETS.PERSON AND PRODUCTS.ID = PRODUCTS_CAT.PRODUCT AND ?(QBF_FILTER) " +
+        " PEOPLE " +
+    "WHERE PRODUCTS.ID = TICKETLINES.PRODUCT AND PEOPLE.ID = TICKETS.PERSON AND PRODUCTS.ISCATALOG = 1 AND ?(QBF_FILTER) " +
     "GROUP BY CATEGORIES.NAME, PRODUCTS.NAME, PRODUCTS.REFERENCE,PRODUCTS.CODE,PRODUCTS.PRICEBUY, " +
     "PRODUCTS.PRICESELL, PRODUCTS.STOCKCOST,PRODUCTS.STOCKVOLUME, TAXCATEGORIES.ID, TAXCATEGORIES.NAME, PEOPLE.NAME, RECEIPTS.DATENEW " +
     "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME, RECEIPTS.DATENEW, PEOPLE.NAME");

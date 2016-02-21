@@ -960,6 +960,18 @@
         <sql>ALTER TABLE SHIFTS CHANGE STARTSHIFT STARTSHIFT TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql>
         <sql>ALTER TABLE LEAVES CHANGE STARTDATE STARTDATE TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql> 
     </changeSet>   
+    
+    <changeSet author="Chromis POS" id="Add Dob to customers">    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="DOB" tableName="CUSTOMERS"/>
+            </not>
+        </preConditions>   
+           
+        <addColumn tableName="CUSTOMERS">
+            <column name="DOB" type="timestamp" />            
+        </addColumn>        
+    </changeSet>  
   <!--  
     <changeSet author="Chromis POS" id="Add tableopen column in sharedtickets if it does not exist" >    
         <preConditions onFail="MARK_RAN">
@@ -1271,7 +1283,7 @@
     
     <changeSet author="Chromis POS" id="Add Reset pickup ID panel permissions:">    
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description126'</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE CLASSNAME = 'uk.chromis.pos.sales.JPanelResetPickupId'</sqlCheck>
         </preConditions> 
         <insert tableName="DBPERMISSIONS">		
             <column name="CLASSNAME" value="uk.chromis.pos.sales.JPanelResetPickupId"/>

@@ -22,6 +22,7 @@
     <include file="uk/chromis/pos/liquibase/resizederbycolumns.xml"/>  
     <include file="uk/chromis/pos/liquibase/chromiscreatefks.xml"/>          
     <include file="uk/chromis/pos/liquibase/updatechromis.xml"/>
- 
+    <include file="uk/chromis/pos/liquibase/mysqlinnodb.xml"/>
+    
 </databaseChangeLog>
 

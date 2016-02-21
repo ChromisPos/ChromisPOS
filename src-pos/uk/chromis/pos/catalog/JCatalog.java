@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
 package uk.chromis.pos.catalog;
 
 import uk.chromis.basic.BasicException;
