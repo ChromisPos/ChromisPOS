@@ -1133,7 +1133,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jCategory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jPanel1.add(m_jCategory);
-        m_jCategory.setBounds(130, 130, 170, 25);
+        m_jCategory.setBounds(130, 130, 270, 25);
 
         jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel13.setText(AppLocal.getIntString("label.attributes")); // NOI18N

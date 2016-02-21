@@ -289,15 +289,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final ProductInfoExt getProductInfoByCode(String sCode) throws BasicException {
         
-        if (sCode.startsWith("977")) {
-            // This is an ISSN barcode (news and magazines)
-            // the first 3 digits correspond to the 977 prefix assigned to serial publications,
-            // the next 7 digits correspond to the ISSN of the publication
-            // Anything after that is publisher dependant - we strip everything after 
-            // the 10th character
-            sCode = sCode.substring(0, 10);
-        }
-
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
@@ -336,7 +327,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
                 + "COLOUR, "
-                + "CATORDER "
+                + "CATORDER, "
+                + "CONCAT( '/', NAME) AS PATH "
                 + "FROM CATEGORIES "
                 + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead()).list();
@@ -354,7 +346,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
                 + "COLOUR, "
-                + "CATORDER "
+                + "CATORDER, "
+                + "CONCAT( '/', NAME) AS PATH "
                 + "FROM CATEGORIES "
                 + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " AND CATORDER IS NOT NULL "
                 + "ORDER BY CATORDER", null, CategoryInfo.getSerializerRead()).list();
@@ -368,7 +361,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
                 + "COLOUR, "
-                + "CATORDER "
+                + "CATORDER, "
+                + "CONCAT( '/', NAME) AS PATH "
                 + "FROM CATEGORIES "
                 + "WHERE PARENTID IS NULL AND CATSHOWNAME = " + s.DB.TRUE() + " AND CATORDER IS NULL "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead()).list();
@@ -382,38 +376,44 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final List<CategoryInfo> getSubcategories(String category) throws BasicException {
         return new PreparedSentence(s, "SELECT "
-                + "ID, "
-                + "NAME, "
-                + "IMAGE, "
-                + "TEXTTIP, "
-                + "CATSHOWNAME, "
-                + "COLOUR, "
-                + "CATORDER "
-                + "FROM CATEGORIES WHERE PARENTID = ? ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
+                + "C.ID, "
+                + "C.NAME, "
+                + "C.IMAGE, "
+                + "C.TEXTTIP, "
+                + "C.CATSHOWNAME, "
+                + "C.COLOUR, "
+                + "C.CATORDER, "
+                + "IFNULL( CONCAT( P.NAME, '/', C.NAME ), C.NAME) AS PATH "
+                + "FROM CATEGORIES C LEFT JOIN CATEGORIES P ON C.PARENTID=P.ID "
+                + "WHERE C.PARENTID = ? ORDER BY C.NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
     }
 
     public final List<CategoryInfo> getSubcategoriesByCatOrder(String category) throws BasicException {
         return new PreparedSentence(s, "SELECT "
-                + "ID, "
-                + "NAME, "
-                + "IMAGE, "
-                + "TEXTTIP, "
-                + "CATSHOWNAME, "
-                + "COLOUR, "
-                + "CATORDER "
-                + "FROM CATEGORIES WHERE PARENTID = ? AND CATORDER IS NOT NULL ORDER BY CATORDER", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
+                + "C.ID, "
+                + "C.NAME, "
+                + "C.IMAGE, "
+                + "C.TEXTTIP, "
+                + "C.CATSHOWNAME, "
+                + "C.COLOUR, "
+                + "C.CATORDER, "
+                + "IFNULL( CONCAT( P.NAME, '/', C.NAME ), C.NAME) AS PATH "
+                + "FROM CATEGORIES C LEFT JOIN CATEGORIES P ON C.PARENTID=P.ID "
+                + "WHERE C.PARENTID = ? AND C.CATORDER IS NOT NULL ORDER BY C.CATORDER", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
     }
 
     public final List<CategoryInfo> getSubcategoriesByName(String category) throws BasicException {
         return new PreparedSentence(s, "SELECT "
-                + "ID, "
-                + "NAME, "
-                + "IMAGE, "
-                + "TEXTTIP, "
-                + "CATSHOWNAME, "
-                + "COLOUR, "
-                + "CATORDER "
-                + "FROM CATEGORIES WHERE PARENTID = ? AND CATORDER IS NULL ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
+                + "C.ID, "
+                + "C.NAME, "
+                + "C.IMAGE, "
+                + "C.TEXTTIP, "
+                + "C.CATSHOWNAME, "
+                + "C.COLOUR, "
+                + "C.CATORDER, "
+                + "IFNULL( CONCAT( P.NAME, '/', C.NAME ), C.NAME) AS PATH "
+                + "FROM CATEGORIES C LEFT JOIN CATEGORIES P ON C.PARENTID=P.ID "
+                + "WHERE PARENTID = ? AND CATORDER IS NULL ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
     }
 
     /**
@@ -516,16 +516,17 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final CategoryInfo getCategoryInfo(String id) throws BasicException {
         return (CategoryInfo) new PreparedSentence(s, "SELECT "
-                + "ID, "
-                + "NAME, "
-                + "IMAGE, "
-                + "TEXTTIP, "
-                + "CATSHOWNAME, "
-                + "COLOUR, "
-                + "CATORDER "
-                + "FROM CATEGORIES "
-                + "WHERE ID = ? "
-                + "ORDER BY NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).find(id);
+                + "C.ID, "
+                + "C.NAME, "
+                + "C.IMAGE, "
+                + "C.TEXTTIP, "
+                + "C.CATSHOWNAME, "
+                + "C.COLOUR, "
+                + "C.CATORDER, "
+                + "IFNULL( CONCAT( P.NAME, '/', C.NAME ), C.NAME) AS PATH "
+                + "FROM CATEGORIES C LEFT JOIN CATEGORIES P ON C.PARENTID=P.ID "
+                + "WHERE C.ID = ? "
+                + "ORDER BY C.NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).find(id);
     }
 
     public final SentenceList getProductList() {
@@ -674,15 +675,16 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public final SentenceList getCategoriesList() {
         return new StaticSentence(s, "SELECT "
-                + "ID, "
-                + "NAME, "
-                + "IMAGE, "
-                + "TEXTTIP, "
-                + "CATSHOWNAME, "
-                + "COLOUR, "
-                + "CATORDER "
-                + "FROM CATEGORIES "
-                + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
+                + "C.ID, "
+                + "C.NAME, "
+                + "C.IMAGE, "
+                + "C.TEXTTIP, "
+                + "C.CATSHOWNAME, "
+                + "C.COLOUR, "
+                + "C.CATORDER, "
+                + "IFNULL( CONCAT( P.NAME, '/', C.NAME ), C.NAME) AS PATH "
+                + "FROM CATEGORIES C LEFT JOIN CATEGORIES P ON C.PARENTID=P.ID "
+                + "ORDER BY PATH", null, CategoryInfo.getSerializerRead());
     }
 
     /**

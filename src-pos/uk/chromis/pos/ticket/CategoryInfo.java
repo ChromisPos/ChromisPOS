@@ -35,6 +35,7 @@ public class CategoryInfo implements IKeyed {
     private static final long serialVersionUID = 8612449444103L;
     private String m_sID;
     private String m_sName;
+    private String m_sPath;
     private String m_sTextTip;
     private BufferedImage m_Image;
     private Boolean m_bCatShowName;
@@ -50,9 +51,10 @@ public class CategoryInfo implements IKeyed {
      * @param texttip
      * @param catshowname
      */
-    public CategoryInfo(String id, String name, BufferedImage image, String texttip, Boolean catshowname, String colour, Integer catorder) {
+    public CategoryInfo(String id, String name, String path, BufferedImage image, String texttip, Boolean catshowname, String colour, Integer catorder) {
         m_sID = id;
         m_sName = name;
+        m_sPath = path;
         m_Image = image;
         m_sTextTip = texttip;
         m_bCatShowName = catshowname;
@@ -77,8 +79,16 @@ public class CategoryInfo implements IKeyed {
         return m_sName;
     }
 
+    public String getPath() {
+        return m_sPath;
+    }
+    
     public void setName(String sName) {
         m_sName = sName;
+    }
+
+    public void setPath(String sPath) {
+        m_sPath = sPath;
     }
 
     public String getTextTip() {
@@ -123,14 +133,14 @@ public class CategoryInfo implements IKeyed {
 
     @Override
     public String toString() {
-        return m_sName;
+        return m_sPath;
     }
 
     public static SerializerRead getSerializerRead() {
         return new SerializerRead() {
             @Override
             public Object readValues(DataRead dr) throws BasicException {
-                return new CategoryInfo(dr.getString(1), dr.getString(2), ImageUtils.readImage(dr.getBytes(3)), dr.getString(4), dr.getBoolean(5), dr.getString(6), dr.getInt(7));
+                return new CategoryInfo(dr.getString(1), dr.getString(2), dr.getString(8), ImageUtils.readImage(dr.getBytes(3)), dr.getString(4), dr.getBoolean(5), dr.getString(6), dr.getInt(7));
             }
         };
     }
