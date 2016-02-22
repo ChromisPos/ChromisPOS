@@ -1561,12 +1561,18 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     }//GEN-LAST:event_jCheckBoxPromotionActionPerformed
 
     private void m_jPackQuantityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_jPackQuantityFocusLost
+       Object selectItem =  m_jPackProduct.getSelectedItem();
+       Object selectIndex = m_jPackProduct.getSelectedItem();
         try {
             packproductmodel = new ComboBoxValModel(packproductsent.list());
         } catch (BasicException ex) {
             Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }       
         m_jPackProduct.setModel(packproductmodel);
+        if (selectItem != null){
+            m_jPackProduct.setSelectedItem(selectItem);
+            m_jPackProduct.setSelectedItem(selectIndex);            
+        }
     }//GEN-LAST:event_m_jPackQuantityFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

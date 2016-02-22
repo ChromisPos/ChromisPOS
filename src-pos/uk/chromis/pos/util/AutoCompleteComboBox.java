@@ -52,10 +52,10 @@ public class AutoCompleteComboBox extends PlainDocument {
         });
         comboBox.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
-                if (e.getPropertyName().equals("editor")) {
+                if (e.getPropertyName().equals("editor")) {                    
                     configureEditor((ComboBoxEditor) e.getNewValue());
                 }
-                if (e.getPropertyName().equals("model")) {
+                if (e.getPropertyName().equals("model")) {                 
                     model = (ComboBoxModel) e.getNewValue();
                 }
             }
@@ -148,12 +148,18 @@ public class AutoCompleteComboBox extends PlainDocument {
             setSelectedItem(item);
         } else {
             item = comboBox.getSelectedItem();
-            offSet = offSet - str.length() - 1;            
-            Toolkit.getDefaultToolkit().beep(); 
+            offSet = offSet - str.length();// - 1; 
+            if (offSet < 0) {
+                offSet = 0;
+            }
+            Toolkit.getDefaultToolkit().beep();
         }
-        setText(item.toString());
-        // select the completed part
-        highlightCompletedText(offSet + str.length());
+        if (item != null) {
+            setText(item.toString());
+            highlightCompletedText(offSet + str.length());
+        } else {
+            super.remove(0, getLength());
+        }
     }
 
     private void setText(String text) {
@@ -191,7 +197,6 @@ public class AutoCompleteComboBox extends PlainDocument {
                 }
             }
         }
-        // no item starts with the pattern => return null
         return null;
     }
 
