@@ -70,6 +70,7 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
             m_jName.setText(null);
             m_jNotes.setText(null);
             txtMaxdebt.setText(null);
+            txtDiscount.setText(null);
             txtCurdate.setText(null);
             txtCurdebt.setText(null);
 
@@ -81,6 +82,7 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
             m_jName.setText(customerext.getName());
             m_jNotes.setText(customerext.getNotes());
             txtMaxdebt.setText(Formats.CURRENCY.formatValue(RoundUtils.getValue(customerext.getMaxdebt())));
+            txtDiscount.setText(Formats.PERCENT.formatValue(RoundUtils.getValue(customerext.getDiscount())));
             txtCurdate.setText(Formats.DATE.formatValue(customerext.getCurdate()));
        //     System.out.println(customerext.getCurdebt();
             txtCurdebt.setText(Formats.CURRENCY.formatValue(RoundUtils.getValue(customerext.getCurdebt())));
@@ -178,6 +180,8 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
         txtCurdate = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         m_jNotes = new javax.swing.JTextArea();
+        jLabel5 = new javax.swing.JLabel();
+        txtDiscount = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jlblMessage = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
@@ -224,35 +228,35 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(AppLocal.getIntString("label.maxdebt")); // NOI18N
         jPanel4.add(jLabel2);
-        jLabel2.setBounds(20, 150, 100, 25);
+        jLabel2.setBounds(20, 140, 100, 25);
 
         txtMaxdebt.setEditable(false);
         txtMaxdebt.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtMaxdebt.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jPanel4.add(txtMaxdebt);
-        txtMaxdebt.setBounds(120, 150, 130, 25);
+        txtMaxdebt.setBounds(120, 140, 130, 25);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText(AppLocal.getIntString("label.curdebt")); // NOI18N
         jPanel4.add(jLabel4);
-        jLabel4.setBounds(20, 180, 100, 25);
+        jLabel4.setBounds(20, 200, 100, 25);
 
         txtCurdebt.setEditable(false);
         txtCurdebt.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtCurdebt.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jPanel4.add(txtCurdebt);
-        txtCurdebt.setBounds(120, 180, 130, 25);
+        txtCurdebt.setBounds(120, 200, 130, 25);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText(AppLocal.getIntString("label.curdate")); // NOI18N
         jPanel4.add(jLabel6);
-        jLabel6.setBounds(20, 210, 100, 25);
+        jLabel6.setBounds(20, 230, 100, 25);
 
         txtCurdate.setEditable(false);
         txtCurdate.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtCurdate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel4.add(txtCurdate);
-        txtCurdate.setBounds(120, 210, 130, 25);
+        txtCurdate.setBounds(120, 230, 130, 25);
 
         m_jNotes.setEditable(false);
         m_jNotes.setBackground(new java.awt.Color(240, 240, 240));
@@ -261,9 +265,18 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
         jScrollPane1.setViewportView(m_jNotes);
 
         jPanel4.add(jScrollPane1);
-        jScrollPane1.setBounds(120, 90, 200, 50);
+        jScrollPane1.setBounds(120, 90, 200, 40);
 
-        jPanel5.add(jPanel4, java.awt.BorderLayout.CENTER);
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText(AppLocal.getIntString("label.discount")); // NOI18N
+        jPanel4.add(jLabel5);
+        jLabel5.setBounds(20, 170, 100, 25);
+
+        txtDiscount.setEditable(false);
+        txtDiscount.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtDiscount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jPanel4.add(txtDiscount);
+        txtDiscount.setBounds(120, 170, 130, 25);
 
         jlblMessage.setEditable(false);
         jlblMessage.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -276,7 +289,10 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
         jlblMessage.setRequestFocusEnabled(false);
         jPanel6.add(jlblMessage);
 
-        jPanel5.add(jPanel6, java.awt.BorderLayout.SOUTH);
+        jPanel4.add(jPanel6);
+        jPanel6.setBounds(0, 262, 451, 80);
+
+        jPanel5.add(jPanel4, java.awt.BorderLayout.CENTER);
 
         add(jPanel5, java.awt.BorderLayout.CENTER);
 
@@ -313,6 +329,7 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
@@ -330,6 +347,7 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
     private uk.chromis.editor.JEditorCurrencyPositive m_jTendered;
     private javax.swing.JTextField txtCurdate;
     private javax.swing.JTextField txtCurdebt;
+    private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtMaxdebt;
     // End of variables declaration//GEN-END:variables
 }

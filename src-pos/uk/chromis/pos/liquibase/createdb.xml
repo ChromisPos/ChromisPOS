@@ -682,6 +682,7 @@
             <column name="CURDATE" type="timestamp"/>
             <column name="CURDEBT" type="double precision" defaultValueNumeric="0.0"/>
             <column name="IMAGE" type="${blob.type}"/>
+            <column name="DISCOUNT"  type="double precision" defaultValueNumeric="0.0"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="TAXCATEGORY"

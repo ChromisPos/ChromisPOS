@@ -650,8 +650,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     SQL = "SELECT * FROM CUSTOMERS";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
-                        SQL = "INSERT INTO CUSTOMERS (ID, SEARCHKEY, TAXID, NAME, TAXCATEGORY, CARD, MAXDEBT, ADDRESS, ADDRESS2, POSTAL, CITY,  REGION, COUNTRY, FIRSTNAME, LASTNAME, EMAIL, PHONE, PHONE2, FAX, NOTES, VISIBLE, CURDATE, CURDEBT, IMAGE )"
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        SQL = "INSERT INTO CUSTOMERS (ID, SEARCHKEY, TAXID, NAME, TAXCATEGORY, CARD, MAXDEBT, ADDRESS, ADDRESS2, POSTAL, CITY,  REGION, COUNTRY, FIRSTNAME, LASTNAME, EMAIL, PHONE, PHONE2, FAX, NOTES, VISIBLE, CURDATE, CURDEBT, IMAGE, DISCOUNT )"
+                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
                         pstmt.setString(1, rs.getString("ID"));
                         pstmt.setString(2, rs.getString("SEARCHKEY"));
@@ -677,6 +677,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setTimestamp(22, rs.getTimestamp("CURDATE"));
                         pstmt.setDouble(23, rs.getDouble("CURDEBT"));
                         pstmt.setBytes(24, rs.getBytes("IMAGE"));
+                        pstmt.setBytes(25, rs.getBytes("DISCOUNT"));
                         pstmt.executeUpdate();
                     }
 

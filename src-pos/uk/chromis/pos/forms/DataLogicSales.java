@@ -833,7 +833,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "CITY, "
                 + "REGION, "
                 + "COUNTRY, "
-                + "IMAGE "
+                + "IMAGE, "
+                + "DISCOUNT "
                 + "FROM CUSTOMERS "
                 + "WHERE CARD = ? AND VISIBLE = " + s.DB.TRUE() + " "
                 + "ORDER BY NAME", SerializerWriteString.INSTANCE, new CustomerExtRead()).find(card);
@@ -870,7 +871,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "CITY, "
                 + "REGION, "
                 + "COUNTRY, "
-                + "IMAGE "
+                + "IMAGE, "
+                + "DISCOUNT "
                 + "FROM CUSTOMERS WHERE ID = ?", SerializerWriteString.INSTANCE, new CustomerExtRead()).find(id);
     }
 
@@ -1573,6 +1575,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             c.setRegion(dr.getString(22));
             c.setCountry(dr.getString(23));
             c.setImage(dr.getString(24));
+            c.setDiscount(dr.getDouble(25));
 
             return c;
         }

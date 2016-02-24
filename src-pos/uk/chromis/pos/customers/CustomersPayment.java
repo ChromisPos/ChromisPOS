@@ -163,6 +163,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         txtMaxdebt.setText(Formats.CURRENCY.formatValue(customer.getMaxdebt()));
         txtCurdebt.setText(Formats.CURRENCY.formatValue(customer.getCurdebt()));
         txtCurdate.setText(Formats.DATE.formatValue(customer.getCurdate()));
+        txtDiscount.setText(Formats.PERCENT.formatValue(customer.getDiscount()));
 
         txtNotes.setEnabled(true);
 
@@ -186,7 +187,8 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         txtMaxdebt.setText(null);
         txtCurdebt.setText(null);
         txtCurdate.setText(null);
-
+        txtDiscount.setText(null);
+        
         txtNotes.setEnabled(false);
 
         dirty.setDirty(false);
@@ -285,6 +287,8 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         txtNotes = new uk.chromis.editor.JEditorString();
         txtTaxId = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        txtDiscount = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -437,6 +441,15 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText(AppLocal.getIntString("label.taxid")); // NOI18N
 
+        txtDiscount.setEditable(false);
+        txtDiscount.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtDiscount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDiscount.setFocusable(false);
+        txtDiscount.setRequestFocusEnabled(false);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText(AppLocal.getIntString("label.discount")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -471,7 +484,11 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(81, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -499,13 +516,17 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
                     .addComponent(txtMaxdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCurdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(223, Short.MAX_VALUE))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -629,6 +650,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -643,6 +665,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
     private javax.swing.JTextField txtCard;
     private javax.swing.JTextField txtCurdate;
     private javax.swing.JTextField txtCurdebt;
+    private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtMaxdebt;
     private javax.swing.JTextField txtName;
     private uk.chromis.editor.JEditorString txtNotes;

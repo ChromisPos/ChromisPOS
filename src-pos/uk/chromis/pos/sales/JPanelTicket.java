@@ -23,7 +23,6 @@ import bsh.Interpreter;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -39,10 +38,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.PrintService;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -98,7 +93,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
-import uk.chromis.pos.printer.DeviceTicket;
 import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
 import uk.chromis.pos.promotion.PromotionSupport;
@@ -172,7 +166,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private AppConfig m_config;
     private PromotionSupport m_promotionSupport = null;
     private Boolean fromNumberPad = true;
-
+    
     public JPanelTicket() {
         initComponents();
     }
@@ -629,6 +623,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     new PlayWave("error.wav").start(); // playing WAVE file 
                 }
             } else {
+                
+                // Apply any customer discount
+                if( m_oTicket.getDiscount() > 0.0 ) {
+                   oLine.setPrice( oLine.getPrice() - ( oLine.getPrice() * m_oTicket.getDiscount()));
+                }
+                
                 m_oTicket.addLine(oLine);
                 m_ticketlines.addTicketLine(oLine); // Pintamos la linea en la vista... 
 
@@ -1074,8 +1074,34 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                     sCode + " - " + AppLocal.getIntString("message.nocustomer"),
                                     "Customer Not Found", JOptionPane.WARNING_MESSAGE);
                         } else {
+                            if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
+                                JOptionPane.showMessageDialog(null,
+                                    AppLocal.getIntString("message.customerdiscountapplied"),
+                                    AppLocal.getIntString("Menu.Customers"),
+                                    JOptionPane.WARNING_MESSAGE);
+                            }
+                            
                             m_oTicket.setCustomer(newcustomer);
                             m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
+
+                            if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
+                                
+                                Object[] options = {AppLocal.getIntString("Button.Yes"),
+                                    AppLocal.getIntString("Button.No") };
+                                
+                                if (JOptionPane.showOptionDialog(this,
+                                    AppLocal.getIntString("message.customerdiscount") ,
+                                    AppLocal.getIntString("Menu.Customers"),
+                                    JOptionPane.YES_NO_OPTION, 
+                                    JOptionPane.INFORMATION_MESSAGE, null,
+                                    options, options[1]) == 0) {
+                                        // Apply this discount to all ticket lines
+                                        for (TicketLineInfo line : m_oTicket.getLines()) {
+                                            line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                        }
+                                        refreshTicket();
+                                }
+                            }
                         }
                     } catch (BasicException e) {
                         new PlayWave("error.wav").start(); // playing WAVE file 
@@ -2593,6 +2619,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         finder.setVisible(true);
 
         try {
+            if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
+                JOptionPane.showMessageDialog(null,
+                    AppLocal.getIntString("message.customerdiscountapplied"),
+                    AppLocal.getIntString("Menu.Customers"),
+                    JOptionPane.WARNING_MESSAGE);
+            }
+            
             if (finder.getSelectedCustomer() == null) {
                 m_oTicket.setCustomer(null);
             } else {
@@ -2600,6 +2633,25 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag"))) {
                     restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId());
                 }
+
+                if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
+
+                    Object[] options = {AppLocal.getIntString("Button.Yes"),
+                        AppLocal.getIntString("Button.No") };
+
+                    if (JOptionPane.showOptionDialog(this,
+                        AppLocal.getIntString("message.customerdiscount") ,
+                        AppLocal.getIntString("Menu.Customers"),
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.INFORMATION_MESSAGE, null,
+                        options, options[1]) == 0) {
+                            // Apply this discount to all ticket lines
+                            for (TicketLineInfo line : m_oTicket.getLines()) {
+                                line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                            }
+                            refreshTicket();
+                    }
+                }                
             }
 
         } catch (BasicException e) {

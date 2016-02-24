@@ -50,6 +50,8 @@ public class CustomerInfoExt extends CustomerInfo {
     protected String region;
     protected String country;
     protected String image;
+    protected Double discount;    
+    
     
     /** Creates a new instance of UserInfoBasic
      * @param id */
@@ -113,6 +115,18 @@ public class CustomerInfoExt extends CustomerInfo {
     }
     public String printMaxDebt() {       
         return Formats.CURRENCY.formatValue(RoundUtils.getValue(getMaxdebt()));
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }   
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    public String printDiscount() {       
+        return Formats.PERCENT.formatValue(RoundUtils.getValue(getDiscount()));
     }
     
     /**

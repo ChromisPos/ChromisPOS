@@ -215,6 +215,24 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         // taxes are not copied, must be calculated again.
         return t;
     }
+    
+    public Double getDiscount() {
+        Double discount = null;
+        if( m_Customer != null ) {
+            discount = m_Customer.getDiscount();
+        }
+        if( discount == null )
+            discount = 0.0;
+        
+        return discount;
+    }
+    
+    private Double applyDiscount( Double value ) {
+        if( value != null && value > 0.0 ) {
+            value = value - (value * getDiscount());
+        }
+        return value;
+    }
 
     /**
      *
@@ -299,6 +317,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         if (getCustomerId() != null) {
             name.append(" - ");
             name.append(m_Customer.toString());
+            Double discount = getDiscount();
+            if( discount > 0.0 ) {
+                name.append( " -" );
+                name.append( Formats.PERCENT.formatValue(discount) );
+            }
         }
         return name.toString();
     }
@@ -324,6 +347,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         if (getCustomerId() != null) {
             name.append(" - ");
             name.append(m_Customer.toString());
+            Double discount = getDiscount();
+            if( discount > 0.0 ) {
+                name.append( " -" );
+                name.append( Formats.PERCENT.formatValue(discount) );
+            }
         }
         return name.toString();
     }
@@ -517,11 +545,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         return sum;
     }
-
+    
     public double getTotal() {
         return getSubTotal() + getTax();
     }
-
+    
     public double getTotalPaid() {
         double sum = 0.0;
         for (PaymentInfo p : payments) {

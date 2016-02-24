@@ -76,6 +76,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jCategory.addActionListener(dirty);
         m_jNotes.getDocument().addDocumentListener(dirty);
         txtMaxdebt.getDocument().addDocumentListener(dirty);
+        txtDiscount.getDocument().addDocumentListener(dirty);
         m_jVisible.addActionListener(dirty);
         
         txtFirstName.getDocument().addDocumentListener(dirty);
@@ -137,6 +138,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jNotes.setText(null);
 
         txtMaxdebt.setText(null);
+        txtDiscount.setText(null);
         txtCurdebt.setText(null);
         txtCurdate.setText(null);
         m_jVisible.setSelected(false);
@@ -164,6 +166,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jCategory.setEnabled(false);
         m_jNotes.setEnabled(false);
         txtMaxdebt.setEnabled(false);
+        txtDiscount.setEnabled(false);
         txtCurdebt.setEnabled(false);
         txtCurdate.setEnabled(false);
         m_jVisible.setEnabled(false);
@@ -203,6 +206,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_CategoryModel.setSelectedKey(null);
         m_jNotes.setText(null);
         txtMaxdebt.setText(null);
+        txtDiscount.setText(null);
         txtCurdebt.setText(null);
         txtCurdate.setText(null);        
         m_jVisible.setSelected(true);
@@ -230,6 +234,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jCategory.setEnabled(true);
         m_jNotes.setEnabled(true);
         txtMaxdebt.setEnabled(true);
+        txtDiscount.setEnabled(true);
         txtCurdebt.setEnabled(true);
         txtCurdate.setEnabled(true);
         m_jVisible.setEnabled(true);
@@ -271,6 +276,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jVisible.setSelected(((Boolean) customer[5]));
         jcard.setText((String) customer[6]);
         txtMaxdebt.setText(Formats.CURRENCY.formatValue(customer[7]));
+        txtDiscount.setText(Formats.PERCENT.formatValue(customer[24]));
         txtCurdate.setText(Formats.DATE.formatValue(customer[8]));        
         txtCurdebt.setText(Formats.CURRENCY.formatValue(customer[9]));    
         
@@ -297,6 +303,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jName.setEnabled(false);
         m_jNotes.setEnabled(false);
         txtMaxdebt.setEnabled(false);
+        txtDiscount.setEnabled(false);
         txtCurdebt.setEnabled(false);
         txtCurdate.setEnabled(false);
         m_jVisible.setEnabled(false);
@@ -340,6 +347,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jVisible.setSelected(((Boolean) customer[5]));
         jcard.setText((String) customer[6]);
         txtMaxdebt.setText(Formats.CURRENCY.formatValue(customer[7]));
+        txtDiscount.setText(Formats.PERCENT.formatValue(customer[24]));
         txtCurdate.setText(Formats.DATE.formatValue(customer[8]));        
         txtCurdebt.setText(Formats.CURRENCY.formatValue(customer[9]));    
         
@@ -367,6 +375,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jName.setEnabled(true);
         m_jNotes.setEnabled(true);
         txtMaxdebt.setEnabled(true);
+        txtDiscount.setEnabled(true);
         txtCurdebt.setEnabled(true);
         txtCurdate.setEnabled(true);
         m_jVisible.setEnabled(true);
@@ -435,6 +444,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         customer[22] = m_CategoryModel.getSelectedKey();
 // JG 3 Oct 2013 - Customer image
         customer[23] = m_jImage.getImage();    
+        customer[24] = Formats.PERCENT.parseValue(txtDiscount.getText(), 0.0);
         
         return customer;
     }
@@ -557,6 +567,8 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         m_jNotes = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
         m_jVisible = new eu.hansolo.custom.SteelCheckBox();
+        txtDiscount = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText(AppLocal.getIntString("label.taxid")); // NOI18N
@@ -627,6 +639,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText(AppLocal.getIntString("label.maxdebt")); // NOI18N
+        jLabel1.setToolTipText("");
         jLabel1.setMaximumSize(new java.awt.Dimension(140, 25));
         jLabel1.setMinimumSize(new java.awt.Dimension(140, 25));
         jLabel1.setPreferredSize(new java.awt.Dimension(140, 25));
@@ -897,6 +910,15 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        txtDiscount.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtDiscount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText(AppLocal.getIntString("label.discount")); // NOI18N
+        jLabel10.setMaximumSize(new java.awt.Dimension(140, 25));
+        jLabel10.setMinimumSize(new java.awt.Dimension(140, 25));
+        jLabel10.setPreferredSize(new java.awt.Dimension(140, 25));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -912,7 +934,8 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -937,7 +960,8 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtMaxdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtCurdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(txtCurdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtCurdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -980,7 +1004,11 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtMaxdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMaxdebt, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1013,6 +1041,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -1054,6 +1083,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
     private javax.swing.JTextField txtCountry;
     private javax.swing.JTextField txtCurdate;
     private javax.swing.JTextField txtCurdebt;
+    private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFax;
     private javax.swing.JTextField txtFirstName;

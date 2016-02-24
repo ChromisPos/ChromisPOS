@@ -906,6 +906,18 @@
         <sql>ALTER TABLE LEAVES CHANGE STARTDATE STARTDATE TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP</sql> 
     </changeSet> 
     
+    <changeSet author="Chromis POS" id="Add Discount Column to Customers">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="DISCOUNT" tableName="CUSTOMERS"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="CUSTOMERS">
+            <column name="DISCOUNT" type="double"/>                                                   
+        </addColumn>                         
+    </changeSet>
+    
     
     <!-- End of new columns sections -->
     <!-- ***************************************************************************************** -->

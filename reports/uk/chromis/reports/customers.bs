@@ -22,7 +22,7 @@ report.setTitleKey("Menu.CustomersReport");
 report.setReport("/uk/chromis/reports/customers");
 report.setResourceBundle("uk/chromis/reports/customers_messages");
 
-report.setSentence("SELECT ID, TAXID, NAME, ADDRESS, NOTES, CARD, MAXDEBT, CURDATE, CURDEBT " +
+report.setSentence("SELECT ID, TAXID, NAME, ADDRESS, NOTES, CARD, MAXDEBT, CURDATE, CURDEBT, DISCOUNT " +
                    "FROM CUSTOMERS " +
                    "WHERE VISIBLE = " + app.getSession().DB.TRUE() + " AND ?(QBF_FILTER)");
 
@@ -39,5 +39,6 @@ report.addField("CARD", uk.chromis.data.loader.Datas.STRING);
 report.addField("MAXDEBT", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("CURDATE", uk.chromis.data.loader.Datas.TIMESTAMP);
 report.addField("CURDEBT", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("DISCOUNT", uk.chromis.data.loader.Datas.PERCENT);
 
 report;
