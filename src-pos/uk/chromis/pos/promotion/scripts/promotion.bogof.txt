@@ -9,4 +9,4 @@ Boolean WHOLE_PRODUCTS_ONLY = true;
 //      
 
     support.UpdateBuySomeGetSomeFreeSingleProduct(
-        ticket, productid, promotion, "  *" + promotion.getName(), 1d, 1d, WHOLE_PRODUCTS_ONLY  );
+        ticket, productid, promotion, "  *" + promotion.getName(), 2d, 1d, WHOLE_PRODUCTS_ONLY  );

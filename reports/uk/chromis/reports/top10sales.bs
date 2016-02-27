@@ -16,7 +16,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    MySQL version 
+//    Derby version
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
@@ -27,10 +27,10 @@ report.setResourceBundle("uk/chromis/reports/top10sales_messages");
 report.setSentence(
             "SELECT " +
 			"PRODUCTS.REFERENCE,PRODUCTS.NAME,PRODUCTS.PRICEBUY,PRODUCTS.PRICESELL, " +
-			"ROUND(SUM(TICKETLINES.UNITS)) AS UNITS, " +
-                        "ROUND(SUM(TICKETLINES.PRICE * TICKETLINES.UNITS)) AS SUBTOTAL, " +
-                        "ROUND(SUM((TICKETLINES.PRICE * TICKETLINES.UNITS) * TAXES.RATE)) As TAXES, " +
-                        "ROUND(SUM(TICKETLINES.PRICE * TICKETLINES.UNITS) + SUM((TICKETLINES.PRICE * TICKETLINES.UNITS) * TAXES.RATE)) AS GROSSTOTAL " +
+			"SUM(TICKETLINES.UNITS) AS UNITS, " +
+                        "SUM(TICKETLINES.PRICE * TICKETLINES.UNITS) AS SUBTOTAL, " +
+                        "SUM((TICKETLINES.PRICE * TICKETLINES.UNITS) * TAXES.RATE) As TAXES, " +
+                        "SUM(TICKETLINES.PRICE * TICKETLINES.UNITS) + SUM((TICKETLINES.PRICE * TICKETLINES.UNITS) * TAXES.RATE) AS GROSSTOTAL " +
 			"FROM TICKETLINES " +
 			"LEFT OUTER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID " +
 			"LEFT OUTER JOIN TICKETS ON TICKETS.ID = TICKETLINES.TICKET " +
@@ -42,7 +42,7 @@ report.setSentence(
                         "AND ?(QBF_FILTER) " +
 			"GROUP BY PRODUCTS.REFERENCE, PRODUCTS.NAME,PRODUCTS.PRICEBUY,PRODUCTS.PRICESELL " +
 			"ORDER BY GROSSTOTAL DESC " +
-			"LIMIT 10");
+			"FETCH FIRST 10 ROWS ONLY");
 			
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");

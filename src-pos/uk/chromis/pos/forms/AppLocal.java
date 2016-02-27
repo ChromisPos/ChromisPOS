@@ -31,7 +31,7 @@ public class AppLocal {
     private static final LocaleResources m_resources;
     public static String LIST_BY_RIGHTS = "";
 
-    static {
+    static {        
         m_resources = new LocaleResources();
         m_resources.addBundleName("pos_messages");
         m_resources.addBundleName("erp_messages");
@@ -59,7 +59,7 @@ public class AppLocal {
      * @param sValues
      * @return
      */
-    public static String getIntString(String sKey, Object... sValues) {
+    public static String getIntString(String sKey, Object... sValues) {   
         return m_resources.getString(sKey, sValues);
     }
 }
