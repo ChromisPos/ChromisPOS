@@ -600,7 +600,7 @@ public class PromotionSupport {
         }
         qtyFree = qtyFree * qtyToDiscount;
 
-        if (qtyFree > 0) {
+        if (qtyFree > 0 && discountrate > 0.0 ) {
             // Step through discounting items until qtyFree is reached
             int newLines = 0;
             Double totalDiscount = 0.0;
@@ -795,7 +795,7 @@ public class PromotionSupport {
 
         if (aLines.size() > 0) {
             addDiscounts(ticket, aLines, sDiscountMessage, qtyBuy, qtySomeFree,
-                    0d, bWholeUnitsOnly);
+                    100d, bWholeUnitsOnly);
         }
     }
 
@@ -823,7 +823,7 @@ public class PromotionSupport {
             Collections.sort(aLines);
 
             addDiscounts(ticket, aLines, sDiscountMessage, qtyBuy, qtySomeFree,
-                    0d, bWholeUnitsOnly);
+                    100d, bWholeUnitsOnly);
         }
     }
 
