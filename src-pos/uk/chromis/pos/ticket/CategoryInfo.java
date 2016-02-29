@@ -36,6 +36,7 @@ public class CategoryInfo implements IKeyed {
     private String m_sID;
     private String m_sName;
     private String m_sTextTip;
+    private String m_sPath;
     private BufferedImage m_Image;
     private Boolean m_bCatShowName;
     private String m_sColour;
@@ -53,6 +54,7 @@ public class CategoryInfo implements IKeyed {
     public CategoryInfo(String id, String name, BufferedImage image, String texttip, Boolean catshowname, String colour, Integer catorder) {
         m_sID = id;
         m_sName = name;
+       // m_sPath = path;
         m_Image = image;
         m_sTextTip = texttip;
         m_bCatShowName = catshowname;
@@ -126,11 +128,19 @@ public class CategoryInfo implements IKeyed {
         return m_sName;
     }
 
+    public String getPath() {
+        return m_sPath;
+    }
+
+    public void setPath(String sPath) {
+        m_sPath = sPath;
+    }
+
     public static SerializerRead getSerializerRead() {
         return new SerializerRead() {
             @Override
             public Object readValues(DataRead dr) throws BasicException {
-                return new CategoryInfo(dr.getString(1), dr.getString(2), ImageUtils.readImage(dr.getBytes(3)), dr.getString(4), dr.getBoolean(5), dr.getString(6), dr.getInt(7));
+                return new CategoryInfo(dr.getString(1), dr.getString(2),  ImageUtils.readImage(dr.getBytes(3)), dr.getString(4), dr.getBoolean(5), dr.getString(6), dr.getInt(7));
             }
         };
     }

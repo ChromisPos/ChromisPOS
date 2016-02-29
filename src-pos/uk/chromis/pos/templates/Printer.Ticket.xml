@@ -48,7 +48,10 @@
         <line><text align="left" length="15">Terminal: </text><text>${ticket.getHostname()}</text></line>       
 
 	#if ($ticket.getCustomer())
-		<line><text align="left" length="15">Customer:</text><text>${ticket.getCustomer().printName()}</text></line>
+	<line><text align="left" length="15">Customer:</text><text>${ticket.getCustomer().printName()}</text></line>
+            #if ($ticket.getCustomer().getDiscount() > 0.0 )  
+                   <line><text align="left" length="15">Discount:</text><text>${ticket.getCustomer().printDiscount()}</text></line>  
+      	    #end  
 		<line><text align="left" length="15">Account #:</text><text>${ticket.getCustomer().printTaxid()}</text></line>
 		<line><text align="left" length="15">Current Debt:</text><text>${ticket.getCustomer().printCurDebt()}</text></line>
 	#end

@@ -16,15 +16,15 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.customers;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.util.RoundUtils;
 
 public class CustomerInfoExt extends CustomerInfo {
-    
+
     protected String taxcustomerid;
     protected String notes;
     protected boolean visible;
@@ -45,9 +45,14 @@ public class CustomerInfoExt extends CustomerInfo {
     protected String region;
     protected String country;
     protected String image;
-    
-    /** Creates a new instance of UserInfoBasic
-     * @param id */
+    protected Date dob;
+    protected Double discount;
+
+    /**
+     * Creates a new instance of UserInfoBasic
+     *
+     * @param id
+     */
     public CustomerInfoExt(String id) {
         super(id);
     }
@@ -59,13 +64,15 @@ public class CustomerInfoExt extends CustomerInfo {
     public String getTaxCustCategoryID() {
         return taxcustomerid;
     }
+
     public void setTaxCustomerID(String taxcustomerid) {
         this.taxcustomerid = taxcustomerid;
     }
-    
+
     public String getNotes() {
         return notes;
     }
+
     public void setNotes(String notes) {
         this.notes = notes;
     }
@@ -73,6 +80,7 @@ public class CustomerInfoExt extends CustomerInfo {
     public boolean isVisible() {
         return visible;
     }
+
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
@@ -80,6 +88,7 @@ public class CustomerInfoExt extends CustomerInfo {
     public String getCard() {
         return card;
     }
+
     public void setCard(String card) {
         this.card = card;
     }
@@ -87,20 +96,45 @@ public class CustomerInfoExt extends CustomerInfo {
     public Double getMaxdebt() {
         return maxdebt;
     }
+
     public void setMaxdebt(Double maxdebt) {
         this.maxdebt = maxdebt;
     }
-    public String printMaxDebt() {       
+
+    public String printMaxDebt() {
         return Formats.CURRENCY.formatValue(RoundUtils.getValue(getMaxdebt()));
     }
-    
+
+    public Date getDoB() {
+        return dob;
+    }
+
+    public void setDoB(Date dob) {
+        this.dob = dob;
+    }
+
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    public String printDiscount() {
+        return Formats.PERCENT.formatValue(RoundUtils.getValue(getDiscount()));
+    }
+
     public Date getCurdate() {
         return curdate;
     }
+
     public void setCurdate(Date curdate) {
         this.curdate = curdate;
     }
-    public String printCurDate() {       
+
+    public String printCurDate() {
         return Formats.DATE.formatValue(getCurdate());
     }
 
@@ -111,24 +145,25 @@ public class CustomerInfoExt extends CustomerInfo {
     public Double getCurdebt() {
         return curdebt;
     }
+
     public void setCurdebt(Double curdebt) {
         this.curdebt = curdebt;
     }
-    public String printCurDebt() {       
+
+    public String printCurDebt() {
         return Formats.CURRENCY.formatValue(RoundUtils.getValue(getCurdebt()));
     }
 
-    
     /**
      *
      * @param amount
      * @param d
      */
     public void updateCurDebt(Double amount, Date d) {
-        
+
         curdebt = curdebt == null ? amount : curdebt + amount;
-        curdate =  (new Date());
-        
+        curdate = (new Date());
+
         if (RoundUtils.compare(curdebt, 0.0) > 0) {
             if (curdate == null) {
                 // new date
@@ -140,7 +175,6 @@ public class CustomerInfoExt extends CustomerInfo {
         } else { // < 0
             curdate = null;
         }
-        
     }
 
     public String getFirstname() {
@@ -252,5 +286,5 @@ public class CustomerInfoExt extends CustomerInfo {
     public void setImage(String image) {
         this.image = image;
     }
-    
+
 }

@@ -204,6 +204,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 m_jScale.setSelected(info.isScale());
                 m_jPriceBuy.setText(Formats.CURRENCY.formatValue(info.getPriceBuy()));
                 m_jPriceSell.setText(Formats.CURRENCY.formatValue(info.getPriceSell()));
+                setPriceSell(info.getPriceSell());
                 m_CategoryModel.setSelectedKey(info.getCategoryID());
                 m_PromotionModel.setSelectedKey(info.getPromotionID());
                 taxcatmodel.setSelectedKey(info.getTaxCategoryID());

@@ -68,10 +68,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         jcboDBDriver.addItem("MySQL");
         jcboDBDriver.addItem("Oracle 11g Express");
         jcboDBDriver.addItem("PostgreSQL");
-        
-      
-        
-       
+
     }
 
     /**

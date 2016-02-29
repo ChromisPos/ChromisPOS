@@ -93,7 +93,9 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             "REGION",
             "COUNTRY",
             "TAXCATEGORY",
-            "IMAGE","DOB"}, new String[]{
+            "IMAGE",
+            "DOB",
+            "DISCOUNT"}, new String[]{
             "ID",
             AppLocal.getIntString("label.taxid"),
             AppLocal.getIntString("label.searchkey"),
@@ -117,7 +119,10 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             AppLocal.getIntString("label.region"),
             AppLocal.getIntString("label.country"),
             "TAXCATEGORY",
-            "IMAGE","DOB"}, new Datas[]{
+            "IMAGE",
+            "DOB",
+            AppLocal.getIntString("label.discount")
+            }, new Datas[]{
             Datas.STRING,
             Datas.STRING,
             Datas.STRING,
@@ -142,7 +147,8 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             Datas.STRING,
             Datas.STRING,
             Datas.IMAGE,
-            Datas.TIMESTAMP}, new Formats[]{
+            Datas.TIMESTAMP,
+            Datas.DOUBLE}, new Formats[]{
             Formats.STRING,
             Formats.STRING,
             Formats.STRING,
@@ -167,7 +173,8 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             Formats.STRING,
             Formats.STRING,
             Formats.NULL,
-            Formats.TIMESTAMP}, new int[]{0}," LOWER(NAME) ");
+            Formats.TIMESTAMP,
+            Formats.PERCENT}, new int[]{0}," LOWER(NAME) ");
     }
 
 

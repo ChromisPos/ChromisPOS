@@ -863,9 +863,7 @@
         </addColumn>
    
     </changeSet>           
-  
 
- 
     <changeSet author="Chromis POS" id="Add Pack Products details mo" dbms="mysql, oracle">    
         <preConditions onFail="MARK_RAN">
             <not>
@@ -879,12 +877,21 @@
             </column>
             <column name="PACKQUANTITY" type="double precision"/>
             <column name="PACKPRODUCT" type="varchar(255)"/>
-        </addColumn>        
-        
-
+        </addColumn>               
     </changeSet>        
+  
+  <changeSet author="Chromis POS" id="Add Discount Column to Customers">  
+        <preConditions onFail="MARK_RAN">  
+             <not>  
+                 <columnExists columnName="DISCOUNT" tableName="CUSTOMERS"/>  
+             </not>  
+         </preConditions>  
    
-     
+         <addColumn tableName="CUSTOMERS">  
+             <column name="DISCOUNT" type="double"/>                                                     
+         </addColumn>                           
+     </changeSet>  
+                              
     <changeSet author="Chromis POS" id="check for packproduct FK">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1349,7 +1356,7 @@
     <!-- ***************************************************************************************** -->   
     <!-- Drop any sharedtickets -->
     <!-- If required If it needs to be done after further updates increment number to make unique  -->   
-    <changeSet author="Chromis POS" id="drop hversions data v0.55" >       
+    <changeSet author="Chromis POS" id="drop hversions data v0.56" >       
         <sql>DELETE FROM HVERSIONS</sql>
     </changeSet> 
 
@@ -1375,7 +1382,7 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update Hversions start v0.55"> 
+    <changeSet author="Chromis POS" id="Update Hversions start v0.56"> 
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.54"/>       
         </insert>                   
@@ -1393,7 +1400,10 @@
         </insert>  
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.55"/>       
-        </insert>                       
+        </insert>    
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.56"/>       
+        </insert>                    
     </changeSet> 
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1434,9 +1444,9 @@
         </insert>                                          
     </changeSet>
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.55.1">    
+    <changeSet author="Chromis POS" id="Update to 0.56">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.55.1"/>          
+            <column name="VERSION" value="0.56"/>          
         </update>  
     </changeSet>
 </databaseChangeLog>

@@ -405,7 +405,7 @@ public class PaymentInfoMagcard extends PaymentInfo {
      */
     @Override
     public double getTendered() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0.00;
     }
   
 }

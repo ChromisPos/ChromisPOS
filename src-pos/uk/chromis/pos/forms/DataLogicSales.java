@@ -34,6 +34,7 @@ import uk.chromis.pos.payment.PaymentInfoTicket;
 import uk.chromis.pos.ticket.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -854,6 +855,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "REGION, "
                 + "COUNTRY, "
                 + "IMAGE "
+                + "DOB "
+                + "DISCOUNT "
                 + "FROM CUSTOMERS "
                 + "WHERE CARD = ? AND VISIBLE = " + s.DB.TRUE() + " "
                 + "ORDER BY NAME", SerializerWriteString.INSTANCE, new CustomerExtRead()).find(card);
@@ -890,7 +893,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "CITY, "
                 + "REGION, "
                 + "COUNTRY, "
-                + "IMAGE "
+                + "IMAGE, "
+                + "DOB, "
+                + "DISCOUNT "
                 + "FROM CUSTOMERS WHERE ID = ?", SerializerWriteString.INSTANCE, new CustomerExtRead()).find(id);
     }
 
@@ -1629,7 +1634,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             c.setRegion(dr.getString(22));
             c.setCountry(dr.getString(23));
             c.setImage(dr.getString(24));
-
+            c.setDoB(dr.getTimestamp(25));
+            c.setDiscount(dr.getDouble(26));
+              
             return c;
         }
     }

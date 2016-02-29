@@ -696,6 +696,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         rs2.updateTimestamp("CURDATE", rs.getTimestamp("CURDATE"));
                         rs2.updateDouble("CURDEBT", rs.getDouble("CURDEBT"));
                         rs2.updateBytes("IMAGE", rs.getBytes("IMAGE"));
+                        rs2.updateTimestamp("DOB", rs.getTimestamp("DOB"));
+                        rs2.updateDouble("DISCOUNT", rs.getDouble("DISCOUNT"));
                         rs2.insertRow();
                     }
                                                             
