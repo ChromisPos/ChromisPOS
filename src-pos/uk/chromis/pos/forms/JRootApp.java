@@ -133,9 +133,9 @@ public class JRootApp extends JPanel implements AppView {
         public void actionPerformed(ActionEvent evt) {
             m_clock = getLineTimer();
             m_date = getLineDate();
-            // m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
-            m_jLblTitle.setText("Chromis POS - v0.55.1 Beta ONLY VERSION");
+            m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
             jLabel2.setText("  " + m_date + "  " + m_clock);
+            
         }
     }
 
@@ -387,7 +387,7 @@ public class JRootApp extends JPanel implements AppView {
 
         switch (getDbVersion()) {
             case "d":
-                dbReportsSource = new File(currentPath + "/reports/uk//chromis/derby");
+                dbReportsSource = new File(currentPath + "/reports/uk/chromis/derby");
                 break;
             case "m":
                 dbReportsSource = new File(currentPath + "/reports/uk/chromis/mysql");
@@ -679,7 +679,6 @@ public class JRootApp extends JPanel implements AppView {
                 jPeople.add(btn);
             }
             jScrollPane1.getViewport().setView(jPeople);
-
         } catch (BasicException ee) {
         }
     }
