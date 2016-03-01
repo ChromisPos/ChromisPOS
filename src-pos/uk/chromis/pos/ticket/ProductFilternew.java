@@ -38,7 +38,7 @@ import uk.chromis.pos.reports.ReportEditorCreator;
  *
  *
  */
-public class ProductFilter extends javax.swing.JPanel implements ReportEditorCreator {
+public class ProductFilternew extends javax.swing.JPanel implements ReportEditorCreator {
 
     private SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
@@ -46,7 +46,7 @@ public class ProductFilter extends javax.swing.JPanel implements ReportEditorCre
     /**
      * Creates new form JQBFProduct
      */
-    public ProductFilter() {
+    public ProductFilternew() {
 
         initComponents();
     }

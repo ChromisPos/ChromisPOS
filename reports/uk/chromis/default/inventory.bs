@@ -53,7 +53,10 @@ report.addParameter("PRODUCTS.CODE");
 report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
 
 report.addParameter("STOCKCURRENT.LOCATION");
-report.addQBFFilter(new uk.chromis.pos.reports.JParamsLocationWithFirst());
+report.addParameter("UNITS");
+report.addQBFFilter(new uk.chromis.pos.reports.JParamsLocationWithStockLevel());
+
+
 
 report.addField("LOCATIONID", uk.chromis.data.loader.Datas.STRING);
 report.addField("LOCATIONNAME", uk.chromis.data.loader.Datas.STRING);
