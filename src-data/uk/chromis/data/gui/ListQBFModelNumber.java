@@ -54,10 +54,8 @@ public class ListQBFModelNumber extends AbstractListModel implements ComboBoxMod
                 QBFCompareEnum.COMP_EQUALS,
                 QBFCompareEnum.COMP_RE,
                 QBFCompareEnum.COMP_DISTINCT,
-                //            QBFCompareEnum.COMP_GREATER,
                 QBFCompareEnum.COMP_GREATER,
                 QBFCompareEnum.COMP_LESS,
-                //            QBFCompareEnum.COMP_GREATEROREQUALS,
                 QBFCompareEnum.COMP_GREATEROREQUALS,
                 QBFCompareEnum.COMP_LESSOREQUALS
         );
@@ -94,9 +92,6 @@ public class ListQBFModelNumber extends AbstractListModel implements ComboBoxMod
                 QBFCompareEnum.COMP_GREATEROREQUALS,
                 QBFCompareEnum.COMP_LESSOREQUALS,
                 QBFCompareEnum.COMP_ISNULL,
-                //            QBFCompareEnum.COMP_ISNOTNULL,
-                //        };
-                //        m_sel = m_items[0];
                 QBFCompareEnum.COMP_ISNOTNULL
         );
     }
@@ -105,11 +100,31 @@ public class ListQBFModelNumber extends AbstractListModel implements ComboBoxMod
      *
      * @return
      */
-    public static ListQBFModelNumber getNonMandatoryStock() {
+    public static ListQBFModelNumber getNonMandatoryProduct() {
         return new ListQBFModelNumber(
+                null,
+                QBFCompareEnum.COMP_EQUALS,
+                QBFCompareEnum.COMP_RE,
+                QBFCompareEnum.COMP_DISTINCT,
+                QBFCompareEnum.COMP_GREATER,
+                QBFCompareEnum.COMP_LESS,
+                QBFCompareEnum.COMP_GREATEROREQUALS,
+                QBFCompareEnum.COMP_LESSOREQUALS
+        );
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static ListQBFModelNumber getNonMandatoryPrice() {
+        return new ListQBFModelNumber(
+                null,
+                QBFCompareEnum.COMP_LESS,
+                QBFCompareEnum.COMP_LESSOREQUALS,
                 QBFCompareEnum.COMP_EQUALS,
                 QBFCompareEnum.COMP_GREATER,
-                QBFCompareEnum.COMP_LESS
+                QBFCompareEnum.COMP_GREATEROREQUALS
         );
     }
 
@@ -137,7 +152,6 @@ public class ListQBFModelNumber extends AbstractListModel implements ComboBoxMod
      */
     public static ListQBFModelNumber getOverrideMandatoryNumber() {
         return new ListQBFModelNumber(
-                //            QBFCompareEnum.COMP_NONE,
                 QBFCompareEnum.COMP_EQUALS,
                 QBFCompareEnum.COMP_DISTINCT,
                 QBFCompareEnum.COMP_GREATER,

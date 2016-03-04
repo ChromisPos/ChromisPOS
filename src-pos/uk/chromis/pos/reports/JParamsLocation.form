@@ -48,7 +48,7 @@
                   <Component id="jLabel8" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   <Component id="m_jLocation" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="45" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

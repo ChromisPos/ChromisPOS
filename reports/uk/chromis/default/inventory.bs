@@ -50,7 +50,7 @@ report.addParameter("PRODUCTS.PRICEBUY");
 report.addParameter("PRODUCTS.PRICESELL");
 report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
-report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
+report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilterReport());
 
 report.addParameter("STOCKCURRENT.LOCATION");
 report.addParameter("UNITS");
