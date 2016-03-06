@@ -107,15 +107,25 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     public DataLogicSales() {
         stockdiaryDatas = new Datas[]{
-            Datas.STRING,
-            Datas.TIMESTAMP,
-            Datas.INT,
-            Datas.STRING,
-            Datas.STRING,
-            Datas.STRING,
-            Datas.DOUBLE,
-            Datas.DOUBLE,
-            Datas.STRING};
+            Datas.STRING,       // 0 - ID
+            Datas.TIMESTAMP,    // 1- Time
+            Datas.INT,          // 2 - Reason
+            Datas.STRING,       // 3 - Location
+            Datas.STRING,       // 4 - Product
+            Datas.STRING,       // 5 - Attribute
+            Datas.DOUBLE,       // 6 - Units
+            Datas.DOUBLE,       // 7 - Price
+            Datas.STRING,       // 8 - User
+            Datas.STRING,       // 9 - Product Reference
+            Datas.STRING,       // 10 - Product Code
+            Datas.STRING,       // 11 - Product Name
+            Datas.STRING,       // 12 - Attribute set ID
+            Datas.STRING,       // 13 - Attribute set inst desc
+            Datas.DOUBLE,       // 14 - Units in stock
+            Datas.DOUBLE,       // 15 - Stock Security
+            Datas.DOUBLE        // 16 - Stock Maximum
+        };
+        
         paymenttabledatas = new Datas[]{
             Datas.STRING,
             Datas.STRING,
@@ -1021,7 +1031,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             location,
                             l.getProductID(),
                             l.getProductAttSetInstId(), -l.getMultiply(), l.getPrice(),
-                            ticket.getUser().getName()
+                            ticket.getUser().getName(),
+                            null, null, null, null, null, null, null
                         });
                     }
 
@@ -1119,7 +1130,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             location,
                             ticket.getLine(i).getProductID(),
                             ticket.getLine(i).getProductAttSetInstId(), ticket.getLine(i).getMultiply(), ticket.getLine(i).getPrice(),
-                            ticket.getUser().getName()
+                            ticket.getUser().getName(),
+                            null, null, null, null, null, null, null
                         });
                     }
                 }
@@ -1346,6 +1358,15 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 if (updateresult == 0) {
                     new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{3, 4, 5, 6})).exec(params);
                 }
+                
+                if(  ((Object[]) params)[15] != null && ((Object[]) params)[16] != null ) {
+                    updateresult = new PreparedSentence(s, "UPDATE STOCKLEVEL SET STOCKSECURITY = ?, STOCKMAXIMUM = ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{15, 16, 3, 4})).exec(params);
+
+                    if (updateresult == 0) {
+                        new PreparedSentence(s, "INSERT INTO STOCKLEVEL (LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{3, 4, 15, 16})).exec(params);
+                    }
+                }
+                
                 return new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
             }
         };
@@ -1420,6 +1441,22 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 : new PreparedSentence(s, "SELECT UNITS FROM STOCKCURRENT WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasic(Datas.STRING, Datas.STRING, Datas.STRING), SerializerReadDouble.INSTANCE);
 
         Double d = (Double) p.find(warehouse, id, attsetinstid);
+        return d == null ? 0.0 : d;
+    }
+    
+    public final double findProductStockSecurity(String warehouse, String id) throws BasicException {
+
+        PreparedSentence p = new PreparedSentence(s, "SELECT STOCKSECURITY FROM STOCKLEVEL WHERE LOCATION = ? AND PRODUCT = ? ", new SerializerWriteBasic(Datas.STRING, Datas.STRING), SerializerReadDouble.INSTANCE);
+
+        Double d = (Double) p.find(warehouse, id );
+        return d == null ? 0.0 : d;
+    }
+    
+    public final double findProductStockMaximum(String warehouse, String id) throws BasicException {
+
+        PreparedSentence p = new PreparedSentence(s, "SELECT STOCKMAXIMUM FROM STOCKLEVEL WHERE LOCATION = ? AND PRODUCT = ? ", new SerializerWriteBasic(Datas.STRING, Datas.STRING), SerializerReadDouble.INSTANCE);
+
+        Double d = (Double) p.find(warehouse, id );
         return d == null ? 0.0 : d;
     }
 

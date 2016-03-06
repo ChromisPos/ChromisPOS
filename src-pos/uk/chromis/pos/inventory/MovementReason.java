@@ -27,50 +27,22 @@ import uk.chromis.pos.panels.ComboItemLocal;
  */
 public class MovementReason extends ComboItemLocal {
     
-    // public static final MovementReason NULL = new MovementReason(null, "");
 
-    /**
-     *
-     */
-        public static final MovementReason IN_PURCHASE = new MovementReason(+1, "stock.in.purchase");
-
-    /**
-     *
-     */
+    // The numeric key indicates whether this is an increase or decrease in stock level
+    // It is important to get the sign right.
+    public static final MovementReason IN_PURCHASE = new MovementReason(+1, "stock.in.purchase");
     public static final MovementReason IN_REFUND = new MovementReason(+2, "stock.in.refund");
-
-    /**
-     *
-     */
     public static final MovementReason IN_MOVEMENT = new MovementReason(+4, "stock.in.movement");
+    public static final MovementReason IN_OPEN_PACK = new MovementReason(+5, "stock.in.openpack");
+    public static final MovementReason IN_STOCKCHANGE = new MovementReason(+7, "stock.in.stockchange");
 
-    /**
-     *
-     */
     public static final MovementReason OUT_SALE = new MovementReason(-1, "stock.out.sale");
-
-    /**
-     *
-     */
     public static final MovementReason OUT_REFUND = new MovementReason(-2, "stock.out.refund");
-
-    /**
-     *
-     */
     public static final MovementReason OUT_BREAK = new MovementReason(-3, "stock.out.break");
-
-    /**
-     *
-     */
-    public static final MovementReason OUT_MOVEMENT = new MovementReason(-4, "stock.out.movement");
-    
-    public static final MovementReason IN_OPEN_PACK = new MovementReason(-5, "stock.in.openpack");
-
-    public static final MovementReason OUT_OPEN_PACK = new MovementReason(-6, "stock.out.openpack");
-     
-    public static final MovementReason IN_STOCKCHANGE = new MovementReason(-7, "stock.in.stockchange");
-
-    public static final MovementReason OUT_STOCKCHANGE = new MovementReason(-8, "stock.out.stockchange");
+    public static final MovementReason OUT_MOVEMENT = new MovementReason(-4, "stock.out.movement");   
+    public static final MovementReason OUT_OPEN_PACK = new MovementReason(-5, "stock.out.openpack");
+    public static final MovementReason OUT_STOCKCHANGE = new MovementReason(-7, "stock.out.stockchange");
+   
     
     /**
      *
