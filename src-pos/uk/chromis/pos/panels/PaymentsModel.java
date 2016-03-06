@@ -18,10 +18,14 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.panels;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
@@ -30,10 +34,12 @@ import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.data.loader.SerializerReadBasic;
 import uk.chromis.data.loader.SerializerReadClass;
 import uk.chromis.data.loader.SerializerWriteString;
+import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.util.StringUtils;
 
 public class PaymentsModel {
@@ -68,6 +74,7 @@ public class PaymentsModel {
     private java.util.List<SalesLine> m_lsales;
 
     private final static String[] SALEHEADERS = {"label.taxcategory", "label.totaltax", "label.totalnet"};
+    private DataLogicSystem dlSystem;
 
     private PaymentsModel() {
     }
@@ -222,25 +229,39 @@ public class PaymentsModel {
             p.m_lsales = asales;
         }
          */
-        List<SalesLine> asales = new StaticSentence(app.getSession(),
-                "SELECT TAXCATEGORIES.NAME, SUM(NEWTAXLINES.AMOUNT), SUM(NEWTAXLINES.BASE), SUM(NEWTAXLINES.BASE + NEWTAXLINES.AMOUNT) "
-                + "FROM RECEIPTS, "
-                + "(SELECT TAXLINES.ID,RECEIPT,TAXID,BASE,SUM(AMOUNT) as AMOUNT "
-                // + " FROM TAXLINES,TAXES where TAXLINES.TAXID=TAXES.ID and PARENTID is not null GROUP BY RECEIPT "
-                + " FROM TAXLINES,TAXES where TAXLINES.TAXID=TAXES.ID and PARENTID is not null GROUP BY RECEIPT,PARENTID "
-                + " union "
-                + " SELECT TAXLINES.ID,RECEIPT,TAXID,BASE,AMOUNT as AMOUNT "
-                + " FROM TAXLINES,TAXES "
-                + " where TAXLINES.TAXID=TAXES.ID and PARENTID is null) NEWTAXLINES, "
-                + " TAXES, TAXCATEGORIES "
-                + " WHERE RECEIPTS.ID = NEWTAXLINES.RECEIPT AND NEWTAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID "
-                + "AND RECEIPTS.MONEY = ?"
-                + "GROUP BY TAXCATEGORIES.NAME", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.SalesLine.class))
-                .list(app.getActiveCashIndex());
-        if (asales == null) {
-            p.m_lsales = new ArrayList<>();
-        } else {
-            p.m_lsales = asales;
+        try {
+            List<SalesLine> asales = new StaticSentence(app.getSession(),
+                    "SELECT TAXCATEGORIES.NAME, SUM(NEWTAXLINES.AMOUNT), SUM(NEWTAXLINES.BASE), SUM(NEWTAXLINES.BASE + NEWTAXLINES.AMOUNT) "
+                    + "FROM RECEIPTS, "
+                    + "(SELECT TAXLINES.ID,RECEIPT,TAXID,BASE,SUM(AMOUNT) as AMOUNT "
+                    // + " FROM TAXLINES,TAXES where TAXLINES.TAXID=TAXES.ID and PARENTID is not null GROUP BY RECEIPT "
+                    + " FROM TAXLINES,TAXES where TAXLINES.TAXID=TAXES.ID and PARENTID is not null GROUP BY RECEIPT, PARENTID "
+                    + " union "
+                    + " SELECT TAXLINES.ID, RECEIPT, TAXID, BASE, AMOUNT as AMOUNT "
+                    + " FROM TAXLINES,TAXES "
+                    + " where TAXLINES.TAXID=TAXES.ID and PARENTID is null) NEWTAXLINES, "
+                    + " TAXES, TAXCATEGORIES "
+                    + " WHERE RECEIPTS.ID = NEWTAXLINES.RECEIPT AND NEWTAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID"
+                    + " AND RECEIPTS.MONEY = ?"
+                    + " GROUP BY TAXCATEGORIES.NAME ", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.SalesLine.class))
+                    .list(app.getActiveCashIndex());
+            if (asales == null) {
+                p.m_lsales = new ArrayList<>();
+            } else {
+                p.m_lsales = asales;
+            }
+        } catch (BasicException e) {
+            List<SalesLine> asales = new StaticSentence(app.getSession(),
+                    "SELECT TAXCATEGORIES.NAME, SUM(TAXLINES.AMOUNT), SUM(TAXLINES.BASE), SUM(TAXLINES.BASE + TAXLINES.AMOUNT) "
+                    + "FROM RECEIPTS, TAXLINES, TAXES, TAXCATEGORIES WHERE RECEIPTS.ID = TAXLINES.RECEIPT AND TAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID "
+                    + "AND RECEIPTS.MONEY = ?"
+                    + "GROUP BY TAXCATEGORIES.NAME", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.SalesLine.class))
+                    .list(app.getActiveCashIndex());
+            if (asales == null) {
+                p.m_lsales = new ArrayList<>();
+            } else {
+                p.m_lsales = asales;
+            }
         }
 
         SimpleDateFormat ndf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

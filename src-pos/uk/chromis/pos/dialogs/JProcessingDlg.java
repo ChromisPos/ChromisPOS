@@ -69,7 +69,7 @@ public class JProcessingDlg extends JDialog {
     public static final int YES = 0;
     public static final int NO = -1;
     public static int CHOICE = NO;
-    public static  Boolean DBFAILED =true;
+    public static Boolean DBFAILED = true;
     private Connection con;
     private JProgressBar pb;
 
@@ -125,7 +125,7 @@ public class JProcessingDlg extends JDialog {
         messageArea.setRows(4);
         messageArea.setText(message);
         messageArea.setLineWrap(true);
-        
+
         Font font = new Font("Arial", Font.BOLD, 12);
         messageArea.setFont(font);
         messageArea.setDisabledTextColor(new java.awt.Color(0, 0, 255));
@@ -175,10 +175,18 @@ public class JProcessingDlg extends JDialog {
             AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
             db_password = cypher.decrypt(db_password.substring(6));
         }
+
         try {
             Connection con = DriverManager.getConnection(db_url, db_user, db_password);
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
+
+// Ensure there are not liquibase locks
+            try {
+               PreparedStatement stmt2 = con.prepareStatement("DROP TABLE DATABASECHANGELOGLOCK");
+               stmt2.executeUpdate();
+            } catch (SQLException ex) {
+            }
 
             Liquibase liquibase = null;
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));

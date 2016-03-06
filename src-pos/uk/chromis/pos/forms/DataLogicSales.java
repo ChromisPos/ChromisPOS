@@ -34,7 +34,6 @@ import uk.chromis.pos.payment.PaymentInfoTicket;
 import uk.chromis.pos.ticket.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -692,7 +691,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "FROM CATEGORIES "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
     }
-
     /**
      *
      * @return
