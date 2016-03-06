@@ -677,7 +677,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new StaticSentence(s, "SELECT "
                 + "C.ID, "
                 + "C.NAME, "
-                + "C.IMAGE, "
+                + "NULL, "
                 + "C.TEXTTIP, "
                 + "C.CATSHOWNAME, "
                 + "C.COLOUR, "
