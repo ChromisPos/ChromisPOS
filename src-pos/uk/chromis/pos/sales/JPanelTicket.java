@@ -625,7 +625,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             } else {
                 
                 // Apply any customer discount
-                if( m_oTicket.getDiscount() > 0.0 ) {
+                if( oLine.canDiscount() && m_oTicket.getDiscount() > 0.0 ) {
                    oLine.setPrice( oLine.getPrice() - ( oLine.getPrice() * m_oTicket.getDiscount()));
                 }
                 
@@ -1096,7 +1096,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                     options, options[1]) == 0) {
                                         // Apply this discount to all ticket lines
                                         for (TicketLineInfo line : m_oTicket.getLines()) {
-                                            line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                            if( line.canDiscount() ) {
+                                                line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                            }
                                         }
                                         refreshTicket();
                                 }
@@ -2646,7 +2648,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         options, options[1]) == 0) {
                             // Apply this discount to all ticket lines
                             for (TicketLineInfo line : m_oTicket.getLines()) {
-                                line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                if( line.canDiscount() ) {
+                                    line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                }
                             }
                             refreshTicket();
                     }
