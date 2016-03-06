@@ -859,8 +859,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 // Anything after that is publisher dependant
                 // try to find again by stripping everything after 
                 // the 10th character
-                sCode = sCode.substring(0, 10);
-                oProduct = dlSales.getProductInfoByCode(sCode);
+                oProduct = dlSales.getProductInfoByCode(sCode.substring(0, 10));
             }
 
             if (oProduct == null) {
@@ -1798,7 +1797,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         printTicket(resource, m_oTicket, m_oTicketExt);
     }
 
-    private void updatePromotions(String eventkey, int effectedIndex, String productID) {
+    public void updatePromotions(String eventkey, int effectedIndex, String productID) {
         try {
             int selectedIndex = m_ticketlines.getSelectedIndex();
             if (selectedIndex >= m_oTicket.getLinesCount()) {
