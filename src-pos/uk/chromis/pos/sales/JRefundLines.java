@@ -183,6 +183,7 @@ public class JRefundLines extends javax.swing.JPanel {
                 m_jTicketEdit.addTicketLine(oNewLine);
             }
         }
+        m_jTicketEdit.updatePromotions("promotion.refund", 0, null);
     }//GEN-LAST:event_m_jbtnAddAllActionPerformed
 
 
@@ -221,6 +222,7 @@ public class JRefundLines extends javax.swing.JPanel {
                         }
                     }
                 }
+                m_jTicketEdit.updatePromotions("promotion.refund", index, null);
             }
         }
     }//GEN-LAST:event_m_jbtnAddOneActionPerformed
@@ -243,6 +245,8 @@ public class JRefundLines extends javax.swing.JPanel {
                 m_aLines.set(index, oLine);
                 m_jTicketEdit.addTicketLine(oNewLine);
 
+                m_jTicketEdit.updatePromotions("promotion.refund", index, null);
+                
                 if (index < m_aLines.size() - 1) {
                     oLine = (TicketLineInfo) m_aLines.get(++index);
                     while (index < m_aLines.size() && oLine.isProductCom()) {
