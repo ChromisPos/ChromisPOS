@@ -30,8 +30,8 @@ report.setSentence("SELECT " +
 			"AND PAYMENTS.RECEIPT = RECEIPTS.ID AND ?(QBF_FILTER) " +
                     "GROUP BY PAYMENTS.PAYMENT");
 
-report.addParameter("CLOSEDCASH.DATESTART");
-report.addParameter("CLOSEDCASH.DATESTART");
+report.addParameter("CLOSEDCASH.DATEEND");
+report.addParameter("CLOSEDCASH.DATEEND");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
