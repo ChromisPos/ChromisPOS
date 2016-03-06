@@ -1,5 +1,5 @@
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) (c) 2015-2016 2016 Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -16,7 +16,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    Derby version
+//    MySQL version 
 
 
 report = new uk.chromis.pos.reports.PanelReportBean();
@@ -29,13 +29,13 @@ report.setResourceBundle("uk/chromis/reports/categorysales_messages");
 report.setSentence("SELECT CATEGORIES.ID, CATEGORIES.NAME, " +
 "SUM(TICKETLINES.UNITS) AS QTY, " +
 "SUM(TICKETLINES.PRICE * TICKETLINES.UNITS) AS CATPRICE, " +
-"SUM((PRODUCTS.PRICESELL * TICKETLINES.UNITS)-((CASE WHEN ISVPRICE = TRUE THEN 1 ELSE 0 END) * (TICKETLINES.PRICE * TICKETLINES.UNITS))) AS DISC, " +
+"SUM((PRODUCTS.PRICESELL * TICKETLINES.UNITS)-((PRODUCTS.ISVPRICE ) * (TICKETLINES.PRICE * TICKETLINES.UNITS))) AS DISC, " +
 "SUM((TICKETLINES.PRICE * TAXES.RATE)* TICKETLINES.UNITS) AS CATTAX, " +
 "SUM((TICKETLINES.PRICE * TICKETLINES.UNITS) + ((TICKETLINES.PRICE * TAXES.RATE)* TICKETLINES.UNITS)) AS CATTOTAL " +
 "FROM (TICKETS INNER JOIN RECEIPTS ON TICKETS.ID = RECEIPTS.ID) INNER JOIN ((CATEGORIES INNER JOIN PRODUCTS ON CATEGORIES.ID = PRODUCTS.CATEGORY) INNER JOIN (TAXES INNER JOIN TICKETLINES ON TAXES.ID = TICKETLINES.TAXID) ON PRODUCTS.ID = TICKETLINES.PRODUCT) ON TICKETS.ID = TICKETLINES.TICKET " +
 "WHERE ?(QBF_FILTER) " +
 "GROUP BY CATEGORIES.ID, CATEGORIES.NAME " +
-"ORDER BY CATEGORIES.NAME");;
+"ORDER BY CATEGORIES.NAME");
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");

@@ -15,8 +15,6 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-//
-//    Derby version
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
@@ -37,7 +35,7 @@ report.setSentence("SELECT " +
                     "GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE, CLOSEDCASH.MONEY, CLOSEDCASH.DATESTART, CLOSEDCASH.DATEEND, PAYMENTS.PAYMENT " +
                     "ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE");
 
-report.addParameter("CLOSEDCASH.DATEEND");
+report.addParameter("CLOSEDCASH.DATESTART");
 report.addParameter("CLOSEDCASH.DATEEND");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
