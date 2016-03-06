@@ -39,6 +39,6 @@ report.addField("CARD", uk.chromis.data.loader.Datas.STRING);
 report.addField("MAXDEBT", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("CURDATE", uk.chromis.data.loader.Datas.TIMESTAMP);
 report.addField("CURDEBT", uk.chromis.data.loader.Datas.DOUBLE);
-report.addField("DISCOUNT", uk.chromis.data.loader.Datas.PERCENT);
+report.addField("DISCOUNT", uk.chromis.data.loader.Datas.DOUBLE);
 
 report;
