@@ -52,6 +52,9 @@ report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
 report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
 
+report.addParameter("PRODUCTS.ISCATALOG");
+report.addQBFFilter(new uk.chromis.pos.reports.JParamsCatalog());
+
 report.addParameter("STOCKCURRENT.LOCATION");
 report.addQBFFilter(new uk.chromis.pos.reports.JParamsLocationWithFirst());
 
