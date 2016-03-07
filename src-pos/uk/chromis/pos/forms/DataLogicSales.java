@@ -1363,7 +1363,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     updateresult = new PreparedSentence(s, "UPDATE STOCKLEVEL SET STOCKSECURITY = ?, STOCKMAXIMUM = ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{15, 16, 3, 4})).exec(params);
 
                     if (updateresult == 0) {
-                        new PreparedSentence(s, "INSERT INTO STOCKLEVEL (LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{3, 4, 15, 16})).exec(params);
+                        new PreparedSentence(s, "INSERT INTO STOCKLEVEL (ID, LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 3, 4, 15, 16})).exec(params);
                     }
                 }
                 
