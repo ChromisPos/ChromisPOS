@@ -2821,7 +2821,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void btnLogout(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout
         AutoLogoff.getInstance().deactivateTimer();
         deactivate();
-        ((JRootApp) m_App).closeAppView();
+        // test to see how we have got and close correct form
+        try {
+            ((JRootApp) m_App).closeAppView();
+        } catch (Exception ex) {
+            
+           // to be removed once new admin is added
+           // ((JAdminApp) m_App).closeAppView();
+        }
     }//GEN-LAST:event_btnLogout
 
     private void btnReprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprintActionPerformed
