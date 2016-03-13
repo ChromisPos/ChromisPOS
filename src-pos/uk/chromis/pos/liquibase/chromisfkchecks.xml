@@ -273,7 +273,7 @@
     
     <changeSet author="Chromis POS" id="Drop TICKETLINES_ATTSETINST">
         <preConditions onFail="MARK_RAN">
-            <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_ATTSETINST"/>            
+            <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_ATTSETINST"/>           
         </preConditions>  
         <dropForeignKeyConstraint baseTableName="TICKETLINES" constraintName="TICKETLINES_ATTSETINST"/>
     </changeSet>
@@ -316,9 +316,17 @@
     <changeSet author="Chromis POS" id="Drop TICKETLINES_FK_TICKET">
         <preConditions onFail="MARK_RAN">
             <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_FK_TICKET"/>            
-        </preConditions>  
+         </preConditions> 
         <dropForeignKeyConstraint baseTableName="TICKETLINES" constraintName="TICKETLINES_FK_TICKET"/>
     </changeSet>
+
+    <changeSet author="Chromis POS" id="drop mistake lEAVES_PPLID">
+        <preConditions onFail="MARK_RAN">             
+             <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="lEAVES_PPLID"/>   
+        </preConditions>   
+                            
+        <dropForeignKeyConstraint baseTableName="LEAVES" constraintName="lEAVES_PPLID"/>
+    </changeSet>   
 <!--   
     <changeSet author="Chromis POS" id="Apply foriegn Keys">
         <preConditions onFail="MARK_RAN">
@@ -368,7 +376,7 @@
                ALTER TABLE PLACES ADD CONSTRAINT PLACES_FK_1 FOREIGN KEY (FLOOR) REFERENCES FLOORS(ID);
                ALTER TABLE RESERVATION_CUSTOMERS ADD CONSTRAINT RES_CUST_FK_1 FOREIGN KEY (ID) REFERENCES RESERVATIONS(ID);
                ALTER TABLE RESERVATION_CUSTOMERS ADD CONSTRAINT RES_CUST_FK_2 FOREIGN KEY (CUSTOMER) REFERENCES CUSTOMERS(ID);
-               ALTER TABLE LEAVES ADD CONSTRAINT lEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID);
+               ALTER TABLE LEAVES ADD CONSTRAINT LEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID);
                ALTER TABLE SHIFT_BREAKS ADD CONSTRAINT SHIFT_BREAKS_BREAKID FOREIGN KEY (BREAKID) REFERENCES BREAKS(ID);
                ALTER TABLE SHIFT_BREAKS ADD CONSTRAINT SHIFT_BREAKS_SHIFTID FOREIGN KEY (SHIFTID) REFERENCES SHIFTS(ID);             
            </sql>        

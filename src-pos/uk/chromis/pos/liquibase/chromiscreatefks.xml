@@ -359,13 +359,13 @@
         <sql>ALTER TABLE RESERVATION_CUSTOMERS ADD CONSTRAINT RES_CUST_FK_2 FOREIGN KEY (CUSTOMER) REFERENCES CUSTOMERS(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add LEAVES_PPLID">
+    <changeSet author="Chromis POS" id="Add LEAVES_PPLID.">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="LEAVES_PPLID"/>            
             </not>  
         </preConditions>  
-        <sql>ALTER TABLE LEAVES ADD CONSTRAINT lEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID)</sql>
+        <sql>ALTER TABLE LEAVES ADD CONSTRAINT LEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID)</sql>
     </changeSet>
 
     <changeSet author="Chromis POS" id="Add SHIFT_BREAKS_BREAKID">
@@ -393,6 +393,16 @@
         
         <sql>ALTER TABLE PRODUCTS_CAT ADD CONSTRAINT PRODUCTS_CAT_FK_1 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>  
     </changeSet> 
+    
+    <changeSet author="Chromis POS" id="Fix LEAVES_PPLID mistake.">
+        <preConditions onFail="MARK_RAN">
+            <not>  
+                <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="LEAVES_PPLID"/>            
+            </not>  
+        </preConditions>  
+        <sql>ALTER TABLE LEAVES ADD CONSTRAINT LEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID)</sql>
+    </changeSet>
+    
     
 </databaseChangeLog>
 

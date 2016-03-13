@@ -1,23 +1,22 @@
-//    uniCenta oPOS - Touch Friendly Point Of Sale
-//    Copyright (c) 2009-(c) 2015-2016uniCenta & previous Openbravo POS works
-//    http://www.unicenta.net
+//   Chromis POS - The New Face of Open Source POS 
+//   Copyright (c) (c) 2015-2016 2016 Chromis , previous uniCenta & Openbravo POS works   
 //
-//    This file is part of uniCenta oPOS
+//   This file is part of chromis oPOS
 //
-//    uniCenta oPOS is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
+//  Chromis POS is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
 //
-//    uniCenta oPOS is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
+//   Chromis POS is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
 //
-//    You should have received a copy of the GNU General Public License
-//    along with uniCenta oPOS.  If not, see <http://www.gnu.org/licenses/>.
+//   You should have received a copy of the GNU General Public License
+//   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    MySQL version 
+//    Derby version
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
@@ -34,7 +33,7 @@ report.setSentence("SELECT "+
                    "LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID " +
                    "LEFT OUTER JOIN TICKETS ON TICKETLINES.TICKET = TICKETS.ID " +
                    "LEFT OUTER JOIN RECEIPTS ON TICKETS.ID = RECEIPTS.ID " +
-                   "WHERE LENGTH(CATEGORIES.NAME) > '1' AND ?(QBF_FILTER) " +
+                   "WHERE LENGTH(CATEGORIES.NAME) > 1 AND ?(QBF_FILTER) " +
                    "GROUP BY CATEGORIES.ID, CATEGORIES.NAME "+
                    "ORDER BY CATEGORIES.NAME ASC");
 
@@ -44,7 +43,6 @@ report.addParameter("RECEIPTS.DATENEW");
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
-// JG - 8 Jan 14 paramdates.setEndDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
 report.addQBFFilter(paramdates);

@@ -16,14 +16,14 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    MySQL version 
+//    Derby version
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.SalesProfit");
 report.setReport("/uk/chromis/reports/productsalesprofit");
 report.setResourceBundle("uk/chromis/reports/productsalesprofit_messages");
-
 
 report.setSentence("SELECT PRODUCTS.REFERENCE, " +
        "PRODUCTS.NAME, " +
@@ -44,8 +44,13 @@ report.setSentence("SELECT PRODUCTS.REFERENCE, " +
        "LEFT OUTER JOIN PRODUCTS PRODUCTS " +
           "ON (TICKETLINES.PRODUCT = PRODUCTS.ID) " +
     "WHERE ?(QBF_FILTER) " +
-    "GROUP BY TICKETLINES.PRODUCT " +
+    "GROUP BY TICKETLINES.PRODUCT, " +
+    "PRODUCTS.REFERENCE, " +
+    "PRODUCTS.NAME, " +
+    "PRODUCTS.PRICEBUY, " +
+    "PRODUCTS.PRICESELL " +
     "ORDER BY PRODUCTS.REFERENCE ASC");
+
 
 
 report.addParameter("RECEIPTS.DATENEW");
