@@ -862,7 +862,7 @@
             <column name="SECTION" value="##label.sectionmaintenance"/>
             <column name="DISPLAYNAME" value="##label.displayname116"/>
             <column name="DESCRIPTION" value="##label.description116"/>
-        </insert>             		        				                                     		        			                                               		           		        		
+        </insert>
     </changeSet>
 
 

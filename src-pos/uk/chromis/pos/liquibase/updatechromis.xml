@@ -1207,6 +1207,18 @@
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 
+                                                                                                                                                                                                                                                           <insert tableName="DBPERMISSIONS">		
+    <changeSet author="Chromis POS" id="Add Best Sellers Report">    
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
+        </preConditions> 
+        <column name="CLASSNAME" value="/uk/chromis/reports/bestsellers.bs"/>
+            <column name="SECTION" value="##label.sectionsales"/>
+            <column name="DISPLAYNAME" value="##label.displayname125"/>
+            <column name="DESCRIPTION" value="##label.description125"/>
+        </insert>		
+    </changeSet> 		             		        				                                     		        			                                               		           		        		
+
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
