@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -22,35 +22,13 @@ package uk.chromis.pos.printer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- *
- * @author adrianromero
- */
+
 public class DeviceDisplayBase {
     
-    /**
-     *
-     */
     public static final int ANIMATION_NULL = 0;
-
-    /**
-     *
-     */
     public static final int ANIMATION_FLYER = 1;
-
-    /**
-     *
-     */
     public static final int ANIMATION_SCROLL = 2;
-
-    /**
-     *
-     */
     public static final int ANIMATION_BLINK = 3;
-
-    /**
-     *
-     */
     public static final int ANIMATION_CURTAIN = 4;
     
     private final DeviceDisplayImpl impl;    
@@ -112,25 +90,14 @@ public class DeviceDisplayBase {
         writeVisor(ANIMATION_NULL, sLine1, sLine2);
     }
     
-    /**
-     *
-     */
     public void clearVisor() {
         writeVisor(ANIMATION_NULL, "", "");
     }
     
-    /**
-     *
-     * @return
-     */
     public String getLine1() {
         return anim.getLine1();
     }
     
-    /**
-     *
-     * @return
-     */
     public String getLine2() {
         return anim.getLine2();
     }

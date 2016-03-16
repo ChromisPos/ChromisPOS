@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
 package uk.chromis.pos.inventory;
 
 import java.awt.Component;
@@ -39,12 +40,13 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.sales.TaxesLogic;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.util.BarcodeValidator;
+import uk.chromis.pos.ticket.ProductInfoExt;
+import uk.chromis.pos.util.AutoCompleteComboBox;
 
 /**
  *
@@ -70,8 +72,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private boolean priceselllock = false;
     private boolean reportlock = false;
     private BarcodeValidator validate;
-    DataLogicSales m_dlSales;
-        
+    private DataLogicSales m_dlSales;
+
     /**
      * Creates new form JEditProduct
      *
@@ -80,6 +82,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
      */
     public ProductsEditor(DataLogicSales dlSales, DirtyManager dirty) {
         initComponents();
+
+        m_dlSales = dlSales;
 
         m_dlSales = dlSales;
         
@@ -184,9 +188,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         packproductmodel = new ComboBoxValModel(packproductsent.list());
         m_jPackProduct.setModel(packproductmodel);
 
+        AutoCompleteComboBox.enable(m_jPackProduct);
     }
 
-    // Set the product to be edited.
+// Set the product to be edited.  
     public void setProduct( String productID, String barcode ) {
         try {
             writeValueInsert();
@@ -607,10 +612,19 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         Object[] myprod = new Object[DataLogicSales.FIELD_COUNT];
         myprod[DataLogicSales.INDEX_ID] = m_id;
         myprod[DataLogicSales.INDEX_REFERENCE] = m_jRef.getText();
-        
+
         String code = m_jCode.getText();
+        if (code.startsWith("977")) {
+            // This is an ISSN barcode (news and magazines) 
+            // the first 3 digits correspond to the 977 prefix assigned to serial publications, 
+            // the next 7 digits correspond to the ISSN of the publication 
+            // Anything after that is publisher dependant - we strip everything after  
+            // the 10th character 
+            code = code.substring(0, 10);
+        }
         myprod[DataLogicSales.INDEX_CODE] = code;
         myprod[DataLogicSales.INDEX_CODETYPE] = BarcodeValidator.BarcodeValidate(code);
+
         myprod[DataLogicSales.INDEX_NAME] = m_jName.getText();
         myprod[DataLogicSales.INDEX_ISCOM] = m_jComment.isSelected();
         myprod[DataLogicSales.INDEX_ISSCALE] = m_jScale.isSelected();
@@ -1096,11 +1110,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jCode.setBounds(130, 40, 170, 25);
 
         m_jCodetype.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m_jCodetype.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jCodetypeActionPerformed(evt);
-            }
-        });
         jPanel1.add(m_jCodetype);
         m_jCodetype.setBounds(310, 40, 90, 25);
 
@@ -1142,11 +1151,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel7.setBounds(10, 190, 110, 25);
 
         m_jTax.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m_jTax.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jTaxActionPerformed(evt);
-            }
-        });
         jPanel1.add(m_jTax);
         m_jTax.setBounds(130, 190, 170, 25);
 
@@ -1157,11 +1161,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jPriceSellTax.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jPriceSellTax.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        m_jPriceSellTax.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jPriceSellTaxActionPerformed(evt);
-            }
-        });
         jPanel1.add(m_jPriceSellTax);
         m_jPriceSellTax.setBounds(130, 220, 80, 25);
 
@@ -1321,11 +1320,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPackQuantity.setBounds(350, 270, 80, 25);
 
         m_jPackProduct.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m_jPackProduct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jPackProductActionPerformed(evt);
-            }
-        });
         jPanel2.add(m_jPackProduct);
         m_jPackProduct.setBounds(350, 300, 220, 25);
 
@@ -1420,11 +1414,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 jButtonHTMLMouseClicked(evt);
             }
         });
-        jButtonHTML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonHTMLActionPerformed(evt);
-            }
-        });
         jPanel4.add(jButtonHTML);
         jButtonHTML.setBounds(205, 90, 110, 70);
 
@@ -1444,11 +1433,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel32.setText(bundle.getString("label.fontexample")); // NOI18N
         jLabel32.setToolTipText(bundle.getString("tooltip.fontexample")); // NOI18N
-        jLabel32.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jLabel32MouseDragged(evt);
-            }
-        });
 
         jLabel25.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel25.setText(bundle.getString("label.fontcolour")); // NOI18N
@@ -1537,16 +1521,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 600, 420));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void m_jTaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jTaxActionPerformed
-
-    }//GEN-LAST:event_m_jTaxActionPerformed
-
-    private void m_jPriceSellTaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jPriceSellTaxActionPerformed
-
-    }//GEN-LAST:event_m_jPriceSellTaxActionPerformed
-
     private void m_jRefFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_jRefFocusLost
-
         setCode();
     }//GEN-LAST:event_m_jRefFocusLost
 
@@ -1557,21 +1532,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private void jButtonHTMLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonHTMLMouseClicked
         setButtonHTML();
     }//GEN-LAST:event_jButtonHTMLMouseClicked
-
-    private void jButtonHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHTMLActionPerformed
-
-    }//GEN-LAST:event_jButtonHTMLActionPerformed
-
-    private void jLabel32MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel32MouseDragged
-        // TODO for later
-    }//GEN-LAST:event_jLabel32MouseDragged
-
-    private void m_jCodetypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jCodetypeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_m_jCodetypeActionPerformed
-private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jPackProductActionPerformed
-    // TODO add your handling code here:
-    }//GEN-LAST:event_m_jPackProductActionPerformed
 
 
     private void m_jAlwaysAvailableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jAlwaysAvailableActionPerformed
@@ -1610,12 +1570,18 @@ private void m_jPackProductActionPerformed(java.awt.event.ActionEvent evt) {//GE
     }//GEN-LAST:event_jCheckBoxPromotionActionPerformed
 
     private void m_jPackQuantityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_jPackQuantityFocusLost
+       Object selectItem =  m_jPackProduct.getSelectedItem();
+       Object selectIndex = m_jPackProduct.getSelectedItem();
         try {
             packproductmodel = new ComboBoxValModel(packproductsent.list());
         } catch (BasicException ex) {
             Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }       
         m_jPackProduct.setModel(packproductmodel);
+        if (selectItem != null){
+            m_jPackProduct.setSelectedItem(selectItem);
+            m_jPackProduct.setSelectedItem(selectIndex);            
+        }
     }//GEN-LAST:event_m_jPackQuantityFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

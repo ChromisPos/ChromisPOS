@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.nio.charset.Charset;
 import uk.chromis.pos.printer.DevicePrinter;
 import uk.chromis.pos.printer.DeviceTicket;
+import static uk.chromis.pos.util.BarcodeImage.getBarcode128;
 
 /**
  *
@@ -36,35 +37,20 @@ public abstract class Codes {
     }
 
     public abstract byte[] getInitSequence();
-
     public abstract byte[] getSize0();
-
     public abstract byte[] getSize1();
-
     public abstract byte[] getSize2();
-
     public abstract byte[] getSize3();
-
     public abstract byte[] getBoldSet();
-
     public abstract byte[] getBoldReset();
-
     public abstract byte[] getUnderlineSet();
-
     public abstract byte[] getUnderlineReset();
-
     public abstract byte[] getOpenDrawer();
-
     public abstract byte[] getCutReceipt();
-
     public abstract byte[] getNewLine();
-
     public abstract byte[] getImageHeader();
-
     public abstract int getImageWidth();
-
     public abstract byte[] getImageLogo(Byte iNumber);
-
     public abstract byte[] setPageMode();
 
     /**
@@ -74,7 +60,7 @@ public abstract class Codes {
      * @param position
      * @param code
      */
-    public void printBarcode(PrinterWritter out, String type, String position, String code) {
+    public Boolean printBarcode(PrinterWritter out, String type, String position, String code) {
         if (DevicePrinter.BARCODE_EAN13.equals(type)) {
             out.write(getNewLine());
             out.write(ESCPOS.BAR_HEIGHT);
@@ -88,7 +74,9 @@ public abstract class Codes {
             out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 13).substring(0, 12)));
             out.write(new byte[]{0x00});
             out.write(getNewLine());
-        }
+            return true;
+        } 
+        return false;
     }
 
 
@@ -101,14 +89,10 @@ public abstract class Codes {
 
         CenteredImage centeredimage = new CenteredImage(image, getImageWidth());
 
-        // Imprimo los par\u00e1metros en cu\u00e1druple
         int iWidth = (centeredimage.getWidth() + 7) / 8; // n\u00famero de bytes
-        int iHeight = centeredimage.getHeight();
-        
-        // Array de datos
+        int iHeight = centeredimage.getHeight();        
         byte[] bData = new byte[getImageHeader().length + 4 + iWidth * iHeight];
 
-        // Comando de impresion de imagen
         System.arraycopy(getImageHeader(), 0, bData, 0, getImageHeader().length);
 
         int index = getImageHeader().length;
@@ -131,7 +115,6 @@ public abstract class Codes {
                         p = p | 0x01;
                     }
                 }
-
                 bData[index++] = (byte) p;
             }
         }

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -32,10 +32,7 @@ import uk.chromis.pos.printer.DeviceDisplay;
 import uk.chromis.pos.printer.DeviceDisplayBase;
 import uk.chromis.pos.printer.DeviceDisplayImpl;
 
-/**
- *
- * @author  adrianromero
- */
+
 public class DeviceDisplayPanel extends JPanel implements DeviceDisplay, DeviceDisplayImpl {
     
     private String m_sName;
@@ -111,17 +108,11 @@ public class DeviceDisplayPanel extends JPanel implements DeviceDisplay, DeviceD
         m_displaylines.writeVisor(sLine1, sLine2);
     }
 
-    /**
-     *
-     */
     @Override
     public void clearVisor() {
         m_displaylines.clearVisor();
     }
     
-    /**
-     *
-     */
     @Override
     public void repaintLines() {
         jline1.setText(m_displaylines.getLine1());

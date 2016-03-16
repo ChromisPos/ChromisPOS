@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,20 +16,15 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.customers;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.util.RoundUtils;
 
-/**
- *
- * @author adrianromero
- *    
- */
 public class CustomerInfoExt extends CustomerInfo {
-    
+
     protected String taxcustomerid;
     protected String notes;
     protected boolean visible;
@@ -50,11 +45,14 @@ public class CustomerInfoExt extends CustomerInfo {
     protected String region;
     protected String country;
     protected String image;
-    protected Double discount;    
-    
-    
-    /** Creates a new instance of UserInfoBasic
-     * @param id */
+    protected Date dob;
+    protected Double discount;
+
+    /**
+     * Creates a new instance of UserInfoBasic
+     *
+     * @param id
+     */
     public CustomerInfoExt(String id) {
         super(id);
     }
@@ -66,80 +64,77 @@ public class CustomerInfoExt extends CustomerInfo {
     public String getTaxCustCategoryID() {
         return taxcustomerid;
     }
+
     public void setTaxCustomerID(String taxcustomerid) {
         this.taxcustomerid = taxcustomerid;
     }
-    
-    /**
-     *
-     * @return notes string
-     */
+
     public String getNotes() {
         return notes;
     }
+
     public void setNotes(String notes) {
         this.notes = notes;
     }
 
-    /**
-     *
-     * @return Is visible Y/N? boolean
-     */
     public boolean isVisible() {
         return visible;
     }
+
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
-    /**
-     *
-     * @return customer's hashed member/loyalty card string
-     */
     public String getCard() {
         return card;
     }
+
     public void setCard(String card) {
         this.card = card;
     }
 
-    /**
-     *
-     * @return customer's maximum allowed debt value
-     */
     public Double getMaxdebt() {
         return maxdebt;
     }
+
     public void setMaxdebt(Double maxdebt) {
         this.maxdebt = maxdebt;
     }
-    public String printMaxDebt() {       
+
+    public String printMaxDebt() {
         return Formats.CURRENCY.formatValue(RoundUtils.getValue(getMaxdebt()));
     }
 
+    public Date getDoB() {
+        return dob;
+    }
+
+    public void setDoB(Date dob) {
+        this.dob = dob;
+    }
+
+
     public Double getDiscount() {
         return discount;
-    }   
+    }
 
     public void setDiscount(Double discount) {
         this.discount = discount;
     }
 
-    public String printDiscount() {       
+    public String printDiscount() {
         return Formats.PERCENT.formatValue(RoundUtils.getValue(getDiscount()));
     }
-    
-    /**
-     *
-     * @return customer's last ticket transaction date
-     */
+
     public Date getCurdate() {
         return curdate;
     }
+
     public void setCurdate(Date curdate) {
         this.curdate = curdate;
     }
-    public String printCurDate() {       
+
+    public String printCurDate() {
         return Formats.DATE.formatValue(getCurdate());
     }
 
@@ -150,24 +145,25 @@ public class CustomerInfoExt extends CustomerInfo {
     public Double getCurdebt() {
         return curdebt;
     }
+
     public void setCurdebt(Double curdebt) {
         this.curdebt = curdebt;
     }
-    public String printCurDebt() {       
+
+    public String printCurDebt() {
         return Formats.CURRENCY.formatValue(RoundUtils.getValue(getCurdebt()));
     }
 
-    
     /**
      *
      * @param amount
      * @param d
      */
     public void updateCurDebt(Double amount, Date d) {
-        
+
         curdebt = curdebt == null ? amount : curdebt + amount;
-        curdate =  (new Date());
-        
+        curdate = (new Date());
+
         if (RoundUtils.compare(curdebt, 0.0) > 0) {
             if (curdate == null) {
                 // new date
@@ -179,221 +175,116 @@ public class CustomerInfoExt extends CustomerInfo {
         } else { // < 0
             curdate = null;
         }
-        
     }
 
-    /**
-     *
-     * @return customer's firstname string
-     */
     public String getFirstname() {
         return firstname;
     }
 
-    /**
-     *
-     * @param firstname
-     */
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
-    /**
-     *
-     * @return customer's lastname string
-     */
     public String getLastname() {
         return lastname;
     }
 
-    /**
-     *
-     * @param lastname
-     */
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
-    /**
-     *
-     * @return customer's email string
-     */
     @Override
     public String getEmail() {
         return email;
     }
 
-    /**
-     *
-     * @param email
-     */
     @Override
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     *
-     * @return customer's Primary telephone string
-     */
     @Override
     public String getPhone() {
         return phone;
     }
 
-    /**
-     *
-     * @param phone
-     */
     @Override
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    /**
-     *
-     * @return customer's Secondary telephone string
-     */
     public String getPhone2() {
         return phone2;
     }
 
-    /**
-     *
-     * @param phone2
-     */
     public void setPhone2(String phone2) {
         this.phone2 = phone2;
     }
 
-    /**
-     *
-     * @return customer's fax number string
-     */
     public String getFax() {
         return fax;
     }
 
-    /**
-     *
-     * @param fax
-     */
     public void setFax(String fax) {
         this.fax = fax;
     }
 
-    /**
-     *
-     * @return customer's address line 1 string
-     */
     public String getAddress() {
         return address;
     }
 
-    /**
-     *
-     * @param address
-     */
     public void setAddress(String address) {
         this.address = address;
     }
 
-    /**
-     *
-     * @return customer's address line 2 string
-     */
     public String getAddress2() {
         return address2;
     }
 
-    /**
-     *
-     * @param address2
-     */
     public void setAddress2(String address2) {
         this.address2 = address2;
     }
 
-    /**
-     *
-     * @return customer's postal/zip code string
-     */
     @Override
     public String getPostal() {
         return postal;
     }
 
-    /**
-     *
-     * @param postal
-     */
     @Override
     public void setPostal(String postal) {
         this.postal = postal;
     }
 
-    /**
-     *
-     * @return customer's address city string
-     */
     public String getCity() {
         return city;
     }
 
-    /**
-     *
-     * @param city
-     */
     public void setCity(String city) {
         this.city = city;
     }
 
-    /**
-     *
-     * @return customer's address region/state/county string
-     */
     public String getRegion() {
         return region;
     }
 
-    /**
-     *
-     * @param region
-     */
     public void setRegion(String region) {
         this.region = region;
     }
 
-    /**
-     *
-     * @return customer's address country string
-     */
     public String getCountry() {
         return country;
     }
 
-    /**
-     *
-     * @param country
-     */
     public void setCountry(String country) {
         this.country = country;
     }
 
-    /**
-     *
-     * @return customer's photograph / image
-     */
     public String getImage() {
         return image;
     }
 
-    /**
-     *
-     * @param image
-     */
     public void setImage(String image) {
         this.image = image;
     }
-    
+
 }

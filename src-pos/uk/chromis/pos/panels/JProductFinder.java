@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -44,20 +44,10 @@ public class JProductFinder extends javax.swing.JDialog {
     private ProductInfoExt m_ReturnProduct;
     private ListProvider lpr;
     
-    /**
-     *
-     */
     public final static int PRODUCT_ALL = 0;
-
-    /**
-     *
-     */
     public final static int PRODUCT_NORMAL = 1;
-
-    /**
-     *
-     */
     public final static int PRODUCT_AUXILIAR = 2;
+    public final static int PRODUCT_RECIPE = 3;
     
     /** Creates new form JProductFinder */
     private JProductFinder(java.awt.Frame parent, boolean modal) {
@@ -161,7 +151,7 @@ public class JProductFinder extends javax.swing.JDialog {
         public int getSize() {
             return m_data.size();
         } 
-    }   
+    } 
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

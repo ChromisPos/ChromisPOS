@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,28 +16,22 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
-
 package uk.chromis.pos.forms;
 
 import uk.chromis.beans.LocaleResources;
 
-/**
- *
- * @author adrianromero
- */
 public class AppLocal {
 
     public static final String APP_NAME = "Chromis POS";
     public static final String APP_ID = "chromispos";
-    public static final String APP_VERSION = "0.54.3";
+    public static final String APP_VERSION = "0.56.2";
     public static final String APP_DEMO = "";
-   // public static final String APP_DEMO = " - Test Edition";
+   //  public static final String APP_DEMO = " - Test Edition";
 
     private static final LocaleResources m_resources;
-
     public static String LIST_BY_RIGHTS = "";
 
-    static {
+    static {        
         m_resources = new LocaleResources();
         m_resources.addBundleName("pos_messages");
         m_resources.addBundleName("erp_messages");
@@ -65,7 +59,7 @@ public class AppLocal {
      * @param sValues
      * @return
      */
-    public static String getIntString(String sKey, Object... sValues) {
+    public static String getIntString(String sKey, Object... sValues) {   
         return m_resources.getString(sKey, sValues);
     }
 }

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -18,6 +18,7 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.sales;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -25,6 +26,7 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
@@ -139,7 +141,7 @@ public class JProductAttEdit extends javax.swing.JDialog {
      * @return
      */
     public static JProductAttEdit getAttributesEditor(Component parent, Session s) {
-       
+
         Window window = SwingUtilities.getWindowAncestor(parent);
 
         JProductAttEdit myMsg;
@@ -148,11 +150,15 @@ public class JProductAttEdit extends javax.swing.JDialog {
         } else {
             myMsg = new JProductAttEdit((Dialog) window, true);
         }
+
+        myMsg.getRootPane().setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
+        myMsg.setUndecorated(true);
+
         myMsg.init(s);
         myMsg.applyComponentOrientation(parent.getComponentOrientation());
-     
+
         return myMsg;
-                
+
     }
 
     /**
@@ -211,7 +217,7 @@ public class JProductAttEdit extends javax.swing.JDialog {
                 itemslist.get(0).assignSelection();
             }
         }
-     //   AutoLogoff.getInstance().activateTimer();
+        //   AutoLogoff.getInstance().activateTimer();
     }
 
     /**

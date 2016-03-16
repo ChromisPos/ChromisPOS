@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.sales.restaurant;
 
 import java.awt.Dimension;
@@ -32,28 +31,33 @@ import uk.chromis.data.loader.SerializableRead;
 
 /**
  *
- *   
+ *
  */
 public class Place implements SerializableRead, java.io.Serializable {
-    
+
     private static final long serialVersionUID = 8652254694281L;
     private static final Icon ICO_OCU = new ImageIcon(Place.class.getResource("/uk/chromis/images/edit_group.png"));
     private static final Icon ICO_FRE = new NullIcon(22, 22);
-    
+
     private String m_sId;
     private String m_sName;
     private int m_ix;
     private int m_iy;
+    private int m_diffx;
+    private int m_diffy;
     private String m_sfloor;
     private String m_customer;
     private String m_waiter;
     private String m_ticketId;
     private Boolean m_tableMoved;
-    
+    private Boolean m_changed = false;
+
     private boolean m_bPeople;
     private JButton m_btn;
-        
-    /** Creates a new instance of TablePlace */
+
+    /**
+     * Creates a new instance of TablePlace
+     */
     public Place() {
     }
 
@@ -73,7 +77,7 @@ public class Place implements SerializableRead, java.io.Serializable {
         m_waiter = dr.getString(7);
         m_ticketId = dr.getString(8);
         m_tableMoved = dr.getBoolean(9);
-        
+
         m_bPeople = false;
         m_btn = new JButton();
 
@@ -81,96 +85,99 @@ public class Place implements SerializableRead, java.io.Serializable {
         m_btn.setFocusable(false);
         m_btn.setRequestFocusEnabled(false);
         m_btn.setHorizontalTextPosition(SwingConstants.CENTER);
-        m_btn.setVerticalTextPosition(SwingConstants.BOTTOM);            
+        m_btn.setVerticalTextPosition(SwingConstants.BOTTOM);
         m_btn.setIcon(ICO_FRE);
         m_btn.setText(m_sName);
-        m_btn.setMargin(new Insets(2,5,2,5));
+        m_btn.setMargin(new Insets(2, 5, 2, 5));
 
+        m_diffx=0;
+        m_diffy=0;
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getId() { return m_sId; }
+
+    public String getId() {
+        return m_sId;
+    }
+
+    public String getName() {
+        return m_sName;
+    }
+
+    public int getX() {
+        return m_ix;
+    }
+
+    public int getY() {
+        return m_iy;
+    }
+
+    public void setX(int x) {
+        this.m_ix = x;
+    }
+
+    public void setY(int y) {
+        this.m_iy = y;
+    }
+
+    public int getDiffX() {
+        return m_diffx;
+    }
+
+    public int getDiffY() {
+        return m_diffy;
+    }
+
+    public void setDiffX(int x) {
+        this.m_diffx = x;
+    }
+
+    public void setDiffY(int y) {
+        this.m_diffy = y;
+    }
     
-    /**
-     *
-     * @return
-     */
-    public String getName() { return m_sName; }
+    public Boolean getChanged() {
+        return m_changed;
+    }
 
-    /**
-     *
-     * @return
-     */
-    public int getX() { return m_ix; }
-
-    /**
-     *
-     * @return
-     */
-    public int getY() { return m_iy; }
-
-    /**
-     *
-     * @return
-     */
-    public String getFloor() { return m_sfloor; }
-   
-    /**
-     *
-     * @return
-     */
-    public JButton getButton() { return m_btn; }
+    public void setChanged(Boolean changed) {
+        this.m_changed = changed;
+    }    
     
-    /**
-     *
-     * @return
-     */
-    public String getCustomer(){ return m_customer; }
-
-    /**
-     *
-     * @return
-     */
-    public String getWaiter(){ return m_waiter;}
     
-    /**
-     *
-     * @return
-     */
+    public String getFloor() {
+        return m_sfloor;
+    }
+
+    public JButton getButton() {
+        return m_btn;
+    }
+
+    public String getCustomer() {
+        return m_customer;
+    }
+
+    public String getWaiter() {
+        return m_waiter;
+    }
+
     public boolean hasPeople() {
         return m_bPeople;
-    }   
+    }
 
-    /**
-     *
-     * @param bValue
-     */
     public void setPeople(boolean bValue) {
         m_bPeople = bValue;
-        m_btn.setIcon(bValue ? ICO_OCU : ICO_FRE); 
-    }     
+        m_btn.setIcon(bValue ? ICO_OCU : ICO_FRE);
+    }
 
-    /**
-     *
-     */
     public void setButtonBounds() {
         Dimension d = m_btn.getPreferredSize();
-        m_btn.setPreferredSize(new Dimension(d.width +30,d.height + 15));
+        m_btn.setPreferredSize(new Dimension(d.width + 30, d.height + 15));
         d = m_btn.getPreferredSize();
-        m_btn.setBounds(m_ix - d.width / 2, m_iy - d.height / 2, d.width, d.height); 
+        m_btn.setBounds(m_ix - d.width / 2, m_iy - d.height / 2, d.width, d.height);
     }
-    
-    /**
-     *
-     * @param btnText
-     */
-    public void setButtonText(String btnText){
-        m_btn.setText(btnText);         
-    }
-    
-}    
 
-    
+    public void setButtonText(String btnText) {
+        m_btn.setText(btnText);
+    }
+
+}

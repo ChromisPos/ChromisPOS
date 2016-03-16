@@ -32,7 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import net.miginfocom.swing.MigLayout;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import uk.chromis.convert.Conversion;
@@ -93,10 +92,10 @@ public class StartPOS {
     
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
-        //  File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
+        File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
 
         if (!chromis.exists()) {
-            if (file.exists()) /*|| (openbravo.exists()))*/ {
+            if ((file.exists()) || (openbravo.exists())){
                 Thread t1 = new Thread(new Runnable() {
                     public void run() {
                         Conversion convert = new Conversion() {
@@ -136,7 +135,7 @@ public class StartPOS {
                 String scountry = AppConfig.getInstance().getProperty("user.country");
                 String svariant = AppConfig.getInstance().getProperty("user.variant");
                 if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
-                    Locale.setDefault(new Locale(slang, scountry, svariant));
+                    Locale.setDefault(new Locale(slang, scountry, svariant));                    
                 }
 
                 // Set the format patterns

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.inventory;
 
 import java.awt.Component;
@@ -26,6 +25,7 @@ import uk.chromis.data.user.EditorListener;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.data.user.ListProviderCreator;
 import uk.chromis.data.user.SaveProvider;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.panels.JPanelTable2;
@@ -33,19 +33,21 @@ import uk.chromis.pos.ticket.ProductFilter;
 
 /**
  *
- * @author adrianromero
- * Created on 1 de marzo de 2007, 22:15
+ * @author adrianromero Created on 1 de marzo de 2007, 22:15
  *
  */
 public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
     private ProductsEditor jeditor;
-    private ProductFilter jproductfilter;    
+
+    private ProductFilter jproductfilter;
     private String m_initialFilter = "";
-    
+
     private DataLogicSales m_dlSales = null;
-    
-    /** Creates a new instance of ProductsPanel2 */
+
+    /**
+     * Creates a new instance of ProductsPanel2
+     */
     public ProductsPanel() {
     }
     
@@ -54,32 +56,35 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
         // Set initial filter
         m_initialFilter = szFilter;
     }
-    
+
     /**
      *
      */
     @Override
-    protected void init() {   
+    protected void init() {
         m_dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
-        
+
         // el panel del filtro
         jproductfilter = new ProductFilter();
         jproductfilter.init(app);
 
         row = m_dlSales.getProductsRow();
 
-        lpr =  new ListProviderCreator(m_dlSales.getProductCatQBF(), jproductfilter);
+        lpr = new ListProviderCreator(m_dlSales.getProductCatQBF(), jproductfilter);
 
         spr = new SaveProvider(
-            m_dlSales.getProductCatUpdate(),
-            m_dlSales.getProductCatInsert(),
-            m_dlSales.getProductCatDelete());
+                m_dlSales.getProductCatUpdate(),
+                m_dlSales.getProductCatInsert(),
+                m_dlSales.getProductCatDelete());
 
-            
         // el panel del editor
-        jeditor = new ProductsEditor(m_dlSales, dirty);       
+        jeditor = new ProductsEditor(m_dlSales, dirty);
+
+        if (AppConfig.getInstance().getBoolean("display.longnames")) {
+            setListWidth(300);
+        }
     }
-    
+
     /**
      *
      * @return value
@@ -88,7 +93,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     public EditorRecord getEditor() {
         return jeditor;
     }
-    
+
     /**
      *
      * @return value
@@ -104,7 +109,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
      */
     @Override
     public Component getToolbarExtras() {
-        
+
         JButton btnScanPal = new JButton();
         btnScanPal.setText("ScanPal");
         btnScanPal.setVisible(app.getDeviceScanner() != null);
@@ -113,13 +118,13 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnScanPalActionPerformed(evt);
             }
-        });      
-        
+        });
+
         return btnScanPal;
     }
-    
-    private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {                                           
-  
+
+    private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {
+
         JDlgUploadProducts.showMessage(this, app.getDeviceScanner(), bd);
     }
 
@@ -138,10 +143,10 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
      */
     @Override
     public void activate() throws BasicException {
-        
-        jeditor.activate(); 
+
+        jeditor.activate();
         jproductfilter.activate();
-        
+
         // Speed up loading with large product sets - only load after refresh
         // is hit which is usually after a filter is set up
         setLoadOnActivation(false);
@@ -155,5 +160,5 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
      */
     @Override
     public void updateValue(Object value) {
-    }    
+    }
 }

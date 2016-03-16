@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -59,54 +59,13 @@ public interface DevicePrinter {
      *
      */
     public void beginReceipt();
-
-    /**
-     *
-     * @param image
-     */
     public void printImage(BufferedImage image);
-
-    /**
-     *
-     */
     public void printLogo(Byte iNumber);
-
-    /**
-     *
-     * @param type
-     * @param position
-     * @param code
-     */
-    public void printBarCode(String type, String position, String code);
-
-    /**
-     *
-     * @param iTextSize
-     */
+    public Boolean printBarCode(String type, String position, String code);
     public void beginLine(int iTextSize);
-
-    /**
-     *
-     * @param iStyle
-     * @param sText
-     */
     public void printText(int iStyle, String sText);
-
-    /**
-     *
-     */
     public void endLine();
-
-    /**
-     *
-     */
     public void endReceipt();   
-    
-    // INTERFAZ VARIOUS
-    
-    /**
-     *
-     */
     public void openDrawer();    
 
 }

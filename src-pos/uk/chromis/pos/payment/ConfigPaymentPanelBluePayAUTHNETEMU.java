@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (C) 2015 Chromis
+//    Copyright (C) (c) 2015-2016Chromis
 //    Addition of Blue Pay - Walter Wojick Feb 2014
 //    http://www.chromis.co.uk
 //

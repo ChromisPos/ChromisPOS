@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
+//
 package uk.chromis.data.gui;
 
 import java.awt.Color;
@@ -48,41 +48,44 @@ import uk.chromis.data.loader.LocalRes;
 
 /**
  *
- *   
+ *
  */
 public class JImageEditor extends javax.swing.JPanel {
-    
+
     private Dimension m_maxsize;
     private ZoomIcon m_icon;
     private BufferedImage m_Img = null;
-    
+
     private static File m_fCurrentDirectory = null;
     private static NumberFormat m_percentformat = new DecimalFormat("#,##0.##%");
-    
-    /** Creates new form JImageEditor */
+
+    /**
+     * Creates new form JImageEditor
+     */
     public JImageEditor() {
         initComponents();
-        
+
         m_Img = null;
-        m_maxsize = new Dimension( 200, 200 );  // Default maximum size for product images
+        m_maxsize = new Dimension(200, 200);  // Default maximum size for product images
         m_icon = new ZoomIcon();
         m_jImage.setIcon(m_icon);
         m_jPercent.setText(m_percentformat.format(m_icon.getZoom()));
         privateSetEnabled(isEnabled());
-        
+
         // Enable drag & drop image support
-        this.setTransferHandler( createTransferHandler() );
+        this.setTransferHandler(createTransferHandler());
     }
-    
-    private TransferHandler createTransferHandler(){
-        return new TransferHandler(  ){
+
+    private TransferHandler createTransferHandler() {
+        return new TransferHandler() {
             @Override
-            public boolean importData( JComponent comp, Transferable t ) {
+            public boolean importData(JComponent comp, Transferable t) {
+               System.out.println("flavor " + (DataFlavor.imageFlavor));
                 if (t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
                     try {
-                        Image image = (Image) t.getTransferData(DataFlavor.imageFlavor);
+                        Image image = (Image) t.getTransferData(DataFlavor.imageFlavor);                        
                         ImageIcon icon = new ImageIcon(image);
-                        setIconImage( icon );
+                        setIconImage(icon);
                         return true;
                     } catch (Throwable th) {
                         System.out.println("Failed to accept dropped image " + th);
@@ -97,19 +100,19 @@ public class JImageEditor extends javax.swing.JPanel {
                         }
                         return true;
                     } catch (Throwable th) {
-                        System.out.println( "Failed to accept dropped image " + th);
+                        System.out.println("Failed to accept dropped image " + th);
                     }
-                }            
+                }
                 return true;
             }
 
             @Override
-            public boolean canImport( JComponent comp, DataFlavor[] transferFlavors ) {
+            public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
                 return true;
             }
         };
     }
-    
+
     /**
      *
      * @param size
@@ -125,14 +128,14 @@ public class JImageEditor extends javax.swing.JPanel {
     public Dimension getMaxDimensions() {
         return m_maxsize;
     }
-    
+
     @Override
     public void setEnabled(boolean value) {
 
         privateSetEnabled(value);
         super.setEnabled(value);
     }
-    
+
     private void privateSetEnabled(boolean value) {
         m_jbtnopen.setEnabled(value);
         m_jbtnclose.setEnabled(value && (m_Img != null));
@@ -141,29 +144,29 @@ public class JImageEditor extends javax.swing.JPanel {
         m_jPercent.setEnabled(value && (m_Img != null));
         m_jScr.setEnabled(value && (m_Img != null));
     }
-    
+
     /**
      *
      * @param img
      */
     public void setIconImage(ImageIcon img) {
         BufferedImage bi = new BufferedImage(
-            img.getIconWidth(),
-            img.getIconHeight(),
-            BufferedImage.TYPE_INT_RGB);
+                img.getIconWidth(),
+                img.getIconHeight(),
+                BufferedImage.TYPE_INT_RGB);
         Graphics g = bi.createGraphics();
         // paint the Icon to the BufferedImage.
-        img.paintIcon(null, g, 0,0);
+        img.paintIcon(null, g, 0, 0);
         g.dispose();
-        
+
         // Resize image if it is too big
         if (m_maxsize != null && (bi.getHeight() > m_maxsize.height || bi.getWidth() > m_maxsize.width)) {
             bi = resizeImage(bi);
         }
-        
-        setImage( bi );
+
+        setImage(bi);
     }
-         
+
     /**
      *
      * @param img
@@ -172,18 +175,18 @@ public class JImageEditor extends javax.swing.JPanel {
         BufferedImage oldimg = m_Img;
         m_Img = img;
         m_icon.setIcon(m_Img == null ? null : new ImageIcon(m_Img));
-        
+
         m_jPercent.setText(m_percentformat.format(m_icon.getZoom()));
-     
+
         m_jImage.revalidate();
         m_jScr.revalidate();
         m_jScr.repaint();
 
         privateSetEnabled(isEnabled());
-        
+
         firePropertyChange("image", oldimg, m_Img);
     }
-    
+
     /**
      *
      * @return
@@ -199,7 +202,7 @@ public class JImageEditor extends javax.swing.JPanel {
     public double getZoom() {
         return m_icon.getZoom();
     }
- 
+
     /**
      *
      * @param zoom
@@ -207,50 +210,50 @@ public class JImageEditor extends javax.swing.JPanel {
     public void setZoom(double zoom) {
         double oldzoom = m_icon.getZoom();
         m_icon.setZoom(zoom);
-        
+
         m_jPercent.setText(m_percentformat.format(m_icon.getZoom()));
-        
+
         m_jImage.revalidate();
         m_jScr.revalidate();
         m_jScr.repaint();
-        
+
         firePropertyChange("zoom", oldzoom, zoom);
     }
-    
+
     /**
      *
      */
-    public void incZoom() {        
+    public void incZoom() {
         double zoom = m_icon.getZoom();
         setZoom(zoom > 4.0 ? 8.0 : zoom * 2.0);
     }
-    
+
     /**
      *
      */
-    public void decZoom() {        
+    public void decZoom() {
         double zoom = m_icon.getZoom();
         setZoom(zoom < 0.5 ? 0.25 : zoom / 2.0);
     }
-    
+
     /**
      *
      */
     public void doLoad() {
         JFileChooser fc = new JFileChooser(m_fCurrentDirectory);
-        
+
         fc.addChoosableFileFilter(new ExtensionsFilter(LocalRes.getIntString("label.imagefiles"), "png", "gif", "jpg", "jpeg", "bmp"));
 
-        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {  
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 BufferedImage img = ImageIO.read(fc.getSelectedFile());
                 if (img != null) {
                     // compruebo que no exceda el tamano maximo.
                     if (m_maxsize != null && (img.getHeight() > m_maxsize.height || img.getWidth() > m_maxsize.width)) {
-                        if (JOptionPane.showConfirmDialog(this, LocalRes.getIntString("message.resizeimage"), LocalRes.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {          
+                        if (JOptionPane.showConfirmDialog(this, LocalRes.getIntString("message.resizeimage"), LocalRes.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                             // Redimensionamos la imagen para que se ajuste
                             img = resizeImage(img);
-                        }                        
+                        }
                     }
                     setImage(img);
                     m_fCurrentDirectory = fc.getCurrentDirectory();
@@ -259,14 +262,14 @@ public class JImageEditor extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private BufferedImage resizeImage(BufferedImage img) {
-        
+
         int myheight = img.getHeight();
         int mywidth = img.getWidth();
-        
+
         if (myheight > m_maxsize.height) {
-            mywidth = (int) (mywidth * m_maxsize.height / myheight); 
+            mywidth = (int) (mywidth * m_maxsize.height / myheight);
             myheight = m_maxsize.height;
         }
         if (mywidth > m_maxsize.width) {
@@ -288,34 +291,35 @@ public class JImageEditor extends javax.swing.JPanel {
 
         g2d.fillRect(0, 0, mywidth, myheight);
         if (scalex < scaley) {
-            g2d.drawImage(img, 0,(int) ((myheight - img.getHeight(null) * scalex) / 2.0)
-            , mywidth, (int) (img.getHeight(null) * scalex),  null);
+            g2d.drawImage(img, 0, (int) ((myheight - img.getHeight(null) * scalex) / 2.0), mywidth, (int) (img.getHeight(null) * scalex), null);
         } else {
-           g2d.drawImage(img, (int) ((mywidth - img.getWidth(null) * scaley) / 2.0), 0
-           , (int) (img.getWidth(null) * scaley), myheight, null);
+            g2d.drawImage(img, (int) ((mywidth - img.getWidth(null) * scaley) / 2.0), 0, (int) (img.getWidth(null) * scaley), myheight, null);
         }
-        g2d.dispose(); 
-        
+        g2d.dispose();
+
         return thumb;
     }
-          
+
     private static class ZoomIcon implements Icon {
-        
+
         private Icon ico;
         private double zoom;
-        
+
         public ZoomIcon() {
             this.ico = null;
             this.zoom = 1.0;
         }
+
         @Override
         public int getIconHeight() {
             return ico == null ? 0 : (int) (zoom * ico.getIconHeight());
         }
+
         @Override
         public int getIconWidth() {
             return ico == null ? 0 : (int) (zoom * ico.getIconWidth());
         }
+
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             if (ico != null) {
@@ -328,27 +332,31 @@ public class JImageEditor extends javax.swing.JPanel {
                 g2d.setTransform(oldt);
             }
         }
+
         public void setIcon(Icon ico) {
             this.ico = ico;
             this.zoom = 1.0;
         }
+
         public void setZoom(double zoom) {
             this.zoom = zoom;
         }
+
         public double getZoom() {
             return zoom;
         }
-    }    
+    }
+
     private static class ExtensionsFilter extends FileFilter {
-        
+
         private String message;
         private String[] extensions;
-        
+
         public ExtensionsFilter(String message, String... extensions) {
             this.message = message;
-            this.extensions = extensions;            
+            this.extensions = extensions;
         }
-        
+
         @Override
         public boolean accept(java.io.File f) {
             if (f.isDirectory()) {
@@ -358,26 +366,26 @@ public class JImageEditor extends javax.swing.JPanel {
                 int ipos = sFileName.lastIndexOf('.');
                 if (ipos >= 0) {
                     String sExt = sFileName.substring(ipos + 1);
-                    for(String s : extensions) {
+                    for (String s : extensions) {
                         if (s.equalsIgnoreCase(sExt)) {
                             return true;
                         }
                     }
-                }                        
+                }
                 return false;
-            }   
+            }
         }
-        
+
         @Override
         public String getDescription() {
             return message;
-        }      
+        }
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -456,28 +464,28 @@ public class JImageEditor extends javax.swing.JPanel {
     private void m_jbtnzoomoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnzoomoutActionPerformed
 
         decZoom();
-        
+
     }//GEN-LAST:event_m_jbtnzoomoutActionPerformed
 
     private void m_jbtnzoominActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnzoominActionPerformed
 
         incZoom();
-        
+
     }//GEN-LAST:event_m_jbtnzoominActionPerformed
 
     private void m_jbtncloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtncloseActionPerformed
-        
+
         setImage(null);
-        
+
     }//GEN-LAST:event_m_jbtncloseActionPerformed
 
     private void m_jbtnopenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnopenActionPerformed
-        
+
         doLoad();
-        
+
     }//GEN-LAST:event_m_jbtnopenActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -489,5 +497,5 @@ public class JImageEditor extends javax.swing.JPanel {
     private javax.swing.JButton m_jbtnzoomin;
     private javax.swing.JButton m_jbtnzoomout;
     // End of variables declaration//GEN-END:variables
-    
+
 }

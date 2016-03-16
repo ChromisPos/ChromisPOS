@@ -2,7 +2,7 @@
 //  This file controls all Menu Items in Chromis POS
 //
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -44,7 +44,7 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.SalesByCustomer", "/uk/chromis/reports/salebycustomer.bs");
         submenu = group.addSubmenu("/uk/chromis/images/products.png", "Menu.StockManagement", "uk.chromis.pos.forms.MenuStockManagement");
     
-submenu.addTitle("Menu.StockManagement.Edit");
+    submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/products.png", "Menu.Products", "uk.chromis.pos.inventory.ProductsPanel");
         submenu.addPanel("/uk/chromis/images/location.png", "Menu.ProductsWarehouse", "uk.chromis.pos.inventory.ProductsWarehousePanel");
         submenu.addPanel("/uk/chromis/images/auxiliary.png", "Menu.Auxiliar", "uk.chromis.pos.inventory.AuxiliarPanel");
@@ -55,7 +55,8 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/attributes.png", "Menu.AttributeUse", "uk.chromis.pos.inventory.AttributeUsePanel");
         submenu.addPanel("/uk/chromis/images/stockdiary.png", "Menu.StockDiary", "uk.chromis.pos.inventory.StockDiaryPanel");
         submenu.addPanel("/uk/chromis/images/stockmaint.png", "Menu.StockMovement", "uk.chromis.pos.inventory.StockManagement");        
-        submenu.addPanel("/uk/chromis/images/img.discount.png", "Menu.Promotions", "uk.chromis.pos.promotion.PromotionPanel");        
+        submenu.addPanel("/uk/chromis/images/img.discount.png", "Menu.Promotions", "uk.chromis.pos.promotion.PromotionPanel"); 
+        submenu.addPanel("/uk/chromis/images/auxiliary.png", "Menu.Recipe", "uk.chromis.pos.inventory.RecipePanel");       
 
     submenu.addTitle("Menu.StockManagement.Reports");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.BarcodeSheet", "/uk/chromis/reports/barcodesheet.bs");
@@ -108,6 +109,7 @@ submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/uk/chromis/images/location.png", "Menu.Locations", "uk.chromis.pos.inventory.LocationsPanel");
         submenu.addPanel("/uk/chromis/images/floors.png", "Menu.Floors", "uk.chromis.pos.mant.JPanelFloors");
         submenu.addPanel("/uk/chromis/images/tables.png", "Menu.Tables", "uk.chromis.pos.mant.JPanelPlaces");
+        submenu.addPanel("/uk/chromis/images/reload.png",  "Menu.Resetpickup", "uk.chromis.pos.sales.JPanelResetPickupId");
 
     submenu.addTitle("Menu.Maintenance.Reports");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.UsersReport", "/uk/chromis/reports/people.bs");

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -194,7 +194,9 @@ public class JTicketsBagTicket extends JTicketsBag {
                     m_ticket != null
                     && (m_ticket.getTicketType().equals(TicketType.NORMAL) || m_ticket.getTicketType().equals(TicketType.INVOICE)
                     || m_ticket.getTicketType().equals(TicketType.REFUND))
-                    && m_dlSales.isCashActive(m_ticket.getActiveCash()));
+                    && m_dlSales.isCashActive(m_ticket.getActiveCash()) && m_App.getAppUserView().getUser().hasPermission("button.refundeditsale"));
+            m_jEdit.setVisible(m_jEdit.isEnabled());
+
         } catch (BasicException e) {
             m_jEdit.setEnabled(false);
         }

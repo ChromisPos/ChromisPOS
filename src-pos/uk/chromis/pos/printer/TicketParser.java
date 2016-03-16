@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -319,20 +319,17 @@ public class TicketParser extends DefaultHandler {
 // Added 23.05.13 used by star TSP700 to print stored logo image JDL            
             case OUTPUT_TICKET:
                 if ("logo".equals(qName)) {
-//                    m_oOutputPrinter.printLogo();
                     Byte firstLogo = 0x01;
 // no logo number is passed then pass the first logo in the NV store
                     if (text.toString().isEmpty()) {
                         m_oOutputPrinter.printLogo(firstLogo);
-                    } else {
-//Check if the value passed >0 and < 254    
-// if not pass the first logo in the NV store                    
-                        if (((Integer.parseInt(text.toString())) > 1) && ((Integer.parseInt(text.toString())) < 256)) {
+                    } else //Check if the value passed >0 and < 254    
+                    // if not pass the first logo in the NV store                    
+                    if (((Integer.parseInt(text.toString())) > 1) && ((Integer.parseInt(text.toString())) < 256)) {
 // Convert entry to byte
-                            m_oOutputPrinter.printLogo(Byte.parseByte(text.toString()));
-                        } else {
-                            m_oOutputPrinter.printLogo(firstLogo);
-                        }
+                        m_oOutputPrinter.printLogo(Byte.parseByte(text.toString()));
+                    } else {
+                        m_oOutputPrinter.printLogo(firstLogo);
                     }
                 } else if ("image".equals(qName)) {
                     try {
@@ -346,16 +343,24 @@ public class TicketParser extends DefaultHandler {
                     }
                     text = null;
                 } else if ("barcode".equals(qName)) {
-                    m_oOutputPrinter.printBarCode(
-                            bctype,
-                            bcposition,
-                            text.toString());
+                    if (!m_oOutputPrinter.printBarCode(bctype, bcposition, text.toString())) {
+                        try {
+                            BarCode barCode = new BarCode();
+                            BufferedImage image;
+                            
+                            image = barCode.getBarcode(text.toString(), bctype,0, 20);
+                            if (image != null) {
+                                m_oOutputPrinter.printImage(image);
+                            }
+                        } catch (Exception fnfe) {
+                        }
+                    }
                     text = null;
                 } else if ("qrcode".equals(qName)) {
                     try {
                         BarCode qrCode = new BarCode();
                         BufferedImage image;
-                        if (qrsize < 50 ) {
+                        if (qrsize < 50) {
                             image = qrCode.getQRCode(text.toString(), 50);
                         } else {
                             image = qrCode.getQRCode(text.toString(), qrsize);
@@ -366,11 +371,6 @@ public class TicketParser extends DefaultHandler {
                     } catch (Exception fnfe) {
                     }
                     text = null;
-              //  } else if ("prtbarcode".equals(qName)) {
-              //      m_oOutputPrinter.printerHWBarCode(
-              //              bctype,                            
-              //              text.toString());
-              //      text = null;
                 } else if ("text".equals(qName)) {
                     if (m_iTextLength > 0) {
                         switch (m_iTextAlign) {

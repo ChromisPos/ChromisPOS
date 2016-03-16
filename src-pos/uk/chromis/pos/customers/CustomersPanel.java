@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
+//
 package uk.chromis.pos.customers;
 
 import javax.swing.ListCellRenderer;
@@ -29,6 +29,7 @@ import uk.chromis.data.user.EditorRecord;
 import uk.chromis.data.user.ListProvider;
 import uk.chromis.data.user.ListProviderCreator;
 import uk.chromis.data.user.SaveProvider;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.panels.JPanelTable;
 
@@ -37,36 +38,42 @@ import uk.chromis.pos.panels.JPanelTable;
  * @author adrianromero
  */
 public class CustomersPanel extends JPanelTable {
-    
+
     private TableDefinition tcustomers;
     private CustomersView jeditor;
-    
-    /** Creates a new instance of CustomersPanel */
-    public CustomersPanel() {    
+
+    /**
+     * Creates a new instance of CustomersPanel
+     */
+    public CustomersPanel() {
         CustomerInfoGlobal.getInstance().setEditableData(bd);
     }
-    
+
     /**
      *
      */
     @Override
-    protected void init() {        
-        DataLogicCustomers dlCustomers  = (DataLogicCustomers) app.getBean("uk.chromis.pos.customers.DataLogicCustomers");
+    protected void init() {
+        DataLogicCustomers dlCustomers = (DataLogicCustomers) app.getBean("uk.chromis.pos.customers.DataLogicCustomers");
         tcustomers = dlCustomers.getTableCustomers();
-        jeditor = new CustomersView(app, dirty);    
-        AppLocal.LIST_BY_RIGHTS="";                
+        jeditor = new CustomersView(app, dirty);
+        AppLocal.LIST_BY_RIGHTS = "";
+
+        if (AppConfig.getInstance().getBoolean("display.longnames")) {
+            setListWidth(300);
+        }
     }
-    
+
     /**
      *
      * @throws BasicException
      */
     @Override
-    public void activate() throws BasicException { 
-        jeditor.activate();         
+    public void activate() throws BasicException {
+        jeditor.activate();
         super.activate();
     }
-    
+
     /**
      *
      * @return
@@ -75,16 +82,16 @@ public class CustomersPanel extends JPanelTable {
     public ListProvider getListProvider() {
         return new ListProviderCreator(tcustomers);
     }
-    
+
     /**
      *
      * @return
      */
     @Override
     public SaveProvider getSaveProvider() {
-        return new SaveProvider(tcustomers, new int[] {0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24});        
+        return new SaveProvider(tcustomers, new int[] {0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 });        
     }
-    
+
     /**
      *
      * @return
@@ -93,16 +100,16 @@ public class CustomersPanel extends JPanelTable {
     public Vectorer getVectorer() {
         return tcustomers.getVectorerBasic(new int[]{1, 2, 3, 4});
     }
-    
+
     /**
      *
      * @return
      */
     @Override
     public ComparatorCreator getComparatorCreator() {
-        return tcustomers.getComparatorCreator(new int[] {1, 2, 3, 4});
+        return tcustomers.getComparatorCreator(new int[]{1, 2, 3, 4});
     }
-    
+
     /**
      *
      * @return
@@ -111,7 +118,7 @@ public class CustomersPanel extends JPanelTable {
     public ListCellRenderer getListCellRenderer() {
         return new ListCellRendererBasic(tcustomers.getRenderStringBasic(new int[]{3}));
     }
-    
+
     /**
      *
      * @return
@@ -128,5 +135,5 @@ public class CustomersPanel extends JPanelTable {
     @Override
     public String getTitle() {
         return AppLocal.getIntString("Menu.CustomersManagement");
-    }    
+    }
 }

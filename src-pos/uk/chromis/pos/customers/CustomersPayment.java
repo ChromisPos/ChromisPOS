@@ -672,3 +672,4 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
     private javax.swing.JTextField txtTaxId;
     // End of variables declaration//GEN-END:variables
 }
+

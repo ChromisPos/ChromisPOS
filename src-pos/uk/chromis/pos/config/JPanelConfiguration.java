@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -18,8 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.config;
 
-import java.awt.Dimension;
-import java.io.File;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
@@ -27,10 +25,7 @@ import uk.chromis.pos.forms.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -39,7 +34,6 @@ import org.apache.commons.io.FileUtils;
 public class JPanelConfiguration extends JPanel implements JPanelView {
 
     private List<PanelConfig> m_panelconfig;
-
 
     /**
      * Creates new form JPanelConfiguration
@@ -68,8 +62,8 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         PanelConfig panel;
 
         panel = new JPanelConfigDatabase();
-        m_panelconfig.add(panel);      
-        jPanelDatabase.add(panel.getConfigComponent());       
+        m_panelconfig.add(panel);
+        jPanelDatabase.add(panel.getConfigComponent());
 
         panel = new JPanelConfigGeneral();
         m_panelconfig.add(panel);
@@ -94,6 +88,10 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         panel = new JPanelTicketSetup();
         m_panelconfig.add(panel);
         jPanelTicketSetup.add(panel.getConfigComponent());
+
+        panel = new JPanelConfigRestaurant();
+        m_panelconfig.add(panel);
+        jPanelRestaurantSetup.add(panel.getConfigComponent());
 
     }
 
@@ -193,10 +191,11 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         jPanelPeripheral = new javax.swing.JPanel();
         jPanelSystem = new javax.swing.JPanel();
         jPanelTicketSetup = new javax.swing.JPanel();
+        jPanelRestaurantSetup = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jbtnRestore = new javax.swing.JButton();
-        jbtnExit = new javax.swing.JButton();
         jbtnSave = new javax.swing.JButton();
+        jbtnExit = new javax.swing.JButton();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setMinimumSize(new java.awt.Dimension(780, 700));
@@ -240,6 +239,11 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         jPanelTicketSetup.setLayout(new javax.swing.BoxLayout(jPanelTicketSetup, javax.swing.BoxLayout.LINE_AXIS));
         jTabbedPane1.addTab("Ticket Setup", jPanelTicketSetup);
 
+        jPanelRestaurantSetup.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jPanelRestaurantSetup.setPreferredSize(new java.awt.Dimension(0, 500));
+        jPanelRestaurantSetup.setLayout(new javax.swing.BoxLayout(jPanelRestaurantSetup, javax.swing.BoxLayout.LINE_AXIS));
+        jTabbedPane1.addTab("Restaurant Setup", jPanelRestaurantSetup);
+
         jbtnRestore.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jbtnRestore.setText(AppLocal.getIntString("Button.Factory")); // NOI18N
         jbtnRestore.setMaximumSize(new java.awt.Dimension(103, 33));
@@ -248,17 +252,6 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         jbtnRestore.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnRestoreActionPerformed(evt);
-            }
-        });
-
-        jbtnExit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jbtnExit.setText(AppLocal.getIntString("Button.Exit")); // NOI18N
-        jbtnExit.setMaximumSize(new java.awt.Dimension(70, 33));
-        jbtnExit.setMinimumSize(new java.awt.Dimension(70, 33));
-        jbtnExit.setPreferredSize(new java.awt.Dimension(80, 33));
-        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnExitActionPerformed(evt);
             }
         });
 
@@ -280,9 +273,7 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jbtnRestore, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(230, 230, 230)
-                .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 250, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -290,9 +281,19 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jbtnRestore, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        jbtnExit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jbtnExit.setText(AppLocal.getIntString("Button.Exit")); // NOI18N
+        jbtnExit.setMaximumSize(new java.awt.Dimension(70, 33));
+        jbtnExit.setMinimumSize(new java.awt.Dimension(70, 33));
+        jbtnExit.setPreferredSize(new java.awt.Dimension(80, 33));
+        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnExitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -300,17 +301,20 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -342,6 +346,7 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
     private javax.swing.JPanel jPanelLocale;
     private javax.swing.JPanel jPanelPayment;
     private javax.swing.JPanel jPanelPeripheral;
+    private javax.swing.JPanel jPanelRestaurantSetup;
     private javax.swing.JPanel jPanelSystem;
     private javax.swing.JPanel jPanelTicketSetup;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -351,3 +356,4 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
     // End of variables declaration//GEN-END:variables
 
 }
+

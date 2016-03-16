@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -25,14 +25,7 @@ package uk.chromis.pos.printer;
  */
 public class NullAnimator implements DisplayAnimator {
     
-    /**
-     *
-     */
     protected String currentLine1;
-
-    /**
-     *
-     */
     protected String currentLine2;
 
     /**

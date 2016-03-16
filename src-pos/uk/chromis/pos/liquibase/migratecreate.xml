@@ -1,0 +1,1014 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- 
+        This is the base liquibase xml for a blank database used by migrate routine
+    -->
+
+
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="bit" dbms="mysql"/>
+    <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
+
+    <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
+    <property name="blob.type" value="bytea" dbms="postgresql"/>
+    <property name="blob.type" value="mediumblob" dbms="mysql"/>
+
+    
+    <changeSet author="Chromis POS" id="Create Applications Table">
+        <createTable tableName="APPLICATIONS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>               
+    </changeSet>    
+    
+    <changeSet author="Chromis POS" id="Create Attribute Table">
+        <createTable tableName="ATTRIBUTE">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>	
+		
+    <changeSet author="Chromis POS" id="Create Attributeinstance Table">
+        <createTable tableName="ATTRIBUTEINSTANCE">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALUE" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create Attributeset Table">
+        <createTable tableName="ATTRIBUTESET">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create Attributesetinstance Table">
+        <createTable tableName="ATTRIBUTESETINSTANCE">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESET_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create Attributeuse Table">
+        <createTable tableName="ATTRIBUTEUSE">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESET_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LINENO" type="int"/>
+        </createTable>
+    </changeSet>	
+
+    <changeSet author="Chromis POS" id="Create Attributevalue Table">
+        <createTable tableName="ATTRIBUTEVALUE">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTE_ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALUE" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Create BREAKS Table.">        
+        <createTable tableName="BREAKS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="VISIBLE" type="${boolean.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Create Categories Table.">
+        <createTable tableName="CATEGORIES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PARENTID" type="varchar(255)"/>
+            <column name="TEXTTIP" type="varchar(255)" defaultValue="NULL"/>
+            <column name="CATSHOWNAME" type="${boolean.type}" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IMAGE" type="${blob.type}"/>
+            <column name="COLOUR" type="varchar(50)"/> 
+            <column name="CATORDER" type="int"/> 
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Closedcash Table">
+        <createTable tableName="CLOSEDCASH">
+            <column name="MONEY" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HOST" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HOSTSEQUENCE" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATESTART" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATEEND" type="timestamp"/>
+            <column name="NOSALES" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Create CSVImport Table">
+        <createTable tableName="CSVIMPORT">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ROWNUMBER" type="varchar(255)"/>
+            <column name="CSVERROR" type="varchar(255)"/>
+            <column name="REFERENCE" type="varchar(255)"/>
+            <column name="CODE" type="varchar(255)"/>
+            <column name="NAME" type="varchar(255)"/>
+            <column name="PRICEBUY" type="double precision"/>
+            <column name="PRICESELL" type="double precision"/>
+            <column name="PREVIOUSBUY" type="double precision"/>
+            <column name="PREVIOUSSELL" type="double precision"/>
+            <column name="CATEGORY" type="varchar(255)"></column>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Customers Table.">
+        <createTable tableName="CUSTOMERS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEARCHKEY" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAXID" type="varchar(255)"/>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAXCATEGORY" type="varchar(255)"/>
+            <column name="CARD" type="varchar(255)"/>
+            <column name="MAXDEBT" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDRESS" type="varchar(255)"/>
+            <column name="ADDRESS2" type="varchar(255)"/>
+            <column name="POSTAL" type="varchar(255)"/>
+            <column name="CITY" type="varchar(255)"/>
+            <column name="REGION" type="varchar(255)"/>
+            <column name="COUNTRY" type="varchar(255)"/>
+            <column name="FIRSTNAME" type="varchar(255)"/>
+            <column name="LASTNAME" type="varchar(255)"/>
+            <column name="EMAIL" type="varchar(255)"/>
+            <column name="PHONE" type="varchar(255)"/>
+            <column name="PHONE2" type="varchar(255)"/>
+            <column name="FAX" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="VISIBLE" type="${boolean.type}" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CURDATE" type="timestamp"/>
+            <column name="CURDEBT" type="double precision" defaultValueNumeric="0.0"/>
+            <column name="IMAGE" type="${blob.type}"/>
+            <column name="DOB" type="timestamp" />  
+            <column name="DISCOUNT" type="double"/> 
+        </createTable>
+    </changeSet>	
+	
+	
+    <changeSet author="Chromis POS" id="Create New dbpermissions Table">
+        <createTable tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SECTION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DISPLAYNAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="DESCRIPTION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable> 
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Draweropened Table">
+        <createTable tableName="DRAWEROPENED">
+            <column name="OPENDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP"/>
+            <column name="NAME" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Floors Table">
+        <createTable tableName="FLOORS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IMAGE" type="${blob.type}"/>
+        </createTable>
+    </changeSet>	
+
+    <changeSet author="Chromis POS" id="Create Historic Version Table">
+        <createTable tableName="HVERSIONS">
+            <column name="VERSION" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column> 
+        </createTable>       
+    </changeSet> 	
+	
+    <changeSet author="Chromis POS" id="Create LEAVES Table">
+        <createTable tableName="LEAVES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PPLID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STARTDATE" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENDDATE" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NOTES" type="varchar(255)"/>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Lineremoved Table.">
+        <createTable tableName="LINEREMOVED">
+            <column name="REMOVEDDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="PRODUCTNAME" type="varchar(255)"/>
+            <column name="UNITS" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Locations Table">
+        <createTable tableName="LOCATIONS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDRESS" type="varchar(255)"/>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Dynamic entries table">
+        <createTable tableName="MENUENTRIES">
+            <column name="ENTRY" type="varchar(255)" />
+            <column name="FOLLOWS" type="varchar(255)" />
+            <column name="GRAPHIC" type="varchar(255)" />
+            <column name="TITLE" type="varchar(255)" />                
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Moorers Table.">
+        <createTable tableName="MOORERS">
+            <column name="VESSELNAME" type="varchar(255)"/>
+            <column name="SIZE" type="int"/>
+            <column name="DAYS" type="int"/>
+            <column name="POWER" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Orders Table">
+        <createTable tableName="ORDERS">
+            <column name="ID" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORDERID" type="varchar(50)"/>                
+            <column name="QTY" type="int"/>           
+            <column name="DETAILS" type="varchar(255)"/>
+            <column name="ATTRIBUTES" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+            <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DISPLAYID" type="int"/>     
+            <column name="AUXILIARY" type="int"/>			
+        </createTable>                         
+    </changeSet> 	
+	
+    <changeSet author="Chromis POS" id="Create PAYMENTS Table">
+        <createTable tableName="PAYMENTS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RECEIPT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PAYMENT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TOTAL" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRANSID" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+            <column name="TENDERED" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CARDNAME" type="varchar(255)"/>
+            <column name="RETURNMSG" type="${blob.type}"/>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create People Table.">
+        <createTable tableName="PEOPLE">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)"/>
+            <column name="APPPASSWORD" type="varchar(255)"/>
+            <column name="CARD" type="varchar(255)"/>
+            <column name="ROLE" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VISIBLE" type="${boolean.type}" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IMAGE" type="${blob.type}"/>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Places Table.">
+        <createTable tableName="PLACES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="X" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Y" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FLOOR" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CUSTOMER" type="varchar(255)"/>
+            <column name="WAITER" type="varchar(255)"/>
+            <column name="TICKETID" type="varchar(255)"/>
+            <column name="TABLEMOVED" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Products Table.">
+        <createTable tableName="PRODUCTS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REFERENCE" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CODE" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CODETYPE" type="varchar(50)"/>                
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRICEBUY" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRICESELL" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATEGORY" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAXCAT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESET_ID" type="varchar(255)"/>
+            <column name="STOCKCOST" type="double precision"/>
+            <column name="STOCKVOLUME" type="double precision"/>
+            <column name="ISCOM" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ISSCALE" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ISKITCHEN" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRINTKB" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SENDSTATUS" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ISSERVICE" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="ATTRIBUTES" type="${blob.type}"/>
+            <column name="ISVPRICE" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ISVERPATRIB" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TEXTTIP" type="varchar(255)"/>
+            <column name="WARRANTY" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IMAGE" type="${blob.type}"/>
+            <column name="STOCKUNITS" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ALIAS" type="varchar(50)"/>  
+            <column name="ALWAYSAVAILABLE" type="${boolean.type}" defaultValueBoolean="false" >
+                <constraints nullable="false"/>  
+            </column> 
+            <column name="DISCOUNTED" type="varchar(5)" defaultValue="no"></column>  
+            <column name="CANDISCOUNT" type="${boolean.type}" defaultValueBoolean="true" >
+                <constraints nullable="false"/>  
+            </column>
+            <column name="ISCATALOG" type="${boolean.type}" defaultValueBoolean="true" />
+            <column name="CATORDER" type="integer"/>
+            <column name="ISPACK" type="${boolean.type}" defaultValueNumeric="1" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="PACKQUANTITY" type="double precision"/>
+            <column name="PACKPRODUCT" type="varchar(255)"/>
+            <column name="PROMOTIONID" type="varchar(50)" /> 	
+            <column name="ALLPRODUCTS" type="${boolean.type}"   
+                    defaultValueBoolean="false"/>  			
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Products_com Table">
+        <createTable tableName="PRODUCTS_COM">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRODUCT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRODUCT2" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>	
+	  
+    <changeSet author="Chromis POS" id="Create recipes table" >
+        <createTable tableName="PRODUCTS_KIT">
+            <column name="ID" type="varchar(255)" > 
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRODUCT" type="varchar(255)" > 
+                <constraints nullable="false" />
+            </column>
+            <column name="PRODUCT_KIT" type="varchar(255)" >   
+                <constraints nullable="false" />
+            </column>         
+            <column name="QUANTITY" type="double precision" >       
+                <constraints nullable="false" />
+            </column>            
+        </createTable>                                                                     
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Promotion Table">       
+        <createTable tableName="PROMOTIONS">
+            <column name="ID" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)" >
+                <constraints nullable="false" />                
+            </column>
+            <column name="CRITERIA"  type="${blob.type}"/>           
+            <column name="SCRIPT"  type="${blob.type}" >
+                <constraints nullable="false" />
+            </column>
+            <column name="ALLPRODUCTS" type="${boolean.type}"   
+                    defaultValueBoolean="false"/>  
+            <column name="ISENABLED" type="${boolean.type}" 
+                    defaultValueBoolean="true"/>
+        </createTable>      
+    </changeSet> 	
+	
+    <changeSet author="Chromis POS" id="Create Receipts Table">
+        <createTable tableName="RECEIPTS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MONEY" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATENEW" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PERSON" type="varchar(255)"/>
+            <column name="ATTRIBUTES" type="${blob.type}"/>
+        </createTable>
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create reservations Table.">
+        <createTable tableName="RESERVATIONS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATENEW" type="timestamp" defaultValueDate="2013-01-01 00:00:00">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TITLE" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CHAIRS" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ISDONE" type="${boolean.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="varchar(255)"/>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create reservation_CUSTOMERS Table.">
+        <createTable tableName="RESERVATION_CUSTOMERS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CUSTOMER" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Resources Table">
+        <createTable tableName="RESOURCES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RESTYPE" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONTENT" type="${blob.type}"/>
+        </createTable>
+    </changeSet>	
+		
+    <changeSet author="Chromis POS" id="Create Roles Table" >
+        <createTable tableName="ROLES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PERMISSIONS" type="${blob.type}"/>
+            <column name="RIGHTSLEVEL" type="int" defaultValueNumeric="4" >
+                <constraints nullable="false"/> 
+            </column>
+        </createTable>
+    </changeSet>
+            
+    <changeSet author="Chromis POS" id="Create SharedTICKETS Table">
+        <createTable tableName="SHAREDTICKETS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONTENT" type="${blob.type}"/>
+            <column name="PICKUPID" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="APPUSER" type="varchar(255)"/>
+        </createTable>
+    </changeSet>			
+			
+    <changeSet author="Chromis POS" id="SHIFTS Table">
+        <createTable tableName="SHIFTS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STARTSHIFT" type="timestamp">
+                <constraints nullable="false"/>
+            </column> 
+            <column name="ENDSHIFT" type="timestamp"/>
+            <column name="PPLID" type="varchar(255)"/>
+        </createTable>
+    </changeSet>			
+
+    <changeSet author="Chromis POS" id="Create SHIFT_BREAKS Table">
+        <createTable tableName="SHIFT_BREAKS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SHIFTID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BREAKID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STARTTIME" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENDTIME" type="timestamp"/>
+        </createTable>
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
+        <createTable tableName="STOCKCHANGES">
+            <column name="ID" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)"/>                
+            <column name="USERNAME" type="varchar(50)"/>           
+            <column name="UPLOADTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="PRODUCTID" type="varchar(255)"/>
+            <column name="CHANGETYPE" type="int"/>
+            <column name="DISPLAY" type="varchar(255)"/>
+            <column name="FIELD" type="varchar(50)"/>
+            <column name="TEXTVALUE" type="varchar(255)"/> 
+            <column name="BLOBVALUE" type="${blob.type}"/>                                    
+            <column name="CHANGES_PROCESSED" type="int"/>
+        </createTable>       
+    </changeSet> 
+			
+    <changeSet author="Chromis POS" id="Create Stock current Table.">
+        <createTable tableName="STOCKCURRENT">
+            <column name="LOCATION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRODUCT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
+            <column name="UNITS" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>			
+			
+    <changeSet author="Chromis POS" id="Create Stock diary Table">
+        <createTable tableName="STOCKDIARY">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATENEW" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REASON" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRODUCT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
+            <column name="UNITS" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRICE" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="APPUSER" type="varchar(255)"/>
+        </createTable>
+    </changeSet>			
+		
+    <changeSet author="Chromis POS" id="Create Stock level Table">
+        <createTable tableName="STOCKLEVEL">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LOCATION" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRODUCT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STOCKSECURITY" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STOCKMAXIMUM" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>	
+		
+    <changeSet author="Chromis POS" id="Create TaxCATEGORIES Table">
+        <createTable tableName="TAXCATEGORIES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+			
+    <changeSet author="Chromis POS" id="Create TaxCustCategories Table">
+        <createTable tableName="TAXCUSTCATEGORIES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>			
+			
+    <changeSet author="Chromis POS" id="Create Taxes Table">
+        <createTable tableName="TAXES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATEGORY" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CUSTCATEGORY" type="varchar(255)"/>
+            <column name="PARENTID" type="varchar(255)"/>
+            <column name="RATE" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RATECASCADE" type="${boolean.type}" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RATEORDER" type="int"/>
+        </createTable>
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create TAXLINES Table">
+        <createTable tableName="TAXLINES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RECEIPT" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAXID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BASE" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="double precision" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>			
+			
+    <changeSet author="Chromis POS" id="Create THIRDPARTIES Table">
+        <createTable tableName="THIRDPARTIES">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CIF" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDRESS" type="varchar(255)"/>
+            <column name="CONTACTCOMM" type="varchar(255)"/>
+            <column name="CONTACTFACT" type="varchar(255)"/>
+            <column name="PAYRULE" type="varchar(255)"/>
+            <column name="FAXNUMBER" type="varchar(255)"/>
+            <column name="PHONENUMBER" type="varchar(255)"/>
+            <column name="MOBILENUMBER" type="varchar(255)"/>
+            <column name="EMAIL" type="varchar(255)"/>
+            <column name="WEBPAGE" type="varchar(255)"/>
+            <column name="NOTES" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create TICKETS Table">
+        <createTable tableName="TICKETS">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TICKETTYPE" type="int" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="TICKETID" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PERSON" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CUSTOMER" type="varchar(255)"/>
+            <column name="STATUS" type="int" defaultValue="0" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>        
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create TICKETLINES table"> 
+        <createTable tableName="TICKETLINES">
+            <column name="TICKET" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LINE" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRODUCT" type="varchar(255)"/>
+            <column name="ATTRIBUTESETINSTANCE_ID" type="varchar(255)"/>
+            <column name="UNITS" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRICE" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAXID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATTRIBUTES" type="${blob.type}"/>
+            <column name="REFUNDQTY" type="double precision" defaultValueNumeric="0.0"/> 
+        </createTable>        
+    </changeSet>	
+	
+    <changeSet author="Chromis POS" id="Create Voucher Table">
+        <createTable tableName="VOUCHERS">
+            <column name="VOUCHER" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>           
+            <column name="SOLDDATE" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="REDEEMDATE" type="timestamp" />            
+            <column name="SOLDTICKETID" type="varchar(50)"/>
+            <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
+        </createTable>       
+    </changeSet>
+			
+
+    <changeSet author="Chromis POS" id="Create TICKETSNUM Sequence" dbms="postgresql, hypersql, hsqldb">
+        <sql>CREATE SEQUENCE TICKETSNUM START WITH 1</sql>
+        <sql>CREATE SEQUENCE TICKETSNUM_REFUND START WITH 1</sql>
+        <sql>CREATE SEQUENCE TICKETSNUM_PAYMENT START WITH 1</sql>
+        <sql>CREATE SEQUENCE PICKUP_NUMBER START WITH 1</sql>
+        <sql>CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1</sql> 
+    </changeSet>
+	
+    <changeSet author="Chromis POS" id="Create TICKETSNUM Sequence" dbms="derby">
+        <sql>CREATE TABLE TICKETSNUM (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO TICKETSNUM VALUES (DEFAULT)</sql>
+        <sql>CREATE TABLE TICKETSNUM_REFUND (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO TICKETSNUM_REFUND VALUES (DEFAULT)</sql>
+        <sql>CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO TICKETSNUM_PAYMENT VALUES (DEFAULT)</sql>
+        <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO PICKUP_NUMBER VALUES (DEFAULT)</sql>
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
+            INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Create TICKETSNUM Sequence" dbms="oracle">
+        <sql>CREATE TABLE TICKETSNUM (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO TICKETSNUM VALUES(1)</sql>		
+        <sql>CREATE TABLE TICKETSNUM_REFUND (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO TICKETSNUM_REFUND VALUES(1)</sql>
+        <sql>CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO TICKETSNUM_PAYMENT VALUES(1)</sql>
+        <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO PICKUP_NUMBER VALUES(1))</sql>        
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL);
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>			
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Create TICKETSNUM Sequence" dbms="mysql">
+        <sql>CREATE TABLE TICKETSNUM (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO TICKETSNUM VALUES(1)</sql>
+        <sql>CREATE TABLE TICKETSNUM_REFUND (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO TICKETSNUM_REFUND VALUES(1)</sql>	
+        <sql>CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO TICKETSNUM_PAYMENT VALUES(1)</sql>
+        <sql>CREATE TABLE PICKUP_NUMBER (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO PICKUP_NUMBER VALUES(1)</sql>	
+        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>			
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Create Primary keys">      
+        <sql>ALTER TABLE APPLICATIONS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE ATTRIBUTE ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE ATTRIBUTEINSTANCE ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE ATTRIBUTESET ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE ATTRIBUTESETINSTANCE ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE ATTRIBUTEUSE ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE ATTRIBUTEVALUE ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE BREAKS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE CATEGORIES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE CLOSEDCASH ADD PRIMARY KEY (MONEY)</sql>
+        <sql>ALTER TABLE CSVIMPORT ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE CUSTOMERS ADD PRIMARY KEY (ID)</sql>           
+        <sql>ALTER TABLE DBPERMISSIONS ADD PRIMARY KEY (CLASSNAME)</sql>        
+        <sql>ALTER TABLE FLOORS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE HVERSIONS ADD PRIMARY KEY (VERSION)</sql>
+        <sql>ALTER TABLE LOCATIONS ADD PRIMARY KEY (ID)</sql>        
+        <sql>ALTER TABLE ORDERS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE PLACES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE PROMOTIONS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE RECEIPTS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE RESERVATIONS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE RESOURCES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE ROLES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE SHAREDTICKETS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE SHIFTS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE STOCKCHANGES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE TAXCATEGORIES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE TAXCUSTCATEGORIES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE THIRDPARTIES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE VOUCHERS ADD PRIMARY KEY (VOUCHER)</sql>              
+        <sql>ALTER TABLE PAYMENTS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE PEOPLE ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE RESERVATION_CUSTOMERS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE SHIFT_BREAKS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE TICKETS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE LEAVES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE PRODUCTS ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE PRODUCTS_COM ADD PRIMARY KEY (ID,PRODUCT,PRODUCT2)</sql>
+        <sql>ALTER TABLE PRODUCTS_KIT ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE STOCKDIARY ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE STOCKLEVEL ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE TAXES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE TAXLINES ADD PRIMARY KEY (ID)</sql>
+        <sql>ALTER TABLE TICKETLINES ADD PRIMARY KEY (TICKET, LINE)</sql>
+    </changeSet>                
+                         
+                                 	 
+</databaseChangeLog>
+

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -70,7 +70,7 @@ public class ProductInfoExt {
     protected Boolean m_bPack;
     protected Double m_packquantity;
     protected String m_packproduct;
-    
+
     public ProductInfoExt() {
         m_ID = null;
         m_sRef = "0000";
@@ -96,7 +96,7 @@ public class ProductInfoExt {
         m_sTextTip = null;
         m_bWarranty = false;
         m_dStockUnits = 0.0;
-        m_sAlias=null;
+        m_sAlias = null;
         m_bAlwaysAvailable = false;
         m_canDiscount = true;
         m_discounted = "no";
@@ -288,10 +288,11 @@ public class ProductInfoExt {
     public final String getPromotionID() {
         return m_promotionid;
     }
-    
+
     public final Boolean getInCatalog() {
         return m_bCatalog;
     }
+
     public final Double getCatOrder() {
         return m_catorder;
     }
@@ -343,7 +344,7 @@ public class ProductInfoExt {
     public final void setAlwaysAvailable(Boolean bValue) {
         m_bAlwaysAvailable = bValue;
     }
- 
+
     public final Boolean getCanDiscount() {
         return m_canDiscount;
     }
@@ -361,7 +362,7 @@ public class ProductInfoExt {
     }
 
     public void setIsPack(Boolean ispack) {
-        m_bPack = ispack; 
+        m_bPack = ispack;
     }
 
     public final double getPackQuantity() {
@@ -372,9 +373,9 @@ public class ProductInfoExt {
     }
 
     public final void setPackQuantity(double packQuantity) {
-        m_packquantity = packQuantity;    
+        m_packquantity = packQuantity;
     }
-    
+
     public final String getPackProduct() {
         return m_packproduct;
     }
@@ -387,13 +388,13 @@ public class ProductInfoExt {
         return new SerializerRead() {
             @Override
             public Object readValues(DataRead dr) throws BasicException {
-                
+
                 // If this assert fails it is likely a coding error
                 // Look at the number of fields fetched by the SELECT statement
                 // and cross check for a mismatch in the INDEX_xxx fields in
                 // DataLogicSales
-                assert( dr.getDataField().length == DataLogicSales.FIELD_COUNT );
-                
+                assert (dr.getDataField().length == DataLogicSales.FIELD_COUNT);
+
                 ProductInfoExt product = new ProductInfoExt();
                 product.m_ID = dr.getString(DataLogicSales.INDEX_ID + 1);
                 product.m_sRef = dr.getString(DataLogicSales.INDEX_REFERENCE + 1);
@@ -408,7 +409,7 @@ public class ProductInfoExt {
                 product.taxcategoryid = dr.getString(DataLogicSales.INDEX_TAXCAT + 1);
                 product.attributesetid = dr.getString(DataLogicSales.INDEX_ATTRIBUTESET_ID + 1);
                 product.m_Image = ImageUtils.readImage(dr.getBytes(DataLogicSales.INDEX_IMAGE + 1));
-                product.m_attributes = ImageUtils.readProperties(dr.getBytes(DataLogicSales.INDEX_ATTRIBUTES + 1));                
+                product.m_attributes = ImageUtils.readProperties(dr.getBytes(DataLogicSales.INDEX_ATTRIBUTES + 1));
                 product.m_stockCost = dr.getDouble(DataLogicSales.INDEX_STOCKCOST + 1);
                 product.m_stockVolume = dr.getDouble(DataLogicSales.INDEX_STOCKVOLUME + 1);
                 product.m_bCatalog = dr.getBoolean(DataLogicSales.INDEX_ISCATALOG + 1);

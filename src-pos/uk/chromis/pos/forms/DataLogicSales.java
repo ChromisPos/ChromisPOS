@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk liquibase
 //
 //    This file is part of Chromis POS
@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
 package uk.chromis.pos.forms;
 
 import uk.chromis.pos.promotion.PromotionInfo;
@@ -47,6 +48,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     protected Session s;
     protected Datas[] auxiliarDatas;
     protected Datas[] stockdiaryDatas;
+    protected Datas[] stockAdjustDatas;
     protected SentenceExec m_sellvoucher;
     protected SentenceExec m_insertcat;
     protected Datas[] paymenttabledatas;
@@ -106,6 +108,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * Creates a new instance of SentenceContainerGeneric
      */
     public DataLogicSales() {
+        stockAdjustDatas = new Datas[]{
+            Datas.STRING,
+            Datas.STRING,
+            Datas.STRING,
+            Datas.DOUBLE
+        };
         stockdiaryDatas = new Datas[]{
             Datas.STRING,       // 0 - ID
             Datas.TIMESTAMP,    // 1- Time
@@ -298,7 +306,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public final ProductInfoExt getProductInfoByCode(String sCode) throws BasicException {
-        
+        if (sCode.startsWith("977")) {
+            // This is an ISSN barcode (news and magazines) 
+            // the first 3 digits correspond to the 977 prefix assigned to serial publications, 
+            // the next 7 digits correspond to the ISSN of the publication 
+            // Anything after that is publisher dependant - we strip everything after  
+            // the 10th character 
+            sCode = sCode.substring(0, 10);
+        }
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
@@ -696,7 +711,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "FROM CATEGORIES C LEFT JOIN CATEGORIES P ON C.PARENTID=P.ID "
                 + "ORDER BY PATH", null, CategoryInfo.getSerializerRead());
     }
-
     /**
      *
      * @return
@@ -756,6 +770,21 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY RECEIPTS.DATENEW DESC, PRODUCTS.NAME",
                 SerializerWriteString.INSTANCE,
                 CustomerTransaction.getSerializerRead()).list(name);
+    }
+
+    /**
+     *
+     * @param productId The product id to look for kit
+     * @return List of products part of the searched product
+     * @throws BasicException
+     */
+    public final List<ProductsRecipeInfo> getProductsKit(String productId) throws BasicException {
+        return new PreparedSentence(s, "SELECT "
+                + "ID, "
+                + "PRODUCT, "
+                + "PRODUCT_KIT, "
+                + "QUANTITY "
+                + "FROM PRODUCTS_KIT WHERE PRODUCT = ? ", SerializerWriteString.INSTANCE, ProductsRecipeInfo.getSerializerRead()).list(productId);
     }
 
     /**
@@ -843,7 +872,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "CITY, "
                 + "REGION, "
                 + "COUNTRY, "
-                + "IMAGE, "
+                + "IMAGE "
+                + "DOB "
                 + "DISCOUNT "
                 + "FROM CUSTOMERS "
                 + "WHERE CARD = ? AND VISIBLE = " + s.DB.TRUE() + " "
@@ -882,6 +912,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "REGION, "
                 + "COUNTRY, "
                 + "IMAGE, "
+                + "DOB, "
                 + "DISCOUNT "
                 + "FROM CUSTOMERS WHERE ID = ?", SerializerWriteString.INSTANCE, new CustomerExtRead()).find(id);
     }
@@ -962,7 +993,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 // Set Receipt Id
                 switch (ticket.getTicketType()) {
                     case NORMAL:
-                        ticket.setTicketId(getNextTicketIndex());
+                        if (ticket.getTicketId() == 0) {
+                            ticket.setTicketId(getNextTicketIndex());
+                        }
                         break;
                     case REFUND:
                         ticket.setTicketId(getNextTicketRefundIndex());
@@ -1351,23 +1384,27 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new SentenceExecTransaction(s) {
             @Override
             public int execInTransaction(Object params) throws BasicException {
-                int updateresult = ((Object[]) params)[5] == null // si ATTRIBUTESETINSTANCE_ID is null
-                        ? new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{6, 3, 4})).exec(params)
-                        : new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{6, 3, 4, 5})).exec(params);
 
-                if (updateresult == 0) {
-                    new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{3, 4, 5, 6})).exec(params);
-                }
-                
                 if(  ((Object[]) params)[15] != null && ((Object[]) params)[16] != null ) {
-                    updateresult = new PreparedSentence(s, "UPDATE STOCKLEVEL SET STOCKSECURITY = ?, STOCKMAXIMUM = ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{15, 16, 3, 4})).exec(params);
+                    int updateresult = new PreparedSentence(s, "UPDATE STOCKLEVEL SET STOCKSECURITY = ?, STOCKMAXIMUM = ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{15, 16, 3, 4})).exec(params);
 
                     if (updateresult == 0) {
                         new PreparedSentence(s, "INSERT INTO STOCKLEVEL (ID, LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 3, 4, 15, 16})).exec(params);
                     }
                 }
                 
-                return new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
+                /* Set up adjust parameters */
+                Object[] adjustParams = new Object[4];
+                Object[] paramsArray = (Object[]) params;
+                adjustParams[0] = paramsArray[3]; //product ->Location 
+                adjustParams[1] = paramsArray[4]; //location -> Product 
+                adjustParams[2] = paramsArray[5]; //attrubutesetinstance 
+                adjustParams[3] = paramsArray[6]; //units 
+
+                int as = adjustStock(adjustParams);
+
+                return as + new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
+
             }
         };
     }
@@ -1421,11 +1458,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     }
 
     public final Double getCustomerDebt(String id) throws BasicException {
-       return (Double) new PreparedSentence(s, "SELECT CURDEBT FROM CUSTOMERS WHERE ID = ? ", 
-              SerializerWriteString.INSTANCE, SerializerReadDouble.INSTANCE).find(id);
+        return (Double) new PreparedSentence(s, "SELECT CURDEBT FROM CUSTOMERS WHERE ID = ? ",
+                SerializerWriteString.INSTANCE, SerializerReadDouble.INSTANCE).find(id);
 
     }
-   
+
     /**
      *
      * @param warehouse
@@ -1576,6 +1613,40 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     }
 
     /**
+     * @param params[0] Product ID
+     * @param params[1] location Location to adjust from
+     * @param params[2] Attribute ID
+     * @param params[3] Units
+     */
+    private int adjustStock(Object params[]) throws BasicException {
+        /* Retrieve product kit */
+        List<ProductsRecipeInfo> kit = getProductsKit((String) ((Object[]) params)[1]);
+        if (kit.size() > 0) {
+            /* If this is a kit, i.e. has hits, call recursively for each product */
+            int as = 0;
+            for (ProductsRecipeInfo component : kit) {
+                Object[] adjustParams = new Object[4];
+                adjustParams[0] = params[0];
+                adjustParams[1] = component.getProductKitId();
+                adjustParams[2] = params[2];
+                adjustParams[3] = ((Double) params[3]) * component.getQuantity();
+                as += adjustStock(adjustParams);
+            }
+            return as;
+        } else {
+            /* If not, adjust the stock */
+            int updateresult = ((Object[]) params)[2] == null // si ATTRIBUTESETINSTANCE_ID is null
+                    ? new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{3, 0, 1})).exec(params)
+                    : new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{3, 0, 1, 2})).exec(params);
+
+            if (updateresult == 0) {
+                new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{0, 1, 2, 3})).exec(params);
+            }
+            return 1;
+        }
+    }
+
+    /**
      *
      */
     protected static class CustomerExtRead implements SerializerRead {
@@ -1612,7 +1683,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             c.setRegion(dr.getString(22));
             c.setCountry(dr.getString(23));
             c.setImage(dr.getString(24));
-            c.setDiscount(dr.getDouble(25));
+            c.setDoB(dr.getTimestamp(25));
+            c.setDiscount(dr.getDouble(26));
 
             return c;
         }

@@ -1,5 +1,5 @@
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -25,6 +25,8 @@ import uk.chromis.pos.payment.PaymentInfo;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.printer.TicketPrinterException;
+import uk.chromis.pos.forms.DataLogicSystem;
 
 boolean isCash = false;
 String change = "";

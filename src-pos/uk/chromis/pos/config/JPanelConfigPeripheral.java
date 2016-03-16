@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -243,6 +243,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         jcboConnDisplay.addItem("serial");
         jcboConnDisplay.addItem("file");
+        jcboConnDisplay.addItem("raw");
+        jcboConnDisplay.addItem("usb");
 
         jcboSerialDisplay.addItem("COM1");
         jcboSerialDisplay.addItem("COM2");
@@ -804,9 +806,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         m_jPrinterParams1 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jlblConnPrinter = new javax.swing.JLabel();
+        jlblConnPrinter1 = new javax.swing.JLabel();
         jcboConnPrinter1 = new javax.swing.JComboBox();
-        jlblPrinterPort = new javax.swing.JLabel();
+        jlblPrinterPort1 = new javax.swing.JLabel();
         jcboSerialPrinter1 = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
@@ -842,7 +844,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jPanel15 = new javax.swing.JPanel();
         jlblConnPrinter4 = new javax.swing.JLabel();
         jcboConnPrinter4 = new javax.swing.JComboBox();
-        jlblPrinterPort6 = new javax.swing.JLabel();
+        jlblPrinterPort4 = new javax.swing.JLabel();
         jcboSerialPrinter4 = new javax.swing.JComboBox();
         jPanel18 = new javax.swing.JPanel();
         m_jtxtJPOSPrinter4 = new javax.swing.JTextField();
@@ -854,7 +856,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jPanel21 = new javax.swing.JPanel();
         jlblConnPrinter5 = new javax.swing.JLabel();
         jcboConnPrinter5 = new javax.swing.JComboBox();
-        jlblPrinterPort7 = new javax.swing.JLabel();
+        jlblPrinterPort5 = new javax.swing.JLabel();
         jcboSerialPrinter5 = new javax.swing.JComboBox();
         jPanel22 = new javax.swing.JPanel();
         m_jtxtJPOSPrinter5 = new javax.swing.JTextField();
@@ -866,7 +868,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jPanel25 = new javax.swing.JPanel();
         jlblConnPrinter6 = new javax.swing.JLabel();
         jcboConnPrinter6 = new javax.swing.JComboBox();
-        jlblPrinterPort8 = new javax.swing.JLabel();
+        jlblPrinterPort6 = new javax.swing.JLabel();
         jcboSerialPrinter6 = new javax.swing.JComboBox();
         jPanel26 = new javax.swing.JPanel();
         m_jtxtJPOSPrinter6 = new javax.swing.JTextField();
@@ -876,12 +878,12 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         m_jScaleParams = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
-        jlblPrinterPort4 = new javax.swing.JLabel();
+        jlblScalePort = new javax.swing.JLabel();
         jcboSerialScale = new javax.swing.JComboBox();
         m_jScannerParams = new javax.swing.JPanel();
         jPanel24 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        jlblPrinterPort5 = new javax.swing.JLabel();
+        jlblScannerPort = new javax.swing.JLabel();
         jcboSerialScanner = new javax.swing.JComboBox();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1053,7 +1055,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 .addComponent(jlblDisplayPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jcboSerialDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1089,7 +1091,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(m_jtxtJPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(204, Short.MAX_VALUE))
+                .addContainerGap(212, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1108,9 +1110,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         jPanel5.setPreferredSize(new java.awt.Dimension(10, 25));
         m_jPrinterParams1.add(jPanel5, "empty");
 
-        jlblConnPrinter.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jlblConnPrinter.setText(AppLocal.getIntString("label.machinedisplayconn")); // NOI18N
-        jlblConnPrinter.setPreferredSize(new java.awt.Dimension(50, 25));
+        jlblConnPrinter1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jlblConnPrinter1.setText(AppLocal.getIntString("label.machinedisplayconn")); // NOI18N
+        jlblConnPrinter1.setPreferredSize(new java.awt.Dimension(50, 25));
 
         jcboConnPrinter1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jcboConnPrinter1.setPreferredSize(new java.awt.Dimension(100, 23));
@@ -1120,9 +1122,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             }
         });
 
-        jlblPrinterPort.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jlblPrinterPort.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
-        jlblPrinterPort.setPreferredSize(new java.awt.Dimension(50, 25));
+        jlblPrinterPort1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jlblPrinterPort1.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
+        jlblPrinterPort1.setPreferredSize(new java.awt.Dimension(50, 25));
 
         jcboSerialPrinter1.setEditable(true);
         jcboSerialPrinter1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1134,13 +1136,13 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jlblConnPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jlblConnPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jcboConnPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlblPrinterPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jlblPrinterPort1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcboSerialPrinter1, 0, 146, Short.MAX_VALUE)
+                .addComponent(jcboSerialPrinter1, 0, 158, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -1148,9 +1150,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcboConnPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblPrinterPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblPrinterPort1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcboSerialPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblConnPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jlblConnPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
         );
 
@@ -1234,7 +1236,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jlblPrinterPort2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcboSerialPrinter2, 0, 146, Short.MAX_VALUE)
+                .addComponent(jcboSerialPrinter2, 0, 158, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -1328,7 +1330,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jlblPrinterPort3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcboSerialPrinter3, 0, 146, Short.MAX_VALUE)
+                .addComponent(jcboSerialPrinter3, 0, 158, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -1402,9 +1404,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             }
         });
 
-        jlblPrinterPort6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jlblPrinterPort6.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
-        jlblPrinterPort6.setPreferredSize(new java.awt.Dimension(50, 25));
+        jlblPrinterPort4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jlblPrinterPort4.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
+        jlblPrinterPort4.setPreferredSize(new java.awt.Dimension(50, 25));
 
         jcboSerialPrinter4.setEditable(true);
         jcboSerialPrinter4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1420,9 +1422,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jcboConnPrinter4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlblPrinterPort6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jlblPrinterPort4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcboSerialPrinter4, 0, 146, Short.MAX_VALUE)
+                .addComponent(jcboSerialPrinter4, 0, 158, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel15Layout.setVerticalGroup(
@@ -1430,7 +1432,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcboConnPrinter4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblPrinterPort6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblPrinterPort4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcboSerialPrinter4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlblConnPrinter4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
@@ -1496,9 +1498,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             }
         });
 
-        jlblPrinterPort7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jlblPrinterPort7.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
-        jlblPrinterPort7.setPreferredSize(new java.awt.Dimension(50, 25));
+        jlblPrinterPort5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jlblPrinterPort5.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
+        jlblPrinterPort5.setPreferredSize(new java.awt.Dimension(50, 25));
 
         jcboSerialPrinter5.setEditable(true);
         jcboSerialPrinter5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1514,9 +1516,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jcboConnPrinter5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlblPrinterPort7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jlblPrinterPort5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcboSerialPrinter5, 0, 146, Short.MAX_VALUE)
+                .addComponent(jcboSerialPrinter5, 0, 158, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel21Layout.setVerticalGroup(
@@ -1524,7 +1526,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcboConnPrinter5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblPrinterPort7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblPrinterPort5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcboSerialPrinter5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlblConnPrinter5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
@@ -1590,9 +1592,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             }
         });
 
-        jlblPrinterPort8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jlblPrinterPort8.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
-        jlblPrinterPort8.setPreferredSize(new java.awt.Dimension(50, 25));
+        jlblPrinterPort6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jlblPrinterPort6.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
+        jlblPrinterPort6.setPreferredSize(new java.awt.Dimension(50, 25));
 
         jcboSerialPrinter6.setEditable(true);
         jcboSerialPrinter6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1608,9 +1610,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jcboConnPrinter6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlblPrinterPort8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jlblPrinterPort6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcboSerialPrinter6, 0, 146, Short.MAX_VALUE)
+                .addComponent(jcboSerialPrinter6, 0, 158, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel25Layout.setVerticalGroup(
@@ -1618,7 +1620,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             .addGroup(jPanel25Layout.createSequentialGroup()
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcboConnPrinter6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblPrinterPort8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblPrinterPort6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcboSerialPrinter6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlblConnPrinter6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
@@ -1672,9 +1674,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         m_jScaleParams.setLayout(new java.awt.CardLayout());
         m_jScaleParams.add(jPanel16, "empty");
 
-        jlblPrinterPort4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jlblPrinterPort4.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
-        jlblPrinterPort4.setPreferredSize(new java.awt.Dimension(50, 25));
+        jlblScalePort.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jlblScalePort.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
+        jlblScalePort.setPreferredSize(new java.awt.Dimension(50, 25));
 
         jcboSerialScale.setEditable(true);
         jcboSerialScale.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1686,17 +1688,17 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jlblPrinterPort4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jlblScalePort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jcboSerialScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(224, Short.MAX_VALUE))
+                .addContainerGap(232, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcboSerialScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblPrinterPort4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jlblScalePort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
         );
 
@@ -1706,9 +1708,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         m_jScannerParams.setLayout(new java.awt.CardLayout());
         m_jScannerParams.add(jPanel24, "empty");
 
-        jlblPrinterPort5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jlblPrinterPort5.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
-        jlblPrinterPort5.setPreferredSize(new java.awt.Dimension(50, 25));
+        jlblScannerPort.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jlblScannerPort.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
+        jlblScannerPort.setPreferredSize(new java.awt.Dimension(50, 25));
 
         jcboSerialScanner.setEditable(true);
         jcboSerialScanner.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1720,17 +1722,17 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jlblPrinterPort5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jlblScannerPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jcboSerialScanner, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(234, Short.MAX_VALUE))
+                .addComponent(jcboSerialScanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(232, Short.MAX_VALUE))
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcboSerialScanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblPrinterPort5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jlblScannerPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
         );
 
@@ -1748,7 +1750,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jcboMachinePrinter2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jPrinterParams2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(m_jPrinterParams2, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1795,12 +1797,12 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel13Layout.createSequentialGroup()
                                 .addComponent(jcboMachineDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(m_jDisplayParams, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+                                .addComponent(m_jDisplayParams, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
                             .addGroup(jPanel13Layout.createSequentialGroup()
                                 .addComponent(jcboMachinePrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1869,14 +1871,14 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cboPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(m_jScannerParams, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addContainerGap(174, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2016,8 +2018,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter2ActionPerformed
         jcboSerialPrinter2.removeAllItems();
         if (("raw".equals(jcboConnPrinter2.getSelectedItem())) || ("usb".equals(jcboConnPrinter2.getSelectedItem()))) {
+            jlblPrinterPort2.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter2);
         } else {
+            jlblPrinterPort2.setText("Port");
             buildPrinterList(jcboSerialPrinter2);
         }
         jcboSerialPrinter2.setSelectedItem(null);
@@ -2026,8 +2030,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter1ActionPerformed
         jcboSerialPrinter1.removeAllItems();
         if (("raw".equals(jcboConnPrinter1.getSelectedItem())) || ("usb".equals(jcboConnPrinter1.getSelectedItem()))) {
+            jlblPrinterPort1.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter1);
         } else {
+            jlblPrinterPort1.setText("Port");
             buildPrinterList(jcboSerialPrinter1);
         }
         jcboSerialPrinter1.setSelectedItem(null);
@@ -2036,8 +2042,10 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter3ActionPerformed
         jcboSerialPrinter3.removeAllItems();
         if (("raw".equals(jcboConnPrinter3.getSelectedItem())) || ("usb".equals(jcboConnPrinter3.getSelectedItem()))) {
+            jlblPrinterPort3.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter3);
         } else {
+            jlblPrinterPort3.setText("Port");
             buildPrinterList(jcboSerialPrinter3);
         }
         jcboSerialPrinter3.setSelectedItem(null);
@@ -2046,28 +2054,33 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private void jcboConnPrinter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter4ActionPerformed
         jcboSerialPrinter4.removeAllItems();
         if (("raw".equals(jcboConnPrinter4.getSelectedItem())) || ("usb".equals(jcboConnPrinter4.getSelectedItem()))) {
+            jlblPrinterPort4.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter4);
         } else {
+            jlblPrinterPort4.setText("Port");
             buildPrinterList(jcboSerialPrinter4);
+            jcboSerialPrinter4.setSelectedItem(null);
         }
-        jcboSerialPrinter4.setSelectedItem(null);
     }//GEN-LAST:event_jcboConnPrinter4ActionPerformed
 
     private void jcboConnPrinter5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter5ActionPerformed
         jcboSerialPrinter5.removeAllItems();
         if (("raw".equals(jcboConnPrinter5.getSelectedItem())) || ("usb".equals(jcboConnPrinter5.getSelectedItem()))) {
+            jlblPrinterPort5.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter5);
         } else {
+            jlblPrinterPort5.setText("Port");
             buildPrinterList(jcboSerialPrinter5);
         }
-        jcboSerialPrinter5.setSelectedItem(null);
     }//GEN-LAST:event_jcboConnPrinter5ActionPerformed
 
     private void jcboConnPrinter6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnPrinter6ActionPerformed
         jcboSerialPrinter6.removeAllItems();
         if (("raw".equals(jcboConnPrinter6.getSelectedItem())) || ("usb".equals(jcboConnPrinter6.getSelectedItem()))) {
+            jlblPrinterPort6.setText("Printer");
             addRegisteredPrinters(jcboSerialPrinter6);
         } else {
+            jlblPrinterPort6.setText("Port");
             buildPrinterList(jcboSerialPrinter6);
         }
         jcboSerialPrinter6.setSelectedItem(null);
@@ -2151,21 +2164,21 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
     private javax.swing.JComboBox jcboSerialScale;
     private javax.swing.JComboBox jcboSerialScanner;
     private javax.swing.JLabel jlblConnDisplay;
-    private javax.swing.JLabel jlblConnPrinter;
+    private javax.swing.JLabel jlblConnPrinter1;
     private javax.swing.JLabel jlblConnPrinter2;
     private javax.swing.JLabel jlblConnPrinter3;
     private javax.swing.JLabel jlblConnPrinter4;
     private javax.swing.JLabel jlblConnPrinter5;
     private javax.swing.JLabel jlblConnPrinter6;
     private javax.swing.JLabel jlblDisplayPort;
-    private javax.swing.JLabel jlblPrinterPort;
+    private javax.swing.JLabel jlblPrinterPort1;
     private javax.swing.JLabel jlblPrinterPort2;
     private javax.swing.JLabel jlblPrinterPort3;
     private javax.swing.JLabel jlblPrinterPort4;
     private javax.swing.JLabel jlblPrinterPort5;
     private javax.swing.JLabel jlblPrinterPort6;
-    private javax.swing.JLabel jlblPrinterPort7;
-    private javax.swing.JLabel jlblPrinterPort8;
+    private javax.swing.JLabel jlblScalePort;
+    private javax.swing.JLabel jlblScannerPort;
     private javax.swing.JPanel m_jDisplayParams;
     private javax.swing.JPanel m_jPrinterParams1;
     private javax.swing.JPanel m_jPrinterParams2;

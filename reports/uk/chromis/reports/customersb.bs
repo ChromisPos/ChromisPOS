@@ -1,5 +1,5 @@
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016 2016 Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -35,7 +35,7 @@ report.addField("CARD", uk.chromis.data.loader.Datas.STRING);
 report.addField("MAXDEBT", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("CURDATE", uk.chromis.data.loader.Datas.TIMESTAMP);
 report.addField("CURDEBT", uk.chromis.data.loader.Datas.DOUBLE);
-report.addField("DISCOUNT", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("DISCOUNT", uk.chromis.data.loader.Datas.PERCENT); 
 
 report;
 

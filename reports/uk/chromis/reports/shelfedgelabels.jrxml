@@ -54,3 +54,4 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 		</band>
 	</detail>
 </jasperReport>
+

@@ -351,3 +351,4 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
     private javax.swing.JTextField txtMaxdebt;
     // End of variables declaration//GEN-END:variables
 }
+

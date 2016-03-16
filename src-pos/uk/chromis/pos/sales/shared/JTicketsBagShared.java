@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -182,7 +182,7 @@ public class JTicketsBagShared extends JTicketsBag {
             m_panelticket.setTicketName(tName);
         }
         checkLayaways();
-        // END TRANSACTION                 
+
     }
 
     private void checkLayaways() {
@@ -240,20 +240,23 @@ public class JTicketsBagShared extends JTicketsBag {
             newTicket();
         }*/
         newTicket();
-        /*
-        try {
-            List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
-            if (l.isEmpty()) {
-                m_jListTickets.setText("");                
-                 newTicket();
-            } else {
-                m_jListTickets.doClick(); 
+       // AutoLogoff.getInstance().deactivateTimer();
+        if (AppConfig.getInstance().getBoolean("till.layawaypopup")) {
+            try {
+                List<SharedTicketInfo> l = dlReceipts.getSharedTicketList();
+                if (l.isEmpty()) {
+                    m_jListTickets.setText("");
+                    newTicket();
+                    AutoLogoff.getInstance().activateTimer();
+                } else {
+                    m_jListTicketsActionPerformed(null);
+                }
+            } catch (BasicException e) {
+                new MessageInf(e).show(this);
+                newTicket();
+                AutoLogoff.getInstance().activateTimer();
             }
-        } catch (BasicException e) {
-            new MessageInf(e).show(this);
-            newTicket();
-        }  
-         */
+        }
 
     }
 
@@ -338,7 +341,7 @@ public class JTicketsBagShared extends JTicketsBag {
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jListTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jListTicketsActionPerformed
-        AutoLogoff.getInstance().deactivateTimer();
+  //      AutoLogoff.getInstance().deactivateTimer();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -369,7 +372,6 @@ public class JTicketsBagShared extends JTicketsBag {
                 }
             }
         });
-        AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_m_jListTicketsActionPerformed
 
     private void m_jDelTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDelTicketActionPerformed

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -17,7 +17,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    Updated to use liguibase JDL
+//   
 package uk.chromis.pos.migrate;
 
 import uk.chromis.basic.BasicException;
@@ -65,16 +65,17 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     private DirtyManager dirty = new DirtyManager();
     private Connection con;
     private String sdbmanager;
-    private Session session;
+    //  private Session session;
     private Connection con2;
     private String sdbmanager2;
     private Session session2;
     private ResultSet rs;
+    private ResultSet rs2;
     private Statement stmt;
     private Statement stmt2;
     private String SQL;
     private PreparedStatement pstmt;
-    private PreparedStatement pstmt2;
+    private String ticketsnumInvoice;
     private String ticketsnum;
     private String ticketsnumRefund;
     private String ticketsnumPayment;
@@ -104,7 +105,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
         initComponents();
         jPanel2.setPreferredSize(new java.awt.Dimension(645, 209));
-        //    m_props = props;
         m_panelconfig = new ArrayList<>();
 
         jtxtDbDriverLib.getDocument().addDocumentListener(dirty);
@@ -127,6 +127,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
      */
     @SuppressWarnings("empty-statement")
     public Boolean createMigratedb() {
+        pb.setString("Creating blank database ..... ");
 
         if ((!"MySQL".equals(sdbmanager2)) && (!"PostgreSQL".equals(sdbmanager2)) && (!"Apache Derby".equals(sdbmanager2))) {
             return (false);
@@ -136,11 +137,12 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
-            changelog = "uk/chromis/pos/liquibase/migratelog.xml";
+            changelog = "uk/chromis/pos/liquibase/migratecreate.xml";
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
             liquibase.update("implement");
+
         } catch (DatabaseException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LiquibaseException ex) {
@@ -156,16 +158,16 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
      * @return
      */
     public Boolean addFKeys() {
-
         try {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
-            changelog = "uk/chromis/pos/liquibase/createfkslog.xml";
+            changelog = "uk/chromis/pos/liquibase/migratecomplete.xml";
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
             liquibase.update("implement");
+
         } catch (DatabaseException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LiquibaseException ex) {
@@ -173,7 +175,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         } catch (MalformedURLException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return (true);
     }
 
@@ -243,7 +244,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         }
 
         try {
-            session = AppViewConnection.createSession();
+            Session session = AppViewConnection.createSession();
             con = DriverManager.getConnection(db_url, db_user, db_password);
             sdbmanager = con.getMetaData().getDatabaseProductName();
         } catch (BasicException | SQLException e) {
@@ -289,6 +290,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         jLabel5 = new javax.swing.JLabel();
         jNewdbType = new javax.swing.JComboBox();
         jButtonTest = new javax.swing.JButton();
+        pb = new javax.swing.JProgressBar();
 
         setPreferredSize(new java.awt.Dimension(600, 300));
 
@@ -422,7 +424,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -460,17 +462,19 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(364, Short.MAX_VALUE)
                 .addComponent(jbtnMigrate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -481,7 +485,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pb, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnMigrate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -489,201 +495,864 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtnMigrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMigrateActionPerformed
+    private void performAction() {
         if (getSeconddbDetails()) {
 // check if this a supported migration path         
-
             if (createMigratedb()) {
 
                 try {
                     stmt = (Statement) con.createStatement();
-                    stmt2 = (Statement) con2.createStatement();
+                    stmt2 = (Statement) con2.createStatement(rs2.TYPE_SCROLL_SENSITIVE, rs2.CONCUR_UPDATABLE);
+
 
 //copy applications table
+                    pb.setString("Migrating Applications table");
                     SQL = "SELECT * FROM APPLICATIONS";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO APPLICATIONS (ID, NAME, VERSION) VALUES (?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("VERSION"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("VERSION", rs.getString("VERSION"));
+                        rs2.insertRow();
                     }
 
 // copy attribute table       
+                    pb.setString("Migrating Attributes table");
                     SQL = "SELECT * FROM ATTRIBUTE";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO ATTRIBUTE (ID, NAME) VALUES (?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.insertRow();
                     }
 
 //  copy attributeinstance table        
+                    pb.setString("Migrating Attributeinstance table");
                     SQL = "SELECT * FROM ATTRIBUTEINSTANCE";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO ATTRIBUTEINSTANCE (ID, ATTRIBUTEINSTANCE_ID, ATTRIBUTE_ID, VALUE) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("ATTRIBUTEINSTANCE_ID"));
-                        pstmt.setString(3, rs.getString("ATTRIBUTE_ID"));
-                        pstmt.setString(4, rs.getString("VALUE"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("ATTRIBUTESETINSTANCE_ID", rs.getString("ATTRIBUTESETINSTANCE_ID"));
+                        rs2.updateString("ATTRIBUTE_ID", rs.getString("ATTRIBUTE_ID"));
+                        rs2.updateString("VALUE", rs.getString("VALUE"));
+                        rs2.insertRow();
                     }
 
 // copy attributeset table       
+                    pb.setString("Migrating Attributeset table");
                     SQL = "SELECT * FROM ATTRIBUTESET";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO ATTRIBUTESET (ID, NAME) VALUES (?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.insertRow();
                     }
 
-// copy attributesetinstance table       
+// copy attributesetinstance table  
+                    pb.setString("Migrating Attributesetinstance table");
                     SQL = "SELECT * FROM ATTRIBUTESETINSTANCE";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO ATTRIBUTESETINSTANCE (ID, ATTRIBUTESET_ID, DESCRIPTION) VALUES (?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("ATTRIBUTESET_ID"));
-                        pstmt.setString(3, rs.getString("DESCRIPTION"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("ATTRIBUTESET_ID", rs.getString("ATTRIBUTESET_ID"));
+                        rs2.updateString("DESCRIPTION", rs.getString("DESCRIPTION"));
+                        rs2.insertRow();
                     }
 
-// copy attributeuse table       
+// copy attributeuse table    
+                    pb.setString("Migrating Attributeuse table");
                     SQL = "SELECT * FROM ATTRIBUTEUSE";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO ATTRIBUTEUSE(ID, ATTRIBUTESET_ID, ATTRIBUTE_ID, LINENO) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("ATTRIBUTESET_ID"));
-                        pstmt.setString(3, rs.getString("ATTRIBUTE_ID"));
-                        pstmt.setInt(4, rs.getInt("LINENO"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("ATTRIBUTESET_ID", rs.getString("ATTRIBUTESET_ID"));
+                        rs2.updateString("ATTRIBUTE_ID", rs.getString("ATTRIBUTE_ID"));
+                        rs2.updateInt("LINENO", rs.getInt("LINENO"));
+                        rs2.insertRow();
                     }
 
 // copy attributevalue table       
+                    pb.setString("Migrating Attributevalue table");
                     SQL = "SELECT * FROM ATTRIBUTEVALUE";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO ATTRIBUTEVALUE (ID, ATTRIBUTE_ID, VALUE) VALUES (?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("ATTRIBUTE_ID"));
-                        pstmt.setString(3, rs.getString("VALUE"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("ATTRIBUTE_ID", rs.getString("ATTRIBUTE_ID"));
+                        rs2.updateString("VALUE", rs.getString("VALUE"));
+                        rs2.insertRow();
                     }
 
-// copy breaks table       
+// copy breaks table     
+                    pb.setString("Migrating Breaks table");
                     SQL = "SELECT * FROM BREAKS";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO BREAKS(ID, NAME, NOTES, VISIBLE) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("NOTES"));
-                        pstmt.setBoolean(4, rs.getBoolean("VISIBLE"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("NOTES", rs.getString("NOTES"));
+                        rs2.updateBoolean("VISIBLE", rs.getBoolean("VISIBLE"));
+                        rs2.insertRow();
                     }
 
-// copy categories table       
+// copy categories table    
+                    pb.setString("Migrating Categories table");
                     SQL = "SELECT * FROM CATEGORIES";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO CATEGORIES(ID, NAME, PARENTID, IMAGE, TEXTTIP, CATSHOWNAME, COLOUR ) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("PARENTID"));
-                        pstmt.setBytes(4, rs.getBytes("IMAGE"));
-                        pstmt.setString(5, rs.getString("TEXTTIP"));
-                        pstmt.setBoolean(6, rs.getBoolean("CATSHOWNAME"));
-                        pstmt.setString(7, rs.getString("COLOUR"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("PARENTID", rs.getString("PARENTID"));
+                        rs2.updateBytes("IMAGE", rs.getBytes("IMAGE"));
+                        rs2.updateString("TEXTTIP", rs.getString("TEXTTIP"));
+                        rs2.updateBoolean("CATSHOWNAME", rs.getBoolean("CATSHOWNAME"));
+                        rs2.updateString("COLOUR", rs.getString("COLOUR"));
+                        rs2.updateInt("CATORDER", rs.getInt("CATORDER"));
+                        rs2.insertRow();
                     }
 
-// copy closedcash  table       
+// copy closedcash  table  
+                    pb.setString("Migrating closedcash table");
                     SQL = "SELECT * FROM CLOSEDCASH";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO CLOSEDCASH(MONEY, HOST, HOSTSEQUENCE, DATESTART, DATEEND, NOSALES ) VALUES (?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("MONEY"));
-                        pstmt.setString(2, rs.getString("HOST"));
-                        pstmt.setInt(3, rs.getInt("HOSTSEQUENCE"));
-                        pstmt.setTimestamp(4, rs.getTimestamp("DATESTART"));
-                        pstmt.setTimestamp(5, rs.getTimestamp("DATEEND"));
-                        pstmt.setInt(6, rs.getInt("NOSALES"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("MONEY", rs.getString("MONEY"));
+                        rs2.updateString("HOST", rs.getString("HOST"));
+                        rs2.updateInt("HOSTSEQUENCE", rs.getInt("HOSTSEQUENCE"));
+                        rs2.updateTimestamp("DATESTART", rs.getTimestamp("DATESTART"));
+                        rs2.updateTimestamp("DATEEND", rs.getTimestamp("DATEEND"));
+                        rs2.updateInt("NOSALES", rs.getInt("NOSALES"));
+                        rs2.insertRow();
                     }
 
-// copy csvimport  table       
+// copy csvimport  table  
+                    pb.setString("Migrating CSVImport table");
                     SQL = "SELECT * FROM CSVIMPORT";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO CSVIMPORT (ID, ROWNUMBER, CSVERROR, REFERENCE, CODE, NAME, PRICEBUY, PRICESELL, PREVIOUSBUY, PREVIOUSSELL, CATEGORY  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("ROWNUMBER"));
-                        pstmt.setString(3, rs.getString("CSVERROR"));
-                        pstmt.setString(4, rs.getString("REFERENCE"));
-                        pstmt.setString(5, rs.getString("CODE"));
-                        pstmt.setString(6, rs.getString("NAME"));
-                        pstmt.setDouble(7, rs.getDouble("PRICEBUY"));
-                        pstmt.setDouble(8, rs.getDouble("PRICESELL"));
-                        pstmt.setDouble(9, rs.getDouble("PREVIOUSBUY"));
-                        pstmt.setDouble(10, rs.getDouble("PREVIOUSSELL"));
-                        pstmt.setString(11, rs.getString("CATEGORY"));
-                        pstmt.executeUpdate();
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("ROWNUMBER", rs.getString("ROWNUMBER"));
+                        rs2.updateString("CSVERROR", rs.getString("CSVERROR"));
+                        rs2.updateString("REFERENCE", rs.getString("REFERENCE"));
+                        rs2.updateString("CODE", rs.getString("CODE"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateDouble("PRICEBUY", rs.getDouble("PRICEBUY"));
+                        rs2.updateDouble("PRICESELL", rs.getDouble("PRICESELL"));
+                        rs2.updateDouble("PREVIOUSBUY", rs.getDouble("PREVIOUSBUY"));
+                        rs2.updateDouble("PREVIOUSSELL", rs.getDouble("PREVIOUSSELL"));
+                        rs2.updateString("CATEGORY", rs.getString("CATEGORY"));
+                        rs2.insertRow();
                     }
 
-// copy CUSTOMERS  table       
+// copy CUSTOMERS  table  
+                    pb.setString("Migrating Customers table");
                     SQL = "SELECT * FROM CUSTOMERS";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO CUSTOMERS (ID, SEARCHKEY, TAXID, NAME, TAXCATEGORY, CARD, MAXDEBT, ADDRESS, ADDRESS2, POSTAL, CITY,  REGION, COUNTRY, FIRSTNAME, LASTNAME, EMAIL, PHONE, PHONE2, FAX, NOTES, VISIBLE, CURDATE, CURDEBT, IMAGE, DISCOUNT )"
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("SEARCHKEY", rs.getString("SEARCHKEY"));
+                        rs2.updateString("TAXID", rs.getString("TAXID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("TAXCATEGORY", rs.getString("TAXCATEGORY"));
+                        rs2.updateString("CARD", rs.getString("CARD"));
+                        rs2.updateDouble("MAXDEBT", rs.getDouble("MAXDEBT"));
+                        rs2.updateString("ADDRESS", rs.getString("ADDRESS"));
+                        rs2.updateString("ADDRESS2", rs.getString("ADDRESS2"));
+                        rs2.updateString("POSTAL", rs.getString("POSTAL"));
+                        rs2.updateString("CITY", rs.getString("CITY"));
+                        rs2.updateString("REGION", rs.getString("REGION"));
+                        rs2.updateString("COUNTRY", rs.getString("COUNTRY"));
+                        rs2.updateString("FIRSTNAME", rs.getString("FIRSTNAME"));
+                        rs2.updateString("LASTNAME", rs.getString("LASTNAME"));
+                        rs2.updateString("EMAIL", rs.getString("EMAIL"));
+                        rs2.updateString("PHONE", rs.getString("PHONE"));
+                        rs2.updateString("PHONE2", rs.getString("PHONE2"));
+                        rs2.updateString("FAX", rs.getString("FAX"));
+                        rs2.updateString("NOTES", rs.getString("NOTES"));
+                        rs2.updateBoolean("VISIBLE", rs.getBoolean("VISIBLE"));
+                        rs2.updateTimestamp("CURDATE", rs.getTimestamp("CURDATE"));
+                        rs2.updateDouble("CURDEBT", rs.getDouble("CURDEBT"));
+                        rs2.updateBytes("IMAGE", rs.getBytes("IMAGE"));
+                        rs2.updateTimestamp("DOB", rs.getTimestamp("DOB"));
+                        rs2.updateDouble("DISCOUNT", rs.getDouble("DISCOUNT"));
+                        rs2.insertRow();
+                    }
+                                                            
+                    
+// copy DBPERMISSIONS table 
+                    pb.setString("Migrating DBPermissions table");
+                    SQL = "SELECT * FROM DBPERMISSIONS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("CLASSNAME", rs.getString("CLASSNAME"));
+                        rs2.updateString("SECTION", rs.getString("SECTION"));
+                        rs2.updateString("DISPLAYNAME", rs.getString("DISPLAYNAME"));
+                        rs2.updateString("DESCRIPTION", rs.getString("DESCRIPTION"));
+                        rs2.insertRow();
+                    }
+
+// copy DRAWEROPEN table  
+                    pb.setString("Migrating Draweropened table");
+                    SQL = "SELECT * FROM DRAWEROPENED";
+                    rs = stmt.executeQuery(SQL);
+                   /*
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateTimestamp("OPENDATE", rs.getTimestamp("OPENDATE"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("TICKETID", rs.getString("TICKETID"));
+                        rs2.insertRow();
+                    }
+                    
+                    */
+                    while (rs.next()) {
+                        SQL = "INSERT INTO DRAWEROPENED (OPENDATE, NAME, TICKETID) VALUES (?, ?, ?)";
                         pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("SEARCHKEY"));
-                        pstmt.setString(3, rs.getString("TAXID"));
-                        pstmt.setString(4, rs.getString("NAME"));
-                        pstmt.setString(5, rs.getString("TAXCATEGORY"));
-                        pstmt.setString(6, rs.getString("CARD"));
-                        pstmt.setDouble(7, rs.getDouble("MAXDEBT"));
-                        pstmt.setString(8, rs.getString("ADDRESS"));
-                        pstmt.setString(9, rs.getString("ADDRESS2"));
-                        pstmt.setString(10, rs.getString("POSTAL"));
-                        pstmt.setString(11, rs.getString("CITY"));
-                        pstmt.setString(12, rs.getString("REGION"));
-                        pstmt.setString(13, rs.getString("COUNTRY"));
-                        pstmt.setString(14, rs.getString("FIRSTNAME"));
-                        pstmt.setString(15, rs.getString("LASTNAME"));
-                        pstmt.setString(16, rs.getString("EMAIL"));
-                        pstmt.setString(17, rs.getString("PHONE"));
-                        pstmt.setString(18, rs.getString("PHONE2"));
-                        pstmt.setString(19, rs.getString("FAX"));
-                        pstmt.setString(20, rs.getString("NOTES"));
-                        pstmt.setBoolean(21, rs.getBoolean("VISIBLE"));
-                        pstmt.setTimestamp(22, rs.getTimestamp("CURDATE"));
-                        pstmt.setDouble(23, rs.getDouble("CURDEBT"));
-                        pstmt.setBytes(24, rs.getBytes("IMAGE"));
-                        pstmt.setBytes(25, rs.getBytes("DISCOUNT"));
+                        pstmt.setString(1, rs.getString("OPENDATE"));
+                        pstmt.setString(2, rs.getString("NAME"));
+                        pstmt.setString(3, rs.getString("TICKETID"));
+                        pstmt.executeUpdate();
+                    }                    
+                  
+                    
+
+// copy FLOORS table    
+                    pb.setString("Migrating Floors table");
+                    SQL = "SELECT * FROM FLOORS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateBytes("IMAGE", rs.getBytes("IMAGE"));
+                        rs2.insertRow();
+                    }
+
+// copy HVERSIONS table    
+                    pb.setString("Migrating HVersions table");
+                    SQL = "SELECT * FROM HVERSIONS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("VERSION", rs.getString("VERSION"));
+                        rs2.insertRow();
+                    }
+
+// copy LEAVES table  
+                    pb.setString("Migrating Leaves table");
+                    SQL = "SELECT * FROM LEAVES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("PPLID", rs.getString("PPLID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateTimestamp("STARTDATE", rs.getTimestamp("STARTDATE"));
+                        rs2.updateTimestamp("ENDDATE", rs.getTimestamp("ENDDATE"));
+                        rs2.updateString("NOTES", rs.getString("NOTES"));
+                        rs2.insertRow();
+                    }
+
+// copy LINEREMOVED table
+                    pb.setString("Migrating Lineremoved table");
+                    SQL = "SELECT * FROM LINEREMOVED";
+                    rs = stmt.executeQuery(SQL);
+                    while (rs.next()) {
+                        SQL = "INSERT INTO LINEREMOVED (REMOVEDDATE, NAME, TICKETID, PRODUCTID, PRODUCTNAME, UNITS) VALUES (?, ?, ?, ?, ?, ?)";
+                        pstmt = con2.prepareStatement(SQL);
+                        pstmt.setTimestamp(1, rs.getTimestamp("REMOVEDDATE"));
+                        pstmt.setString(2, rs.getString("NAME"));
+                        pstmt.setString(3, rs.getString("TICKETID"));
+                        pstmt.setString(4, rs.getString("PRODUCTID"));
+                        pstmt.setString(5, rs.getString("PRODUCTNAME"));
+                        pstmt.setInt(6, rs.getInt("UNITS"));
                         pstmt.executeUpdate();
                     }
 
+// copy LOCATIONS table 
+                    pb.setString("Migrating Locations table");
+                    SQL = "SELECT * FROM LOCATIONS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("ADDRESS", rs.getString("ADDRESS"));
+                        rs2.insertRow();
+                    }
+
+// copy ORDERS table
+                    pb.setString("Migrating Orders table");
+                    SQL = "SELECT * FROM ORDERS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("ORDERID", rs.getString("ORDERID"));
+                        rs2.updateInt("QTY", rs.getInt("QTY"));
+                        rs2.updateString("DETAILS", rs.getString("DETAILS"));
+                        rs2.updateString("ATTRIBUTES", rs.getString("ATTRIBUTES"));
+                        rs2.updateString("NOTES", rs.getString("NOTES"));
+                        rs2.updateString("TICKETID", rs.getString("TICKETID"));
+                        rs2.updateTimestamp("ORDERTIME", rs.getTimestamp("ORDERTIME"));
+                        rs2.updateString("DISPLAYID", rs.getString("DISPLAYID"));
+                        rs2.updateInt("AUXILIARY", rs.getInt("AUXILIARY"));
+                        rs2.insertRow();
+                    }
+
+// copy payments table    
+                    pb.setString("Migrating Payments table");
+                    SQL = "SELECT * FROM PAYMENTS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("RECEIPT", rs.getString("RECEIPT"));
+                        rs2.updateString("PAYMENT", rs.getString("PAYMENT"));
+                        rs2.updateDouble("TOTAL", rs.getDouble("TOTAL"));
+                        rs2.updateString("TRANSID", rs.getString("TRANSID"));
+                        rs2.updateString("NOTES", rs.getString("NOTES"));
+                        rs2.updateDouble("TENDERED", rs.getDouble("TENDERED"));
+                        rs2.updateString("CARDNAME", rs.getString("CARDNAME"));
+                        rs2.updateBytes("RETURNMSG", rs.getBytes("RETURNMSG"));
+                        rs2.insertRow();
+                    }
+
+// copy PEOPLE table  
+                    pb.setString("Migrating People table");
+                    SQL = "SELECT * FROM PEOPLE";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("APPPASSWORD", rs.getString("APPPASSWORD"));
+                        rs2.updateString("CARD", rs.getString("CARD"));
+                        rs2.updateString("ROLE", rs.getString("ROLE"));
+                        rs2.updateBoolean("VISIBLE", rs.getBoolean("VISIBLE"));
+                        rs2.updateBytes("IMAGE", rs.getBytes("IMAGE"));
+                        rs2.insertRow();
+                    }
+
+// copy Places table      
+                    pb.setString("Migrating Places table");
+                    SQL = "SELECT * FROM PLACES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateInt("X", rs.getInt("X"));
+                        rs2.updateInt("Y", rs.getInt("Y"));
+                        rs2.updateString("FLOOR", rs.getString("FLOOR"));
+                        rs2.updateString("CUSTOMER", rs.getString("CUSTOMER"));
+                        rs2.updateString("WAITER", rs.getString("WAITER"));
+                        rs2.updateString("TICKETID", rs.getString("TICKETID"));
+                        rs2.updateBoolean("TABLEMOVED", rs.getBoolean("TABLEMOVED"));
+                        rs2.insertRow();
+                    }
+
+// copy Products  table   
+                    pb.setString("Migrating Products table");
+                    SQL = "SELECT * FROM PRODUCTS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("REFERENCE", rs.getString("REFERENCE"));
+                        rs2.updateString("CODE", rs.getString("CODE"));
+                        rs2.updateString("CODETYPE", rs.getString("CODETYPE"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateDouble("PRICEBUY", rs.getDouble("PRICEBUY"));
+                        rs2.updateDouble("PRICESELL", rs.getDouble("PRICESELL"));
+                        rs2.updateString("CATEGORY", rs.getString("CATEGORY"));
+                        rs2.updateString("TAXCAT", rs.getString("TAXCAT"));
+                        rs2.updateString("ATTRIBUTESET_ID", rs.getString("ATTRIBUTESET_ID"));
+                        rs2.updateDouble("STOCKCOST", rs.getDouble("STOCKCOST"));
+                        rs2.updateDouble("STOCKVOLUME", rs.getDouble("STOCKVOLUME"));
+                        rs2.updateBytes("IMAGE", rs.getBytes("IMAGE"));
+                        rs2.updateBoolean("ISCOM", rs.getBoolean("ISCOM"));
+                        rs2.updateBoolean("ISSCALE", rs.getBoolean("ISSCALE"));
+                        rs2.updateBoolean("ISKITCHEN", rs.getBoolean("ISKITCHEN"));
+                        rs2.updateBoolean("PRINTKB", rs.getBoolean("PRINTKB"));
+                        rs2.updateBoolean("SENDSTATUS", rs.getBoolean("SENDSTATUS"));
+                        rs2.updateBoolean("ISSERVICE", rs.getBoolean("ISSERVICE"));
+                        rs2.updateString("DISPLAY", rs.getString("DISPLAY"));
+                        rs2.updateBytes("ATTRIBUTES", rs.getBytes("ATTRIBUTES"));
+                        rs2.updateBoolean("ISVPRICE", rs.getBoolean("ISVPRICE"));
+                        rs2.updateBoolean("ISVERPATRIB", rs.getBoolean("ISVERPATRIB"));
+                        rs2.updateString("TEXTTIP", rs.getString("TEXTTIP"));
+                        rs2.updateBoolean("WARRANTY", rs.getBoolean("WARRANTY"));
+                        rs2.updateDouble("STOCKUNITS", rs.getDouble("STOCKUNITS"));
+                        rs2.updateString("ALIAS", rs.getString("ALIAS"));
+                        rs2.updateBoolean("ALWAYSAVAILABLE", rs.getBoolean("ALWAYSAVAILABLE"));
+                        rs2.updateBoolean("CANDISCOUNT", rs.getBoolean("CANDISCOUNT"));
+                        rs2.updateBoolean("ISPACK", rs.getBoolean("ISPACK"));
+                        rs2.updateDouble("PACKQUANTITY", rs.getDouble("PACKQUANTITY"));
+                        rs2.updateString("PACKPRODUCT", rs.getString("PACKPRODUCT"));
+                        rs2.updateBoolean("ISCATALOG", rs.getBoolean("ISCATALOG"));
+                        rs2.updateInt("CATORDER", rs.getInt("CATORDER"));
+                        rs2.updateString("PROMOTIONID", rs.getString("PROMOTIONID"));
+                        rs2.updateBoolean("ALLPRODUCTS", rs.getBoolean("ALLPRODUCTS"));
+                        rs2.insertRow();
+
+                    }
+
+// copy PRODUCTS_COM table   
+                    pb.setString("Migrating Products_com table");
+                    SQL = "SELECT * FROM PRODUCTS_COM";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("PRODUCT", rs.getString("PRODUCT"));
+                        rs2.updateString("PRODUCT2", rs.getString("PRODUCT2"));
+                        rs2.insertRow();
+                    }
+
+// copy PRODUCTS_KIT table 
+                    pb.setString("Migrating Producst_kit table");
+                    SQL = "SELECT * FROM PRODUCTS_KIT";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("PRODUCT", rs.getString("PRODUCT"));
+                        rs2.updateString("PRODUCT_KIT", rs.getString("PRODUCT_KIT"));
+                        rs2.updateDouble("QUANTITY", rs.getDouble("QUANTITY"));
+                        rs2.insertRow();
+                    }
+
+// copy PROMOTIONS table 
+                    pb.setString("Migrating Promotions table");
+                    SQL = "SELECT * FROM PROMOTIONS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateBytes("CRITERIA", rs.getBytes("CRITERIA"));
+                        rs2.updateBytes("SCRIPT", rs.getBytes("SCRIPT"));
+                        rs2.updateBoolean("ALLPRODUCTS", rs.getBoolean("ALLPRODUCTS"));
+                        rs2.updateBoolean("ISENABLED", rs.getBoolean("ISENABLED"));
+                        rs2.insertRow();
+                    }
+
+// copy RECEIPTS table    
+                    pb.setString("Migrating Receipts table");
+                    SQL = "SELECT * FROM RECEIPTS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("MONEY", rs.getString("MONEY"));
+                        rs2.updateTimestamp("DATENEW", rs.getTimestamp("DATENEW"));
+                        rs2.updateBytes("ATTRIBUTES", rs.getBytes("ATTRIBUTES"));
+                        rs2.updateString("PERSON", rs.getString("PERSON"));
+                        rs2.insertRow();
+                    }
+
+// copy reservation_customers table 
+                    pb.setString("Migrating Reservayion_customers table");
+                    SQL = "SELECT * FROM RESERVATION_CUSTOMERS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("CUSTOMER", rs.getString("CUSTOMER"));
+                        rs2.insertRow();
+                    }
+
+// copy reservationS table    
+                    pb.setString("Migrating Reservations table");
+                    SQL = "SELECT * FROM RESERVATIONS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateTimestamp("CREATED", rs.getTimestamp("CREATED"));
+                        rs2.updateTimestamp("DATENEW", rs.getTimestamp("DATENEW"));
+                        rs2.updateString("TITLE", rs.getString("TITLE"));
+                        rs2.updateInt("CHAIRS", rs.getInt("CHAIRS"));
+                        rs2.updateBoolean("ISDONE", rs.getBoolean("ISDONE"));
+                        rs2.updateString("DESCRIPTION", rs.getString("DESCRIPTION"));
+                        rs2.insertRow();
+                    }
+
+// copy resources table   
+                    pb.setString("Migrating Resources table");
+                    SQL = "SELECT * FROM RESOURCES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateInt("RESTYPE", rs.getInt("RESTYPE"));
+                        rs2.updateBytes("CONTENT", rs.getBytes("CONTENT"));
+                        rs2.insertRow();
+                    }
+
+// copy ROLES table    
+                    pb.setString("Migrating Roles table");
+                    SQL = "SELECT * FROM ROLES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateBytes("PERMISSIONS", rs.getBytes("PERMISSIONS"));
+                        rs2.updateInt("RIGHTSLEVEL", rs.getInt("RIGHTSLEVEL"));
+                        rs2.insertRow();
+                    }
+// copy SHAREDTICKETS table  
+                    pb.setString("Migrating Sharedtickets table");
+                    SQL = "SELECT * FROM SHAREDTICKETS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateBytes("CONTENT", rs.getBytes("CONTENT"));
+                        rs2.updateBytes("APPUSER", rs.getBytes("APPUSER"));
+                        rs2.updateInt("PICKUPID", rs.getInt("PICKUPID"));
+                        rs2.insertRow();
+                    }
+
+// copy SHIFT_BREAKS table 
+                    pb.setString("Migrating Shift_breaks table");
+                    SQL = "SELECT * FROM SHIFT_BREAKS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("SHIFTID", rs.getString("SHIFTID"));
+                        rs2.updateString("BREAKID", rs.getString("BREAKID"));
+                        rs2.updateTimestamp("STARTTIME", rs.getTimestamp("STARTTIME"));
+                        rs2.updateTimestamp("ENDTIME", rs.getTimestamp("ENDTIME"));
+                        rs2.insertRow();
+                    }
+
+// copy SHIFTS table     
+                    pb.setString("Migrating Shifts table");
+                    SQL = "SELECT * FROM SHIFTS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateTimestamp("STARTSHIFT", rs.getTimestamp("STARTSHIFT"));
+                        rs2.updateTimestamp("ENDSHIFT", rs.getTimestamp("ENDSHIFT"));
+                        rs2.updateString("PPLID", rs.getString("PPLID"));
+                        rs2.insertRow();
+                    }
+
+// copy STOCKCHANGES table  
+                    pb.setString("Migrating Stockchanges table");
+                    SQL = "SELECT * FROM STOCKCHANGES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("LOCATION", rs.getString("LOCATION"));
+                        rs2.updateString("USERNAME", rs.getString("USERNAME"));
+                        rs2.updateTimestamp("UPLOADTIME", rs.getTimestamp("UPLOADTIME"));
+                        rs2.updateString("PRODUCTID", rs.getString("PRODUCTID"));
+                        rs2.updateInt("TYPE", rs.getInt("TYPE"));
+                        rs2.updateString("DISPLAY", rs.getString("DISPLAY"));
+                        rs2.updateString("FIELD", rs.getString("FIELD"));
+                        rs2.updateString("TEXTVALUE", rs.getString("TEXTVALUE"));
+                        rs2.updateBytes("BLOBVALUE", rs.getBytes("BLOBVALUE"));
+                        rs2.updateInt("CHANGES_PROCESSED", rs.getInt("CHANGES_PROCESSED"));
+                        rs2.insertRow();
+                    }
+
+// copy STOCKDIARY table     
+                    pb.setString("Migrating Stockdiary table");
+                    SQL = "SELECT * FROM STOCKDIARY";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateTimestamp("DATENEW", rs.getTimestamp("DATENEW"));
+                        rs2.updateInt("REASON", rs.getInt("REASON"));
+                        rs2.updateString("LOCATION", rs.getString("LOCATION"));
+                        rs2.updateString("PRODUCT", rs.getString("PRODUCT"));
+                        rs2.updateString("ATTRIBUTESETINSTANCE_ID", rs.getString("ATTRIBUTESETINSTANCE_ID"));
+                        rs2.updateDouble("UNITS", rs.getDouble("UNITS"));
+                        rs2.updateDouble("PRICE", rs.getDouble("PRICE"));
+                        rs2.updateString("APPUSER", rs.getString("APPUSER"));
+                        rs2.insertRow();
+                    }
+
+// copy STOCKLEVEL table  
+                    pb.setString("Migrating Stocklevel table");
+                    SQL = "SELECT * FROM STOCKLEVEL";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("LOCATION", rs.getString("LOCATION"));
+                        rs2.updateString("PRODUCT", rs.getString("PRODUCT"));
+                        rs2.updateDouble("STOCKSECURITY", rs.getDouble("STOCKSECURITY"));
+                        rs2.updateDouble("STOCKMAXIMUM", rs.getDouble("STOCKMAXIMUM"));
+                        rs2.insertRow();
+                    }
+
+// copy TAXCATEGORIES table   
+                    pb.setString("Migrating Taxcategories table");
+                    SQL = "SELECT * FROM TAXCATEGORIES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.insertRow();
+                    }
+
+// copy TAXCUSTCATEGORIES table 
+                    pb.setString("Migrating Taxcustcategories table");
+                    SQL = "SELECT * FROM TAXCUSTCATEGORIES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.insertRow();
+                    }
+
+// copy TAXES table    
+                    pb.setString("Migrating Taxes table");
+                    SQL = "SELECT * FROM TAXES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("CATEGORY", rs.getString("CATEGORY"));
+                        rs2.updateString("CUSTCATEGORY", rs.getString("CUSTCATEGORY"));
+                        rs2.updateString("PARENTID", rs.getString("PARENTID"));
+                        rs2.updateDouble("RATE", rs.getDouble("RATE"));
+                        rs2.updateBoolean("RATECASCADE", rs.getBoolean("RATECASCADE"));
+                        rs2.updateInt("RATEORDER", rs.getInt("RATEORDER"));
+                        rs2.insertRow();
+                    }
+
+// copy TAXLINES table     
+                    pb.setString("Migrating Taxlines table");
+                    SQL = "SELECT * FROM TAXLINES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("RECEIPT", rs.getString("RECEIPT"));
+                        rs2.updateString("TAXID", rs.getString("TAXID"));
+                        rs2.updateDouble("BASE", rs.getDouble("BASE"));
+                        rs2.updateDouble("AMOUNT", rs.getDouble("AMOUNT"));
+                        rs2.insertRow();
+                    }
+
+// copy THIRDPARTIES table 
+                    pb.setString("Migrating Thirdparties table");
+                    SQL = "SELECT * FROM THIRDPARTIES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("CIF", rs.getString("CIF"));
+                        rs2.updateString("NAME", rs.getString("NAME"));
+                        rs2.updateString("ADDRESS", rs.getString("ADDRESS"));
+                        rs2.updateString("CONTACTCOMM", rs.getString("CONTACTCOMM"));
+                        rs2.updateString("CONTACTFACT", rs.getString("CONTACTFACT"));
+                        rs2.updateString("PAYRULE", rs.getString("PAYRULE"));
+                        rs2.updateString("FAXNUMBER", rs.getString("FAXNUMBER"));
+                        rs2.updateString("PHONENUMBER", rs.getString("PHONENUMBER"));
+                        rs2.updateString("MOBILENUMBER", rs.getString("MOBILENUMBER"));
+                        rs2.updateString("EMAIL", rs.getString("EMAIL"));
+                        rs2.updateString("WEBPAGE", rs.getString("WEBPAGE"));
+                        rs2.updateString("NOTES", rs.getString("NOTES"));
+                        rs2.insertRow();
+                    }
+
+// copy TICKETLINES table    
+                    pb.setString("Migrating Ticketlines table");
+                    SQL = "SELECT * FROM TICKETLINES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("TICKET", rs.getString("TICKET"));
+                        rs2.updateInt("LINE", rs.getInt("LINE"));
+                        rs2.updateString("PRODUCT", rs.getString("PRODUCT"));
+                        rs2.updateString("ATTRIBUTESETINSTANCE_ID", rs.getString("ATTRIBUTESETINSTANCE_ID"));
+                        rs2.updateDouble("UNITS", rs.getDouble("UNITS"));
+                        rs2.updateDouble("PRICE", rs.getDouble("PRICE"));
+                        rs2.updateString("TAXID", rs.getString("TAXID"));
+                        rs2.updateBytes("ATTRIBUTES", rs.getBytes("ATTRIBUTES"));
+                        rs2.updateDouble("REFUNDQTY", rs.getDouble("REFUNDQTY"));
+                        rs2.insertRow();
+                    }
+
+// copy TICKETS table   
+                    pb.setString("Migrating Tickets table");
+                    SQL = "SELECT * FROM TICKETS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateInt("TICKETTYPE", rs.getInt("TICKETTYPE"));
+                        rs2.updateInt("TICKETID", rs.getInt("TICKETID"));
+                        rs2.updateString("PERSON", rs.getString("PERSON"));
+                        rs2.updateString("CUSTOMER", rs.getString("CUSTOMER"));
+                        rs2.updateInt("STATUS", rs.getInt("STATUS"));
+                        rs2.insertRow();
+                    }
+
+// copy TICKETS table      
+                    pb.setString("Migrating Vouchers table");
+                    SQL = "SELECT * FROM VOUCHERS";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("VOUCHER", rs.getString("VOUCHER"));
+                        rs2.updateTimestamp("SOLDDATE", rs.getTimestamp("SOLDDATE"));
+                        rs2.updateTimestamp("REDEEMDATE", rs.getTimestamp("REDDEMDATE"));
+                        rs2.updateString("SOLDTICKETID", rs.getString("SOLDTICKETID"));
+                        rs2.updateString("REDEEMTICKETID", rs.getString("REDEEMTICKETID"));
+                        rs2.insertRow();
+                    }
+
+// copy STOCKCURRENT table   
+                    pb.setString("Migrating Stockcurrent table");
+                    /*
+                    SQL = "SELECT * FROM STOCKCURRENT";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("LOCATION", rs.getString("LOCATION"));
+                        rs2.updateString("PRODUCT", rs.getString("PRODUCT"));
+                        rs2.updateString("ATTRIBUTESETINSTANCE_ID", rs.getString("ATTRIBUTESETINSTANCE_ID"));
+                        rs2.updateDouble("UNITS", rs.getDouble("UNITS"));
+                        rs2.insertRow();
+                    }*/
+                    SQL = "SELECT * FROM STOCKCURRENT";
+                    rs = stmt.executeQuery(SQL);
+                    while (rs.next()) {
+                        SQL = "INSERT INTO STOCKCURRENT(LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS ) VALUES (?, ?, ?, ?)";
+                        pstmt = con2.prepareStatement(SQL);
+                        pstmt.setString(1, rs.getString("LOCATION"));
+                        pstmt.setString(2, rs.getString("PRODUCT"));
+                        pstmt.setString(3, rs.getString("ATTRIBUTESETINSTANCE_ID"));
+                        pstmt.setDouble(4, rs.getDouble("UNITS"));
+                        pstmt.executeUpdate();
+                    }
+
+// copy MENUENTRIES TABLE   
+                    pb.setString("Migrating MenuEntries table");
+                    SQL = "SELECT * FROM MENUENTRIES";
+                    rs = stmt.executeQuery(SQL);
+                    while (rs.next()) {
+                        SQL = "INSERT INTO MENUENTRIES (ENTRY, FOLLOWS, GRAPHIC, TITLE) VALUES (?, ?, ?, ?)";
+                        pstmt = con2.prepareStatement(SQL);
+                        pstmt.setString(1, rs.getString("ENTRY"));
+                        pstmt.setString(2, rs.getString("FOLLOWS"));
+                        pstmt.setString(3, rs.getString("GRAPHIC"));
+                        pstmt.setString(4, rs.getString("TITLE"));
+                        pstmt.executeUpdate();
+                    }
+                    /*
+                    SQL = "SELECT * FROM MENUENTRIES";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ADDRESS", rs.getString("ADDRESS"));
+                        rs2.updateString("FOLLOWS", rs.getString("FOLLOWS"));
+                        rs2.updateString("GRAPHIC", rs.getString("GRAPHIC"));
+                        rs2.updateString("TITLE", rs.getString("TITLE"));
+                        rs2.insertRow();
+                    }*/
+
 // copy DATABASECHANGELOG table
-                    pstmt2 = con.prepareStatement("DELETE FROM DATABASECHANGELOG");
+                    pb.setString("Migrating DatabaseChangeLog table");
+                    PreparedStatement pstmt2 = con2.prepareStatement("DELETE FROM DATABASECHANGELOG");
                     pstmt2.executeUpdate();
+                    /*
+                    SQL = "SELECT * FROM DATABASECHANGELOG";
+                    rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
+                    while (rs.next()) {
+                        rs2.updateString("ID", rs.getString("ID"));
+                        rs2.updateString("AUTHOR", rs.getString("AUTHOR"));
+                        rs2.updateString("FILENAME", rs.getString("FILENAME"));
+                        rs2.updateTimestamp("DATEEXECUTED", rs.getTimestamp("DATEEXECUTED"));
+                        rs2.updateInt("ORDEREXECUTED", rs.getInt("ORDEREXECUTED"));
+                        rs2.updateString("EXECTYPE", rs.getString("EXECTYPE"));
+                        rs2.updateString("MD5SUM", rs.getString("MD5SUM"));
+                        rs2.updateString("DESCRIPTION", rs.getString("DESCRIPTION"));
+                        rs2.updateString("COMMENTS", rs.getString("COMMENTS"));
+                        rs2.updateString("TAG", rs.getString("TAG"));
+                        rs2.updateString("LIQUIBASE", rs.getString("LIQUIBASE"));
+                        rs2.insertRow();
+                    }  */
+                    
+// copy DATABASECHANGELOG table
                     SQL = "SELECT * FROM DATABASECHANGELOG";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
@@ -702,86 +1371,10 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setString(11, rs.getString("LIQUIBASE"));
                         pstmt.executeUpdate();
                     }
-
-// copy DBPERMISSIONS table       
-                    SQL = "SELECT * FROM DBPERMISSIONS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO DBPERMISSIONS (CLASSNAME, SECTION, DISPLAYNAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("CLASSNAME"));
-                        pstmt.setString(2, rs.getString("SECTION"));
-                        pstmt.setString(3, rs.getString("DISPLAYNAME"));
-                        pstmt.setString(4, rs.getString("DESCRIPTION"));
-                        pstmt.executeUpdate();
-                    }
-// copy DRAWEROPEN table       
-                    SQL = "SELECT * FROM DRAWEROPENED";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO DRAWEROPENED (OPENDATE, NAME, TICKETID) VALUES (?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("OPENDATE"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("TICKETID"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy FLOORS table       
-                    SQL = "SELECT * FROM FLOORS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO FLOORS (ID, NAME, IMAGE) VALUES (?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setBytes(3, rs.getBytes("IMAGE"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy LEAVES table       
-                    SQL = "SELECT * FROM LEAVES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO LEAVES (ID, PPLID, NAME, STARTDATE, ENDDATE, NOTES) VALUES (?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("PPLID"));
-                        pstmt.setString(3, rs.getString("NAME"));
-                        pstmt.setTimestamp(4, rs.getTimestamp("STARTDATE"));
-                        pstmt.setTimestamp(5, rs.getTimestamp("ENDDATE"));
-                        pstmt.setString(6, rs.getString("NOTES"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy LINEREMOVED table
-                    SQL = "SELECT * FROM LINEREMOVED";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO LINEREMOVED (REMOVEDDATE, NAME, TICKETID, PRODUCTID, PRODUCTNAME, UNITS) VALUES (?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setTimestamp(1, rs.getTimestamp("REMOVEDDATE"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("TICKETID"));
-                        pstmt.setString(4, rs.getString("PRODUCTID"));
-                        pstmt.setString(5, rs.getString("PRODUCTNAME"));
-                        pstmt.setInt(6, rs.getInt("UNITS"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy LOCATIONS table       
-                    SQL = "SELECT * FROM LOCATIONS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO LOCATIONS (ID, NAME, ADDRESS) VALUES (?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("ADDRESS"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy MOORERS TABLE     
+                    
+                    
+// copy MOORERS TABLE    
+                    pb.setString("Migrating Moorers table");
                     SQL = "SELECT * FROM MOORERS";
                     rs = stmt.executeQuery(SQL);
                     while (rs.next()) {
@@ -793,437 +1386,20 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         pstmt.setBoolean(4, rs.getBoolean("POWER"));
                         pstmt.executeUpdate();
                     }
-
-// copy ORDERS table
-                    SQL = "SELECT * FROM ORDERS";
+                    /* SQL = "SELECT * FROM MOORERS";
                     rs = stmt.executeQuery(SQL);
+                    rs2 = stmt2.executeQuery(SQL);
+                    rs2.moveToInsertRow();
                     while (rs.next()) {
-                        SQL = "INSERT INTO ORDERS (ID, ORDERID, QTY, DETAILS, ATTRIBUTES, NOTES, TICKETID, ORDERTIME, DISPLAYID, AUXILIARY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("ORDERID"));
-                        pstmt.setInt(3, rs.getInt("QTY"));
-                        pstmt.setString(4, rs.getString("DETAILS"));
-                        pstmt.setString(5, rs.getString("ATTRIBUTES"));
-                        pstmt.setString(6, rs.getString("NOTES"));
-                        pstmt.setString(7, rs.getString("TICKETID"));
-                        pstmt.setTimestamp(8, rs.getTimestamp("ORDERTIME"));
-                        pstmt.setString(9, rs.getString("DISPLAYID"));
-                        pstmt.setInt(10, rs.getInt("AUXILIARY"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy payments table       
-                    SQL = "SELECT * FROM PAYMENTS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, NOTES, TENDERED, CARDNAME, RETURNMSG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("RECEIPT"));
-                        pstmt.setString(3, rs.getString("PAYMENT"));
-                        pstmt.setDouble(4, rs.getDouble("TOTAL"));
-                        pstmt.setString(5, rs.getString("TRANSID"));
-                        pstmt.setString(6, rs.getString("NOTES"));
-                        pstmt.setDouble(7, rs.getDouble("TENDERED"));
-                        pstmt.setString(8, rs.getString("CARDNAME"));
-                        pstmt.setBytes(9, rs.getBytes("RETURNMSG"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy PEOPLE table       
-                    SQL = "SELECT * FROM PEOPLE";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO PEOPLE (ID, NAME, APPPASSWORD, CARD, ROLE, VISIBLE, IMAGE) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("APPPASSWORD"));
-                        pstmt.setString(4, rs.getString("CARD"));
-                        pstmt.setString(5, rs.getString("ROLE"));
-                        pstmt.setBoolean(6, rs.getBoolean("VISIBLE"));
-                        pstmt.setBytes(7, rs.getBytes("IMAGE"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy Places table         
-                    SQL = "SELECT * FROM PLACES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO PLACES (ID, NAME, X, Y, FLOOR, CUSTOMER, WAITER, TICKETID, TABLEMOVED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setInt(3, rs.getInt("X"));
-                        pstmt.setInt(4, rs.getInt("Y"));
-                        pstmt.setString(5, rs.getString("FLOOR"));
-                        pstmt.setString(6, rs.getString("CUSTOMER"));
-                        pstmt.setString(7, rs.getString("WAITER"));
-                        pstmt.setString(8, rs.getString("TICKETID"));
-                        pstmt.setBoolean(9, rs.getBoolean("TABLEMOVED"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy Products  table                    
-                    SQL = "SELECT * FROM PRODUCTS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO PRODUCTS (ID, REFERENCE, CODE, CODETYPE, NAME, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, ATTRIBUTESET_ID,"
-                                + " STOCKCOST, STOCKVOLUME, IMAGE, ISCOM, ISSCALE, ISKITCHEN, PRINTKB, SENDSTATUS, ISSERVICE, DISPLAY, ATTRIBUTES,"
-                                + " ISVPRICE, ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, CANDISCOUNT, ISPACK, PACKQUANTITY, "
-                                + " PACKPRODUCT, ISCATALOG, CATORDER, PROMOTIONID )"
-                                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("REFERENCE"));
-                        pstmt.setString(3, rs.getString("CODE"));
-                        pstmt.setString(4, rs.getString("CODETYPE"));
-                        pstmt.setString(5, rs.getString("NAME"));
-                        pstmt.setDouble(6, rs.getDouble("PRICEBUY"));
-                        pstmt.setDouble(7, rs.getDouble("PRICESELL"));
-                        pstmt.setString(8, rs.getString("CATEGORY"));
-                        pstmt.setString(9, rs.getString("TAXCAT"));
-                        pstmt.setString(10, rs.getString("ATTRIBUTESET_ID"));
-                        pstmt.setDouble(11, rs.getDouble("STOCKCOST"));
-                        pstmt.setDouble(12, rs.getDouble("STOCKVOLUME"));
-                        pstmt.setBytes(13, rs.getBytes("IMAGE"));
-                        pstmt.setBoolean(14, rs.getBoolean("ISCOM"));
-                        pstmt.setBoolean(15, rs.getBoolean("ISSCALE"));
-                        pstmt.setBoolean(16, rs.getBoolean("ISKITCHEN"));
-                        pstmt.setBoolean(17, rs.getBoolean("PRINTKB"));
-                        pstmt.setBoolean(18, rs.getBoolean("SENDSTATUS"));
-                        pstmt.setBoolean(19, rs.getBoolean("ISSERVICE"));
-                        pstmt.setString(20, rs.getString("DISPLAY"));
-                        pstmt.setBytes(21, rs.getBytes("ATTRIBUTES"));
-                        pstmt.setBoolean(22, rs.getBoolean("ISVPRICE"));
-                        pstmt.setBoolean(23, rs.getBoolean("ISVERPATRIB"));
-                        pstmt.setString(24, rs.getString("TEXTTIP"));
-                        pstmt.setBoolean(25, rs.getBoolean("WARRANTY"));
-                        pstmt.setDouble(26, rs.getDouble("STOCKUNITS"));
-                        pstmt.setString(27, rs.getString("ALIAS"));
-                        pstmt.setBoolean(28, rs.getBoolean("ALWAYSAVAILABLE"));
-                        pstmt.setBoolean(29, rs.getBoolean("CANDISCOUNT"));
-                        pstmt.setBoolean(30, rs.getBoolean("ISPACK"));
-                        pstmt.setDouble(31, rs.getDouble("PACKQUANTITY"));
-                        pstmt.setString(32, rs.getString("PACKPRODUCT"));
-                        pstmt.setString(33, rs.getString("ISCATALOG"));
-                        pstmt.setString(34, rs.getString("CATORDER"));
-                        pstmt.setString(35, rs.getString("PROMOTIONID"));
-
-                        if (!"xxx999_999xxx_x9x9x9".equals(rs.getString(1))) {
-                            pstmt.executeUpdate();
-                        }
-                    }
-
-                    // copy PRODUCTS_COM table       
-                    SQL = "SELECT * FROM PRODUCTS_COM";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO PRODUCTS_COM(ID, PRODUCT, PRODUCT2 ) VALUES (?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("PRODUCT"));
-                        pstmt.setString(3, rs.getString("PRODUCT2"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy RECEIPTS table       
-                    SQL = "SELECT * FROM RECEIPTS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO RECEIPTS(ID, MONEY, DATENEW, ATTRIBUTES, PERSON ) VALUES (?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("MONEY"));
-                        pstmt.setTimestamp(3, rs.getTimestamp("DATENEW"));
-                        pstmt.setBytes(4, rs.getBytes("ATTRIBUTES"));
-                        pstmt.setString(5, rs.getString("PERSON"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy reservation_customers table       
-                    SQL = "SELECT * FROM RESERVATION_CUSTOMERS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO RESERVATION_CUSTOMERS(ID, CUSTOMER) VALUES (?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("CUSTOMER"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy reservationS table       
-                    SQL = "SELECT * FROM RESERVATIONS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO RESERVATIONS(ID, CREATED, DATENEW, TITLE, CHAIRS, ISDONE, DESCRIPTION ) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setTimestamp(2, rs.getTimestamp("CREATED"));
-                        pstmt.setTimestamp(3, rs.getTimestamp("DATENEW"));
-                        pstmt.setString(4, rs.getString("TITLE"));
-                        pstmt.setInt(5, rs.getInt("CHAIRS"));
-                        pstmt.setBoolean(6, rs.getBoolean("ISDONE"));
-                        pstmt.setString(7, rs.getString("DESCRIPTION"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy resources table       
-                    SQL = "SELECT * FROM RESOURCES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setInt(3, rs.getInt("RESTYPE"));
-                        pstmt.setBytes(4, rs.getBytes("CONTENT"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy ROLES table       
-                    SQL = "SELECT * FROM ROLES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO ROLES(ID, NAME, PERMISSIONS, RIGHTSLEVEL ) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setBytes(3, rs.getBytes("PERMISSIONS"));
-                        pstmt.setInt(4, rs.getInt("RIGHTSLEVEL"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy SHAREDTICKETS table       
-                    SQL = "SELECT * FROM SHAREDTICKETS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO SHAREDTICKETS(ID, NAME, CONTENT, APPUSER, PICKUPID ) VALUES (?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setBytes(3, rs.getBytes("CONTENT"));
-                        pstmt.setBytes(4, rs.getBytes("APPUSER"));
-                        pstmt.setInt(5, rs.getInt("PICKUPID"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy SHIFT_BREAKS table       
-                    SQL = "SELECT * FROM SHIFT_BREAKS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO SHIFT_BREAKS(ID, SHIFTID, BREAKID, STARTTIME, ENDTIME ) VALUES (?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("SHIFTID"));
-                        pstmt.setString(3, rs.getString("BREAKID"));
-                        pstmt.setTimestamp(4, rs.getTimestamp("STARTTIME"));
-                        pstmt.setTimestamp(5, rs.getTimestamp("ENDTIME"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy SHIFTS table       
-                    SQL = "SELECT * FROM SHIFTS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO SHIFTS(ID, STARTSHIFT, ENDSHIFT, PPLID ) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setTimestamp(2, rs.getTimestamp("STARTSHIFT"));
-                        pstmt.setTimestamp(3, rs.getTimestamp("ENDSHIFT"));
-                        pstmt.setString(4, rs.getString("PPLID"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy STOCKCHANGES table       
-                    SQL = "SELECT * FROM STOCKCHANGES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO STOCKCHANGES(ID, LOCATION, USERNAME, UPLOADTIME, PRODUCTID, TYPE, DISPLAY, FIELD, TEXTVALUE, BLOBVALUE, PROCESSED ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("LOCATION"));
-                        pstmt.setString(3, rs.getString("USERNAME"));
-                        pstmt.setTimestamp(4, rs.getTimestamp("UPLOADTIME"));
-                        pstmt.setString(5, rs.getString("PRODUCTID"));
-                        pstmt.setInt(6, rs.getInt("TYPE"));
-                        pstmt.setString(7, rs.getString("DISPLAY"));
-                        pstmt.setString(8, rs.getString("FIELD"));
-                        pstmt.setString(9, rs.getString("TEXTVALUE"));
-                        pstmt.setBytes(10, rs.getBytes("BLOBVALUE"));
-                        pstmt.setInt(11, rs.getInt("CHANGES_PROCESSED"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy STOCKCURRENT table       
-                    SQL = "SELECT * FROM STOCKCURRENT";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO STOCKCURRENT(LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS ) VALUES (?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("LOCATION"));
-                        pstmt.setString(2, rs.getString("PRODUCT"));
-                        pstmt.setString(3, rs.getString("ATTRIBUTESETINSTANCE_ID"));
-                        pstmt.setDouble(4, rs.getDouble("UNITS"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy STOCKDIARY table       
-                    SQL = "SELECT * FROM STOCKDIARY";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO STOCKDIARY(ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, APPUSER ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setTimestamp(2, rs.getTimestamp("DATENEW"));
-                        pstmt.setInt(3, rs.getInt("REASON"));
-                        pstmt.setString(4, rs.getString("LOCATION"));
-                        pstmt.setString(5, rs.getString("PRODUCT"));
-                        pstmt.setString(6, rs.getString("ATTRIBUTESETINSTANCE_ID"));
-                        pstmt.setDouble(7, rs.getDouble("UNITS"));
-                        pstmt.setDouble(8, rs.getDouble("PRICE"));
-                        pstmt.setString(9, rs.getString("APPUSER"));
-                        pstmt.executeUpdate();
-                    }
-
-                    // copy STOCKLEVEL table       
-                    SQL = "SELECT * FROM STOCKLEVEL";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO STOCKLEVEL(ID, LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM ) VALUES (?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("LOCATION"));
-                        pstmt.setString(3, rs.getString("PRODUCT"));
-                        pstmt.setDouble(4, rs.getDouble("STOCKSECURITY"));
-                        pstmt.setDouble(5, rs.getDouble("STOCKMAXIMUM"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy TAXCATEGORIES table       
-                    SQL = "SELECT * FROM TAXCATEGORIES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO TAXCATEGORIES (ID, NAME) VALUES (?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy TAXCUSTCATEGORIES table       
-                    SQL = "SELECT * FROM TAXCUSTCATEGORIES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO TAXCUSTCATEGORIES (ID, NAME) VALUES (?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy TAXES table       
-                    SQL = "SELECT * FROM TAXES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO TAXES (ID, NAME, CATEGORY, CUSTCATEGORY, PARENTID, RATE, RATECASCADE, RATEORDER ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("NAME"));
-                        pstmt.setString(3, rs.getString("CATEGORY"));
-                        pstmt.setString(4, rs.getString("CUSTCATEGORY"));
-                        pstmt.setString(5, rs.getString("PARENTID"));
-                        pstmt.setDouble(6, rs.getDouble("RATE"));
-                        pstmt.setBoolean(7, rs.getBoolean("RATECASCADE"));
-                        pstmt.setInt(8, rs.getInt("RATEORDER"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy TAXLINES table       
-                    SQL = "SELECT * FROM TAXLINES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO TAXLINES (ID, RECEIPT, TAXID, BASE, AMOUNT ) VALUES (?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("RECEIPT"));
-                        pstmt.setString(3, rs.getString("TAXID"));
-                        pstmt.setDouble(4, rs.getDouble("BASE"));
-                        pstmt.setDouble(5, rs.getDouble("AMOUNT"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy THIRDPARTIES table       
-                    SQL = "SELECT * FROM THIRDPARTIES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO THIRDPARTIES (ID, CIF, NAME, ADDRESS, CONTACTCOMM, CONTACTFACT, PAYRULE, FAXNUMBER, PHONENUMBER, MOBILENUMBER, EMAIL, WEBPAGE, NOTES  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setString(2, rs.getString("CIF"));
-                        pstmt.setString(3, rs.getString("NAME"));
-                        pstmt.setString(4, rs.getString("ADDRESS"));
-                        pstmt.setString(5, rs.getString("CONTACTCOMM"));
-                        pstmt.setString(6, rs.getString("CONTACTFACT"));
-                        pstmt.setString(7, rs.getString("PAYRULE"));
-                        pstmt.setString(8, rs.getString("FAXNUMBER"));
-                        pstmt.setString(9, rs.getString("PHONENUMBER"));
-                        pstmt.setString(10, rs.getString("MOBILENUMBER"));
-                        pstmt.setString(11, rs.getString("EMAIL"));
-                        pstmt.setString(12, rs.getString("WEBPAGE"));
-                        pstmt.setString(13, rs.getString("NOTES"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy TICKETLINES table       
-                    SQL = "SELECT * FROM TICKETLINES";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES, REFUNDQTY ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("TICKET"));
-                        pstmt.setInt(2, rs.getInt("LINE"));
-                        pstmt.setString(3, rs.getString("PRODUCT"));
-                        pstmt.setString(4, rs.getString("ATTRIBUTESETINSTANCE_ID"));
-                        pstmt.setDouble(5, rs.getDouble("UNITS"));
-                        pstmt.setDouble(6, rs.getDouble("PRICE"));
-                        pstmt.setString(7, rs.getString("TAXID"));
-                        pstmt.setBytes(8, rs.getBytes("ATTRIBUTES"));
-                        pstmt.setString(9, rs.getString("REFUNDQTY"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy TICKETS table       
-                    SQL = "SELECT * FROM TICKETS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO TICKETS (ID, TICKETTYPE, TICKETID, PERSON, CUSTOMER, STATUS ) VALUES (?, ?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("ID"));
-                        pstmt.setInt(2, rs.getInt("TICKETTYPE"));
-                        pstmt.setInt(3, rs.getInt("TICKETID"));
-                        pstmt.setString(4, rs.getString("PERSON"));
-                        pstmt.setString(5, rs.getString("CUSTOMER"));
-                        pstmt.setInt(6, rs.getInt("STATUS"));
-                        pstmt.executeUpdate();
-                    }
-
-// copy TICKETS table       
-                    SQL = "SELECT * FROM VOUCHERS";
-                    rs = stmt.executeQuery(SQL);
-                    while (rs.next()) {
-                        SQL = "INSERT INTO VOUCHERS (VOUCHER, SOLDDATE, REDEEMDATE, SOLDTICKETID, REDEEMTICKETID) VALUES (?, ?, ?, ?, ?)";
-                        pstmt = con2.prepareStatement(SQL);
-                        pstmt.setString(1, rs.getString("VOUCHER"));
-                        pstmt.setTimestamp(2, rs.getTimestamp("SOLDDATE"));
-                        pstmt.setTimestamp(3, rs.getTimestamp("REDEEMDATE"));
-                        pstmt.setString(4, rs.getString("SOLDTICKETID"));
-                        pstmt.setString(5, rs.getString("REDEEMTICKETID"));
-                        pstmt.executeUpdate();
-                    }
-
+                        rs2.updateString("VESSELNAME", rs.getString("VESSELNAME"));
+                        rs2.updateInt("SIZE", rs.getInt("SIZE"));
+                        rs2.updateInt("DAYS", rs.getInt("DAYS"));
+                        rs2.updateBoolean("POWER", rs.getBoolean("POWER"));
+                        rs2.insertRow();
+                    }*/
+                    
 // GET THE SEQUENCE NUMBERS
+                    pb.setString("Migrating sequences tables ");
                     if (("Apache Derby".equals(sdbmanager)) || ("MySQL".equals(sdbmanager))) {
                         SQL = "SELECT * FROM TICKETSNUM";
                         rs = stmt.executeQuery(SQL);
@@ -1239,6 +1415,11 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         rs = stmt.executeQuery(SQL);
                         while (rs.next()) {
                             ticketsnumRefund = rs.getString("ID");
+                        }
+                        SQL = "SELECT * FROM TICKETSNUM_INVOICE";
+                        rs = stmt.executeQuery(SQL);
+                        while (rs.next()) {
+                            ticketsnumInvoice = rs.getString("ID");
                         }
                     } else {
                         SQL = "SELECT * FROM TICKETSNUM";
@@ -1256,6 +1437,11 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         while (rs.next()) {
                             ticketsnumRefund = rs.getString("LAST_VALUE");
                         }
+                        SQL = "SELECT * FROM TICKETSNUM_INVOICE";
+                        rs = stmt.executeQuery(SQL);
+                        while (rs.next()) {
+                            ticketsnumInvoice = rs.getString("LAST_VALUE");
+                        }
                     }
 
 // WRITE SEQUENCE NUMBER
@@ -1266,12 +1452,16 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         stmt2.executeUpdate(SQL);
                         SQL = "UPDATE TICKETSNUM_REFUND SET ID=" + ticketsnumRefund;
                         stmt2.executeUpdate(SQL);
+                        SQL = "UPDATE TICKETSNUM_INVOICE SET ID=" + ticketsnumInvoice;
+                        stmt2.executeUpdate(SQL);
                     } else if (("Apache Derby".equals(sdbmanager))) {
                         SQL = "CREATE TABLE TICKETSNUM (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH " + ticketsnum + "))";
                         stmt2.executeUpdate(SQL);
                         SQL = "CREATE TABLE TICKETSNUM_PAYMENT (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH " + ticketsnumPayment + "))";
                         stmt2.executeUpdate(SQL);
                         SQL = "CREATE TABLE TICKETSNUM_REFUND (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH " + ticketsnumRefund + "))";
+                        stmt2.executeUpdate(SQL);
+                        SQL = "CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH " + ticketsnumInvoice + "))";
                         stmt2.executeUpdate(SQL);
                     } else {
                         SQL = "ALTER SEQUENCE TICKETSNUM RESTART WITH " + ticketsnum;
@@ -1280,10 +1470,17 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         stmt2.executeUpdate(SQL);
                         SQL = "ALTER SEQUENCE TICKETSNUM_REFUND RESTART WITH " + ticketsnumRefund;
                         stmt2.executeUpdate(SQL);
+                        SQL = "ALTER SEQUENCE TICKETSNUM_INVOICE RESTART WITH " + ticketsnumInvoice;
+                        stmt2.executeUpdate(SQL);
                     }
 
-// Add foreign keys back into the datbase
+// Add ALL keys and indices back
+                    pb.setString("Creating Indexes and Foreign Keys ");
                     addFKeys();
+
+                    pb.setIndeterminate(false);
+                    pb.setStringPainted(false);
+                    pb.setString("");
 
 // Write new database settings to properties file
                     if ("MySQL".equals(sdbmanager2)) {
@@ -1322,6 +1519,22 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
             }
         }
+    }
+
+
+    private void jbtnMigrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMigrateActionPerformed
+        Thread workThread = new Thread() {
+            public void run() {
+                performAction();
+            }
+        };
+        workThread.start();
+
+        pb.setIndeterminate(true);
+        pb.setStringPainted(true);
+        pb.setString("Migrating Database ..... Processing ");
+
+
     }//GEN-LAST:event_jbtnMigrateActionPerformed
 
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
@@ -1406,5 +1619,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     private javax.swing.JPasswordField jtxtDbPassword;
     private javax.swing.JTextField jtxtDbURL;
     private javax.swing.JTextField jtxtDbUser;
+    private javax.swing.JProgressBar pb;
     // End of variables declaration//GEN-END:variables
 }

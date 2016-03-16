@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,7 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>
-
+//
 package uk.chromis.pos.forms;
 
 import java.awt.CardLayout;
@@ -84,6 +84,7 @@ import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.Session;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.dialogs.JProcessingDlg;
 import uk.chromis.pos.printer.DeviceTicket;
 import uk.chromis.pos.printer.TicketParser;
 import uk.chromis.pos.printer.TicketPrinterException;
@@ -140,8 +141,8 @@ public class JRootApp extends JPanel implements AppView {
             m_clock = getLineTimer();
             m_date = getLineDate();
             m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
-            // m_jLblTitle.setText("Chromis POS - v0.53.44 Beta ONLY VERSION");
             jLabel2.setText("  " + m_date + "  " + m_clock);
+            
         }
     }
 
@@ -201,10 +202,6 @@ public class JRootApp extends JPanel implements AppView {
         m_props = props;
         m_jPanelDown.setVisible(!AppConfig.getInstance().getBoolean("till.hideinfo"));
 
-        if (!AppConfig.getInstance().getBoolean("chromis.tickettype")) {
-            UpdateTicketType.updateTicketType();
-        }
-
         // support for different component orientation languages.
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
@@ -219,6 +216,9 @@ public class JRootApp extends JPanel implements AppView {
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
 
         String sDBVersion = readDataBaseVersion();
+        if (!AppConfig.getInstance().getBoolean("chromis.tickettype") && sDBVersion != null) {
+            UpdateTicketType.updateTicketType();
+        }
 
         if (!AppLocal.APP_VERSION.equals(sDBVersion)) {
 // Lets check if this is a historic version of the jar and it is in the database  
@@ -237,6 +237,7 @@ public class JRootApp extends JPanel implements AppView {
             }
 */
             boolean bFailed = true;
+
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
@@ -321,7 +322,8 @@ public class JRootApp extends JPanel implements AppView {
 
         // Leo la localizacion de la caja (Almacen).
         m_sInventoryLocation = m_propsdb.getProperty("location");
-        if (m_sInventoryLocation == null) {
+        if (m_sInventoryLocation
+                == null) {
             m_sInventoryLocation = "0";
             m_propsdb.setProperty("location", m_sInventoryLocation);
             m_dlSystem.setResourceAsProperties(AppConfig.getInstance().getHost() + "/properties", m_propsdb);
@@ -332,6 +334,7 @@ public class JRootApp extends JPanel implements AppView {
 
         // Inicializamos 
         m_TTP = new TicketParser(getDeviceTicket(), m_dlSystem);
+
         printerStart();
 
         // Inicializamos la bascula
@@ -340,9 +343,11 @@ public class JRootApp extends JPanel implements AppView {
         // Inicializamos la scanpal
         m_Scanner = DeviceScannerFactory.createInstance(m_props);
 
-        new javax.swing.Timer(250, new PrintTimeAction()).start();
+        new javax.swing.Timer(
+                250, new PrintTimeAction()).start();
 
         String sWareHouse;
+
         try {
             sWareHouse = m_dlSystem.findLocationName(m_sInventoryLocation);
         } catch (BasicException e) {
@@ -351,16 +356,20 @@ public class JRootApp extends JPanel implements AppView {
 
         // Show Hostname, Warehouse and URL in taskbar
         String url;
+
         try {
             url = session.getURL();
         } catch (SQLException e) {
             url = "";
         }
-        m_jHost.setText("<html>" + AppConfig.getInstance().getHost() + " - " + sWareHouse + "<br>" + url);
+
+        m_jHost.setText(
+                "<html>" + AppConfig.getInstance().getHost() + " - " + sWareHouse + "<br>" + url);
 
         // display the new logo if set
         String newLogo = AppConfig.getInstance().getProperty("start.logo");
-        if (newLogo != null) {
+        if (newLogo
+                != null) {
             if ("".equals(newLogo)) {
                 jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png")));
             } else {
@@ -370,10 +379,11 @@ public class JRootApp extends JPanel implements AppView {
 
         // change text under logo
         String newText = AppConfig.getInstance().getProperty("start.text");
-        if (newText != null) {
+        if (newText
+                != null) {
             if (newText.equals("")) {
                 jLabel1.setText("<html><center>Chromis POS - The New Face of Open Source POS<br>"
-                        + "Copyright \u00A9 2015 Chromis <br>"
+                        + "Copyright \u00A9 (c) 2015-2016Chromis <br>"
                         + "<br>"
                         + "http://www.chromis.co.uk<br>"
                         + "<br>"
@@ -401,6 +411,7 @@ public class JRootApp extends JPanel implements AppView {
 // Get the database version first
         File dbReportsSource = null;
         String currentPath = new File("").getAbsolutePath();
+
         if (OSValidator.isMac()) {
             try {
                 currentPath = new File(JRootApp.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).toString();
@@ -414,7 +425,7 @@ public class JRootApp extends JPanel implements AppView {
 
         switch (getDbVersion()) {
             case "d":
-                dbReportsSource = new File(currentPath + "/reports/uk//chromis/derby");
+                dbReportsSource = new File(currentPath + "/reports/uk/chromis/derby");
                 break;
             case "m":
                 dbReportsSource = new File(currentPath + "/reports/uk/chromis/mysql");
@@ -425,6 +436,7 @@ public class JRootApp extends JPanel implements AppView {
         }
 
         File reportsDestination = new File(currentPath + "/reports/uk/chromis/reports");
+
         try {
             File reportsSource = new File(currentPath + "/reports/uk/chromis/default");
             FileUtils.copyDirectory(reportsSource, new File(currentPath + "/reports/uk/chromis/reports"));
@@ -434,9 +446,18 @@ public class JRootApp extends JPanel implements AppView {
         } catch (IOException ex) {
             Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         showLogin();
 
         return true;
+    }
+
+    private class doWork implements Runnable {
+
+        @Override
+        public void run() {
+
+        }
     }
 
     private String readDataBaseVersion() {
@@ -572,11 +593,14 @@ public class JRootApp extends JPanel implements AppView {
                 try {
                     Class bfclass = Class.forName(beanfactory);
 
-                    if (BeanFactory.class.isAssignableFrom(bfclass)) {
+                    if (BeanFactory.class
+                            .isAssignableFrom(bfclass)) {
                         bf = (BeanFactory) bfclass.newInstance();
+
                     } else {
                         // the old construction for beans...
-                        Constructor constMyView = bfclass.getConstructor(new Class[]{AppView.class});
+                        Constructor constMyView = bfclass.getConstructor(new Class[]{AppView.class
+                        });
                         Object bean = constMyView.newInstance(new Object[]{this});
 
                         bf = new BeanFactoryObj(bean);
@@ -693,7 +717,6 @@ public class JRootApp extends JPanel implements AppView {
                 jPeople.add(btn);
             }
             jScrollPane1.getViewport().setView(jPeople);
-
         } catch (BasicException ee) {
         }
     }
@@ -911,7 +934,7 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png"))); // NOI18N
         jLabel1.setText("<html><center>Chromis POS - The New Face of open source POS<br>" +
-            "Copyright \u00A9 2015 Chromis <br>" +
+            "Copyright \u00A9 (c) 2015-2016Chromis <br>" +
             "http://www.chromis.co.uk<br>" +
             "<br>" +
             "Chromis POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +
@@ -1066,10 +1089,12 @@ public class JRootApp extends JPanel implements AppView {
                 PreparedStatement stmt = con.prepareStatement("INSERT INTO PEOPLE (ID, NAME, ROLE, VISIBLE) VALUES ('99', 'SuperAdminUser', '0', 0)");
                 stmt.executeUpdate();
                 user = m_dlSystem.getsuperuser();
+
             }
         } catch (BasicException e) {
         } catch (SQLException | MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JRootApp.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         openAppView(user);
@@ -1088,9 +1113,11 @@ public class JRootApp extends JPanel implements AppView {
         };
 
         String currentPath = null;
+
         if (OSValidator.isMac()) {
             try {
-                currentPath = new File(JRootApp.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).toString();
+                currentPath = new File(JRootApp.class
+                        .getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).toString();
             } catch (URISyntaxException ex) {
             }
         } else {
@@ -1102,10 +1129,14 @@ public class JRootApp extends JPanel implements AppView {
             FileInputStream fis = new FileInputStream(new File(currentPath));
             md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
             fis.close();
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JRootApp.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (IOException ex) {
-            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JRootApp.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         /*

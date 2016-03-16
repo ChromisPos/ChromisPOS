@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -103,13 +103,10 @@ public class JFrmConfig extends javax.swing.JFrame {
     public static void main(final String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
-            public void run() {
+            public void run() { 
                 
-              // config = AppConfig.getInstance().getDefaultConfig();
-              // config.load();    
-                
+
 // Set the look and feel.
-   // Set the look and feel.
                 try {
 
                     Object laf = Class.forName(AppConfig.getInstance().getProperty("swing.defaultlaf")).newInstance();

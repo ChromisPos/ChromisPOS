@@ -46,7 +46,7 @@ public class PanelReportBean extends JPanelReport {
     private String sentence;
 
     
-
+// JG 16 May 12 use diamond inference
     private List<Datas> fielddatas = new ArrayList<>();
     private List<String> fieldnames = new ArrayList<>();
     
@@ -138,6 +138,18 @@ public class PanelReportBean extends JPanelReport {
      */
     public void setResourceBundle(String resourcebundle) {
         this.resourcebundle = resourcebundle;
+        
+                 /*    
+        String locale = AppConfig.getInstance().getProperty("user.language").equals("")
+                ? resourcebundle 
+                : resourcebundle + "_" + AppConfig.getInstance().getProperty("user.language");
+        
+        this.resourcebundle = AppConfig.getInstance().getProperty("user.country").equals("")
+                ? locale 
+                : locale + "_" + AppConfig.getInstance().getProperty("user.country");    
+       */
+        
+        
     }
     
     /**

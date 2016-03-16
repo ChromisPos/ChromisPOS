@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -18,7 +18,11 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.printer.escpos;
 
+import uk.chromis.pos.printer.DevicePrinter;
 import uk.chromis.pos.printer.DeviceTicket;
+import uk.chromis.pos.printer.ticket.PrintItem;
+import uk.chromis.pos.printer.ticket.PrintItemBarcode;
+import static uk.chromis.pos.util.BarcodeImage.getBarcode128;
 
 /**
  *
@@ -132,16 +136,19 @@ public class CodesEpson extends Codes {
     }
 
     @Override
-    public void printBarcode(PrinterWritter out, String type, String position, String code) {
-// Modified 07.02.2014 JDL    
-        out.write(new byte[]{0x1b, 0x61, 0x01}); //set to print in the centre of the line  
-        out.write(new byte[]{0x1D, 0x77, 0x02}); // set the width of barcode  
-        out.write(new byte[]{0x1D, 0x48, 0x02}); // set the position of user readable text
-        out.write(new byte[]{0x1D, 0x68, 0x20}); // set the height of barcode
-        out.write(new byte[]{0x1D, 0x6B, 0x02}); // setup to use ean13             
-        out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 12).substring(0, 12)));
-        out.write(new byte[]{0x00}); //end barcode   
-
+    public Boolean printBarcode(PrinterWritter out, String type, String position, String code) {
+// Modified 07.02.2014 JDL         
+        if (DevicePrinter.BARCODE_EAN13.equals(type)) {
+            out.write(new byte[]{0x1b, 0x61, 0x01}); //set to print in the centre of the line  
+            out.write(new byte[]{0x1D, 0x77, 0x02}); // set the width of barcode  
+            out.write(new byte[]{0x1D, 0x48, 0x02}); // set the position of user readable text
+            out.write(new byte[]{0x1D, 0x68, 0x20}); // set the height of barcode
+            out.write(new byte[]{0x1D, 0x6B, 0x02}); // setup to use ean13             
+            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 12).substring(0, 12)));
+            out.write(new byte[]{0x00}); //end barcode 
+            return true;
+        }
+        return false;
     }
 
 }

@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -624,8 +624,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         PaymentInfo returnPayment = ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).executePayment();
 
-        double change = Integer.parseInt(AppConfig.getInstance().getProperty("till.changelimit"));
-        if (returnPayment.getChange() > change) {
+        double change = AppConfig.getInstance().getDouble("till.changelimit");
+        if (returnPayment.getChange() > change && AppConfig.getInstance().getBoolean("till.enablechangelimit")) {
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,
                     AppLocal.getIntString("message.largechange"),

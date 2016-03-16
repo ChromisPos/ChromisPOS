@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -40,24 +40,9 @@ public class PrintItemBarcode implements PrintItem {
      */
     protected AbstractBarcodeBean m_barcode;
 
-    /**
-     *
-     */
     protected String m_sCode;
-
-    /**
-     *
-     */
     protected int m_iWidth;
-
-    /**
-     *
-     */
     protected int m_iHeight;
-
-    /**
-     *
-     */
     protected double scale;
 
     /** Creates a new instance of PrinterItemBarcode

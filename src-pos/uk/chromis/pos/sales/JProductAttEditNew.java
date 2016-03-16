@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -16,10 +16,10 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.sales;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -31,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -80,11 +81,11 @@ public class JProductAttEditNew extends javax.swing.JDialog {
                 "SELECT ID, NAME FROM ATTRIBUTESET WHERE ID = ?",
                 SerializerWriteString.INSTANCE,
                 new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new AttributeSetInfo(dr.getString(1), dr.getString(2));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new AttributeSetInfo(dr.getString(1), dr.getString(2));
+            }
+        });
         attsetinstExistsSent = new PreparedSentence(s,
                 "SELECT ID FROM ATTRIBUTESETINSTANCE WHERE ATTRIBUTESET_ID = ? AND DESCRIPTION = ?",
                 new SerializerWriteBasic(Datas.STRING, Datas.STRING),
@@ -96,22 +97,22 @@ public class JProductAttEditNew extends javax.swing.JDialog {
                 + "ORDER BY AU.LINENO",
                 SerializerWriteString.INSTANCE,
                 new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
+            }
+        });
         attinstSent2 = new PreparedSentence(s, "SELECT A.ID, A.NAME, AI.ID, AI.VALUE "
                 + "FROM ATTRIBUTEUSE AU JOIN ATTRIBUTE A ON AU.ATTRIBUTE_ID = A.ID LEFT OUTER JOIN ATTRIBUTEINSTANCE AI ON AI.ATTRIBUTE_ID = A.ID "
                 + "WHERE AU.ATTRIBUTESET_ID = ? AND AI.ATTRIBUTESETINSTANCE_ID = ?"
                 + "ORDER BY AU.LINENO",
                 new SerializerWriteBasic(Datas.STRING, Datas.STRING),
                 new SerializerRead() {
-                    @Override
-                    public Object readValues(DataRead dr) throws BasicException {
-                        return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
-                    }
-                });
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                return new AttributeInstInfo(dr.getString(1), dr.getString(2), dr.getString(3), dr.getString(4));
+            }
+        });
         attvaluesSent = new PreparedSentence(s, "SELECT VALUE FROM ATTRIBUTEVALUE WHERE ATTRIBUTE_ID = ?",
                 SerializerWriteString.INSTANCE,
                 SerializerReadString.INSTANCE);
@@ -127,6 +128,10 @@ public class JProductAttEditNew extends javax.swing.JDialog {
         } else {
             myMsg = new JProductAttEditNew((Dialog) window, true);
         }
+
+        myMsg.getRootPane().setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
+        myMsg.setUndecorated(true);
+        
         myMsg.init(s);
         myMsg.applyComponentOrientation(parent.getComponentOrientation());
         return myMsg;
@@ -200,7 +205,7 @@ public class JProductAttEditNew extends javax.swing.JDialog {
             if (description.length() == 0) {
                 id = null;
             } else {
-                try {                    
+                try {
                     id = (String) attsetinstExistsSent.find(attsetid, description.toString());
                 } catch (BasicException ex) {
                     return;
@@ -237,6 +242,7 @@ public class JProductAttEditNew extends javax.swing.JDialog {
     }
 
     private static class AttributeInstInfo {
+
         private String attid;
         private String attname;
         private String id;

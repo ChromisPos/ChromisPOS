@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -94,6 +94,7 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             "COUNTRY",
             "TAXCATEGORY",
             "IMAGE",
+            "DOB",
             "DISCOUNT"}, new String[]{
             "ID",
             AppLocal.getIntString("label.taxid"),
@@ -119,6 +120,7 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             AppLocal.getIntString("label.country"),
             "TAXCATEGORY",
             "IMAGE",
+            "DOB",
             AppLocal.getIntString("label.discount")
             }, new Datas[]{
             Datas.STRING,
@@ -145,6 +147,7 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             Datas.STRING,
             Datas.STRING,
             Datas.IMAGE,
+            Datas.TIMESTAMP,
             Datas.DOUBLE}, new Formats[]{
             Formats.STRING,
             Formats.STRING,
@@ -170,6 +173,7 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             Formats.STRING,
             Formats.STRING,
             Formats.NULL,
+            Formats.TIMESTAMP,
             Formats.PERCENT}, new int[]{0}," LOWER(NAME) ");
     }
 

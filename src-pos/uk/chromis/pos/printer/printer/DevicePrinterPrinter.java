@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -197,8 +197,9 @@ public class DevicePrinterPrinter implements DevicePrinter {
      * @param code
      */
     @Override
-    public void printBarCode(String type, String position, String code) {
+    public Boolean printBarCode(String type, String position, String code) {
         m_ticketcurrent.printBarCode(type, position, code);
+        return true;
     }
 
     /**

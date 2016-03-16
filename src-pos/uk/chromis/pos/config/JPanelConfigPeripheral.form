@@ -55,7 +55,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jcboMachinePrinter2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="m_jPrinterParams2" max="32767" attributes="0"/>
+                          <Component id="m_jPrinterParams2" pref="402" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -113,16 +113,16 @@
                               <Component id="jLabel5" max="32767" attributes="0"/>
                               <Component id="jLabel6" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jcboMachineDisplay" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="m_jDisplayParams" pref="394" max="32767" attributes="0"/>
+                                  <Component id="m_jDisplayParams" pref="402" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="jcboMachinePrinter1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="m_jPrinterParams1" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -214,7 +214,7 @@
                       </Group>
                       <Component id="m_jScannerParams" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="74" max="32767" attributes="0"/>
+                  <EmptySpace pref="174" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -563,7 +563,7 @@
                           <Component id="jlblDisplayPort" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jcboSerialDisplay" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="54" max="32767" attributes="0"/>
+                          <EmptySpace pref="62" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -646,7 +646,7 @@
                           <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="m_jtxtJPOSName" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="204" max="32767" attributes="0"/>
+                          <EmptySpace pref="212" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -728,13 +728,13 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="jlblConnPrinter" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlblConnPrinter1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jcboConnPrinter1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jlblPrinterPort" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlblPrinterPort1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialPrinter1" pref="146" max="32767" attributes="0"/>
+                          <Component id="jcboSerialPrinter1" pref="158" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -744,9 +744,9 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jcboConnPrinter1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblPrinterPort" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlblPrinterPort1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jcboSerialPrinter1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblConnPrinter" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlblConnPrinter1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                       </Group>
@@ -754,7 +754,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jlblConnPrinter">
+                <Component class="javax.swing.JLabel" name="jlblConnPrinter1">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -780,7 +780,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcboConnPrinter1ActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jlblPrinterPort">
+                <Component class="javax.swing.JLabel" name="jlblPrinterPort1">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -930,7 +930,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jlblPrinterPort2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialPrinter2" pref="146" max="32767" attributes="0"/>
+                          <Component id="jcboSerialPrinter2" pref="158" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1126,7 +1126,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jlblPrinterPort3" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialPrinter3" pref="146" max="32767" attributes="0"/>
+                          <Component id="jcboSerialPrinter3" pref="158" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1320,9 +1320,9 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jcboConnPrinter4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jlblPrinterPort6" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlblPrinterPort4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialPrinter4" pref="146" max="32767" attributes="0"/>
+                          <Component id="jcboSerialPrinter4" pref="158" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1332,7 +1332,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jcboConnPrinter4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblPrinterPort6" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlblPrinterPort4" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jcboSerialPrinter4" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jlblConnPrinter4" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -1368,7 +1368,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcboConnPrinter4ActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jlblPrinterPort6">
+                <Component class="javax.swing.JLabel" name="jlblPrinterPort4">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -1516,9 +1516,9 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jcboConnPrinter5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jlblPrinterPort7" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlblPrinterPort5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialPrinter5" pref="146" max="32767" attributes="0"/>
+                          <Component id="jcboSerialPrinter5" pref="158" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1528,7 +1528,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jcboConnPrinter5" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblPrinterPort7" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlblPrinterPort5" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jcboSerialPrinter5" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jlblConnPrinter5" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -1564,7 +1564,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcboConnPrinter5ActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jlblPrinterPort7">
+                <Component class="javax.swing.JLabel" name="jlblPrinterPort5">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -1712,9 +1712,9 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jcboConnPrinter6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jlblPrinterPort8" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlblPrinterPort6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialPrinter6" pref="146" max="32767" attributes="0"/>
+                          <Component id="jcboSerialPrinter6" pref="158" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1724,7 +1724,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jcboConnPrinter6" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblPrinterPort8" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlblPrinterPort6" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jcboSerialPrinter6" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jlblConnPrinter6" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -1760,7 +1760,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcboConnPrinter6ActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jlblPrinterPort8">
+                <Component class="javax.swing.JLabel" name="jlblPrinterPort6">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -1904,10 +1904,10 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jlblPrinterPort4" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlblScalePort" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jcboSerialScale" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="224" max="32767" attributes="0"/>
+                          <EmptySpace pref="232" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1916,7 +1916,7 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jcboSerialScale" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblPrinterPort4" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlblScalePort" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                       </Group>
@@ -1924,7 +1924,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jlblPrinterPort4">
+                <Component class="javax.swing.JLabel" name="jlblScalePort">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -1982,10 +1982,10 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jlblPrinterPort5" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlblScannerPort" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jcboSerialScanner" min="-2" pref="90" max="-2" attributes="0"/>
-                          <EmptySpace pref="234" max="32767" attributes="0"/>
+                          <Component id="jcboSerialScanner" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="232" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1994,7 +1994,7 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jcboSerialScanner" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblPrinterPort5" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlblScannerPort" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                       </Group>
@@ -2002,7 +2002,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jlblPrinterPort5">
+                <Component class="javax.swing.JLabel" name="jlblScannerPort">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>

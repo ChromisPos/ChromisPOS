@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -27,19 +27,8 @@ import java.util.ArrayList;
 
 public abstract class BasicTicket implements PrintItem {
 
-    /**
-     *
-     */
     protected java.util.List<PrintItem> m_aCommands;
-
-    /**
-     *
-     */
     protected PrintItemLine pil;
-
-    /**
-     *
-     */
     protected int m_iBodyHeight;
    
        /** Creates a new instance of AbstractTicket */
@@ -49,28 +38,10 @@ public abstract class BasicTicket implements PrintItem {
            m_iBodyHeight = 0;
        }
 
-    /**
-     *
-     * @return
-     */
     protected abstract Font getBaseFont();
-
-    /**
-     *
-     * @return
-     */
     protected abstract int getFontHeight();
-
-    /**
-     *
-     * @return
-     */
     protected abstract double getImageScale();
 
-    /**
-     *
-     * @return
-     */
     @Override
        public int getHeight() {
           return m_iBodyHeight;

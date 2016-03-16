@@ -1,5 +1,5 @@
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016 2016 Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -57,6 +57,8 @@ report.addQBFFilter(new uk.chromis.pos.reports.JParamsCatalog());
 
 report.addParameter("STOCKCURRENT.LOCATION");
 report.addQBFFilter(new uk.chromis.pos.reports.JParamsLocationWithFirst());
+
+
 
 report.addField("LOCATIONID", uk.chromis.data.loader.Datas.STRING);
 report.addField("LOCATIONNAME", uk.chromis.data.loader.Datas.STRING);

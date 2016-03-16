@@ -7,11 +7,16 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-       
+    
+    <!-- Main entry point for all new databases
+         Loads other changeset xml's as required 
+    -->
+              
     <include file="uk/chromis/pos/liquibase/createdb.xml"/>
+    <include file="uk/chromis/pos/liquibase/chromisfkchecks.xml"/>
+    <include file="uk/chromis/pos/liquibase/resizederbycolumns.xml"/>
+    <include file="uk/chromis/pos/liquibase/chromiscreatefks.xml"/>
     <include file="uk/chromis/pos/liquibase/updatechromis.xml"/>
-    <include file="uk/chromis/pos/liquibase/updatechromisbeta.xml"/>
 
- 
 </databaseChangeLog>
 

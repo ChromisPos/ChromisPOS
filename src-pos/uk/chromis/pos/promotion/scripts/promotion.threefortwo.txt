@@ -19,4 +19,3 @@ Boolean WHOLE_PRODUCTS_ONLY = true;
                 "  *" + promotion.getName(),
                 QTY_FOR_EVERY, QTY_FREE,
                 WHOLE_PRODUCTS_ONLY );
-

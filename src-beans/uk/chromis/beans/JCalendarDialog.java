@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -139,9 +139,8 @@ public class JCalendarDialog extends javax.swing.JDialog {
         myMsg.getRootPane().setDefaultButton(myMsg.jcmdOK);        
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        myMsg.setBounds((screenSize.width - dialogwidth) / 2, (screenSize.height - 359) / 2, dialogwidth, 359);
+        myMsg.setBounds((screenSize.width - dialogwidth) / 2, (screenSize.height - 369) / 2, dialogwidth, 369);
         
-        //myMsg.show();
         myMsg.m_date = null;
         myMsg.setVisible(true);
         return myMsg.m_date;
@@ -163,7 +162,7 @@ public class JCalendarDialog extends javax.swing.JDialog {
             m_me = me;
         }
         public void propertyChange(PropertyChangeEvent evt) {
-            m_me.myTime.setDate(m_me.myCalendar.getDate());
+            m_me.myCalendar.setDate(m_me.myCalendar.getDate());
         }        
     }
     

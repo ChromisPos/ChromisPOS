@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk 3.81
 //
 //    This file is part of Chromis POS
@@ -606,9 +606,10 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             dCategory = ((String) cat_list.get(prodInfo.getCategoryID()) == null) ? prodInfo.getCategoryID() : (String) cat_list.get(prodInfo.getCategoryID());
             oldBuyPrice = prodInfo.getPriceBuy();
             oldSellPrice = prodInfo.getPriceSell();
-            productSellPrice *= (1 + dOriginalRate);
+            //  productSellPrice *= (1 + dOriginalRate);
             if ((oldBuyPrice != productBuyPrice) || (oldSellPrice != productSellPrice)) {
-                createCSVEntry("Updated Price Details", oldBuyPrice, oldSellPrice * (1 + dOriginalRate));
+                //   createCSVEntry("Updated Price Details", oldBuyPrice, oldSellPrice * (1 + dOriginalRate));
+                createCSVEntry("Updated Price Details", oldBuyPrice, (jCheckSellIncTax.isSelected()) ? oldSellPrice * (1 + dOriginalRate) : oldSellPrice);
                 createProduct("update");
                 priceUpdates++;
             } else {
@@ -700,7 +701,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             @Override
             protected final void process(final List<Integer> chunks) {
                 pb.setValue(chunks.get(0));
-                pb.setString("Processed " + progress +"% of import");
+                pb.setString("Processed " + progress + "% of import");
             }
         };
         backgroundWork.execute();
@@ -1176,8 +1177,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jFileName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(116, 116, 116))
+                .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(99, 99, 99))
         );
         jFileChooserPanelLayout.setVerticalGroup(
             jFileChooserPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1997,7 +1998,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 .addComponent(pb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

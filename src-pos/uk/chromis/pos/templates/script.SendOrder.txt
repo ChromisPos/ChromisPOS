@@ -2,7 +2,7 @@
 // Sends an item in a Sale to a remote (Kitchen) Printer
 //
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
    Chromis POS - The New Face of Open Source POS 
-   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 
    This file is part of chromis oPOS
 
@@ -32,7 +32,7 @@
 
 	<line><text align="center" length="42">Chromis POS</text></line>
 	<line><text align="center" length="42">The New Face of Open source POS</text></line>
-	<line><text align="center" length="42">Copyright (c) 2015 Chromis</text></line>
+	<line><text align="center" length="42">Copyright (c) (c) 2015-2016Chromis</text></line>
 	<line><text align="center" length="42">Printer.Ticket</text></line>
 	<line></line>
 
@@ -48,10 +48,10 @@
         <line><text align="left" length="15">Terminal: </text><text>${ticket.getHostname()}</text></line>       
 
 	#if ($ticket.getCustomer())
-		<line><text align="left" length="15">Customer:</text><text>${ticket.getCustomer().printName()}</text></line>
-        	#if ($ticket.getCustomer().getDiscount() > 0.0 )
-                    <line><text align="left" length="15">Discount:</text><text>${ticket.getCustomer().printDiscount()}</text></line>
-        	#end
+	<line><text align="left" length="15">Customer:</text><text>${ticket.getCustomer().printName()}</text></line>
+            #if ($ticket.getCustomer().getDiscount() > 0.0 )  
+                   <line><text align="left" length="15">Discount:</text><text>${ticket.getCustomer().printDiscount()}</text></line>  
+      	    #end  
 		<line><text align="left" length="15">Account #:</text><text>${ticket.getCustomer().printTaxid()}</text></line>
 		<line><text align="left" length="15">Current Debt:</text><text>${ticket.getCustomer().printCurDebt()}</text></line>
 	#end

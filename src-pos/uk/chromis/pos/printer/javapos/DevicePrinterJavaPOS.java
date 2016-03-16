@@ -1,5 +1,5 @@
 //    Chromis POS  - The New Face of Open Source POS
-//    Copyright (c) 2015 
+//    Copyright (c) (c) 2015-2016
 //    http://www.chromis.co.uk
 //
 //    This file is part of Chromis POS
@@ -167,7 +167,7 @@ public class DevicePrinterJavaPOS  implements DevicePrinter {
      * @param code
      */
     @Override
-    public void printBarCode(String type, String position, String code) {
+    public Boolean printBarCode(String type, String position, String code) {
         try {
             if (m_printer.getCapRecBarCode()) { // si podemos imprimir codigos de barras
                 if (DevicePrinter.POSITION_NONE.equals(position)) {                
@@ -176,8 +176,10 @@ public class DevicePrinterJavaPOS  implements DevicePrinter {
                     m_printer.printBarCode(POSPrinterConst.PTR_S_RECEIPT, code, POSPrinterConst.PTR_BCS_EAN13, 10 * 100, 60 * 100, POSPrinterConst.PTR_BC_CENTER, POSPrinterConst.PTR_BC_TEXT_BELOW);
                 }
             }
+            return true;
         } catch (JposException e) {
         }
+        return false;
     }
     
     /**
