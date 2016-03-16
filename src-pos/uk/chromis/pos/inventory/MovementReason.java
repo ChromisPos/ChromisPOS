@@ -85,8 +85,10 @@ public class MovementReason extends ComboItemLocal {
      * @return
      */
     public Double getPrice(Double dBuyPrice, Double dSellPrice) {
-        
-        if (this == IN_PURCHASE || this == OUT_REFUND || this == OUT_BREAK) {
+
+        if (this == IN_PURCHASE || this == OUT_REFUND || this == OUT_BREAK ||
+            this == IN_OPEN_PACK || this == OUT_OPEN_PACK || this == OUT_BREAK || 
+            this == IN_STOCKCHANGE || this == OUT_STOCKCHANGE ) {
             return dBuyPrice;
         } else if (this == OUT_SALE || this == IN_REFUND) {
             return dSellPrice;

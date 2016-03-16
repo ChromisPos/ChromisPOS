@@ -365,7 +365,7 @@
                 <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="LEAVES_PPLID"/>            
             </not>  
         </preConditions>  
-        <sql>ALTER TABLE LEAVES ADD CONSTRAINT lEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID)</sql>
+        <sql>ALTER TABLE LEAVES ADD CONSTRAINT LEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID)</sql>
     </changeSet>
 
     <changeSet author="Chromis POS" id="Add SHIFT_BREAKS_BREAKID">

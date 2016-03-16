@@ -765,7 +765,6 @@
                      indexName="PKIT_INX_PROD"
                      unique="true">
             <column name="PRODUCT" type="varchar(255)"/>
-            <column name="PRODUCT_KIT" type="varchar(255)"/>
         </createIndex>                                               
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
     <!-- End of new tables sections -->
@@ -879,18 +878,6 @@
             <column name="PACKPRODUCT" type="varchar(255)"/>
         </addColumn>               
     </changeSet>        
-  
-  <changeSet author="Chromis POS" id="Add Discount Column to Customers">  
-        <preConditions onFail="MARK_RAN">  
-             <not>  
-                 <columnExists columnName="DISCOUNT" tableName="CUSTOMERS"/>  
-             </not>  
-         </preConditions>  
-   
-         <addColumn tableName="CUSTOMERS">  
-             <column name="DISCOUNT" type="double"/>                                                     
-         </addColumn>                           
-     </changeSet>  
                               
     <changeSet author="Chromis POS" id="check for packproduct FK">
         <preConditions onFail="MARK_RAN">
@@ -1276,19 +1263,7 @@
             <column name="DESCRIPTION" value="##label.description123"/>
         </insert> 
     </changeSet> 
-    <!-- 
-        <changeSet author="Chromis POS" id="Add Supplier panel permissions">    
-            <preConditions onFail="MARK_RAN">
-                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description124'</sqlCheck>
-            </preConditions> 
-            <insert tableName="DBPERMISSIONS">		
-                <column name="CLASSNAME" value="uk.chromis.pos.suppliers.SuppliersPanel"/>
-                <column name="SECTION" value="##label.sectionstock"/>
-                <column name="DISPLAYNAME" value="##label.displayname124"/>
-                <column name="DESCRIPTION" value="##label.description124"/>
-            </insert> 
-        </changeSet> 
-    -->
+
     <changeSet author="Chromis POS" id="Add PRODUCTS_KIT panel permissions:">    
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
@@ -1313,21 +1288,22 @@
         </insert> 
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="drop top10salesMysql">  
-        <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
-    </changeSet> 
-                                                                                                                                                                                                                                                           <insert tableName="DBPERMISSIONS">		
     <changeSet author="Chromis POS" id="Add Best Sellers Report">    
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description127'</sqlCheck>
         </preConditions> 
-        <column name="CLASSNAME" value="/uk/chromis/reports/bestsellers.bs"/>
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/bestsellers.bs"/>
             <column name="SECTION" value="##label.sectionsales"/>
-            <column name="DISPLAYNAME" value="##label.displayname125"/>
-            <column name="DESCRIPTION" value="##label.description125"/>
+            <column name="DISPLAYNAME" value="##label.displayname127"/>
+            <column name="DESCRIPTION" value="##label.description127"/>
         </insert>		
     </changeSet> 		             		        				                                     		        			                                               		           		        		
 
+    <changeSet author="Chromis POS" id="drop top10salesMysql">  
+        <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
+    </changeSet> 
+    
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->

@@ -584,42 +584,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     public void notifyCompletionCancel() {
     }
 
-    private void editProduct() {
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JDlgEditProduct dlg = new JDlgEditProduct(topFrame, true);
-        dlg.init(m_dlSales, m_Dirty, productid, null);
-        dlg.setCallbacks(this);
-        dlg.setVisible(true);
-    }
-
-    private void newProduct() {
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JDlgEditProduct dlg = new JDlgEditProduct(topFrame, true);
-        String code = m_jcodebar.getText();
-        
-        dlg.init(m_dlSales, m_Dirty, null, code);
-        dlg.setCallbacks(this);
-        dlg.setVisible(true);
-    }
-
-    @Override
-    public void notifyCompletionOk(String reference) {
-        // Try to assign product again
-        if (reference != null) {
-            writeValueInsert();
-            m_jreference.setText(reference);
-
-            jproduct.setEnabled(true);
-            m_junitsinstock.setEnabled(true);
-
-            assignProductByReference();
-        }
-    }
-
-    @Override
-    public void notifyCompletionCancel() {
-    }
-
     private class CatalogListener implements ActionListener {
 
         @Override
@@ -773,7 +737,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         jLabel3.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel3.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel3.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 110, 60, 20));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 110, 60, 20));
 
         m_jreference.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jreference.addActionListener(new java.awt.event.ActionListener() {
@@ -830,7 +794,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_jmaximum.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jmaximum.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jPanel1.add(m_jmaximum, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 110, 50, 25));
+        jPanel1.add(m_jmaximum, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 70, 25));
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText(AppLocal.getIntString("label.price")); // NOI18N
