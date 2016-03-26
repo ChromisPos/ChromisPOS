@@ -66,6 +66,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private String productcode;
     private String productname;
     private String unitsinstock;
+    private String buyprice;
+    private String sellprice;
     private Double stocksecurity;
     private Double stockmaximum;
     private String attsetid;
@@ -164,12 +166,16 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         productcode = null;
         productname = null;
         unitsinstock = null;
+        buyprice = null;
+        sellprice = null;
         stocksecurity = null;
         stockmaximum = null;
         m_jreference.setText(null);
         m_jcodebar.setText(null);
         jproduct.setText(null);
         m_junitsinstock.setText(null);
+        m_jbuyprice.setText(null);
+        m_jsellprice.setText(null);
         m_jminimum.setText(null);
         m_jmaximum.setText(null);        
         attsetid = null;
@@ -188,6 +194,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(false);
         m_junitsinstock.setEnabled(false);
+        m_jbuyprice.setEnabled(false);
+        m_jsellprice.setEnabled(false);
         m_jminimum.setEnabled(false);
         m_jmaximum.setEnabled(false);
         m_FindProduct.setEnabled(false);
@@ -213,6 +221,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         productcode = null;
         productname = null;
         unitsinstock = null;
+        buyprice = null;
+        sellprice = null;
         stocksecurity = null;
         stockmaximum = null;
 
@@ -220,6 +230,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jcodebar.setText(null);
         jproduct.setText(null);
         m_junitsinstock.setText(null);
+        m_jbuyprice.setText(null);
+        m_jsellprice.setText(null);
         m_jminimum.setText(null);
         m_jmaximum.setText(null);        
         attsetid = null;
@@ -237,7 +249,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jEnter.setEnabled(true);
         m_jLocation.setEnabled(true);
         jproduct.setEnabled(true);
-        m_junitsinstock.setEnabled(true);
         m_jminimum.setEnabled(true);
         m_jmaximum.setEnabled(true);
         m_FindProduct.setEnabled(true);
@@ -268,10 +279,15 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         unitsinstock = (String) diary[14];
         stocksecurity = (Double) diary[15];
         stockmaximum = (Double) diary[16];
+        buyprice = Formats.CURRENCY.formatValue(diary[17]);
+        sellprice = Formats.CURRENCY.formatValue(diary[18]);
         m_jreference.setText(productref);
         m_jcodebar.setText(productcode);
         jproduct.setText(productname);
         m_junitsinstock.setText(unitsinstock);
+        m_jbuyprice.setText( buyprice );
+        m_jsellprice.setText( sellprice );
+
         m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
         m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
         attsetid = (String) diary[11];
@@ -290,6 +306,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(false);
         m_junitsinstock.setEnabled(false);
+        m_jbuyprice.setEnabled(false);
+        m_jsellprice.setEnabled(false);
+
         m_jminimum.setEnabled(false);
         m_jmaximum.setEnabled(false);
         m_FindProduct.setEnabled(false);
@@ -319,10 +338,16 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         unitsinstock = (String) diary[14];
         stocksecurity = (Double) diary[15];
         stockmaximum = (Double) diary[16];
+        buyprice = Formats.CURRENCY.formatValue(diary[17]);
+        sellprice = Formats.CURRENCY.formatValue(diary[18]);
+
         m_jreference.setText(productref);
         m_jcodebar.setText(productcode);
         jproduct.setText(productname);
         m_junitsinstock.setText(unitsinstock);
+        m_jbuyprice.setText(buyprice);
+        m_jsellprice.setText(sellprice);
+        
         m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
         m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
         attsetid = (String) diary[12];
@@ -340,7 +365,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(true);
-        m_junitsinstock.setEnabled(true);
         m_jminimum.setEnabled(true);
         m_jmaximum.setEnabled(true);
         m_FindProduct.setEnabled(true);
@@ -378,7 +402,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel
             attsetinstdesc,
             unitsinstock,
             stocksecurity,
-            stockmaximum
+            stockmaximum,
+            buyprice,
+            sellprice
         };
     }
 
@@ -421,6 +447,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                 productcode = null;
                 productname = null;
                 unitsinstock = null;
+                buyprice = null;
+                sellprice = null;
                 stocksecurity = null;
                 stockmaximum = null;
                 attsetid = null;
@@ -432,6 +460,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                 jattributes.setText(null);
                 m_EditProduct.setEnabled(false);
                 m_junitsinstock.setText(null);
+                m_jbuyprice.setText(null);
+                m_jsellprice.setText(null);                
                 m_jminimum.setText(null);
                 m_jmaximum.setText(null);        
             } else {
@@ -445,6 +475,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                             (String) m_LocationsModel.getSelectedKey(),
                             productid, attsetid);
                     unitsinstock = Formats.DOUBLE.formatValue(dStock);
+
+                    buyprice = Formats.CURRENCY.formatValue( prod.getPriceBuy() );
+                    sellprice = Formats.CURRENCY.formatValue( prod.getPriceSell() );
                     
                     stocksecurity = m_dlSales.findProductStockSecurity(
                             (String) m_LocationsModel.getSelectedKey(),
@@ -458,6 +491,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                     unitsinstock = null;
                     stockmaximum = null;
                     stocksecurity = null;
+                    buyprice = null;
+                    sellprice = null;
                 }
 
                 attsetinstid = null;
@@ -466,6 +501,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                 m_jcodebar.setText(productcode);
                 m_jreference.setText(productref);
                 m_junitsinstock.setText(unitsinstock);
+                m_jbuyprice.setText(buyprice);
+                m_jsellprice.setText(sellprice);
+                
                 m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
                 m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
                 jattributes.setText(null);
@@ -572,7 +610,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
             m_jreference.setText( reference );
 
             jproduct.setEnabled(true);
-            m_junitsinstock.setEnabled(true);
             m_jminimum.setEnabled(true);
             m_jmaximum.setEnabled(true);
 
@@ -630,6 +667,10 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_junits = new javax.swing.JTextField();
         m_jminimum = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        m_jbuyprice = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        m_jsellprice = new javax.swing.JTextField();
         catcontainer = new javax.swing.JPanel();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -737,7 +778,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         jLabel3.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel3.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel3.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 110, 60, 20));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 140, 60, 20));
 
         m_jreference.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jreference.addActionListener(new java.awt.event.ActionListener() {
@@ -767,11 +808,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         jLabel9.setMaximumSize(new java.awt.Dimension(48, 20));
         jLabel9.setMinimumSize(new java.awt.Dimension(48, 20));
         jLabel9.setPreferredSize(new java.awt.Dimension(48, 20));
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 150, 70, 25));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 170, 70, 25));
 
         jattributes.setEditable(false);
         jattributes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jPanel1.add(jattributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 150, 200, 25));
+        jPanel1.add(jattributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 210, 25));
 
         jEditAttributes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/attributes.png"))); // NOI18N
         jEditAttributes.setToolTipText(bundle.getString("tiptext.productattributes")); // NOI18N
@@ -783,7 +824,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                 jEditAttributesActionPerformed(evt);
             }
         });
-        jPanel1.add(jEditAttributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, 40, -1));
+        jPanel1.add(jEditAttributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 160, 40, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText(AppLocal.getIntString("label.units")); // NOI18N
@@ -794,7 +835,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_jmaximum.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jmaximum.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jPanel1.add(m_jmaximum, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 70, 25));
+        jPanel1.add(m_jmaximum, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 70, 25));
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText(AppLocal.getIntString("label.price")); // NOI18N
@@ -829,14 +870,38 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_jminimum.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jminimum.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jPanel1.add(m_jminimum, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, 60, 25));
+        jPanel1.add(m_jminimum, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 140, 60, 25));
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel12.setText(AppLocal.getIntString("label.minimum")); // NOI18N
         jLabel12.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel12.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel12.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 60, 20));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, 60, 20));
+
+        m_jbuyprice.setEditable(false);
+        m_jbuyprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jbuyprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jPanel1.add(m_jbuyprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, 60, 20));
+
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText(AppLocal.getIntString("label.prodpricebuy")); // NOI18N
+        jLabel13.setMaximumSize(new java.awt.Dimension(40, 20));
+        jLabel13.setMinimumSize(new java.awt.Dimension(40, 20));
+        jLabel13.setPreferredSize(new java.awt.Dimension(40, 20));
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 60, 20));
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText(AppLocal.getIntString("label.prodpricesell")); // NOI18N
+        jLabel14.setMaximumSize(new java.awt.Dimension(40, 20));
+        jLabel14.setMinimumSize(new java.awt.Dimension(40, 20));
+        jLabel14.setPreferredSize(new java.awt.Dimension(40, 20));
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 110, 60, 20));
+
+        m_jsellprice.setEditable(false);
+        m_jsellprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jsellprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jPanel1.add(m_jsellprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 60, 20));
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
@@ -923,6 +988,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -939,6 +1006,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private javax.swing.JButton m_jEnter;
     private javax.swing.JComboBox m_jLocation;
     private javax.swing.JButton m_jbtndate;
+    private javax.swing.JTextField m_jbuyprice;
     private javax.swing.JTextField m_jcodebar;
     private javax.swing.JTextField m_jdate;
     private javax.swing.JTextField m_jmaximum;
@@ -946,6 +1014,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private javax.swing.JTextField m_jprice;
     private javax.swing.JComboBox m_jreason;
     private javax.swing.JTextField m_jreference;
+    private javax.swing.JTextField m_jsellprice;
     private javax.swing.JTextField m_junits;
     private javax.swing.JTextField m_junitsinstock;
     // End of variables declaration//GEN-END:variables

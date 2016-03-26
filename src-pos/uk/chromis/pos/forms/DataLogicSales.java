@@ -131,7 +131,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.STRING,       // 13 - Attribute set inst desc
             Datas.DOUBLE,       // 14 - Units in stock
             Datas.DOUBLE,       // 15 - Stock Security
-            Datas.DOUBLE        // 16 - Stock Maximum
+            Datas.DOUBLE,       // 16 - Stock Maximum
+            Datas.DOUBLE,       // 17 - Buy Price
+            Datas.DOUBLE        // 18 - Sell Price
         };
         
         paymenttabledatas = new Datas[]{
