@@ -106,7 +106,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
 
         String changeCheck = (AppConfig.getInstance().getProperty("till.changelimit"));
         if (changeCheck == null) {
-            AppConfig.getInstance().setProperty("till.changelimit", "20");
+            AppConfig.getInstance().setProperty("till.changelimit", "50");
         }
 
         jEnableAutoLogoff.setSelected(AppConfig.getInstance().getBoolean("till.enableautologoff"));
