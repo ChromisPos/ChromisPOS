@@ -210,7 +210,16 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 m_jPriceBuy.setText(Formats.CURRENCY.formatValue(info.getPriceBuy()));
                 setPriceSell(info.getPriceSell());
                 m_CategoryModel.setSelectedKey(info.getCategoryID());
-                m_PromotionModel.setSelectedKey( info.getPromotionID());
+                jComboBoxPromotion.setEnabled(true);
+                
+                String promID =  info.getPromotionID();
+                if ( promID != null && !promID.isEmpty() ) {
+                    jCheckBoxPromotion.setSelected(true);
+                } else {
+                    jCheckBoxPromotion.setSelected(false);
+                }
+                m_PromotionModel.setSelectedKey( promID );
+                
                 taxcatmodel.setSelectedKey( info.getTaxCategoryID());
                 attmodel.setSelectedKey( info.getAttributeSetID());
                 m_jImage.setImage( info.getImage());
