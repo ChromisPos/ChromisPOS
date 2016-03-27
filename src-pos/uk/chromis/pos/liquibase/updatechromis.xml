@@ -727,7 +727,7 @@
         </sql>
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                          
   
-    <changeSet author="Chromis POS" id="Create recipes table" >
+    <changeSet author="Chromis POS" id="Create recipes table m." dbms="mysql, postgresql, hypersql, hsqldb, oracle" >
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PRODUCTS_KIT"/>

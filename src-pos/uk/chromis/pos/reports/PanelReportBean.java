@@ -81,7 +81,7 @@ public class PanelReportBean extends JPanelReport {
             setVisibleButtonFilter(false);
         }
     }
-    
+       
     /**
      *
      * @return
