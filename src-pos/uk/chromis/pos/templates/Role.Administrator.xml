@@ -122,5 +122,6 @@
 	<class name="/uk/chromis/reports/stockchanges.bs"/>
       	<class name="uk.chromis.pos.promotion.PromotionPanel"/>
 	<class name="/uk/chromis/reports/promotions.bs"/>
+	<class name="uk.chromis.pos.inventory.ProductListsPanel"/>
 
  </permissions>
