@@ -103,6 +103,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public static int INDEX_PACKQUANTITY = FIELD_COUNT++;
     public static int INDEX_PACKPRODUCT = FIELD_COUNT++;
     public static int INDEX_PROMOTIONID = FIELD_COUNT++;
+    public static int INDEX_MANAGESTOCK = FIELD_COUNT++;
 
     /**
      * Creates a new instance of SentenceContainerGeneric
@@ -193,7 +194,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ISPACK", Datas.BOOLEAN, Formats.BOOLEAN),
                 new Field("PACKQUANTITY", Datas.DOUBLE, Formats.DOUBLE),
                 new Field("PACKPRODUCT", Datas.STRING, Formats.STRING),
-                new Field("PROMOTIONID", Datas.STRING, Formats.STRING)
+                new Field("PROMOTIONID", Datas.STRING, Formats.STRING),
+                new Field("MANAGESTOCK", Datas.BOOLEAN, Formats.BOOLEAN)
         );
 
         // If this fails there is a coding error - have you added a column
@@ -233,7 +235,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.DISCOUNTED, "
                 + "P.CANDISCOUNT, "
                 + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT, "
-                + "P.PROMOTIONID ";
+                + "P.PROMOTIONID, "
+                + "P.MANAGESTOCK ";
         return sel;
     }
 
@@ -1055,7 +1058,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                     ticketlineinsert.exec(l);
 
-                    if (l.getProductID() != null && l.isProductService() != true) {
+                    if (l.getProductID() != null && l.isProductService() != true
+                            && l.getManageStock() == true ) {
                         // update the stock
                         getStockDiaryInsert().exec(new Object[]{
                             UUID.randomUUID().toString(),
@@ -1154,7 +1158,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 // update the inventory
                 Date d = new Date();
                 for (int i = 0; i < ticket.getLinesCount(); i++) {
-                    if (ticket.getLine(i).getProductID() != null) {
+                    if (ticket.getLine(i).getProductID() != null 
+                        && ticket.getLine(i).getManageStock() == true ) {
                         // Hay que actualizar el stock si el hay producto
                         getStockDiaryInsert().exec(new Object[]{
                             UUID.randomUUID().toString(),
@@ -1273,8 +1278,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "ATTRIBUTESET_ID, IMAGE, STOCKCOST, STOCKVOLUME, ISCATALOG, CATORDER, "
                         + "ATTRIBUTES, ISKITCHEN, ISSERVICE, DISPLAY, ISVPRICE, "
                         + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT, "
-                        + "ISPACK, PACKQUANTITY, PACKPRODUCT, PROMOTIONID  ) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        + "ISPACK, PACKQUANTITY, PACKPRODUCT, PROMOTIONID, MANAGESTOCK  ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{INDEX_ID,
                                     INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
@@ -1288,7 +1293,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                     INDEX_WARRANTY, INDEX_STOCKUNITS, INDEX_ALIAS,
                                     INDEX_ALWAYSAVAILABLE, INDEX_DISCOUNTED, INDEX_CANDISCOUNT,
                                     INDEX_ISPACK, INDEX_PACKQUANTITY, INDEX_PACKPRODUCT,
-                                    INDEX_PROMOTIONID})).exec(params);
+                                    INDEX_PROMOTIONID, INDEX_MANAGESTOCK })).exec(params);
 
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)",
                         new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
@@ -1333,7 +1338,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "WARRANTY = ?, STOCKUNITS = ?, ALIAS = ?, ALWAYSAVAILABLE = ?, "
                         + "DISCOUNTED = ?, CANDISCOUNT = ?, "
                         + "ISPACK = ?, PACKQUANTITY = ?, PACKPRODUCT = ?, "
-                        + "PROMOTIONID = ?, ISCATALOG = ?, CATORDER = ? "
+                        + "PROMOTIONID = ?, ISCATALOG = ?, CATORDER = ?, "
+                        + "MANAGESTOCK = ? "
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{
                                     INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
@@ -1347,6 +1353,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                     INDEX_ALWAYSAVAILABLE, INDEX_DISCOUNTED, INDEX_CANDISCOUNT,
                                     INDEX_ISPACK, INDEX_PACKQUANTITY, INDEX_PACKPRODUCT,
                                     INDEX_PROMOTIONID, INDEX_ISCATALOG, INDEX_CATORDER,
+                                    INDEX_MANAGESTOCK,
                                     INDEX_ID})).exec(params);
 
                 return i;

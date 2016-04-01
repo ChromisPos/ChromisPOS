@@ -129,6 +129,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
             attributes.setProperty("product.promotionadded", "false");
             attributes.setProperty("product.nosc", "0");
 
+            attributes.setProperty("product.managestock", product.getManageStock() ? "true" : "false");            
         }
         init(pid, null, dMultiply, dPrice, tax, attributes, 0.0);
     }
@@ -251,6 +252,18 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         attributes.setProperty("product.promotionadded", value ? "true" : "false");
     }
 
+    // ManageStock is a flag indicating whether stock diary entries are to
+    // be created on sales or refunds - it is used on products that do not get
+    // entered as new stock but do get sold through the till
+    // This flag prevents stock quantities going negative
+    public Boolean getManageStock() {
+        return "true".equals(attributes.getProperty("product.managestock"));
+    }
+
+    public void setManageStock(Boolean value) {
+        attributes.setProperty("product.managestock", value ? "true" : "false");
+    }
+    
     public int getTicketLine() {
         return m_iLine;
     }

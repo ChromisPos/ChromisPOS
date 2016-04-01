@@ -62,6 +62,7 @@ public class ProductInfoExt {
     protected Double m_dStockUnits;
     protected String m_sAlias;
     protected Boolean m_bAlwaysAvailable;
+    protected Boolean m_manageStock;
     protected Boolean m_canDiscount;
     protected String m_discounted;
     protected String m_promotionid;
@@ -98,6 +99,7 @@ public class ProductInfoExt {
         m_dStockUnits = 0.0;
         m_sAlias = null;
         m_bAlwaysAvailable = false;
+        m_manageStock = true;
         m_canDiscount = true;
         m_discounted = "no";
         m_promotionid = null;
@@ -345,6 +347,14 @@ public class ProductInfoExt {
         m_bAlwaysAvailable = bValue;
     }
 
+    public final Boolean getManageStock() {
+        return m_manageStock;
+    }
+    
+    public final void setManageStock( Boolean bValue ) {
+        m_manageStock = bValue;
+    }
+    
     public final Boolean getCanDiscount() {
         return m_canDiscount;
     }
@@ -430,7 +440,7 @@ public class ProductInfoExt {
                 product.m_packquantity = dr.getDouble(DataLogicSales.INDEX_PACKQUANTITY + 1);
                 product.m_packproduct = dr.getString(DataLogicSales.INDEX_PACKPRODUCT + 1);
                 product.m_promotionid = dr.getString(DataLogicSales.INDEX_PROMOTIONID + 1);
-
+                product.m_manageStock = dr.getBoolean(DataLogicSales.INDEX_MANAGESTOCK + 1);
                 return product;
             }
         };

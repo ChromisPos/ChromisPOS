@@ -66,8 +66,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private String productcode;
     private String productname;
     private String unitsinstock;
-    private String buyprice;
-    private String sellprice;
+    private Double buyprice;
+    private Double sellprice;
     private Double stocksecurity;
     private Double stockmaximum;
     private String attsetid;
@@ -279,14 +279,14 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         unitsinstock = (String) diary[14];
         stocksecurity = (Double) diary[15];
         stockmaximum = (Double) diary[16];
-        buyprice = Formats.CURRENCY.formatValue(diary[17]);
-        sellprice = Formats.CURRENCY.formatValue(diary[18]);
+        buyprice = (Double) diary[17];
+        sellprice = (Double) diary[18];
         m_jreference.setText(productref);
         m_jcodebar.setText(productcode);
         jproduct.setText(productname);
         m_junitsinstock.setText(unitsinstock);
-        m_jbuyprice.setText( buyprice );
-        m_jsellprice.setText( sellprice );
+        m_jbuyprice.setText(Formats.CURRENCY.formatValue(buyprice ) );
+        m_jsellprice.setText(Formats.CURRENCY.formatValue(sellprice) );
 
         m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
         m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
@@ -338,15 +338,15 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         unitsinstock = (String) diary[14];
         stocksecurity = (Double) diary[15];
         stockmaximum = (Double) diary[16];
-        buyprice = Formats.CURRENCY.formatValue(diary[17]);
-        sellprice = Formats.CURRENCY.formatValue(diary[18]);
+        buyprice = (Double) diary[17];
+        sellprice = (Double) diary[18];
 
         m_jreference.setText(productref);
         m_jcodebar.setText(productcode);
         jproduct.setText(productname);
         m_junitsinstock.setText(unitsinstock);
-        m_jbuyprice.setText(buyprice);
-        m_jsellprice.setText(sellprice);
+        m_jbuyprice.setText(Formats.CURRENCY.formatValue(buyprice ) );
+        m_jsellprice.setText(Formats.CURRENCY.formatValue(sellprice) );
         
         m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
         m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
@@ -476,8 +476,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                             productid, attsetid);
                     unitsinstock = Formats.DOUBLE.formatValue(dStock);
 
-                    buyprice = Formats.CURRENCY.formatValue( prod.getPriceBuy() );
-                    sellprice = Formats.CURRENCY.formatValue( prod.getPriceSell() );
+                    buyprice = prod.getPriceBuy();
+                    sellprice = prod.getPriceSell();
                     
                     stocksecurity = m_dlSales.findProductStockSecurity(
                             (String) m_LocationsModel.getSelectedKey(),
@@ -501,8 +501,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                 m_jcodebar.setText(productcode);
                 m_jreference.setText(productref);
                 m_junitsinstock.setText(unitsinstock);
-                m_jbuyprice.setText(buyprice);
-                m_jsellprice.setText(sellprice);
+                m_jbuyprice.setText(Formats.CURRENCY.formatValue(buyprice ) );
+                m_jsellprice.setText(Formats.CURRENCY.formatValue(sellprice) );
                 
                 m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
                 m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        

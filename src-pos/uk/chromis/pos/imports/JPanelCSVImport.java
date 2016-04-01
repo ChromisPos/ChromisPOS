@@ -938,6 +938,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         myprod[DataLogicSales.INDEX_PACKQUANTITY] = packSize;                                                 // PackQuantity
         myprod[DataLogicSales.INDEX_PACKPRODUCT] = (packOf.equals("") ? null : packOf);                                                    // Pack Product
         myprod[DataLogicSales.INDEX_PROMOTIONID] = null;
+        myprod[DataLogicSales.INDEX_MANAGESTOCK] = true;
 
         try {
             if ("new".equals(pType)) {
