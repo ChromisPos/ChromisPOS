@@ -32,12 +32,15 @@ import uk.chromis.pos.ticket.ProductInfoExt;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.*;
-import uk.chromis.data.gui.JMessageDialog;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import uk.chromis.data.gui.ListValModel;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.BeanFactoryApp;
 import uk.chromis.pos.forms.JPanelView;
 import uk.chromis.pos.ticket.PlayWave;
@@ -105,7 +108,6 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
             jButtonRemoveProduct.setEnabled(false);
             jButtonAddProduct.setEnabled(false);
             jButtonDeleteList.setEnabled(false);
-            jButtonExport.setEnabled(false);
             m_FindProduct.setEnabled(false);
             m_jEnter1.setEnabled(false);
             m_jbarcode.setEnabled(false);
@@ -114,7 +116,6 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
             // List has an entry selected  
             m_cat.setComponentEnabled(true);
             jButtonDeleteList.setEnabled(true);
-            jButtonExport.setEnabled(true);
             m_FindProduct.setEnabled(true);
             m_jEnter1.setEnabled(true);
             m_jbarcode.setEnabled(true);
@@ -226,9 +227,7 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
                 oProduct = m_dlSales.getProductInfoByCode( code );
             }
 
-            if (oProduct == null) {       
-                new PlayWave("error.wav").start(); // playing WAVE file 
-            } else {
+            if (oProduct != null) {       
                 assignProduct(oProduct);
             }
         } catch (BasicException eData) {        
@@ -249,20 +248,24 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
 
     private void updateProductList() {
         ProductListInfo info = (ProductListInfo) m_jList.getSelectedItem();
-        String name = info.getName();
-        if( name != null && !name.isEmpty() ) {
-            m_sentProductsList = m_dlSales.getProductListItems( name );
-            try {
-                m_ProductsListModel = new ListValModel( m_sentProductsList.list() );
-                jListProducts.setModel( m_ProductsListModel );
-            } catch (BasicException ex) {
-                MessageInf msg = new MessageInf(ex);
-                msg.show(this);                   
-                jListProducts.setModel( null );
+        if( info != null ) {
+            String name = info.getName();
+            if( name != null && !name.isEmpty() ) {
+                m_sentProductsList = m_dlSales.getProductListItems( name );
+                try {
+                    m_ProductsListModel = new ListValModel( m_sentProductsList.list() );
+                } catch (BasicException ex) {
+                    MessageInf msg = new MessageInf(ex);
+                    msg.show(this);                   
+                    m_ProductsListModel = new ListValModel();
+                }
+            } else {
+                m_ProductsListModel = new ListValModel();
             }
         } else {
-            jListProducts.setModel( null );
+            m_ProductsListModel = new ListValModel();
         }
+        jListProducts.setModel( m_ProductsListModel );
     }
 
     private void addProduct() {
@@ -280,6 +283,41 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         }
     }
 
+    private boolean startNewList() {
+        boolean bResult = false;
+        String name = JOptionPane.showInputDialog( this, AppLocal.getIntString("message.asklistname"));
+        
+        if( name != null && !name.isEmpty() ) {
+            // Find out if already exists
+            int n = m_jList.getItemCount();
+            boolean bExists = false;
+            for( int i = 0; !bExists && i < m_jList.getItemCount(); ++i ) {
+                ProductListInfo info = (ProductListInfo) m_jList.getItemAt(i);
+                if( name.equalsIgnoreCase(info.getName())) {
+                    bExists = true;
+                    m_jList.setSelectedItem(info);
+                }
+            }
+            
+            if( bExists ) {
+                JOptionPane.showMessageDialog(null,
+                    AppLocal.getIntString("message.nameexists"),
+                    AppLocal.getIntString("Menu.ProductLists"),
+                    JOptionPane.WARNING_MESSAGE);
+            } else {
+                ProductListInfo info = new ProductListInfo( name );
+                m_NameListModel.add( info );
+                m_jList.setSelectedItem(info);
+                bResult = true;
+            }
+            
+            setControls();
+        }        
+        
+        return bResult;
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -300,7 +338,6 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         jButtonRemoveProduct = new javax.swing.JButton();
         jButtonAddProduct = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        jButtonExport = new javax.swing.JButton();
         jButtonNewList = new javax.swing.JButton();
         jButtonDeleteList = new javax.swing.JButton();
         jButtonImport = new javax.swing.JButton();
@@ -396,14 +433,6 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         jLabel10.setPreferredSize(new java.awt.Dimension(40, 20));
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 70, 25));
 
-        jButtonExport.setText(bundle.getString("label.exportlist")); // NOI18N
-        jButtonExport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonExportActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButtonExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, -1, -1));
-
         jButtonNewList.setText(bundle.getString("label.newlist")); // NOI18N
         jButtonNewList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -480,12 +509,59 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
 
 }//GEN-LAST:event_m_FindProductActionPerformed
 
-    private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonExportActionPerformed
-
     private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
-        // TODO add your handling code here:
+
+        String last_folder = AppConfig.getInstance().getProperty("CSV.last_folder");
+        JFileChooser chooser = new JFileChooser(last_folder == null ? "C:\\" : last_folder);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv files", "csv");
+        chooser.setFileFilter(filter);
+        chooser.showOpenDialog(null);
+        File csvFile = chooser.getSelectedFile();
+
+        // check if a file was selected        
+        if (csvFile == null) {
+            return;
+        }
+
+        File current_folder = chooser.getCurrentDirectory();
+        // If we have a file lets save the directory for later use if it's different from the old
+        if (last_folder == null || !last_folder.equals(current_folder.getAbsolutePath())) {
+            AppConfig.getInstance().setProperty("CSV.last_folder", current_folder.getAbsolutePath());
+            try {
+                AppConfig.getInstance().save();
+            } catch (IOException ex) {
+                MessageInf msg = new MessageInf(ex);
+                msg.show(this);            
+            }
+        }
+
+        String csv = csvFile.getName();
+        if (!(csv.trim().equals(""))) {
+            String csvFileName = csvFile.getAbsolutePath();
+            if( startNewList() ) {
+                try {
+                    // Get the data and store in the list
+                    FileReader fr = new FileReader( csvFileName );
+                    BufferedReader br = new BufferedReader( fr );
+                    
+                    String line;
+                    while( (line = br.readLine()) != null ) {
+                        line.trim();
+                        m_jreference.setText( line );
+                        assignProductByCode();
+                        addProduct();
+                    }
+                } catch (FileNotFoundException ex) {
+                    MessageInf msg = new MessageInf(ex);
+                    msg.show(this);            
+                } catch (IOException ex) {
+                    MessageInf msg = new MessageInf(ex);
+                    msg.show(this);            
+                }
+                
+            }
+        }
+
     }//GEN-LAST:event_jButtonImportActionPerformed
 
     private void m_jbarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbarcodeActionPerformed
@@ -497,33 +573,7 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
     }//GEN-LAST:event_m_jEnter1ActionPerformed
 
     private void jButtonNewListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewListActionPerformed
-        String name = JOptionPane.showInputDialog( this, AppLocal.getIntString("message.asklistname"));
-        
-        if( name != null && !name.isEmpty() ) {
-            // Find out if already exists
-            int n = m_jList.getItemCount();
-            boolean bExists = false;
-            for( int i = 0; !bExists && i < m_jList.getItemCount(); ++i ) {
-                ProductListInfo info = (ProductListInfo) m_jList.getItemAt(i);
-                if( name.equalsIgnoreCase(info.getName())) {
-                    bExists = true;
-                    m_jList.setSelectedItem(info);
-                }
-            }
-            
-            if( bExists ) {
-                JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.nameexists"),
-                    AppLocal.getIntString("Menu.ProductLists"),
-                    JOptionPane.WARNING_MESSAGE);
-            } else {
-                ProductListInfo info = new ProductListInfo( name );
-                m_NameListModel.add( info );
-                m_jList.setSelectedItem(info);
-            }
-            
-            setControls();
-        }
+        startNewList();
     }//GEN-LAST:event_jButtonNewListActionPerformed
 
     private void jButtonAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddProductActionPerformed
@@ -585,7 +635,6 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
     private javax.swing.JPanel catcontainer;
     private javax.swing.JButton jButtonAddProduct;
     private javax.swing.JButton jButtonDeleteList;
-    private javax.swing.JButton jButtonExport;
     private javax.swing.JButton jButtonImport;
     private javax.swing.JButton jButtonNewList;
     private javax.swing.JButton jButtonRemoveProduct;

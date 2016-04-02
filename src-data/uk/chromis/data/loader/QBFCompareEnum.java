@@ -115,6 +115,16 @@ public abstract class QBFCompareEnum {
             return sField + " <= " + sSQLValue;
         }
     };
+    
+        /**
+     *
+     */
+    public final static QBFCompareEnum COMP_INLIST = new QBFCompareEnum(9, "qbf.inlist") {
+        public String getExpression(String sField, String sSQLValue) {
+            return sField + " IN (SELECT PRODUCT FROM PRODUCTLISTS WHERE LISTNAME = " + sSQLValue + ")";
+        }
+    };
+
 //    public final static QBFCompareEnum COMP_STARTSWITH = new QBFCompareEnum(9, "qbf.startswith") {
 //        public String getExpression(String sField, String sSQLValue) { return sField + " LIKE " ... + sSQLValue; }
 //    };

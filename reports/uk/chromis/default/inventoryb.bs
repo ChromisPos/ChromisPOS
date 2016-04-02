@@ -46,6 +46,7 @@ report.addParameter("PRODUCTS.PRICEBUY");
 report.addParameter("PRODUCTS.PRICESELL");
 report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
+report.addParameter("PRODUCTS.ID");
 report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
 
 report.addParameter("PRODUCTS.ISCATALOG");
