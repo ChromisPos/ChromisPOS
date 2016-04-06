@@ -60,8 +60,10 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
         m_props = props;
         
         m_rootapp = new JRootApp();
+
+        int result = m_rootapp.initApp(m_props);
         
-        if (m_rootapp.initApp(m_props)) {
+        if( result == m_rootapp.INIT_SUCCESS ) {
 
             if ("true".equals(AppConfig.getInstance().getProperty("machine.uniqueinstance"))) {
                 // Register the running application
@@ -83,7 +85,9 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
             setLocationRelativeTo(null);        
             
             setVisible(true);                        
-        } else {
+        }
+
+        if( result == m_rootapp.INIT_FAIL_CONFIG ) {
             new JFrmConfig(props).setVisible(true); // Show the configuration window.
         }
     }
