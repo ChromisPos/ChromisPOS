@@ -23,8 +23,8 @@
 	<detail>
 		<band height="107" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="210" height="20" />
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="0" y="0" width="185" height="20" />
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>

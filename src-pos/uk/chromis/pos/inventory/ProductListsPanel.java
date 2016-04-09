@@ -108,16 +108,18 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
             jButtonRemoveProduct.setEnabled(false);
             jButtonAddProduct.setEnabled(false);
             jButtonDeleteList.setEnabled(false);
-            m_FindProduct.setEnabled(false);
-            m_jEnter1.setEnabled(false);
+            m_FindProductBtn.setEnabled(false);
+            m_jReferenceBtn.setEnabled(false);
+            m_jBarcodeBtn.setEnabled(false);
             m_jbarcode.setEnabled(false);
             m_jreference.setEnabled(false);
         } else {
             // List has an entry selected  
             m_cat.setComponentEnabled(true);
             jButtonDeleteList.setEnabled(true);
-            m_FindProduct.setEnabled(true);
-            m_jEnter1.setEnabled(true);
+            m_FindProductBtn.setEnabled(true);
+            m_jReferenceBtn.setEnabled(true);
+            m_jBarcodeBtn.setEnabled(true);
             m_jbarcode.setEnabled(true);
             m_jreference.setEnabled(true);
             
@@ -132,6 +134,11 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
             } else {
                 jButtonRemoveProduct.setEnabled(true);                
             }
+            
+            if( m_jreference.isFocusOwner() )
+                getRootPane().setDefaultButton(m_jReferenceBtn );
+            else
+                getRootPane().setDefaultButton(m_jBarcodeBtn );                
         }
     }
     
@@ -192,6 +199,8 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
             m_jreference.setText(productref);
             m_jbarcode.setText(productcode);
 
+             addProduct();
+             new PlayWave("beep.wav").start(); // playing WAVE file 
         }
 
         setControls();
@@ -206,6 +215,11 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
             } else {
                 assignProduct(oProduct);
             }
+
+            m_jreference.requestFocus();
+            m_jreference.setSelectionStart(0);
+            m_jreference.setSelectionEnd(m_jreference.getText().length());
+
         } catch (BasicException eData) {        
             assignProduct(null);
             MessageInf msg = new MessageInf(eData);
@@ -215,7 +229,7 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
     
     private void assignProductByCode() {
         try {
-            String code = m_jreference.getText();
+            String code = m_jbarcode.getText();
             ProductInfoExt oProduct = m_dlSales.getProductInfoByCode( code );
             if (oProduct == null && code.startsWith("977")) {
                 // This is an ISSN barcode (news and magazines)
@@ -227,9 +241,17 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
                 oProduct = m_dlSales.getProductInfoByCode( code );
             }
 
-            if (oProduct != null) {       
+            if (oProduct == null) {       
+                assignProduct(null);
+                new PlayWave("error.wav").start(); // playing WAVE file 
+            } else {
                 assignProduct(oProduct);
             }
+            
+            m_jbarcode.requestFocus();
+            m_jbarcode.setSelectionStart(0);
+            m_jbarcode.setSelectionEnd(m_jbarcode.getText().length());
+            
         } catch (BasicException eData) {        
             assignProduct(null);
             MessageInf msg = new MessageInf(eData);
@@ -329,7 +351,7 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         jPanel1 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jproduct = new javax.swing.JTextField();
-        m_FindProduct = new javax.swing.JButton();
+        m_FindProductBtn = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         m_jreference = new javax.swing.JTextField();
         m_jList = new javax.swing.JComboBox();
@@ -343,7 +365,8 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         jButtonImport = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         m_jbarcode = new javax.swing.JTextField();
-        m_jEnter1 = new javax.swing.JButton();
+        m_jBarcodeBtn = new javax.swing.JButton();
+        m_jReferenceBtn = new javax.swing.JButton();
         catcontainer = new javax.swing.JPanel();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -368,15 +391,15 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         jproduct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jPanel1.add(jproduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 270, 25));
 
-        m_FindProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
+        m_FindProductBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
-        m_FindProduct.setToolTipText(bundle.getString("tiptext.searchproductlist")); // NOI18N
-        m_FindProduct.addActionListener(new java.awt.event.ActionListener() {
+        m_FindProductBtn.setToolTipText(bundle.getString("tiptext.searchproductlist")); // NOI18N
+        m_FindProductBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_FindProductActionPerformed(evt);
+                m_FindProductBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(m_FindProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 40, -1));
+        jPanel1.add(m_FindProductBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 40, -1));
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText(AppLocal.getIntString("label.prodref")); // NOI18N
@@ -472,20 +495,35 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         });
         jPanel1.add(m_jbarcode, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 170, 25));
 
-        m_jEnter1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
-        m_jEnter1.setToolTipText(bundle.getString("tiptext.getbarcode")); // NOI18N
-        m_jEnter1.setFocusPainted(false);
-        m_jEnter1.setFocusable(false);
-        m_jEnter1.setMaximumSize(new java.awt.Dimension(54, 33));
-        m_jEnter1.setMinimumSize(new java.awt.Dimension(54, 33));
-        m_jEnter1.setPreferredSize(new java.awt.Dimension(54, 33));
-        m_jEnter1.setRequestFocusEnabled(false);
-        m_jEnter1.addActionListener(new java.awt.event.ActionListener() {
+        m_jBarcodeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
+        m_jBarcodeBtn.setToolTipText(bundle.getString("tiptext.getbarcode")); // NOI18N
+        m_jBarcodeBtn.setFocusPainted(false);
+        m_jBarcodeBtn.setFocusable(false);
+        m_jBarcodeBtn.setMaximumSize(new java.awt.Dimension(54, 33));
+        m_jBarcodeBtn.setMinimumSize(new java.awt.Dimension(54, 33));
+        m_jBarcodeBtn.setPreferredSize(new java.awt.Dimension(54, 33));
+        m_jBarcodeBtn.setRequestFocusEnabled(false);
+        m_jBarcodeBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jEnter1ActionPerformed(evt);
+                m_jBarcodeBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(m_jEnter1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 40, -1));
+        jPanel1.add(m_jBarcodeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 40, -1));
+
+        m_jReferenceBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/products.png"))); // NOI18N
+        m_jReferenceBtn.setToolTipText(bundle.getString("tiptext.getbarcode")); // NOI18N
+        m_jReferenceBtn.setFocusPainted(false);
+        m_jReferenceBtn.setFocusable(false);
+        m_jReferenceBtn.setMaximumSize(new java.awt.Dimension(54, 33));
+        m_jReferenceBtn.setMinimumSize(new java.awt.Dimension(54, 33));
+        m_jReferenceBtn.setPreferredSize(new java.awt.Dimension(54, 33));
+        m_jReferenceBtn.setRequestFocusEnabled(false);
+        m_jReferenceBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jReferenceBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(m_jReferenceBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 40, -1));
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
@@ -504,10 +542,10 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
 
     }//GEN-LAST:event_m_jreferenceActionPerformed
 
-    private void m_FindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_FindProductActionPerformed
+    private void m_FindProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_FindProductBtnActionPerformed
         assignProduct(JProductFinder.showMessage(this, m_dlSales));
 
-}//GEN-LAST:event_m_FindProductActionPerformed
+}//GEN-LAST:event_m_FindProductBtnActionPerformed
 
     private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
 
@@ -568,9 +606,9 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
          assignProductByCode();
     }//GEN-LAST:event_m_jbarcodeActionPerformed
 
-    private void m_jEnter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEnter1ActionPerformed
+    private void m_jBarcodeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jBarcodeBtnActionPerformed
          assignProductByCode();
-    }//GEN-LAST:event_m_jEnter1ActionPerformed
+    }//GEN-LAST:event_m_jBarcodeBtnActionPerformed
 
     private void jButtonNewListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewListActionPerformed
         startNewList();
@@ -631,6 +669,10 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         }
     }//GEN-LAST:event_jButtonDeleteListActionPerformed
 
+    private void m_jReferenceBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jReferenceBtnActionPerformed
+        assignProductById( m_jreference.getText() );
+    }//GEN-LAST:event_m_jReferenceBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel catcontainer;
     private javax.swing.JButton jButtonAddProduct;
@@ -646,9 +688,10 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jproduct;
-    private javax.swing.JButton m_FindProduct;
-    private javax.swing.JButton m_jEnter1;
+    private javax.swing.JButton m_FindProductBtn;
+    private javax.swing.JButton m_jBarcodeBtn;
     private javax.swing.JComboBox m_jList;
+    private javax.swing.JButton m_jReferenceBtn;
     private javax.swing.JTextField m_jbarcode;
     private javax.swing.JTextField m_jreference;
     // End of variables declaration//GEN-END:variables
