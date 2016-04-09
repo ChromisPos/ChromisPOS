@@ -198,9 +198,6 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
             jproduct.setText(productname);
             m_jreference.setText(productref);
             m_jbarcode.setText(productcode);
-
-             addProduct();
-             new PlayWave("beep.wav").start(); // playing WAVE file 
         }
 
         setControls();
@@ -290,19 +287,26 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
         jListProducts.setModel( m_ProductsListModel );
     }
 
-    private void addProduct() {
+    private boolean addProduct() {
         ProductListInfo info = (ProductListInfo) m_jList.getSelectedItem();
         String name = info.getName();
         
         if( name != null && !name.isEmpty() && productid != null && !productid.isEmpty() ) {
             try {
                 m_dlSales.addProductListItem( name, productid );
+                 
                 updateProductList();
+                
             } catch (BasicException ex) {
+                new PlayWave("error.wav").start(); // playing WAVE file 
+                
                 MessageInf msg = new MessageInf(ex);
-                msg.show(this);            
+                msg.show(this);
+                return false;
             }
         }
+        
+        return true;
     }
 
     private boolean startNewList() {
@@ -539,7 +543,7 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
     private void m_jreferenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jreferenceActionPerformed
 
         assignProductById( m_jreference.getText() );
-
+        addProduct();
     }//GEN-LAST:event_m_jreferenceActionPerformed
 
     private void m_FindProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_FindProductBtnActionPerformed
@@ -604,10 +608,16 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
 
     private void m_jbarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbarcodeActionPerformed
          assignProductByCode();
+         if( addProduct() ) {
+            new PlayWave("beep.wav").start(); // playing WAVE file 
+         }
     }//GEN-LAST:event_m_jbarcodeActionPerformed
 
     private void m_jBarcodeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jBarcodeBtnActionPerformed
          assignProductByCode();
+         if( addProduct() ) {
+            new PlayWave("beep.wav").start(); // playing WAVE file 
+         }
     }//GEN-LAST:event_m_jBarcodeBtnActionPerformed
 
     private void jButtonNewListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewListActionPerformed
@@ -671,6 +681,7 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
 
     private void m_jReferenceBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jReferenceBtnActionPerformed
         assignProductById( m_jreference.getText() );
+        addProduct();
     }//GEN-LAST:event_m_jReferenceBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
