@@ -22,6 +22,7 @@ WHERE VISIBLE = TRUE AND CARD IS NOT NULL AND CARD <> '']]>
 	<field name="CURDATE" class="java.util.Date"/>
 	<field name="CURDEBT" class="java.lang.Double"/>
 	<field name="TAXID" class="java.lang.String"/>
+        <field name="DISCOUNT" class="java.lang.Double"/>
 	<background>
 		<band/>
 	</background>

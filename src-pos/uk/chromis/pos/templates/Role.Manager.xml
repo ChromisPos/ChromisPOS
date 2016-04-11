@@ -79,6 +79,7 @@
     <class name="/uk/chromis/reports/customers_list.bs"/>
     <class name="/uk/chromis/reports/salebycustomer.bs"/>
 
+    <class name="uk.chromis.pos.inventory.ProductListsPanel"/>   
     <class name="uk.chromis.pos.forms.MenuStockManagement"/>
     <class name="uk.chromis.pos.inventory.AttributesPanel"/>
     <class name="uk.chromis.pos.inventory.AttributeValuesPanel"/>

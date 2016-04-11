@@ -45,7 +45,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
 
         initComponents();
         jAutoLogoffTime.setText("100");
-        jMaxChange.setText("20");
+        jMaxChange.setText("50");
 
         jAutoLogoffTime.getDocument().addDocumentListener(dirty);
         jAutoLogoffAfterKitchen.addActionListener(dirty);
@@ -106,7 +106,7 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
 
         String changeCheck = (AppConfig.getInstance().getProperty("till.changelimit"));
         if (changeCheck == null) {
-            AppConfig.getInstance().setProperty("till.changelimit", "20");
+            AppConfig.getInstance().setProperty("till.changelimit", "50");
         }
 
         jEnableAutoLogoff.setSelected(AppConfig.getInstance().getBoolean("till.enableautologoff"));

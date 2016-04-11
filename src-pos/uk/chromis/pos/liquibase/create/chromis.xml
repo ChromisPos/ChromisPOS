@@ -12,11 +12,11 @@
          Loads other changeset xml's as required 
     -->
               
-    <include file="uk/chromis/pos/liquibase/createdb.xml"/>
-    <include file="uk/chromis/pos/liquibase/chromisfkchecks.xml"/>
-    <include file="uk/chromis/pos/liquibase/resizederbycolumns.xml"/>
-    <include file="uk/chromis/pos/liquibase/chromiscreatefks.xml"/>
-    <include file="uk/chromis/pos/liquibase/updatechromis.xml"/>
+    <include file="uk/chromis/pos/liquibase/create/createdb.xml"/>    
+    <include file="uk/chromis/pos/liquibase/common/resizederbycolumns.xml"/>    
+    <include file="uk/chromis/pos/liquibase/common/updatechromis.xml"/>
+    <include file="uk/chromis/pos/liquibase/common/checkforeignkeys.xml"/>
+    <include file="uk/chromis/pos/liquibase/common/checkindexes.xml"/>
 
 </databaseChangeLog>
 

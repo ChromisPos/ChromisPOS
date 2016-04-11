@@ -19,7 +19,7 @@
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
 
 
-    <changeSet author="Chromis POS" id="Create New dbpermissions Table">
+    <changeSet author="Chromis POS" id="Create New dbpermissions Table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="DBPERMISSIONS"/>
@@ -40,15 +40,27 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-                        
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                        
+    </changeSet>   
+   
+    <changeSet author="Chromis POS" id="Create Index in dbpermissions Table (NV)">   
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="DBPERMISSIONS" columnNames="CLASSNAME"/>    
+            </not>
+        </preConditions>  
+          
         <createIndex tableName="DBPERMISSIONS"
                      indexName="DBPERMISSIONS_CLASSNAME_INX"
                      unique="true">
             <column name="CLASSNAME" type="varchar(255)"/>
-        </createIndex> 
-    </changeSet>   
+        </createIndex>    
+    </changeSet>  
      
-    <changeSet author="Chromis POS" id="Insert into Permissions Table.">
+    <changeSet author="Chromis POS" id="Insert into Permissions Table (NV)">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS</sqlCheck>
         </preConditions>
@@ -865,6 +877,134 @@
         </insert>             		        				                                     		        			                                               		           		        		
     </changeSet>
 
+    <changeSet author="Chromis POS" id="Add Pack Products permissions (NV)"> 
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
+        </preConditions>
+              
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname117"/>
+            <column name="DESCRIPTION" value="##label.description117"/>
+        </insert>
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname118"/>
+            <column name="DESCRIPTION" value="##label.description118"/>
+        </insert>		         
+    </changeSet>   
+    
+    <changeSet author="Chromis POS" id="Add StockChanges to permissions (NV)"> 
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description119'</sqlCheck>
+        </preConditions>   
+            
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname119"/>
+            <column name="DESCRIPTION" value="##label.description119"/>
+        </insert>
+        		
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/stockchanges.bs"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname120"/>
+            <column name="DESCRIPTION" value="##label.description120"/>
+        </insert>		                 
+    </changeSet>    
+    
+    <changeSet author="Chromis POS" id="Add button.refundeditsale to permissions (NV)">  
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname121'  </sqlCheck>
+        </preConditions>    
+         
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="button.refundeditsale"/>
+            <column name="SECTION" value="##label.sectionbuttons"/>
+            <column name="DISPLAYNAME" value="##label.displayname121"/>
+            <column name="DESCRIPTION" value="##label.description121"/>
+        </insert>
+    </changeSet>
+     
+    <changeSet author="Chromis POS" id="Add Promotions permissions (NV)">     
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description122'</sqlCheck>
+        </preConditions>   
+                                                                           
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.promotion.PromotionPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname122"/>
+            <column name="DESCRIPTION" value="##label.description122"/>
+        </insert>
+        		
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/promotions.bs"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname123"/>
+            <column name="DESCRIPTION" value="##label.description123"/>
+        </insert> 
+    </changeSet> 
 
+    <changeSet author="Chromis POS" id="Add PRODUCTS_KIT panel permissions (NV)">    
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
+        </preConditions> 
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.RecipePanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.displayname125"/>
+            <column name="DESCRIPTION" value="##label.description125"/>
+        </insert> 
+    </changeSet>          
+      
+    <changeSet author="Chromis POS" id="Add Reset pickup ID panel permissions (NV)">     
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE CLASSNAME = 'uk.chromis.pos.sales.JPanelResetPickupId'</sqlCheck>
+        </preConditions> 
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.sales.JPanelResetPickupId"/>
+            <column name="SECTION" value="##label.sectionmaintenance"/>
+            <column name="DISPLAYNAME" value="##label.displayname126"/>
+            <column name="DESCRIPTION" value="##label.description126"/>
+        </insert> 
+    </changeSet>
+
+
+    <changeSet author="Chromis POS" id="Add Best Sellers Report (NV)">      
+        <preConditions onFail="MARK_RAN">  
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description127'</sqlCheck>  
+        </preConditions>  
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="/uk/chromis/reports/bestsellers.bs"/>  
+            <column name="SECTION" value="##label.sectionsales"/>  
+            <column name="DISPLAYNAME" value="##label.displayname127"/>  
+            <column name="DESCRIPTION" value="##label.description127"/>  
+        </insert>		  
+    </changeSet>    
+    
+    <changeSet author="Chromis POS" id="Add Product Lists Permissions (NV)">  
+        <preConditions onFail="MARK_RAN">  
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description128'</sqlCheck>  
+        </preConditions>     
+        <insert tableName="DBPERMISSIONS">		  
+            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductListsPanel"/>  
+            <column name="SECTION" value="##label.sectionstock"/>  
+            <column name="DISPLAYNAME" value="##label.displayname128"/>  
+            <column name="DESCRIPTION" value="##label.description128"/>  
+        </insert>  
+    </changeSet> 
+    
+    <changeSet author="Chromis POS" id="drop top10salesMysql (NV)">   
+        <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
+    </changeSet> 
+    
+    
+    
+    
 </databaseChangeLog>
 

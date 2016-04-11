@@ -17,12 +17,11 @@
     <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
-
-    <include file="uk/chromis/pos/liquibase/chromisfkchecks.xml"/>       
-    <include file="uk/chromis/pos/liquibase/resizederbycolumns.xml"/>  
-    <include file="uk/chromis/pos/liquibase/chromiscreatefks.xml"/>          
-    <include file="uk/chromis/pos/liquibase/updatechromis.xml"/>
-    <include file="uk/chromis/pos/liquibase/mysqlinnodb.xml"/>
+     
+    <include file="uk/chromis/pos/liquibase/common/resizederbycolumns.xml"/>      
+    <include file="uk/chromis/pos/liquibase/common/updatechromis.xml"/>
+    <include file="uk/chromis/pos/liquibase/common/checkforeignkeys.xml"/>
+    <include file="uk/chromis/pos/liquibase/common/checkindexes.xml"/>
     
 </databaseChangeLog>
 

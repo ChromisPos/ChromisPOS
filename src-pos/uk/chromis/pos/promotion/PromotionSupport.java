@@ -324,7 +324,7 @@ public class PromotionSupport {
 
     // Find all instances of the given product currently on the ticket
     // returns an array of indexes into ticket.getLines()
-    public List<LineList> FindProductsInTicket(String productID,
+    public List<LineList> FindProductsInTicket(String promotionid, String productID,
             TicketInfo ticket,
             boolean bIncludePromotionAdded) {
         List<LineList> aIndexes = new ArrayList<LineList>();
@@ -334,7 +334,10 @@ public class PromotionSupport {
             if (bIncludePromotionAdded || line.isPromotionAdded() == false) {
                 String id = line.getProductID();
                 if (id != null && id.contentEquals(productID)) {
-                    aIndexes.add(new LineList(i, line));
+                    String promoid = line.getPromotionId();
+                    if (promoid != null && promoid.contentEquals(promotionid)) {
+                        aIndexes.add(new LineList(i, line));
+                    }
                 }
             }
         }
@@ -600,32 +603,37 @@ public class PromotionSupport {
         }
         qtyFree = qtyFree * qtyToDiscount;
 
-        if (qtyFree > 0 && discountrate > 0.0 ) { 
+        if (qtyFree > 0 && discountrate > 0.0 ) {
             // Step through discounting items until qtyFree is reached
-            int newLines = 0;
             Double totalDiscount = 0.0;
             Double qtyFound = 0.0;
-            for (LineList l : aLines) {
-                int itemIndex = l.getIndex() + newLines;
+            for (int i = 0; i < aLines.size(); ++i ) {
+                LineList l = aLines.get(i);
+                int itemIndex = l.getIndex();
                 Double itemqty = ticket.getLine(itemIndex).getMultiply();
 
                 qtyFound += itemqty;
-                if (qtyFound >= qtyBuy) {
-
-                    Double qtyDiscount = qtyFound / qtyToDiscount;
-                    if (bWholeUnitsOnly) {
-                        qtyDiscount = intPart(qtyDiscount);
-                    }
-                    if (totalDiscount + qtyDiscount > qtyFree) {
-                        qtyDiscount = qtyFree - totalDiscount;
-                    }
-
-                    DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, discountrate );
-                    ++newLines;
-
-                    totalDiscount += qtyDiscount;
-                    qtyFound -= qtyBuy;
+                    
+                Double qtyDiscount = itemqty;
+                if (bWholeUnitsOnly) {
+                    qtyDiscount = intPart(qtyDiscount);
                 }
+                if (totalDiscount + qtyDiscount > qtyFree) {
+                    qtyDiscount = qtyFree - totalDiscount;
+                }
+
+                DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, 100d );
+                
+                // A new line is added to the ticket so re-index ones after
+                for( int j = 0; j< aLines.size(); ++j ) {
+                    int index = aLines.get(j).getIndex();
+                    if(index > itemIndex) {
+                        aLines.get(j).setIndex( index+1 );
+                    }
+                }
+
+                totalDiscount += qtyDiscount;
+                qtyFound += qtyDiscount;
 
                 if (totalDiscount >= qtyFree) {
                     break;
@@ -768,7 +776,7 @@ public class PromotionSupport {
         RemoveDiscountProduct(ticket, productID);
 
         // Get list of products in this ticket
-        List<LineList> aLines = FindProductsInTicket(productID, ticket, false);
+        List<LineList> aLines = FindProductsInTicket( promotion.getID(), productID, ticket, false);
 
         if (aLines.size() > 0) {
             addDiscounts(ticket, aLines, sDiscountMessage, forEvery, qtyDiscounted,
@@ -791,7 +799,7 @@ public class PromotionSupport {
         RemoveDiscountProduct(ticket, productID);
 
         // Get list of products in this ticket
-        List<LineList> aLines = FindProductsInTicket(productID, ticket, false);
+        List<LineList> aLines = FindProductsInTicket( promotion.getID(), productID, ticket, false);
 
         if (aLines.size() > 0) {
             addDiscounts(ticket, aLines, sDiscountMessage, qtyBuy, qtySomeFree,
@@ -842,7 +850,7 @@ public class PromotionSupport {
         RemoveDiscountProduct(ticket, productID);
 
         // Get list of products in this ticket
-        List<LineList> aLines = FindProductsInTicket(productID, ticket, false);
+        List<LineList> aLines = FindProductsInTicket( promotion.getID(), productID, ticket, false);
 
         if (aLines.size() > 0) {
             addDiscountFixedPrice(ticket, promotion, aLines, sDiscountMessage, qtyBuy,

@@ -7,8 +7,219 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+    
+    <changeSet author="Chromis POS" id="Remove constraints PRODUCTS_CAT_FK_1 on Derby (NV)" dbms="derby">   
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_CAT" foreignKeyName="PRODUCTS_CAT_FK_1"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="PRODUCTS_CAT" constraintName="PRODUCTS_CAT_FK_1"/>
+    </changeSet>
        
-    <changeSet author="Chromis POS" id="Refactor PRODUCTS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Remove constraints PRODUCTS_COM_FK_1 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_COM" foreignKeyName="PRODUCTS_COM_FK_1"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="PRODUCTS_COM" constraintName="PRODUCTS_COM_FK_1"/>
+    </changeSet>      
+  
+    <changeSet author="Chromis POS" id="Remove constraints PRODUCTS_COM_FK_2 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_COM" foreignKeyName="PRODUCTS_COM_FK_2"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="PRODUCTS_COM" constraintName="PRODUCTS_COM_FK_2"/>
+    </changeSet>        
+       
+    <changeSet author="Chromis POS" id="Remove constraints STOCKDIARY_FK_1 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="STOCKDIARY" foreignKeyName="STOCKDIARY_FK_1"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="STOCKDIARY" constraintName="STOCKDIARY_FK_1"/>
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Remove constraints STOCKDIARY_FK_2 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="STOCKDIARY" foreignKeyName="STOCKDIARY_FK_2"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="STOCKDIARY" constraintName="STOCKDIARY_FK_2"/>
+    </changeSet>                  
+      
+    <changeSet author="Chromis POS" id="Remove constraints STOCKLEVEL_PRODUCT on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="STOCKLEVEL" foreignKeyName="STOCKLEVEL_PRODUCT"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="STOCKLEVEL" constraintName="STOCKLEVEL_PRODUCT"/>
+    </changeSet>                                     
+                                                                    
+    <changeSet author="Chromis POS" id="Remove constraints STOCKCURRENT_FK_1 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="STOCKCURRENT" foreignKeyName="STOCKCURRENT_FK_1"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="STOCKCURRENT" constraintName="STOCKCURRENT_FK_1"/>
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Remove constraints STOCKCURRENT_FK_2 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="STOCKCURRENT" foreignKeyName="STOCKCURRENT_FK_2"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="STOCKCURRENT" constraintName="STOCKCURRENT_FK_2"/>
+    </changeSet> 
+                                                                                                                                  
+    <changeSet author="Chromis POS" id="Remove constraints TICKETLINES_FK_2 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_FK_2"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TICKETLINES" constraintName="TICKETLINES_FK_2"/>
+    </changeSet>                                                                                                                                                                                                                                                                   
+    
+    <changeSet author="Chromis POS" id="Remove constraints ATTUSE_SET on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEUSE" foreignKeyName="ATTUSE_SET"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="ATTRIBUTEUSE" constraintName="ATTUSE_SET"/>
+    </changeSet>
+  
+    <changeSet author="Chromis POS" id="Remove constraints STOCKCURRENT_ATTSETINST on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="STOCKCURRENT" foreignKeyName="STOCKCURRENT_ATTSETINST"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="STOCKCURRENT" constraintName="STOCKCURRENT_ATTSETINST"/>
+    </changeSet>
+  
+    <changeSet author="Chromis POS" id="Remove constraints ATTINST_SET on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEINSTANCE" foreignKeyName="ATTINST_SET"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="ATTRIBUTEINSTANCE" constraintName="ATTINST_SET"/>
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+   
+    <changeSet author="Chromis POS" id="Remove constraints ATTVAL_ATT on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEVALUE" foreignKeyName="ATTVAL_ATT"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="ATTRIBUTEVALUE" constraintName="ATTVAL_ATT"/>
+    </changeSet>    
+    
+    <changeSet author="Chromis POS" id="Remove constraints ATTUSE_ATT on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEUSE" foreignKeyName="ATTUSE_ATT"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="ATTRIBUTEUSE" constraintName="ATTUSE_ATT"/>
+    </changeSet>        
+            
+    <changeSet author="Chromis POS" id="Remove constraints ATTINST_ATT on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEINSTANCE" foreignKeyName="ATTINST_ATT"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="ATTRIBUTEINSTANCE" constraintName="ATTINST_ATT"/>
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+   
+    <changeSet author="Chromis POS" id="Remove constraints STOCKDIARY_ATTSETINST on Derby (NV)" dbms="derby"> 
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="STOCKDIARY" foreignKeyName="STOCKDIARY_ATTSETINST"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="STOCKDIARY" constraintName="STOCKDIARY_ATTSETINST"/>
+    </changeSet>          
+            
+    <changeSet author="Chromis POS" id="Remove constraints ATTSETINST_SET on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTESETINSTANCE" foreignKeyName="ATTSETINST_SET"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="ATTRIBUTESETINSTANCE" constraintName="ATTSETINST_SET"/>
+    </changeSet>                                                                               
+    
+    <changeSet author="Chromis POS" id="Remove constraints  TICKETLINES_ATTSETINST on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_ATTSETINST"/>           
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TICKETLINES" constraintName="TICKETLINES_ATTSETINST"/>
+    </changeSet>     
+      
+     <changeSet author="Chromis POS" id="Remove constraints PEOPLE_FK_1 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="PEOPLE" foreignKeyName="PEOPLE_FK_1"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="PEOPLE" constraintName="PEOPLE_FK_1"/>
+    </changeSet>       
+        
+    <changeSet author="Chromis POS" id="Remove constraints TICKETS_FK_2 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TICKETS" foreignKeyName="TICKETS_FK_2"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TICKETS" constraintName="TICKETS_FK_2"/>
+    </changeSet>          
+  
+    <changeSet author="Chromis POS" id="Remove constraints CUSTOMERS_TAXCAT on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="CUSTOMERS" foreignKeyName="CUSTOMERS_TAXCAT"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="CUSTOMERS" constraintName="CUSTOMERS_TAXCAT"/>
+    </changeSet>                  
+
+    <changeSet author="Chromis POS" id="Remove constraints TAXES_CUSTCAT_FK on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TAXES" foreignKeyName="TAXES_CUSTCAT_FK"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TAXES" constraintName="TAXES_CUSTCAT_FK"/>
+    </changeSet>
+ 
+    <changeSet author="Chromis POS" id="Remove constraints CATEGORIES_FK_1 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="CATEGORIES" foreignKeyName="CATEGORIES_FK_1"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="CATEGORIES" constraintName="CATEGORIES_FK_1"/>
+    </changeSet>                                      
+
+    <changeSet author="Chromis POS" id="Remove constraints TAXES_CAT_FK on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TAXES" foreignKeyName="TAXES_CAT_FK"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TAXES" constraintName="TAXES_CAT_FK"/>
+    </changeSet> 
+
+    <changeSet author="Chromis POS" id="Remove constraints TAXES_TAXES_FK on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TAXES" foreignKeyName="TAXES_TAXES_FK"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TAXES" constraintName="TAXES_TAXES_FK"/>
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Remove constraints TICKETLINES_FK_3 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_FK_3"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TICKETLINES" constraintName="TICKETLINES_FK_3"/>
+    </changeSet>   
+
+    <changeSet author="Chromis POS" id="Remove constraints TAXLINES_TAX on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="TAXLINES" foreignKeyName="TAXLINES_TAX"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="TAXLINES" constraintName="TAXLINES_TAX"/>
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Remove constraints RECEIPTS_FK_MONEY on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="RECEIPTS" foreignKeyName="RECEIPTS_FK_MONEY"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="RECEIPTS" constraintName="RECEIPTS_FK_MONEY"/>
+    </changeSet>
+
+
+
+
+
+
+
+    <changeSet author="Chromis POS" id="check for primary key on ticketlines table (NV)">        
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists tableName="TICKETLINES"/>   
+            </not>         
+        </preConditions>  
+        <sql>ALTER TABLE TICKETLINES ADD PRIMARY KEY (TICKET, LINE)</sql>
+    </changeSet>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+    <changeSet author="Chromis POS" id="Refactor PRODUCTS (NV)" dbms="derby">  
         <sql>ALTER TABLE PRODUCTS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="PRODUCTS"/>
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="TEXTTIP" tableName="PRODUCTS"/>
@@ -65,8 +276,8 @@
             CREATE UNIQUE INDEX PRODUCTS_NAME_INX ON PRODUCTS(NAME)
         </sql>
     </changeSet> 
-    
-    <changeSet author="Chromis POS" id="Refactor ATTRIBUTE" dbms="derby">       
+                 
+    <changeSet author="Chromis POS" id="Refactor ATTRIBUTE (NV)" dbms="derby">       
         <sql>ALTER TABLE ATTRIBUTE DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="ATTRIBUTE"/>                           
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="ATTRIBUTE"/>                           
@@ -83,7 +294,7 @@
         <dropColumn columnName="JDL_TMP2" tableName="ATTRIBUTE"/>
     </changeSet>  
     
-    <changeSet author="Chromis POS" id="Refactor ATTRIBUTEVALUE" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor ATTRIBUTEVALUE (NV)" dbms="derby">       
         <sql>ALTER TABLE ATTRIBUTEVALUE DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="ATTRIBUTEVALUE"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="ATTRIBUTE_ID" tableName="ATTRIBUTEVALUE"/>                                    
@@ -104,7 +315,7 @@
         <dropColumn columnName="JDL_TMP3" tableName="ATTRIBUTEVALUE"/>
     </changeSet>    
   
-    <changeSet author="Chromis POS" id="Refactor ATTRIBUTESET" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor ATTRIBUTESET (NV)" dbms="derby">       
         <sql>ALTER TABLE ATTRIBUTESET DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="ATTRIBUTESET"/>            
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="ATTRIBUTESET"/>            
@@ -121,7 +332,7 @@
         <dropColumn columnName="JDL_TMP2" tableName="ATTRIBUTESET"/>        
     </changeSet>     
       
-    <changeSet author="Chromis POS" id="Refactor ATTRIBUTEUSE" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor ATTRIBUTEUSE (NV)" dbms="derby">       
         <sql>ALTER TABLE ATTRIBUTEUSE DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="ATTRIBUTEUSE"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="ATTRIBUTESET_ID" tableName="ATTRIBUTEUSE"/>  
@@ -144,8 +355,8 @@
         <dropColumn columnName="JDL_TMP3" tableName="ATTRIBUTEUSE"/>
         <sql>CREATE UNIQUE INDEX ATTUSE_LINE ON ATTRIBUTEUSE(ATTRIBUTESET_ID, LINENO)</sql>
     </changeSet>        
-          
-    <changeSet author="Chromis POS" id="Refactor ATTRIBUTESETINSTANCE" dbms="derby">       
+                                                                                                                                                                                                                
+    <changeSet author="Chromis POS" id="Refactor ATTRIBUTESETINSTANCE (NV)" dbms="derby">       
         <sql>ALTER TABLE ATTRIBUTESETINSTANCE DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="ATTRIBUTESETINSTANCE"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="ATTRIBUTESET_ID" tableName="ATTRIBUTESETINSTANCE"/>                                                            
@@ -164,9 +375,9 @@
         <dropColumn columnName="JDL_TMP1" tableName="ATTRIBUTESETINSTANCE"/>
         <dropColumn columnName="JDL_TMP2" tableName="ATTRIBUTESETINSTANCE"/>       
         <dropColumn columnName="JDL_TMP3" tableName="ATTRIBUTESETINSTANCE"/>       
-    </changeSet>
-              
-    <changeSet author="Chromis POS" id="Refactor ATTRIBUTEINSTANCE" dbms="derby">       
+    </changeSet>              
+               
+    <changeSet author="Chromis POS" id="Refactor ATTRIBUTEINSTANCE (NV)" dbms="derby">       
         <sql>ALTER TABLE ATTRIBUTEINSTANCE DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="ATTRIBUTEINSTANCE"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="ATTRIBUTESETINSTANCE_ID" tableName="ATTRIBUTEINSTANCE"/>  
@@ -191,8 +402,10 @@
         <dropColumn columnName="JDL_TMP3" tableName="ATTRIBUTEINSTANCE"/>        
         <dropColumn columnName="JDL_TMP4" tableName="ATTRIBUTEINSTANCE"/>        
     </changeSet>                           
-                                          
-    <changeSet author="Chromis POS" id="Refactor STOCKDIARY" dbms="derby">       
+     
+                                                                                                                        
+                                                                                                                                                                                                          
+    <changeSet author="Chromis POS" id="Refactor STOCKDIARY (NV)" dbms="derby">       
         <sql>ALTER TABLE STOCKDIARY DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="STOCKDIARY"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="LOCATION" tableName="STOCKDIARY"/>  
@@ -223,7 +436,7 @@
         <sql>CREATE INDEX STOCKDIARY_INX_1 ON STOCKDIARY(DATENEW);</sql>   
     </changeSet>                           
                                                                           
-    <changeSet author="Chromis POS" id="Refactor SHIFT_BREAKS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor SHIFT_BREAKS (NV)" dbms="derby">       
         <sql>ALTER TABLE SHIFT_BREAKS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="SHIFT_BREAKS"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="SHIFTID" tableName="SHIFT_BREAKS"/>  
@@ -245,7 +458,7 @@
         <dropColumn columnName="JDL_TMP3" tableName="SHIFT_BREAKS"/>     
     </changeSet>                                                                      
                                                                                     
-    <changeSet author="Chromis POS" id="Refactor DRAWEROPENED" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor DRAWEROPENED (NV)" dbms="derby">       
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="NAME" tableName="DRAWEROPENED"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="TICKETID" tableName="DRAWEROPENED"/>                                                                 
         <sql>
@@ -258,7 +471,7 @@
         <dropColumn columnName="JDL_TMP2" tableName="DRAWEROPENED"/>
     </changeSet>                                                                      
                                                                                                                    
-    <changeSet author="Chromis POS" id="Refactor BREAKS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor BREAKS (NV)" dbms="derby">       
         <sql>ALTER TABLE BREAKS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="BREAKS"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="BREAKS"/>  
@@ -279,7 +492,7 @@
         <dropColumn columnName="JDL_TMP3" tableName="BREAKS"/>     
     </changeSet>                                                                                                               
                                                                                                                               
-    <changeSet author="Chromis POS" id="Refactor LEAVES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor LEAVES (NV)" dbms="derby">       
         <sql>ALTER TABLE LEAVES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="LEAVES"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="LEAVES"/>  
@@ -305,7 +518,7 @@
         <dropColumn columnName="JDL_TMP4" tableName="LEAVES"/>     
     </changeSet>                                                                                                                                            
                                                                                                                                                           
-    <changeSet author="Chromis POS" id="Refactor SHIFTS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor SHIFTS (NV)" dbms="derby">       
         <sql>ALTER TABLE SHIFTS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="SHIFTS"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="PPLID" tableName="SHIFTS"/>                            
@@ -321,7 +534,7 @@
         <dropColumn columnName="JDL_TMP2" tableName="SHIFTS"/>
     </changeSet>                                                                                                                                                                     
                                                                                                                                                                                       
-    <changeSet author="Chromis POS" id="Refactor ROLES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor ROLES (NV)" dbms="derby">       
         <sql>ALTER TABLE ROLES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="ROLES"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="ROLES"/>                            
@@ -339,7 +552,7 @@
         <sql>CREATE UNIQUE INDEX ROLES_NAME_INX ON ROLES(NAME)</sql>
     </changeSet>                                                                                                                                                                                                    
                                                                                                                                                                                                                   
-    <changeSet author="Chromis POS" id="Refactor PEOPLE" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor PEOPLE (NV)" dbms="derby">       
         <sql>ALTER TABLE PEOPLE DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="PEOPLE"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="PEOPLE"/>  
@@ -371,7 +584,7 @@
         </sql>   
     </changeSet>      
                                                                                                                                                                                                                                               
-    <changeSet author="Chromis POS" id="Refactor RESOURCES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor RESOURCES (NV)" dbms="derby">       
         <sql>ALTER TABLE RESOURCES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="RESOURCES"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="RESOURCES"/>                            
@@ -389,7 +602,7 @@
         <sql>CREATE UNIQUE INDEX RESOURCES_NAME_INX ON RESOURCES(NAME)</sql>
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-    <changeSet author="Chromis POS" id="Refactor TAXCUSTCATEGORIES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor TAXCUSTCATEGORIES (NV)" dbms="derby">       
         <sql>ALTER TABLE TAXCUSTCATEGORIES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="TAXCUSTCATEGORIES"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="TAXCUSTCATEGORIES"/>                            
@@ -407,7 +620,7 @@
         <sql>CREATE UNIQUE INDEX TAXCUSTCAT_NAME_INX ON TAXCUSTCATEGORIES(NAME)</sql>  
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-    <changeSet author="Chromis POS" id="Refactor CATEGORIES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor CATEGORIES (NV)" dbms="derby">       
         <sql>ALTER TABLE CATEGORIES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="CATEGORIES"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="CATEGORIES"/>  
@@ -433,7 +646,7 @@
         <sql>CREATE UNIQUE INDEX CATEGORIES_NAME_INX ON CATEGORIES(NAME)</sql>   
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
-    <changeSet author="Chromis POS" id="Refactor TAXCATEGORIES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor TAXCATEGORIES (NV)" dbms="derby">       
         <sql>ALTER TABLE TAXCATEGORIES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="TAXCATEGORIES"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="TAXCATEGORIES"/>                            
@@ -451,7 +664,7 @@
         <sql>CREATE UNIQUE INDEX TAXCAT_NAME_INX ON TAXCATEGORIES(NAME)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Refactor TAXES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor TAXES (NV)" dbms="derby">       
         <sql>ALTER TABLE TAXES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="TAXES"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="CATEGORY" tableName="TAXES"/>  
@@ -482,7 +695,7 @@
         <sql>CREATE UNIQUE INDEX TAXES_NAME_INX ON TAXES(NAME);</sql>   
     </changeSet> 
 
-    <changeSet author="Chromis POS" id="Refactor SHAREDTICKETS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor SHAREDTICKETS (NV)" dbms="derby">       
         <sql>ALTER TABLE SHAREDTICKETS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="SHAREDTICKETS"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="APPUSER" tableName="SHAREDTICKETS"/>                            
@@ -504,7 +717,7 @@
         <dropColumn columnName="JDL_TMP3" tableName="SHAREDTICKETS"/>
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="Refactor RESERVATION_CUSTOMERS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor RESERVATION_CUSTOMERS (NV)" dbms="derby">       
         <sql>ALTER TABLE RESERVATION_CUSTOMERS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="RESERVATION_CUSTOMERS"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="CUSTOMER" tableName="RESERVATION_CUSTOMERS"/>                            
@@ -521,7 +734,7 @@
         <dropColumn columnName="JDL_TMP2" tableName="RESERVATION_CUSTOMERS"/>
     </changeSet> 
 
-    <changeSet author="Chromis POS" id="Refactor RESERVATIONS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor RESERVATIONS (NV)" dbms="derby">       
         <sql>ALTER TABLE RESERVATIONS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="RESERVATIONS"/>                                                                
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="TITLE" tableName="RESERVATIONS"/>                                                                
@@ -543,7 +756,7 @@
         <sql>CREATE INDEX RESERVATIONS_INX_1 ON RESERVATIONS(DATENEW)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Refactor PLACES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor PLACES (NV)" dbms="derby">       
         <sql>ALTER TABLE PLACES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="PLACES"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="FLOOR" tableName="PLACES"/>  
@@ -578,7 +791,7 @@
         <sql>CREATE UNIQUE INDEX PLACES_NAME_INX ON PLACES(NAME)</sql>   
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Refactor FLOORS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor FLOORS (NV)" dbms="derby">       
         <sql>ALTER TABLE FLOORS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="FLOORS"/>
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="FLOORS"/>                                                                
@@ -596,7 +809,7 @@
         <sql>CREATE UNIQUE INDEX FLOORS_NAME_INX ON FLOORS(NAME)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Refactor LINEREMOVED" dbms="derby">               
+    <changeSet author="Chromis POS" id="Refactor LINEREMOVED (NV)" dbms="derby">               
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="NAME" tableName="LINEREMOVED"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="TICKETID" tableName="LINEREMOVED"/>  
         <renameColumn newColumnName="JDL_TMP3" oldColumnName="PRODUCTID" tableName="LINEREMOVED"/>                                                         
@@ -617,7 +830,7 @@
         <dropColumn columnName="JDL_TMP4" tableName="LINEREMOVED"/>        
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="Refactor PAYMENTS" dbms="derby">    
+    <changeSet author="Chromis POS" id="Refactor PAYMENTS (NV)" dbms="derby">    
         <sql>ALTER TABLE PAYMENTS DROP PRIMARY KEY</sql>           
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="PAYMENTS"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="RECEIPT" tableName="PAYMENTS"/>  
@@ -652,7 +865,7 @@
         <sql>CREATE INDEX PAYMENTS_INX_1 ON PAYMENTS(PAYMENT)</sql>          
     </changeSet>  
     
-    <changeSet author="Chromis POS" id="Refactor TAXLINES" dbms="derby">    
+    <changeSet author="Chromis POS" id="Refactor TAXLINES (NV)" dbms="derby">    
         <sql>ALTER TABLE TAXLINES DROP PRIMARY KEY</sql>           
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="TAXLINES"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="RECEIPT" tableName="TAXLINES"/>  
@@ -672,18 +885,7 @@
         <dropColumn columnName="JDL_TMP3" tableName="TAXLINES"/>                  
     </changeSet> 
 
-
-    <changeSet author="Chromis POS" id="check for primary key on ticketlines table.">        
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <primaryKeyExists tableName="TICKETLINES"/>   
-            </not>         
-        </preConditions>  
-        <sql>ALTER TABLE TICKETLINES ADD PRIMARY KEY (TICKET, LINE)</sql>
-    </changeSet>
-
-
-    <changeSet author="Chromis POS" id="Refactor TICKETLINES" dbms="derby"> 
+    <changeSet author="Chromis POS" id="Refactor TICKETLINES (NV)" dbms="derby"> 
         <sql>ALTER TABLE TICKETLINES DROP PRIMARY KEY</sql>                     
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="TICKET" tableName="TICKETLINES"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="PRODUCT" tableName="TICKETLINES"/>  
@@ -708,7 +910,7 @@
         <dropColumn columnName="JDL_TMP4" tableName="TICKETLINES"/>          
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Refactor TICKETS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor TICKETS (NV)" dbms="derby">       
         <sql>ALTER TABLE TICKETS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="TICKETS"/>              
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="PERSON" tableName="TICKETS"/>  
@@ -730,7 +932,7 @@
         <sql>CREATE INDEX TICKETS_TICKETID ON TICKETS(TICKETTYPE, TICKETID)</sql>          
     </changeSet>    
     
-    <changeSet author="Chromis POS" id="Refactor STOCKLEVEL" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor STOCKLEVEL (NV)" dbms="derby">       
         <sql>ALTER TABLE STOCKLEVEL DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="STOCKLEVEL"/>              
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="LOCATION" tableName="STOCKLEVEL"/>  
@@ -752,7 +954,7 @@
         <dropColumn columnName="JDL_TMP3" tableName="STOCKLEVEL"/>   
     </changeSet>   
     
-    <changeSet author="Chromis POS" id="Refactor STOCKCURRENT" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor STOCKCURRENT (NV)" dbms="derby">       
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="LOCATION" tableName="STOCKCURRENT"/>              
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="PRODUCT" tableName="STOCKCURRENT"/>  
         <renameColumn newColumnName="JDL_TMP3" oldColumnName="ATTRIBUTESETINSTANCE_ID" tableName="STOCKCURRENT"/>                                                        
@@ -772,7 +974,7 @@
         <sql>CREATE UNIQUE INDEX STOCKCURRENT_INX ON STOCKCURRENT(LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID)</sql>
     </changeSet>    
     
-    <changeSet author="Chromis POS" id="Refactor CLOSEDCASH" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor CLOSEDCASH (NV)" dbms="derby">       
         <sql>ALTER TABLE CLOSEDCASH DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="MONEY" tableName="CLOSEDCASH"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="HOST" tableName="CLOSEDCASH"/>                            
@@ -792,7 +994,7 @@
         </sql>
     </changeSet> 
 
-    <changeSet author="Chromis POS" id="Refactor RECEIPTS" dbms="derby"> 
+    <changeSet author="Chromis POS" id="Refactor RECEIPTS (NV)" dbms="derby"> 
         <sql>ALTER TABLE RECEIPTS DROP PRIMARY KEY</sql>      
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="RECEIPTS"/>              
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="MONEY" tableName="RECEIPTS"/>  
@@ -813,7 +1015,7 @@
         <dropColumn columnName="JDL_TMP3" tableName="RECEIPTS"/>         
     </changeSet> 
 
-    <changeSet author="Chromis POS" id="Refactor LOCATIONS" dbms="derby"> 
+    <changeSet author="Chromis POS" id="Refactor LOCATIONS (NV)" dbms="derby"> 
         <sql>ALTER TABLE LOCATIONS DROP PRIMARY KEY</sql>      
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="LOCATIONS"/>              
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="LOCATIONS"/>  
@@ -836,7 +1038,7 @@
     </changeSet> 
 
 
-    <changeSet author="Chromis POS" id="Refactor CUSTOMERS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor CUSTOMERS (NV)" dbms="derby">       
         <sql>ALTER TABLE CUSTOMERS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="CUSTOMERS"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="SEARCHKEY" tableName="CUSTOMERS"/>  
@@ -928,7 +1130,7 @@
         </sql>  
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Refactor THIRDPARTIES" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor THIRDPARTIES (NV)" dbms="derby">       
         <sql>ALTER TABLE THIRDPARTIES DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="THIRDPARTIES"/>     
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="CIF" tableName="THIRDPARTIES"/>  
@@ -994,7 +1196,7 @@
         </sql>  
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Refactor PRODUCTS_CAT" dbms="derby">   
+    <changeSet author="Chromis POS" id="Refactor PRODUCTS_CAT (NV)" dbms="derby">   
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="PRODUCTS_CAT"/>
         </preConditions>
@@ -1011,7 +1213,7 @@
         <sql>CREATE INDEX PRODUCTS_CAT_INX_1 ON PRODUCTS_CAT(CATORDER)</sql>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Refactor PRODUCTS_COM" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor PRODUCTS_COM (NV)" dbms="derby">       
         <sql>ALTER TABLE PRODUCTS_COM DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="PRODUCTS_COM"/>                                                                
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="PRODUCT" tableName="PRODUCTS_COM"/>   
@@ -1034,9 +1236,7 @@
         <sql>CREATE UNIQUE INDEX PCOM_INX_PROD ON PRODUCTS_COM(PRODUCT, PRODUCT2)</sql>
     </changeSet>
 
-
-
-    <changeSet author="Chromis POS" id="Refactor APPLICATIONS" dbms="derby">       
+    <changeSet author="Chromis POS" id="Refactor APPLICATIONS (NV)" dbms="derby">       
         <sql>ALTER TABLE APPLICATIONS DROP PRIMARY KEY</sql>
         <renameColumn newColumnName="JDL_TMP1" oldColumnName="ID" tableName="APPLICATIONS"/> 
         <renameColumn newColumnName="JDL_TMP2" oldColumnName="NAME" tableName="APPLICATIONS"/>

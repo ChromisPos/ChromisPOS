@@ -33,6 +33,7 @@
 	<class name="/uk/chromis/reports/productscatalog.bs"/>
 	<class name="/uk/chromis/reports/inventorybroken.bs"/>
 	<class name="uk.chromis.pos.inventory.StockManagement"/>
+        <class name="uk.chromis.pos.inventory.ProductListsPanel"/>
 	<class name="sales.EditLines"/>
 	<class name="uk.chromis.pos.inventory.AuxiliarPanel"/>
 	<class name="/uk/chromis/reports/usersales.bs"/>

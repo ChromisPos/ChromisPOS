@@ -19,12 +19,10 @@
 //
 package uk.chromis.pos.ticket;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -59,13 +57,14 @@ public class ProductFilterReport extends javax.swing.JPanel implements ReportEdi
     private final JLabel jLabel2;
     private final JLabel jLabel3;
     private final JLabel jLabel4;
-    private final JLabel jLabel5;
+    private final JLabel jLabel5;    
     private final JTextField m_jBarcode = new JTextField();
     private final JComboBox m_jCategory = new JComboBox();
     private final JComboBox m_jCboName = new JComboBox();
-    ;
+    private final JComboBox m_jCatalog = new JComboBox();
     private final JComboBox m_jCboPriceBuy = new JComboBox();
     private final JComboBox m_jCboPriceSell = new JComboBox();
+
     private final JTextField m_jName = new JTextField();
     private final JTextField m_jPriceBuy = new JTextField();
     private final JTextField m_jPriceSell = new JTextField();
@@ -107,6 +106,7 @@ public class ProductFilterReport extends javax.swing.JPanel implements ReportEdi
 
         jLabel5 = new JLabel(AppLocal.getIntString("label.prodbarcode"));
         jLabel5.setFont(font);
+
 
         m_jBarcode.setFont(font);
         m_jBarcode.setPreferredSize(new Dimension(200, 25));
@@ -158,13 +158,9 @@ public class ProductFilterReport extends javax.swing.JPanel implements ReportEdi
 
         DataLogicSales dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
 
-        // El modelo de categorias
         m_sentcat = dlSales.getCategoriesList();
         m_CategoryModel = new ComboBoxValModel();
 
-        // m_ProductNameModel = new ComboBoxValModel();
-        //  m_ProductNameModel.add(null);
-        //  m_ProductNameModel.add(ListQBFModelNumber.getMandatoryString());
         m_jCboName.setModel(ListQBFModelNumber.getNonMandatoryProduct());
         m_jCboPriceBuy.setModel(ListQBFModelNumber.getNonMandatoryPrice());
         m_jCboPriceSell.setModel(ListQBFModelNumber.getNonMandatoryPrice());
@@ -210,6 +206,8 @@ public class ProductFilterReport extends javax.swing.JPanel implements ReportEdi
     @Override
     public Object createValue() throws BasicException {
 
+
+
         if (m_jBarcode.getText() == null || m_jBarcode.getText().equals("")) {
             // Filtro por formulario
             return new Object[]{
@@ -217,7 +215,7 @@ public class ProductFilterReport extends javax.swing.JPanel implements ReportEdi
                 m_jCboPriceBuy.getSelectedItem() == null ? QBFCompareEnum.COMP_NONE : m_jCboPriceBuy.getSelectedItem(), Formats.CURRENCY.parseValue(m_jPriceBuy.getText()),
                 m_jCboPriceSell.getSelectedItem() == null ? QBFCompareEnum.COMP_NONE : m_jCboPriceSell.getSelectedItem(), Formats.CURRENCY.parseValue(m_jPriceSell.getText()),
                 m_CategoryModel.getSelectedKey() == null ? QBFCompareEnum.COMP_NONE : QBFCompareEnum.COMP_EQUALS, m_CategoryModel.getSelectedKey(),
-                QBFCompareEnum.COMP_NONE, null
+                QBFCompareEnum.COMP_NONE, null                 
             };
         } else {
             // Filtro por codigo de barras.

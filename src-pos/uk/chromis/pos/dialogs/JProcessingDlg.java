@@ -26,6 +26,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -36,8 +37,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -53,10 +56,8 @@ import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import net.miginfocom.swing.MigLayout;
-import uk.chromis.data.gui.MessageInf;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.DriverWrapper;
-import uk.chromis.pos.forms.JRootApp;
 import uk.chromis.pos.util.AltEncrypter;
 
 /**
@@ -69,6 +70,8 @@ public class JProcessingDlg extends JDialog {
     public static final int YES = 0;
     public static final int NO = -1;
     public static int CHOICE = NO;
+    public static String ERRORMSG = "";
+
     public static Boolean DBFAILED = true;
     private Connection con;
     private JProgressBar pb;
@@ -167,6 +170,16 @@ public class JProcessingDlg extends JDialog {
     }
 
     private void performAction(String changelog) {
+        Logger logger = Logger.getLogger("liquibase");
+        FileHandler fh = null;
+        try {
+            fh = new FileHandler(System.getProperty("user.home") + "/liquibase.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+        } catch (IOException | SecurityException ex) {
+            Logger.getLogger(JProcessingDlg.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String db_user = (AppConfig.getInstance().getProperty("db.user"));
         String db_url = (AppConfig.getInstance().getProperty("db.URL"));
         String db_password = (AppConfig.getInstance().getProperty("db.password"));
@@ -176,6 +189,7 @@ public class JProcessingDlg extends JDialog {
             db_password = cypher.decrypt(db_password.substring(6));
         }
 
+        Liquibase liquibase = null;
         try {
             Connection con = DriverManager.getConnection(db_url, db_user, db_password);
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
@@ -183,27 +197,27 @@ public class JProcessingDlg extends JDialog {
 
 // Ensure there are not liquibase locks
             try {
-               PreparedStatement stmt2 = con.prepareStatement("DROP TABLE DATABASECHANGELOGLOCK");
-               stmt2.executeUpdate();
+                PreparedStatement stmt2 = con.prepareStatement("DROP TABLE DATABASECHANGELOGLOCK");
+                stmt2.executeUpdate();
             } catch (SQLException ex) {
             }
 
-            Liquibase liquibase = null;
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url, db_user, db_password)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
 
             liquibase.update("implement");
 
             DBFAILED = false;
+
         } catch (DatabaseException | MalformedURLException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JProcessingDlg.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LiquibaseException ex) {
             String txt = ex.getMessage();
             if (ex.getCause() != null) {
                 txt = ex.getCause().toString().replace("liquibase.exception.DatabaseException:", "");
             }
-            MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, "Liquibase Error", txt);
-            msg.show(this);
+            ERRORMSG = txt;
+            logger.info(ex.getMessage());
         } finally {
             if (con != null) {
                 try {
@@ -213,6 +227,9 @@ public class JProcessingDlg extends JDialog {
                     //nothing to do
                 }
             }
+        }
+        if (fh != null) {
+            fh.close();
         }
         insertMenuEntry(db_user, db_url, db_password); //insert in to menu.root
     }

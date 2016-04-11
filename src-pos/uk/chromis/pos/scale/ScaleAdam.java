@@ -44,7 +44,7 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.scale.ScaleAdam");
 
     private CommPortIdentifier m_PortId;
-    private SerialPort m_CommPort;  
+    private NRSerialPort m_CommPort;  
     
     private String m_sPortScale;
     private OutputStream m_out;
@@ -91,9 +91,14 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
         m_Dialog = newpane.createDialog("Use Scales");
         
         m_Dialog.setVisible( true );
-
+        
         // Return to default settings
         UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(),originalFont.getStyle(),originalFont.getSize())));
+
+        if( m_iStatusScale ==  SCALE_READING ) {
+            // User must have pressed cancel
+            changeStatus( SCALE_USERPRESSEDCANCEL );
+        }
 
     }
     
@@ -114,12 +119,27 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
                     wait(1000);
                 }
             } catch (InterruptedException ex) {
-               m_iStatusScale = SCALE_READY;
+               changeStatus( SCALE_ERROR );
             }
+        }
+
+        if( m_iStatusScale ==  SCALE_READING ) {
+            // must have timed out
+            changeStatus( SCALE_ERROR );
         }
             
     } 
+
+    private void changeStatus( int status ) {
+    
+        m_iStatusScale = status;
         
+        if( status != SCALE_READING ) {
+            if( m_Dialog != null )
+                m_Dialog.setVisible(false);
+        }
+    }
+    
     /**
      *
      * @return
@@ -133,31 +153,24 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
             
             try {
                 if (m_out == null) {
-                    m_PortId = CommPortIdentifier.getPortIdentifier(m_sPortScale);                  
-                    m_CommPort = (SerialPort) m_PortId.open("PORTID", 2000);      
+                    m_CommPort = new NRSerialPort(m_sPortScale, 4800); 
+                    m_CommPort.connect();
                     m_CommPort.addEventListener(this);
                     m_CommPort.notifyOnDataAvailable(true);
 
-
                     m_out = m_CommPort.getOutputStream();  
                     m_in = m_CommPort.getInputStream();
-
-                    m_CommPort.setSerialPortParams(4800, 
-                            SerialPort.DATABITS_8, 
-                            SerialPort.STOPBITS_1, 
-                            SerialPort.PARITY_NONE);
-                    m_CommPort.setFlowControlMode( SerialPort.FLOWCONTROL_NONE );
                 }
-            } catch (NoSuchPortException | PortInUseException | TooManyListenersException|  UnsupportedCommOperationException | IOException e ) {
+            } catch ( TooManyListenersException e ) {
                 logger.log(Level.SEVERE, "Port exception", e );
-                m_iStatusScale = SCALE_ERROR;
+                changeStatus( SCALE_ERROR );
             } 
             
-            backgroundReadInput( 20 );
+            backgroundReadInput( 60 );
         }
         
         showDialog();
-                        
+             
         synchronized(this) {
             try {
                 if (m_out != null)
@@ -166,7 +179,7 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
                     m_in.close();
                 if (m_CommPort != null) {
                     m_CommPort.removeEventListener();
-                    m_CommPort.close();
+                    m_CommPort.disconnect();
                 }
             } catch ( IOException e ) {
             }
@@ -174,6 +187,10 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
             m_in = null;
             m_CommPort = null;
             m_PortId = null;
+
+            if( m_Dialog != null )
+                m_Dialog.setVisible(false);
+            m_Dialog = null;
             
             if (m_iStatusScale == SCALE_READY && m_WeightBuffer != null && m_WeightBuffer.isEmpty() == false ) {
                 
@@ -183,12 +200,11 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
                 
                 return dWeight;
             } else {
-                m_iStatusScale = SCALE_READY;
 
                 logger.log(Level.WARNING, "Scale no data", m_WeightBuffer );
                 
                 // Timed out looking for weight or error
-                return 0.0;
+                return null;
             }
         }
     }
@@ -196,7 +212,7 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
     private void write(byte[] data) {
         synchronized (this) {
             try {  
-                    m_out.write(data);
+                m_out.write(data);
             } catch ( IOException e) {
                 assert( false );
             }        
@@ -229,32 +245,25 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
                     try {
                         while (m_in.available() > 0) {
                             int b = m_in.read();
+  
+                            logger.log(Level.WARNING, "Scale sent", Character.toString ((char) b) );
 
-                        logger.log(Level.INFO, "Scale data event", b );
-                        
                             if (b == 0x000D) { // CR ASCII
                                 // End of Line
                                 synchronized (this) {
-                                    m_iStatusScale = SCALE_READY;
-                                    logger.log(Level.INFO, "Scale read complete" );
+                                    changeStatus( SCALE_READY );
                                     notifyAll();
-                                    if( m_Dialog != null )
-                                        m_Dialog.setVisible(false);
                                 }
                             } else {
-
                                 if( b == 0x2e || (b >= 0x30  && b <= 0x39 ) ) {  // Ascii for period or 0-9 
-
-                                        m_WeightBuffer = m_WeightBuffer + Character.toString ((char) b);
-                                     }
+                                    m_WeightBuffer = m_WeightBuffer + Character.toString ((char) b);
                                 }
                             }
-                        } catch (IOException eIO) {
-                            logger.log(Level.SEVERE, "Scale io error", eIO );
-                            m_iStatusScale = SCALE_ERROR;
-                            if( m_Dialog != null )
-                                m_Dialog.setVisible(false);
                         }
+                    } catch (IOException eIO) {
+                        logger.log(Level.SEVERE, "Scale io error", eIO );
+                        changeStatus( SCALE_ERROR );
+                    }
                 }
                 break;
         }

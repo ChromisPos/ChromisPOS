@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.scale;
 
 import java.awt.Component;
@@ -27,15 +26,18 @@ import uk.chromis.pos.util.StringParser;
 
 /**
  *
- *   
+ *
  */
 public class DeviceScale {
-    
+
     private Scale m_scale;
-    
-    /** Creates a new instance of DeviceScale
+
+    /**
+     * Creates a new instance of DeviceScale
+     *
      * @param parent
-     * @param props */
+     * @param props
+     */
     public DeviceScale(Component parent, AppProperties props) {
         StringParser sd = new StringParser(AppConfig.getInstance().getProperty("machine.scale"));
         String sScaleType = sd.nextToken(':');
@@ -43,7 +45,7 @@ public class DeviceScale {
         // String sScaleParam2 = sd.nextToken(',');
         switch (sScaleType) {
             case "Adam Equipment":
-                m_scale = new ScaleAdam(sScaleParam1, parent );
+                m_scale = new ScaleAdam(sScaleParam1, parent);
                 break;
             case "casiopd1":
                 m_scale = new ScaleCasioPD1(sScaleParam1);
@@ -53,6 +55,9 @@ public class DeviceScale {
                 break;
             case "samsungesp":
                 m_scale = new ScaleSamsungEsp(sScaleParam1);
+                break;
+            case "caspdii":
+                m_scale = new ScaleCASPDII(sScaleParam1);
                 break;
             case "fake":
                 // a fake scale for debugging purposes
@@ -67,7 +72,7 @@ public class DeviceScale {
                 break;
         }
     }
-    
+
     /**
      *
      * @return
@@ -75,14 +80,13 @@ public class DeviceScale {
     public boolean existsScale() {
         return m_scale != null;
     }
-    
+
     /**
      *
-     * @return
-     * @throws ScaleException
+     * @return @throws ScaleException
      */
     public Double readWeight() throws ScaleException {
-        
+
         if (m_scale == null) {
             throw new ScaleException(AppLocal.getIntString("scale.notdefined"));
         } else {
@@ -91,11 +95,11 @@ public class DeviceScale {
                 return null; // Canceled by the user / scale
             } else if (result.doubleValue() < 0.002) {
                 // invalid result. nothing on the scale
-                throw new ScaleException(AppLocal.getIntString("scale.invalidvalue"));                
+                throw new ScaleException(AppLocal.getIntString("scale.invalidvalue"));
             } else {
                 // valid result
                 return result;
             }
         }
-    }    
+    }
 }

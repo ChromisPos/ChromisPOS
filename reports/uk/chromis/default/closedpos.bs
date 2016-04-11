@@ -35,7 +35,7 @@ report.setSentence("SELECT " +
                     "GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE, CLOSEDCASH.MONEY, CLOSEDCASH.DATESTART, CLOSEDCASH.DATEEND, PAYMENTS.PAYMENT " +
                     "ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE");
 
-report.addParameter("CLOSEDCASH.DATESTART");
+report.addParameter("CLOSEDCASH.DATEEND");
 report.addParameter("CLOSEDCASH.DATEEND");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();

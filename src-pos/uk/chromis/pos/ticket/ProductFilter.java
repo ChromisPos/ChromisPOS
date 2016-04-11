@@ -80,7 +80,7 @@ public class ProductFilter extends javax.swing.JPanel implements ReportEditorCre
     public void activate() throws BasicException {
 
         List catlist = m_sentcat.list();
-        catlist.add(0, null);
+        catlist.add(0, null);       
         m_CategoryModel = new ComboBoxValModel(catlist);
         m_jCategory.setModel(m_CategoryModel);
     }
@@ -117,7 +117,7 @@ public class ProductFilter extends javax.swing.JPanel implements ReportEditorCre
                 m_jCboName.getSelectedItem(), m_jName.getText(),
                 m_jCboPriceBuy.getSelectedItem(), Formats.CURRENCY.parseValue(m_jPriceBuy.getText()),
                 m_jCboPriceSell.getSelectedItem(), Formats.CURRENCY.parseValue(m_jPriceSell.getText()),
-                m_CategoryModel.getSelectedKey() == null ? QBFCompareEnum.COMP_NONE : QBFCompareEnum.COMP_EQUALS, m_CategoryModel.getSelectedKey(),
+                m_CategoryModel.getSelectedKey() == null ? QBFCompareEnum.COMP_ISNOTNULL : QBFCompareEnum.COMP_EQUALS, m_CategoryModel.getSelectedKey(),
                 QBFCompareEnum.COMP_NONE, null
             };
         } else {

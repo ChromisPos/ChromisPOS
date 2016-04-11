@@ -258,8 +258,8 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
             Datas.STRING
         }));
 
-        m_addOrder = new StaticSentence(s, "INSERT INTO ORDERS (ID, ORDERID, QTY, DETAILS, ATTRIBUTES, NOTES, TICKETID, DISPLAYID, AUXILIARY) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ", new SerializerWriteBasic(new Datas[]{
+        m_addOrder = new StaticSentence(s, "INSERT INTO ORDERS (ID, ORDERID, QTY, DETAILS, ATTRIBUTES, NOTES, TICKETID, DISPLAYID, AUXILIARY, SEQUENCE) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ", new SerializerWriteBasic(new Datas[]{
             Datas.STRING,
             Datas.STRING,
             Datas.INT,
@@ -267,6 +267,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
             Datas.STRING,
             Datas.STRING,
             Datas.STRING,
+            Datas.INT,
             Datas.INT,
             Datas.INT
         }));
@@ -519,8 +520,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         m_updatePlaces.exec(x, y, id);
     }
 
-    public final void addOrder(String id, String orderId, Integer qty, String details, String attributes, String notes, String ticketId, Integer displayId, Integer auxiliaryId) throws BasicException {
-        m_addOrder.exec(id, orderId, qty, details, attributes, notes, ticketId, displayId, auxiliaryId);
+    public final void addOrder(String id, String orderId, Integer qty, String details, String attributes, String notes, String ticketId, Integer displayId, Integer auxiliaryId, Integer sequence) throws BasicException {
+        m_addOrder.exec(id, orderId, qty, details, attributes, notes, ticketId, displayId, auxiliaryId, sequence);
     }
-
-}
+    }

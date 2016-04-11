@@ -32,7 +32,11 @@
             <column name="VERSION" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-        </createTable>               
+        </createTable>  
+
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                      
     </changeSet>    
     
     <changeSet author="Chromis POS" id="Create Attribute Table">
@@ -44,6 +48,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 		
     <changeSet author="Chromis POS" id="Create Attributeinstance Table">
@@ -59,6 +67,10 @@
             </column>
             <column name="VALUE" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 	
     <changeSet author="Chromis POS" id="Create Attributeset Table">
@@ -70,6 +82,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 	
     <changeSet author="Chromis POS" id="Create Attributesetinstance Table">
@@ -82,6 +98,10 @@
             </column>
             <column name="DESCRIPTION" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 	
     <changeSet author="Chromis POS" id="Create Attributeuse Table">
@@ -97,6 +117,10 @@
             </column>
             <column name="LINENO" type="int"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 
     <changeSet author="Chromis POS" id="Create Attributevalue Table">
@@ -109,6 +133,10 @@
             </column>
             <column name="VALUE" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create BREAKS Table.">        
@@ -124,6 +152,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create Categories Table.">
@@ -143,6 +175,10 @@
             <column name="COLOUR" type="varchar(50)"/> 
             <column name="CATORDER" type="int"/> 
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Closedcash Table">
@@ -164,6 +200,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create CSVImport Table">
@@ -182,6 +222,10 @@
             <column name="PREVIOUSSELL" type="double precision"/>
             <column name="CATEGORY" type="varchar(255)"></column>
         </createTable>
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Customers Table.">
@@ -223,6 +267,10 @@
             <column name="DOB" type="timestamp" />  
             <column name="DISCOUNT" type="double"/> 
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
 	
@@ -241,6 +289,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable> 
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Draweropened Table">
@@ -249,6 +301,10 @@
             <column name="NAME" type="varchar(255)"/>
             <column name="TICKETID" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Floors Table">
@@ -261,6 +317,10 @@
             </column>
             <column name="IMAGE" type="${blob.type}"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 
     <changeSet author="Chromis POS" id="Create Historic Version Table">
@@ -269,6 +329,10 @@
                 <constraints nullable="false"/>
             </column> 
         </createTable>       
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet> 	
 	
     <changeSet author="Chromis POS" id="Create LEAVES Table">
@@ -290,6 +354,10 @@
             </column>
             <column name="NOTES" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Lineremoved Table.">
@@ -305,6 +373,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Locations Table">
@@ -317,6 +389,10 @@
             </column>
             <column name="ADDRESS" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Dynamic entries table">
@@ -326,6 +402,10 @@
             <column name="GRAPHIC" type="varchar(255)" />
             <column name="TITLE" type="varchar(255)" />                
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Moorers Table.">
@@ -337,6 +417,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Orders Table">
@@ -354,6 +438,10 @@
             <column name="DISPLAYID" type="int"/>     
             <column name="AUXILIARY" type="int"/>			
         </createTable>                         
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet> 	
 	
     <changeSet author="Chromis POS" id="Create PAYMENTS Table">
@@ -378,6 +466,10 @@
             <column name="CARDNAME" type="varchar(255)"/>
             <column name="RETURNMSG" type="${blob.type}"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create People Table.">
@@ -396,6 +488,10 @@
             </column>
             <column name="IMAGE" type="${blob.type}"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Places Table.">
@@ -422,6 +518,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Products Table.">
@@ -507,6 +607,10 @@
             <column name="ALLPRODUCTS" type="${boolean.type}"   
                     defaultValueBoolean="false"/>  			
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Products_com Table">
@@ -521,6 +625,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	  
     <changeSet author="Chromis POS" id="Create recipes table" >
@@ -538,6 +646,10 @@
                 <constraints nullable="false" />
             </column>            
         </createTable>                                                                     
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Promotion Table">       
@@ -557,6 +669,10 @@
             <column name="ISENABLED" type="${boolean.type}" 
                     defaultValueBoolean="true"/>
         </createTable>      
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet> 	
 	
     <changeSet author="Chromis POS" id="Create Receipts Table">
@@ -573,6 +689,10 @@
             <column name="PERSON" type="varchar(255)"/>
             <column name="ATTRIBUTES" type="${blob.type}"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 	
     <changeSet author="Chromis POS" id="Create reservations Table.">
@@ -597,6 +717,10 @@
             </column>
             <column name="DESCRIPTION" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create reservation_CUSTOMERS Table.">
@@ -608,6 +732,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Resources Table">
@@ -623,6 +751,10 @@
             </column>
             <column name="CONTENT" type="${blob.type}"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 		
     <changeSet author="Chromis POS" id="Create Roles Table" >
@@ -638,6 +770,10 @@
                 <constraints nullable="false"/> 
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
             
     <changeSet author="Chromis POS" id="Create SharedTICKETS Table">
@@ -654,6 +790,10 @@
             </column>
             <column name="APPUSER" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>			
 			
     <changeSet author="Chromis POS" id="SHIFTS Table">
@@ -667,6 +807,10 @@
             <column name="ENDSHIFT" type="timestamp"/>
             <column name="PPLID" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>			
 
     <changeSet author="Chromis POS" id="Create SHIFT_BREAKS Table">
@@ -685,6 +829,10 @@
             </column>
             <column name="ENDTIME" type="timestamp"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
@@ -703,6 +851,10 @@
             <column name="BLOBVALUE" type="${blob.type}"/>                                    
             <column name="CHANGES_PROCESSED" type="int"/>
         </createTable>       
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet> 
 			
     <changeSet author="Chromis POS" id="Create Stock current Table.">
@@ -718,6 +870,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>			
 			
     <changeSet author="Chromis POS" id="Create Stock diary Table">
@@ -746,6 +902,10 @@
             </column>
             <column name="APPUSER" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>			
 		
     <changeSet author="Chromis POS" id="Create Stock level Table">
@@ -766,6 +926,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 		
     <changeSet author="Chromis POS" id="Create TaxCATEGORIES Table">
@@ -777,6 +941,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 			
     <changeSet author="Chromis POS" id="Create TaxCustCategories Table">
@@ -788,6 +956,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>			
 			
     <changeSet author="Chromis POS" id="Create Taxes Table">
@@ -811,6 +983,10 @@
             </column>
             <column name="RATEORDER" type="int"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 	
     <changeSet author="Chromis POS" id="Create TAXLINES Table">
@@ -831,6 +1007,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>			
 			
     <changeSet author="Chromis POS" id="Create THIRDPARTIES Table">
@@ -855,6 +1035,10 @@
             <column name="WEBPAGE" type="varchar(255)"/>
             <column name="NOTES" type="varchar(255)"/>
         </createTable>
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 	
     <changeSet author="Chromis POS" id="Create TICKETS Table">
@@ -876,6 +1060,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>        
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 	
     <changeSet author="Chromis POS" id="Create TICKETLINES table"> 
@@ -900,6 +1088,10 @@
             <column name="ATTRIBUTES" type="${blob.type}"/>
             <column name="REFUNDQTY" type="double precision" defaultValueNumeric="0.0"/> 
         </createTable>        
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>	
 	
     <changeSet author="Chromis POS" id="Create Voucher Table">
@@ -912,6 +1104,10 @@
             <column name="SOLDTICKETID" type="varchar(50)"/>
             <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
         </createTable>       
+    
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql> 
     </changeSet>
 			
 

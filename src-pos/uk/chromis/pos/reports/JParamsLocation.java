@@ -147,7 +147,7 @@ public class JParamsLocation extends javax.swing.JPanel implements ReportEditorC
         m_jLocation.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText(AppLocal.getIntString("label.warehouse")); // NOI18N
+        jLabel8.setText(AppLocal.getIntString("label.locationname")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -166,7 +166,7 @@ public class JParamsLocation extends javax.swing.JPanel implements ReportEditorC
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(m_jLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

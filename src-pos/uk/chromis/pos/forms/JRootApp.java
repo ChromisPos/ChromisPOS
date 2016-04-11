@@ -77,6 +77,7 @@ import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.Session;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.dialogs.JOpenWarningDlg;
 import uk.chromis.pos.dialogs.JProcessingDlg;
 import uk.chromis.pos.printer.DeviceTicket;
 import uk.chromis.pos.printer.TicketParser;
@@ -135,7 +136,7 @@ public class JRootApp extends JPanel implements AppView {
             m_date = getLineDate();
             m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));
             jLabel2.setText("  " + m_date + "  " + m_clock);
-            
+
         }
     }
 
@@ -185,12 +186,17 @@ public class JRootApp extends JPanel implements AppView {
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(30, 30));
     }
 
+    public static final int INIT_SUCCESS = 0;
+    public static final int INIT_FAIL_CONFIG = 1;
+    public static final int INIT_FAIL_EXIT = 2;
+    public static final int INIT_FAIL_RETRY = 3;
+
     /**
      *
      * @param props
      * @return
      */
-    public boolean initApp(AppProperties props) {
+    public int initApp(AppProperties props) {
 
         m_props = props;
         m_jPanelDown.setVisible(!AppConfig.getInstance().getBoolean("till.hideinfo"));
@@ -199,11 +205,22 @@ public class JRootApp extends JPanel implements AppView {
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         // Database start
-        try {
-            session = AppViewConnection.createSession(m_props);
-        } catch (BasicException e) {
-            JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, e.getMessage(), e));
-            return false;
+        int rc = INIT_FAIL_RETRY;
+        while (rc == INIT_FAIL_RETRY) {
+            rc = INIT_SUCCESS;
+            try {
+                session = AppViewConnection.createSession(m_props);
+            } catch (BasicException e) {
+                JOpenWarningDlg wDlg = new JOpenWarningDlg(e.getMessage(), AppLocal.getIntString("message.retryorconfig"), true, true);
+                wDlg.setModal(true);
+                wDlg.setVisible(true);
+                rc = JOpenWarningDlg.CHOICE;
+            }
+        }
+
+        if (rc != INIT_SUCCESS) {
+            return rc;
+
         }
 
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
@@ -234,21 +251,30 @@ public class JRootApp extends JPanel implements AppView {
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
             } else {
                 String changelog = (sDBVersion == null) || ("0.00".equals(sDBVersion))
-                        ? "uk/chromis/pos/liquibase/chromis.xml"
-                        : "uk/chromis/pos/liquibase/updatesystem.xml";              
-                JProcessingDlg dlg = new JProcessingDlg( AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"),(sDBVersion == null ? true : false), changelog);
+                        ? "uk/chromis/pos/liquibase/create/chromis.xml"
+                        : "uk/chromis/pos/liquibase/upgrade/updatesystem.xml";
+                JProcessingDlg dlg = new JProcessingDlg(AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), (sDBVersion == null), changelog);
                 dlg.setModal(true);
                 dlg.setVisible(true);
-                if (dlg.CHOICE == -1 || dlg.DBFAILED) {
+                if (JProcessingDlg.CHOICE == -1 || JProcessingDlg.DBFAILED) {
                     session.close();
-                    return false;
+                    JOpenWarningDlg wDlg;
+                    if (!"".equals(JProcessingDlg.ERRORMSG)) {
+                        wDlg = new JOpenWarningDlg(JProcessingDlg.ERRORMSG, AppLocal.getIntString(sDBVersion == null ? "message.createfailure" : "message.updatefailure"), false, false);
+                    } else {
+                        wDlg = new JOpenWarningDlg(sDBVersion == null ? "Create database process was not run !!" : "Upgrade database process was not run !!", AppLocal.getIntString(sDBVersion == null ? "message.createfailure" : "message.updatefailure"), false, false);
+                    }
+                    wDlg.setModal(true);
+                    wDlg.setVisible(true);
+                    System.exit(0);
                 }
+                
             }
         }
 
 // Clear the cash drawer table as required, by setting 
         try {
-            if (getDbVersion() == "d") {
+            if ("d".equals(getDbVersion())) {
                 SQL = "DELETE FROM DRAWEROPENED WHERE OPENDATE < {fn TIMESTAMPADD(SQL_TSI_DAY ,-" + AppConfig.getInstance().getProperty("dbtable.retaindays") + ", CURRENT_TIMESTAMP)}";
             } else {
                 SQL = "DELETE FROM DRAWEROPENED WHERE OPENDATE < (NOW() - INTERVAL '" + AppConfig.getInstance().getProperty("dbtable.retaindays") + "' DAY)";
@@ -275,11 +301,12 @@ public class JRootApp extends JPanel implements AppView {
                 setActiveCash(sActiveCashIndex, (Integer) valcash[1], (Date) valcash[2], (Date) valcash[3]);
             }
         } catch (BasicException e) {
-            // Casco. Sin caja no hay pos
-            MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotclosecash"), e);
-            msg.show(this);
             session.close();
-            return false;
+            JOpenWarningDlg wDlg = new JOpenWarningDlg(e.getMessage(), AppLocal.getIntString("message.retryorconfig"), false, true);
+            wDlg.setModal(true);
+            wDlg.setVisible(true);
+            return JOpenWarningDlg.CHOICE;
+
         }
 
         // Leo la localizacion de la caja (Almacen).
@@ -411,7 +438,7 @@ public class JRootApp extends JPanel implements AppView {
 
         showLogin();
 
-        return true;
+        return INIT_SUCCESS;
     }
 
     private class doWork implements Runnable {
@@ -562,6 +589,7 @@ public class JRootApp extends JPanel implements AppView {
                     } else {
                         // the old construction for beans...
                         Constructor constMyView = bfclass.getConstructor(new Class[]{AppView.class
+
                         });
                         Object bean = constMyView.newInstance(new Object[]{this});
 
@@ -679,6 +707,7 @@ public class JRootApp extends JPanel implements AppView {
                 jPeople.add(btn);
             }
             jScrollPane1.getViewport().setView(jPeople);
+
         } catch (BasicException ee) {
         }
     }

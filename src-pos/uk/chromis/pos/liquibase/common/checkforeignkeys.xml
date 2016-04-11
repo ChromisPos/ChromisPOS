@@ -8,7 +8,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   
-    <changeSet author="Chromis POS" id="Add PEOPLE_FK_1">
+    <changeSet author="Chromis POS" id="Add PEOPLE_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="PEOPLE" foreignKeyName="PEOPLE_FK_1"/>        
@@ -17,7 +17,7 @@
         <sql> ALTER TABLE PEOPLE ADD CONSTRAINT PEOPLE_FK_1 FOREIGN KEY (ROLE) REFERENCES ROLES(ID)</sql>        
     </changeSet> 
 
-    <changeSet author="Chromis POS" id="Add CUSTOMERS_TAXCAT">
+    <changeSet author="Chromis POS" id="Add CUSTOMERS_TAXCAT (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="CUSTOMERS" foreignKeyName="CUSTOMERS_TAXCAT"/>     
@@ -26,7 +26,7 @@
         <sql>ALTER TABLE CUSTOMERS ADD CONSTRAINT CUSTOMERS_TAXCAT FOREIGN KEY (TAXCATEGORY) REFERENCES TAXCUSTCATEGORIES(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add CATEGORIES_FK_1">
+    <changeSet author="Chromis POS" id="Add CATEGORIES_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="CATEGORIES" foreignKeyName="CATEGORIES_FK_1"/>            
@@ -35,7 +35,7 @@
         <sql>ALTER TABLE CATEGORIES ADD CONSTRAINT CATEGORIES_FK_1 FOREIGN KEY (PARENTID) REFERENCES CATEGORIES(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add TAXES_CAT_FK">
+    <changeSet author="Chromis POS" id="Add TAXES_CAT_FK (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="TAXES" foreignKeyName="TAXES_CAT_FK"/> 
@@ -44,7 +44,7 @@
         <sql>ALTER TABLE TAXES ADD CONSTRAINT TAXES_CAT_FK FOREIGN KEY (CATEGORY) REFERENCES TAXCATEGORIES(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add TAXES_CUSTCAT_FK">
+    <changeSet author="Chromis POS" id="Add TAXES_CUSTCAT_FK (NV)">
         <preConditions onFail="MARK_RAN">
             <not> 
                 <foreignKeyConstraintExists foreignKeyTableName="TAXES" foreignKeyName="TAXES_CUSTCAT_FK"/>    
@@ -53,7 +53,7 @@
         <sql>ALTER TABLE TAXES ADD CONSTRAINT TAXES_CUSTCAT_FK FOREIGN KEY (CUSTCATEGORY) REFERENCES TAXCUSTCATEGORIES(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add TAXES_TAXES_FK">
+    <changeSet author="Chromis POS" id="Add TAXES_TAXES_FK (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="TAXES" foreignKeyName="TAXES_TAXES_FK"/>                    
@@ -62,7 +62,7 @@
         <sql>ALTER TABLE TAXES ADD CONSTRAINT TAXES_TAXES_FK FOREIGN KEY (PARENTID) REFERENCES TAXES(ID)</sql>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Add ATTVAL_ATT">
+    <changeSet author="Chromis POS" id="Add ATTVAL_ATT (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEVALUE" foreignKeyName="ATTVAL_ATT"/>      
@@ -71,7 +71,7 @@
         <sql> ALTER TABLE ATTRIBUTEVALUE ADD CONSTRAINT ATTVAL_ATT FOREIGN KEY (ATTRIBUTE_ID) REFERENCES ATTRIBUTE(ID) ON DELETE CASCADE</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add ATTUSE_SET">
+    <changeSet author="Chromis POS" id="Add ATTUSE_SET (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEUSE" foreignKeyName="ATTUSE_SET"/>            
@@ -80,7 +80,7 @@
         <sql>ALTER TABLE ATTRIBUTEUSE ADD CONSTRAINT ATTUSE_SET FOREIGN KEY (ATTRIBUTESET_ID) REFERENCES ATTRIBUTESET(ID) ON DELETE CASCADE</sql>
     </changeSet>
         
-    <changeSet author="Chromis POS" id="Add ATTUSE_ATT">
+    <changeSet author="Chromis POS" id="Add ATTUSE_ATT (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEUSE" foreignKeyName="ATTUSE_ATT"/>            
@@ -89,7 +89,7 @@
         <sql>ALTER TABLE ATTRIBUTEUSE ADD CONSTRAINT ATTUSE_ATT FOREIGN KEY (ATTRIBUTE_ID) REFERENCES ATTRIBUTE(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add ATTSETINST_SET">
+    <changeSet author="Chromis POS" id="Add ATTSETINST_SET (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTESETINSTANCE" foreignKeyName="ATTSETINST_SET"/>            
@@ -98,7 +98,7 @@
         <sql> ALTER TABLE ATTRIBUTESETINSTANCE ADD CONSTRAINT ATTSETINST_SET FOREIGN KEY (ATTRIBUTESET_ID) REFERENCES ATTRIBUTESET(ID) ON DELETE CASCADE</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add ATTINST_SET">
+    <changeSet author="Chromis POS" id="Add ATTINST_SET (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEINSTANCE" foreignKeyName="ATTINST_SET"/>            
@@ -107,7 +107,7 @@
         <sql>ALTER TABLE ATTRIBUTEINSTANCE ADD CONSTRAINT ATTINST_SET FOREIGN KEY (ATTRIBUTESETINSTANCE_ID) REFERENCES ATTRIBUTESETINSTANCE(ID) ON DELETE CASCADE</sql>
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="Add ATTINST_ATT">
+    <changeSet author="Chromis POS" id="Add ATTINST_ATT (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="ATTRIBUTEINSTANCE" foreignKeyName="ATTINST_ATT"/>            
@@ -116,7 +116,7 @@
         <sql>ALTER TABLE ATTRIBUTEINSTANCE ADD CONSTRAINT ATTINST_ATT FOREIGN KEY (ATTRIBUTE_ID) REFERENCES ATTRIBUTE(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add PRODUCTS_FK_1">
+    <changeSet author="Chromis POS" id="Add PRODUCTS_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS" foreignKeyName="PRODUCTS_FK_1"/>            
@@ -125,7 +125,7 @@
         <sql>ALTER TABLE PRODUCTS ADD CONSTRAINT PRODUCTS_FK_1 FOREIGN KEY (CATEGORY) REFERENCES CATEGORIES(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add PRODUCTS_TAXCAT_FK">
+    <changeSet author="Chromis POS" id="Add PRODUCTS_TAXCAT_FK (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS" foreignKeyName="PRODUCTS_TAXCAT_FK"/>            
@@ -134,7 +134,7 @@
         <sql>ALTER TABLE PRODUCTS ADD CONSTRAINT PRODUCTS_TAXCAT_FK FOREIGN KEY (TAXCAT) REFERENCES TAXCATEGORIES(ID)</sql>
     </changeSet>    
     
-    <changeSet author="Chromis POS" id="Add PRODUCTS_ATTRSET_FK">
+    <changeSet author="Chromis POS" id="Add PRODUCTS_ATTRSET_FK (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS" foreignKeyName="PRODUCTS_ATTRSET_FK"/>            
@@ -143,7 +143,7 @@
         <sql>ALTER TABLE PRODUCTS ADD CONSTRAINT PRODUCTS_ATTRSET_FK FOREIGN KEY (ATTRIBUTESET_ID) REFERENCES ATTRIBUTESET(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add PRODUCTS_COM_FK_1">
+    <changeSet author="Chromis POS" id="Add PRODUCTS_COM_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_COM" foreignKeyName="PRODUCTS_COM_FK_1"/>            
@@ -152,7 +152,7 @@
         <sql>ALTER TABLE PRODUCTS_COM ADD CONSTRAINT PRODUCTS_COM_FK_1 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Add PRODUCTS_COM_FK_2">
+    <changeSet author="Chromis POS" id="Add PRODUCTS_COM_FK_2 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_COM" foreignKeyName="PRODUCTS_COM_FK_2"/>            
@@ -161,7 +161,7 @@
         <sql>ALTER TABLE PRODUCTS_COM ADD CONSTRAINT PRODUCTS_COM_FK_2 FOREIGN KEY (PRODUCT2) REFERENCES PRODUCTS(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add STOCKDIARY_FK_1">
+    <changeSet author="Chromis POS" id="Add STOCKDIARY_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKDIARY" foreignKeyName="STOCKDIARY_FK_1"/>            
@@ -170,7 +170,7 @@
         <sql>ALTER TABLE STOCKDIARY ADD CONSTRAINT STOCKDIARY_FK_1 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add STOCKDIARY_ATTSETINST">
+    <changeSet author="Chromis POS" id="Add STOCKDIARY_ATTSETINST (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKDIARY" foreignKeyName="STOCKDIARY_ATTSETINST"/>            
@@ -179,7 +179,7 @@
         <sql>ALTER TABLE STOCKDIARY ADD CONSTRAINT STOCKDIARY_ATTSETINST FOREIGN KEY (ATTRIBUTESETINSTANCE_ID) REFERENCES ATTRIBUTESETINSTANCE(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add STOCKDIARY_FK_2">
+    <changeSet author="Chromis POS" id="Add STOCKDIARY_FK_2 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKDIARY" foreignKeyName="STOCKDIARY_FK_2"/>            
@@ -188,7 +188,7 @@
         <sql>ALTER TABLE STOCKDIARY ADD CONSTRAINT STOCKDIARY_FK_2 FOREIGN KEY (LOCATION) REFERENCES LOCATIONS(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add STOCKLEVEL_PRODUCT">
+    <changeSet author="Chromis POS" id="Add STOCKLEVEL_PRODUCT (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKLEVEL" foreignKeyName="STOCKLEVEL_PRODUCT"/>            
@@ -197,7 +197,7 @@
         <sql>ALTER TABLE STOCKLEVEL ADD CONSTRAINT STOCKLEVEL_PRODUCT FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add STOCKLEVEL_LOCATION">
+    <changeSet author="Chromis POS" id="Add STOCKLEVEL_LOCATION (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKLEVEL" foreignKeyName="STOCKLEVEL_LOCATION"/>            
@@ -206,7 +206,7 @@
         <sql>ALTER TABLE STOCKLEVEL ADD CONSTRAINT STOCKLEVEL_LOCATION FOREIGN KEY (LOCATION) REFERENCES LOCATIONS(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add STOCKCURRENT_FK_1">
+    <changeSet author="Chromis POS" id="Add STOCKCURRENT_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKCURRENT" foreignKeyName="STOCKCURRENT_FK_1"/>            
@@ -215,7 +215,7 @@
         <sql>ALTER TABLE STOCKCURRENT ADD CONSTRAINT STOCKCURRENT_FK_1 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Add STOCKCURRENT_ATTSETINST">
+    <changeSet author="Chromis POS" id="Add STOCKCURRENT_ATTSETINST (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKCURRENT" foreignKeyName="STOCKCURRENT_ATTSETINST"/>            
@@ -224,7 +224,7 @@
         <sql>ALTER TABLE STOCKCURRENT ADD CONSTRAINT STOCKCURRENT_ATTSETINST FOREIGN KEY (ATTRIBUTESETINSTANCE_ID) REFERENCES ATTRIBUTESETINSTANCE(ID);</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add STOCKCURRENT_FK_2">
+    <changeSet author="Chromis POS" id="Add STOCKCURRENT_FK_2 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="STOCKCURRENT" foreignKeyName="STOCKCURRENT_FK_2"/>            
@@ -233,7 +233,7 @@
         <sql>ALTER TABLE STOCKCURRENT ADD CONSTRAINT STOCKCURRENT_FK_2 FOREIGN KEY (LOCATION) REFERENCES LOCATIONS(ID);</sql>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Add RECEIPTS_FK_MONEY">
+    <changeSet author="Chromis POS" id="Add RECEIPTS_FK_MONEY (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="RECEIPTS" foreignKeyName="RECEIPTS_FK_MONEY"/>            
@@ -242,7 +242,7 @@
         <sql>ALTER TABLE RECEIPTS ADD CONSTRAINT RECEIPTS_FK_MONEY FOREIGN KEY (MONEY) REFERENCES CLOSEDCASH(MONEY)</sql>
     </changeSet>
    
-    <changeSet author="Chromis POS" id="Add TICKETS_FK_ID">
+    <changeSet author="Chromis POS" id="Add TICKETS_FK_ID (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TICKETS" foreignKeyName="TICKETS_FK_ID"/>            
@@ -251,7 +251,7 @@
         <sql>ALTER TABLE TICKETS ADD CONSTRAINT TICKETS_FK_ID FOREIGN KEY (ID) REFERENCES RECEIPTS(ID)</sql>
     </changeSet> 
 
-    <changeSet author="Chromis POS" id="Add TICKETS_FK_2">
+    <changeSet author="Chromis POS" id="Add TICKETS_FK_2 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TICKETS" foreignKeyName="TICKETS_FK_2"/>            
@@ -260,7 +260,7 @@
         <sql>ALTER TABLE TICKETS ADD CONSTRAINT TICKETS_FK_2 FOREIGN KEY (PERSON) REFERENCES PEOPLE(ID)</sql>
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="Add TICKETS_CUSTOMERS_FK">
+    <changeSet author="Chromis POS" id="Add TICKETS_CUSTOMERS_FK (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TICKETS" foreignKeyName="TICKETS_CUSTOMERS_FK"/>            
@@ -269,7 +269,7 @@
         <sql>ALTER TABLE TICKETS ADD CONSTRAINT TICKETS_CUSTOMERS_FK FOREIGN KEY (CUSTOMER) REFERENCES CUSTOMERS(ID)</sql>
     </changeSet> 
 
-    <changeSet author="Chromis POS" id="Add TICKETLINES_FK_TICKET">
+    <changeSet author="Chromis POS" id="Add TICKETLINES_FK_TICKET (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_FK_TICKET"/>            
@@ -278,7 +278,7 @@
         <sql>ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_FK_TICKET FOREIGN KEY (TICKET) REFERENCES TICKETS(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add TICKETLINES_FK_2">
+    <changeSet author="Chromis POS" id="Add TICKETLINES_FK_2 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_FK_2"/>            
@@ -287,7 +287,7 @@
         <sql>ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_FK_2 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add TICKETLINES_ATTSETINST">
+    <changeSet author="Chromis POS" id="Add TICKETLINES_ATTSETINST (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_ATTSETINST"/>            
@@ -296,7 +296,7 @@
         <sql>ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_ATTSETINST FOREIGN KEY (ATTRIBUTESETINSTANCE_ID) REFERENCES ATTRIBUTESETINSTANCE(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add TICKETLINES_FK_3">
+    <changeSet author="Chromis POS" id="Add TICKETLINES_FK_3 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_FK_3"/>            
@@ -305,7 +305,7 @@
         <sql>ALTER TABLE TICKETLINES ADD CONSTRAINT TICKETLINES_FK_3 FOREIGN KEY (TAXID) REFERENCES TAXES(ID)</sql>
     </changeSet>              
   
-    <changeSet author="Chromis POS" id="Add PAYMENTS_FK_RECEIPT">
+    <changeSet author="Chromis POS" id="Add PAYMENTS_FK_RECEIPT (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="PAYMENTS" foreignKeyName="PAYMENTS_FK_RECEIPT"/>            
@@ -314,7 +314,7 @@
         <sql>ALTER TABLE PAYMENTS ADD CONSTRAINT PAYMENTS_FK_RECEIPT FOREIGN KEY (RECEIPT) REFERENCES RECEIPTS(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add TAXLINES_TAX">
+    <changeSet author="Chromis POS" id="Add TAXLINES_TAX (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TAXLINES" foreignKeyName="TAXLINES_TAX"/>            
@@ -323,7 +323,7 @@
         <sql>ALTER TABLE TAXLINES ADD CONSTRAINT TAXLINES_TAX FOREIGN KEY (TAXID) REFERENCES TAXES(ID)</sql>
     </changeSet>
                                     
-    <changeSet author="Chromis POS" id="Add TAXLINES_RECEIPT">
+    <changeSet author="Chromis POS" id="Add TAXLINES_RECEIPT (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="TAXLINES" foreignKeyName="TAXLINES_RECEIPT"/>            
@@ -332,7 +332,7 @@
         <sql>ALTER TABLE TAXLINES ADD CONSTRAINT TAXLINES_RECEIPT FOREIGN KEY (RECEIPT) REFERENCES RECEIPTS(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add PLACES_FK_1">
+    <changeSet author="Chromis POS" id="Add PLACES_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="PLACES" foreignKeyName="PLACES_FK_1"/>            
@@ -341,7 +341,7 @@
         <sql>ALTER TABLE PLACES ADD CONSTRAINT PLACES_FK_1 FOREIGN KEY (FLOOR) REFERENCES FLOORS(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add RES_CUST_FK_1">
+    <changeSet author="Chromis POS" id="Add RES_CUST_FK_1 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="RESERVATION_CUSTOMERS" foreignKeyName="RES_CUST_FK_1"/>            
@@ -350,7 +350,7 @@
         <sql>ALTER TABLE RESERVATION_CUSTOMERS ADD CONSTRAINT RES_CUST_FK_1 FOREIGN KEY (ID) REFERENCES RESERVATIONS(ID)</sql>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Add RES_CUST_FK_2">
+    <changeSet author="Chromis POS" id="Add RES_CUST_FK_2 (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="RESERVATION_CUSTOMERS" foreignKeyName="RES_CUST_FK_2"/>            
@@ -359,7 +359,7 @@
         <sql>ALTER TABLE RESERVATION_CUSTOMERS ADD CONSTRAINT RES_CUST_FK_2 FOREIGN KEY (CUSTOMER) REFERENCES CUSTOMERS(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add LEAVES_PPLID.">
+    <changeSet author="Chromis POS" id="Add LEAVES_PPLID (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="LEAVES_PPLID"/>            
@@ -368,7 +368,7 @@
         <sql>ALTER TABLE LEAVES ADD CONSTRAINT LEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID)</sql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add SHIFT_BREAKS_BREAKID">
+    <changeSet author="Chromis POS" id="Add SHIFT_BREAKS_BREAKID (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="SHIFT_BREAKS" foreignKeyName="SHIFT_BREAKS_BREAKID"/>            
@@ -377,7 +377,7 @@
         <sql>ALTER TABLE SHIFT_BREAKS ADD CONSTRAINT SHIFT_BREAKS_BREAKID FOREIGN KEY (BREAKID) REFERENCES BREAKS(ID)</sql>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Add SHIFT_BREAKS_SHIFTID">
+    <changeSet author="Chromis POS" id="Add SHIFT_BREAKS_SHIFTID (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="SHIFT_BREAKS" foreignKeyName="SHIFT_BREAKS_SHIFTID"/>            
@@ -386,15 +386,7 @@
         <sql>ALTER TABLE SHIFT_BREAKS ADD CONSTRAINT SHIFT_BREAKS_SHIFTID FOREIGN KEY (SHIFTID) REFERENCES SHIFTS(ID) </sql>
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Add constraints to PRODUCTS_CAT" dbms="derby">   
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="PRODUCTS_CAT"/>  
-        </preConditions>
-        
-        <sql>ALTER TABLE PRODUCTS_CAT ADD CONSTRAINT PRODUCTS_CAT_FK_1 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>  
-    </changeSet> 
-    
-    <changeSet author="Chromis POS" id="Fix LEAVES_PPLID mistake.">
+    <changeSet author="Chromis POS" id="Fix LEAVES_PPLID mistake (NV)">
         <preConditions onFail="MARK_RAN">
             <not>  
                 <foreignKeyConstraintExists foreignKeyTableName="LEAVES" foreignKeyName="LEAVES_PPLID"/>            
@@ -402,7 +394,24 @@
         </preConditions>  
         <sql>ALTER TABLE LEAVES ADD CONSTRAINT LEAVES_PPLID FOREIGN KEY (PPLID) REFERENCES PEOPLE(ID)</sql>
     </changeSet>
-    
-    
+ 
+    <changeSet author="Chromis POS" id="Add PRODUCTS_KIT_FK_1 (NV)">
+        <preConditions onFail="MARK_RAN">
+            <not>  
+                <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_KIT" foreignKeyName="PRODUCTS_KIT_FK_1"/>            
+            </not>  
+        </preConditions>  
+        <sql>ALTER TABLE PRODUCTS_KIT ADD CONSTRAINT PRODUCTS_KIT_FK_1 FOREIGN KEY (PRODUCT) REFERENCES PRODUCTS(ID)</sql>
+    </changeSet>    
+
+    <changeSet author="Chromis POS" id="Add PRODUCTS_KIT_FK_2 (NV)">
+        <preConditions onFail="MARK_RAN">
+            <not>  
+                <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_KIT" foreignKeyName="PRODUCTS_KIT_FK_2"/>            
+            </not>  
+        </preConditions>  
+        <sql>ALTER TABLE PRODUCTS_KIT ADD CONSTRAINT PRODUCTS_KIT_FK_2 FOREIGN KEY (PRODUCT_KIT) REFERENCES PRODUCTS(ID)</sql>
+    </changeSet>                          
+      
 </databaseChangeLog>
 

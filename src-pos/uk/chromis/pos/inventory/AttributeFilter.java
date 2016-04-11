@@ -138,7 +138,7 @@ public class AttributeFilter extends javax.swing.JPanel implements ReportEditorC
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText(AppLocal.getIntString("label.attribute")); // NOI18N
 
-        jAttr.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jAttr.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -158,7 +158,7 @@ public class AttributeFilter extends javax.swing.JPanel implements ReportEditorC
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jAttr, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -169,3 +169,4 @@ public class AttributeFilter extends javax.swing.JPanel implements ReportEditorC
     // End of variables declaration//GEN-END:variables
 
 }
+

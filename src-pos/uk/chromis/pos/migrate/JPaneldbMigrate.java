@@ -137,7 +137,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
-            changelog = "uk/chromis/pos/liquibase/migratecreate.xml";
+            changelog = "uk/chromis/pos/liquibase/migrate/migratecreate.xml";
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
@@ -162,7 +162,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
-            changelog = "uk/chromis/pos/liquibase/migratecomplete.xml";
+            changelog = "uk/chromis/pos/liquibase/migrate/migratecomplete.xml";
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);

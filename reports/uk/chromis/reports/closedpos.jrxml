@@ -145,7 +145,7 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.DATESTART]]>
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue($F{DATESTART})]]></textFieldExpression>
+					<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue($F{DATEEND})]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement key="textField-23" mode="Opaque" x="0" y="0" width="110" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="849657c7-5a7c-47e0-8ef1-58b034108a02"/>

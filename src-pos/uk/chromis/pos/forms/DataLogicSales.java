@@ -103,6 +103,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public static int INDEX_PACKQUANTITY = FIELD_COUNT++;
     public static int INDEX_PACKPRODUCT = FIELD_COUNT++;
     public static int INDEX_PROMOTIONID = FIELD_COUNT++;
+    public static int INDEX_MANAGESTOCK = FIELD_COUNT++;
 
     /**
      * Creates a new instance of SentenceContainerGeneric
@@ -115,15 +116,26 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.DOUBLE
         };
         stockdiaryDatas = new Datas[]{
-            Datas.STRING,
-            Datas.TIMESTAMP,
-            Datas.INT,
-            Datas.STRING,
-            Datas.STRING,
-            Datas.STRING,
-            Datas.DOUBLE,
-            Datas.DOUBLE,
-            Datas.STRING};
+            Datas.STRING, // 0 - ID  
+            Datas.TIMESTAMP, // 1- Time  
+            Datas.INT, // 2 - Reason  
+            Datas.STRING, // 3 - Location  
+            Datas.STRING, // 4 - Product  
+            Datas.STRING, // 5 - Attribute  
+            Datas.DOUBLE, // 6 - Units  
+            Datas.DOUBLE, // 7 - Price  
+            Datas.STRING, // 8 - User  
+            Datas.STRING, // 9 - Product Reference  
+            Datas.STRING, // 10 - Product Code  
+            Datas.STRING, // 11 - Product Name  
+            Datas.STRING, // 12 - Attribute set ID  
+            Datas.STRING, // 13 - Attribute set inst desc  
+            Datas.DOUBLE, // 14 - Units in stock  
+            Datas.DOUBLE, // 15 - Stock Security  
+            Datas.DOUBLE, // 16 - Stock Maximum  
+            Datas.DOUBLE, // 17 - Buy Price  
+            Datas.DOUBLE // 18 - Sell Price 
+        };
         paymenttabledatas = new Datas[]{
             Datas.STRING,
             Datas.STRING,
@@ -181,7 +193,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ISPACK", Datas.BOOLEAN, Formats.BOOLEAN),
                 new Field("PACKQUANTITY", Datas.DOUBLE, Formats.DOUBLE),
                 new Field("PACKPRODUCT", Datas.STRING, Formats.STRING),
-                new Field("PROMOTIONID", Datas.STRING, Formats.STRING)
+                new Field("PROMOTIONID", Datas.STRING, Formats.STRING),
+                new Field("MANAGESTOCK", Datas.BOOLEAN, Formats.BOOLEAN)
         );
 
         // If this fails there is a coding error - have you added a column
@@ -221,7 +234,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.DISCOUNTED, "
                 + "P.CANDISCOUNT, "
                 + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT, "
-                + "P.PROMOTIONID ";
+                + "P.PROMOTIONID, "
+                + "P.MANAGESTOCK ";
         return sel;
     }
 
@@ -683,7 +697,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new StaticSentence(s, "SELECT "
                 + "ID, "
                 + "NAME, "
-                + "IMAGE, "
+                + "NULL, "
                 + "TEXTTIP, "
                 + "CATSHOWNAME, "
                 + "COLOUR, "
@@ -691,6 +705,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "FROM CATEGORIES "
                 + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
     }
+
     /**
      *
      * @return
@@ -811,6 +826,21 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "NAME, "
                 + "ADDRESS FROM LOCATIONS "
                 + "ORDER BY NAME", null, new SerializerReadClass(LocationInfo.class));
+    }
+
+    public final SentenceList getProductListList() {
+        return new StaticSentence(s, "SELECT DISTINCT "
+                + "LISTNAME FROM PRODUCTLISTS "
+                + "ORDER BY LISTNAME", null, new SerializerReadClass(ProductListInfo.class));
+    }
+
+    public final SentenceList getProductListItems(String listName) {
+        return new StaticSentence(s, "SELECT "
+                + "L.PRODUCT, P.REFERENCE, P.NAME FROM PRODUCTLISTS L LEFT JOIN PRODUCTS P "
+                + "ON P.ID = L.PRODUCT "
+                + "WHERE L.LISTNAME = '" + listName + "' "
+                + "ORDER BY P.REFERENCE ",
+                null, new SerializerReadClass(ProductListItem.class));
     }
 
     /**
@@ -1033,7 +1063,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                     ticketlineinsert.exec(l);
 
-                    if (l.getProductID() != null && l.isProductService() != true) {
+                    if (l.getProductID() != null && l.isProductService() != true
+                            && l.getManageStock() == true) {
+
                         // update the stock
                         getStockDiaryInsert().exec(new Object[]{
                             UUID.randomUUID().toString(),
@@ -1044,7 +1076,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             location,
                             l.getProductID(),
                             l.getProductAttSetInstId(), -l.getMultiply(), l.getPrice(),
-                            ticket.getUser().getName()
+                            ticket.getUser().getName(),
+                            null, null, null, null, null, null, null
                         });
                     }
 
@@ -1131,7 +1164,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 // update the inventory
                 Date d = new Date();
                 for (int i = 0; i < ticket.getLinesCount(); i++) {
-                    if (ticket.getLine(i).getProductID() != null) {
+                    if (ticket.getLine(i).getProductID() != null
+                            && ticket.getLine(i).getManageStock() == true) {
+
                         // Hay que actualizar el stock si el hay producto
                         getStockDiaryInsert().exec(new Object[]{
                             UUID.randomUUID().toString(),
@@ -1226,7 +1261,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE",
                 new String[]{
-                    "P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}), new SerializerWriteBasic(new Datas[]{
+                    "P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}, false), new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,
             Datas.OBJECT, Datas.DOUBLE,
             Datas.OBJECT, Datas.DOUBLE,
@@ -1249,8 +1284,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "ATTRIBUTESET_ID, IMAGE, STOCKCOST, STOCKVOLUME, ISCATALOG, CATORDER, "
                         + "ATTRIBUTES, ISKITCHEN, ISSERVICE, DISPLAY, ISVPRICE, "
                         + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS, ALIAS, ALWAYSAVAILABLE, DISCOUNTED, CANDISCOUNT, "
-                        + "ISPACK, PACKQUANTITY, PACKPRODUCT, PROMOTIONID  ) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        + "ISPACK, PACKQUANTITY, PACKPRODUCT, PROMOTIONID, MANAGESTOCK  ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{INDEX_ID,
                                     INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
@@ -1264,7 +1299,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                     INDEX_WARRANTY, INDEX_STOCKUNITS, INDEX_ALIAS,
                                     INDEX_ALWAYSAVAILABLE, INDEX_DISCOUNTED, INDEX_CANDISCOUNT,
                                     INDEX_ISPACK, INDEX_PACKQUANTITY, INDEX_PACKPRODUCT,
-                                    INDEX_PROMOTIONID})).exec(params);
+                                    INDEX_PROMOTIONID, INDEX_MANAGESTOCK})).exec(params);
 
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)",
                         new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
@@ -1309,7 +1344,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "WARRANTY = ?, STOCKUNITS = ?, ALIAS = ?, ALWAYSAVAILABLE = ?, "
                         + "DISCOUNTED = ?, CANDISCOUNT = ?, "
                         + "ISPACK = ?, PACKQUANTITY = ?, PACKPRODUCT = ?, "
-                        + "PROMOTIONID = ?, ISCATALOG = ?, CATORDER = ? "
+                        + "PROMOTIONID = ?, ISCATALOG = ?, CATORDER = ?, "
+                        + "MANAGESTOCK = ? "
                         + "WHERE ID = ?", new SerializerWriteBasicExt(productsRow.getDatas(),
                                 new int[]{
                                     INDEX_REFERENCE, INDEX_CODE, INDEX_CODETYPE,
@@ -1323,6 +1359,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                     INDEX_ALWAYSAVAILABLE, INDEX_DISCOUNTED, INDEX_CANDISCOUNT,
                                     INDEX_ISPACK, INDEX_PACKQUANTITY, INDEX_PACKPRODUCT,
                                     INDEX_PROMOTIONID, INDEX_ISCATALOG, INDEX_CATORDER,
+                                    INDEX_MANAGESTOCK,
                                     INDEX_ID})).exec(params);
 
                 return i;
@@ -1362,18 +1399,23 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new SentenceExecTransaction(s) {
             @Override
             public int execInTransaction(Object params) throws BasicException {
+                int updateresult = ((Object[]) params)[5] == null // si ATTRIBUTESETINSTANCE_ID is null 
+                        ? new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{6, 3, 4})).exec(params)
+                        : new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{6, 3, 4, 5})).exec(params);
 
-                /* Set up adjust parameters */
-                Object[] adjustParams = new Object[4];
-                Object[] paramsArray = (Object[]) params;
-                adjustParams[0] = paramsArray[3]; //product ->Location 
-                adjustParams[1] = paramsArray[4]; //location -> Product 
-                adjustParams[2] = paramsArray[5]; //attrubutesetinstance 
-                adjustParams[3] = paramsArray[6]; //units 
+                if (updateresult == 0) {
+                    new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{3, 4, 5, 6})).exec(params);
+                }
 
-                int as = adjustStock(adjustParams);
+                if (((Object[]) params)[15] != null && ((Object[]) params)[16] != null) {
+                    updateresult = new PreparedSentence(s, "UPDATE STOCKLEVEL SET STOCKSECURITY = ?, STOCKMAXIMUM = ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{15, 16, 3, 4})).exec(params);
 
-                return as + new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
+                    if (updateresult == 0) {
+                        new PreparedSentence(s, "INSERT INTO STOCKLEVEL (ID, LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{3, 4, 15, 16})).exec(params);
+                    }
+                }
+
+                return new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
             }
         };
     }
@@ -1396,6 +1438,29 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 return new PreparedSentence(s, "DELETE FROM STOCKDIARY WHERE ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0})).exec(params);
             }
         };
+    }
+
+    public void addProductListItem(String listName, String ProductID) throws BasicException {
+        new PreparedSentence(s, "INSERT INTO PRODUCTLISTS (LISTNAME, PRODUCT) VALUES ('"
+                + listName + "','" + ProductID + "')", null).exec();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public void removeProductListItem(String listName, String ProductID) throws BasicException {
+        new PreparedSentence(s, "DELETE FROM PRODUCTLISTS WHERE LISTNAME ='"
+                + listName + "' AND PRODUCT = '" + ProductID + "'", null).exec();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public void removeProductList(String listName) throws BasicException {
+        new PreparedSentence(s, "DELETE FROM PRODUCTLISTS WHERE LISTNAME ='"
+                + listName + "'", null).exec();
     }
 
     /**
@@ -1441,12 +1506,22 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public final double findProductStock(String warehouse, String id, String attsetinstid) throws BasicException {
-
         PreparedSentence p = attsetinstid == null
                 ? new PreparedSentence(s, "SELECT UNITS FROM STOCKCURRENT WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL", new SerializerWriteBasic(Datas.STRING, Datas.STRING), SerializerReadDouble.INSTANCE)
                 : new PreparedSentence(s, "SELECT UNITS FROM STOCKCURRENT WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasic(Datas.STRING, Datas.STRING, Datas.STRING), SerializerReadDouble.INSTANCE);
-
         Double d = (Double) p.find(warehouse, id, attsetinstid);
+        return d == null ? 0.0 : d;
+    }
+
+    public final double findProductStockSecurity(String warehouse, String id) throws BasicException {
+        PreparedSentence p = new PreparedSentence(s, "SELECT STOCKSECURITY FROM STOCKLEVEL WHERE LOCATION = ? AND PRODUCT = ? ", new SerializerWriteBasic(Datas.STRING, Datas.STRING), SerializerReadDouble.INSTANCE);
+        Double d = (Double) p.find(warehouse, id);
+        return d == null ? 0.0 : d;
+    }
+
+    public final double findProductStockMaximum(String warehouse, String id) throws BasicException {
+        PreparedSentence p = new PreparedSentence(s, "SELECT STOCKMAXIMUM FROM STOCKLEVEL WHERE LOCATION = ? AND PRODUCT = ? ", new SerializerWriteBasic(Datas.STRING, Datas.STRING), SerializerReadDouble.INSTANCE);
+        Double d = (Double) p.find(warehouse, id);
         return d == null ? 0.0 : d;
     }
 

@@ -17,7 +17,8 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
   
-    <include file="uk/chromis/pos/liquibase/dbpermissions.xml"/>  
+    <include file="uk/chromis/pos/liquibase/common/dbpermissions.xml"/>  
+    <include file="uk/chromis/pos/liquibase/common/derbybooleanconvert.xml"/>
      
     <!-- ***************************************************************************************** --> 
     <!-- ***************************************************************************************** --> 
@@ -33,504 +34,12 @@
          and will then prevent the scrip from running throwing a liquibase error.
     
     Please read the comments before each section -->
-    
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->    
-    <!-- Need to enure that all columns are present before attempting to refactor for deriby
-    Once refactored all columns will be added with new format
-    DO NOT MOVE OR ADD TO THIS SECTION -->
-    <changeSet author="Chromis POS" id="Add PrintkB if not found" dbms="postgresql, hypersql, hsqldb">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="PRINTKB" tableName="PRODUCTS"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="PRODUCTS">
-            <column name="PRINTKB" type="${boolean.type}" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>                                                   
-        </addColumn>                     
-    </changeSet> 
-
-    <changeSet author="Chromis POS" id="Add PrintkB if not found m" dbms="mysql, oracle">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="PRINTKB" tableName="PRODUCTS"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="PRODUCTS">
-            <column name="PRINTKB" type="${boolean.type}" defaultValueNumeric="1" >
-                <constraints nullable="false"/>
-            </column>                                                   
-        </addColumn>                     
-    </changeSet> 
-
-    <changeSet author="Chromis POS" id="Add PrintkB if not found d" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="PRINTKB" tableName="PRODUCTS"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="PRODUCTS">
-            <column name="PRINTKB" type="SMALLINT" defaultValueNumeric="1" >
-                <constraints nullable="false"/>
-            </column>                                                   
-        </addColumn>                     
-    </changeSet> 
-
-    <changeSet author="Chromis POS" id="Add SENDSTATUS if not found" dbms="postgresql, hypersql, hsqldb">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="SENDSTATUS" tableName="PRODUCTS"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="PRODUCTS">
-            <column name="SENDSTATUS" type="${boolean.type}" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>                                                   
-        </addColumn>                     
-    </changeSet> 
-
-    <changeSet author="Chromis POS" id="Add SENDSTATUS if not found m" dbms="mysql, oracle">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="SENDSTATUS" tableName="PRODUCTS"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="PRODUCTS">
-            <column name="SENDSTATUS" type="${boolean.type}" defaultValueNumeric="1" >
-                <constraints nullable="false"/>
-            </column>                                                   
-        </addColumn>                     
-    </changeSet> 
-
-    <changeSet author="Chromis POS" id="Add SENDSTATUS if not found d" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="SENDSTATUS" tableName="PRODUCTS"/>
-            </not>
-        </preConditions>
-
-        <addColumn tableName="PRODUCTS">
-            <column name="SENDSTATUS" type="SMALLINT" defaultValueNumeric="1" >
-                <constraints nullable="false"/>
-            </column>                                                   
-        </addColumn>                     
-    </changeSet>
-    <!-- End of refactoring preperation -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->    
-    <!-- Refactors derby database to use update driver for boolean 
-    Any columns that used 'int' will be converted to use true/false.
-    DO NOT CHANGE THIS SECTION -->    
-    <changeSet author="Chromis POS" id="Refactor People table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions>  
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="VISIBLE"
-            tableName="PEOPLE"/>
-  
-        <addColumn tableName="PEOPLE">
-            <column name="VISIBLE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PEOPLE SET VISIBLE='TRUE' WHERE JDL_TMP=1;
-            UPDATE PEOPLE SET VISIBLE='FALSE' WHERE JDL_TMP=0
-        </sql>
-        
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PEOPLE"/>
-    </changeSet>  
-    
-    <changeSet author="Chromis POS" id="Refactor Breaks table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions> 
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="VISIBLE"
-            tableName="BREAKS"/>
-  
-        <addColumn tableName="BREAKS">
-            <column name="VISIBLE" type="boolean"/>
-        </addColumn>
-        
-        <sql>
-            UPDATE BREAKS SET VISIBLE='TRUE' WHERE JDL_TMP=1;
-            UPDATE BREAKS SET VISIBLE='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="BREAKS"/>
-    </changeSet>            
-      
-    <changeSet author="Chromis POS" id="Refactor CUSTOMER table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions> 
-    
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="VISIBLE"
-            tableName="CUSTOMERS"/>
-  
-        <addColumn tableName="CUSTOMERS">
-            <column name="VISIBLE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE CUSTOMERS SET VISIBLE='TRUE' WHERE JDL_TMP=1;
-            UPDATE CUSTOMERS SET VISIBLE='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="CUSTOMERS"/>
-    </changeSet>      
-        
-    <changeSet author="Chromis POS" id="Refactor Moorers table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions>        
-
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="POWER"
-            tableName="MOORERS"/>
-  
-        <addColumn tableName="MOORERS">
-            <column name="POWER" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE MOORERS SET POWER='TRUE' WHERE JDL_TMP=1;
-            UPDATE MOORERS SET POWER='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="MOORERS"/>
-    </changeSet>      
-        
-    <changeSet author="Chromis POS" id="Refactor Places table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions>   
-
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="TABLEMOVED"
-            tableName="PLACES"/>
-  
-        <addColumn tableName="PLACES">
-            <column name="TABLEMOVED" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PLACES SET TABLEMOVED='TRUE' WHERE JDL_TMP=1;
-            UPDATE PLACES SET TABLEMOVED='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PLACES"/>
-    </changeSet>        
-        
-    <changeSet author="Chromis POS" id="Refactor Catergories table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions>    
-
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="CATSHOWNAME"
-            tableName="CATEGORIES"/>
-  
-        <addColumn tableName="CATEGORIES">
-            <column name="CATSHOWNAME" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE CATEGORIES SET CATSHOWNAME='TRUE' WHERE JDL_TMP=1;
-            UPDATE CATEGORIES SET CATSHOWNAME='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="CATEGORIES"/>
-    </changeSet>         
-        
-    <changeSet author="Chromis POS" id="Refactor Taxes table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions>     
-
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="RATECASCADE"
-            tableName="TAXES"/>
-  
-        <addColumn tableName="TAXES">
-            <column name="RATECASCADE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE TAXES SET RATECASCADE='TRUE' WHERE JDL_TMP=1;
-            UPDATE TAXES SET RATECASCADE='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="TAXES"/>
-    </changeSet>         
-        
-    <changeSet author="Chromis POS" id="Refactor Reservations table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions>    
-
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ISDONE"
-            tableName="RESERVATIONS"/>
-  
-        <addColumn tableName="RESERVATIONS">
-            <column name="ISDONE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE RESERVATIONS SET ISDONE='TRUE' WHERE JDL_TMP=1;
-            UPDATE RESERVATIONS SET ISDONE='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="RESERVATIONS"/>
-    </changeSet>         
-        
-    
-    <changeSet author="Chromis POS" id="Refactor Products table" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='derby10.10.20'</sqlCheck>  
-        </preConditions>  
-
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ISCOM"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="ISCOM" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET ISCOM='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET ISCOM='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ISSCALE"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="ISSCALE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET ISSCALE='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET ISSCALE='FALSE' WHERE JDL_TMP=0    
-        </sql>                    
-        
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ISKITCHEN"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="ISKITCHEN" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET ISKITCHEN='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET ISKITCHEN='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>        
-  
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="PRINTKB"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="PRINTKB" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET PRINTKB='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET PRINTKB='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>      
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="SENDSTATUS"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="SENDSTATUS" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET SENDSTATUS='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET SENDSTATUS='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>       
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ISSERVICE"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="ISSERVICE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET ISSERVICE='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET ISSERVICE='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>        
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ISVERPATRIB"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="ISVERPATRIB" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET ISVERPATRIB='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET ISVERPATRIB='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>        
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ISVPRICE"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="ISVPRICE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET ISVPRICE='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET ISVPRICE='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>       
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="WARRANTY"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="WARRANTY" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET WARRANTY='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET WARRANTY='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>        
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="CANDISCOUNT"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="CANDISCOUNT" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET CANDISCOUNT='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET CANDISCOUNT='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>         
-        
-        <renameColumn 
-            newColumnName="JDL_TMP"
-            oldColumnName="ALWAYSAVAILABLE"
-            tableName="PRODUCTS"/>
-  
-        <addColumn tableName="PRODUCTS">
-            <column name="ALWAYSAVAILABLE" type="boolean"/>
-        </addColumn>
-        <sql>
-            UPDATE PRODUCTS SET ALWAYSAVAILABLE='TRUE' WHERE JDL_TMP=1;
-            UPDATE PRODUCTS SET ALWAYSAVAILABLE='FALSE' WHERE JDL_TMP=0    
-        </sql>  
-              
-        <dropColumn 
-            columnName="JDL_TMP"
-            tableName="PRODUCTS"/>         
-
-        <sql>
-            INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, EXECTYPE, MD5SUM, DESCRIPTION, LIQUIBASE) 
-            VALUES (
-            'derby10.10.20',
-            'Chromis POS', 
-            'uk/chromis/pos/liquibase/udpdatecreatedb.xml', 
-            '2015-10-23 22:43:33.487',
-            0,
-            'EXECUTED',
-            '7:d41d8cd98f00b204e9800998ecf8427e',
-            'empty',                       
-            '3.5.0-Chromis Mod')                
-        </sql>
-    </changeSet>      
-    <!-- End of  Derby refactoring -->                 
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->    
     <!-- Add any new tables required in this section -->
-    <changeSet author="Chromis POS" id="Create StockChanges Table">
+    <changeSet author="Chromis POS" id="Create StockChanges Table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="STOCKCHANGES"/>
@@ -550,10 +59,14 @@
             <column name="CHANGES_FIELD" type="varchar(50)"/>
             <column name="CHANGES_TEXTVALUE" type="varchar(255)"/> 
             <column name="CHANGES_BLOBVALUE" type="${blob.type}"/>                                    
-        </createTable>       
+        </createTable>    
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>    
     </changeSet>   
   
-    <changeSet author="Chromis POS" id="Create Voucher Table">
+    <changeSet author="Chromis POS" id="Create Voucher Table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="VOUCHERS"/>
@@ -568,10 +81,14 @@
             <column name="REDEEMDATE" type="timestamp" />            
             <column name="SOLDTICKETID" type="varchar(50)"/>
             <column name="REDEEMTICKETID" type="varchar(50)"/>                                    
-        </createTable>       
+        </createTable> 
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                     
     </changeSet>
     
-    <changeSet author="Chromis POS" id="Create Orders Table">
+    <changeSet author="Chromis POS" id="Create Orders Table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="ORDERS"/>
@@ -590,52 +107,44 @@
             <column name="TICKETID" type="varchar(255)"/>
             <column name="ORDERTIME" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
             <column name="DISPLAYID" type="int"/>                                    
-        </createTable>                         
+        </createTable> 
+
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                                                                 
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="Create TICKETSNUM_INVOICE Sequence." dbms="postgresql, hypersql, hsqldb">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="TICKETSNUM_INVOICE"/>
-            </not>
-        </preConditions>
-        
-        <sql>CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1</sql>  
-    </changeSet>  
-
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE mysql if not found" dbms="mysql">
+    <changeSet author="Chromis POS" id="Create TICKETSNUM_INVOICE Sequence (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="TICKETSNUM_INVOICE"/>
             </not>
         </preConditions>
-        
-        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
-    </changeSet>
 
-    <changeSet author="Chromis Pos" id="Create TICKETSNUM Sequence INVOICE oracle if not found" dbms="oracle">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="TICKETSNUM_INVOICE"/>
-            </not>
-        </preConditions>
+        <sql>CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1</sql>
+        <sql>--</sql>
         
-        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL);
-            INSERT INTO TICKETSNUM_INVOICE VALUES(1)</sql>
-    </changeSet>
-
-    <changeSet author="Chromis Pos" id="CCreate TICKETSNUM Sequence INVOICE  derby if not found" dbms="derby">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="TICKETSNUM_INVOICE"/>
-            </not>
-        </preConditions>
-        
-        <sql>CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1));
-            INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)</sql>
-    </changeSet>
-
+        <modifySql dbms="mysql">
+            <replace replace="CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1" 
+                     with="CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;"/>  
+            <replace replace="--" 
+                     with="INSERT INTO TICKETSNUM_INVOICE VALUES(0)"/>                  
+        </modifySql>        
+        <modifySql dbms="oracle">
+            <replace replace="CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1" 
+                     with="CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER DEFAULT 0 NOT NULL);"/>   
+            <replace replace="--" 
+                     with="INSERT INTO TICKETSNUM_INVOICE VALUES(0)"/>                    
+        </modifySql>             
+        <modifySql dbms="derby">
+            <replace replace="CREATE SEQUENCE TICKETSNUM_INVOICE START WITH 1" 
+                     with="CREATE TABLE TICKETSNUM_INVOICE (ID INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 0))"/>    
+            <replace replace="--" 
+                     with="INSERT INTO TICKETSNUM_INVOICE VALUES (DEFAULT)"/>                   
+        </modifySql>        
+    </changeSet> 
+    
+    
     <changeSet author="Chromis POS" id="Drop faulty STOCKCHANGES Table" >    
         <preConditions onFail="MARK_RAN">
             <columnExists columnName="CHANGES_TEXTVALUE" tableName="STOCKCHANGES"/>
@@ -643,7 +152,7 @@
         <dropTable tableName="STOCKCHANGES"/>
     </changeSet> 
                            
-    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table">
+    <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="STOCKCHANGES"/>
@@ -664,10 +173,14 @@
             <column name="TEXTVALUE" type="varchar(255)"/> 
             <column name="BLOBVALUE" type="${blob.type}"/>                                    
             <column name="CHANGES_PROCESSED" type="int"/>
-        </createTable>       
+        </createTable>  
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                  
     </changeSet>   
 
-    <changeSet author="Chromis POS" id="Create Promotion Table">       
+    <changeSet author="Chromis POS" id="Create Promotion Table (NV)">       
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PROMOTIONS"/>
@@ -689,10 +202,14 @@
                     defaultValueBoolean="false"/>  
             <column name="ISENABLED" type="${boolean.type}" 
                     defaultValueBoolean="true"/>
-        </createTable>      
+        </createTable> 
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                  
     </changeSet>   
                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-    <changeSet author="Chromis POS" id="Create Historic Version Table">
+    <changeSet author="Chromis POS" id="Create Historic Version Table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="HVERSIONS"/>
@@ -703,7 +220,11 @@
             <column name="VERSION" type="varchar(50)"> 
                 <constraints primaryKey="true"/>
             </column>
-        </createTable>       
+        </createTable> 
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                    
     </changeSet>        
 
 
@@ -727,7 +248,7 @@
         </sql>
     </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                          
   
-    <changeSet author="Chromis POS" id="Create recipes table m." dbms="mysql, postgresql, hypersql, hsqldb, oracle" >
+    <changeSet author="Chromis POS" id="Create recipes table - mp (NV)" dbms="mysql, postgresql, hypersql, hsqldb, oracle" >
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="PRODUCTS_KIT"/>
@@ -749,6 +270,18 @@
             </column>            
         </createTable>                        
                           
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                                               
+    </changeSet>       
+
+    <changeSet author="Chromis POS" id="Create recipes table FKs - mp (NV)" dbms="mysql, postgresql, hypersql, hsqldb, oracle" >
+        <preConditions onFail="MARK_RAN">    
+            <not>        
+                <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_KIT" foreignKeyName="PRODUCTS_KIT_FK_1"/>  
+            </not>          
+        </preConditions>
+        
         <addForeignKeyConstraint baseColumnNames="PRODUCT"
                                  constraintName ="PRODUCTS_KIT_FK_1"
                                  referencedColumnNames = "ID"
@@ -767,7 +300,8 @@
             <column name="PRODUCT" type="varchar(255)"/>
             <column name="PRODUCT_KIT" type="varchar(255)"/>
         </createIndex>                                               
-    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    </changeSet>   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -801,7 +335,11 @@
         </addColumn>                                                       
     </changeSet>
  
-    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS d " dbms="derby, postgresql, hypersql, hsqldb" > 
+    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS d (NV)" dbms="derby, postgresql, hypersql, hsqldb" > 
+        <preConditions onFail="MARK_RAN">
+                 <tableExists tableName="PRODUCTS_CAT"/>
+        </preConditions>
+       
         <sql>   
             UPDATE PRODUCTS SET ISCATALOG = FALSE; 
             UPDATE PRODUCTS_CAT SET FLAG = TRUE;        
@@ -812,7 +350,10 @@
         <addDefaultValue tableName="PRODUCTS" columnName="ISCATALOG" defaultValueBoolean="true" />                  
     </changeSet>
    
-    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS m " dbms="mysql, oracle ">
+    <changeSet author="Chromis POS" id="Move PRODUCTS_CAT table into PRODUCTS m (NV)" dbms="mysql, oracle ">
+        <preConditions onFail="MARK_RAN">            
+            <tableExists tableName="PRODUCTS_CAT"/>           
+        </preConditions> 
         <sql>
             UPDATE PRODUCTS SET ISCATALOG = 0; 
             UPDATE PRODUCTS_CAT SET FLAG = 1; 
@@ -823,7 +364,7 @@
         <addDefaultValue tableName="PRODUCTS" columnName="ISCATALOG" defaultValueNumeric="1" />  
     </changeSet>     
           
-    <changeSet author="Chromis POS" id="Add refund qty Ticketlines Table">
+    <changeSet author="Chromis POS" id="Add refund qty to Ticketlines Table">
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="REFUNDQTY" tableName="TICKETLINES"/>
@@ -979,6 +520,34 @@
             <column name="DOB" type="timestamp" />            
         </addColumn>        
     </changeSet>  
+    
+    <changeSet author="Chromis POS" id="Add MANAGESTOCK into PRODUCTS" >      
+        <preConditions onFail="MARK_RAN">  
+            <not>  
+               <columnExists columnName="MANAGESTOCK" tableName="PRODUCTS"/>  
+            </not>  
+        </preConditions>   
+                        
+        <addColumn tableName="PRODUCTS">              
+            <column name="MANAGESTOCK" type="${boolean.type}" defaultValueBoolean="true" />  
+        </addColumn>                                                       
+    </changeSet>  
+    
+    <changeSet author="N Deppe" id="Update ORDERS table, add SEQUENCE column (NV)" >  
+         <preConditions onFail="MARK_RAN">  
+             <not>  
+                 <columnExists columnName="SEQUENCE" tableName="ORDERS"/>  
+             </not>  
+         </preConditions>  
+         
+         <addColumn tableName="ORDERS">  
+             <column name="SEQUENCE" type="int" defaultValueNumeric="0">  
+                 <constraints nullable="false"/>  
+             </column>                                                     
+         </addColumn>                       
+     </changeSet>   
+
+    
   <!--  
     <changeSet author="Chromis POS" id="Add tableopen column in sharedtickets if it does not exist" >    
         <preConditions onFail="MARK_RAN">
@@ -1189,124 +758,6 @@
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->              
-    <!-- Add any new dbpermission changesets to this section -->       
-    <changeSet author="Chromis POS" id="Add Pack Products permissions"> 
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname117'  </sqlCheck>
-        </preConditions>
-              
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/inventoryreorder.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname117"/>
-            <column name="DESCRIPTION" value="##label.description117"/>
-        </insert>
-        
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.ProductPacksPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname118"/>
-            <column name="DESCRIPTION" value="##label.description118"/>
-        </insert>		         
-    </changeSet>   
-    
-    <changeSet author="Chromis POS" id="Add StockChanges to permissions">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description119'</sqlCheck>
-        </preConditions>   
-            
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.imports.StockChangesPanel"/>
-            <column name="SECTION" value="##label.sectiontools"/>
-            <column name="DISPLAYNAME" value="##label.displayname119"/>
-            <column name="DESCRIPTION" value="##label.description119"/>
-        </insert>
-        		
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/stockchanges.bs"/>
-            <column name="SECTION" value="##label.sectiontools"/>
-            <column name="DISPLAYNAME" value="##label.displayname120"/>
-            <column name="DESCRIPTION" value="##label.description120"/>
-        </insert>		                 
-    </changeSet>    
-    
-    <changeSet author="Chromis POS" id="Add button.refundeditsale to permissions">   
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(0) FROM DBPERMISSIONS WHERE DISPLAYNAME='##label.displayname121'  </sqlCheck>
-        </preConditions>    
-         
-        <insert tableName="DBPERMISSIONS">
-            <column name="CLASSNAME" value="button.refundeditsale"/>
-            <column name="SECTION" value="##label.sectionbuttons"/>
-            <column name="DISPLAYNAME" value="##label.displayname121"/>
-            <column name="DESCRIPTION" value="##label.description121"/>
-        </insert>
-    </changeSet>
-     
-    <changeSet author="Chromis POS" id="Add Promotions permissions.">    
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description122'</sqlCheck>
-        </preConditions>   
-                                                                           
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.promotion.PromotionPanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname122"/>
-            <column name="DESCRIPTION" value="##label.description122"/>
-        </insert>
-        		
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="/uk/chromis/reports/promotions.bs"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname123"/>
-            <column name="DESCRIPTION" value="##label.description123"/>
-        </insert> 
-    </changeSet> 
-    <!-- 
-        <changeSet author="Chromis POS" id="Add Supplier panel permissions">    
-            <preConditions onFail="MARK_RAN">
-                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description124'</sqlCheck>
-            </preConditions> 
-            <insert tableName="DBPERMISSIONS">		
-                <column name="CLASSNAME" value="uk.chromis.pos.suppliers.SuppliersPanel"/>
-                <column name="SECTION" value="##label.sectionstock"/>
-                <column name="DISPLAYNAME" value="##label.displayname124"/>
-                <column name="DESCRIPTION" value="##label.description124"/>
-            </insert> 
-        </changeSet> 
-    -->
-    <changeSet author="Chromis POS" id="Add PRODUCTS_KIT panel permissions:">    
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description125'</sqlCheck>
-        </preConditions> 
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.inventory.RecipePanel"/>
-            <column name="SECTION" value="##label.sectionstock"/>
-            <column name="DISPLAYNAME" value="##label.displayname125"/>
-            <column name="DESCRIPTION" value="##label.description125"/>
-        </insert> 
-    </changeSet>          
-    
-    <changeSet author="Chromis POS" id="Add Reset pickup ID panel permissions:">    
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS WHERE CLASSNAME = 'uk.chromis.pos.sales.JPanelResetPickupId'</sqlCheck>
-        </preConditions> 
-        <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.sales.JPanelResetPickupId"/>
-            <column name="SECTION" value="##label.sectionmaintenance"/>
-            <column name="DISPLAYNAME" value="##label.displayname126"/>
-            <column name="DESCRIPTION" value="##label.description126"/>
-        </insert> 
-    </changeSet> 
-    
-    <changeSet author="Chromis POS" id="drop top10salesMysql">  
-        <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
-    </changeSet> 
-    <!-- End of dbpermissions changeset section   -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
-    <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->     
     <!-- Add any new data to tables required in this section. -->    
     <changeSet author="Chromis POS" id="Check the default category still exists">   
@@ -1333,7 +784,7 @@
     </changeSet>
 
                                                                                                                                                                                                                                                                                                                                                                                                                                   
-    <changeSet author="Chromis POS" id="Add new Service Charge product to table.">   
+    <changeSet author="Chromis POS" id="Add new Service Charge product to table (NV)">   
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(0) FROM PRODUCTS WHERE ID='sc999-001'  </sqlCheck>
         </preConditions>    
@@ -1360,7 +811,31 @@
             <column name="PRICEBUY" valueNumeric="0.00"/>
             <column name="PRICESELL" valueNumeric="0.00"/>
         </insert>
-    </changeSet>                                                                                                                                                                                                                                                                                                          
+    </changeSet>  
+   
+    <changeSet author="Chromis POS" id="Create SITEGUID table (NV)"  >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SITEGUID"/>
+            </not>
+        </preConditions> 
+          
+        <createTable tableName="SITEGUID">
+            <column name="GUID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column> 
+        </createTable>                                                 
+    </changeSet>     
+    
+        <changeSet author="Chromis POS" id="Create SITEGUID colunmn in tables (NV)"  >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="APPLICATIONS" columnName="SITEGUID"/>
+            </not>
+        </preConditions>                      
+        <customChange class="uk.chromis.pos.util.SiteGUID" />                                       
+    </changeSet>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     <!-- End of add new data to tables changeset section   -->    
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1423,7 +898,7 @@
     <!-- ***************************************************************************************** -->  
     <!-- This section is used to allow dynamic update of menu.root with losing customised entries -->
     <!-- Remember to always change the ID details as well -->     
-    <changeSet author="Chromis POS" id="Create Dynamic entries table">
+    <changeSet author="Chromis POS" id="Create Dynamic entries table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="MENUENTRIES"/>
@@ -1436,6 +911,10 @@
             <column name="GRAPHIC" type="varchar(255)" />
             <column name="TITLE" type="varchar(255)" />                
         </createTable>
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>        
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create Dynamic table entries v0.55"> 
@@ -1455,11 +934,32 @@
             <column name="TITLE" value="Menu.Resetpickup" />   
         </insert>                                          
     </changeSet>
+   
+    <changeSet author="Chromis POS" id="Create Dynamic table entries v0.56.2"> 
+        <insert tableName="MENUENTRIES"> 
+            <column name="ENTRY" value="/uk/chromis/reports/bestsellers.bs"/>   
+            <column name="FOLLOWS" value="/uk/chromis/reports/closedproducts_1.bs"/>
+            <column name="GRAPHIC" value="/uk/chromis/images/reports.png" />
+            <column name="TITLE" value="Menu.BestSellers" />   
+        </insert>                                          
+    </changeSet> 
+    
+    <changeSet author="Chromis POS" id="Create Dynamic table entries v0.56.x">                                     
+        <insert tableName="MENUENTRIES">   
+            <column name="ENTRY" value="/uk/chromis/reports/bestsellers.bs"/>     
+            <column name="FOLLOWS" value="/uk/chromis/reports/closedproducts_1.bs"/>  
+            <column name="GRAPHIC" value="/uk/chromis/images/reports.png.png" />  
+            <column name="TITLE" value="Menu.BestSellers" />     
+        </insert>                                   
+    </changeSet>  
+
+    
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.56.2">    
+    <changeSet author="Chromis POS" id="Update to 0.5-beta">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.56.2"/>          
+            <column name="VERSION" value="0.57-beta"/>          
         </update>  
     </changeSet>
+    
 </databaseChangeLog>
 
