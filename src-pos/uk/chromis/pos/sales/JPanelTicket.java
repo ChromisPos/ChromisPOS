@@ -747,6 +747,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
                 dlSystem.execLineRemoved(
                         new Object[]{
+                            UUID.randomUUID().toString(),
                             m_App.getAppUserView().getUser().getName(),
                             ticketID,
                             m_oTicket.getLine(i).getProductID(),

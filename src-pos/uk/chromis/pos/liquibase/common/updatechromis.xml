@@ -955,9 +955,9 @@
 
     
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.5-beta">    
+    <changeSet author="Chromis POS" id="Update to 0.5-beta2">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.57-beta"/>          
+            <column name="VERSION" value="0.57-beta2"/>          
         </update>  
     </changeSet>
     

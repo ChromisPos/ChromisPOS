@@ -220,15 +220,16 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
             Datas.TIMESTAMP,
             Datas.TIMESTAMP}));
 
-        m_draweropened = new StaticSentence(s, "INSERT INTO DRAWEROPENED ( NAME, TICKETID) "
-                + "VALUES (?, ?)", new SerializerWriteBasic(new Datas[]{
+        m_draweropened = new StaticSentence(s, "INSERT INTO DRAWEROPENED (ID, NAME, TICKETID) "
+                + "VALUES (?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+            Datas.STRING,
             Datas.STRING,
             Datas.STRING}));
 
         m_lineremoved = new StaticSentence(s,
-                "INSERT INTO LINEREMOVED (NAME, TICKETID, PRODUCTID, PRODUCTNAME, UNITS) "
-                + "VALUES (?, ?, ?, ?, ?)",
-                new SerializerWriteBasic(new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE}));
+                "INSERT INTO LINEREMOVED (ID,NAME, TICKETID, PRODUCTID, PRODUCTNAME, UNITS) "
+                + "VALUES (?, ?, ?, ?, ?, ?)",
+                new SerializerWriteBasic(new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE}));
 
         m_locationfind = new StaticSentence(s, "SELECT NAME FROM LOCATIONS WHERE ID = ?", SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
 
@@ -523,4 +524,4 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     public final void addOrder(String id, String orderId, Integer qty, String details, String attributes, String notes, String ticketId, Integer displayId, Integer auxiliaryId, Integer sequence) throws BasicException {
         m_addOrder.exec(id, orderId, qty, details, attributes, notes, ticketId, displayId, auxiliaryId, sequence);
     }
-    }
+}

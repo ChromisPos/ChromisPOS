@@ -649,14 +649,28 @@
         <sql>CREATE UNIQUE INDEX PRODUCTS_NAME_INX ON PRODUCTS (NAME)</sql>        
     </changeSet>   
 
+    <changeSet author="Chromis POS" id="Add ID column to lineremoved table (NV)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ID" tableName="LINEREMOVED"/>
+            </not>
+        </preConditions>  
+        <addColumn tableName="LINEREMOVED">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>                                                        
+        </addColumn>   
+         <customChange class="uk.chromis.pos.util.LineRemovedGUID" />      
+    </changeSet>
+
     <changeSet author="Chromis POS" id="Add Primary key to lineremoved table (NV)">
-        <sql>ALTER TABLE LINEREMOVED ADD PRIMARY KEY (REMOVEDDATE, UNITS)</sql>        
+        <sql>ALTER TABLE LINEREMOVED ADD PRIMARY KEY (ID)</sql>        
     </changeSet> 
 
     <changeSet author="Chromis POS" id="Add Primary key to STOCKCURRENT table (NV)">
         <sql>ALTER TABLE STOCKCURRENT ADD PRIMARY KEY (LOCATION, PRODUCT)</sql>        
     </changeSet> 
-
+<!--
     <changeSet author="Chromis POS" id="Make OPENDATE not nullable (NV)">
         <addColumn tableName="DRAWEROPENED">
             <column name="TMPOPENDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP" >                 
@@ -667,9 +681,23 @@
         <sql>ALTER TABLE DRAWEROPENED DROP COLUMN OPENDATE</sql> 
         <renameColumn tableName="DRAWEROPENED" oldColumnName="TMPOPENDATE" newColumnName="OPENDATE" columnDataType="timestamp"/>        
     </changeSet>
+-->
+    <changeSet author="Chromis POS" id="Add ID column to Draweropened table (NV)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ID" tableName="DRAWEROPENED"/>
+            </not>
+        </preConditions>  
+        <addColumn tableName="DRAWEROPENED">
+            <column name="ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>                                                        
+        </addColumn>     
+         <customChange class="uk.chromis.pos.util.DrawerOpenedGUID" />    
+    </changeSet>
 
     <changeSet author="Chromis POS" id="Add Primary key to DRAWEROPENED table (NV)">
-        <sql>ALTER TABLE DRAWEROPENED ADD PRIMARY KEY (OPENDATE)</sql>        
+        <sql>ALTER TABLE DRAWEROPENED ADD PRIMARY KEY (ID)</sql>        
     </changeSet> 
 
 </databaseChangeLog>
