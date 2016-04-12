@@ -1300,7 +1300,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                     INDEX_ALWAYSAVAILABLE, INDEX_DISCOUNTED, INDEX_CANDISCOUNT,
                                     INDEX_ISPACK, INDEX_PACKQUANTITY, INDEX_PACKPRODUCT,
                                     INDEX_PROMOTIONID, INDEX_MANAGESTOCK})).exec(params);
-
+                                
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)",
                         new SerializerWriteBasicExt(productsRow.getDatas(), new int[]{INDEX_ID})).exec(params);
 
@@ -1404,6 +1404,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         : new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{6, 3, 4, 5})).exec(params);
 
                 if (updateresult == 0) {
+                    
                     new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{3, 4, 5, 6})).exec(params);
                 }
 

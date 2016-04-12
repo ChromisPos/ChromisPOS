@@ -513,7 +513,7 @@
         </preConditions>  
         <sql>CREATE INDEX STOCKCURRENT_FK_1 ON STOCKCURRENT (PRODUCT)</sql>        
     </changeSet>            
-            
+                                                                                   
     <changeSet author="Chromis POS" id="Add STOCKDIARY_ATTSETINST Index (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -666,21 +666,10 @@
     <changeSet author="Chromis POS" id="Add Primary key to lineremoved table (NV)">
         <sql>ALTER TABLE LINEREMOVED ADD PRIMARY KEY (ID)</sql>        
     </changeSet> 
-
-    <changeSet author="Chromis POS" id="Add Primary key to STOCKCURRENT table (NV)">
-        <sql>ALTER TABLE STOCKCURRENT ADD PRIMARY KEY (LOCATION, PRODUCT)</sql>        
-    </changeSet> 
 <!--
-    <changeSet author="Chromis POS" id="Make OPENDATE not nullable (NV)">
-        <addColumn tableName="DRAWEROPENED">
-            <column name="TMPOPENDATE" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP" >                 
-                <constraints nullable="false"/>   
-            </column>                                               
-        </addColumn>   
-        <sql>UPDATE DRAWEROPENED SET TMPOPENDATE=OPENDATE</sql>
-        <sql>ALTER TABLE DRAWEROPENED DROP COLUMN OPENDATE</sql> 
-        <renameColumn tableName="DRAWEROPENED" oldColumnName="TMPOPENDATE" newColumnName="OPENDATE" columnDataType="timestamp"/>        
-    </changeSet>
+    <changeSet author="Chromis POS" id="Add Primary key to STOCKCURRENT table (NV)">
+        <sql>ALTER TABLE STOCKCURRENT ADD PRIMARY KEY (ID,)</sql>        
+    </changeSet> 
 -->
     <changeSet author="Chromis POS" id="Add ID column to Draweropened table (NV)">
         <preConditions onFail="MARK_RAN">
