@@ -302,7 +302,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         @Override
         public String getIconKey() {
-            return "/uk/chromis/images/customer.png";
+            return "/uk/chromis/images/account.png";
         }
     }
 
