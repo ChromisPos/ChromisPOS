@@ -23,6 +23,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
@@ -74,13 +75,27 @@ public class JPaymentSelectReceipt extends JPaymentSelect {
     @Override
     protected void addTabs() {
 
-        addTabPayment(new JPaymentSelect.JPaymentCashCreator());
-        addTabPayment(new JPaymentSelect.JPaymentChequeCreator());
-        addTabPayment(new JPaymentSelect.JPaymentPaperCreator());
-        addTabPayment(new JPaymentSelect.JPaymentMagcardCreator());      
-        addTabPayment(new JPaymentSelect.JPaymentFreeCreator());
-        addTabPayment(new JPaymentSelect.JPaymentDebtCreator());
-        addTabPayment(new JPaymentSelect.JPaymentBankCreator());
+        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcash")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentCashCreator());
+        }
+        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptvoucher")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentPaperCreator());
+        }
+        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcard")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentMagcardCreator());      
+        }
+        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptfree")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentFreeCreator());
+        }
+        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptbank")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentBankCreator());
+        }
+        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcheque")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentChequeCreator());
+        }
+        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptaccount")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentDebtCreator());
+        }
         setHeaderVisible(true);
     }
 

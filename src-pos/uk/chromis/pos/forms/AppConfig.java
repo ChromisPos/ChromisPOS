@@ -188,6 +188,14 @@ public class AppConfig implements AppProperties {
         m_propsconfig.setProperty("payment.testmode", "false");
         m_propsconfig.setProperty("payment.commerceid", "");
         m_propsconfig.setProperty("payment.commercepassword", "password");
+        
+        m_propsconfig.setProperty("payment.acceptbank", "true");
+        m_propsconfig.setProperty("payment.acceptcash", "true");
+        m_propsconfig.setProperty("payment.acceptaccount", "true");
+        m_propsconfig.setProperty("payment.acceptcheque", "true");
+        m_propsconfig.setProperty("payment.acceptvoucher", "true");
+        m_propsconfig.setProperty("payment.acceptcard", "true");
+        m_propsconfig.setProperty("payment.acceptfree", "true");
 
         m_propsconfig.setProperty("machine.printername", "(Default)");
 
