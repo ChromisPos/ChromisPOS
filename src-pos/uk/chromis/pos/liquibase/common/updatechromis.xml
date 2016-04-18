@@ -613,13 +613,6 @@
         </update> 
     </changeSet>                     
                                                        
-    <changeSet author="Chromis POS" id="update to to new menu for roles">    
-        <update tableName="RESOURCES">
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
-            <where>NAME='Menu.Root'</where>      
-        </update>               
-    </changeSet>
-
     <changeSet author="Chromis POS" id="update 2 sql.ActionStockChanges to resources">        
         <update tableName="RESOURCES">
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>  
@@ -686,21 +679,7 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Display.Message.xml"/>
         </insert>
-    </changeSet>   
-    
-    <changeSet author="Chromis POS" id="Update menu.root for promotions engine">
-        <update tableName="RESOURCES">
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
-            <where>NAME='Menu.Root'</where>      
-        </update>         
-    </changeSet>
-     
-    <changeSet author="Chromis POS" id="Update menu.root in to resources">
-        <update tableName="RESOURCES">
-            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Menu.Root.txt"/>  
-            <where>NAME='Menu.Root'</where>      
-        </update> 
-    </changeSet>   
+    </changeSet>       
     
     <changeSet author="Chromis POS" id="Insert ServiceCharge into RESOURCES Table">
         <preConditions onFail="MARK_RAN">
@@ -827,7 +806,7 @@
         </createTable>                                                 
     </changeSet>     
     
-        <changeSet author="Chromis POS" id="Create SITEGUID colunmn in tables (NV)"  >    
+    <changeSet author="Chromis POS" id="Create SITEGUID colunmn in tables (NV)"  >    
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="APPLICATIONS" columnName="SITEGUID"/>
@@ -835,7 +814,47 @@
         </preConditions>                      
         <customChange class="uk.chromis.pos.util.SiteGUID" />                                       
     </changeSet>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+      
+    <changeSet author="Chromis POS" id="Add ID column to lineremoved table (NV)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ID" tableName="LINEREMOVED"/>
+            </not>
+        </preConditions>  
+        <addColumn tableName="LINEREMOVED">
+            <column name="ID" type="varchar(255)"/>                                                                        
+        </addColumn>          
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="process the lineremoved guid (NV)">
+        <customChange class="uk.chromis.pos.util.LineRemovedGUID" />      
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Add Primary key to lineremoved table (NV)">
+        <sql>ALTER TABLE LINEREMOVED ADD PRIMARY KEY (ID)</sql>        
+    </changeSet> 
+
+    <changeSet author="Chromis POS" id="Add ID column to Draweropened table (NV)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="ID" tableName="DRAWEROPENED"/>
+            </not>
+        </preConditions>  
+        <addColumn tableName="DRAWEROPENED">
+            <column name="ID" type="varchar(255)" />                                                        
+        </addColumn>     
+          
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="process draweropened guid (NV)">
+        <customChange class="uk.chromis.pos.util.DrawerOpenedGUID" />      
+    </changeSet>
+
+    <changeSet author="Chromis POS" id="Add Primary key to DRAWEROPENED table (NV)">
+        <sql>ALTER TABLE DRAWEROPENED ADD PRIMARY KEY (ID)</sql>        
+    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
     <!-- End of add new data to tables changeset section   -->    
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -843,7 +862,7 @@
     <!-- ***************************************************************************************** -->   
     <!-- Drop any sharedtickets -->
     <!-- If required If it needs to be done after further updates increment number to make unique  -->   
-    <changeSet author="Chromis POS" id="drop hversions data v0.56" >       
+    <changeSet author="Chromis POS" id="drop hversions data v0.57" >       
         <sql>DELETE FROM HVERSIONS</sql>
     </changeSet> 
 
@@ -869,7 +888,7 @@
     <!-- ***************************************************************************************** -->  
     <!-- Update this section with the latest version number -->
     <!-- Remember to always change the ID details as well -->    
-    <changeSet author="Chromis POS" id="Update Hversions start v0.56"> 
+    <changeSet author="Chromis POS" id="Update Hversions start v0.57"> 
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.54"/>       
         </insert>                   
@@ -890,7 +909,10 @@
         </insert>    
         <insert tableName="HVERSIONS"> 
             <column name="VERSION" value="0.56"/>       
-        </insert>                    
+        </insert>   
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.57"/>       
+        </insert>                  
     </changeSet> 
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -944,20 +966,16 @@
         </insert>                                          
     </changeSet> 
     
-    <changeSet author="Chromis POS" id="Create Dynamic table entries v0.56.x">                                     
-        <insert tableName="MENUENTRIES">   
-            <column name="ENTRY" value="/uk/chromis/reports/bestsellers.bs"/>     
-            <column name="FOLLOWS" value="/uk/chromis/reports/closedproducts_1.bs"/>  
-            <column name="GRAPHIC" value="/uk/chromis/images/reports.png.png" />  
-            <column name="TITLE" value="Menu.BestSellers" />     
-        </insert>                                   
-    </changeSet>  
+ 
 
     
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.5-beta3">    
+    <!--                Must be updated below to reflect current version                           -->
+    <!-- ***************************************************************************************** -->
+
+    <changeSet author="Chromis POS" id="Update to 0.57.1-beta">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.57-beta3"/>          
+            <column name="VERSION" value="0.57.1-beta"/>          
         </update>  
     </changeSet>
     

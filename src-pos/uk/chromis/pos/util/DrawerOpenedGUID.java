@@ -96,6 +96,10 @@ public class DrawerOpenedGUID implements liquibase.change.custom.CustomTaskChang
             pstmt = conn.prepareStatement(SQL);
             pstmt.executeUpdate();
 
+            SQL = "DELETE FROM DRAWEROPENED WHERE ID IS NULL";
+            pstmt = conn.prepareStatement(SQL);
+            pstmt.executeUpdate();
+
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(SiteGUID.class.getName()).log(Level.SEVERE, null, ex);

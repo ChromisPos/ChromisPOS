@@ -61,7 +61,7 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.HOSTSEQUENCE]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue(new Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

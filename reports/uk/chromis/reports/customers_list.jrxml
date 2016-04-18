@@ -76,7 +76,7 @@ ORDER BY NAME;]]>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue(new Date())]]></textFieldExpression>
 			</textField>
 			<rectangle radius="5">
 				<reportElement key="rectangle-2" mode="Opaque" x="0" y="31" width="782" height="2" forecolor="#33CCFF" backcolor="#33CCFF"/>

@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.FormatStyle;
 import java.util.Date;
 import uk.chromis.basic.BasicException;
 
@@ -32,83 +33,27 @@ import uk.chromis.basic.BasicException;
  */
 public abstract class Formats {
 
-    /**
-     *
-     */
     public final static Formats NULL = new FormatsNULL();
-
-    /**
-     *
-     */
     public final static Formats INT = new FormatsINT();
-
-    /**
-     *
-     */
     public final static Formats STRING = new FormatsSTRING();
-
-    /**
-     *
-     */
     public final static Formats DOUBLE = new FormatsDOUBLE();
-
-    /**
-     *
-     */
     public final static Formats CURRENCY = new FormatsCURRENCY();
-
-    /**
-     *
-     */
     public final static Formats PERCENT = new FormatsPERCENT();
-
-    /**
-     *
-     */
     public final static Formats BOOLEAN = new FormatsBOOLEAN();
-
-    /**
-     *
-     */
     public final static Formats TIMESTAMP = new FormatsTIMESTAMP();
-
-    /**
-     *
-     */
     public final static Formats DATE = new FormatsDATE();
-
-    /**
-     *
-     */
     public final static Formats TIMEDIFFERENCE = new FormatsTIMEDIFFERENCE();
-
-    /**
-     *
-     */
     public final static Formats TIME = new FormatsTIME();
-
-    /**
-     *
-     */
     public final static Formats BYTEA = new FormatsBYTEA();
-
-    /**
-     *
-     */
     public final static Formats HOURMIN = new FormatsHOURMIN();
-    /**
-     * Added; Thanks TSirwani 3 Mar 11
-     */
     public final static Formats SIMPLEDATE = new FormatsSIMPLEDATE();
     private static NumberFormat m_integerformat = NumberFormat.getIntegerInstance();
     private static NumberFormat m_doubleformat = NumberFormat.getNumberInstance();
     private static NumberFormat m_currencyformat = NumberFormat.getCurrencyInstance();
     private static NumberFormat m_percentformat = new DecimalFormat("#,##0.##%");
-
     private static DateFormat m_dateformat = DateFormat.getDateInstance();
     private static DateFormat m_timeformat = DateFormat.getTimeInstance();
     private static DateFormat m_datetimeformat = DateFormat.getDateTimeInstance();
-
     private static final DateFormat m_hourminformat = new SimpleDateFormat("H:mm:ss");
     private static final DateFormat m_simpledate = new SimpleDateFormat("dd-MM-yyyy");
 

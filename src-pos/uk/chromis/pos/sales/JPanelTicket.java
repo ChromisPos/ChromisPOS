@@ -2867,9 +2867,6 @@ private String setTempjPrice(String jPrice) {
                 i.set("pickupid", m_oTicket.getPickupId());
                 Object result;
                 result = i.eval(rScript);
-
-            
-
 } catch (EvalError ex) {
                 Logger.getLogger(JPanelTicket.class
 

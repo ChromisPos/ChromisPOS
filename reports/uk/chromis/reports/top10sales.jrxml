@@ -82,7 +82,7 @@ FETCH FIRST 10 ROWS ONLY;]]>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue(new Date())]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-19" mode="Opaque" x="1" y="33" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF"/>

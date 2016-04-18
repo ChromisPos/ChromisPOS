@@ -986,7 +986,7 @@
             <column name="DESCRIPTION" value="##label.description127"/>  
         </insert>		  
     </changeSet>    
-    
+ <!--   
     <changeSet author="Chromis POS" id="Add Product Lists Permissions (NV)">  
         <preConditions onFail="MARK_RAN">  
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description128'</sqlCheck>  
@@ -998,7 +998,7 @@
             <column name="DESCRIPTION" value="##label.description128"/>  
         </insert>  
     </changeSet> 
-    
+  -->  
     <changeSet author="Chromis POS" id="drop top10salesMysql (NV)">   
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 

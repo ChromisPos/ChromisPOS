@@ -98,6 +98,9 @@ public class LineRemovedGUID implements liquibase.change.custom.CustomTaskChange
             pstmt = conn.prepareStatement(SQL);
             pstmt.executeUpdate();
 
+            SQL = "DELETE FROM LINEREMOVED WHERE ID IS NULL";
+            pstmt = conn.prepareStatement(SQL);
+            pstmt.executeUpdate();
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(SiteGUID.class.getName()).log(Level.SEVERE, null, ex);

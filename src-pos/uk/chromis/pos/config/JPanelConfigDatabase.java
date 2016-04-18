@@ -63,10 +63,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
 
 
         jcboDBDriver.addItem("Apache Derby Embedded");
-        jcboDBDriver.addItem("Apache Derby Client/Server");
-        jcboDBDriver.addItem("HSQLDB");
         jcboDBDriver.addItem("MySQL");
-        jcboDBDriver.addItem("Oracle 11g Express");
         jcboDBDriver.addItem("PostgreSQL");
 
     }
@@ -353,28 +350,11 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
             jtxtDbUser.setText("");
             jtxtDbPassword.setText("");            
             
-        } else if ("Apache Derby Client/Server".equals(jcboDBDriver.getSelectedItem())) {
-            jtxtDbDriverLib.setText(new File(new File(dirname), "lib/derbyclient.jar").getAbsolutePath());
-            jtxtDbDriver.setText("org.apache.derby.jdbc.ClientDriver");
-            jtxtDbURL.setText("jdbc:derby://localhost:1527/chromispos");
-            
-        } else if ("HSQLDB".equals(jcboDBDriver.getSelectedItem())) {
-            jtxtDbDriverLib.setText(new File(new File(dirname), "lib/hsqldb.jar").getAbsolutePath());
-            jtxtDbDriver.setText("org.hsqldb.jdbcDriver");
-            jtxtDbURL.setText("jdbc:hsqldb:file:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-db").getAbsolutePath() + ";shutdown=true");
-            jtxtDbUser.setText("SA");
-            jtxtDbPassword.setText("");
-            
         } else if ("MySQL".equals(jcboDBDriver.getSelectedItem())) {
             jtxtDbDriverLib.setText(new File(new File(dirname), "lib/mysql-connector-java-5.1.26-bin.jar").getAbsolutePath());
             jtxtDbDriver.setText("com.mysql.jdbc.Driver");
             jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
             
-        } else if ("Oracle 11g Express".equals(jcboDBDriver.getSelectedItem())) {
-            jtxtDbDriverLib.setText(new File(new File(dirname), "lib/ojdbc6.jar").getAbsolutePath());
-            jtxtDbDriver.setText("oracle.jdbc.driver.OracleDriver");
-            jtxtDbURL.setText("jdbc:oracle:thin://localhost:1521/chromispos");
-
         } else if ("PostgreSQL".equals(jcboDBDriver.getSelectedItem())) {
             jtxtDbDriverLib.setText(new File(new File(dirname), "lib/postgresql-9.2-1003.jdbc4.jar").getAbsolutePath());
             jtxtDbDriver.setText("org.postgresql.Driver");

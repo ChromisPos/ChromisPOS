@@ -86,7 +86,7 @@ ORDER BY CATEGORIES.NAME, PRODUCTS.NAME]]>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue(new Date())]]></textFieldExpression>
 			</textField>
 			<rectangle radius="5">
 				<reportElement key="rectangle-1" positionType="Float" mode="Opaque" x="0" y="48" width="535" height="2" forecolor="#33CCFF" backcolor="#33CCFF"/>

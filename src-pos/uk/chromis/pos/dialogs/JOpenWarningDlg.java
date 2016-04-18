@@ -74,16 +74,21 @@ public class JOpenWarningDlg extends JDialog {
             }
         });
 
-        height = 300;
-        if (!bRetry && !bConfig){
-            height = 200;
-        }       
+        int size = (eMessage.length() / 38) + 1;
+        height = 350;
+        if (!bRetry && !bConfig) {
+            height = 300 + ((size - 5) * 10);
+        }
 
         MigLayout layout = new MigLayout("", "[fill]");
-        JPanel mainPanel = new JPanel(layout);        
+        JPanel mainPanel = new JPanel(layout);
         JPanel dialogPanel = new JPanel();
         JPanel errorPanel = new JPanel();
         JPanel btnPanel = new JPanel();
+
+        JLabel logoLabel = new JLabel();
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/chromis_main.png")));
+        mainPanel.add(logoLabel, "wrap");
 
         dialogPanel.setBackground(Color.white);
         errorPanel.setBackground(Color.white);
@@ -123,7 +128,7 @@ public class JOpenWarningDlg extends JDialog {
         dialogPanel.add(messageArea);
         dialogPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
         mainPanel.add(dialogPanel, "wrap");
-               
+
         JButton btnImport = new JButton("Import");
         if (bRetry) {
             btnPanel.add(btnRetry, "split,right, width 100!");

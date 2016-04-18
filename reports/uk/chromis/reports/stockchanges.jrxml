@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2015-11-04T17:52:30 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StockChanges" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a1f690a3-5977-4467-85f8-6b0bcd5b7210">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -13,7 +11,7 @@
 	<style name="Detail" fontName="Arial" fontSize="12"/>
 	<queryString>
 		<![CDATA[SELECT L.NAME AS LOCATION, C.USERNAME AS USERNAME, C.UPLOADTIME AS UPLOADTIME,
- IFNULL(P.NAME, '***NEW PRODUCT') AS PRODUCT, P.REFERENCE AS REFERENCE,
+ COALESCE(P.NAME, '***NEW PRODUCT') AS PRODUCT, P.REFERENCE AS REFERENCE,
 CASE C.CHANGETYPE
     	WHEN 1 THEN 'Adjust'
     	WHEN 2 THEN 'Change'
@@ -205,7 +203,7 @@ CASE C.CHANGETYPE
 				<textElement>
 					<font size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue(new Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

@@ -26,9 +26,11 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -45,6 +47,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -125,7 +130,7 @@ public class JRootApp extends JPanel implements AppView {
     private String db_password;
 
     static {
-        initOldClasses();
+        m_oldclasses = new HashMap<>();
     }
 
     private class PrintTimeAction implements ActionListener {
@@ -141,28 +146,66 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private String getLineTimer() {
-        try {
-            if ((AppConfig.getInstance().getProperty("clock.time") == "") || (AppConfig.getInstance().getProperty("clock.time") == null)) {
-                return Formats.HOURMIN.formatValue(new Date());
-            } else {
-                formatter = new SimpleDateFormat(AppConfig.getInstance().getProperty("clock.time"));
-                return formatter.format(new Date());
-            }
-        } catch (IllegalArgumentException e) {
-            return Formats.HOURMIN.formatValue(new Date());
-        }
+        return Formats.TIME.formatValue(new Date());
     }
 
     private String getLineDate() {
+        return Formats.DATE.formatValue(new Date());
+    }
+
+    private void runRepair() throws SQLException {
+// this routine checks for a repair script in the folder if it is found then it will execute it
+        String s = new String();
+        StringBuffer sb = new StringBuffer();
+
+        db_user = (AppConfig2.getInstance2().getProperty("db.user"));
+        db_url = (AppConfig2.getInstance2().getProperty("db.URL"));
+        db_password = (AppConfig2.getInstance2().getProperty("db.password"));
+        if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
+            AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
+            db_password = cypher.decrypt(db_password.substring(6));
+        }
+
+        FileReader fr;
+        File file;
         try {
-            if ((AppConfig.getInstance().getProperty("clock.date") == "") || (AppConfig.getInstance().getProperty("clock.date") == null)) {
-                return Formats.SIMPLEDATE.formatValue(new Date());
-            } else {
-                formatter = new SimpleDateFormat(AppConfig.getInstance().getProperty("clock.date"));
-                return formatter.format(new Date());
+            file = new File(System.getProperty("user.dir") + "/repair.sql");
+            fr = new FileReader(file);
+        } catch (FileNotFoundException ex) {
+            return;
+        }
+
+        try {
+            ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
+            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
+            Class.forName(AppConfig2.getInstance2().getProperty("db.driver"));
+            con = DriverManager.getConnection(db_url, db_user, db_password);
+            stmt = (Statement) con.createStatement();
+
+            BufferedReader br = new BufferedReader(fr);
+
+            while ((s = br.readLine()) != null) {
+                sb.append(s);
             }
-        } catch (IllegalArgumentException e) {
-            return Formats.SIMPLEDATE.formatValue(new Date());
+            br.close();
+            String[] inst = sb.toString().split(";");
+
+            for (int i = 0; i < inst.length; i++) {
+                if (!inst[i].trim().equals("")) {
+                    stmt.executeUpdate(inst[i]);
+                    System.out.println(">>" + inst[i]);
+                }
+            }
+            file.delete();
+        } catch (Exception e) {
+            System.out.println("*** Error : " + e.toString());
+            System.out.println("*** ");
+            System.out.println("*** Error : ");
+            e.printStackTrace();
+            System.out.println("################################################");
+            System.out.println(sb.toString());
+        } finally {
+            con.close();
         }
     }
 
@@ -170,6 +213,14 @@ public class JRootApp extends JPanel implements AppView {
      * Creates new form JRootApp
      */
     public JRootApp() {
+
+        try {
+            //Lets check if there is repair script to execute
+            runRepair();
+        } catch (SQLException ex) {
+            Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         // get some default settings 
         db_user = (AppConfig.getInstance().getProperty("db.user"));
         db_url = (AppConfig.getInstance().getProperty("db.URL"));
@@ -220,7 +271,6 @@ public class JRootApp extends JPanel implements AppView {
 
         if (rc != INIT_SUCCESS) {
             return rc;
-
         }
 
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
@@ -268,7 +318,6 @@ public class JRootApp extends JPanel implements AppView {
                     wDlg.setVisible(true);
                     System.exit(0);
                 }
-                
             }
         }
 
@@ -291,10 +340,7 @@ public class JRootApp extends JPanel implements AppView {
                     ? null
                     : m_dlSystem.findActiveCash(sActiveCashIndex);
             if (valcash == null || !AppConfig.getInstance().getHost().equals(valcash[0])) {
-                // no la encuentro o no es de mi host por tanto creo una...
                 setActiveCash(UUID.randomUUID().toString(), m_dlSystem.getSequenceCash(AppConfig.getInstance().getHost()) + 1, new Date(), null);
-
-                // creamos la caja activa      
                 m_dlSystem.execInsertCash(
                         new Object[]{getActiveCashIndex(), AppConfig.getInstance().getHost(), getActiveCashSequence(), getActiveCashDateStart(), getActiveCashDateEnd()});
             } else {
@@ -306,10 +352,8 @@ public class JRootApp extends JPanel implements AppView {
             wDlg.setModal(true);
             wDlg.setVisible(true);
             return JOpenWarningDlg.CHOICE;
-
         }
 
-        // Leo la localizacion de la caja (Almacen).
         m_sInventoryLocation = m_propsdb.getProperty("location");
         if (m_sInventoryLocation
                 == null) {
@@ -619,32 +663,6 @@ public class JRootApp extends JPanel implements AppView {
                 : newclass;
     }
 
-    private static void initOldClasses() {
-
-        m_oldclasses = new HashMap<>();
-        /*
-        // update bean names from 2.00 to 2.20    
-        m_oldclasses.put("uk.chromis.pos.reports.JReportCustomers", "/uk/chromis/reports/customers.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportCustomersB", "/uk/chromis/reports/customersb.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportClosedPos", "/uk/chromis/reports/closedpos.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportClosedProducts", "/uk/chromis/reports/closedproducts.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JChartSales", "/uk/chromis/reports/chartsales.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportInventory", "/uk/chromis/reports/inventory.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportInventory2", "/uk/chromis/reports/inventoryb.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportInventoryBroken", "/uk/chromis/reports/inventorybroken.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportInventoryDiff", "/uk/chromis/reports/inventorydiff.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportInventoryReOrder", "/uk/chromis/reports/inventoryreorder.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportPeople", "/uk/chromis/reports/people.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportTaxes", "/uk/chromis/reports/taxes.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportUserSales", "/uk/chromis/reports/usersales.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportProducts", "/uk/chromis/reports/products.bs");
-        m_oldclasses.put("uk.chromis.pos.reports.JReportCatalog", "/uk/chromis/reports/productscatalog.bs");
- 
-        // update bean names from 2.10 to 2.20
-        m_oldclasses.put("uk.chromis.pos.panels.JPanelTax", "uk.chromis.pos.inventory.TaxPanel");
-         */
-    }
-
     /**
      *
      */
@@ -907,7 +925,8 @@ public class JRootApp extends JPanel implements AppView {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel2.setPreferredSize(new java.awt.Dimension(180, 34));
+        jLabel2.setPreferredSize(new java.awt.Dimension(280, 34));
+        jLabel2.setRequestFocusEnabled(false);
         m_jPanelTitle.add(jLabel2, java.awt.BorderLayout.LINE_START);
 
         add(m_jPanelTitle, java.awt.BorderLayout.NORTH);
@@ -925,7 +944,7 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/fixedimages/chromis.png"))); // NOI18N
         jLabel1.setText("<html><center>Chromis POS - The New Face of open source POS<br>" +
-            "Copyright \u00A9 (c) 2015-2016Chromis <br>" +
+            "Copyright \u00A9 2015 Chromis <br>" +
             "http://www.chromis.co.uk<br>" +
             "<br>" +
             "Chromis POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +

@@ -649,45 +649,19 @@
         <sql>CREATE UNIQUE INDEX PRODUCTS_NAME_INX ON PRODUCTS (NAME)</sql>        
     </changeSet>   
 
-    <changeSet author="Chromis POS" id="Add ID column to lineremoved table (NV)">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="ID" tableName="LINEREMOVED"/>
-            </not>
+    <changeSet author="Chromis POS" id="drop unique PRODUCTS_NAME_INX Index (NV)">
+        <preConditions onFail="MARK_RAN">           
+                <indexExists tableName="PRODUCTS" indexName="PRODUCTS_NAME_INX"/>                        
         </preConditions>  
-        <addColumn tableName="LINEREMOVED">
-            <column name="ID" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>                                                        
-        </addColumn>   
-         <customChange class="uk.chromis.pos.util.LineRemovedGUID" />      
+        
+        <sql>ALTER TABLE PRODUCTS DROP INDEX PRODUCTS_NAME_INX</sql>
+        <sql>CREATE INDEX PRODUCTS_NAME_INX ON PRODUCTS (NAME)</sql>        
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Add Primary key to lineremoved table (NV)">
-        <sql>ALTER TABLE LINEREMOVED ADD PRIMARY KEY (ID)</sql>        
-    </changeSet> 
-<!--
-    <changeSet author="Chromis POS" id="Add Primary key to STOCKCURRENT table (NV)">
-        <sql>ALTER TABLE STOCKCURRENT ADD PRIMARY KEY (ID,)</sql>        
-    </changeSet> 
--->
-    <changeSet author="Chromis POS" id="Add ID column to Draweropened table (NV)">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists columnName="ID" tableName="DRAWEROPENED"/>
-            </not>
-        </preConditions>  
-        <addColumn tableName="DRAWEROPENED">
-            <column name="ID" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>                                                        
-        </addColumn>     
-         <customChange class="uk.chromis.pos.util.DrawerOpenedGUID" />    
-    </changeSet>
 
-    <changeSet author="Chromis POS" id="Add Primary key to DRAWEROPENED table (NV)">
-        <sql>ALTER TABLE DRAWEROPENED ADD PRIMARY KEY (ID)</sql>        
-    </changeSet> 
+
+
+
 
 </databaseChangeLog>
 

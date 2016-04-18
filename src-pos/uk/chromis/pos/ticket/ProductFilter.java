@@ -59,14 +59,9 @@ public class ProductFilter extends javax.swing.JPanel implements ReportEditorCre
     public void init(AppView app) {
 
         DataLogicSales dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
-
-        // El modelo de categorias
         m_sentcat = dlSales.getCategoriesList();
         m_CategoryModel = new ComboBoxValModel();
 
-//        m_jCboName.setModel(new ListQBFModelNumber());
-//        m_jCboPriceBuy.setModel(new ListQBFModelNumber());
-//        m_jCboPriceSell.setModel(new ListQBFModelNumber());
         m_jCboName.setModel(ListQBFModelNumber.getMandatoryString());
         m_jCboPriceBuy.setModel(ListQBFModelNumber.getMandatoryNumber());
         m_jCboPriceSell.setModel(ListQBFModelNumber.getMandatoryNumber());
@@ -121,7 +116,6 @@ public class ProductFilter extends javax.swing.JPanel implements ReportEditorCre
                 QBFCompareEnum.COMP_NONE, null
             };
         } else {
-            // Filtro por codigo de barras.
             return new Object[]{
                 QBFCompareEnum.COMP_NONE, null,
                 QBFCompareEnum.COMP_NONE, null,
