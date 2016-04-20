@@ -815,14 +815,16 @@
         <customChange class="uk.chromis.pos.util.SiteGUID" />                                       
     </changeSet>
       
-    <changeSet author="Chromis POS" id="Add ID column to lineremoved table (NV)">
+    <changeSet author="Chromis POS" id="Add ID and primary key to lineremoved table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists columnName="ID" tableName="LINEREMOVED"/>
             </not>
         </preConditions>  
         <addColumn tableName="LINEREMOVED">
-            <column name="ID" type="varchar(255)"/>                                                                        
+            <column name="ID" type="varchar(255)" defaultValue="" > 
+                <constraints nullable="false"/>
+            </column>                                                                       
         </addColumn>          
     </changeSet>
 
@@ -833,7 +835,7 @@
     <changeSet author="Chromis POS" id="Add Primary key to lineremoved table (NV)">
         <sql>ALTER TABLE LINEREMOVED ADD PRIMARY KEY (ID)</sql>        
     </changeSet> 
-
+    
     <changeSet author="Chromis POS" id="Add ID column to Draweropened table (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -841,7 +843,9 @@
             </not>
         </preConditions>  
         <addColumn tableName="DRAWEROPENED">
-            <column name="ID" type="varchar(255)" />                                                        
+            <column name="ID" type="varchar(255)" defaultValue="" > 
+                <constraints nullable="false"/>
+            </column>                                                       
         </addColumn>     
           
     </changeSet>
@@ -973,9 +977,9 @@
     <!--                Must be updated below to reflect current version                           -->
     <!-- ***************************************************************************************** -->
 
-    <changeSet author="Chromis POS" id="Update to 0.57.1-beta">    
+    <changeSet author="Chromis POS" id="Update to 0.57.1-beta3">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.57.1-beta"/>          
+            <column name="VERSION" value="0.57.1-beta3"/>          
         </update>  
     </changeSet>
     

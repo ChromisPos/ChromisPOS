@@ -649,7 +649,7 @@
         <sql>CREATE UNIQUE INDEX PRODUCTS_NAME_INX ON PRODUCTS (NAME)</sql>        
     </changeSet>   
 
-    <changeSet author="Chromis POS" id="drop unique PRODUCTS_NAME_INX Index (NV)">
+    <changeSet author="Chromis POS" id="drop unique PRODUCTS_NAME_INX Index (NV)" dbms="mysql">
         <preConditions onFail="MARK_RAN">           
                 <indexExists tableName="PRODUCTS" indexName="PRODUCTS_NAME_INX"/>                        
         </preConditions>  
@@ -658,7 +658,14 @@
         <sql>CREATE INDEX PRODUCTS_NAME_INX ON PRODUCTS (NAME)</sql>        
     </changeSet>
 
-
+    <changeSet author="Chromis POS" id="drop unique PRODUCTS_NAME_INX Index (NV)" dbms="derby, postgresql">
+        <preConditions onFail="MARK_RAN">           
+                <indexExists tableName="PRODUCTS" indexName="PRODUCTS_NAME_INX"/>                        
+        </preConditions>  
+        
+        <sql>DROP INDEX PRODUCTS_NAME_INX</sql>
+        <sql>CREATE INDEX PRODUCTS_NAME_INX ON PRODUCTS (NAME)</sql>        
+    </changeSet>
 
 
 

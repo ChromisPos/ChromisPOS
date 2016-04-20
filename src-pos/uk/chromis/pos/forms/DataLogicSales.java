@@ -1078,7 +1078,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             l.getProductAttSetInstId(), -l.getMultiply(), l.getPrice(),
                             ticket.getUser().getName(),
                             null, null, null, null, null, null, null
-                        });
+                        }); 
+                    //    adjustStock(new Object[]{l.getProductID(), location, l.getProductAttSetInstId() , l.getMultiply()});
                     }
 
                 }

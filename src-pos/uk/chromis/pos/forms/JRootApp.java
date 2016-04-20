@@ -342,7 +342,7 @@ public class JRootApp extends JPanel implements AppView {
             if (valcash == null || !AppConfig.getInstance().getHost().equals(valcash[0])) {
                 setActiveCash(UUID.randomUUID().toString(), m_dlSystem.getSequenceCash(AppConfig.getInstance().getHost()) + 1, new Date(), null);
                 m_dlSystem.execInsertCash(
-                        new Object[]{getActiveCashIndex(), AppConfig.getInstance().getHost(), getActiveCashSequence(), getActiveCashDateStart(), getActiveCashDateEnd()});
+                        new Object[]{getActiveCashIndex(), AppConfig.getInstance().getHost(), getActiveCashSequence(), getActiveCashDateStart(), getActiveCashDateEnd(), 0});
             } else {
                 setActiveCash(sActiveCashIndex, (Integer) valcash[1], (Date) valcash[2], (Date) valcash[3]);
             }

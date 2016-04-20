@@ -181,8 +181,7 @@ public class TicketParser extends DefaultHandler {
                         m_printer.getDevicePrinter(readString(attributes.getValue("printer"), "1")).openDrawer();
                         // Cashdrawer has been activated record the data in the table
                         try {
-                            m_system.execDrawerOpened(
-                                    //new Object[] {df.format(dNow),cUser,ticketId});
+                            m_system.execDrawerOpened(                                    
                                     new Object[]{UUID.randomUUID().toString(), cUser, ticketId});
                         } catch (BasicException ex) {
                         }

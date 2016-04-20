@@ -103,15 +103,14 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
         timeListModel = new ComboBoxValModel(new ArrayList<>(Arrays.asList(timeStrings)));
         jcboTime.setModel(timeListModel);
 
-        String[] timeDateStrings = {"dd.MM.yy, H:mm", "dd.MM.yy, H:mm", "MM.dd.yy, H:mm", "MM.dd.yy, H:mm", 
+        String[] timeDateStrings = {"dd.MM.yy, H:mm", "dd.MM.yy, H:mm", "MM.dd.yy, H:mm", "MM.dd.yy, H:mm",
             "dd.MM.yyyy, H:mm", "dd.MM.yyyy, H:mm", "MM.dd.yyyy, H:mm", "MM.dd.yyyy, H:mm",
-             "EEE, MMMM d yyyy, H:mm", "EEEE, MMMM d yyyy, H:mm"
-            };
+            "EEE, MMMM d yyyy, H:mm", "EEEE, MMMM d yyyy, H:mm"
+        };
         ComboBoxValModel timeDateListModel;
 
         timeDateListModel = new ComboBoxValModel(new ArrayList<>(Arrays.asList(timeDateStrings)));
         jcboDatetime.setModel(timeDateListModel);
-
 
     }
 
@@ -505,17 +504,23 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
     }// </editor-fold>//GEN-END:initComponents
 
     private void jcboDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcboDateItemStateChanged
-        Formats.setDatePattern(jcboDate.getSelectedItem().toString());
+        if (jcboDate.getSelectedItem().toString().equals("")) {
+            Formats.setDatePattern(jcboDate.getSelectedItem().toString());
+        }
         jtxtDate.setText(Formats.DATE.formatValue(new Date()));
     }//GEN-LAST:event_jcboDateItemStateChanged
 
     private void jcboTimeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcboTimeItemStateChanged
-        Formats.setTimePattern(jcboTime.getSelectedItem().toString());
+        if (jcboTime.getSelectedItem().toString().equals("")) {
+            Formats.setTimePattern(jcboTime.getSelectedItem().toString());
+        }
         jtxtTime.setText(Formats.TIME.formatValue(new Date()));
     }//GEN-LAST:event_jcboTimeItemStateChanged
 
     private void jcboDatetimeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcboDatetimeItemStateChanged
-        Formats.setDateTimePattern(jcboDatetime.getSelectedItem().toString());       
+        if (jcboDatetime.getSelectedItem().toString().equals("")) {
+            Formats.setDateTimePattern(jcboDatetime.getSelectedItem().toString());
+        }
         jtxtDateTime.setText(Formats.TIMESTAMP.formatValue(new Date()));
     }//GEN-LAST:event_jcboDatetimeItemStateChanged
 
