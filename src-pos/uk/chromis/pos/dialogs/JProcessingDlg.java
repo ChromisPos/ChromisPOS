@@ -128,6 +128,7 @@ public class JProcessingDlg extends JDialog {
         messageArea.setRows(4);
         messageArea.setText(message);
         messageArea.setLineWrap(true);
+        messageArea.setWrapStyleWord(true);
 
         Font font = new Font("Arial", Font.BOLD, 12);
         messageArea.setFont(font);

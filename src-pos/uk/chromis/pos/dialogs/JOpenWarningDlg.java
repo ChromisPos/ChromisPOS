@@ -99,6 +99,8 @@ public class JOpenWarningDlg extends JDialog {
         eMessageArea.setRows(2);
         eMessageArea.setText(eMessage);
         eMessageArea.setLineWrap(true);
+        eMessageArea.setWrapStyleWord(true);
+
 
         font = new Font("Arial", Font.BOLD, 12);
         eMessageArea.setFont(font);
@@ -117,6 +119,7 @@ public class JOpenWarningDlg extends JDialog {
         messageArea.setRows(4);
         messageArea.setText(message);
         messageArea.setLineWrap(true);
+        messageArea.setWrapStyleWord(true);
 
         font = new Font("Arial", Font.BOLD, 12);
         messageArea.setFont(font);

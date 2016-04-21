@@ -311,11 +311,9 @@ public class JRootApp extends JPanel implements AppView {
                     JOpenWarningDlg wDlg;
                     if (!"".equals(JProcessingDlg.ERRORMSG)) {
                         wDlg = new JOpenWarningDlg(JProcessingDlg.ERRORMSG, AppLocal.getIntString(sDBVersion == null ? "message.createfailure" : "message.updatefailure"), false, false);
-                    } else {
-                        wDlg = new JOpenWarningDlg(sDBVersion == null ? "Create database process was not run !!" : "Upgrade database process was not run !!", AppLocal.getIntString(sDBVersion == null ? "message.createfailure" : "message.updatefailure"), false, false);
-                    }
-                    wDlg.setModal(true);
-                    wDlg.setVisible(true);
+                        wDlg.setModal(true);
+                        wDlg.setVisible(true);
+                    } 
                     System.exit(0);
                 }
             }
