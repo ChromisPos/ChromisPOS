@@ -88,6 +88,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         });
 
         jcboMachineScreenmode.addItem("window");
+        jcboMachineScreenmode.addItem("windowmaximised");
         jcboMachineScreenmode.addItem("fullscreen");
 
         jcboTicketsBag.addItem("simple");

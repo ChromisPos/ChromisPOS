@@ -89,13 +89,13 @@ public class StartPOS {
             System.exit(1);
 
         }
-    
+
         File file = new File(System.getProperty("user.home"), "unicentaopos.properties");
         File chromis = new File(System.getProperty("user.home"), "chromispos.properties");
         File openbravo = new File(System.getProperty("user.home"), "openbravopos.properties");
 
         if (!chromis.exists()) {
-            if ((file.exists()) || (openbravo.exists())){
+            if ((file.exists()) || (openbravo.exists())) {
                 Thread t1 = new Thread(new Runnable() {
                     public void run() {
                         Conversion convert = new Conversion() {
@@ -135,7 +135,7 @@ public class StartPOS {
                 String scountry = AppConfig.getInstance().getProperty("user.country");
                 String svariant = AppConfig.getInstance().getProperty("user.variant");
                 if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
-                    Locale.setDefault(new Locale(slang, scountry, svariant));                    
+                    Locale.setDefault(new Locale(slang, scountry, svariant));
                 }
 
                 // Set the format patterns
@@ -166,6 +166,10 @@ public class StartPOS {
                 if ("fullscreen".equals(screenmode)) {
                     JRootKiosk rootkiosk = new JRootKiosk();
                     rootkiosk.initFrame(config);
+                } else if ("windowmaximised".equals(screenmode)) {
+                    JRootFrame rootframe = new JRootFrame();
+                    rootframe.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    rootframe.initFrame(config);
                 } else {
                     JRootFrame rootframe = new JRootFrame();
                     rootframe.initFrame(config);
