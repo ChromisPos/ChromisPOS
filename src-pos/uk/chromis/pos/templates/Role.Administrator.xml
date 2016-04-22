@@ -37,6 +37,7 @@
 	<class name="/uk/chromis/reports/dailypresencereport.bs"/>
 	<class name="uk.chromis.pos.inventory.StockManagement"/>
 	<class name="payment.bank"/>
+        <class name="payment.custom"/>
 	<class name="sales.PrintKitchen"/>
 	<class name="button.scharge"/>
 	<class name="/uk/chromis/reports/usersales.bs"/>
@@ -69,6 +70,7 @@
 	<class name="/uk/chromis/reports/customersb.bs"/>
 	<class name="/uk/chromis/reports/saletaxes.bs"/>
 	<class name="refund.cash"/>
+        <class name="refund.custom"/>
 	<class name="uk.chromis.pos.inventory.AuxiliarPanel"/>
 	<class name="refund.paper"/>
 	<class name="uk.chromis.pos.mant.JPanelFloors"/>

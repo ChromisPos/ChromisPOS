@@ -132,9 +132,21 @@
 		<line><text align ="right" length="42">${paymentline.printTotal()}</text></line>
 	#end
 
+	#if ($paymentline.name == "customin")
+		<line></line>
+		<line><text bold="true">Custom payment</text></line>
+		<line><text align ="right" length="42">${paymentline.printTotal()}</text></line>
+	#end
+
 	#if ($paymentline.name == "paperout")
 		<line></line>
 		<line><text bold="true">Note Refund</text></line>
+		<line><text align ="right" length="42">${paymentline.printTotal()}</text></line>
+	#end
+
+	#if ($paymentline.name == "customout")
+		<line></line>
+		<line><text bold="true">Custom Refund</text></line>
 		<line><text align ="right" length="42">${paymentline.printTotal()}</text></line>
 	#end
 

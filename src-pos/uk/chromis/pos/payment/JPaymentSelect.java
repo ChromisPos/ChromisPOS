@@ -237,6 +237,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         }
     }
 
+    public class JPaymentCustomCreator implements JPaymentCreator {
+
+        @Override
+        public JPaymentInterface createJPayment() {
+            return new JPaymentCustom(JPaymentSelect.this, "customin", dlSystem);
+        }
+
+        @Override
+        public String getKey() {
+            return "payment.custom";
+        }
+
+        @Override
+        public String getLabelKey() {
+            return "tab.custom";
+        }
+
+        @Override
+        public String getIconKey() {
+            return "/uk/chromis/images/voucher.png";
+        }
+    }
+
     public class JPaymentMagcardCreator implements JPaymentCreator {
 
         @Override
@@ -375,6 +398,32 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         }
     }
 
+        public class JPaymentCustomRefundCreator implements JPaymentCreator {
+
+        @Override
+        public JPaymentInterface createJPayment() {
+            return new JPaymentRefund(JPaymentSelect.this, "customout");
+        }
+
+        @Override
+        public String getKey() {
+            return "refund.custom";
+        }
+
+        @Override
+        public String getLabelKey() {
+            return "tab.custom";
+        }
+
+        @Override
+        public String getIconKey() {
+            return "/uk/chromis/images/voucher.png";
+        }
+    }
+    
+    
+    
+    
     public class JPaymentMagcardRefundCreator implements JPaymentCreator {
 
         @Override

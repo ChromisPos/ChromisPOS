@@ -1,5 +1,5 @@
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016 2016 Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -26,10 +26,7 @@ report.setSentence("SELECT " +
                 "PEOPLE.NAME, " +
                 "LEAVES.STARTDATE, " +
                 "LEAVES.ENDDATE, " +
-                "((DATE_PART('day', LEAVES.ENDDATE - LEAVES.STARTDATE) * 24 + " + 
-                "DATE_PART('hour', LEAVES.ENDDATE - LEAVES.STARTDATE)) * 60 + " +
-                "DATE_PART('minute', LEAVES.ENDDATE - LEAVES.STARTDATE)) * 60 + " +
-                "DATE_PART('second', LEAVES.ENDDATE - LEAVES.STARTDATE)  AS TOTAL " +
+                "CONCAT('',DATEDIFF(LEAVES.ENDDATE, LEAVES.STARTDATE)) AS TOTAL " +
                 "FROM PEOPLE LEFT JOIN LEAVES ON LEAVES.PPLID = PEOPLE.ID " +
                 "WHERE ?(QBF_FILTER) " +
                 "ORDER BY LEAVES.STARTDATE DESC ");

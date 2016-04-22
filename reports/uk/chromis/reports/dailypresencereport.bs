@@ -1,5 +1,5 @@
 //   Chromis POS - The New Face of Open Source POS 
-//   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
+//   Copyright (c) (c) 2015-2016 2016 Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
 //
@@ -26,10 +26,7 @@ report.setSentence("SELECT " +
                 "PEOPLE.NAME, " +
                 "SHIFTS.STARTSHIFT, " +
                 "SHIFTS.ENDSHIFT, " +
-                "((DATE_PART('day', SHIFTS.ENDSHIFT - SHIFTS.STARTSHIFT) * 24 + " + 
-                "DATE_PART('hour', SHIFTS.ENDSHIFT - SHIFTS.STARTSHIFT)) * 60 + " +
-                "DATE_PART('minute', SHIFTS.ENDSHIFT - SHIFTS.STARTSHIFT)) * 60 + " +
-                "DATE_PART('second', SHIFTS.ENDSHIFT - SHIFTS.STARTSHIFT)  AS TOTAL " +
+                "CONCAT('',TIMEDIFF(SHIFTS.ENDSHIFT, SHIFTS.STARTSHIFT)) AS TOTAL " +
                 "FROM PEOPLE LEFT JOIN SHIFTS ON SHIFTS.PPLID = PEOPLE.ID " +
                 "WHERE ?(QBF_FILTER) ");
 

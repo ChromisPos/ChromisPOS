@@ -139,6 +139,18 @@
                 <text align ="right" length="42">${paymentline.printTotal()}</text>
             </line>
         #end
+        
+        #if ($paymentline.name == "customin")
+            <line></line>
+            <line>
+                <text bold="true">Custom payment</text>
+            </line>
+            <line>
+                <text align ="right" length="42">${paymentline.printTotal()}</text>
+            </line>
+        #end
+        
+        
     #end
        <line></line>
         <line>

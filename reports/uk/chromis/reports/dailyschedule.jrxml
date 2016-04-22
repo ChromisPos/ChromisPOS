@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dailyschedule" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dailyschedule" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="798cb806-cf7d-4651-9a8a-f596b8ccedf3">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.3310000000000006"/>
@@ -44,7 +44,7 @@
 	<title>
 		<band height="74">
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-21" mode="Transparent" x="0" y="0" width="375" height="30" forecolor="#33CCFF" backcolor="#FFFFFF"/>
+				<reportElement key="textField-21" mode="Transparent" x="0" y="0" width="375" height="30" forecolor="#33CCFF" backcolor="#FFFFFF" uuid="eaedd2eb-d063-470b-9b21-a716724a7a79"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -58,7 +58,7 @@
 				<textFieldExpression><![CDATA[$R{label.title}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-23" mode="Opaque" x="0" y="55" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-23" mode="Opaque" x="0" y="55" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="176e8684-1207-4530-a062-7aa42e4fe699"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -72,7 +72,7 @@
 				<textFieldExpression><![CDATA[$R{label.name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-23" mode="Opaque" x="138" y="55" width="122" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-23" mode="Opaque" x="138" y="55" width="122" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="c2cbcece-5c9e-457a-919b-001b18cc4a06"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -86,7 +86,7 @@
 				<textFieldExpression><![CDATA[$R{label.start}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-23" mode="Opaque" x="280" y="55" width="130" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-23" mode="Opaque" x="280" y="55" width="130" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="085cb6d6-ec72-4cf8-ad4d-97261e621584"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -100,7 +100,7 @@
 				<textFieldExpression><![CDATA[$R{label.end}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-23" mode="Opaque" x="435" y="55" width="100" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-23" mode="Opaque" x="435" y="55" width="100" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="03761028-4b2c-4fa8-a95b-eefc407a7ad0"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -114,7 +114,7 @@
 				<textFieldExpression><![CDATA[$R{label.total}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-2" mode="Opaque" x="400" y="0" width="135" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-2" mode="Opaque" x="400" y="0" width="135" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b738e4f2-fdce-495d-bc99-46a2b5f943b2"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -128,14 +128,14 @@
 				<textFieldExpression><![CDATA[$R{label.printed}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="false">
-				<reportElement key="textField-3" x="400" y="15" width="135" height="15"/>
+				<reportElement key="textField-3" x="400" y="15" width="135" height="15" uuid="ecb11e3a-7464-4848-bf30-3a1cba3a062d"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue(new Date())]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-10" mode="Opaque" x="0" y="33" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-10" mode="Opaque" x="0" y="33" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="4c7b0815-0f32-4716-bc18-cd2585a2f955"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -149,7 +149,7 @@
 				<textFieldExpression><![CDATA[$R{label.period}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-2" mode="Transparent" x="50" y="33" width="110" height="15"/>
+				<reportElement key="textField-2" mode="Transparent" x="50" y="33" width="110" height="15" uuid="d3e6c674-f1fc-40fb-b12f-d3aae046310a"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -163,7 +163,7 @@
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[1])]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="staticText-1" mode="Transparent" x="160" y="33" width="10" height="15"/>
+				<reportElement key="staticText-1" mode="Transparent" x="160" y="33" width="10" height="15" uuid="aec02d75-6af9-4a78-a5a2-3da47b05aa21"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -177,7 +177,7 @@
 				<text><![CDATA[-]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-3" mode="Transparent" x="170" y="33" width="110" height="15"/>
+				<reportElement key="textField-3" mode="Transparent" x="170" y="33" width="110" height="15" uuid="6a06ec8d-237e-42a2-afb9-b439cbac0df7"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -191,13 +191,13 @@
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[3])]]></textFieldExpression>
 			</textField>
 			<rectangle radius="5">
-				<reportElement key="rectangle-1" mode="Opaque" x="0" y="50" width="535" height="2" forecolor="#33CCFF" backcolor="#33CCFF"/>
+				<reportElement key="rectangle-1" mode="Opaque" x="0" y="50" width="535" height="2" forecolor="#33CCFF" backcolor="#33CCFF" uuid="26184939-c57a-4f28-a482-c45a7e001da4"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.25" lineStyle="Solid"/>
 				</graphicElement>
 			</rectangle>
 			<line>
-				<reportElement key="line-4" mode="Opaque" x="0" y="70" width="535" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-4" mode="Opaque" x="0" y="70" width="535" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="87618f07-f834-4c41-a830-dcc5beabf825"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.25" lineStyle="Solid"/>
 				</graphicElement>
@@ -213,7 +213,7 @@
 	<detail>
 		<band height="16">
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-4" mode="Opaque" x="0" y="0" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-4" mode="Opaque" x="0" y="0" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="7c8ef311-b5e0-4296-99ff-4b2e99d7d249"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -227,7 +227,7 @@
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.STRING.formatValue($F{NAME})]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-4" mode="Opaque" x="138" y="0" width="122" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-4" mode="Opaque" x="138" y="0" width="122" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="ef02bc1c-82b7-440e-9cf5-18df410db388"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -241,7 +241,7 @@
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue($F{STARTDATE})]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-4" mode="Opaque" x="280" y="0" width="130" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-4" mode="Opaque" x="280" y="0" width="130" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="a0d86238-631c-4c99-93a9-fbda41655b37"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -255,11 +255,11 @@
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMESTAMP.formatValue($F{ENDDATE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="435" y="0" width="100" height="15"/>
+				<reportElement x="435" y="0" width="100" height="15" uuid="a7e170d7-5895-4ef4-bb7f-5224f24fc46e"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[uk.chromis.format.Formats.TIMEDIFFERENCE.formatValue($F{TOTAL})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -269,7 +269,7 @@
 	<pageFooter>
 		<band height="30">
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-6" mode="Opaque" x="485" y="10" width="20" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-6" mode="Opaque" x="485" y="10" width="20" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="147b19ea-4c59-4d1e-aa70-fe4133a6446a"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -283,7 +283,7 @@
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-7" mode="Opaque" x="515" y="10" width="20" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-7" mode="Opaque" x="515" y="10" width="20" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="0b9872bc-bc6f-4309-869d-e822f31bb845"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -297,7 +297,7 @@
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="staticText-5" mode="Opaque" x="505" y="10" width="10" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="staticText-5" mode="Opaque" x="505" y="10" width="10" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="070e3dec-fb6e-4f60-bb0f-320894f6b345"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -311,7 +311,7 @@
 				<text><![CDATA[/]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="10" width="100" height="15"/>
+				<reportElement x="0" y="10" width="100" height="15" uuid="2d1bc62b-c0a0-4366-a19a-18f29e16d2ed"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>

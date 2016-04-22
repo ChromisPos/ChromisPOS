@@ -973,7 +973,7 @@
     <!-- ***************************************************************************************** -->
     <!--                Update Administrator permissions if required                               -->
     <!-- ***************************************************************************************** -->    
-    <changeSet author="Chromis POS" id="Update admin permissiosn v0.57.1beta3">   
+    <changeSet author="Chromis POS" id="Update admin permissiosn v0.57.1beta4">   
          <update tableName="ROLES">           
             <column name="PERMISSIONS" valueBlobResource="/uk/chromis/pos/templates/Role.Administrator.xml"/>   
             <where>ID='0'</where>         
@@ -983,9 +983,9 @@
     <!-- ***************************************************************************************** -->
     <!--                Must be updated below to reflect current version                           -->
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.57.1-beta3">    
+    <changeSet author="Chromis POS" id="Update to 0.57.1-beta4">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.57.1-beta3"/>          
+            <column name="VERSION" value="0.57.1-beta4"/>          
         </update>  
     </changeSet>
     
