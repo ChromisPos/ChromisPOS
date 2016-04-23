@@ -80,16 +80,21 @@ public class PaymentInfoList {
         tmp_apayment = (LinkedList<PaymentInfo>) m_apayment.clone();
         m_apayment.clear();
         double dPaidOther = 0.0;
-        double dPaidCash = 0.0;          
+        double dPaidCash = 0.0;
+        Boolean cash = false;
         for (PaymentInfo p : tmp_apayment) {
             if (!p.getName().equals("cash")) {
                 m_apayment.add(p);
                 dPaidOther = dPaidOther + p.getTotal();
-            }else {
-                dPaidCash = dPaidCash + p.getPaid();               
+            } else {
+                cash = true;
+                dPaidCash = dPaidCash + p.getPaid();
             }
         }
-        m_apayment.add(new PaymentInfoCash_original(m_dTotal-dPaidOther, dPaidCash));        
+        if (cash) {
+            m_apayment.add(new PaymentInfoCash_original(m_dTotal - dPaidOther, dPaidCash));
+        }
+
     }
 
     /**
