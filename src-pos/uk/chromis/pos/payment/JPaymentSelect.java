@@ -398,7 +398,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         }
     }
 
-        public class JPaymentCustomRefundCreator implements JPaymentCreator {
+    public class JPaymentCustomRefundCreator implements JPaymentCreator {
 
         @Override
         public JPaymentInterface createJPayment() {
@@ -420,10 +420,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
             return "/uk/chromis/images/voucher.png";
         }
     }
-    
-    
-    
-    
+
     public class JPaymentMagcardRefundCreator implements JPaymentCreator {
 
         @Override
@@ -673,6 +670,9 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         PaymentInfo returnPayment = ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).executePayment();
 
+        
+        
+        
         double change = AppConfig.getInstance().getDouble("till.changelimit");
         if (returnPayment.getChange() > change && AppConfig.getInstance().getBoolean("till.enablechangelimit")) {
             Toolkit.getDefaultToolkit().beep();
@@ -683,6 +683,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
             addTabs();
         } else if (returnPayment != null) {
             m_aPaymentInfo.add(returnPayment);
+            // always ensure cash is last in the list for payment
+            m_aPaymentInfo.sortPayments(m_dTotal);
             accepted = true;
 
             dispose();

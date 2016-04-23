@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.payment;
 
 import java.util.Iterator;
@@ -24,30 +23,33 @@ import java.util.LinkedList;
 
 /**
  *
- *   
+ *
  */
 public class PaymentInfoList {
-    
+
     private final LinkedList<PaymentInfo> m_apayment;
-    
-    /** Creates a new instance of PaymentInfoComposed */
+    private LinkedList<PaymentInfo> tmp_apayment;
+
+    /**
+     * Creates a new instance of PaymentInfoComposed
+     */
     public PaymentInfoList() {
         m_apayment = new LinkedList<>();
     }
-        
+
     /**
      *
      * @return
      */
     public double getTotal() {
-        
+
         double dTotal = 0.0;
         Iterator i = m_apayment.iterator();
         while (i.hasNext()) {
             PaymentInfo p = (PaymentInfo) i.next();
             dTotal += p.getTotal();
         }
-        
+
         return dTotal;
     }
 
@@ -58,7 +60,7 @@ public class PaymentInfoList {
     public boolean isEmpty() {
         return m_apayment.isEmpty();
     }
-    
+
     /**
      *
      * @param p
@@ -66,14 +68,30 @@ public class PaymentInfoList {
     public void add(PaymentInfo p) {
         m_apayment.addLast(p);
     }
-    
+
     /**
      *
      */
     public void removeLast() {
         m_apayment.removeLast();
     }
-    
+
+    public void sortPayments(Double m_dTotal) {
+        tmp_apayment = (LinkedList<PaymentInfo>) m_apayment.clone();
+        m_apayment.clear();
+        double dPaidOther = 0.0;
+        double dPaidCash = 0.0;          
+        for (PaymentInfo p : tmp_apayment) {
+            if (!p.getName().equals("cash")) {
+                m_apayment.add(p);
+                dPaidOther = dPaidOther + p.getTotal();
+            }else {
+                dPaidCash = dPaidCash + p.getPaid();               
+            }
+        }
+        m_apayment.add(new PaymentInfoCash_original(m_dTotal-dPaidOther, dPaidCash));        
+    }
+
     /**
      *
      * @return
