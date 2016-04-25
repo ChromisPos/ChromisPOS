@@ -17,11 +17,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 
-package uk.chromis.pos.imports;
+package uk.chromis.pos.sync;
 
-public class JPanelCSV extends javax.swing.JPanel {
+public class JPanelSync extends javax.swing.JPanel {
 
-    public JPanelCSV() {
+    public JPanelSync() {
         initComponents();
     }
 

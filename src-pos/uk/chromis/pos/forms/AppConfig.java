@@ -39,6 +39,7 @@ public class AppConfig implements AppProperties {
     private final Properties m_propsconfig;
     private final File configFile;
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.AppConfig");
+    private DataLogicSystem dlSystem;
 
     protected AppConfig(File configFile) {
         this.configFile = configFile;
@@ -89,12 +90,12 @@ public class AppConfig implements AppProperties {
         return Boolean.valueOf(m_propsconfig.getProperty(sKey));
     }
 
-    public Double getDouble(String sKey) {    
-        if (getProperty(sKey)!= null){
+    public Double getDouble(String sKey) {
+        if (getProperty(sKey) != null) {
             return Double.valueOf(m_propsconfig.getProperty(sKey));
-        }else{
+        } else {
             return 0.00;
-        }        
+        }
     }
 
     public boolean delete() {
@@ -211,7 +212,7 @@ public class AppConfig implements AppProperties {
         m_propsconfig.setProperty("screen.receipt.columns", "42");
 
     }
-
+    
     @Override
     public File getConfigFile() {
         return configFile;

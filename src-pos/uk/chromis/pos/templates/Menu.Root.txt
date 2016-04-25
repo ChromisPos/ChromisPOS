@@ -115,7 +115,7 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.UsersReport", "/uk/chromis/reports/people.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.UserSells", "/uk/chromis/reports/usersales.bs");
 
-// EPM
+
     submenu = group.addSubmenu("/uk/chromis/images/users.png", "Menu.PresenceManagement", "uk.chromis.pos.forms.MenuEmployees");
     submenu.addTitle("Menu.PresenceManagement");
         submenu.addPanel("/uk/chromis/images/coffee.png", "Menu.Breaks", "uk.chromis.pos.epm.BreaksPanel");
@@ -142,11 +142,18 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.StockChangesReport", "/uk/chromis/reports/stockchanges.bs");
 
 
+
+    group = menu.addGroup("Menu.Sync");
+       submenu = group.addSubmenu("/uk/chromis/images/database.png",  "Menu.Sync", "uk.chromis.pos.sync.JPanelSync");
+       submenu.addTitle("Menu.Sync");
+       submenu.addPanel("/uk/chromis/images/database.png",  "Menu.DatabaseSync", "uk.chromis.pos.sync.JPanelManualSync");
+
     group = menu.addGroup("Menu.System");
     group.addChangePasswordAction();
     group.addPanel("/uk/chromis/images/configuration.png", "Menu.Configuration", "uk.chromis.pos.config.JPanelConfiguration");
     group.addPanel("/uk/chromis/images/printer.png", "Menu.Printer", "uk.chromis.pos.panels.JPanelPrinter");
     group.addPanel("/uk/chromis/images/timer.png", "Menu.CheckInCheckOut", "uk.chromis.pos.epm.JPanelEmployeePresence");
+
 
 
     group.addExitAction();

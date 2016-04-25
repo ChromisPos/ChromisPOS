@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.data.loader;
 
 import java.util.Date;
@@ -27,12 +26,12 @@ import uk.chromis.basic.BasicException;
  * @author adrianromero
  */
 public abstract class DataParams implements DataWrite {
-    
+
     /**
      *
      */
     protected DataWrite dw;
-    
+
     /**
      *
      * @throws BasicException

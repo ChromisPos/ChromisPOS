@@ -1004,7 +1004,28 @@
             <column name="DESCRIPTION" value="##label.description130"/>  
         </insert> 		  
     </changeSet>        
+ 
              
+    <changeSet author="Chromis POS" id="Add synchronisation option (NV)">      
+        <preConditions onFail="MARK_RAN">  
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description131'</sqlCheck>  
+        </preConditions> 
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="uk.chromis.pos.sync.JPanelManualSync"/>  
+            <column name="SECTION" value="##label.sectionsync"/>
+            <column name="DISPLAYNAME" value="##label.displayname131"/>  
+            <column name="DESCRIPTION" value="##label.description131"/>  
+        </insert> 
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.sync.JPanelSync"/>  
+            <column name="SECTION" value="##label.sectionsync"/>
+            <column name="DISPLAYNAME" value="##label.displayname132"/>  
+            <column name="DESCRIPTION" value="##label.description132"/>  
+        </insert>		  
+    </changeSet>     
+    
+                                    
+                                
     <!--   
       <changeSet author="Chromis POS" id="Add Product Lists Permissions (NV)">  
           <preConditions onFail="MARK_RAN">  

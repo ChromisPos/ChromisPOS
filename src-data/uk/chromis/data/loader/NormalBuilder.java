@@ -79,7 +79,7 @@ public class NormalBuilder implements ISQLBuilderStatic {
             ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, DataWriteUtils.getSQLValue(iValue));
         }
-        
+      
         @Override
         public void setString(int paramIndex, String sValue) throws BasicException {
             ensurePlace(paramIndex - 1);
@@ -133,5 +133,7 @@ public class NormalBuilder implements ISQLBuilderStatic {
             
             return sNewSentence.toString(); // sustituida
         }                
+
+
     }    
 }
