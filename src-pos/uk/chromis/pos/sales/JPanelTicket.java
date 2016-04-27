@@ -238,7 +238,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     && (app.getDeviceTicket().getDeviceDisplay() instanceof DeviceDisplayAdvance)) {
                 DeviceDisplayAdvance advDisplay = (DeviceDisplayAdvance) m_App.getDeviceTicket().getDeviceDisplay();
                 if (advDisplay.hasFeature(DeviceDisplayAdvance.TICKETLINES)) {
-                    m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.Line"));
+                    m_ticketlines2 = new JTicketLines(dlSystem.getResourceAsXML("Ticket.LineDisplay"));
                     advDisplay.setTicketLines(m_ticketlines2);
                 }
                 m_ticketlines.addListSelectionListener(new ListSelectionListener() {
