@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import uk.chromis.pos.util.AltEncrypter;
+import uk.chromis.pos.sync.Sync;
 
 /**
  *

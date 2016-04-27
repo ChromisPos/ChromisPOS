@@ -51,7 +51,7 @@ import uk.chromis.pos.forms.BeanFactoryException;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.JPanelView;
 import uk.chromis.pos.sales.TaxesLogic;
-import uk.chromis.pos.util.JRViewer300;
+import com.openbravo.pos.util.JRViewer400;
 
 /**
  *
@@ -59,7 +59,7 @@ import uk.chromis.pos.util.JRViewer300;
  */
 public abstract class JPanelReport extends JPanel implements JPanelView, BeanFactoryApp   {
     
-    private JRViewer300 reportviewer = null;   
+    private JRViewer400 reportviewer = null;   
     private JasperReport jr = null;
     private EditorCreator editor = null;
             
@@ -104,7 +104,7 @@ public abstract class JPanelReport extends JPanel implements JPanelView, BeanFac
             jPanelFilter.add(((ReportEditorCreator) editor).getComponent(), BorderLayout.CENTER);
         }
                   
-        reportviewer = new JRViewer300(null);                        
+        reportviewer = new JRViewer400(null);                        
         
         add(reportviewer, BorderLayout.CENTER);
         

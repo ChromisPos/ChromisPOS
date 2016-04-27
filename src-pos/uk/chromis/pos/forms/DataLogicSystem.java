@@ -61,7 +61,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     protected String m_sInitScript;
     private SentenceFind m_version;
     private SentenceExec m_dummy;
-    private String m_dbVersion = "";
+    public static String m_dbVersion = "";
     protected SentenceList m_peoplevisible;
     protected SentenceList m_peoplevisibleByRights;
     protected SentenceFind m_peoplebycard;

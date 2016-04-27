@@ -31,9 +31,7 @@ import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
-import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.JRootFrame;
-import uk.chromis.pos.sales.JResetPickupID;
 
 public class JFrmSync extends javax.swing.JFrame {
     
