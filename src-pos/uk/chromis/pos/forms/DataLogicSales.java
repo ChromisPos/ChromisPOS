@@ -694,16 +694,29 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @return
      */
     public final SentenceList getCategoriesList() {
-        return new StaticSentence(s, "SELECT "
-                + "ID, "
-                + "NAME, "
-                + "NULL, "
-                + "TEXTTIP, "
-                + "CATSHOWNAME, "
-                + "COLOUR, "
-                + "CATORDER "
-                + "FROM CATEGORIES "
-                + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
+        if (DataLogicSystem.m_dbVersion.equals("Derby")) {
+            return new StaticSentence(s, "SELECT "
+                    + "ID, "
+                    + "NAME, "
+                    + "IMAGE, "
+                    + "TEXTTIP, "
+                    + "CATSHOWNAME, "
+                    + "COLOUR, "
+                    + "CATORDER "
+                    + "FROM CATEGORIES "
+                    + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
+        } else {
+            return new StaticSentence(s, "SELECT "
+                    + "ID, "
+                    + "NAME, "
+                    + "NULL, "
+                    + "TEXTTIP, "
+                    + "CATSHOWNAME, "
+                    + "COLOUR, "
+                    + "CATORDER "
+                    + "FROM CATEGORIES "
+                    + "ORDER BY NAME", null, CategoryInfo.getSerializerRead());
+        }
     }
 
     /**
@@ -1066,23 +1079,23 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     if (l.getProductID() != null && l.isProductService() != true
                             && l.getManageStock() == true) {
 
-                   //     List<ProductsRecipeInfo> kit = getProductsKit(l.getProductID());
-                   //     if (kit.size() == 0) {
-                            // update the stock
-                            getStockDiaryInsert().exec(new Object[]{
-                                UUID.randomUUID().toString(),
-                                ticket.getDate(),
-                                l.getMultiply() < 0.0
-                                ? MovementReason.IN_REFUND.getKey()
-                                : MovementReason.OUT_SALE.getKey(),
-                                location,
-                                l.getProductID(),
-                                l.getProductAttSetInstId(), -l.getMultiply(), l.getPrice(),
-                                ticket.getUser().getName(),
-                                null, null, null, null, null, null, null
-                            });
-                        }
-                        /* else {
+                        //     List<ProductsRecipeInfo> kit = getProductsKit(l.getProductID());
+                        //     if (kit.size() == 0) {
+                        // update the stock
+                        getStockDiaryInsert().exec(new Object[]{
+                            UUID.randomUUID().toString(),
+                            ticket.getDate(),
+                            l.getMultiply() < 0.0
+                            ? MovementReason.IN_REFUND.getKey()
+                            : MovementReason.OUT_SALE.getKey(),
+                            location,
+                            l.getProductID(),
+                            l.getProductAttSetInstId(), -l.getMultiply(), l.getPrice(),
+                            ticket.getUser().getName(),
+                            null, null, null, null, null, null, null
+                        });
+                    }
+                    /* else {
                             for (ProductsRecipeInfo component : kit) {
                                 getStockDiaryInsert().exec(new Object[]{
                                     UUID.randomUUID().toString(),
@@ -1098,7 +1111,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                                 });
                             }
                         }*/
-                    }
+                }
                 // }
 
                 final Payments payments = new Payments();
@@ -1409,7 +1422,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
         return new PreparedSentence(s, "UPDATE CUSTOMERS SET CURDEBT = ?, CURDATE = ? WHERE ID = ?", SerializerWriteParams.INSTANCE);
     }
-       
+
     /**
      *
      * @return
@@ -1426,15 +1439,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 adjustParams[2] = paramsArray[5]; //attrubutesetinstance
                 adjustParams[3] = paramsArray[6]; //units
                 int as = adjustStock(adjustParams);
-                
-                return as+new PreparedSentence(s
-                    , "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                    , new SerializerWriteBasicExt(stockdiaryDatas, new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
+
+                return as + new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
             }
         };
     }
-    
-    
+
     /*
     public final SentenceExec getStockDiaryInsert() {
         return new SentenceExecTransaction(s) {
@@ -1457,7 +1467,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             }
         };
     }
-*/
+     */
     /**
      *
      * @return
@@ -1486,38 +1496,32 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      */
     private int adjustStock(Object params[]) throws BasicException {
         /* Retrieve product kit */
-        List<ProductsRecipeInfo> kit = getProductsKit((String) ((Object[])params)[1]);
+        List<ProductsRecipeInfo> kit = getProductsKit((String) ((Object[]) params)[1]);
         if (kit.size() > 0) {
             /* If this is a kit, i.e. has hits, call recursively for each product */
-            int as=0;
+            int as = 0;
             for (ProductsRecipeInfo component : kit) {
                 Object[] adjustParams = new Object[4];
                 adjustParams[0] = params[0];
                 adjustParams[1] = component.getProductKitId();
                 adjustParams[2] = params[2];
-                adjustParams[3] = ((Double)params[3]) * component.getQuantity();
-                as+=adjustStock(adjustParams);
+                adjustParams[3] = ((Double) params[3]) * component.getQuantity();
+                as += adjustStock(adjustParams);
             }
             return as;
         } else {
             /* If not, adjust the stock */
             int updateresult = ((Object[]) params)[2] == null // si ATTRIBUTESETINSTANCE_ID is null
-               ? new PreparedSentence(s
-                   , "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL"
-                   , new SerializerWriteBasicExt(stockAdjustDatas, new int[] {3, 0, 1})).exec(params)
-               : new PreparedSentence(s
-                   , "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?"
-                   , new SerializerWriteBasicExt(stockAdjustDatas, new int[] {3, 0, 1, 2})).exec(params);
+                    ? new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{3, 0, 1})).exec(params)
+                    : new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ?", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{3, 0, 1, 2})).exec(params);
 
             if (updateresult == 0) {
-                new PreparedSentence(s
-                    , "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?)"
-                    , new SerializerWriteBasicExt(stockAdjustDatas, new int[] {0, 1, 2, 3})).exec(params);
+                new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?)", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{0, 1, 2, 3})).exec(params);
             }
             return 1;
         }
     }
- 
+
     public void addProductListItem(String listName, String ProductID) throws BasicException {
         new PreparedSentence(s, "INSERT INTO PRODUCTLISTS (LISTNAME, PRODUCT) VALUES ('"
                 + listName + "','" + ProductID + "')", null).exec();
