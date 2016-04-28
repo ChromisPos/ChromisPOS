@@ -58,7 +58,7 @@ public class JPanelManualSync extends JPanel implements JPanelView {
     private String SQL;
     private PreparedStatement pstmt;
 
-    public JPanelManualSync(AppView oApp) {        
+    public JPanelManualSync(AppView oApp) {
         initComponents();
         if (oApp != null) {
             jbtnExit.setVisible(false);
@@ -188,7 +188,7 @@ public class JPanelManualSync extends JPanel implements JPanelView {
     }
 
     private Connection getSiteConnection(Connection connection) {
-        try {           
+        try {
             Statement stmt = (Statement) localConnection.createStatement();
             rs = stmt.executeQuery("SELECT * FROM SITES");
             while (rs.next()) {
@@ -454,18 +454,25 @@ public class JPanelManualSync extends JPanel implements JPanelView {
     private void jbtnSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSyncActionPerformed
         // create a new sync instance
         Sync sync = new Sync();
+        String syncMessage = "Unable to run 'Sync Process'";
 
-        // process the sync table data on this machine
-        jtxtSyncProcess.setText("Processing local syncdata table.");
+        if (sync.checkSync(localConnection, remoteConnection)) {
+            syncMessage = "";
+        }
+
+// process the sync table data on this machine
+
+        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
         sync.processSyncData(localConnection, localGUID, remoteGUID);
 
         // Sync the changedobject tables       
-        jtxtSyncProcess.setText("Synchronizing transfer data.");
+        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
         sync.syncSites(localConnection, remoteConnection, remoteGUID, localGUID);
 
-        jtxtSyncProcess.setText("Processing transfer data.");
+        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
         sync.processChangedObjects(localConnection, localGUID);
-        jtxtSyncProcess.setText("Processing complete.");
+
+        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
     }//GEN-LAST:event_jbtnSyncActionPerformed
 
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
