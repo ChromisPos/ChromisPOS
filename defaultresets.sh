@@ -38,4 +38,4 @@ Darwin) LIBRARYPATH=/lib/Mac_OS_X;;
 CYGWIN*|MINGW32*) LIBRARYPATH=/lib/Windows/i368-mingw32;;
 esac
 
-java -cp $CP uk.chromis.defaultresets.DefaultResets
+java -cp $CP uk.chromis.pos.forms.DefaultResets

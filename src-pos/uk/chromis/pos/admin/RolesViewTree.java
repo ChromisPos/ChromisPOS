@@ -347,7 +347,7 @@ public final class RolesViewTree extends javax.swing.JPanel implements EditorRec
         role[3] = jRightsLevel.getValue();
 
         if (!hasPermissions) {
-            Object[] options = {AppLocal.getIntString("Button.NoPermissionsYes"), AppLocal.getIntString("Button.NoPermissionsNo")};
+            Object[] options = {AppLocal.getIntString("Button.Yes"), AppLocal.getIntString("Button.No")};
             if (JOptionPane.showOptionDialog(this,
                     AppLocal.getIntString("Message.adminpermissions1") + m_jName.getText() + " " + AppLocal.getIntString("Message.adminpermissions2"), AppLocal.getIntString("Message.adminwarning"),
                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == 1) {

@@ -183,7 +183,7 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
                 String sColour = (String) newColour;
                 if (sColour == null) {
                     sColour = "";
-                }
+                }                
                 jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), sColour);
             }
         } catch (BasicException e) {

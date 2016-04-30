@@ -77,7 +77,7 @@ public class JOpenWarningDlg extends JDialog {
         int size = (eMessage.length() / 38) + 1;
         height = 350;
         if (!bRetry && !bConfig) {
-            height = 300 + ((size - 5) * 10);
+            height = 350 + ((size - 5) * 10);
         }
 
         MigLayout layout = new MigLayout("", "[fill]");

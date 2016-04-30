@@ -8,10 +8,10 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   
-    <changeSet author="Chromis POS" id="Add CLOSEDCASH_INX_SEQ Index (NV)">
+    <changeSet author="Chromis POS" id="Add CLOSEDCASH_INX_SEQ Index. (NV)">
         <preConditions onFail="MARK_RAN">
             <not> 
-                <indexExists indexName="CLOSEDCASH_INX_SEQ" schemaName="CHROMIS"/>        
+                <indexExists tableName="CLOSEDCASH" indexName="CLOSEDCASH_INX_SEQ" />        
             </not>    
         </preConditions>  
         <sql>CREATE UNIQUE INDEX CLOSEDCASH_INX_SEQ ON CLOSEDCASH (HOST, HOSTSEQUENCE)</sql>        
@@ -23,8 +23,7 @@
                 <indexExists tableName="THIRDPARTIES" indexName="THIRDPARTIES_CIF_INX"/>        
             </not>    
         </preConditions>  
-        <sql>CREATE UNIQUE INDEX THIRDPARTIES_CIF_INX ON THIRDPARTIES (CIF);
-        </sql>        
+        <sql>CREATE UNIQUE INDEX THIRDPARTIES_CIF_INX ON THIRDPARTIES (CIF)</sql>        
     </changeSet> 
     
     <changeSet author="Chromis POS" id="Add THIRDPARTIES_NAME_INX Index (NV)">
