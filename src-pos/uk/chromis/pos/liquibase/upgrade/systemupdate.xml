@@ -10,18 +10,19 @@
 
 
 
-    <property name="boolean.type" value="boolean" dbms="derby, postgresql, hypersql, hsqldb"/>
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql"/>
     <property name="boolean.type" value="bit" dbms="mysql"/>
-    <property name="boolean.type" value="numeric(1)" dbms="oracle"/>
-
-    <property name="blob.type" value="blob" dbms="oracle, derby, hypersql, hsqldb"/>
+   
+    <property name="blob.type" value="blob" dbms="derby"/>
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
      
-    <include file="uk/chromis/pos/liquibase/common/resizederbycolumns.xml"/>      
-    <include file="uk/chromis/pos/liquibase/common/updatechromis.xml"/>
-    <include file="uk/chromis/pos/liquibase/common/checkforeignkeys.xml"/>
-    <include file="uk/chromis/pos/liquibase/common/checkindexes.xml"/>
+
+    <include file="uk/chromis/pos/liquibase/systemupgrade/tables.xml"/> 
+    <include file="uk/chromis/pos/liquibase/systemupgrade/data.xml"/>
+    <include file="uk/chromis/pos/liquibase/common/dbpermissions.xml"/>   
+    <include file="uk/chromis/pos/liquibase/common/setVersion.xml"/>
+    
     
 </databaseChangeLog>
 

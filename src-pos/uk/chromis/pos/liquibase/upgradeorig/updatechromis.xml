@@ -18,7 +18,7 @@
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
   
     <include file="uk/chromis/pos/liquibase/common/dbpermissions.xml"/>  
-    <include file="uk/chromis/pos/liquibase/common/derbybooleanconvert.xml"/>
+    <include file="uk/chromis/pos/liquibase/upgradeorig/derbybooleanconvert.xml"/>
      
     <!-- ***************************************************************************************** --> 
     <!-- ***************************************************************************************** --> 
@@ -974,20 +974,16 @@
     <!--                Update Administrator permissions if required                               -->
     <!-- ***************************************************************************************** -->    
     <changeSet author="Chromis POS" id="Update admin permissiosn v0.57.1beta4">   
-         <update tableName="ROLES">           
+        <update tableName="ROLES">           
             <column name="PERMISSIONS" valueBlobResource="/uk/chromis/pos/templates/Role.Administrator.xml"/>   
             <where>ID='0'</where>         
-       </update> 
-    </changeSet>
+        </update> 
+    </changeSet>  
     
-    <!-- ***************************************************************************************** -->
-    <!--                Must be updated below to reflect current version                           -->
-    <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.57.2-beta">    
-        <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.57.2-beta"/>          
-        </update>  
-    </changeSet>
+    
+    <!-- Flag used to indicate that this point new  upgrade will be used -->
+    <changeSet author="Chromis POS" id="New Database">    
+    </changeSet> 
     
 </databaseChangeLog>
 

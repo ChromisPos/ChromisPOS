@@ -299,10 +299,10 @@ public class JRootApp extends JPanel implements AppView {
             if (getDbVersion().equals("x")) {
                 JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER,
                         AppLocal.getIntString("message.databasenotsupported", session.DB.getName())));
-            } else {
+            } else {              
                 String changelog = (sDBVersion == null) || ("0.00".equals(sDBVersion))
                         ? "uk/chromis/pos/liquibase/create/chromis.xml"
-                        : "uk/chromis/pos/liquibase/upgrade/updatesystem.xml";
+                        : "uk/chromis/pos/liquibase/upgradeorig/updatesystem.xml";                
                 JProcessingDlg dlg = new JProcessingDlg(AppLocal.getIntString(sDBVersion == null ? "message.createdatabase" : "message.updatedatabase"), (sDBVersion == null), changelog);
                 dlg.setModal(true);
                 dlg.setVisible(true);

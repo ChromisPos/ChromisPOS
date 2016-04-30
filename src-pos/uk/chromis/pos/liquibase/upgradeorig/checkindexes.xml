@@ -566,7 +566,7 @@
         </preConditions>  
         <sql>CREATE INDEX STOCKLEVEL_PRODUCT ON STOCKLEVEL (PRODUCT)</sql>        
     </changeSet>            
-            
+                           
     <changeSet author="Chromis POS" id="Add TAXES_CAT_FK Index (NV)">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -665,9 +665,6 @@
         <sql>DROP INDEX PRODUCTS_NAME_INX</sql>
         <sql>CREATE INDEX PRODUCTS_NAME_INX ON PRODUCTS (NAME)</sql>        
     </changeSet>
-
-
-
 
 </databaseChangeLog>
 

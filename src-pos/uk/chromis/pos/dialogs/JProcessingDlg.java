@@ -75,6 +75,7 @@ public class JProcessingDlg extends JDialog {
     public static Boolean DBFAILED = true;
     private Connection con;
     private JProgressBar pb;
+    PreparedStatement stmt2;
 
     public JProcessingDlg(String message, Boolean create, String changeLog) {
 
@@ -196,9 +197,20 @@ public class JProcessingDlg extends JDialog {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
 
+            // lets check if the database has passed new database test
+            try {
+                PreparedStatement stmt2 = con.prepareStatement("SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID='New Database'");
+                ResultSet rs = stmt2.executeQuery();
+                if (rs.next()) {
+                    if (rs.getInt(1) != 0) {
+                        changelog = "uk/chromis/pos/liquibase/upgrade/systemupdate.xml";
+                    }
+                }
+            } catch (SQLException ex) {
+            }
 // Ensure there are not liquibase locks
             try {
-                PreparedStatement stmt2 = con.prepareStatement("DROP TABLE DATABASECHANGELOGLOCK");
+                stmt2 = con.prepareStatement("DROP TABLE DATABASECHANGELOGLOCK");
                 stmt2.executeUpdate();
             } catch (SQLException ex) {
             }
