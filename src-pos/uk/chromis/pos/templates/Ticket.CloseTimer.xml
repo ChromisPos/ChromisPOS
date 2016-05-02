@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import uk.chromis.pos.forms.AppConfig;
 import javax.swing.Timer;
+import uk.chromis.pos.forms.AppLocal;
 
 boolean isCash = false;
 String change = "";

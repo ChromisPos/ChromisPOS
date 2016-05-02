@@ -27,6 +27,7 @@ import javax.swing.JDialog;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.printer.TicketPrinterException;
 import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.forms.AppLocal;
 
 boolean isCash = false;
 String change = "";

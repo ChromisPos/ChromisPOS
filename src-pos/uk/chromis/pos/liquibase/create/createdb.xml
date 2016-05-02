@@ -147,8 +147,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="NOTES" type="varchar(255)"/>
-            <column name="VISIBLE" type="${boolean.type}">
-                <constraints nullable="false"/>
+            <column name="VISIBLE" type="${boolean.type}" defaultValueBoolean="true">
+                <constraints nullable="false" />
             </column>
         </createTable>
         
@@ -749,7 +749,7 @@
             <column name="CHAIRS" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="ISDONE" type="${boolean.type}">
+            <column name="ISDONE" type="${boolean.type} ">
                 <constraints nullable="false"/>
             </column>
             <column name="DESCRIPTION" type="varchar(255)"/>
@@ -1748,6 +1748,92 @@
             <column name="RESTYPE" valueNumeric="0"/>
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.ReprintLastTicket.xml"/>
         </insert>
+        <insert tableName="RESOURCES">
+            <column name="ID" value="62"/>
+            <column name="NAME" value="img.reportlogo"/>
+            <column name="RESTYPE" valueNumeric="1"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/img.reportlogo.png"/>
+        </insert>
+        <insert tableName="RESOURCES">
+            <column name="ID" value="63"/>
+            <column name="NAME" value="Printer.TicketRefundPreview"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.TicketRefundPreview.xml"/>
+        </insert> 
+        <insert tableName="RESOURCES">
+            <column name="ID" value="64"/>
+            <column name="NAME" value="sql.ActionStockChanges"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/sql.ActionStockChanges.txt"/>
+        </insert>  
+        
+        
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="70"/>
+            <column name="NAME" value="Display.Message"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Display.Message.xml"/>
+        </insert>
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="73"/>
+            <column name="NAME" value="Ticket.CloseTimer"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Ticket.CloseTimer.xml"/>
+        </insert> 
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6700"/>
+            <column name="NAME" value="help.promotion"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Help.Promotion.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6701"/>
+            <column name="NAME" value="promotion.bogof"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.bogof.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6702"/>
+            <column name="NAME" value="promotion.threefortwo"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.multibuy.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6703"/>
+            <column name="NAME" value="promotion.mealdeal"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.mealdeal.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6704"/>
+            <column name="NAME" value="promotion.percentoff"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.percentoff.txt"/>
+        </insert>
+
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6705"/>
+            <column name="NAME" value="promotion.coupon"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.coupon.txt"/>
+        </insert>
+        <insert tableName="RESOURCES">  
+            <column name="ID" value="6706"/>  
+            <column name="NAME" value="promotion.fixedpricegroup"/>  
+            <column name="RESTYPE" valueNumeric="0"/>  
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.fixedpricegroup.txt"/>  
+        </insert> 
+        
+        
+        
+        
     </changeSet>   
     
     <changeSet author="Chromis POS" id="Insert into CATEGORIES Table (New Database)"> 

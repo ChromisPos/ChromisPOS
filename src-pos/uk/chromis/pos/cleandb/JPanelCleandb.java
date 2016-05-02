@@ -18,7 +18,7 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
 //   
-package uk.chromis.pos.migrate;
+package uk.chromis.pos.cleandb;
 
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
@@ -62,24 +62,14 @@ import liquibase.resource.ClassLoaderResourceAccessor;
  *
  *
  */
-public class JPaneldbMigrate extends JPanel implements JPanelView {
+public class JPanelCleandb extends JPanel implements JPanelView {
 
     private DirtyManager dirty = new DirtyManager();
     private Connection con;
     private String sdbmanager;
     private Connection con2;
     private String sdbmanager2;
-    private Session session2;
-    private ResultSet rs;
-    private ResultSet rs2;
     private Statement stmt;
-    private Statement stmt2;
-    private String SQL;
-    private PreparedStatement pstmt;
-    private String ticketsnumInvoice;
-    private String ticketsnum;
-    private String ticketsnumRefund;
-    private String ticketsnumPayment;
     private List<PanelConfig> m_panelconfig;
 
     private String db_user2;
@@ -88,12 +78,15 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     private String db_password2;
     private String changelog;
     private Liquibase liquibase;
+    private List<String> tableList;
 
-    public JPaneldbMigrate(AppView oApp) {
+    public JPanelCleandb(AppView oApp) {
         this(oApp.getProperties());
     }
 
-    public JPaneldbMigrate(AppProperties props) {
+    public JPanelCleandb(AppProperties props) {
+
+        tableList = new ArrayList<>();
 
         initComponents();
         jPanel2.setPreferredSize(new java.awt.Dimension(645, 209));
@@ -107,9 +100,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         jbtnDbDriverLib.addActionListener(new DirectoryEvent(jtxtDbDriverLib));
         jNewdbType.addActionListener(dirty);
 
+        jNewdbType.addItem("Apache Derby Embedded");
         jNewdbType.addItem("MySQL");
         jNewdbType.addItem("PostgreSQL");
-        jNewdbType.addItem("Derby");
 
     }
 
@@ -147,27 +140,22 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
     @Override
     public void activate() throws BasicException {
-        // connect to the database
         String db_user = (AppConfig.getInstance().getProperty("db.user"));
         String db_url = (AppConfig.getInstance().getProperty("db.URL"));
         String db_password = (AppConfig.getInstance().getProperty("db.password"));
-
         if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
             // the password is encrypted
             AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
             db_password = cypher.decrypt(db_password.substring(6));
         }
-
         try {
             Session session = AppViewConnection.createSession();
             con = DriverManager.getConnection(db_url, db_user, db_password);
             sdbmanager = con.getMetaData().getDatabaseProductName();
         } catch (BasicException | SQLException e) {
-// put some error trap here  
             JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, AppLocal.getIntString("database.UnableToConnect"), e));
             System.exit(0);
         }
-
     }
 
     @Override
@@ -202,11 +190,16 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         jNewdbType = new javax.swing.JComboBox();
         jButtonTest = new javax.swing.JButton();
         pb = new javax.swing.JProgressBar();
+        jPanel3 = new javax.swing.JPanel();
+        jChkStockRecords = new javax.swing.JCheckBox();
+        jchkFloorplans = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setPreferredSize(new java.awt.Dimension(600, 300));
 
         jbtnMigrate.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jbtnMigrate.setText(AppLocal.getIntString("button.migrate")); // NOI18N
+        jbtnMigrate.setText("Create Clean Database");
         jbtnMigrate.setMaximumSize(new java.awt.Dimension(70, 33));
         jbtnMigrate.setMinimumSize(new java.awt.Dimension(70, 33));
         jbtnMigrate.setPreferredSize(new java.awt.Dimension(70, 33));
@@ -320,7 +313,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -354,22 +347,69 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         .addContainerGap())))
         );
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bundle.getString("title.keep"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+
+        jChkStockRecords.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jChkStockRecords.setText(bundle.getString("label.stockrecords")); // NOI18N
+
+        jchkFloorplans.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jchkFloorplans.setText(bundle.getString("label.floorplans")); // NOI18N
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jTextArea1.setRows(5);
+        jTextArea1.setText(" All products and their associated references, Users, Resources and Permissions will be \n retained in the new database.\n\n You may also retain details from the following");
+        jScrollPane1.setViewportView(jTextArea1);
+        jTextArea1.getAccessibleContext().setAccessibleParent(jTextArea1);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jChkStockRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jchkFloorplans, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 8, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jChkStockRecords)
+                    .addComponent(jchkFloorplans))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(364, Short.MAX_VALUE)
-                .addComponent(jbtnMigrate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jbtnMigrate, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -377,17 +417,17 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addComponent(pb, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnMigrate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -484,9 +524,10 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                 tableName = rsTables.getString("tablename").toUpperCase();
                         }
 
-                        if (!tableName.equalsIgnoreCase("ticketsnum") && !tableName.equalsIgnoreCase("pickup_number")
-                                && !tableName.equalsIgnoreCase("ticketsnum_invoice") && !tableName.equalsIgnoreCase("ticketsnum_payment")
-                                && !tableName.equalsIgnoreCase("ticketsnum_refund")) {
+                        // if (!tableName.equalsIgnoreCase("ticketsnum") && !tableName.equalsIgnoreCase("pickup_number")
+                        //         && !tableName.equalsIgnoreCase("ticketsnum_invoice") && !tableName.equalsIgnoreCase("ticketsnum_payment")
+                        //         && !tableName.equalsIgnoreCase("ticketsnum_refund")) {
+                        if (tableList.contains(tableName)) {
 
                             pb.setString("Transferring data from table " + tableName);
                             String SQL = " SELECT * FROM " + tableName;
@@ -553,11 +594,17 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         }
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(JPaneldbMigrate.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JPanelCleandb.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                replaceSequenceNumbers();
+                if (!jChkStockRecords.isSelected()) {
+                    try {
+                        con2.createStatement().executeUpdate("UPDATE STOCKCURRENT SET UNITS = 0.0");
+                    } catch (SQLException ex) {
+                    }
+                }
 
+                //replaceSequenceNumbers();
                 try {
                     con2.createStatement().executeUpdate("DELETE FROM DATABASECHANGELOG WHERE ID='New Database'");
                 } catch (SQLException ex) {
@@ -609,7 +656,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                pb.setString("Migrating Complete ... ");
+                pb.setString("Clean Database Creation Complete ... ");
                 pb.setIndeterminate(false);
 
                 AppConfig.getInstance().setProperty("db.engine", sdbmanager2);
@@ -630,7 +677,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.restartchanges"), AppLocal.getIntString("message.title"), JOptionPane.INFORMATION_MESSAGE);
                     jbtnMigrate.setEnabled(false);
                 } catch (IOException ex) {
-                    Logger.getLogger(JPaneldbMigrate.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JPanelCleandb.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 pb.setString("");
@@ -701,7 +748,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(JPaneldbMigrate.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JPanelCleandb.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
@@ -740,6 +787,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             sql.append("CREATE TABLE ");
             sql.append(table.toUpperCase());
             sql.append(" (\n");
+            //System.out.println("************************************************************");
+            //System.out.println(table);
+            //System.out.println("************************************************************");
 
             while (rsColumns.next()) {
                 sql.append(rsColumns.getString("COLUMN_NAME"));
@@ -846,24 +896,34 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
                 }
                 sql.append(",\n");
+
+                String name = rsColumns.getString("COLUMN_NAME");
+                String type = rsColumns.getString("TYPE_NAME");
+                int size = rsColumns.getInt("COLUMN_SIZE");
+                String dvalue = rsColumns.getString("COLUMN_DEF");
+                int dType = rsColumns.getInt("DATA_TYPE");
+                //System.out.println("Column name: [" + name + "]; type: [" + type
+                //        + "]; typeint: [" + dType + "]; size: [" + size + "]" + "; defaultvalue:[" + dvalue + "];");
             }
             sql.setLength(sql.length() - 2);
             sql.append("\n)");
             if (sdbmanager2.equals("MySQL")) {
                 sql.append(" ENGINE = InnoDB DEFAULT CHARSET=utf8  ");
             }
+            //System.out.println("--------------------------------------------------------------");
+            //System.out.println(sql.toString());
             Statement stmt2;
             stmt2 = con2.createStatement();
             stmt2.executeUpdate(sql.toString());
 
         } catch (SQLException ex) {
-            Logger.getLogger(JPaneldbMigrate.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JPanelCleandb.class.getName()).log(Level.SEVERE, null, ex);
             try {
                 con2.close();
                 con.close();
 
             } catch (SQLException ex1) {
-                Logger.getLogger(JPaneldbMigrate.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(JPanelCleandb.class.getName()).log(Level.SEVERE, null, ex1);
 
             }
 
@@ -871,6 +931,35 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     }
 
     private void jbtnMigrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMigrateActionPerformed
+
+        tableList.clear();
+        tableList.add("APPLICATIONS");
+        tableList.add("PRODUCTS");
+        tableList.add("CATEGORIES");
+        tableList.add("ATTRIBUTE");
+        tableList.add("ATTRIBUTEINSTANCE");
+        tableList.add("ATTRIBUTESET");
+        tableList.add("ATTRIBUTESETINSTANCE");
+        tableList.add("ATTRIBUTEUSE");
+        tableList.add("ATTRIBUTEVALUE");
+        tableList.add("PRODUCTS_COM");
+        tableList.add("PRODUCTS_KIT");
+        tableList.add("TAXCATEGORIES");
+        tableList.add("TAXCUSTCATEGORIES");
+        tableList.add("TAXES");
+        tableList.add("SITEGUID");
+        tableList.add("DBPERMISSIONS");
+        tableList.add("ROLES");
+        tableList.add("PEOPLE");
+        tableList.add("RESOURCES");
+        tableList.add("STOCKCURRENT");
+        tableList.add("LOCATIONS");
+
+        if (jchkFloorplans.isSelected()) {
+            tableList.add("PLACES");
+            tableList.add("FLOORS");
+        }
+
         Thread workThread = new Thread() {
             public void run() {
                 performAction();
@@ -880,8 +969,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
         pb.setIndeterminate(true);
         pb.setStringPainted(true);
-        pb.setString("Migrating Database ..... Processing ");
-
 
     }//GEN-LAST:event_jbtnMigrateActionPerformed
 
@@ -889,24 +976,6 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         deactivate();
         System.exit(0);
     }//GEN-LAST:event_jbtnExitActionPerformed
-
-    private void jNewdbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewdbTypeActionPerformed
-        if ("MySQL".equals(jNewdbType.getSelectedItem())) {
-            jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/mysql-connector-java-5.1.26-bin.jar");
-            jtxtDbDriver.setText("com.mysql.jdbc.Driver");
-            jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
-        } else if ("PostgreSQL".equals(jNewdbType.getSelectedItem())) {
-            jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/postgresql-9.2-1003.jdbc4.jar");
-            jtxtDbDriver.setText("org.postgresql.Driver");
-            jtxtDbURL.setText("jdbc:postgresql://localhost:5432/chromispos");
-        } else if ("Derby".equals(jNewdbType.getSelectedItem())) {
-            jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/derby-10.10.2.0.jar");
-            jtxtDbDriver.setText("org.apache.derby.jdbc.EmbeddedDriver");
-            jtxtDbURL.setText("jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
-            jtxtDbUser.setText("");
-            jtxtDbPassword.setText("");
-        }
-    }//GEN-LAST:event_jNewdbTypeActionPerformed
 
     private void jButtonTestjButtonTestConnectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTestjButtonTestConnectionActionPerformed
         try {
@@ -936,8 +1005,31 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, "Unknown exception", e));
         }
     }//GEN-LAST:event_jButtonTestjButtonTestConnectionActionPerformed
+
+    private void jNewdbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewdbTypeActionPerformed
+        if ("MySQL".equals(jNewdbType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/mysql-connector-java-5.1.26-bin.jar");
+            jtxtDbDriver.setText("com.mysql.jdbc.Driver");
+            jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
+            //jtxtDbURL.setText("jdbc:mysql://192.168.254.75:3306/ghost");
+            //jtxtDbUser.setText("eposuser");
+            //jtxtDbPassword.setText("epos");
+        } else if ("PostgreSQL".equals(jNewdbType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/postgresql-9.2-1003.jdbc4.jar");
+            jtxtDbDriver.setText("org.postgresql.Driver");
+            jtxtDbURL.setText("jdbc:postgresql://localhost:5432/chromispos");
+        } else if ("Apache Derby Embedded".equals(jNewdbType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/derby-10.10.2.0.jar");
+            jtxtDbDriver.setText("org.apache.derby.jdbc.EmbeddedDriver");
+            jtxtDbURL.setText("jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
+            jtxtDbUser.setText("");
+            jtxtDbPassword.setText("");
+        }
+    }//GEN-LAST:event_jNewdbTypeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonTest;
+    private javax.swing.JCheckBox jChkStockRecords;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
@@ -947,9 +1039,13 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
     private javax.swing.JComboBox jNewdbType;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton jbtnDbDriverLib;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnMigrate;
+    private javax.swing.JCheckBox jchkFloorplans;
     private javax.swing.JTextField jtxtDbDriver;
     private javax.swing.JTextField jtxtDbDriverLib;
     private javax.swing.JPasswordField jtxtDbPassword;
