@@ -17,10 +17,6 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
      
-
-    <include file="uk/chromis/pos/liquibase/systemupgrade/dbpermissions.xml"/> 
-    <include file="uk/chromis/pos/liquibase/common/dbpermissions.xml"/>   
-    <include file="uk/chromis/pos/liquibase/common/setVersion.xml"/>
     
     <!-- This xml is used for any new tables or columns that need to be added as part of the upgrade -->
     
