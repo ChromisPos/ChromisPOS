@@ -588,7 +588,7 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                                         }
                                         i++;
                                     }
-                                }
+                                }                                
                                 pstmt.executeUpdate();
                             }
                         }
@@ -632,7 +632,7 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                 }
 
                 try {
-                    con2.createStatement().executeUpdate("DELETE FROM DATABASECHANGELOG WHERE ID='Create Primary keys (Migrate-cleandb function)'");
+                    con2.createStatement().executeUpdate("DELETE FROM DATABASECHANGELOG WHERE ID='Create Primary keys (new db - migrate function)'");
                 } catch (SQLException ex) {
                 }
 
@@ -640,12 +640,16 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                     ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
                     DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
                     Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
+                    pb.setString("Adding System Defaults ");
+                    changelog = "uk/chromis/pos/liquibase/common/adddefaults.xml";
+                    liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
+                    liquibase.update("implement");
                     pb.setString("Adding Primary Keys ");
-                    changelog = "uk/chromis/pos/liquibase/migrate/primarykeys.xml";
+                    changelog = "uk/chromis/pos/liquibase/common/primarykeys.xml";
                     liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                     liquibase.update("implement");
                     pb.setString("Creating Indexes and Foreign Keys ");
-                    changelog = "uk/chromis/pos/liquibase/migrate/addIndexes.xml";
+                    changelog = "uk/chromis/pos/liquibase/common/addIndexes.xml";
                     liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                     liquibase.update("implement");
                 } catch (DatabaseException ex) {
@@ -687,6 +691,14 @@ public class JPanelCleandb extends JPanel implements JPanelView {
         }
     }
 
+    private void addDatabaseDefaults(){
+        
+        
+        
+        
+        
+    }
+    
     private Boolean createDB() {
         // check if the database already exists
         Statement chkStmt;
@@ -753,7 +765,7 @@ public class JPanelCleandb extends JPanel implements JPanelView {
         try {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
-            changelog = "uk/chromis/pos/liquibase/migrate/sequences.xml";
+            changelog = "uk/chromis/pos/liquibase/common/sequences.xml";
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
             liquibase.update("implement");
@@ -775,7 +787,6 @@ public class JPanelCleandb extends JPanel implements JPanelView {
         } catch (SQLException ex) {
 
         }
-
         return (true);
     }
 
@@ -897,11 +908,11 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                 }
                 sql.append(",\n");
 
-                String name = rsColumns.getString("COLUMN_NAME");
-                String type = rsColumns.getString("TYPE_NAME");
-                int size = rsColumns.getInt("COLUMN_SIZE");
-                String dvalue = rsColumns.getString("COLUMN_DEF");
-                int dType = rsColumns.getInt("DATA_TYPE");
+              //  String name = rsColumns.getString("COLUMN_NAME");
+              //  String type = rsColumns.getString("TYPE_NAME");
+              //  int size = rsColumns.getInt("COLUMN_SIZE");
+              //  String dvalue = rsColumns.getString("COLUMN_DEF");
+              //  int dType = rsColumns.getInt("DATA_TYPE");
                 //System.out.println("Column name: [" + name + "]; type: [" + type
                 //        + "]; typeint: [" + dType + "]; size: [" + size + "]" + "; defaultvalue:[" + dvalue + "];");
             }

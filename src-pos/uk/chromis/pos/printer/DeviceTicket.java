@@ -49,6 +49,7 @@ import uk.chromis.pos.printer.javapos.DeviceFiscalPrinterJavaPOS;
 import uk.chromis.pos.printer.javapos.DevicePrinterJavaPOS;
 import uk.chromis.pos.printer.printer.DevicePrinterPrinter;
 import uk.chromis.pos.printer.screen.DeviceDisplayPanel;
+import uk.chromis.pos.printer.screen.DeviceDisplayScreen;
 import uk.chromis.pos.printer.screen.DeviceDisplayWindow;
 import uk.chromis.pos.printer.screen.DevicePrinterPanel;
 import uk.chromis.pos.util.StringParser;
@@ -125,8 +126,8 @@ public class DeviceTicket {
         try {
 
             switch (sDisplayType) {
-                case "screen":
-                    m_devicedisplay = new DeviceDisplayPanel();
+                case "2nd screen":
+                    m_devicedisplay = new DeviceDisplayScreen();
                     break;
                 case "window":
                     m_devicedisplay = new DeviceDisplayWindow();
@@ -253,7 +254,7 @@ public class DeviceTicket {
                         pw = new PrinterWritterFile(port);
                         m_apool.put(skey, pw);
                         break;
-                    case "usb" :
+                    case "usb":
                     case "raw":
                         pw = new PrinterWritterRaw(port);
                         m_apool.put(skey, pw);

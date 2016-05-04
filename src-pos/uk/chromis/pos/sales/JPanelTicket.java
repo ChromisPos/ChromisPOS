@@ -232,7 +232,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         /*
         Code to drive full screen display
-         */
+         */        
         if (AppConfig.getInstance().getBoolean("machine.customerdisplay")) {
             if ((app.getDeviceTicket().getDeviceDisplay() != null)
                     && (app.getDeviceTicket().getDeviceDisplay() instanceof DeviceDisplayAdvance)) {

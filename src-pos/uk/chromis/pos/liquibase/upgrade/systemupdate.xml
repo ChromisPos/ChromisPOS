@@ -23,6 +23,5 @@
     <include file="uk/chromis/pos/liquibase/common/dbpermissions.xml"/>   
     <include file="uk/chromis/pos/liquibase/common/setVersion.xml"/>
     
-    
 </databaseChangeLog>
 

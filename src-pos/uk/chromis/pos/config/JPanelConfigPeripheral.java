@@ -234,7 +234,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         // Display
         jcboMachineDisplay.addItem("Not defined");
-        jcboMachineDisplay.addItem("screen");
+        jcboMachineDisplay.addItem("2nd screen");
         jcboMachineDisplay.addItem("window");
         jcboMachineDisplay.addItem("javapos");
         jcboMachineDisplay.addItem("epson");
@@ -1024,7 +1024,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jCustomerScreen.setText(bundle.getString("label.customerscreen")); // NOI18N
-        jPanel2.add(jCustomerScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 30));
+        jPanel2.add(jCustomerScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 250, 30));
 
         m_jDisplayParams.add(jPanel2, "empty");
 
@@ -1879,7 +1879,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE)
+            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2009,6 +2009,11 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
             cl.show(m_jDisplayParams, "javapos");
         } else if ("Not defined".equals(jcboMachineDisplay.getSelectedItem())) {
             jCustomerScreen.setVisible(false);
+
+        } else if ("2nd screen".equals(jcboMachineDisplay.getSelectedItem())) {
+            cl.show(m_jDisplayParams, "empty");
+            jCustomerScreen.setVisible(false);
+            jCustomerScreen.setSelected(false);
         } else {
             jCustomerScreen.setVisible(true);
             cl.show(m_jDisplayParams, "empty");

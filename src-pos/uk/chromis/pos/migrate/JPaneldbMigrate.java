@@ -44,6 +44,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -359,8 +360,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(364, Short.MAX_VALUE)
-                .addComponent(jbtnMigrate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtnMigrate, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
@@ -504,7 +505,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                 SQLInsert.append(" (");
 
                                 for (int j = 1; j <= rsmd.getColumnCount(); j++) {
-                                    if (dataRS.getString(rsmd.getColumnName(j)) != null) {
+                                    if (dataRS.getString(rsmd.getColumnName(j)) != null) {                                        
                                         SQLInsert.append(rsmd.getColumnName(j));
                                         SQLInsert.append(", ");
                                         SQLSubString.append("?, ");
@@ -523,7 +524,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
                                     if (dataRS.getString(rsmd.getColumnName(j)) != null) {
                                         switch (rsmd.getColumnType(j)) {
-                                            case 12: //varchar              
+                                            case 12: //varchar   
                                                 pstmt.setString(i, dataRS.getString(rsmd.getColumnName(j)));
                                                 break;
                                             case 8:  //double
@@ -541,8 +542,12 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                             case 4:  //integer
                                                 pstmt.setInt(i, dataRS.getInt(rsmd.getColumnName(j)));
                                                 break;
-                                            case 93:  //timestamp
-                                                pstmt.setTimestamp(i, dataRS.getTimestamp(rsmd.getColumnName(j)));
+                                            case 93:  //timestamp                                                
+                                                if (dataRS.getTimestamp(rsmd.getColumnName(j)).toString().equals("0000-00-00 00:00:00")) {
+                                                    pstmt.setTimestamp(i, Timestamp.valueOf("2016-05-03 00:00:01"));
+                                                } else {
+                                                    pstmt.setTimestamp(i, dataRS.getTimestamp(rsmd.getColumnName(j)));
+                                                }
                                                 break;
                                         }
                                         i++;
@@ -585,7 +590,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                 }
 
                 try {
-                    con2.createStatement().executeUpdate("DELETE FROM DATABASECHANGELOG WHERE ID='Create Primary keys (Migrate-cleandb function)'");
+                    con2.createStatement().executeUpdate("DELETE FROM DATABASECHANGELOG WHERE ID='Create Primary keys (new db - migrate function)'");
                 } catch (SQLException ex) {
                 }
 
@@ -594,11 +599,11 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                     DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
                     Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
                     pb.setString("Adding Primary Keys ");
-                    changelog = "uk/chromis/pos/liquibase/migrate/primarykeys.xml";
+                    changelog = "uk/chromis/pos/liquibase/common/primarykeys.xml";
                     liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                     liquibase.update("implement");
                     pb.setString("Creating Indexes and Foreign Keys ");
-                    changelog = "uk/chromis/pos/liquibase/migrate/addIndexes.xml";
+                    changelog = "uk/chromis/pos/liquibase/common/addIndexes.xml";
                     liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                     liquibase.update("implement");
                 } catch (DatabaseException ex) {
@@ -706,7 +711,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         try {
             ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
             DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
-            changelog = "uk/chromis/pos/liquibase/migrate/sequences.xml";
+            changelog = "uk/chromis/pos/liquibase/common/sequences.xml";
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(DriverManager.getConnection(db_url2, db_user2, db_password2)));
             liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
             liquibase.update("implement");
@@ -740,7 +745,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
             sql.append("CREATE TABLE ");
             sql.append(table.toUpperCase());
             sql.append(" (\n");
-
+           // System.out.println("************************************************************");
+           // System.out.println(table);
+           // System.out.println("************************************************************");
             while (rsColumns.next()) {
                 sql.append(rsColumns.getString("COLUMN_NAME"));
                 switch (rsColumns.getInt("DATA_TYPE")) {
@@ -804,10 +811,15 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                     sql.append("CURRENT_TIMESTAMP");
                                     break;
                                 } else {
-                                    sql.append(" '");
-                                    sql.append(rsColumns.getString("COLUMN_DEF").replaceAll("::timestamp without time zone", "").replaceAll("'", "").replaceAll("TIMESTAMP", "").replace("(", "").replace(")", ""));
-                                    sql.append("'");
-                                    sql.append(" not null");
+                                    if (rsColumns.getString("COLUMN_DEF").equalsIgnoreCase("0000-00-00 00:00:00")) {
+                                        sql.setLength(sql.length() - 8);
+                                    } else {
+                                        sql.append(" '");
+                                        sql.append(rsColumns.getString("COLUMN_DEF").replaceAll("::timestamp without time zone", "").replaceAll("'", "").replaceAll("TIMESTAMP", "").replace("(", "").replace(")", ""));
+                                        sql.append("'");
+                                        sql.append(" not null");
+                                    }
+
                                     break;
                                 }
                             case 16:
@@ -846,12 +858,21 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
                 }
                 sql.append(",\n");
+            //    String name = rsColumns.getString("COLUMN_NAME");
+            //    String type = rsColumns.getString("TYPE_NAME");
+            //    int size = rsColumns.getInt("COLUMN_SIZE");
+            //    String dvalue = rsColumns.getString("COLUMN_DEF");
+            //    int dType = rsColumns.getInt("DATA_TYPE");
+            //    System.out.println("Column name: [" + name + "]; type: [" + type
+            //            + "]; typeint: [" + dType + "]; size: [" + size + "]" + "; defaultvalue:[" + dvalue + "];");
             }
             sql.setLength(sql.length() - 2);
             sql.append("\n)");
             if (sdbmanager2.equals("MySQL")) {
                 sql.append(" ENGINE = InnoDB DEFAULT CHARSET=utf8  ");
             }
+            //System.out.println("--------------------------------------------------------------");
+           // System.out.println(sql.toString());
             Statement stmt2;
             stmt2 = con2.createStatement();
             stmt2.executeUpdate(sql.toString());
@@ -894,7 +915,10 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         if ("MySQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/mysql-connector-java-5.1.26-bin.jar");
             jtxtDbDriver.setText("com.mysql.jdbc.Driver");
-            jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
+            // jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
+            jtxtDbURL.setText("jdbc:mysql://192.168.254.75:3306/ghost");
+            jtxtDbUser.setText("eposuser");
+            jtxtDbPassword.setText("epos");
         } else if ("PostgreSQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/postgresql-9.2-1003.jdbc4.jar");
             jtxtDbDriver.setText("org.postgresql.Driver");

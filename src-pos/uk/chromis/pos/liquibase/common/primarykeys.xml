@@ -19,7 +19,7 @@
     <property name="blob.type" value="bytea" dbms="postgresql"/>
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
        
-    <changeSet author="Chromis POS" id="Create Primary keys (Migrate-cleandb function)">      
+    <changeSet author="Chromis POS" id="Create Primary keys (new db - migrate function)">      
         <sql>ALTER TABLE APPLICATIONS ADD PRIMARY KEY (ID)</sql>
         <sql>ALTER TABLE ATTRIBUTE ADD PRIMARY KEY (ID)</sql>
         <sql>ALTER TABLE ATTRIBUTEINSTANCE ADD PRIMARY KEY (ID)</sql>
@@ -69,6 +69,6 @@
         <sql>ALTER TABLE TICKETS ADD PRIMARY KEY (ID)</sql>   
         <sql>ALTER TABLE DATABASECHANGELOG ADD PRIMARY KEY (ID)</sql>      
     </changeSet>                
-                                                    	 
+                                                                                                                                                                   	 
 </databaseChangeLog>
 
