@@ -1204,7 +1204,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         } else if (sCode.length() == 12) {
                             switch (sCode.substring(0, 1)) {
                                 case "2":
-                                    sVariableNum = sCode.substring(6, 11);
+                                    sVariableNum = sCode.substring(7, 11);
                                     dPriceSell = Double.parseDouble(sVariableNum) / 100;
                                     break;
                             }

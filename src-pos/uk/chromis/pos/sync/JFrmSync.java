@@ -43,7 +43,7 @@ public class JFrmSync extends javax.swing.JFrame {
             this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/fixedimages/smllogo.png")));
         } catch (IOException e) {
         }   
-       // setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - Manual Synchronisation");   
+      
        setTitle(AppLocal.APP_NAME +  " - Manual Synchronisation"); 
         addWindowListener(new MyFrameListener());         
         config = new JPanelManualSync(null);        

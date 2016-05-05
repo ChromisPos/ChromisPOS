@@ -915,10 +915,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         if ("MySQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/mysql-connector-java-5.1.26-bin.jar");
             jtxtDbDriver.setText("com.mysql.jdbc.Driver");
-            // jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
-            jtxtDbURL.setText("jdbc:mysql://192.168.254.75:3306/ghost");
-            jtxtDbUser.setText("eposuser");
-            jtxtDbPassword.setText("epos");
+             jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");            
         } else if ("PostgreSQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/postgresql-9.2-1003.jdbc4.jar");
             jtxtDbDriver.setText("org.postgresql.Driver");

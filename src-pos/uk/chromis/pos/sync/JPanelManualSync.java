@@ -72,7 +72,7 @@ public class JPanelManualSync extends JPanel implements JPanelView {
 
     @Override
     public String getTitle() {
-        return AppLocal.getIntString("Menu.Configuration");
+        return AppLocal.getIntString("Menu.Sync");
     }
 
     @Override
@@ -461,18 +461,17 @@ public class JPanelManualSync extends JPanel implements JPanelView {
         }
 
 // process the sync table data on this machine
-
         jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
         sync.processSyncData(localConnection, localGUID, remoteGUID);
 
         // Sync the changedobject tables       
-        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
+        jtxtSyncProcess.setText(syncMessage.equals("") ? "Synchronising data between server." : syncMessage);
         sync.syncSites(localConnection, remoteConnection, remoteGUID, localGUID);
 
-        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
+        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local changed objects table." : syncMessage);
         sync.processChangedObjects(localConnection, localGUID);
 
-        jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
+        jtxtSyncProcess.setText(syncMessage.equals("") ? "Sync Process Complete ." : syncMessage);
     }//GEN-LAST:event_jbtnSyncActionPerformed
 
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
