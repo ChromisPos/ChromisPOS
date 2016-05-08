@@ -204,6 +204,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_jPanEntries.add(m_jNumberKey);
         }
 
+        jButton1.setVisible(!AppConfig.getInstance().getBoolean("till.addcustomerbutton"));
+        
         jbtnMooring.setVisible(AppConfig.getInstance().getBoolean("till.marineoption"));
         priceWith00 = ("true".equals(AppConfig.getInstance().getProperty("till.pricewith00")));
         if (priceWith00) {
