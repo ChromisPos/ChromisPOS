@@ -579,16 +579,20 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                                             case -4:
                                                 pstmt.setBytes(i, dataRS.getBytes(rsmd.getColumnName(j)));
                                                 break;
-                                            case 4:  //integer
+                                            case 4:
+                                            case 5://integer
                                                 pstmt.setInt(i, dataRS.getInt(rsmd.getColumnName(j)));
                                                 break;
                                             case 93:  //timestamp
                                                 pstmt.setTimestamp(i, dataRS.getTimestamp(rsmd.getColumnName(j)));
                                                 break;
+                                            case 2:
+                                                pstmt.setBigDecimal(i, dataRS.getBigDecimal(rsmd.getColumnName(j)));
+                                                break;
                                         }
                                         i++;
                                     }
-                                }                                
+                                }
                                 pstmt.executeUpdate();
                             }
                         }
@@ -649,7 +653,7 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                     liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                     liquibase.update("implement");
                     pb.setString("Creating Indexes and Foreign Keys ");
-                    changelog = "uk/chromis/pos/liquibase/common/addIndexes.xml";
+                    changelog = "uk/chromis/pos/liquibase/common/addindexes.xml";
                     liquibase = new Liquibase(changelog, new ClassLoaderResourceAccessor(), database);
                     liquibase.update("implement");
                 } catch (DatabaseException ex) {
@@ -691,14 +695,6 @@ public class JPanelCleandb extends JPanel implements JPanelView {
         }
     }
 
-    private void addDatabaseDefaults(){
-        
-        
-        
-        
-        
-    }
-    
     private Boolean createDB() {
         // check if the database already exists
         Statement chkStmt;
@@ -792,6 +788,11 @@ public class JPanelCleandb extends JPanel implements JPanelView {
 
     private void createTable(String table) {
         try {
+            String SQL = " SELECT * FROM " + table;
+            Statement dataStmt = con.createStatement();
+            ResultSet dataRS = dataStmt.executeQuery(SQL);
+            ResultSetMetaData rsmd = dataRS.getMetaData();
+
             DatabaseMetaData mdColumns = con.getMetaData();
             ResultSet rsColumns = mdColumns.getColumns(null, null, table, null);
             StringBuilder sql = new StringBuilder();
@@ -833,9 +834,20 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                         sql.append((sdbmanager2.equals("MySQL")) ? " datetime" : " timestamp");
                         break;
                     case 4:
+                    case 5:
                         sql.append(" integer");
                         break;
-
+                    case 2:
+                        sql.append(" numeric(");
+                        for (int k = 1; k <= rsmd.getColumnCount(); k++) {
+                            if (rsmd.getColumnName(k).equalsIgnoreCase(rsColumns.getString("COLUMN_NAME"))) {
+                                sql.append(rsmd.getPrecision(k));
+                                sql.append(",");
+                                sql.append(rsmd.getScale(k));
+                                sql.append(")");
+                            }
+                        }
+                        break;
                 }
                 if (rsColumns.getString("IS_NULLABLE").equalsIgnoreCase("no")) {
                     if (rsColumns.getString("COLUMN_DEF") == null) {
@@ -844,6 +856,7 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                         sql.append(" default");
                         switch (rsColumns.getInt("DATA_TYPE")) {
                             case 4:
+                            case 5:
                                 sql.append(" ");
                                 sql.append(rsColumns.getString("COLUMN_DEF"));
                                 sql.append(" not null");
@@ -897,6 +910,11 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                                 sql.append(rsColumns.getString("COLUMN_DEF"));
                                 sql.append(" not null");
                                 break;
+                            case 2:
+                                sql.append(" ");
+                                sql.append(rsColumns.getString("COLUMN_DEF"));
+                                sql.append(" not null");                               
+                                break;
                             default:
                                 sql.append(" ");
                                 sql.append(rsColumns.getString("COLUMN_DEF"));
@@ -908,11 +926,11 @@ public class JPanelCleandb extends JPanel implements JPanelView {
                 }
                 sql.append(",\n");
 
-              //  String name = rsColumns.getString("COLUMN_NAME");
-              //  String type = rsColumns.getString("TYPE_NAME");
-              //  int size = rsColumns.getInt("COLUMN_SIZE");
-              //  String dvalue = rsColumns.getString("COLUMN_DEF");
-              //  int dType = rsColumns.getInt("DATA_TYPE");
+                //  String name = rsColumns.getString("COLUMN_NAME");
+                //  String type = rsColumns.getString("TYPE_NAME");
+                //  int size = rsColumns.getInt("COLUMN_SIZE");
+                //  String dvalue = rsColumns.getString("COLUMN_DEF");
+                //  int dType = rsColumns.getInt("DATA_TYPE");
                 //System.out.println("Column name: [" + name + "]; type: [" + type
                 //        + "]; typeint: [" + dType + "]; size: [" + size + "]" + "; defaultvalue:[" + dvalue + "];");
             }

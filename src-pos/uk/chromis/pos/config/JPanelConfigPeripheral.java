@@ -234,7 +234,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         // Display
         jcboMachineDisplay.addItem("Not defined");
-        jcboMachineDisplay.addItem("2nd screen");
+        jcboMachineDisplay.addItem("dual screen");
         jcboMachineDisplay.addItem("window");
         jcboMachineDisplay.addItem("javapos");
         jcboMachineDisplay.addItem("epson");
@@ -692,6 +692,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
                 break;
             case "screen":
             case "window":
+            case "dual screen":
                 AppConfig.getInstance().setProperty("machine.display", sMachineDisplay);
                 AppConfig.getInstance().setBoolean("machine.customerdisplay", jCustomerScreen.isSelected());
                 break;
@@ -2010,10 +2011,9 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         } else if ("Not defined".equals(jcboMachineDisplay.getSelectedItem())) {
             jCustomerScreen.setVisible(false);
 
-        } else if ("2nd screen".equals(jcboMachineDisplay.getSelectedItem())) {
+        } else if ("dual screen".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "empty");
-            jCustomerScreen.setVisible(false);
-            jCustomerScreen.setSelected(false);
+            jCustomerScreen.setSelected(true);
         } else {
             jCustomerScreen.setVisible(true);
             cl.show(m_jDisplayParams, "empty");

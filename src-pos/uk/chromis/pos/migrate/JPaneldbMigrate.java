@@ -108,9 +108,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         jbtnDbDriverLib.addActionListener(new DirectoryEvent(jtxtDbDriverLib));
         jNewdbType.addActionListener(dirty);
 
+        jNewdbType.addItem("Apache Derby Embedded");
         jNewdbType.addItem("MySQL");
         jNewdbType.addItem("PostgreSQL");
-        jNewdbType.addItem("Derby");
 
     }
 
@@ -505,7 +505,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                 SQLInsert.append(" (");
 
                                 for (int j = 1; j <= rsmd.getColumnCount(); j++) {
-                                    if (dataRS.getString(rsmd.getColumnName(j)) != null) {                                        
+                                    if (dataRS.getString(rsmd.getColumnName(j)) != null) {
                                         SQLInsert.append(rsmd.getColumnName(j));
                                         SQLInsert.append(", ");
                                         SQLSubString.append("?, ");
@@ -539,7 +539,8 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                             case -4:
                                                 pstmt.setBytes(i, dataRS.getBytes(rsmd.getColumnName(j)));
                                                 break;
-                                            case 4:  //integer
+                                            case 4:
+                                            case 5://integer
                                                 pstmt.setInt(i, dataRS.getInt(rsmd.getColumnName(j)));
                                                 break;
                                             case 93:  //timestamp                                                
@@ -548,6 +549,9 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                                 } else {
                                                     pstmt.setTimestamp(i, dataRS.getTimestamp(rsmd.getColumnName(j)));
                                                 }
+                                                break;
+                                            case 2:
+                                                pstmt.setBigDecimal(i, dataRS.getBigDecimal(rsmd.getColumnName(j)));
                                                 break;
                                         }
                                         i++;
@@ -739,15 +743,29 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
     private void createTable(String table) {
         try {
+            String SQL = " SELECT * FROM " + table;
+            Statement dataStmt = con.createStatement();
+            ResultSet dataRS = dataStmt.executeQuery(SQL);
+            ResultSetMetaData rsmd = dataRS.getMetaData();
+            /*
+            System.out.println("=====================================================");
+            System.out.println("Table name          : " + rsmd.getTableName(1));
+            System.out.println("Column count        : " + rsmd.getColumnCount());
+            System.out.println("Column name         : " + rsmd.getColumnName(1));
+            System.out.println("Column type         : " + rsmd.getColumnTypeName(1));
+            System.out.println("Column type Int     : " + rsmd.getColumnType(1));
+            System.out.println("=====================================================");
+             */
             DatabaseMetaData mdColumns = con.getMetaData();
             ResultSet rsColumns = mdColumns.getColumns(null, null, table, null);
             StringBuilder sql = new StringBuilder();
             sql.append("CREATE TABLE ");
             sql.append(table.toUpperCase());
             sql.append(" (\n");
-           // System.out.println("************************************************************");
-           // System.out.println(table);
-           // System.out.println("************************************************************");
+            //System.out.println("************************************************************");
+            //System.out.println(table);
+            //System.out.println("************************************************************");
+
             while (rsColumns.next()) {
                 sql.append(rsColumns.getString("COLUMN_NAME"));
                 switch (rsColumns.getInt("DATA_TYPE")) {
@@ -779,9 +797,20 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         sql.append((sdbmanager2.equals("MySQL")) ? " datetime" : " timestamp");
                         break;
                     case 4:
+                    case 5:
                         sql.append(" integer");
                         break;
-
+                    case 2:
+                        sql.append(" numeric(");
+                        for (int k = 1; k <= rsmd.getColumnCount(); k++) {
+                            if (rsmd.getColumnName(k).equalsIgnoreCase(rsColumns.getString("COLUMN_NAME"))) {
+                                sql.append(rsmd.getPrecision(k));
+                                sql.append(",");
+                                sql.append(rsmd.getScale(k));
+                                sql.append(")");
+                            }
+                        }
+                        break;
                 }
                 if (rsColumns.getString("IS_NULLABLE").equalsIgnoreCase("no")) {
                     if (rsColumns.getString("COLUMN_DEF") == null) {
@@ -790,6 +819,7 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                         sql.append(" default");
                         switch (rsColumns.getInt("DATA_TYPE")) {
                             case 4:
+                            case 5:
                                 sql.append(" ");
                                 sql.append(rsColumns.getString("COLUMN_DEF"));
                                 sql.append(" not null");
@@ -848,6 +878,11 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
                                 sql.append(rsColumns.getString("COLUMN_DEF"));
                                 sql.append(" not null");
                                 break;
+                            case 2:
+                                sql.append(" ");
+                                sql.append(rsColumns.getString("COLUMN_DEF"));
+                                sql.append(" not null");
+                                break;
                             default:
                                 sql.append(" ");
                                 sql.append(rsColumns.getString("COLUMN_DEF"));
@@ -858,21 +893,22 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
 
                 }
                 sql.append(",\n");
-            //    String name = rsColumns.getString("COLUMN_NAME");
-            //    String type = rsColumns.getString("TYPE_NAME");
-            //    int size = rsColumns.getInt("COLUMN_SIZE");
-            //    String dvalue = rsColumns.getString("COLUMN_DEF");
-            //    int dType = rsColumns.getInt("DATA_TYPE");
-            //    System.out.println("Column name: [" + name + "]; type: [" + type
-            //            + "]; typeint: [" + dType + "]; size: [" + size + "]" + "; defaultvalue:[" + dvalue + "];");
+                //String name = rsColumns.getString("COLUMN_NAME");
+                //String type = rsColumns.getString("TYPE_NAME");
+                //int size = rsColumns.getInt("COLUMN_SIZE");
+                //String dvalue = rsColumns.getString("COLUMN_DEF");
+                //int dType = rsColumns.getInt("DATA_TYPE");
+                //System.out.println("Column name: [" + name + "]; type: [" + type
+                //        + "]; typeint: [" + dType + "]; size: [" + size + "]" + "; defaultvalue:[" + dvalue + "];");
             }
+
             sql.setLength(sql.length() - 2);
             sql.append("\n)");
             if (sdbmanager2.equals("MySQL")) {
                 sql.append(" ENGINE = InnoDB DEFAULT CHARSET=utf8  ");
             }
             //System.out.println("--------------------------------------------------------------");
-           // System.out.println(sql.toString());
+            //System.out.println(sql.toString());
             Statement stmt2;
             stmt2 = con2.createStatement();
             stmt2.executeUpdate(sql.toString());
@@ -915,12 +951,15 @@ public class JPaneldbMigrate extends JPanel implements JPanelView {
         if ("MySQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/mysql-connector-java-5.1.26-bin.jar");
             jtxtDbDriver.setText("com.mysql.jdbc.Driver");
-             jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");            
+            jtxtDbURL.setText("jdbc:mysql://localhost:3306/chromispos");
+            //jtxtDbURL.setText("jdbc:mysql://192.168.254.75:3306/kidsgrove");
+            //jtxtDbUser.setText("eposuser");
+            //jtxtDbPassword.setText("epos");
         } else if ("PostgreSQL".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/postgresql-9.2-1003.jdbc4.jar");
             jtxtDbDriver.setText("org.postgresql.Driver");
             jtxtDbURL.setText("jdbc:postgresql://localhost:5432/chromispos");
-        } else if ("Derby".equals(jNewdbType.getSelectedItem())) {
+        } else if ("Apache Derby Embedded".equals(jNewdbType.getSelectedItem())) {
             jtxtDbDriverLib.setText(System.getProperty("user.dir") + "/lib/derby-10.10.2.0.jar");
             jtxtDbDriver.setText("org.apache.derby.jdbc.EmbeddedDriver");
             jtxtDbURL.setText("jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");

@@ -126,7 +126,7 @@ public class DeviceTicket {
         try {
 
             switch (sDisplayType) {
-                case "2nd screen":
+                case "dual screen":
                     m_devicedisplay = new DeviceDisplayScreen();
                     break;
                 case "window":
