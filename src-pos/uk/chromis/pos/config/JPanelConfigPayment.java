@@ -52,6 +52,13 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         jcboCardReader.addActionListener(dirty);
         jcboPaymentGateway.addActionListener(dirty);
         jchkPaymentTest.addActionListener(dirty);
+        jchkPaymentAcceptBank.addActionListener(dirty);
+        jchkPaymentAcceptCash.addActionListener(dirty);
+        jchkPaymentAcceptAccount.addActionListener(dirty);
+        jchkPaymentAcceptCheque.addActionListener(dirty);
+        jchkPaymentAcceptVoucher.addActionListener(dirty);
+        jchkPaymentAcceptCard.addActionListener(dirty);
+        jchkPaymentAcceptFree.addActionListener(dirty);
         
         // Payment Provider                
         initPayments("Not defined", new ConfigPaymentPanelEmpty());
@@ -102,6 +109,15 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         jcboCardReader.setSelectedItem(AppConfig.getInstance().getProperty("payment.magcardreader"));
         jcboPaymentGateway.setSelectedItem(AppConfig.getInstance().getProperty("payment.gateway"));
         jchkPaymentTest.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.testmode")));       
+        
+        jchkPaymentAcceptBank.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptbank")));
+        jchkPaymentAcceptCash.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcash")));
+        jchkPaymentAcceptAccount.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptaccount")));
+        jchkPaymentAcceptCheque.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcheque")));
+        jchkPaymentAcceptVoucher.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptvoucher")));
+        jchkPaymentAcceptCard.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcard")));
+        jchkPaymentAcceptFree.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptfree")));
+        
         pc.loadProperties();
         dirty.setDirty(false);
     }
@@ -116,6 +132,13 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         AppConfig.getInstance().setProperty("payment.magcardreader", comboValue(jcboCardReader.getSelectedItem()));
         AppConfig.getInstance().setProperty("payment.gateway", comboValue(jcboPaymentGateway.getSelectedItem()));
         AppConfig.getInstance().setProperty("payment.testmode", Boolean.toString(jchkPaymentTest.isSelected()));
+        AppConfig.getInstance().setProperty("payment.acceptcash", Boolean.toString(jchkPaymentAcceptCash.isSelected()));
+        AppConfig.getInstance().setProperty("payment.acceptaccount", Boolean.toString(jchkPaymentAcceptAccount.isSelected()));
+        AppConfig.getInstance().setProperty("payment.acceptcheque", Boolean.toString(jchkPaymentAcceptCheque.isSelected()));
+        AppConfig.getInstance().setProperty("payment.acceptvoucher", Boolean.toString(jchkPaymentAcceptVoucher.isSelected()));
+        AppConfig.getInstance().setProperty("payment.acceptcard", Boolean.toString(jchkPaymentAcceptCard.isSelected()));
+        AppConfig.getInstance().setProperty("payment.acceptfree", Boolean.toString(jchkPaymentAcceptFree.isSelected()));
+        AppConfig.getInstance().setProperty("payment.acceptbank", Boolean.toString(jchkPaymentAcceptBank.isSelected()));
         pc.saveProperties();
         dirty.setDirty(false);
     }
@@ -144,6 +167,14 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
         jcboCardReader = new javax.swing.JComboBox();
         jchkPaymentTest = new eu.hansolo.custom.SteelCheckBox();
         jPanel1 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jchkPaymentAcceptBank = new eu.hansolo.custom.SteelCheckBox();
+        jchkPaymentAcceptCash = new eu.hansolo.custom.SteelCheckBox();
+        jchkPaymentAcceptAccount = new eu.hansolo.custom.SteelCheckBox();
+        jchkPaymentAcceptCheque = new eu.hansolo.custom.SteelCheckBox();
+        jchkPaymentAcceptVoucher = new eu.hansolo.custom.SteelCheckBox();
+        jchkPaymentAcceptCard = new eu.hansolo.custom.SteelCheckBox();
+        jchkPaymentAcceptFree = new eu.hansolo.custom.SteelCheckBox();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setPreferredSize(new java.awt.Dimension(600, 450));
@@ -178,6 +209,96 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jchkPaymentAcceptBank.setText(bundle.getString("tab.bank")); // NOI18N
+        jchkPaymentAcceptBank.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkPaymentAcceptBankActionPerformed(evt);
+            }
+        });
+
+        jchkPaymentAcceptCash.setText(bundle.getString("tab.cash")); // NOI18N
+        jchkPaymentAcceptCash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkPaymentAcceptCashActionPerformed(evt);
+            }
+        });
+
+        jchkPaymentAcceptAccount.setText(bundle.getString("tab.debt")); // NOI18N
+        jchkPaymentAcceptAccount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkPaymentAcceptAccountActionPerformed(evt);
+            }
+        });
+
+        jchkPaymentAcceptCheque.setText(bundle.getString("tab.cheque")); // NOI18N
+        jchkPaymentAcceptCheque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkPaymentAcceptChequeActionPerformed(evt);
+            }
+        });
+
+        jchkPaymentAcceptVoucher.setText(bundle.getString("tab.paper")); // NOI18N
+        jchkPaymentAcceptVoucher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkPaymentAcceptVoucherActionPerformed(evt);
+            }
+        });
+
+        jchkPaymentAcceptCard.setText(bundle.getString("tab.magcard")); // NOI18N
+        jchkPaymentAcceptCard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkPaymentAcceptCardActionPerformed(evt);
+            }
+        });
+
+        jchkPaymentAcceptFree.setText(bundle.getString("tab.free")); // NOI18N
+        jchkPaymentAcceptFree.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkPaymentAcceptFreeActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jchkPaymentAcceptBank, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jchkPaymentAcceptCash, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jchkPaymentAcceptAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jchkPaymentAcceptVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jchkPaymentAcceptCheque, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jchkPaymentAcceptFree, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jchkPaymentAcceptCard, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jchkPaymentAcceptBank, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jchkPaymentAcceptCash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jchkPaymentAcceptCheque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jchkPaymentAcceptAccount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jchkPaymentAcceptVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jchkPaymentAcceptFree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jchkPaymentAcceptCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -206,6 +327,10 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
                                 .addGap(43, 43, 43)
                                 .addComponent(jchkPaymentTest, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(77, Short.MAX_VALUE))))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,17 +341,17 @@ public class JPanelConfigPayment extends javax.swing.JPanel implements PanelConf
                     .addComponent(jcboCardReader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcboPaymentGateway, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcboPaymentGateway, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jchkPaymentTest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -240,6 +365,34 @@ private void jcboPaymentGatewayActionPerformed(java.awt.event.ActionEvent evt) {
         jPanel2.repaint(); 
     }
 }//GEN-LAST:event_jcboPaymentGatewayActionPerformed
+
+    private void jchkPaymentAcceptBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkPaymentAcceptBankActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jchkPaymentAcceptBankActionPerformed
+
+    private void jchkPaymentAcceptCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkPaymentAcceptCashActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jchkPaymentAcceptCashActionPerformed
+
+    private void jchkPaymentAcceptAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkPaymentAcceptAccountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jchkPaymentAcceptAccountActionPerformed
+
+    private void jchkPaymentAcceptChequeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkPaymentAcceptChequeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jchkPaymentAcceptChequeActionPerformed
+
+    private void jchkPaymentAcceptVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkPaymentAcceptVoucherActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jchkPaymentAcceptVoucherActionPerformed
+
+    private void jchkPaymentAcceptCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkPaymentAcceptCardActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jchkPaymentAcceptCardActionPerformed
+
+    private void jchkPaymentAcceptFreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkPaymentAcceptFreeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jchkPaymentAcceptFreeActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -247,8 +400,16 @@ private void jcboPaymentGatewayActionPerformed(java.awt.event.ActionEvent evt) {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JComboBox jcboCardReader;
     private javax.swing.JComboBox jcboPaymentGateway;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentAcceptAccount;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentAcceptBank;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentAcceptCard;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentAcceptCash;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentAcceptCheque;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentAcceptFree;
+    private eu.hansolo.custom.SteelCheckBox jchkPaymentAcceptVoucher;
     private eu.hansolo.custom.SteelCheckBox jchkPaymentTest;
     // End of variables declaration//GEN-END:variables
     

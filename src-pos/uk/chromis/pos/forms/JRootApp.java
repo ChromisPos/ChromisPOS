@@ -58,6 +58,7 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -192,12 +193,42 @@ public class JRootApp extends JPanel implements AppView {
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(30, 30));
     }
 
+    public static final int INIT_SUCCESS = 0;
+    public static final int INIT_FAIL_CONFIG = 1;
+    public static final int INIT_FAIL_EXIT = 2;
+    public static final int INIT_FAIL_RETRY = 3;
+    
+    private int showFailDialog( boolean bRetry ) {
+
+        String [] option1 = new String [] {
+            AppLocal.getIntString("Button.Configuration"),
+            AppLocal.getIntString("Button.Exit"),
+            AppLocal.getIntString("Button.Retry")
+        };
+        String [] option2 = new String [] {
+            AppLocal.getIntString("Button.Configuration"),
+            AppLocal.getIntString("Button.Exit")
+        };
+
+        String [] options = bRetry ? option1 : option2;
+        String  dflt = bRetry ? option1[2] : option2[1];
+        
+        int rc = JOptionPane.showOptionDialog( null,
+                AppLocal.getIntString("message.retryorconfig"),
+                AppLocal.getIntString("Label.Database"),
+                0, JOptionPane.PLAIN_MESSAGE, null,
+                options, dflt );
+        
+        return rc + 1;
+    }
+    
+
     /**
      *
      * @param props
      * @return
      */
-    public boolean initApp(AppProperties props) {
+    public int initApp(AppProperties props) {
 
         m_props = props;
         m_jPanelDown.setVisible(!AppConfig.getInstance().getBoolean("till.hideinfo"));
@@ -206,11 +237,19 @@ public class JRootApp extends JPanel implements AppView {
         applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         // Database start
-        try {
-            session = AppViewConnection.createSession(m_props);
-        } catch (BasicException e) {
-            JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, e.getMessage(), e));
-            return false;
+        int rc = INIT_FAIL_RETRY;
+        while( rc == INIT_FAIL_RETRY ) {
+            rc = INIT_SUCCESS;
+            try {
+                session = AppViewConnection.createSession(m_props);
+            } catch (BasicException e) {
+                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, e.getMessage(), e));
+                rc = showFailDialog( true );
+            }
+        }
+
+        if( rc != INIT_SUCCESS ) {
+            return rc;
         }
 
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
@@ -279,7 +318,7 @@ public class JRootApp extends JPanel implements AppView {
                 
                 if( bFailed ) {
                     session.close();
-                    return false;
+                    return showFailDialog( false );
                 }
             }
         }
@@ -317,7 +356,7 @@ public class JRootApp extends JPanel implements AppView {
             MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotclosecash"), e);
             msg.show(this);
             session.close();
-            return false;
+            return showFailDialog( false );
         }
 
         // Leo la localizacion de la caja (Almacen).
@@ -449,7 +488,7 @@ public class JRootApp extends JPanel implements AppView {
 
         showLogin();
 
-        return true;
+        return INIT_SUCCESS;
     }
 
     private class doWork implements Runnable {

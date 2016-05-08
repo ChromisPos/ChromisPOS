@@ -37,7 +37,6 @@ import uk.chromis.pos.sales.JProductAttEdit;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -47,7 +46,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.sales.TaxesLogic;
 import uk.chromis.pos.ticket.PlayWave;
 
 /**
@@ -82,6 +81,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
     private final AppView m_App;
     private final DataLogicSales m_dlSales;
+    private TaxesLogic taxeslogic;
     
     private DirtyManager m_Dirty;
     
@@ -93,6 +93,13 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_App = app;
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
+
+        try {
+            taxeslogic = new TaxesLogic(m_dlSales.getTaxList().list());
+        } catch (BasicException ex) {
+            Logger.getLogger(StockDiaryEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         m_Dirty = dirty;
         
         initComponents();      
@@ -477,7 +484,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                     unitsinstock = Formats.DOUBLE.formatValue(dStock);
 
                     buyprice = prod.getPriceBuy();
-                    sellprice = prod.getPriceSell();
+                    sellprice = prod.getPriceSellTax( taxeslogic.getTaxInfo( prod.getTaxCategoryID() ) );
                     
                     stocksecurity = m_dlSales.findProductStockSecurity(
                             (String) m_LocationsModel.getSelectedKey(),

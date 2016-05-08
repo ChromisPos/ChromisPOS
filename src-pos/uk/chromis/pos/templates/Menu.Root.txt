@@ -53,6 +53,7 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/uk/chromis/images/attributes.png", "Menu.AttributeValues", "uk.chromis.pos.inventory.AttributeValuesPanel");
         submenu.addPanel("/uk/chromis/images/attributes.png", "Menu.AttributeSets", "uk.chromis.pos.inventory.AttributeSetsPanel");
         submenu.addPanel("/uk/chromis/images/attributes.png", "Menu.AttributeUse", "uk.chromis.pos.inventory.AttributeUsePanel");
+        submenu.addPanel("/uk/chromis/images/products.png", "Menu.ProductLists", "uk.chromis.pos.inventory.ProductListsPanel");
         submenu.addPanel("/uk/chromis/images/stockdiary.png", "Menu.StockDiary", "uk.chromis.pos.inventory.StockDiaryPanel");
         submenu.addPanel("/uk/chromis/images/stockmaint.png", "Menu.StockMovement", "uk.chromis.pos.inventory.StockManagement");        
         submenu.addPanel("/uk/chromis/images/img.discount.png", "Menu.Promotions", "uk.chromis.pos.promotion.PromotionPanel"); 

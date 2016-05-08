@@ -302,7 +302,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         @Override
         public String getIconKey() {
-            return "/uk/chromis/images/customer.png";
+            return "/uk/chromis/images/account.png";
         }
     }
 
@@ -588,7 +588,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         getContentPane().add(jPanel5, java.awt.BorderLayout.SOUTH);
 
-        setSize(new java.awt.Dimension(672, 497));
+        setSize(new java.awt.Dimension(708, 565));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

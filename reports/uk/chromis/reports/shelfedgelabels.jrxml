@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
               xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
-              name="report name" columnCount="3" pageWidth="595" pageHeight="842" columnWidth="188" leftMargin="15" rightMargin="15"
+              name="report name" columnCount="3" pageWidth="600" pageHeight="842" columnWidth="175" columnSpacing="22" leftMargin="15" rightMargin="5"
               topMargin="58" bottomMargin="20" >
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -23,8 +23,8 @@
 	<detail>
 		<band height="107" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="210" height="20" />
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="0" y="0" width="185" height="20" />
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
@@ -44,7 +44,7 @@
 )]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="45" y="60" width="210" height="30" />
+				<reportElement x="40" y="60" width="210" height="30" />
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="SansSerif" size="20" isBold="false"/>
 				</textElement>

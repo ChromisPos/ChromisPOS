@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -159,7 +160,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.STRING,
             Datas.STRING,
             Datas.STRING};
-
+        
         productsRow = new Row(
                 new Field("ID", Datas.STRING, Formats.STRING),
                 new Field(AppLocal.getIntString("label.prodref"), Datas.STRING, Formats.STRING, true, true, true),
@@ -311,14 +312,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public final ProductInfoExt getProductInfoByCode(String sCode) throws BasicException {
-        if (sCode.startsWith("977")) {
-            // This is an ISSN barcode (news and magazines) 
-            // the first 3 digits correspond to the 977 prefix assigned to serial publications, 
-            // the next 7 digits correspond to the ISSN of the publication 
-            // Anything after that is publisher dependant - we strip everything after  
-            // the 10th character 
-            sCode = sCode.substring(0, 10);
-        }
+
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
@@ -838,6 +832,29 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY NAME", null, new SerializerReadClass(LocationInfo.class));
     }
 
+    /**
+     *
+     * @return
+     */
+    public final SentenceList getProductListList() {
+        return new StaticSentence(s, "SELECT DISTINCT "
+                + "LISTNAME FROM PRODUCTLISTS "
+                + "ORDER BY LISTNAME", null, new SerializerReadClass(ProductListInfo.class));
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public final SentenceList getProductListItems( String listName ) {
+        return new StaticSentence(s, "SELECT "
+                + "L.PRODUCT, P.REFERENCE, P.NAME FROM PRODUCTLISTS L LEFT JOIN PRODUCTS P "
+                + "ON P.ID = L.PRODUCT "
+                + "WHERE L.LISTNAME = '" + listName + "' "
+                + "ORDER BY P.REFERENCE ",
+                null, new SerializerReadClass(ProductListItem.class));
+    }
+    
     /**
      *
      * @return
@@ -1436,6 +1453,33 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 return new PreparedSentence(s, "DELETE FROM STOCKDIARY WHERE ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0})).exec(params);
             }
         };
+    }
+
+    /**
+     *
+     * @return
+     */
+    public void addProductListItem( String listName, String ProductID ) throws BasicException {
+        new PreparedSentence(s, "INSERT INTO PRODUCTLISTS (LISTNAME, PRODUCT) VALUES ('"
+                + listName + "','" + ProductID + "')", null ).exec();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public void removeProductListItem( String listName, String ProductID ) throws BasicException {
+        new PreparedSentence(s, "DELETE FROM PRODUCTLISTS WHERE LISTNAME ='"
+                + listName + "' AND PRODUCT = '" + ProductID + "'", null ).exec();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public void removeProductList( String listName ) throws BasicException {
+        new PreparedSentence(s, "DELETE FROM PRODUCTLISTS WHERE LISTNAME ='"
+                + listName + "'", null ).exec();
     }
 
     /**
