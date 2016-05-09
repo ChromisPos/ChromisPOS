@@ -234,9 +234,5 @@ public class DataLogicReceipts extends BeanFactoryDataSingle {
         }
         return (tmpPickupId);
     }
-    
-    
-    
-    
-    
+
 }

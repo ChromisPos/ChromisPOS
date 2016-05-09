@@ -99,6 +99,9 @@ public class Place implements SerializableRead, java.io.Serializable {
         return m_sId;
     }
 
+    public String getTicketID(){
+        return m_ticketId;
+    }
     public String getName() {
         return m_sName;
     }

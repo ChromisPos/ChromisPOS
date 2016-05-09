@@ -211,37 +211,36 @@ public class JTicketsBagRestaurant extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_MoveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_MoveTableActionPerformed
-
         restDB.clearCustomerNameInTableById(m_restaurant.getTable());
         restDB.clearWaiterNameInTableById(m_restaurant.getTable());
+        restDB.clearTicketIdInTableById(m_restaurant.getTable());
         restDB.setTableMovedFlag(m_restaurant.getTable());
+        restDB.clearTableLock(m_restaurant.getTable());
         m_restaurant.moveTicket();
-
     }//GEN-LAST:event_m_MoveTableActionPerformed
 
     @SuppressWarnings("empty-statement")
     private void m_DelTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_DelTicketActionPerformed
-
         int res = JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.wannadelete"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (res == JOptionPane.YES_OPTION) {
-
             restDB.clearCustomerNameInTableById(m_restaurant.getTable());
             restDB.clearWaiterNameInTableById(m_restaurant.getTable());
             restDB.clearTicketIdInTableById(m_restaurant.getTable());
+            restDB.clearTableLock(m_restaurant.getTable());
             m_restaurant.deleteTicket();
         }
 
     }//GEN-LAST:event_m_DelTicketActionPerformed
 
     private void m_TablePlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_TablePlanActionPerformed
+        restDB.clearTableLock(m_restaurant.getTable());
         m_restaurant.newTicket();
-
     }//GEN-LAST:event_m_TablePlanActionPerformed
 
     @SuppressWarnings("empty-statement")
     private void m_KitchenPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_KitchenPrintActionPerformed
 // This replaces the code from the buttons script
-        if  (!ticket.getTicketType().equals(TicketType.REFUND)) {
+        if (!ticket.getTicketType().equals(TicketType.REFUND)) {
             ticket = m_restaurant.getActiveTicket();
             String rScript = (m_dlSystem.getResourceAsText("script.SendOrder"));
 

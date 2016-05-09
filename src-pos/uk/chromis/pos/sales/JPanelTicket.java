@@ -232,7 +232,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         /*
         Code to drive full screen display
-         */        
+         */
         if (AppConfig.getInstance().getBoolean("machine.customerdisplay")) {
             if ((app.getDeviceTicket().getDeviceDisplay() != null)
                     && (app.getDeviceTicket().getDeviceDisplay() instanceof DeviceDisplayAdvance)) {
@@ -404,6 +404,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public boolean deactivate() {
         AutoLogoff.getInstance().deactivateTimer();
         //Listener.stop();
+        if (m_oTicket != null) {
+            if (AppConfig.getInstance().getProperty("machine.ticketsbag").equals("restaurant")) {
+                restDB.clearTableLockByTicket(m_oTicket.getId());
+            }
+        }
         return m_ticketsbag.deactivate();
     }
 
@@ -457,7 +462,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     restDB.setWaiterNameInTable(m_App.getAppUserView().getUser().getName(), oTicketExt.toString());
                 }
                 restDB.setTicketIdInTable(m_oTicket.getId(), oTicketExt.toString());
-
+                restDB.setTableLock(m_oTicket.getId(), m_App.getAppUserView().getUser().getName());
             }
         }
 
@@ -1857,8 +1862,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-
-private Object evalScript(ScriptObject scr, String resource, ScriptArg... args) {
+    private Object evalScript(ScriptObject scr, String resource, ScriptArg... args) {
         // resource here is guaranteed to be not null
         try {
             scr.setSelectedIndex(m_ticketlines.getSelectedIndex());
@@ -1904,12 +1908,11 @@ private Object evalScript(ScriptObject scr, String resource, ScriptArg... args) 
                     selectedIndex, effectedIndex, productID)) {
                 refreshTicket();
                 setSelectedIndex(selectedIndex);
-            
 
-}
+            }
         } catch (ScriptException ex) {
             Logger.getLogger(JPanelTicket.class
-.getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex);
             JMessageDialog.showMessage(this,
                     new MessageInf(MessageInf.SGN_WARNING,
                             AppLocal.getIntString("message.cannotexecute"), ex));
@@ -1933,9 +1936,8 @@ private Object evalScript(ScriptObject scr, String resource, ScriptArg... args) 
     private Object executeEvent(TicketInfo ticket, Object ticketext, String eventkey, ScriptArg... args) {
         String resource = m_jbtnconfig.getEvent(eventkey);
         Logger
-
-.getLogger(JPanelTicket.class
-.getName()).log(Level.INFO, null, eventkey);
+                .getLogger(JPanelTicket.class
+                        .getName()).log(Level.INFO, null, eventkey);
         if (resource == null) {
             return null;
         } else {
@@ -1957,31 +1959,30 @@ private Object evalScript(ScriptObject scr, String resource, ScriptArg... args) 
             m_ticketlines.setSelectedIndex(i);
         } else if (m_oTicket.getLinesCount() > 0) {
             m_ticketlines.setSelectedIndex(m_oTicket.getLinesCount() - 1);
-        
 
-}
+        }
     }
 
     public static class ScriptArg {
 
-    private final String key;
-    private final Object value;
+        private final String key;
+        private final Object value;
 
-    public ScriptArg(String key, Object value) {
-        this.key = key;
-        this.value = value;
+        public ScriptArg(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public Object getValue() {
+            return value;
+        }
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-}
-
-private String setTempjPrice(String jPrice) {
+    private String setTempjPrice(String jPrice) {
         jPrice = jPrice.replace(".", "");
 // remove all leading zeros from the string        
         long tempL = Long.parseLong(jPrice);
@@ -1992,87 +1993,85 @@ private String setTempjPrice(String jPrice) {
         }
         return (jPrice.length() <= 2) ? jPrice : (new StringBuffer(jPrice).insert(jPrice.length() - 2, ".").toString());
 
-    
-
-}
+    }
 
     public class ScriptObject {
 
-    private final TicketInfo ticket;
-    private final Object ticketext;
-    private int selectedindex;
+        private final TicketInfo ticket;
+        private final Object ticketext;
+        private int selectedindex;
 
-    private ScriptObject(TicketInfo ticket, Object ticketext) {
-        this.ticket = ticket;
-        this.ticketext = ticketext;
-    }
-
-    public double getInputValue() {
-        if (m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO) {
-            return JPanelTicket.this.getInputValue();
-        } else {
-            return 0.0;
+        private ScriptObject(TicketInfo ticket, Object ticketext) {
+            this.ticket = ticket;
+            this.ticketext = ticketext;
         }
-    }
 
-    public int getSelectedIndex() {
-        return selectedindex;
-    }
-
-    public void setSelectedIndex(int i) {
-        selectedindex = i;
-    }
-
-    public void printReport(String resourcefile) {
-        JPanelTicket.this.printReport(resourcefile, ticket, ticketext);
-    }
-
-    public void printTicket(String sresourcename) {
-        JPanelTicket.this.printTicket(sresourcename, ticket, ticketext);
-    }
-
-    public Object evalScript(String code, ScriptArg... args) throws ScriptException {
-
-        ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
-        String sDBUser = AppConfig.getInstance().getProperty("db.user");
-        String sDBPassword = AppConfig.getInstance().getProperty("db.password");
-
-        if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
-            AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
-            sDBPassword = cypher.decrypt(sDBPassword.substring(6));
+        public double getInputValue() {
+            if (m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO) {
+                return JPanelTicket.this.getInputValue();
+            } else {
+                return 0.0;
+            }
         }
-        script.put("hostname", AppConfig.getInstance().getProperty("machine.hostname"));
-        script.put("dbURL", AppConfig.getInstance().getProperty("db.URL"));
-        script.put("dbUser", sDBUser);
-        script.put("dbPassword", sDBPassword);
+
+        public int getSelectedIndex() {
+            return selectedindex;
+        }
+
+        public void setSelectedIndex(int i) {
+            selectedindex = i;
+        }
+
+        public void printReport(String resourcefile) {
+            JPanelTicket.this.printReport(resourcefile, ticket, ticketext);
+        }
+
+        public void printTicket(String sresourcename) {
+            JPanelTicket.this.printTicket(sresourcename, ticket, ticketext);
+        }
+
+        public Object evalScript(String code, ScriptArg... args) throws ScriptException {
+
+            ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
+            String sDBUser = AppConfig.getInstance().getProperty("db.user");
+            String sDBPassword = AppConfig.getInstance().getProperty("db.password");
+
+            if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
+                AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
+                sDBPassword = cypher.decrypt(sDBPassword.substring(6));
+            }
+            script.put("hostname", AppConfig.getInstance().getProperty("machine.hostname"));
+            script.put("dbURL", AppConfig.getInstance().getProperty("db.URL"));
+            script.put("dbUser", sDBUser);
+            script.put("dbPassword", sDBPassword);
 // End mod            
-        script.put("ticket", ticket);
-        script.put("place", ticketext);
-        script.put("taxes", taxcollection);
-        script.put("taxeslogic", taxeslogic);
-        script.put("user", m_App.getAppUserView().getUser());
-        script.put("sales", this);
-        script.put("taxesinc", m_jaddtax.isSelected());
-        script.put("warranty", warrantyPrint);
-        script.put("pickupid", getPickupString(ticket));
-        script.put("m_App", m_App);
-        script.put("m_TTP", m_TTP);
-        script.put("dlSystem", dlSystem);
-        script.put("dlSales", dlSales);
+            script.put("ticket", ticket);
+            script.put("place", ticketext);
+            script.put("taxes", taxcollection);
+            script.put("taxeslogic", taxeslogic);
+            script.put("user", m_App.getAppUserView().getUser());
+            script.put("sales", this);
+            script.put("taxesinc", m_jaddtax.isSelected());
+            script.put("warranty", warrantyPrint);
+            script.put("pickupid", getPickupString(ticket));
+            script.put("m_App", m_App);
+            script.put("m_TTP", m_TTP);
+            script.put("dlSystem", dlSystem);
+            script.put("dlSales", dlSales);
 
-        // more arguments
-        for (ScriptArg arg : args) {
-            script.put(arg.getKey(), arg.getValue());
+            // more arguments
+            for (ScriptArg arg : args) {
+                script.put(arg.getKey(), arg.getValue());
+            }
+            return script.eval(code);
         }
-        return script.eval(code);
     }
-}
 
-/**
- * This method is called from within the constructor to initialize the form.
- * WARNING: Do NOT modify this code. The content of this method is always
- * regenerated by the FormEditor.
- */
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the FormEditor.
+     */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -2868,10 +2867,9 @@ private String setTempjPrice(String jPrice) {
                 i.set("pickupid", m_oTicket.getPickupId());
                 Object result;
                 result = i.eval(rScript);
-} catch (EvalError ex) {
+            } catch (EvalError ex) {
                 Logger.getLogger(JPanelTicket.class
-
-.getName()).log(Level.SEVERE, null, ex);
+                        .getName()).log(Level.SEVERE, null, ex);
             }
 
             AutoLogoff.getInstance().activateTimer();
@@ -2881,6 +2879,7 @@ private String setTempjPrice(String jPrice) {
                 case "restaurant":
                     if (autoLogoffEnabled && autoLogoffAfterKitchen) {
                         if (autoLogoffToTables) {
+                            //      restDB.clearTableLock(m_oTicket.getTicketId());
                             deactivate();
                             setActiveTicket(null, null);
                             break;

@@ -20,6 +20,18 @@
     
     <!-- This xml is used for any new tables or columns that need to be added as part of the upgrade -->
     
+    <changeSet author="Chromis POS" id="Create table lock columns in places table" >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="LOCKED" tableName="PLACES"/>
+            </not>
+        </preConditions> 
+                       
+        <addColumn tableName="PLACES">            
+            <column name="LOCKED" type="${boolean.type}" defaultValueBoolean="false" /> 
+            <column name="OPENEDBY" type="varchar(50)" />             
+        </addColumn>                                               
+    </changeSet>
     
     
     

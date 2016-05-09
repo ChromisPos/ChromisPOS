@@ -1419,7 +1419,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @return
      */
     public final SentenceExec getDebtUpdate() {
-
         return new PreparedSentence(s, "UPDATE CUSTOMERS SET CURDEBT = ?, CURDATE = ? WHERE ID = ?", SerializerWriteParams.INSTANCE);
     }
 
