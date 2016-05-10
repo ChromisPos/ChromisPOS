@@ -530,7 +530,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         p = new StringParser(AppConfig.getInstance().getProperty("machine.scale"));
         sparam = p.nextToken(':');
         jcboMachineScale.setSelectedItem(sparam);
-        if ("casiopd1".equals(sparam) || "Adam Equipment".equals(sparam) || "dialog1".equals(sparam) || "samsungesp".equals(sparam)) {
+        if ("casiopd1".equals(sparam) || "Adam Equipment".equals(sparam) || "dialog1".equals(sparam) || "samsungesp".equals(sparam) || "caspdii".equals(sparam)) {
             jcboSerialScale.setSelectedItem(p.nextToken(','));
         }
 
@@ -704,7 +704,8 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
         String sMachineScale = comboValue(jcboMachineScale.getSelectedItem());
         if ("casiopd1".equals(sMachineScale) || "Adam Equipment".equals(sMachineScale)
                 || "dialog1".equals(sMachineScale)
-                || "samsungesp".equals(sMachineScale)) {
+                || "dialog1".equals(sMachineScale)
+                || "caspdii".equals(sMachineScale)) {
             AppConfig.getInstance().setProperty("machine.scale", sMachineScale + ":" + comboValue(jcboSerialScale.getSelectedItem()));
         } else {
             AppConfig.getInstance().setProperty("machine.scale", sMachineScale);
@@ -1993,6 +1994,7 @@ public class JPanelConfigPeripheral extends javax.swing.JPanel implements PanelC
 
         if ("casiopd1".equals(jcboMachineScale.getSelectedItem())
                 || "dialog1".equals(jcboMachineScale.getSelectedItem())
+                || "caspdii".equals(jcboMachineScale.getSelectedItem())
                 || "Adam Equipment".equals(jcboMachineScale.getSelectedItem())
                 || "samsungesp".equals(jcboMachineScale.getSelectedItem())) {
             cl.show(m_jScaleParams, "comm");
