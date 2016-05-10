@@ -688,9 +688,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 for (int i = 0; i < numlines; i++) {
                     TicketLineInfo current_ticketline = m_oTicket.getLine(i);
                     double current_unit = current_ticketline.getMultiply();
-                    if (current_unit != 0.0D) {
-                        for (int j = i + 1; j < numlines; j++) {
-                            if ((m_oTicket.getLine(j).getProductID() != null) && (m_oTicket.getLine(j).getProductName() != "")) {
+                    if (current_unit != 0.0D && !m_oTicket.getLine(i).isPromotionAdded() ) {
+                        for (int j = i + 1; j < numlines; j++)  {
+                            if ((m_oTicket.getLine(j).getProductID() != null) &&
+                                    (m_oTicket.getLine(j).getProductName() != "") &&
+                                    !m_oTicket.getLine(j).isPromotionAdded() ) {
                                 TicketLineInfo loop_ticketline = m_oTicket.getLine(j);
                                 double loop_unit = loop_ticketline.getMultiply();
                                 String current_productid = current_ticketline.getProductID();
