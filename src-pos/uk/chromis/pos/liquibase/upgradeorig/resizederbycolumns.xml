@@ -127,14 +127,14 @@
         <dropForeignKeyConstraint baseTableName="ATTRIBUTESETINSTANCE" constraintName="ATTSETINST_SET"/>
     </changeSet>                                                                               
     
-    <changeSet author="Chromis POS" id="Remove constraints  TICKETLINES_ATTSETINST on Derby (NV)" dbms="derby">
+    <changeSet author="Chromis POS" id="Remove constraints TICKETLINES_ATTSETINST on Derby (NV)" dbms="derby">
         <preConditions onFail="MARK_RAN">
             <foreignKeyConstraintExists foreignKeyTableName="TICKETLINES" foreignKeyName="TICKETLINES_ATTSETINST"/>           
         </preConditions>  
         <dropForeignKeyConstraint baseTableName="TICKETLINES" constraintName="TICKETLINES_ATTSETINST"/>
     </changeSet>     
       
-     <changeSet author="Chromis POS" id="Remove constraints PEOPLE_FK_1 on Derby (NV)" dbms="derby">
+    <changeSet author="Chromis POS" id="Remove constraints PEOPLE_FK_1 on Derby (NV)" dbms="derby">
         <preConditions onFail="MARK_RAN">
             <foreignKeyConstraintExists foreignKeyTableName="PEOPLE" foreignKeyName="PEOPLE_FK_1"/>            
         </preConditions>  
@@ -204,11 +204,26 @@
         <dropForeignKeyConstraint baseTableName="RECEIPTS" constraintName="RECEIPTS_FK_MONEY"/>
     </changeSet>
 
+    <changeSet author="Chromis POS" id="Remove constraints PRODUCTS_KIT_FK_1 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_KIT" foreignKeyName="PRODUCTS_KIT_FK_1"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="PRODUCTS_KIT" constraintName="PRODUCTS_KIT_FK_1"/>
+    </changeSet>
+    
+    <changeSet author="Chromis POS" id="Remove constraints PRODUCTS_KIT_FK_2 on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS_KIT" foreignKeyName="PRODUCTS_KIT_FK_2"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="PRODUCTS_KIT" constraintName="PRODUCTS_KIT_FK_2"/>
+    </changeSet>
 
-
-
-
-
+    <changeSet author="Chromis POS" id="Remove constraints PRODUCTS_PACKPRODUCT_FK on Derby (NV)" dbms="derby">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyTableName="PRODUCTS" foreignKeyName="PRODUCTS_PACKPRODUCT_FK"/>            
+        </preConditions>  
+        <dropForeignKeyConstraint baseTableName="PRODUCTS" constraintName="PRODUCTS_PACKPRODUCT_FK"/>
+    </changeSet>
 
     <changeSet author="Chromis POS" id="check for primary key on ticketlines table (NV)">        
         <preConditions onFail="MARK_RAN">
