@@ -216,6 +216,11 @@ public abstract class BatchSentence extends BaseSentence {
         public int updateCount() {
             return 0;
         }
+
+        @Override
+        public java.math.BigDecimal getBigDecimal(int columnIndex) throws BasicException {
+            throw new BasicException(LocalRes.getIntString("exception.nodataset"));
+        }
     }
     
     /**

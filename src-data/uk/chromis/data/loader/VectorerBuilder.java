@@ -16,29 +16,30 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.data.loader;
 
 import java.util.ArrayList;
 import uk.chromis.basic.BasicException;
+import java.math.*;
 
 /**
  *
- *   
+ *
  */
 public abstract class VectorerBuilder implements Vectorer {
-    
-    /** Creates a new instance of VectorerBuilder */
+
+    /**
+     * Creates a new instance of VectorerBuilder
+     */
     public VectorerBuilder() {
     }
-    
+
     /**
      *
-     * @return
-     * @throws BasicException
+     * @return @throws BasicException
      */
     public abstract String[] getHeaders() throws BasicException;
-    
+
     /**
      *
      * @param obj
@@ -46,37 +47,49 @@ public abstract class VectorerBuilder implements Vectorer {
      * @throws BasicException
      */
     public String[] getValues(Object obj) throws BasicException {
-        
-        SerializableToArray s2a = new SerializableToArray(); 
+
+        SerializableToArray s2a = new SerializableToArray();
         ((SerializableWrite) obj).writeValues(s2a);
         return s2a.getValues();
     }
-    
+
     private static class SerializableToArray implements DataWrite {
 
         private ArrayList m_aParams;
 
-        /** Creates a new instance of MetaParameter */
+        /**
+         * Creates a new instance of MetaParameter
+         */
         public SerializableToArray() {
             m_aParams = new ArrayList();
         }
+
+        public void setBigDecimal(int paramIndex, BigDecimal bdValue) throws BasicException {
+            ensurePlace(paramIndex - 1);
+            m_aParams.set(paramIndex - 1, bdValue.toString());
         
+        }
+
         public void setDouble(int paramIndex, Double dValue) throws BasicException {
             ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, dValue.toString());
         }
+
         public void setBoolean(int paramIndex, Boolean bValue) throws BasicException {
             ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, bValue.toString());
         }
+
         public void setInt(int paramIndex, Integer iValue) throws BasicException {
             ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, iValue.toString());
-        }   
+        }
+
         public void setString(int paramIndex, String sValue) throws BasicException {
             ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, sValue);
         }
+
         public void setTimestamp(int paramIndex, java.util.Date dValue) throws BasicException {
             ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, dValue.toString());
@@ -85,24 +98,26 @@ public abstract class VectorerBuilder implements Vectorer {
 //            ensurePlace(paramIndex -1);
 //            // m_aParams.set(paramIndex - 1, value.toString()); // quiza un uuencode o algo asi
 //        }
+
         public void setBytes(int paramIndex, byte[] value) throws BasicException {
-            ensurePlace(paramIndex -1);
+            ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, value.toString()); // quiza un uuencode o algo asi
         }
+
         public void setObject(int paramIndex, Object value) throws BasicException {
             ensurePlace(paramIndex - 1);
             m_aParams.set(paramIndex - 1, value.toString());
-        }  
-        
+        }
+
         private void ensurePlace(int i) {
             m_aParams.ensureCapacity(i);
-            while (i >= m_aParams.size()){
+            while (i >= m_aParams.size()) {
                 m_aParams.add(null);
             }
         }
-        
+
         public String[] getValues() {
             return (String[]) m_aParams.toArray(new String[m_aParams.size()]);
-        } 
+        }
     }
 }

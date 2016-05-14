@@ -78,28 +78,17 @@ public class LineRemovedGUID implements liquibase.change.custom.CustomTaskChange
 
         try {
             Statement stmt = (Statement) conn.createStatement();
-
-            String SQL = "SELECT * FROM LINEREMOVED";
-            rs = stmt.executeQuery(SQL);
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery("SELECT * FROM LINEREMOVED");
             while (rs.next()) {
-                String SQL2 = "INSERT INTO LINEREMOVED (ID, REMOVEDDATE, NAME, TICKETID, PRODUCTID, PRODUCTNAME, UNITS) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                pstmt = conn.prepareStatement(SQL2);
-                pstmt.setString(1, UUID.randomUUID().toString());
-                pstmt.setTimestamp(2, rs.getTimestamp("REMOVEDDATE"));
-                pstmt.setString(3, rs.getString("NAME"));
-                pstmt.setString(4, rs.getString("TICKETID"));
-                pstmt.setString(5, rs.getString("PRODUCTID"));
-                pstmt.setString(6, rs.getString("PRODUCTNAME"));
-                pstmt.setDouble(7, rs.getDouble("UNITS"));
-                pstmt.executeUpdate();
+               rs.updateString("ID", UUID.randomUUID().toString());
+               rs.updateRow();
             }
-
-            SQL = "DELETE FROM LINEREMOVED WHERE ID =''";
-            pstmt = conn.prepareStatement(SQL);
+          
+            pstmt = conn.prepareStatement("DELETE FROM LINEREMOVED WHERE ID =''");
             pstmt.executeUpdate();
-
-            SQL = "DELETE FROM LINEREMOVED WHERE ID IS NULL";
-            pstmt = conn.prepareStatement(SQL);
+            
+            pstmt = conn.prepareStatement("DELETE FROM LINEREMOVED WHERE ID IS NULL");
             pstmt.executeUpdate();
             conn.close();
         } catch (SQLException ex) {

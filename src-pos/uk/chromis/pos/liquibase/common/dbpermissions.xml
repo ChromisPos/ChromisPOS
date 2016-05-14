@@ -1023,6 +1023,18 @@
         </insert>		  
     </changeSet>     
     
+    <changeSet author="Chromis POS" id="Add unlock tables option (NV)">      
+        <preConditions onFail="MARK_RAN">  
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM DBPERMISSIONS WHERE DESCRIPTION = '##label.description133'</sqlCheck>  
+        </preConditions> 
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="uk.chromis.pos.sales.JPanelUnlockTables"/>  
+            <column name="SECTION" value="##label.sectionmaintenance"/>
+            <column name="DISPLAYNAME" value="##label.displayname133"/>  
+            <column name="DESCRIPTION" value="##label.description133"/>  
+        </insert> 		  
+    </changeSet> 
+    
  
     <changeSet author="Chromis POS" id="drop top10salesMysql (NV)">   
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           

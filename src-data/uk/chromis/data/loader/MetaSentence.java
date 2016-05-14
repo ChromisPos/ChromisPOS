@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.JDBCSentence.JDBCDataResultSet;
+import java.math.*;
 
 /**
  *
@@ -79,6 +80,10 @@ public class MetaSentence extends JDBCSentence {
         }
 
         public void setDouble(int paramIndex, Double dValue) throws BasicException {
+            throw new BasicException(LocalRes.getIntString("exception.noparamtype"));
+        }
+
+        public void setBigDecimal(int paramIndex, BigDecimal bdValue) throws BasicException {
             throw new BasicException(LocalRes.getIntString("exception.noparamtype"));
         }
 

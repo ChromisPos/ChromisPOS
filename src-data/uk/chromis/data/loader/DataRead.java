@@ -41,6 +41,14 @@ public interface DataRead {
      * @return
      * @throws BasicException
      */
+    public java.math.BigDecimal getBigDecimal(int columnIndex) throws BasicException;    
+    
+    /**
+     *
+     * @param columnIndex
+     * @return
+     * @throws BasicException
+     */
     public String getString(int columnIndex) throws BasicException;
 
     /**

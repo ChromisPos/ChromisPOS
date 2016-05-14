@@ -77,23 +77,15 @@ public class StockCurrentGUID implements liquibase.change.custom.CustomTaskChang
         }
 
         try {
-            Statement stmt = (Statement) conn.createStatement();
-
-            String SQL = "SELECT * FROM STOCKCURRENT";
-            rs = stmt.executeQuery(SQL);
+            Statement stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            
+            rs = stmt.executeQuery("SELECT * FROM STOCKCURRENT");
             while (rs.next()) {
-                String SQL2 = "INSERT INTO STOCKCURRENT (ID, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS) VALUES (?, ?, ?, ?, ?)";
-                pstmt = conn.prepareStatement(SQL2);
-                pstmt.setString(1, UUID.randomUUID().toString());                
-                pstmt.setString(2, rs.getString("LOCATION"));
-                pstmt.setString(3, rs.getString("PRODUCT"));
-                pstmt.setString(4, rs.getString("ATTRIBUTESETINSTANCE_ID"));               
-                pstmt.setDouble(5, rs.getDouble("UNITS"));
-                pstmt.executeUpdate();
-            }
+               rs.updateString("ID", UUID.randomUUID().toString());
+               rs.updateRow();
+            }            
 
-            SQL = "DELETE FROM STOCKCURRENT WHERE ID =''";
-            pstmt = conn.prepareStatement(SQL);
+            pstmt = conn.prepareStatement("DELETE FROM STOCKCURRENT WHERE ID =''");
             pstmt.executeUpdate();
 
             conn.close();

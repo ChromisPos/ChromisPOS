@@ -16,13 +16,12 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
-
 package uk.chromis.data.loader;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import uk.chromis.basic.BasicException;
+import java.math.*;
 
 /**
  *
@@ -30,66 +29,20 @@ import uk.chromis.basic.BasicException;
  */
 public abstract class Datas {
 
-    /**
-     *
-     */
     public final static Datas INT = new DatasINT();
-
-    /**
-     *
-     */
     public final static Datas PERCENT = new DatasPERCENT();
-    /**
-     *
-     */
     public final static Datas STRING = new DatasSTRING();
-
-    /**
-     *
-     */
     public final static Datas DOUBLE = new DatasDOUBLE();
-
-    /**
-     *
-     */
     public final static Datas BOOLEAN = new DatasBOOLEAN();
-
-    /**
-     *
-     */
     public final static Datas TIMESTAMP = new DatasTIMESTAMP();
-
-    /**
-     *
-     */
     public final static Datas BYTES = new DatasBYTES();
-
-    /**
-     *
-     */
     public final static Datas IMAGE = new DatasIMAGE();
-    //public final static Datas INPUTSTREAM = new DatasINPUTSTREAM();
-
-    /**
-     *
-     */
     public final static Datas OBJECT = new DatasOBJECT();
-
-    /**
-     *
-     */
     public final static Datas SERIALIZABLE = new DatasSERIALIZABLE();
-
-    /**
-     *
-     */
     public final static Datas NULL = new DatasNULL();
-
+    public final static Datas BIGDECIMAL = new DatasBIGDECIMAL();
     private static DateFormat tsf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-    /**
-     * Creates a new instance of Datas
-     */
     private Datas() {
     }
 
@@ -111,10 +64,7 @@ public abstract class Datas {
      */
     public abstract void setValue(DataWrite dw, int i, Object value) throws BasicException;
 
-    /**
-     *
-     * @return
-     */
+
     public abstract Class getClassValue();
 
     /**
@@ -211,6 +161,29 @@ public abstract class Datas {
         }
     }
 
+    private static final class DatasBIGDECIMAL extends Datas {
+
+        public Object getValue(DataRead dr, int i) throws BasicException {
+            return dr.getBigDecimal(i);
+        }
+
+        public void setValue(DataWrite dw, int i, Object value) throws BasicException {
+            dw.setBigDecimal(i, (BigDecimal) value);
+        }
+
+        public Class getClassValue() {
+            return java.math.BigDecimal.class;
+        }
+
+        protected String toStringAbstract(Object value) {
+            return ((BigDecimal) value).toString();
+        }
+
+        protected int compareAbstract(Object o1, Object o2) {
+            return ((BigDecimal) o1).compareTo((BigDecimal) o2);
+        }
+    }    
+    
     private static final class DatasDOUBLE extends Datas {
 
         public Object getValue(DataRead dr, int i) throws BasicException {

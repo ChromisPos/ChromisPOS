@@ -47,9 +47,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -1094,7 +1091,7 @@ public class JRootApp extends JPanel implements AppView {
                 DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
                 Class.forName(AppConfig.getInstance().getProperty("db.driver"));
                 con = DriverManager.getConnection(db_url, db_user, db_password);
-                PreparedStatement stmt = con.prepareStatement("INSERT INTO PEOPLE (ID, NAME, ROLE, VISIBLE) VALUES ('99', 'SuperAdminUser', '0', 0)");
+                PreparedStatement stmt = con.prepareStatement("INSERT INTO PEOPLE (ID, NAME, ROLE, VISIBLE) VALUES ('99', 'SuperAdminUser', '0', true)");
                 stmt.executeUpdate();
                 user = m_dlSystem.getsuperuser();
 

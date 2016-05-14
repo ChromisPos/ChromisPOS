@@ -22,6 +22,8 @@
     <include file="uk/chromis/pos/liquibase/upgradeorig/updatechromis.xml"/>
     <include file="uk/chromis/pos/liquibase/upgradeorig/checkforeignkeys.xml"/>
     <include file="uk/chromis/pos/liquibase/upgradeorig/checkindexes.xml"/>
+    <include file="uk/chromis/pos/liquibase/upgrade/tables.xml"/> 
+    <include file="uk/chromis/pos/liquibase/upgrade/data.xml"/>
     <include file="uk/chromis/pos/liquibase/common/setVersion.xml"/>
     
 </databaseChangeLog>

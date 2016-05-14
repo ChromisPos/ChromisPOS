@@ -78,28 +78,18 @@ public class DrawerOpenedGUID implements liquibase.change.custom.CustomTaskChang
 
         try {
             Statement stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-            String SQL = "SELECT * FROM DRAWEROPENED";
-            rs = stmt.executeQuery(SQL);
-
+            
+            rs = stmt.executeQuery("SELECT * FROM DRAWEROPENED");
             while (rs.next()) {
-                String SQL2 = "INSERT INTO DRAWEROPENED (ID, OPENDATE, NAME, TICKETID) VALUES (?, ?, ?, ?)";
-                pstmt = conn.prepareStatement(SQL2);
-                pstmt.setString(1, UUID.randomUUID().toString());
-                pstmt.setTimestamp(2, rs.getTimestamp("OPENDATE"));
-                pstmt.setString(3, rs.getString("NAME"));
-                pstmt.setString(4, rs.getString("TICKETID"));
-                pstmt.executeUpdate();
+               rs.updateString("ID", UUID.randomUUID().toString());
+               rs.updateRow();
             }
-
-            SQL = "DELETE FROM DRAWEROPENED WHERE ID = ''";
-            pstmt = conn.prepareStatement(SQL);
+            
+            pstmt = conn.prepareStatement("DELETE FROM DRAWEROPENED WHERE ID = ''");
             pstmt.executeUpdate();
 
-            SQL = "DELETE FROM DRAWEROPENED WHERE ID IS NULL";
-            pstmt = conn.prepareStatement(SQL);
+            pstmt = conn.prepareStatement("DELETE FROM DRAWEROPENED WHERE ID IS NULL");
             pstmt.executeUpdate();
-
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(SiteGUID.class.getName()).log(Level.SEVERE, null, ex);

@@ -97,14 +97,6 @@ public class JFrmMigrate extends javax.swing.JFrame {
             public void run() {
                 
                 AppConfig config = AppConfig.getInstance();
-                
-                
-// Set the look and feel.
-             //   try {                    
-               //     UIManager.setLookAndFeel(config.getProperty("swing.defaultlaf"));
-               // } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-               // }
-
                 new JFrmMigrate(config).setVisible(true);                
 
             }

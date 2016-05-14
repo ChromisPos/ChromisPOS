@@ -39,4 +39,6 @@ public interface DataWrite {
     public void setBytes(int paramIndex, byte[] value) throws BasicException;
 
     public void setObject(int paramIndex, Object value) throws BasicException;
+    
+    public void setBigDecimal(int paramIndex, java.math.BigDecimal bdValue) throws BasicException;
 }

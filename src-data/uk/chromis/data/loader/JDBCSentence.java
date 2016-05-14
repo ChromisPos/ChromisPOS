@@ -16,62 +16,64 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.data.loader;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import uk.chromis.basic.BasicException;
+import  java.math.*;
 
 /**
  *
- *   
+ *
  */
 public abstract class JDBCSentence extends BaseSentence {
-    
+
     // Conexion
     // protected Connection m_c;
-
     /**
      *
      */
-        protected Session m_s;
-    
-    /** Creates a new instance of BaseSentence
-     * @param s */
+    protected Session m_s;
+
+    /**
+     * Creates a new instance of BaseSentence
+     *
+     * @param s
+     */
     public JDBCSentence(Session s) {
         super();
-        m_s = s; 
+        m_s = s;
     }
 
     /**
      *
      */
     protected static final class JDBCDataResultSet implements DataResultSet {
-        
+
         private ResultSet m_rs;
         private SerializerRead m_serread;
 //        private int m_iColumnCount;
 
-            /**
-             *
-             * @param rs
-             * @param serread
-             */
-            public JDBCDataResultSet(ResultSet rs, SerializerRead serread) {
+        /**
+         *
+         * @param rs
+         * @param serread
+         */
+        public JDBCDataResultSet(ResultSet rs, SerializerRead serread) {
             m_rs = rs;
             m_serread = serread;
 //            m_iColumnCount = -1;
         }
 
-            /**
-             *
-             * @param columnIndex
-             * @return
-             * @throws BasicException
-             */
-            public Integer getInt(int columnIndex) throws BasicException {
+        /**
+         *
+         * @param columnIndex
+         * @return
+         * @throws BasicException
+         */
+        public Integer getInt(int columnIndex) throws BasicException {
             try {
                 int iValue = m_rs.getInt(columnIndex);
                 return m_rs.wasNull() ? null : new Integer(iValue);
@@ -80,13 +82,13 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @param columnIndex
-             * @return
-             * @throws BasicException
-             */
-            public String getString(int columnIndex) throws BasicException {
+        /**
+         *
+         * @param columnIndex
+         * @return
+         * @throws BasicException
+         */
+        public String getString(int columnIndex) throws BasicException {
             try {
                 return m_rs.getString(columnIndex);
             } catch (SQLException eSQL) {
@@ -94,13 +96,13 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @param columnIndex
-             * @return
-             * @throws BasicException
-             */
-            public Double getDouble(int columnIndex) throws BasicException {
+        /**
+         *
+         * @param columnIndex
+         * @return
+         * @throws BasicException
+         */
+        public Double getDouble(int columnIndex) throws BasicException {
             try {
                 double dValue = m_rs.getDouble(columnIndex);
                 return m_rs.wasNull() ? null : new Double(dValue);
@@ -109,13 +111,13 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @param columnIndex
-             * @return
-             * @throws BasicException
-             */
-            public Boolean getBoolean(int columnIndex) throws BasicException {
+        /**
+         *
+         * @param columnIndex
+         * @return
+         * @throws BasicException
+         */
+        public Boolean getBoolean(int columnIndex) throws BasicException {
             try {
                 boolean bValue = m_rs.getBoolean(columnIndex);
                 return m_rs.wasNull() ? null : new Boolean(bValue);
@@ -123,14 +125,14 @@ public abstract class JDBCSentence extends BaseSentence {
                 throw new BasicException(eSQL);
             }
         }
-        
-            /**
-             *
-             * @param columnIndex
-             * @return
-             * @throws BasicException
-             */
-            public java.util.Date getTimestamp(int columnIndex) throws BasicException {        
+
+        /**
+         *
+         * @param columnIndex
+         * @return
+         * @throws BasicException
+         */
+        public java.util.Date getTimestamp(int columnIndex) throws BasicException {
             try {
                 java.sql.Timestamp ts = m_rs.getTimestamp(columnIndex);
                 return ts == null ? null : new java.util.Date(ts.getTime());
@@ -139,13 +141,13 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @param columnIndex
-             * @return
-             * @throws BasicException
-             */
-            public byte[] getBytes(int columnIndex) throws BasicException {
+        /**
+         *
+         * @param columnIndex
+         * @return
+         * @throws BasicException
+         */
+        public byte[] getBytes(int columnIndex) throws BasicException {
             try {
                 return m_rs.getBytes(columnIndex);
             } catch (SQLException eSQL) {
@@ -153,13 +155,13 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @param columnIndex
-             * @return
-             * @throws BasicException
-             */
-            public Object getObject(int columnIndex) throws BasicException {
+        /**
+         *
+         * @param columnIndex
+         * @return
+         * @throws BasicException
+         */
+        public Object getObject(int columnIndex) throws BasicException {
             try {
                 return m_rs.getObject(columnIndex);
             } catch (SQLException eSQL) {
@@ -167,12 +169,11 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @return
-             * @throws BasicException
-             */
-            public DataField[] getDataField() throws BasicException {
+        /**
+         *
+         * @return @throws BasicException
+         */
+        public DataField[] getDataField() throws BasicException {
             try {
                 ResultSetMetaData md = m_rs.getMetaData();
                 DataField[] df = new DataField[md.getColumnCount()];
@@ -188,22 +189,20 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @return
-             * @throws BasicException
-             */
-            @Override
+        /**
+         *
+         * @return @throws BasicException
+         */
+        @Override
         public Object getCurrent() throws BasicException {
             return m_serread.readValues(this);
         }
 
-            /**
-             *
-             * @return
-             * @throws BasicException
-             */
-            @Override
+        /**
+         *
+         * @return @throws BasicException
+         */
+        @Override
         public boolean next() throws BasicException {
             try {
                 return m_rs.next();
@@ -212,11 +211,11 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @throws BasicException
-             */
-            @Override
+        /**
+         *
+         * @throws BasicException
+         */
+        @Override
         public void close() throws BasicException {
             try {
                 m_rs.close();
@@ -225,14 +224,23 @@ public abstract class JDBCSentence extends BaseSentence {
             }
         }
 
-            /**
-             *
-             * @return
-             * @throws BasicException
-             */
-            @Override
+        /**
+         *
+         * @return @throws BasicException
+         */
+        @Override
         public int updateCount() throws BasicException {
             return -1; // es decir somos datos.
-        }        
-    }    
+        }
+
+        @Override
+        public BigDecimal getBigDecimal(int columnIndex) throws BasicException {
+            try {
+                BigDecimal bdValue = m_rs.getBigDecimal(columnIndex);
+                return m_rs.wasNull() ? null : bdValue;
+            } catch (SQLException eSQL) {
+                throw new BasicException(eSQL);
+            }
+        }
+    }
 }
