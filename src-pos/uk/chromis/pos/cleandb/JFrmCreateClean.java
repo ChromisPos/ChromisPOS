@@ -30,16 +30,11 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppProperties;
 import uk.chromis.pos.forms.JRootFrame;
 
-/**
- *
- * @author adrianromero
- */
+
 public class JFrmCreateClean extends javax.swing.JFrame {
     
     private JPanelCleandb config;
     
-    /** Creates new form JFrmMigrate
-     * @param props */
     public JFrmCreateClean(AppProperties props) {
         initComponents();
         
