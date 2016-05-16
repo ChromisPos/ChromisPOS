@@ -73,7 +73,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private boolean reportlock = false;
     private BarcodeValidator validate;
     private DataLogicSales m_dlSales;
-
+    private Boolean displayEdited = false;
+    
     /**
      * Creates new form JEditProduct
      *
@@ -160,7 +161,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jAlwaysAvailable.addActionListener(dirty);
         m_jDiscounted.addActionListener(dirty);
         m_jManageStock.addActionListener(dirty);
-        
+
         writeValueEOF();
     }
 
@@ -243,6 +244,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 m_jIsPack.setSelected( info.getIsPack());
                 m_jPackQuantity.setText(Formats.DOUBLE.formatValue(info.getPackQuantity()));
                 packproductmodel.setSelectedKey( info.getPromotionID());
+                String displayname = "<html>" + m_jName.getText();
+                displayEdited = !displayname.equals(m_jDisplay.getText());
+                
             } else {
 
                 if( barcode != null ) {
@@ -496,6 +500,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         packproductmodel.setSelectedKey(myprod[DataLogicSales.INDEX_PACKPRODUCT]);
         m_jManageStock.setSelected( ((Boolean) myprod[DataLogicSales.INDEX_MANAGESTOCK]) );
 
+        String displayname = "<html>" + m_jName.getText();
+        displayEdited = !displayname.equals(m_jDisplay.getText());
+
     }
 
     /**
@@ -727,19 +734,20 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
     private void setDisplay() {
 
-        String str = (m_jName.getText());
-        int length = str.length();
+        if( !displayEdited ) {
+            String str = (m_jName.getText());
+            int length = str.length();
 
-        if (!reportlock) {
-            reportlock = true;
+            if (!reportlock) {
+                reportlock = true;
 
-            if (length == 0) {
-//                m_jDisplay.setText("<html>" + "Need Button Text");
-                m_jDisplay.setText(m_jName.getText());
-            } else if (m_jDisplay.getText() == null || "".equals(m_jDisplay.getText())) {
-                m_jDisplay.setText("<html>" + m_jName.getText());
+                if (length == 0) {
+                    m_jDisplay.setText(null);
+                } else if (m_jDisplay.getText() == null || "".equals(m_jDisplay.getText())) {
+                    m_jDisplay.setText("<html>" + m_jName.getText());
+                }
+                reportlock = false;
             }
-            reportlock = false;
         }
     }
 
