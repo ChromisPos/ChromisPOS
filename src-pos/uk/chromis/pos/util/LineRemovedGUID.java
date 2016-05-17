@@ -75,14 +75,33 @@ public class LineRemovedGUID implements liquibase.change.custom.CustomTaskChange
         } catch (MalformedURLException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(SiteGUID.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+//
         try {
             Statement stmt = (Statement) conn.createStatement();
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery("SELECT * FROM LINEREMOVED");
+            int count = 0;
+            rs = stmt.executeQuery("SELECT COUNT(*) FROM LINEREMOVED");
             while (rs.next()) {
-               rs.updateString("ID", UUID.randomUUID().toString());
-               rs.updateRow();
+                count = rs.getInt(1);
+            }
+
+            if (count > 0) {
+                rs = stmt.executeQuery("SELECT * FROM LINEREMOVED");
+                int j = 1;
+                while (rs.next()) {
+                    if (j <= count) {
+                        String SQL2 = "INSERT INTO LINEREMOVED (ID, REMOVEDDATE, NAME, TICKETID, PRODUCTID, PRODUCTNAME, UNITS) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        pstmt = conn.prepareStatement(SQL2);
+                        pstmt.setString(1, UUID.randomUUID().toString());
+                        pstmt.setTimestamp(2, rs.getTimestamp("REMOVEDDATE"));
+                        pstmt.setString(3, rs.getString("NAME"));
+                        pstmt.setString(4, rs.getString("TICKETID"));
+                        pstmt.setString(5, rs.getString("PRODUCTID"));
+                        pstmt.setString(6, rs.getString("PRODUCTNAME"));
+                        pstmt.setDouble(7, rs.getDouble("UNITS"));
+                        pstmt.executeUpdate();
+                        j++;
+                    }
+                }
             }
           
             pstmt = conn.prepareStatement("DELETE FROM LINEREMOVED WHERE ID =''");

@@ -471,6 +471,11 @@ public class JPanelManualSync extends JPanel implements JPanelView {
         jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local changed objects table." : syncMessage);
         sync.processChangedObjects(localConnection, localGUID);
 
+        jtxtFromLocal.setText(checkLocalRecords(localConnection).toString() + " local records found to process.");
+        jtxtChangedObjects.setText(checkLocalTransferRecords(localConnection, localGUID).toString() + " local records found to transfer.");
+        jtxtFromRemote.setText(checkRemoteRecords(remoteConnection, localGUID).toString() + " remote records found to transfer.");
+        jtxtToProcess.setText(checkLocalRecordsToProcess(localConnection, localGUID) + " transfer records to process.");
+
         jtxtSyncProcess.setText(syncMessage.equals("") ? "Sync Process Complete ." : syncMessage);
     }//GEN-LAST:event_jbtnSyncActionPerformed
 

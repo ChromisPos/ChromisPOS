@@ -1,4 +1,4 @@
-//    Chromis POS  - The New Face of Open Source POS
+   //    Chromis POS  - The New Face of Open Source POS
 //    Copyright (c) 2015 
 //    http://www.chromis.co.uk
 //
@@ -28,7 +28,7 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort m_CommPortPrinter;  
     
-    private final String m_sPortScale;
+    private String m_sPortScale;
     private OutputStream m_out;
     private InputStream m_in;
 
@@ -40,8 +40,7 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
     private double m_dWeightDecimals;
     private int m_iStatusScale;
         
-    /** Creates a new instance of ScaleComm
-     * @param sPortPrinter */
+    /** Creates a new instance of ScaleComm */
     public ScaleCASPDII(String sPortPrinter) {
         m_sPortScale = sPortPrinter;
         m_out = null;
@@ -52,7 +51,6 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
         m_dWeightDecimals = 1.0;
     }
     
-    @Override
     public Double readWeight() {
         
         synchronized(this) {
@@ -63,30 +61,34 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
                 } catch (InterruptedException e) {
                 }
                 if (m_iStatusScale != SCALE_READY) {
+                    // bascula tonta.
                     m_iStatusScale = SCALE_READY;
                 }
             }
             
+            // Ya estamos en SCALE_READY
             m_dWeightBuffer = 0.0;
             m_dWeightDecimals = 1.0;
-            write(new byte[] {0x57});
+            write(new byte[] {0x57}); // W
             flush();             
             
+            // Esperamos un ratito
             try {
                 wait(1000);
             } catch (InterruptedException e) {
             }
             
             if (m_iStatusScale == SCALE_READY) {
+                // hemos recibido cositas o si no hemos recibido nada estamos a 0.0
                 double dWeight = m_dWeightBuffer / m_dWeightDecimals;
                 m_dWeightBuffer = 0.0;
                 m_dWeightDecimals = 1000.0;
-                return dWeight;
+                return new Double(dWeight);
             } else {
                 m_iStatusScale = SCALE_READY;
                 m_dWeightBuffer = 0.0;
                 m_dWeightDecimals = 1000.0;
-                return 0.0;
+                return new Double(0.0);
             }
         }
     }
@@ -101,32 +103,26 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
     private void write(byte[] data) {
         try {  
             if (m_out == null) {
-                m_PortIdPrinter = CommPortIdentifier.getPortIdentifier(m_sPortScale);                  
-                m_CommPortPrinter = (SerialPort) m_PortIdPrinter.open("PORTID", 1000);
+                m_PortIdPrinter = CommPortIdentifier.getPortIdentifier(m_sPortScale); // Tomamos el puerto                   
+                m_CommPortPrinter = (SerialPort) m_PortIdPrinter.open("PORTID", 1000); // Abrimos el puerto       
 
-                m_out = m_CommPortPrinter.getOutputStream();
+                m_out = m_CommPortPrinter.getOutputStream(); // Tomamos el chorro de escritura   
                 m_in = m_CommPortPrinter.getInputStream();
                 
                 m_CommPortPrinter.addEventListener(this);
                 m_CommPortPrinter.notifyOnDataAvailable(true);
                 
-                m_CommPortPrinter.setSerialPortParams(9600, 
-                        SerialPort.DATABITS_7, 
-                        SerialPort.STOPBITS_1, 
-                        SerialPort.PARITY_EVEN);
+                m_CommPortPrinter.setSerialPortParams(9600, SerialPort.DATABITS_7, SerialPort.STOPBITS_1, SerialPort.PARITY_EVEN); // Configuramos el puerto
             }
             m_out.write(data);
-        } catch (NoSuchPortException | 
-                PortInUseException | 
-                UnsupportedCommOperationException | 
-                TooManyListenersException | 
-            IOException e) {
+        } catch (NoSuchPortException | PortInUseException | UnsupportedCommOperationException | TooManyListenersException | IOException e) {
         }        
     }
     
     @Override
     public void serialEvent(SerialPortEvent e) {
 
+	// Determine type of event.
 	switch (e.getEventType()) {
             case SerialPortEvent.BI:
             case SerialPortEvent.OE:
@@ -143,7 +139,8 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
                     while (m_in.available() > 0) {
                         int b = m_in.read();
 
-                        if (b == 0x000D) {
+                        if (b == 0x000D) { // CR ASCII
+                            // Fin de lectura
                             synchronized (this) {
                                 m_iStatusScale = SCALE_READY;
                                 notifyAll();
@@ -151,7 +148,7 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
                         } else if ((b > 0x002F && b < 0x003A) || b == 0x002E){
                             synchronized(this) {
                                 if (m_iStatusScale == SCALE_READY) {
-                                    m_dWeightBuffer = 0.0;
+                                    m_dWeightBuffer = 0.0; // se supone que esto debe estar ya garantizado
                                     m_dWeightDecimals = 1000.0;
                                     m_iStatusScale = SCALE_READING;
                                 }
@@ -165,7 +162,8 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
                                 }
                             }
                         } else {
-                            m_dWeightBuffer = 0.0;
+                            // caracteres invalidos, reseteamos.
+                            m_dWeightBuffer = 0.0; // se supone que esto debe estar ya garantizado
                             m_dWeightDecimals = 1000.0;
                             m_iStatusScale = SCALE_READY;
                         }

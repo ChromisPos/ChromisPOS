@@ -77,6 +77,8 @@ public class StockCurrentGUID implements liquibase.change.custom.CustomTaskChang
         }
 
         try {
+            
+            
             Statement stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
             rs = stmt.executeQuery("SELECT * FROM STOCKCURRENT");
