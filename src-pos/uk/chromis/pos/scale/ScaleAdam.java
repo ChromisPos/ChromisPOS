@@ -84,10 +84,10 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
         UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20)));
         String message =  AppLocal.getIntString("scale.weighitem");
         JLabel FontText = new JLabel(message);
-        FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
+        FontText.setFont (new Font ( "Arial", Font.BOLD, 18) );
 
         JOptionPane newpane = new JOptionPane( FontText, JOptionPane.PLAIN_MESSAGE, JOptionPane.CANCEL_OPTION, null, new Object[]{"Cancel"} );
-        newpane.setPreferredSize( new Dimension(450,150));
+        newpane.setPreferredSize( new Dimension(375,150));
         m_Dialog = newpane.createDialog("Use Scales");
         
         m_Dialog.setVisible( true );
@@ -154,16 +154,25 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
             try {
                 if (m_out == null) {
                     m_CommPort = new NRSerialPort(m_sPortScale, 4800); 
-                    m_CommPort.connect();
-                    m_CommPort.addEventListener(this);
-                    m_CommPort.notifyOnDataAvailable(true);
+                    if( !m_CommPort.connect() ) {
+                        logger.log(Level.SEVERE, "Connect to Scale port failed" );
+                       changeStatus( SCALE_ERROR );
+                        m_CommPort = null;
+                       return null;
+                    } else {
+                        m_CommPort.addEventListener(this);
+                        m_CommPort.notifyOnDataAvailable(true);
 
-                    m_out = m_CommPort.getOutputStream();  
-                    m_in = m_CommPort.getInputStream();
+                        m_out = m_CommPort.getOutputStream();  
+                        m_in = m_CommPort.getInputStream();
+                    }
                 }
             } catch ( TooManyListenersException e ) {
+                m_CommPort.disconnect();
+                m_CommPort = null;
                 logger.log(Level.SEVERE, "Port exception", e );
                 changeStatus( SCALE_ERROR );
+                return null;
             } 
             
             backgroundReadInput( 60 );

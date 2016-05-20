@@ -954,6 +954,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 Double value = m_App.getDeviceScale().readWeight();
                 if (value != null) {
                     incProduct(value, prod);
+                } else {
+                    if (AppConfig.getInstance().getBoolean("till.customsounds")) {
+                        new PlayWave("error.wav").start(); // playing WAVE file 
+                    } else {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
                 }
             } catch (ScaleException e) {
                 if (AppConfig.getInstance().getBoolean("till.customsounds")) {
