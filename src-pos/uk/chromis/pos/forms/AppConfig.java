@@ -40,16 +40,49 @@ public class AppConfig implements AppProperties {
     private final File configFile;
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.AppConfig");
 
-    protected AppConfig(File configFile) {
+    protected AppConfig( final String args[] ) {
+        File configFile = new File( System.getProperty("user.home"),
+                    AppLocal.APP_ID + ".properties" );
+
+        if( args != null ) {
+           for(int i=0; i<args.length-1; i++){
+                if( args[i].matches( "-cfg") ) {
+                    configFile = new File( args[i+1] );
+                }
+            }
+        }
+            
         this.configFile = configFile;
         m_propsconfig = new Properties();
         load();
         logger.log(Level.INFO, "Reading configuration file: {0}", configFile.getAbsolutePath());
+
+        // Now apply any over-rides passed on the command line
+        if( args != null ) {
+           for(int i=0; i<args.length-1; i++){
+                if( args[i].startsWith("-") && args[i].length() > 2 ) {
+                    String pName = args[i].substring(1);
+                    m_propsconfig.setProperty(pName, args[i+1]);
+                    logger.log(Level.INFO, "Command line over-ride: {0}", pName + "=" + args[i+1]);
+                }
+            }
+        }
+
     }
 
+    public static AppConfig getInstance(final String args[]) {
+        if (instance == null) {
+            
+            instance = new AppConfig( args );
+        }
+        return instance;
+    }
+    
+    
     public static AppConfig getInstance() {
         if (instance == null) {
-            instance = new AppConfig(new File(System.getProperty("user.home"), AppLocal.APP_ID + ".properties"));
+            
+            instance = new AppConfig( null );
         }
         return instance;
     }

@@ -129,7 +129,8 @@ public class StartPOS {
                     System.exit(1);
                 }
 
-                AppConfig config = AppConfig.getInstance();
+                AppConfig config = AppConfig.getInstance( args );
+                
                 // set Locale.
                 String slang = AppConfig.getInstance().getProperty("user.language");
                 String scountry = AppConfig.getInstance().getProperty("user.country");
