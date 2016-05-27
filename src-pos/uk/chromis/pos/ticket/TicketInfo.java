@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package uk.chromis.pos.ticket;
 
 import java.io.ByteArrayInputStream;
@@ -215,20 +214,21 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         // taxes are not copied, must be calculated again.
         return t;
     }
-    
+
     public Double getDiscount() {
         Double discount = null;
-        if( m_Customer != null ) {
+        if (m_Customer != null) {
             discount = m_Customer.getDiscount();
         }
-        if( discount == null )
+        if (discount == null) {
             discount = 0.0;
-        
+        }
+
         return discount;
     }
-    
-    private Double applyDiscount( Double value ) {
-        if( value != null && value > 0.0 ) {
+
+    private Double applyDiscount(Double value) {
+        if (value != null && value > 0.0) {
             value = value - (value * getDiscount());
         }
         return value;
@@ -318,9 +318,9 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             name.append(" - ");
             name.append(m_Customer.toString());
             Double discount = getDiscount();
-            if( discount > 0.0 ) {
-                name.append( " -" );
-                name.append( Formats.PERCENT.formatValue(discount) );
+            if (discount > 0.0) {
+                name.append(" -");
+                name.append(Formats.PERCENT.formatValue(discount));
             }
         }
         return name.toString();
@@ -348,9 +348,9 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             name.append(" - ");
             name.append(m_Customer.toString());
             Double discount = getDiscount();
-            if( discount > 0.0 ) {
-                name.append( " -" );
-                name.append( Formats.PERCENT.formatValue(discount) );
+            if (discount > 0.0) {
+                name.append(" -");
+                name.append(Formats.PERCENT.formatValue(discount));
             }
         }
         return name.toString();
@@ -545,11 +545,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         return sum;
     }
-    
+
     public double getTotal() {
         return getSubTotal() + getTax();
     }
-    
+
     public double getTotalPaid() {
         double sum = 0.0;
         for (PaymentInfo p : payments) {
@@ -569,7 +569,7 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         return sum;
     }
-    
+
     public double getChange() {
         return getTotalChange();
     }
@@ -583,11 +583,11 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         }
         return sum;
     }
-    
+
     public double getTendered() {
         return getTotalTendered();
     }
-    
+
     public List<String> getCouponLines() {
         return m_CouponLines.getCouponLines();
     }
@@ -736,16 +736,17 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return Formats.CURRENCY.formatValue(getTendered());
     }
 
-  //  public String printChange() {
-   //     return Formats.CURRENCY.formatValue(getChange());
-   // }
-    
-    public String printChange() {  
-       return Formats.CURRENCY.formatValue(getTendered()-getTotal());  
-   }  
-     
+    public String printOriginalUser() {
+        if (getSharedTicketUser() == null) {
+            return "";
+        }
+        return getSharedTicketUser().getName();
+    }
 
-    
+    public String printChange() {
+        return Formats.CURRENCY.formatValue(getTendered() - getTotal());
+    }
+
     public String VoucherReturned() {
         return Formats.CURRENCY.formatValue(getTotalPaid() - getTotal());
     }
@@ -779,4 +780,3 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     }
 
 }
-
