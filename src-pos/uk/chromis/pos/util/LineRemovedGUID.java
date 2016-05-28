@@ -83,7 +83,6 @@ public class LineRemovedGUID implements liquibase.change.custom.CustomTaskChange
             while (rs.next()) {
                 count = rs.getInt(1);
             }
-
             if (count > 0) {
                 rs = stmt.executeQuery("SELECT * FROM LINEREMOVED");
                 int j = 1;
