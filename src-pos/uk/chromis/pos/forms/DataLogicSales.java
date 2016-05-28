@@ -36,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -64,6 +65,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     protected static final String PREPAY = "prepay";
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.DataLogicSales");
     private String getCardName;
+    private DataLogicSystem m_dlSystem;
 
     private SentenceExec m_updateRefund;
 
@@ -109,6 +111,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * Creates a new instance of SentenceContainerGeneric
      */
     public DataLogicSales() {
+
         stockAdjustDatas = new Datas[]{
             Datas.STRING,
             Datas.STRING,
@@ -290,6 +293,15 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return productsRow;
     }
 
+    public final String getCurrentLocationStock(String id) throws BasicException {
+        m_dlSystem = new DataLogicSystem();
+        m_dlSystem.init(s);
+        Properties m_propsdb = m_dlSystem.getResourceAsProperties(AppConfig.getInstance().getHost() + "/properties");
+
+        Object[] record = (Object[]) new StaticSentence(s, "SELECT UNITS FROM STOCKCURRENT WHERE  LOCATION = " + m_propsdb.getProperty("location") + " AND PRODUCT = ? ", SerializerWriteString.INSTANCE, new SerializerReadBasic(new Datas[]{Datas.STRING})).find(id);
+        return record == null ? "0.0" : (String) record[0];
+    }
+
     /**
      *
      * @param id
@@ -318,7 +330,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             // the 10th character 
             sCode = sCode.substring(0, 10);
         }
-
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
@@ -550,9 +561,44 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     }
 
     public final SentenceList getProductList() {
+        m_dlSystem = new DataLogicSystem();
+        m_dlSystem.init(s);
+        Properties m_propsdb = m_dlSystem.getResourceAsProperties(AppConfig.getInstance().getHost() + "/properties");
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
-                + getSelectFieldList()
+                + "P.ID, "
+                + "P.REFERENCE, "
+                + "P.CODE, "
+                + "P.CODETYPE, "
+                + "P.NAME, "
+                + "P.ISCOM, "
+                + "P.ISSCALE, "
+                + "P.PRICEBUY, "
+                + "P.PRICESELL, "
+                + "P.CATEGORY, "
+                + "P.TAXCAT, "
+                + "P.ATTRIBUTESET_ID, "
+                + "P.IMAGE, "
+                + "P.ATTRIBUTES, "
+                + "P.STOCKCOST, "
+                + "P.STOCKVOLUME, "
+                + "P.ISCATALOG, "
+                + "P.CATORDER, "
+                + "P.ISKITCHEN, "
+                + "P.ISSERVICE, "
+                + "P.DISPLAY, "
+                + "P.ISVPRICE, "
+                + "P.ISVERPATRIB, "
+                + "P.TEXTTIP, "
+                + "P.WARRANTY, "
+                + "( SELECT UNITS FROM STOCKCURRENT WHERE  LOCATION = " + m_propsdb.getProperty("location") + " AND PRODUCT = P.ID ), "
+                + "P.ALIAS, "
+                + "P.ALWAYSAVAILABLE, "
+                + "P.DISCOUNTED, "
+                + "P.CANDISCOUNT, "
+                + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT, "
+                + "P.PROMOTIONID, "
+                + "P.MANAGESTOCK "
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE, P.NAME",
