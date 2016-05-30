@@ -26,6 +26,7 @@ import uk.chromis.format.Formats;
 import java.awt.image.BufferedImage;
 import java.util.Properties;
 import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.util.SessionFactory;
 
 /**
  *
@@ -72,7 +73,7 @@ public class ProductInfoExt {
     protected String m_packproduct;
     protected Boolean m_manageStock;
 
-    public ProductInfoExt() {
+    public ProductInfoExt() {        
         m_ID = null;
         m_sRef = "0000";
         m_sCode = "0000";
@@ -256,7 +257,6 @@ public class ProductInfoExt {
 
     public final Double getStockUnits() {
         return m_dStockUnits;
-
     }
 
     public final void setStockUnits(Double dStockUnits) {
@@ -442,6 +442,7 @@ public class ProductInfoExt {
                 product.m_packproduct = dr.getString(DataLogicSales.INDEX_PACKPRODUCT + 1);
                 product.m_promotionid = dr.getString(DataLogicSales.INDEX_PROMOTIONID + 1);
                 product.m_manageStock = dr.getBoolean(DataLogicSales.INDEX_MANAGESTOCK + 1);
+
                 return product;
             }
         };

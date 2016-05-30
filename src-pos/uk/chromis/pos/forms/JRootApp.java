@@ -87,6 +87,7 @@ import uk.chromis.pos.printer.TicketPrinterException;
 import uk.chromis.pos.scale.DeviceScale;
 import uk.chromis.pos.scanpal2.DeviceScanner;
 import uk.chromis.pos.scanpal2.DeviceScannerFactory;
+import uk.chromis.pos.sync.Sync;
 import uk.chromis.pos.util.AltEncrypter;
 import uk.chromis.pos.util.OSValidator;
 
@@ -348,13 +349,13 @@ public class JRootApp extends JPanel implements AppView {
             wDlg.setVisible(true);
             return JOpenWarningDlg.CHOICE;
         }
-
+        
         m_sInventoryLocation = m_propsdb.getProperty("location");
         if (m_sInventoryLocation
                 == null) {
             m_sInventoryLocation = "0";
             m_propsdb.setProperty("location", m_sInventoryLocation);
-            m_dlSystem.setResourceAsProperties(AppConfig.getInstance().getHost() + "/properties", m_propsdb);
+            m_dlSystem.setResourceAsProperties(AppConfig.getInstance().getHost() + "/properties", m_propsdb);           
         }
 
         // setup the display
@@ -610,39 +611,31 @@ public class JRootApp extends JPanel implements AppView {
     public Object getBean(String beanfactory) throws BeanFactoryException {
         // For backwards compatibility
         beanfactory = mapNewClass(beanfactory);
-
         BeanFactory bf = m_aBeanFactories.get(beanfactory);
         if (bf == null) {
             // testing sripts
             if (beanfactory.startsWith("/")) {
                 bf = new BeanFactoryScript(beanfactory);
             } else {
-                // Class BeanFactory
                 try {
                     Class bfclass = Class.forName(beanfactory);
 
                     if (BeanFactory.class
                             .isAssignableFrom(bfclass)) {
                         bf = (BeanFactory) bfclass.newInstance();
-
                     } else {
                         // the old construction for beans...
                         Constructor constMyView = bfclass.getConstructor(new Class[]{AppView.class
-
                         });
                         Object bean = constMyView.newInstance(new Object[]{this});
-
                         bf = new BeanFactoryObj(bean);
                     }
-
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
                     throw new BeanFactoryException(e);
                 }
             }
-
             // cache the factory
             m_aBeanFactories.put(beanfactory, bf);
-
             // Initialize if it is a BeanFactoryApp
             if (bf instanceof BeanFactoryApp) {
                 ((BeanFactoryApp) bf).init(this);
@@ -1171,6 +1164,7 @@ public class JRootApp extends JPanel implements AppView {
         model.addRow(new Object[]{"Java Version", System.getProperty("java.version")});
         model.addRow(new Object[]{"Jar MD5", md5});
         model.addRow(new Object[]{"Operating System", System.getProperty("os.name")});
+        model.addRow(new Object[]{"Sync library", Sync.getVersion()});
 
         JScrollPane scrollPane = new JScrollPane(table);
         JPanel mainPanel = new JPanel(layout);

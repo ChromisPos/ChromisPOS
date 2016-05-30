@@ -33,7 +33,14 @@
         </addColumn>                                               
     </changeSet>
     
-    
+   <changeSet author="Chromis POS" id="Create SFLAG colunmn in tables (NV)"  >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="APPLICATIONS" columnName="SFLAG"/>
+            </not>
+        </preConditions>                      
+        <customChange class="uk.chromis.pos.util.SyncFlag" />                                       
+    </changeSet>
     
 </databaseChangeLog>
 

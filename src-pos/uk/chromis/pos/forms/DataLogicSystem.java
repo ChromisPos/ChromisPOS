@@ -104,7 +104,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
 
     @Override
     public void init(Session s) {
-
+        
         m_sInitScript = "/uk/chromis/pos/scripts/" + s.DB.getName();
         m_dbVersion = s.DB.getName();
 

@@ -1533,7 +1533,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 JRefundLines.updateRefunds();
                             } catch (BasicException ex) {
                                 //  Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
-                                System.out.println();
                             }
                         }
                         m_ticketsbag.deleteTicket();
@@ -1602,8 +1601,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 for (TicketLineInfo line : m_oTicket.getLines()) {
                                     if ((line.getProperty("vCode") != "") && (line.getProperty("vCode") != null)) {
                                         try {
-                                            dlSales.sellVoucher(
-                                                    new Object[]{line.getProperty("vCode"), Integer.toString(ticket.getTicketId())});
+                                            dlSales.sellVoucher(new Object[]{line.getProperty("vCode"), Integer.toString(ticket.getTicketId())});
                                         } catch (BasicException ex) {
                                         }
                                     }

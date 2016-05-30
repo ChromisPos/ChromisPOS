@@ -759,7 +759,7 @@
          
         <insert tableName="CATEGORIES">
             <column name="ID" value="000"/>
-            <column name="NAME" value="Service Charge"/>
+            <column name="NAME" value="Category Standard"/>
             <column name="CATSHOWNAME" valueBoolean="true"/>
         </insert>
     </changeSet>   
@@ -805,7 +805,7 @@
         </insert>
     </changeSet>  
    
-    <changeSet author="Chromis POS" id="Create SITEGUID table (NV)"  >    
+    <changeSet author="Chromis POS" id="Create SITEGUID table. (NV)"  >    
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="SITEGUID"/>
@@ -816,7 +816,11 @@
             <column name="GUID" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column> 
-        </createTable>                                                 
+        </createTable>
+          
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                                               
     </changeSet>     
     
     <changeSet author="Chromis POS" id="Create SITEGUID colunmn in tables (NV)"  >    

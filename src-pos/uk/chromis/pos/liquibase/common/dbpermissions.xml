@@ -45,21 +45,7 @@
             <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
         </modifySql>                        
     </changeSet>   
-   
-    <changeSet author="Chromis POS" id="Create Index in dbpermissions Table (NV)">   
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists tableName="DBPERMISSIONS" columnNames="CLASSNAME"/>    
-            </not>
-        </preConditions>  
-          
-        <createIndex tableName="DBPERMISSIONS"
-                     indexName="DBPERMISSIONS_CLASSNAME_INX"
-                     unique="true">
-            <column name="CLASSNAME" type="varchar(255)"/>
-        </createIndex>    
-    </changeSet>  
-     
+         
     <changeSet author="Chromis POS" id="Insert into Permissions Table (NV)">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(*) FROM DBPERMISSIONS</sqlCheck>

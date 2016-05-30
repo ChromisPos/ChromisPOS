@@ -851,12 +851,16 @@
         </modifySql>
     </changeSet>
 
-    <changeSet author="Chromis POS" id="Create SITEGUID table (New Database)"  >    
+    <changeSet author="Chromis POS" id="Create SITEGUID table. (New Database)"  >    
         <createTable tableName="SITEGUID">
             <column name="GUID" type="varchar(50)">
                 <constraints nullable="false"/>
             </column> 
-        </createTable>                                                 
+        </createTable>   
+        
+        <modifySql dbms="mysql">
+            <append value=" ENGINE = InnoDB DEFAULT CHARSET=utf8  "/>
+        </modifySql>                                              
     </changeSet>
 
     <changeSet author="Chromis POS" id="Create new STOCKCHANGES Table (New Database)">
@@ -1728,6 +1732,21 @@
         </insert>  
     </changeSet>       
 
+    <changeSet author="Chromis POS" id="Insert service charge into PRODUCTS Table (New Database)"> 
+        <insert tableName="PRODUCTS">
+            <column name="ID" value="sc999-001"/>
+            <column name="REFERENCE" value="sc999-001"/>
+            <column name="CODE" value="sc999-001"/>
+            <column name="NAME" value="Service Charge"/>
+            <column name="CATEGORY" value="000"/>
+            <column name="TAXCAT" value="001"/>
+            <column name="ISSERVICE" valueBoolean="true"/>
+            <column name="PRICEBUY" valueNumeric="0.0"/>
+            <column name="PRICESELL" valueNumeric="0.0"/>
+            <column name="ISCATALOG" valueBoolean="true"/>
+        </insert>  
+    </changeSet> 
+    
     <changeSet author="Chromis POS" id="Insert into LOCATIONS Table (New Database)"> 
         <insert tableName="LOCATIONS">
             <column name="ID" value="0"/>
@@ -1867,6 +1886,10 @@
     
     <!-- Flag used to indicate that database was created with new routine so latest version of upgrade routines to be used -->
     <changeSet author="Chromis POS" id="New Database">    
-    </changeSet>            
+    </changeSet>   
+    
+    <!-- Flag used to indicate that database was created with new primary keys so latest version of upgrade routines to be used -->
+    <changeSet author="Chromis POS" id="New Primary Key structures included">    
+    </changeSet>          
 </databaseChangeLog>
 
