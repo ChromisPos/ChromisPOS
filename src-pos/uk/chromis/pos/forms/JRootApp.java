@@ -156,9 +156,9 @@ public class JRootApp extends JPanel implements AppView {
         String s = new String();
         StringBuffer sb = new StringBuffer();
 
-        db_user = (AppConfig2.getInstance2().getProperty("db.user"));
-        db_url = (AppConfig2.getInstance2().getProperty("db.URL"));
-        db_password = (AppConfig2.getInstance2().getProperty("db.password"));
+        db_user = (AppConfig.getInstance().getProperty("db.user"));
+        db_url = (AppConfig.getInstance().getProperty("db.URL"));
+        db_password = (AppConfig.getInstance().getProperty("db.password"));
         if (db_user != null && db_password != null && db_password.startsWith("crypt:")) {
             AltEncrypter cypher = new AltEncrypter("cypherkey" + db_user);
             db_password = cypher.decrypt(db_password.substring(6));
@@ -174,9 +174,9 @@ public class JRootApp extends JPanel implements AppView {
         }
 
         try {
-            ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig2.getInstance2().getProperty("db.driverlib")).toURI().toURL()});
-            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig2.getInstance2().getProperty("db.driver"), true, cloader).newInstance()));
-            Class.forName(AppConfig2.getInstance2().getProperty("db.driver"));
+            ClassLoader cloader = new URLClassLoader(new URL[]{new File(AppConfig.getInstance().getProperty("db.driverlib")).toURI().toURL()});
+            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(AppConfig.getInstance().getProperty("db.driver"), true, cloader).newInstance()));
+            Class.forName(AppConfig.getInstance().getProperty("db.driver"));
             con = DriverManager.getConnection(db_url, db_user, db_password);
             stmt = (Statement) con.createStatement();
 
