@@ -30,9 +30,9 @@
     <!-- ***************************************************************************************** -->
     <!--                Must be updated below to reflect current version                           -->
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.58.4">    
+    <changeSet author="Chromis POS" id="Update to 0.58.5">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.58.4"/>          
+            <column name="VERSION" value="0.58.5"/>          
         </update>  
     </changeSet>
     

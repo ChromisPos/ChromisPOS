@@ -18,7 +18,6 @@
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 package uk.chromis.pos.customers;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.util.RoundUtils;

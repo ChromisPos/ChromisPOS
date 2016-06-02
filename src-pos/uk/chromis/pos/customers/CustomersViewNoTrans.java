@@ -230,7 +230,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         txtDiscount.setText(null);
         txtCurdebt.setText(null);
         txtCurdate.setText(null);
-        m_jVisible.setSelected(false);
+        m_jVisible.setSelected(true);
         jcard.setText(null);
         txtFirstName.setText(null);
         txtLastName.setText(null);
@@ -994,6 +994,7 @@ public final class CustomersViewNoTrans extends javax.swing.JPanel implements Ed
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText(AppLocal.getIntString("label.customerTotalSales")); // NOI18N
 
+        m_jVisible.setSelected(true);
         m_jVisible.setText(" ");
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N

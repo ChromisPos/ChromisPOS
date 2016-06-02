@@ -289,7 +289,7 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
      *
      * @return assign a table to a customer reservation (restaurant mode)
      */
-    public final TableDefinition getTableCustomers() {
+    public final TableDefinition getTableCustomers() {        
         return tcustomers;
     }
 }
