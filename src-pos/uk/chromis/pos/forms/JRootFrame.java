@@ -80,7 +80,7 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
                this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/uk/chromis/fixedimages/smllogo.png")));
             } catch (IOException e) {
             }   
-            setTitle(AppLocal.APP_NAME + " - V" + AppLocal.APP_VERSION + AppLocal.APP_DEMO);               
+            setTitle(AppLocal.APP_NAME + " - V" + AppLocal.APP_VERSION + "." + AppLocal.APP_BUILD + AppLocal.APP_DEMO );               
             pack();
             setLocationRelativeTo(null);        
             
