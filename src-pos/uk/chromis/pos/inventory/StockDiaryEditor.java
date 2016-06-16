@@ -264,7 +264,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_junits.setEnabled(true);
         m_jprice.setEnabled(true);
         m_cat.setComponentEnabled(true);
-        getRootPane().setDefaultButton(m_jEnter);
         m_jcodebar.requestFocusInWindow();
     }
 
@@ -988,6 +987,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         assignProduct(JProductFinder.showMessage(this, m_dlSales));
 
 }//GEN-LAST:event_m_FindProductActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel catcontainer;
     private javax.swing.JButton jEditAttributes;
