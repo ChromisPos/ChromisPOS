@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
+import uk.chromis.data.gui.MessageInf;
 import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.SaveProvider;
@@ -191,7 +192,9 @@ public class JDlgEditProduct extends javax.swing.JDialog {
                 reference = (String) aValues[DataLogicSales.INDEX_REFERENCE];
                 
             } catch (BasicException ex) {
-                Logger.getLogger(JDlgEditProduct.class.getName()).log(Level.SEVERE, null, ex);
+                MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosave"), ex);
+                msg.show(this);
+                return;
             }
         }
         
