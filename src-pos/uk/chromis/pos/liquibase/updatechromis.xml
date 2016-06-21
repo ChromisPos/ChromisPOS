@@ -1014,7 +1014,19 @@
             <column name="MANAGESTOCK" type="${boolean.type}" defaultValueBoolean="true" />
         </addColumn>                                                     
     </changeSet>  
-    
+ 
+     <changeSet author="Chromis POS" id="Add CHANGEGIVEN into PAYMENTS" >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="CHANGEGIVEN" tableName="PAYMENTS"/>
+            </not>
+        </preConditions> 
+                       
+        <addColumn tableName="PAYMENTS">            
+            <column name="CHANGEGIVEN" type="double precision" defaultValueNumeric="0.0" />
+        </addColumn>                                                     
+    </changeSet>  
+   
   <!--  
     <changeSet author="Chromis POS" id="Add tableopen column in sharedtickets if it does not exist" >    
         <preConditions onFail="MARK_RAN">
@@ -1463,6 +1475,13 @@
             <column name="VERSION" value="0.56"/>       
         </insert>                    
     </changeSet> 
+        
+    <changeSet author="Chromis POS" id="Update Hversions v0.56.6.1"> 
+        <insert tableName="HVERSIONS"> 
+            <column name="VERSION" value="0.56.6.1"/>       
+        </insert>                    
+    </changeSet> 
+    
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1519,9 +1538,9 @@
     </changeSet>
     
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.56.6">    
+    <changeSet author="Chromis POS" id="Update to 0.56.6.1">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.56.6"/>          
+            <column name="VERSION" value="0.56.6.1"/>          
         </update>  
     </changeSet>
 </databaseChangeLog>

@@ -161,12 +161,14 @@
         <line>
             <text bold="true">Card</text>
         </line>
-        <line> 
-            <text align="left" length="22">Card Sale</text>
-            <text align ="right" length="20">${paymentline.printTotal()}</text>
-        </line>
-                                                    
-
+            <line></line>
+            <line size="1"><text align="left" length="32" bold="true">CARD SALE</text></line>
+            <line><text align="left" length="14">Total Charge:</text>
+                <text align ="right" length="18">${paymentline.printTendered()}</text></line>
+         <line>
+            <text align ="left" length="14">Cashback:</text>
+            <text align ="right" length="18">${paymentline.printChange()}</text></line>
+           <line>
         #end
 
         #if ($paymentline.name == "magcardrefund")

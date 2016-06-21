@@ -59,6 +59,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     private String pName;
     private Double getTotal;
     private Double getTendered;
+    private Double getChange;
     private String getRetMsg;
     public static final String DEBT = "debt";
     public static final String DEBT_PAID = "debtpaid";
@@ -994,7 +995,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             ticket.setLines(new PreparedSentence(s, "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES, L.REFUNDQTY  "
                     + "FROM TICKETLINES L, TAXES T WHERE L.TAXID = T.ID AND L.TICKET = ? ORDER BY L.LINE", SerializerWriteString.INSTANCE, new SerializerReadClass(TicketLineInfo.class)).list(ticket.getId()));
             ticket.setPayments(new PreparedSentence(s //                    , "SELECT PAYMENT, TOTAL, TRANSID TENDERED FROM PAYMENTS WHERE RECEIPT = ?" 
-                    , "SELECT PAYMENT, TOTAL, TRANSID, TENDERED, CARDNAME FROM PAYMENTS WHERE RECEIPT = ?", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentInfoTicket.class)).list(ticket.getId()));
+                    , "SELECT PAYMENT, TOTAL, TRANSID, TENDERED, CARDNAME, CHANGEGIVEN FROM PAYMENTS WHERE RECEIPT = ?", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentInfoTicket.class)).list(ticket.getId()));
         }
         return ticket;
     }
@@ -1094,10 +1095,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                 }
                 final Payments payments = new Payments();
-                SentenceExec paymentinsert = new PreparedSentence(s, "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE);
+                SentenceExec paymentinsert = new PreparedSentence(s,
+                        "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME, CHANGEGIVEN) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE);
 
                 for (final PaymentInfo p : ticket.getPayments()) {
-                    payments.addPayment(p.getName(), p.getTotal(), p.getPaid(), ticket.getReturnMessage());
+                    payments.addPayment(p.getName(), p.getTotal(), p.getTendered(), p.getChange(), ticket.getReturnMessage() );
                 }
 
                 //for (final PaymentInfo p : ticket.getPayments()) {
@@ -1109,6 +1111,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             getTotal = payments.getPaidAmount(pName);
                             getTendered = payments.getTendered(pName);
                             getRetMsg = payments.getRtnMessage(pName);
+                            getChange = payments.getChange(pName);
                             payments.removeFirst(pName);
 
                             setString(1, UUID.randomUUID().toString());
@@ -1119,6 +1122,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             setBytes(6, (byte[]) Formats.BYTEA.parseValue(getRetMsg));
                             setDouble(7, getTendered);
                             setString(8, getCardName);
+                            setDouble(9, getChange);
                             payments.removeFirst(pName);
                         }
                     });

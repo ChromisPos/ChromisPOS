@@ -19,6 +19,8 @@
 
 package uk.chromis.pos.payment;
 
+import uk.chromis.format.Formats;
+
 /**
  *
  *   
@@ -29,6 +31,16 @@ public class PaymentInfoMagcard extends PaymentInfo {
      *
      */
     protected double m_dTotal;
+    
+    /**
+     *
+     */
+    protected double m_dCashBack;
+    
+    /**
+     *
+     */
+    protected double m_dProcessFee;
     
     /**
      *
@@ -93,7 +105,9 @@ public class PaymentInfoMagcard extends PaymentInfo {
      * @param track2
      * @param track1
      * @param sTransactionID
-     * @param dTotal */
+     * @param dTotal
+     * @param dProcessFee
+     * @param dCashBack */
     public PaymentInfoMagcard(
             String sHolderName, 
             String sCardNumber, 
@@ -101,8 +115,10 @@ public class PaymentInfoMagcard extends PaymentInfo {
             String track1, 
             String track2, 
             String track3, 
-            String sTransactionID, 
-            double dTotal) {
+            String sTransactionID,
+            double dTotal,
+            double dProcessFee,
+            double dCashBack ) {
         
         m_sHolderName = sHolderName;
         m_sCardNumber = sCardNumber;
@@ -113,6 +129,8 @@ public class PaymentInfoMagcard extends PaymentInfo {
         
         m_sTransactionID = sTransactionID;
         m_dTotal = dTotal;
+        m_dCashBack = dCashBack;
+        m_dProcessFee = dProcessFee;
         
         m_sAuthorization = null;
         m_sErrorMessage = null;
@@ -123,15 +141,19 @@ public class PaymentInfoMagcard extends PaymentInfo {
      * @param sHolderName
      * @param sCardNumber
      * @param sExpirationDate
+     * @param sTransactionID
      * @param dTotal
-     * @param sTransactionID */
+     * @param dProcessFee
+     * @param dCashBack */
     public PaymentInfoMagcard(
             String sHolderName, 
             String sCardNumber, 
             String sExpirationDate, 
             String sTransactionID, 
-            double dTotal) {
-        this(sHolderName, sCardNumber, sExpirationDate, null, null, null, sTransactionID, dTotal);
+            double dTotal,
+            double dProcessFee,
+            double dCashBack ) {
+        this(sHolderName, sCardNumber, sExpirationDate, null, null, null, sTransactionID, dTotal, dProcessFee, dCashBack );
     }
     
     /**
@@ -148,7 +170,9 @@ public class PaymentInfoMagcard extends PaymentInfo {
                 track2, 
                 track3, 
                 m_sTransactionID, 
-                m_dTotal);
+                m_dTotal,
+                m_dProcessFee,
+                m_dCashBack );
         
         p.m_sAuthorization = m_sAuthorization;
         p.m_sErrorMessage = m_sErrorMessage;
@@ -170,7 +194,7 @@ public class PaymentInfoMagcard extends PaymentInfo {
      */
     @Override
     public double getTotal() {
-        return m_dTotal;
+        return m_dTotal + m_dProcessFee + m_dCashBack;
     }
 
     /**
@@ -385,9 +409,41 @@ public class PaymentInfoMagcard extends PaymentInfo {
      *
      * @return
      */
+    public String printTransactionFee() {
+        return Formats.CURRENCY.formatValue(m_dProcessFee);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String printChange() {
+        return Formats.CURRENCY.formatValue(m_dCashBack);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String printTendered() {
+        return Formats.CURRENCY.formatValue(getTendered());
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String printPaid() {
+        return Formats.CURRENCY.formatValue(getPaid());
+    }
+    
+    /**
+     *
+     * @return
+     */
     @Override
     public double getPaid() {
-        return (0.0); 
+        return (m_dTotal + m_dProcessFee ); 
     }
 
     /**
@@ -396,7 +452,7 @@ public class PaymentInfoMagcard extends PaymentInfo {
      */
     @Override
     public double getChange(){
-       return 0.00;
+       return m_dCashBack;
    }   
 
     /**
@@ -405,7 +461,7 @@ public class PaymentInfoMagcard extends PaymentInfo {
      */
     @Override
     public double getTendered() {
-        return 0.00;
+        return (m_dTotal + m_dProcessFee + m_dCashBack); 
     }
   
 }

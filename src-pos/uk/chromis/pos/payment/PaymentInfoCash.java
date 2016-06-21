@@ -29,7 +29,7 @@ public class PaymentInfoCash extends PaymentInfo {
     private double prePayAmount = 0.0;
     private double m_dPaid;
     private double m_dTotal;
-//    private double m_dTendered;
+    private double m_dTendered;
     private String m_dCardName = null;
 
     /**
@@ -42,7 +42,7 @@ public class PaymentInfoCash extends PaymentInfo {
     public PaymentInfoCash(double dTotal, double dPaid, double dTendered) {
         m_dTotal = dTotal;
         m_dPaid = dPaid;
-        //      m_dTendered = dTendered;
+        m_dTendered = dTendered != 0.0 ? dTendered : dPaid;
     }
 
     /**
@@ -54,7 +54,7 @@ public class PaymentInfoCash extends PaymentInfo {
      * @param prePayAmount
      */
     public PaymentInfoCash(double dTotal, double dPaid, double dTendered, double prePayAmount) {
-        this(dTotal, dTendered, dPaid);
+        this(dTotal, dPaid, dTendered);
         this.prePayAmount = prePayAmount;
     }
 
@@ -64,8 +64,7 @@ public class PaymentInfoCash extends PaymentInfo {
      */
     @Override
     public PaymentInfo copyPayment() {
-        //    return new PaymentInfoCash(m_dTotal, m_dPaid, m_dTendered, prePayAmount);
-        return new PaymentInfoCash(m_dTotal, m_dPaid, prePayAmount);
+        return new PaymentInfoCash(m_dTotal, m_dPaid, m_dTendered, prePayAmount);
     }
 
     /**
@@ -110,8 +109,7 @@ public class PaymentInfoCash extends PaymentInfo {
      */
     @Override
     public double getTendered() {
-        //   return m_dTendered;
-        return m_dPaid;
+        return m_dTendered;
     }
 
     /**
@@ -120,7 +118,7 @@ public class PaymentInfoCash extends PaymentInfo {
      */
     @Override
     public double getChange() {
-        return m_dPaid - m_dTotal;
+        return m_dTendered - m_dTotal;
     }
 
     /**
@@ -154,8 +152,7 @@ public class PaymentInfoCash extends PaymentInfo {
      * @return
      */
     public String printTendered() {
-        //     return Formats.CURRENCY.formatValue(m_dTendered);
-        return printPaid();
+        return Formats.CURRENCY.formatValue(m_dTendered);
     }
 
     /**
@@ -163,7 +160,7 @@ public class PaymentInfoCash extends PaymentInfo {
      * @return
      */
     public String printPaid() {
-        return Formats.CURRENCY.formatValue(m_dPaid);
+        return Formats.CURRENCY.formatValue( m_dPaid );
     }
 
     /**
@@ -171,7 +168,7 @@ public class PaymentInfoCash extends PaymentInfo {
      * @return
      */
     public String printChange() {
-        return Formats.CURRENCY.formatValue(new Double(m_dPaid - m_dTotal));
+        return Formats.CURRENCY.formatValue(new Double(m_dTendered - m_dTotal));
     }
 
 }

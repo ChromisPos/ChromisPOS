@@ -20,6 +20,7 @@
 package uk.chromis.pos.payment;
 
 import javax.swing.JPanel;
+import uk.chromis.pos.forms.AppConfig;
 
 /**
  *
@@ -47,6 +48,11 @@ public class ConfigPaymentPanelEmpty extends javax.swing.JPanel implements Payme
      */
     @Override
     public void loadProperties() {
+        jchkCashBackEnabled.setSelected(Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.cashbackenabled")));       
+        
+        jtxtCashBackLimit.setText(AppConfig.getInstance().getProperty("payment.cashbacklimit") );
+        jtxtCashBackPercentCharge.setText(AppConfig.getInstance().getProperty("payment.cashbackpercentcharge") );
+        jtxtCashBackTransactionCharge.setText(AppConfig.getInstance().getProperty("payment.cashbacktransactioncharge") );
         
     }
     
@@ -57,6 +63,11 @@ public class ConfigPaymentPanelEmpty extends javax.swing.JPanel implements Payme
     @Override
     public void saveProperties() {
         
+        AppConfig.getInstance().setProperty("payment.cashbackenabled", Boolean.toString( jchkCashBackEnabled.isSelected() ) );             
+        AppConfig.getInstance().setProperty("payment.cashbacklimit", jtxtCashBackLimit.getText() );
+        AppConfig.getInstance().setProperty("payment.cashbackpercentcharge", jtxtCashBackPercentCharge.getText() );
+        AppConfig.getInstance().setProperty("payment.cashbacktransactioncharge", jtxtCashBackTransactionCharge.getText() );
+    
     }
     
     /** This method is called from within the constructor to
@@ -68,22 +79,112 @@ public class ConfigPaymentPanelEmpty extends javax.swing.JPanel implements Payme
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
+        jPanel1 = new javax.swing.JPanel();
+        label1 = new java.awt.Label();
+        jtxtCashBackTransactionCharge = new java.awt.TextField();
+        label2 = new java.awt.Label();
+        jtxtCashBackPercentCharge = new java.awt.TextField();
+        jLabel1 = new javax.swing.JLabel();
+        jtxtCashBackLimit = new java.awt.TextField();
+        jchkCashBackEnabled = new eu.hansolo.custom.SteelCheckBox();
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
         setPreferredSize(new java.awt.Dimension(650, 75));
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        label1.setText(bundle.getString("Label.CashBackChargeTransaction")); // NOI18N
+
+        jtxtCashBackTransactionCharge.setText("textField1");
+
+        label2.setText(bundle.getString("Label.CashBackChargePercent")); // NOI18N
+
+        jtxtCashBackPercentCharge.setText("textField2");
+
+        jLabel1.setText(bundle.getString("Label.CashBackLimit")); // NOI18N
+
+        jtxtCashBackLimit.setText("textField1");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtxtCashBackTransactionCharge, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(jtxtCashBackPercentCharge, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jtxtCashBackLimit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtxtCashBackTransactionCharge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtxtCashBackPercentCharge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jtxtCashBackLimit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jchkCashBackEnabled.setText(bundle.getString("Label.CashBack")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 650, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jchkCashBackEnabled, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(416, 416, 416))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(66, 66, 66))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jchkCashBackEnabled, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private eu.hansolo.custom.SteelCheckBox jchkCashBackEnabled;
+    private java.awt.TextField jtxtCashBackLimit;
+    private java.awt.TextField jtxtCashBackPercentCharge;
+    private java.awt.TextField jtxtCashBackTransactionCharge;
+    private java.awt.Label label1;
+    private java.awt.Label label2;
     // End of variables declaration//GEN-END:variables
 
 }

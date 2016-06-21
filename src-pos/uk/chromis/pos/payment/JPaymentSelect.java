@@ -633,6 +633,12 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
             //Reset the payment tabs
             addTabs();
         } else if (returnPayment != null) {
+            
+            if( returnPayment.getChange() > 0.0 && returnPayment.getName().contentEquals("magcard")) {
+                // Cashback - also need to add a negative cash payment
+                m_aPaymentInfo.add( new PaymentInfoCash( returnPayment.getChange() * -1.0, 0, 0 ) );
+            }
+            
             m_aPaymentInfo.add(returnPayment);
             accepted = true;
 

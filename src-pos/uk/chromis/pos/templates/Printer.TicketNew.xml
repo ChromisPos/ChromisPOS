@@ -133,7 +133,7 @@
             </line>
             <line>
               <text align="left" length="22">Tendered:</text>
-              <text align ="right" length="20">${paymentline.printPaid()}</text>
+              <text align ="right" length="20">${paymentline.printTendered()}</text>
             </line>
             <line>
               <text align="left" length="22">Change:</text>
@@ -149,13 +149,14 @@
             </line>
           #end
           #if ($paymentline.name == "magcard")
-            <line>
-              <text bold="true">Card</text>
-          </line>
-          <line>
-            <text align ="right" length="42">${paymentline.printTotal()}</text>
-          </line>
-          <line>
+            <line></line>
+            <line size="1"><text align="left" length="32" bold="true">CARD SALE</text></line>
+            <line><text align="left" length="14">Total Charge:</text>
+                <text align ="right" length="18">${paymentline.printTendered()}</text></line>
+         <line>
+            <text align ="left" length="14">Cashback:</text>
+            <text align ="right" length="18">${paymentline.printChange()}</text></line>
+           <line>
             <text align ="left" length="22">Card Number:</text>
             <text>${paymentline.printCardNumber()}</text>
           </line>

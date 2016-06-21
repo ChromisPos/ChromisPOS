@@ -104,7 +104,7 @@ public class PaymentPanelType extends javax.swing.JPanel implements PaymentPanel
                     null,                    
                     null,                    
                     m_sTransactionID,
-                    m_dTotal);
+                    m_dTotal, 0.0, 0.0);
         } else {
             return new PaymentInfoMagcardRefund(
                     m_jHolderName.getText(),

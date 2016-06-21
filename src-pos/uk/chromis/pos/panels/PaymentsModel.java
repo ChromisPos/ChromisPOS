@@ -174,7 +174,7 @@ public class PaymentsModel {
             p.m_dPaymentsTotal = (Double) valtickets[1];
         }
 
-        List l = new StaticSentence(app.getSession(), "SELECT PAYMENTS.PAYMENT, SUM(PAYMENTS.TOTAL), PAYMENTS.NOTES "
+        List l = new StaticSentence(app.getSession(), "SELECT PAYMENTS.PAYMENT, SUM(PAYMENTS.TOTAL), PAYMENTS.NOTES, SUM(PAYMENTS.CHANGEGIVEN) "
                 + "FROM PAYMENTS, RECEIPTS "
                 + "WHERE PAYMENTS.RECEIPT = RECEIPTS.ID AND RECEIPTS.MONEY = ? "
                 + "GROUP BY PAYMENTS.PAYMENT, PAYMENTS.NOTES", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentsModel.PaymentsLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
@@ -1002,6 +1002,7 @@ public class PaymentsModel {
         private String m_PaymentType;
         private Double m_PaymentValue;
         private String s_PaymentReason;
+        private Double m_PaymentChange;
 
         /**
          *
@@ -1013,6 +1014,7 @@ public class PaymentsModel {
             m_PaymentType = dr.getString(1);
             m_PaymentValue = dr.getDouble(2);
             s_PaymentReason = dr.getString(3) == null ? "" : dr.getString(3);
+            m_PaymentChange = dr.getDouble(4);
         }
 
         /**
@@ -1045,6 +1047,21 @@ public class PaymentsModel {
          */
         public Double getValue() {
             return m_PaymentValue;
+        }
+        /**
+         *
+         * @return
+         */
+        public String printChange() {
+            return Formats.CURRENCY.formatValue(m_PaymentChange);
+        }
+
+        /**
+         *
+         * @return
+         */
+        public Double getChange() {
+            return m_PaymentChange;
         }
 
         /**

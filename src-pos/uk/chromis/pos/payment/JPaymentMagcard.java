@@ -116,46 +116,22 @@ public class JPaymentMagcard extends javax.swing.JPanel implements JPaymentInter
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jlblMessage = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(300, 40));
         setPreferredSize(new java.awt.Dimension(300, 40));
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jPanel1.setMinimumSize(new java.awt.Dimension(290, 35));
-        jPanel1.setPreferredSize(new java.awt.Dimension(290, 35));
-
         jlblMessage.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jlblMessage.setText("jLabel1");
         jlblMessage.setMaximumSize(new java.awt.Dimension(46, 25));
         jlblMessage.setMinimumSize(new java.awt.Dimension(46, 25));
         jlblMessage.setPreferredSize(new java.awt.Dimension(46, 25));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(2, 2, 2)
-                .addComponent(jlblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        add(jlblMessage, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jlblMessage;
     // End of variables declaration//GEN-END:variables
 

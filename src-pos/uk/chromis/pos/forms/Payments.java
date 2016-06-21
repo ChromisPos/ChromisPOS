@@ -14,6 +14,7 @@ public class Payments {
     private Double tendered;
     private HashMap paymentPaid;
     private HashMap paymentTendered;
+    private HashMap changeGiven;
     private HashMap rtnMessage;
     private String name;
 
@@ -24,7 +25,7 @@ public class Payments {
     paymentPaid =  new HashMap();
     paymentTendered =  new HashMap();
     rtnMessage = new HashMap();
-     
+    changeGiven = new HashMap();
     }
 
     /**
@@ -32,16 +33,19 @@ public class Payments {
      * @param pName
      * @param pAmountPaid
      * @param pTendered
+     * @param pChangeGiven
      * @param rtnMsg
      */
-    public void addPayment (String pName, Double pAmountPaid, Double pTendered, String rtnMsg){
+    public void addPayment (String pName, Double pAmountPaid, Double pTendered, Double pChangeGiven, String rtnMsg){
         if (paymentPaid.containsKey(pName)){
             paymentPaid.put(pName,Double.parseDouble(paymentPaid.get(pName).toString()) + pAmountPaid);
             paymentTendered.put(pName,Double.parseDouble(paymentTendered.get(pName).toString()) + pTendered); 
+            changeGiven.put(pName,Double.parseDouble(changeGiven.get(pName).toString()) + pChangeGiven); 
             rtnMessage.put(pName, rtnMsg);
         }else {    
             paymentPaid.put(pName, pAmountPaid);
             paymentTendered.put(pName,pTendered);
+            changeGiven.put(pName,pChangeGiven);
             rtnMessage.put(pName, rtnMsg);
         }        
 }
@@ -55,6 +59,16 @@ public class Payments {
     return(Double.parseDouble(paymentTendered.get(pName).toString()));
 }
 
+
+    /**
+     *
+     * @param pName
+     * @return
+     */
+    public Double getChange (String pName){
+    return(Double.parseDouble(changeGiven.get(pName).toString()));
+}
+    
     /**
      *
      * @param pName

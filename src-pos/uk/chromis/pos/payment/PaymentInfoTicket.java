@@ -59,6 +59,8 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
         m_sName = sName;
         m_dTicket = dTicket;
         m_transactionID = transactionID;
+        m_dTendered = 0.00;
+        m_dChange = 0.00;        
     }
 
     /**
@@ -69,6 +71,7 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
         m_dTicket = 0.0;
         m_transactionID = null;
         m_dTendered = 0.00;
+        m_dChange = 0.00;
     }
 
     /**
@@ -85,7 +88,9 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
             m_dTendered = dr.getDouble(4);
         }
         m_dCardName = dr.getString(5);
-        m_dChange = m_dTendered - m_dTicket;
+        if (dr.getDouble(6) != null) {
+            m_dChange = dr.getDouble(6);
+        }
     }
 
     /**
@@ -145,7 +150,7 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
      */
     @Override
     public double getChange() {
-        return m_dTendered - m_dTicket;
+        return m_dChange;
     }
 
     /**
@@ -154,7 +159,7 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
      */
     @Override
     public double getTendered() {
-        return (0.00);
+        return (m_dTendered);
     }
 
     /**
@@ -190,7 +195,7 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
      * @return
      */
     public String printChange() {
-        return Formats.CURRENCY.formatValue(m_dTendered - m_dTicket);
+        return Formats.CURRENCY.formatValue(m_dChange);
     }
 
     /**
