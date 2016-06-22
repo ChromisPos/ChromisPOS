@@ -74,6 +74,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private BarcodeValidator validate;
     private DataLogicSales m_dlSales;
     private Boolean displayEdited = false;
+    private String originalDisplay;
     
     /**
      * Creates new form JEditProduct
@@ -244,8 +245,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 m_jIsPack.setSelected( info.getIsPack());
                 m_jPackQuantity.setText(Formats.DOUBLE.formatValue(info.getPackQuantity()));
                 packproductmodel.setSelectedKey( info.getPromotionID());
+                
                 String displayname = "<html>" + m_jName.getText();
-                displayEdited = !displayname.equals(m_jDisplay.getText());
+                originalDisplay = m_jDisplay.getText();
+                displayEdited = displayname.compareToIgnoreCase(originalDisplay) != 0;
                 
             } else {
 
@@ -501,7 +504,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jManageStock.setSelected( ((Boolean) myprod[DataLogicSales.INDEX_MANAGESTOCK]) );
 
         String displayname = "<html>" + m_jName.getText();
-        displayEdited = !displayname.equals(m_jDisplay.getText());
+        originalDisplay = m_jDisplay.getText();
+        displayEdited = displayname.compareToIgnoreCase(originalDisplay) != 0;
 
     }
 
@@ -743,8 +747,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
                 if (length == 0) {
                     m_jDisplay.setText(null);
-                } else if (m_jDisplay.getText() == null || "".equals(m_jDisplay.getText())) {
+                } else if( originalDisplay.contentEquals( m_jDisplay.getText() ) ) {
                     m_jDisplay.setText("<html>" + m_jName.getText());
+                    originalDisplay = m_jDisplay.getText();
                 }
                 reportlock = false;
             }
