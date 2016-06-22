@@ -445,10 +445,10 @@ public class PromotionSupport {
     }
 
     // Discount a group of products by adding a single discount 
-    // to the end of the ticket.
+    // at the given location
     public void DiscountProductGroup(TicketInfo ticket, PromotionInfo promotion,
             String sDiscountMessage,
-            Double qty, Double price, TaxInfo tax) {
+            Double qty, Double price, TaxInfo tax, int line) {
 
         String tcID = null;
         if (tax != null) {
@@ -463,8 +463,12 @@ public class PromotionSupport {
 
         discountline.setPromotionAdded(true);
         discountline.setProperty("product.promotionid", promotion.getID());
-
-        ticket.addLine(discountline);
+        
+        if( line != -1 ) {
+            ticket.insertLine( line, discountline );
+        } else {
+            ticket.addLine(discountline);
+        }
     }
 
     // Remove discount on a product
@@ -654,6 +658,7 @@ public class PromotionSupport {
             Double fixedPrice,
             Boolean bWholeUnitsOnly) {
 
+        Double dDiscount = 0.0;
         // Count the number of items in the ticket
         Double qty = 0.0;
         for (LineList l : aLines) {
@@ -682,10 +687,14 @@ public class PromotionSupport {
             // Step through discounting items until qtyFree is reached
             Double totalDiscount = 0.0;
             Double qtyFound = 0.0;
+            int indexLastItem = 0;
+            
             for (int i = 0; i < aLines.size(); ++i ) {
                 LineList l = aLines.get(i);
                 int itemIndex = l.getIndex();
-                Double itemqty = ticket.getLine(itemIndex).getMultiply();
+                
+                TicketLineInfo productline = ticket.getLine(itemIndex);
+                Double itemqty = productline.getMultiply();
 
                 qtyFound += itemqty;
                     
@@ -697,16 +706,19 @@ public class PromotionSupport {
                     qtyDiscount = qtyFree - totalDiscount;
                 }
 
-                DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, 100d );
+//                DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, 100d );
                 
                 // A new line is added to the ticket so re-index ones after
-                for( int j = 0; j< aLines.size(); ++j ) {
-                    int index = aLines.get(j).getIndex();
-                    if(index > itemIndex) {
-                        aLines.get(j).setIndex( index+1 );
-                    }
-                }
+//                for( int j = 0; j< aLines.size(); ++j ) {
+//                    int index = aLines.get(j).getIndex();
+//                    if(index > itemIndex) {
+//                        aLines.get(j).setIndex( index+1 );
+//                    }
+//                }
 
+                dDiscount += (productline.getPrice()*qtyDiscount);
+                indexLastItem = i;
+                
                 totalDiscount += qtyDiscount;
                 qtyFound += qtyDiscount;
 
@@ -723,13 +735,15 @@ public class PromotionSupport {
                 }
             }
             
-            // We have now discounted all products involved the deal to zero,
-            // Now add a line to the end of the ticket for the
-            // actual price, use the highest tax rate we found
-            fixedPrice = fixedPrice / (1+tax.getRate());
-            
+            // Now add a line after the last discounted item for the discounts
+            Double qtyDiscount = qtyFree/qtyBuy;
+ 
+            fixedPrice = (fixedPrice / (1+tax.getRate()) ) * qtyDiscount;
+ 
+            Double priceDiscount = (fixedPrice - dDiscount) /qtyDiscount;
+ 
             DiscountProductGroup(ticket, promotion, sDiscountMessage,
-                    qtyFree/qtyBuy, fixedPrice, tax);
+                    qtyDiscount, priceDiscount, tax, indexLastItem+1 );
         }
     }
 
@@ -999,7 +1013,7 @@ public class PromotionSupport {
                 // Now add a line to the end of the ticket for the meal deal's
                 // actual price, use the highest tax rate we found
                 DiscountProductGroup(ticket, promotion, sDiscountMessage,
-                        smallest, price, tax);
+                        smallest, price, tax, -1);
             }
         }
     }
