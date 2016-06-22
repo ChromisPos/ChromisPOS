@@ -563,7 +563,8 @@ public final class TicketInfo implements SerializableRead, Externalizable {
     public double getTotalChange() {
         double sum = 0.0;
         for (PaymentInfo p : payments) {
-            if (!"debtpaid".equals(p.getName())) {
+            if (!"debtpaid".equals(p.getName()) &&
+                !"magcard".equals(p.getName())) {
                 sum += p.getChange();
             }
         }
