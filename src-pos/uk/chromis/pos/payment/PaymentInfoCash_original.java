@@ -127,4 +127,11 @@ public class PaymentInfoCash_original extends PaymentInfo {
         return Formats.CURRENCY.formatValue(new Double(m_dPaid - m_dTotal));
     }  
     
+    /**
+     *
+     * @return
+     */
+    public String printTendered() {
+        return Formats.CURRENCY.formatValue(getTendered());
+    }    
 }
