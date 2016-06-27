@@ -1914,17 +1914,20 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     public void updatePromotions(String eventkey, int effectedIndex, String productID) {
         try {
-            TicketLineInfo lastProduct = m_oTicket.getLine( m_ticketlines.getSelectedIndex() );
+            int index = m_ticketlines.getSelectedIndex();
+            if (index >= 0) {
+                TicketLineInfo lastProduct = m_oTicket.getLine( index );
 
-            if (productID == null) {
-                productID = m_oTicket.getLine(effectedIndex).getProductID();
-            }
+                if (productID == null) {
+                    productID = m_oTicket.getLine(effectedIndex).getProductID();
+                }
 
-            if (m_promotionSupport.checkPromotions(eventkey, true, m_oTicket,
-                    lastProduct.getTicketLine(), effectedIndex, productID)) {
-                refreshTicket();
-                
-                setSelectedIndex(lastProduct.getTicketLine());
+                if (m_promotionSupport.checkPromotions(eventkey, true, m_oTicket,
+                        lastProduct.getTicketLine(), effectedIndex, productID)) {
+                    refreshTicket();
+
+                    setSelectedIndex(lastProduct.getTicketLine());
+                }
             }
         } catch (ScriptException ex) {
             Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
