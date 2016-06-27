@@ -679,7 +679,7 @@ public class PromotionSupport {
             qtyFree = intPart(qtyFree);
         }
 
-        // Tax is chargable at the highest item tax rate so need to
+        // Tax is chargable at the lowest item tax rate so need to
         // keep track of that.
         TaxInfo tax = null;
         
@@ -706,27 +706,16 @@ public class PromotionSupport {
                     qtyDiscount = qtyFree - totalDiscount;
                 }
 
-//                DiscountProductQty(ticket, itemIndex, sDiscountMessage, qtyDiscount, 100d );
-                
-                // A new line is added to the ticket so re-index ones after
-//                for( int j = 0; j< aLines.size(); ++j ) {
-//                    int index = aLines.get(j).getIndex();
-//                    if(index > itemIndex) {
-//                        aLines.get(j).setIndex( index+1 );
-//                    }
-//                }
-
-                dDiscount += (productline.getPrice()*qtyDiscount);
+                dDiscount += (productline.getPriceTax()*qtyDiscount);
                 indexLastItem = i;
                 
                 totalDiscount += qtyDiscount;
                 qtyFound += qtyDiscount;
 
                 TicketLineInfo info = ticket.getLine(itemIndex);
-                // Save the highest tax rate - we must charge that rate
-                // on the final price (UK tax laws)
+                // Save the lowest tax rate - we must use that rate
                 if (tax == null
-                        || tax.getRate() < info.getTaxInfo().getRate()) {
+                        || tax.getRate() > info.getTaxInfo().getRate()) {
                     tax = info.getTaxInfo();
                 }
 
@@ -737,10 +726,12 @@ public class PromotionSupport {
             
             // Now add a line after the last discounted item for the discounts
             Double qtyDiscount = qtyFree/qtyBuy;
+            Double priceDiscount = fixedPrice - (dDiscount /qtyDiscount);
+
+            // All the above calculations are done on the taxed price
+            // DiscountProductGroup takes a pre-tax price
+            priceDiscount = (priceDiscount / (1+tax.getRate()) );
  
-            fixedPrice = (fixedPrice / (1+tax.getRate()) ) * qtyDiscount;
- 
-            Double priceDiscount = (fixedPrice - dDiscount) /qtyDiscount;
  
             DiscountProductGroup(ticket, promotion, sDiscountMessage,
                     qtyDiscount, priceDiscount, tax, indexLastItem+1 );
