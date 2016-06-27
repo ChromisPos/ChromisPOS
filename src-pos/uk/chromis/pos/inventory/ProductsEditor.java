@@ -171,6 +171,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
      * @throws BasicException
      */
     public void activate() throws BasicException {
+        originalDisplay = "";
 
         // Load the taxes logic
         taxeslogic = new TaxesLogic(taxsent.list());
