@@ -889,9 +889,27 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     Toolkit.getDefaultToolkit().beep();
                 }
-                JOptionPane.showMessageDialog(null,
-                        sCode + " - " + AppLocal.getIntString("message.noproduct"), "Check", JOptionPane.WARNING_MESSAGE);
-                stateToZero();
+                
+                String[] options = new String[2];
+                options[0] = new String( AppLocal.getIntString( "label.search"));
+                options[1] = new String( AppLocal.getIntString( "Button.OK"));
+                
+                if (JOptionPane.showOptionDialog(this, AppLocal.getIntString( "message.noproduct"),
+                        AppLocal.getIntString("message.title"),
+                        0, JOptionPane.WARNING_MESSAGE, null, options, null )
+                        == 0 ) {
+                    
+                        AutoLogoff.getInstance().deactivateTimer();
+                        oProduct = JProductFinder.showMessage(JPanelTicket.this, dlSales);
+                        AutoLogoff.getInstance().activateTimer();
+                        if (oProduct == null) {
+                            stateToZero(); 
+                        } else {
+                            incProduct(count, oProduct);
+                        }
+                } else {
+                    stateToZero(); 
+                }
             } else {
                 if (oProduct.isScale() && m_App.getDeviceScale().existsScale()) {
                     try {
