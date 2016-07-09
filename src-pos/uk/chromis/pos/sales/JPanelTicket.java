@@ -32,6 +32,7 @@ import java.io.ObjectInputStream;
 import static java.lang.Integer.parseInt;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -97,12 +98,10 @@ import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
 import uk.chromis.pos.promotion.PromotionSupport;
-import uk.chromis.pos.ticket.PlayWave;
 import uk.chromis.pos.util.AutoLogoff;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
+import uk.chromis.pos.payment.JPaymentSelectCustomer;
+import uk.chromis.pos.payment.PaymentInfo;
+import uk.chromis.pos.payment.PaymentInfoTicket;
 import uk.chromis.pos.ticket.PlayWave;
 
 public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFactoryApp, TicketsEditor {
@@ -120,7 +119,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private final static int NUMBER_PORDEC = 7;
 
     private final String m_sCurrentTicket = null;
-    private final String temp_jPrice = "";
     protected JTicketLines m_ticketlines, m_ticketlines2;
     protected TicketInfo m_oTicket;
     protected JPanelButtons m_jbtnconfig;
@@ -145,6 +143,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private TaxesLogic taxeslogic;
     private JPaymentSelect paymentdialogreceipt;
     private JPaymentSelect paymentdialogrefund;
+    private JPaymentSelect paymentdialogcustomer;
+
     private JRootApp root;
     private Object m_principalapp;
     private Boolean restaurant;
@@ -204,7 +204,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_jPanEntries.add(m_jNumberKey);
         }
 
-        jButton1.setVisible(!AppConfig.getInstance().getBoolean("till.addcustomerbutton"));
+        jButtonCustomerAdd.setVisible(!AppConfig.getInstance().getBoolean("till.addcustomerbutton"));
         
         jbtnMooring.setVisible(AppConfig.getInstance().getBoolean("till.marineoption"));
         priceWith00 = ("true".equals(AppConfig.getInstance().getProperty("till.pricewith00")));
@@ -361,6 +361,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         paymentdialogreceipt.init(m_App);
         paymentdialogrefund = JPaymentSelectRefund.getDialog(this);
         paymentdialogrefund.init(m_App);
+        paymentdialogcustomer = JPaymentSelectCustomer.getDialog(this);        
+        paymentdialogcustomer.init(m_App);
 
         // impuestos incluidos seleccionado ?
         m_jaddtax.setSelected("true".equals(m_jbtnconfig.getProperty("taxesincluded")));
@@ -401,6 +403,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         //     m_jNumberKey.setMinusEnabled(m_App.getAppUserView().getUser().hasPermission("sales.EditLines"));
         m_jNumberKey.setEqualsEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total"));
         m_jbtnconfig.setPermissions(m_App.getAppUserView().getUser());
+
+        jButtonCustomerPay.setEnabled(false);
 
         m_ticketsbag.activate();
 
@@ -484,11 +488,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (m_oTicket != null && m_oTicket.getCustomer() != null) {
             try {
                 m_oTicket.getCustomer().setCurdebt(dlSales.getCustomerDebt(m_oTicket.getCustomer().getId()));
+                
+                jButtonCustomerPay.setEnabled( m_oTicket.getCustomer().getCurdebt() > 0 ? true: false);
             } catch (BasicException ex) {
                 Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            jButtonCustomerPay.setEnabled( false);
         }
 
+        
         // read resources ticket.show and execute
         executeEvent(m_oTicket, m_oTicketExt, "ticket.show");
         j_btnKitchenPrt.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.PrintKitchen"));
@@ -1157,6 +1166,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             JOptionPane.showMessageDialog(null,
                                     sCode + " - " + AppLocal.getIntString("message.nocustomer"),
                                     "Customer Not Found", JOptionPane.WARNING_MESSAGE);
+
+                            jButtonCustomerPay.setEnabled( false );
                         } else {
                             if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
                                 JOptionPane.showMessageDialog(null,
@@ -1166,6 +1177,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             }
                             
                             m_oTicket.setCustomer(newcustomer);
+                            jButtonCustomerPay.setEnabled(newcustomer.getCurdebt() > 0 ? true: false);
+
                             m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
 
                             if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
@@ -2112,11 +2125,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanContainer = new javax.swing.JPanel();
         m_jOptions = new javax.swing.JPanel();
         m_jButtons = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jButtonCustomerAdd = new javax.swing.JButton();
         btnCustomer = new javax.swing.JButton();
         btnSplit = new javax.swing.JButton();
         jbtnLogout = new javax.swing.JButton();
         btnReprint1 = new javax.swing.JButton();
+        jButtonCustomerPay = new javax.swing.JButton();
         m_jPanelScripts = new javax.swing.JPanel();
         m_jButtonsExt = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -2162,19 +2176,19 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_jOptions.setLayout(new java.awt.BorderLayout());
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_add_sml.png"))); // NOI18N
+        jButtonCustomerAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_add_sml.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
-        jButton1.setToolTipText(bundle.getString("tiptext.gotocustomers")); // NOI18N
-        jButton1.setFocusPainted(false);
-        jButton1.setFocusable(false);
-        jButton1.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        jButton1.setMaximumSize(new java.awt.Dimension(50, 40));
-        jButton1.setMinimumSize(new java.awt.Dimension(50, 40));
-        jButton1.setPreferredSize(new java.awt.Dimension(52, 40));
-        jButton1.setRequestFocusEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCustomerAdd.setToolTipText(bundle.getString("tiptext.gotocustomers")); // NOI18N
+        jButtonCustomerAdd.setFocusPainted(false);
+        jButtonCustomerAdd.setFocusable(false);
+        jButtonCustomerAdd.setMargin(new java.awt.Insets(0, 4, 0, 4));
+        jButtonCustomerAdd.setMaximumSize(new java.awt.Dimension(50, 40));
+        jButtonCustomerAdd.setMinimumSize(new java.awt.Dimension(50, 40));
+        jButtonCustomerAdd.setPreferredSize(new java.awt.Dimension(52, 40));
+        jButtonCustomerAdd.setRequestFocusEnabled(false);
+        jButtonCustomerAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonCustomerAddActionPerformed(evt);
             }
         });
 
@@ -2238,6 +2252,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         });
 
+        jButtonCustomerPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customerpay.png"))); // NOI18N
+        jButtonCustomerPay.setToolTipText(bundle.getString("tiptext.gotocustomers")); // NOI18N
+        jButtonCustomerPay.setFocusPainted(false);
+        jButtonCustomerPay.setFocusable(false);
+        jButtonCustomerPay.setMargin(new java.awt.Insets(0, 4, 0, 4));
+        jButtonCustomerPay.setMaximumSize(new java.awt.Dimension(50, 40));
+        jButtonCustomerPay.setMinimumSize(new java.awt.Dimension(50, 40));
+        jButtonCustomerPay.setPreferredSize(new java.awt.Dimension(52, 40));
+        jButtonCustomerPay.setRequestFocusEnabled(false);
+        jButtonCustomerPay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCustomerPayActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout m_jButtonsLayout = new javax.swing.GroupLayout(m_jButtons);
         m_jButtons.setLayout(m_jButtonsLayout);
         m_jButtonsLayout.setHorizontalGroup(
@@ -2246,23 +2275,26 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 .addGap(6, 6, 6)
                 .addComponent(jbtnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonCustomerAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonCustomerPay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnReprint1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1))
+                .addGap(47, 47, 47))
         );
         m_jButtonsLayout.setVerticalGroup(
             m_jButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(m_jButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(m_jButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonCustomerPay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReprint1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbtnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCustomerAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -2768,11 +2800,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             
             if (finder.getSelectedCustomer() == null) {
                 m_oTicket.setCustomer(null);
+                jButtonCustomerPay.setEnabled(false);
             } else {
                 m_oTicket.setCustomer(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()));
                 if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag"))) {
                     restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId());
                 }
+                
+                jButtonCustomerPay.setEnabled(m_oTicket.getCustomer().getCurdebt() > 0 ? true: false);
 
                 if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
 
@@ -2812,8 +2847,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             TicketInfo ticket1 = m_oTicket.copyTicket();
             TicketInfo ticket2 = new TicketInfo();
-            ticket2.setCustomer(m_oTicket.getCustomer());
-
+            CustomerInfoExt cInfo = m_oTicket.getCustomer();
+            ticket2.setCustomer( cInfo );
+            if( cInfo == null ) {
+                jButtonCustomerPay.setEnabled( false );
+            } else {
+                jButtonCustomerPay.setEnabled( cInfo.getCurdebt() > 0 ? true: false);
+            }
+        
             if (splitdialog.showDialog(ticket1, ticket2, m_oTicketExt)) {
                 if (closeTicket(ticket2, m_oTicketExt)) {
                     setActiveTicket(ticket1, m_oTicketExt);
@@ -2853,12 +2894,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         //  AutoLogoff.getInstance().activateTimer();
 }//GEN-LAST:event_jEditAttributesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonCustomerAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCustomerAddActionPerformed
         AutoLogoff.getInstance().activateTimer();
 // Show the custmer panel - this does deactivate
         m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
         AutoLogoff.getInstance().activateTimer();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonCustomerAddActionPerformed
 
     private void jbtnMooringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMooringActionPerformed
 // Display vessel selection box on screen if reply is good add to the ticket
@@ -2969,13 +3010,63 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_btnReprintActionPerformed
 
+    private void jButtonCustomerPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCustomerPayActionPerformed
+        
+        CustomerInfoExt cInfo = m_oTicket.getCustomer();
+        if( cInfo == null ) {
+            jButtonCustomerPay.setEnabled(false);  // Should not be here
+            return;
+        }
+
+        paymentdialogcustomer.setPrintSelected(true);
+        if (paymentdialogcustomer.showDialog(cInfo.getCurdebt(), cInfo)) {
+
+            TicketInfo ticket = new TicketInfo();
+            ticket.setTicketType(TicketType.PAYMENT);
+
+            List<PaymentInfo> payments = paymentdialogcustomer.getSelectedPayments();
+
+            double total = 0.0;
+            for (PaymentInfo p : payments) {
+                total += p.getTotal();
+            }
+
+            payments.add(new PaymentInfoTicket(-total, "debtpaid"));
+
+            ticket.setPayments(payments);
+
+            ticket.setUser(m_App.getAppUserView().getUser().getUserInfo());
+            ticket.setActiveCash(m_App.getActiveCashIndex());
+            ticket.setDate(new Date()); // Set the edition date.
+            ticket.setCustomer(cInfo);
+
+            try {
+                dlSales.saveTicket(ticket, m_App.getInventoryLocation());
+            } catch (BasicException eData) {
+                MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
+                msg.show(this);
+            }
+
+            printTicket(paymentdialogcustomer.isPrintSelected()
+                    ? "Printer.CustomerPaid"
+                    : "Printer.CustomerPaid2",
+                    ticket, cInfo );
+            
+            m_oTicket.setCustomer(null);
+            jButtonCustomerPay.setEnabled(false);
+            refreshTicket();
+        }
+        
+    }//GEN-LAST:event_jButtonCustomerPayActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnReprint1;
     private javax.swing.JButton btnSplit;
     private javax.swing.JPanel catcontainer;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonCustomerAdd;
+    private javax.swing.JButton jButtonCustomerPay;
     private javax.swing.JButton jEditAttributes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

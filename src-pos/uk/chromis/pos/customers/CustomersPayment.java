@@ -323,7 +323,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         jPanel6.add(jSeparator1);
 
         btnPay.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/pay.png"))); // NOI18N
+        btnPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customerpay.png"))); // NOI18N
         btnPay.setText(AppLocal.getIntString("button.pay")); // NOI18N
         btnPay.setToolTipText(bundle.getString("tiptext.payaccount")); // NOI18N
         btnPay.setFocusPainted(false);

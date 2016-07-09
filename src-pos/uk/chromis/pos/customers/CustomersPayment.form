@@ -80,7 +80,7 @@
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/uk/chromis/images/pay.png"/>
+                  <Image iconType="3" name="/uk/chromis/images/customerpay.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="pos_messages.properties" key="button.pay" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
@@ -455,4 +455,3 @@
     </Container>
   </SubComponents>
 </Form>
-

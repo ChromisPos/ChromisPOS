@@ -52,6 +52,9 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
     protected JPaymentSelect(java.awt.Frame parent, boolean modal, ComponentOrientation o) {
         super(parent, modal);
+
+        setPrintSelected(!Boolean.parseBoolean(AppConfig.getInstance().getProperty("till.receiptprintoff")));
+
         initComponents();
 
         this.applyComponentOrientation(o);
@@ -94,7 +97,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         this.customerext = customerext;
 
-        setPrintSelected(!Boolean.parseBoolean(AppConfig.getInstance().getProperty("till.receiptprintoff")));
         m_jButtonPrint.setSelected(printselected);
 
         m_jTotalEuros.setText(Formats.CURRENCY.formatValue(m_dTotal));
