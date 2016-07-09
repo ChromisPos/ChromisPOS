@@ -53,8 +53,6 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     protected JPaymentSelect(java.awt.Frame parent, boolean modal, ComponentOrientation o) {
         super(parent, modal);
 
-        setPrintSelected(!Boolean.parseBoolean(AppConfig.getInstance().getProperty("till.receiptprintoff")));
-
         initComponents();
 
         this.applyComponentOrientation(o);
