@@ -34,8 +34,16 @@ public class NullAnimator implements DisplayAnimator {
      * @param line2
      */
     public NullAnimator(String line1, String line2) {
-        currentLine1 = DeviceTicket.alignLeft(line1, 20);
-        currentLine2 = DeviceTicket.alignLeft(line2, 20);
+        if( line1 != null ) {
+            currentLine1 = DeviceTicket.alignLeft(line1, 20);
+        } else {
+            currentLine1 = "";
+        }
+        if( line2 != null ) {
+            currentLine2 = DeviceTicket.alignLeft(line2, 20);
+        } else {
+            currentLine2 = "";
+        }
     }
 
     /**
