@@ -75,7 +75,7 @@
         <line></line>
         <line>
             <text align ="left" length="32" bold="true">Account Balance</text>
-            <text align ="right" length="10" bold="true">${customer.printCurDebt()}</text>
+            <text align ="right" length="10" bold="true">${ticket.getCustomer().printCurDebt()}</text>
         </line>
 
     #foreach ($paymentline in $ticket.payments)
