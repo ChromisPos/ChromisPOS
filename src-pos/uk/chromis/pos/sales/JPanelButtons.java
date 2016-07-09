@@ -71,7 +71,7 @@ public class JPanelButtons extends javax.swing.JPanel {
         initComponents();
 
         // Load categories default thumbnail
-        tnbmacro = new ThumbNailBuilder(18, 18, "uk/chromis/images/run_script.png");
+        tnbmacro = new ThumbNailBuilder(24, 24, "uk/chromis/images/run_script.png");
 
         this.panelticket = panelticket;
 
@@ -225,7 +225,7 @@ public class JPanelButtons extends javax.swing.JPanel {
                 setIcon(new ImageIcon(tnbmacro.getThumbNail(panelticket.getResourceAsImage(sImage))));
             } else {
                 Image image = new ImageIcon(imgURL).getImage();
-                setIcon(new ImageIcon(image.getScaledInstance(18,18, java.awt.Image.SCALE_SMOOTH)));
+                setIcon(new ImageIcon(image.getScaledInstance(24,24, java.awt.Image.SCALE_SMOOTH)));
             }
             setFocusPainted(false);
             setFocusable(false);
