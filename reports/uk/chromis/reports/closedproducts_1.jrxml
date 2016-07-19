@@ -27,7 +27,7 @@ FROM (taxes INNER JOIN
     INNER JOIN receipts ON TICKETS.ID = receipts.ID)
     ON taxes.ID = ticketlines.TAXID) INNER JOIN closedcash
     ON receipts.MONEY = closedcash.MONEY
-GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.DATESTART, CLOSEDCASH.DATEEND, taxes.NAME, products.REFERENCE, products.NAME, PRODUCTS.PRICESELL
+GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.DATESTART, CLOSEDCASH.DATEEND, taxes.NAME, products.REFERENCE, products.NAME, PRODUCTS.PRICESELL, TAXES.RATE
 ORDER BY CLOSEDCASH.HOST, taxes.NAME, products.NAME]]>
 	</queryString>
 	<field name="HOST" class="java.lang.String"/>

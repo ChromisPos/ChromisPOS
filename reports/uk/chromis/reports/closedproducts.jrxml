@@ -20,13 +20,15 @@ Sum(PRODUCTS.PRICESELL+(PRODUCTS.PRICESELL*TAXES.RATE)) AS PRICE,
 Sum(TICKETLINES.UNITS) AS UNITS,
 Sum((PRODUCTS.PRICESELL+PRODUCTS.PRICESELL*TAXES.RATE)*UNITS) AS VALUE,
 Sum((PRODUCTS.PRICESELL+PRODUCTS.PRICESELL*TAXES.RATE)*TICKETLINES.UNITS-(TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS DISCOUNT,
-Sum((TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS TOTAL
+Sum((TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS TOTAL,
+PEOPLE.NAME AS PERSON
 FROM ((TICKETS INNER JOIN (TICKETLINES INNER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID)
 ON TICKETS.ID = TICKETLINES.TICKET) INNER JOIN (RECEIPTS INNER JOIN CLOSEDCASH
 ON RECEIPTS.MONEY = CLOSEDCASH.MONEY) ON TICKETS.ID = RECEIPTS.ID) INNER JOIN taxes ON TICKETLINES.TAXID = taxes.ID
+INNER JOIN PEOPLE ON TICKETS.PERSON = PEOPLE.ID
 WHERE CLOSEDCASH.MONEY = RECEIPTS.MONEY AND RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET
-GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.MONEY, CLOSEDCASH.DATEEND, PRODUCTS.REFERENCE, PRODUCTS.NAME
-ORDER BY PRODUCTS.NAME, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
+GROUP BY PEOPLE.NAME, CLOSEDCASH.HOST, CLOSEDCASH.MONEY, CLOSEDCASH.DATEEND, PRODUCTS.REFERENCE, PRODUCTS.NAME, TAXES.RATE
+ORDER BY PRODUCTS.NAME, PEOPLE.NAME, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 	</queryString>
 	<field name="HOST" class="java.lang.String"/>
 	<field name="MONEY" class="java.lang.String"/>
@@ -38,6 +40,7 @@ ORDER BY PRODUCTS.NAME, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 	<field name="VALUE" class="java.lang.Double"/>
 	<field name="DISCOUNT" class="java.lang.Double"/>
 	<field name="TOTAL" class="java.lang.Double"/>
+	<field name="PERSON" class="java.lang.String"/>
 	<variable name="BIGTOTAL" class="java.lang.Double" resetType="Group" resetGroup="byproduct" calculation="Sum">
 		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
 		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
@@ -283,7 +286,66 @@ ORDER BY PRODUCTS.NAME, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 			</band>
 		</groupFooter>
 	</group>
-	<group name="byhost">
+	<group name="byperson" isStartNewPage="false" isResetPageNumber="false" isReprintHeaderOnEachPage="false">
+		<groupExpression><![CDATA[$F{HOST}]]></groupExpression>
+		<groupHeader>
+			<band height="32" splitType="Stretch">
+				<line>
+					<reportElement key="line-4" mode="Opaque" x="0" y="25" width="530" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<graphicElement>
+						<pen lineWidth="0.25" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement key="textField-1" mode="Opaque" x="76" y="4" width="152" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+						<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PERSON}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-7" x="0" y="4" width="76" height="18"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Person:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20" splitType="Stretch">
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement key="textField-26" mode="Opaque" x="433" y="0" width="97" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+						<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{PARTIALTOTAL})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-9" x="337" y="0" width="92" height="13"/>
+					<textElement textAlignment="Right">
+						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Person Total:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+ 	<group name="byhost">
 		<groupExpression><![CDATA[$F{HOST}]]></groupExpression>
 		<groupHeader>
 			<band/>
@@ -355,6 +417,7 @@ ORDER BY PRODUCTS.NAME, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 			</band>
 		</groupFooter>
 	</group>
+       
 	<background>
 		<band/>
 	</background>
