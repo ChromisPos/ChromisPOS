@@ -231,7 +231,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ISVERPATRIB, "
                 + "P.TEXTTIP, "
                 + "P.WARRANTY, "
-                + "P.STOCKUNITS, "
+                + "C.UNITS, "
                 + "P.ALIAS, "
                 + "P.ALWAYSAVAILABLE, "
                 + "P.DISCOUNTED, "
@@ -331,13 +331,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE REFERENCE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sReference);
-    }
-
-    public final ProductInfoExt getProductInfoNoSC(String id) throws BasicException {
-        return (ProductInfoExt) new PreparedSentence(s, "SELECT "
-                + getSelectFieldList()
-                + "FROM PRODUCTS P WHERE P.ID = ? "
-                + "ORDER BY P.ID, P.REFERENCE, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
     }
 
     /**
@@ -450,7 +443,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public List<ProductInfoExt> getProductCatalog(String category) throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "FROM PRODUCTS P "
+                + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE (P.ISCATALOG = " + s.DB.TRUE() + " AND P.CATEGORY = ?) OR (P.ALWAYSAVAILABLE = " + s.DB.TRUE() + ") "
                 + "ORDER BY P.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
     }
@@ -464,7 +457,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public List<ProductInfoExt> getAllProductCatalogByCatOrder() throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "FROM PRODUCTS P "
+                + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " "
                 + "ORDER BY P.CATORDER, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
@@ -472,7 +465,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public List<ProductInfoExt> getAllNonProductCatalog() throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "FROM PRODUCTS P "
+                + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCATALOG = " + s.DB.FALSE() + " "
                 + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
@@ -486,7 +479,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public List<ProductInfoExt> getAllProductCatalog() throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "FROM PRODUCTS P "
+                + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " "
                 + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
@@ -500,7 +493,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public List<ProductInfoExt> getProductCatalogAlways() throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "FROM CATEGORIES C INNER JOIN PRODUCTS P ON (P.CATEGORY = C.ID) "
+                + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + " INNER JOIN CATEGORIES C ON (P.CATEGORY = C.ID) "
                 + "WHERE P.ALWAYSAVAILABLE = " + s.DB.TRUE() + " "
                 + "ORDER BY  C.NAME, P.NAME",
                 null,
@@ -511,7 +505,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public List<ProductInfoExt> getProductNonCatalog(String category) throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "FROM PRODUCTS P "
+                + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCATALOG = " + s.DB.FALSE() + " "
                 + "AND P.CATEGORY = ? "
                 + "ORDER BY P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
@@ -526,7 +520,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public List<ProductInfoExt> getProductComments(String id) throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
-                + "FROM PRODUCTS P, PRODUCTS_COM M "
+                + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + ", PRODUCTS_COM M "
                 + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " "
                 + "AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
                 + "AND P.ISCOM = " + s.DB.TRUE() + " "
@@ -1272,8 +1267,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
                 + getSelectFieldList()
-                + "FROM PRODUCTS P "
-                + "WHERE ?(QBF_FILTER) "
+                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+               + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE",
                 new String[]{
                     "P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}, false), new SerializerWriteBasic(new Datas[]{
