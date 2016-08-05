@@ -115,9 +115,9 @@
           </Properties>
         </Component>
         <Component class="java.awt.TextField" name="jtxtCashBackTransactionCharge">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="textField1"/>
-          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtxtCashBackTransactionChargeActionPerformed"/>
+          </Events>
         </Component>
         <Component class="java.awt.Label" name="label2">
           <Properties>
@@ -127,9 +127,6 @@
           </Properties>
         </Component>
         <Component class="java.awt.TextField" name="jtxtCashBackPercentCharge">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="textField2"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -139,9 +136,6 @@
           </Properties>
         </Component>
         <Component class="java.awt.TextField" name="jtxtCashBackLimit">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="textField1"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>

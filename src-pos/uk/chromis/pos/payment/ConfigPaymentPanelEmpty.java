@@ -105,15 +105,15 @@ public class ConfigPaymentPanelEmpty extends javax.swing.JPanel implements Payme
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         label1.setText(bundle.getString("Label.CashBackChargeTransaction")); // NOI18N
 
-        jtxtCashBackTransactionCharge.setText("textField1");
+        jtxtCashBackTransactionCharge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtCashBackTransactionChargeActionPerformed(evt);
+            }
+        });
 
         label2.setText(bundle.getString("Label.CashBackChargePercent")); // NOI18N
 
-        jtxtCashBackPercentCharge.setText("textField2");
-
         jLabel1.setText(bundle.getString("Label.CashBackLimit")); // NOI18N
-
-        jtxtCashBackLimit.setText("textField1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -173,6 +173,10 @@ public class ConfigPaymentPanelEmpty extends javax.swing.JPanel implements Payme
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jtxtCashBackTransactionChargeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtCashBackTransactionChargeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxtCashBackTransactionChargeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
