@@ -116,7 +116,7 @@ public class PaymentPanelBasic extends javax.swing.JPanel implements PaymentPane
         m_sTransactionID = sTransaction;
         m_dTotal = dTotal;
 
-        m_Cashback = Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.cashbackenabled") ) &&
+        m_Cashback = AppConfig.getInstance().getBoolean("payment.cashbackenabled") &&
                 m_dTotal > 0.0;
         
         jLabel1.setVisible(!m_Cashback);
@@ -124,9 +124,9 @@ public class PaymentPanelBasic extends javax.swing.JPanel implements PaymentPane
 
         if( m_Cashback ) {
             m_jCashBackAmount.setDoubleValue(0.0);
-            m_CashbackPercent = Double.parseDouble( AppConfig.getInstance().getProperty("payment.cashbackpercentcharge") );
-            m_CashbackLimit = Double.parseDouble( AppConfig.getInstance().getProperty("payment.cashbacklimit") );
-            m_CashbackTransactionCharge = Double.parseDouble( AppConfig.getInstance().getProperty("payment.cashbacktransactioncharge") );
+            m_CashbackPercent = AppConfig.getInstance().getDouble("payment.cashbackpercentcharge");
+            m_CashbackLimit = AppConfig.getInstance().getDouble("payment.cashbacklimit");
+            m_CashbackTransactionCharge = AppConfig.getInstance().getDouble("payment.cashbacktransactioncharge");
 
             m_jCashBackAmount.reset();
             m_jCashBackAmount.activate();
@@ -210,10 +210,10 @@ public class PaymentPanelBasic extends javax.swing.JPanel implements PaymentPane
         m_jCashBackAmount.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
         jLabelPayment.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        jLabelPayment.setText("jLabel4");
+        jLabelPayment.setText("0.00");
 
         jLabelCharge.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabelCharge.setText("jLabel5");
+        jLabelCharge.setText("0.00");
 
         jLabel4.setText(bundle.getString("message.paymentgatewayext")); // NOI18N
 
