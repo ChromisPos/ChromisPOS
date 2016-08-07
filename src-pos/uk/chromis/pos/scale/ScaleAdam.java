@@ -180,6 +180,10 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
         
         showDialog();
              
+        if( m_Dialog != null )
+            m_Dialog.setVisible(false);
+        m_Dialog = null;
+            
         synchronized(this) {
             try {
                 if (m_out != null)
@@ -197,10 +201,6 @@ public class ScaleAdam implements Scale, SerialPortEventListener {
             m_CommPort = null;
             m_PortId = null;
 
-            if( m_Dialog != null )
-                m_Dialog.setVisible(false);
-            m_Dialog = null;
-            
             if (m_iStatusScale == SCALE_READY && m_WeightBuffer != null && m_WeightBuffer.isEmpty() == false ) {
                 
                 logger.log(Level.INFO, "Scale ready", m_WeightBuffer );
