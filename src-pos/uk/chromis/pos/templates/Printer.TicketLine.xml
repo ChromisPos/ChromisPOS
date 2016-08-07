@@ -19,7 +19,7 @@
    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <output>
-    <display>
+  <display>
         <line>
             #if ($ticketline.isProductCom()) 
                 <text align="left" length="15">*${ticketline.printName()}</text>
@@ -29,8 +29,8 @@
             <text align="right" length="4">x${ticketline.printMultiply()}</text>            
         </line>
         <line>
-            <text align="left" length="10">${ticketline.printPrice()}</text>
-            <text align="right" length="10">${ticketline.printSubValue()}</text>
+            <text align="left" length="10">T:${ticket.printTotal()}</text>
+            <text align="right" length="9">${ticketline.printPriceTax()}</text>
         </line>
     </display>
 </output>

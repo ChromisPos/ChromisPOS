@@ -614,6 +614,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
+    private void visorCurrentTicketLine() {
+        int index = m_ticketlines.getSelectedIndex();
+        visorTicketLine(m_oTicket.getLine(index) );
+    }
+    
     private void addTicketLine(ProductInfoExt oProduct, double dMul, double dPrice) {
         if (oProduct.isVprice()) {
             TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
@@ -1851,6 +1856,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             try {
                 ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
                 script.put("ticketline", oLine);
+                script.put("ticket", m_oTicket );
                 m_TTP.printTicket(script.eval(dlSystem.getResourceAsXML("Printer.TicketLine")).toString());
             } catch (ScriptException | TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintline"), e);
@@ -2015,6 +2021,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else if (m_oTicket.getLinesCount() > 0) {
             m_ticketlines.setSelectedIndex(m_oTicket.getLinesCount() - 1);
         }
+        visorCurrentTicketLine();
     }
 
     public static class ScriptArg {
