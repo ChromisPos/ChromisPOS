@@ -19,6 +19,14 @@
 
 package uk.chromis.pos.ticket;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.Font; 
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.Externalizable;
 import java.io.IOException;
@@ -36,6 +44,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.LocalRes;
@@ -43,6 +61,7 @@ import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.JPrincipalApp;
 import uk.chromis.pos.payment.PaymentInfo;
 import uk.chromis.pos.payment.PaymentInfoMagcard;
 import uk.chromis.pos.util.StringUtils;
@@ -773,5 +792,76 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         oldTicket = otState;
     }
 
+    // Show a message to the user - any key pressed will dismiss the message
+    // This is modal - it will block the application until the dialog is dismissed
+    // If seconds > 0 the message will automatically disappear after the time has
+    // elapsed
+    public void showMessage( String title, String message, int seconds ) {
+        
+        // Get details of the original font before we change it otherwise all dialogboxes will use new settings
+        JPanel panel=new JPanel();
+        
+        BoxLayout layout = new BoxLayout( panel, BoxLayout.Y_AXIS );
+
+        panel.setLayout( layout );
+        panel.setPreferredSize( new Dimension(450,150));
+
+        panel.add(Box.createRigidArea(new Dimension(450,20)));
+
+        final JDialog dialog = new JDialog( (Frame)null, title, true );
+        dialog.setSize(450, 200);
+        dialog.setLocationRelativeTo(null);
+        
+        JLabel FontText = new JLabel(message);
+        FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
+        FontText.setSize(450, 100);
+        FontText.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add( FontText );
+
+        panel.add(Box.createRigidArea(new Dimension(450,20)));
+        
+        JButton bOK = new JButton("OK");
+        bOK.setFont( new FontUIResource(new Font("ARIAL",Font.PLAIN,20)) );
+        bOK.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+                dialog.setVisible(false);
+                dialog.dispose();
+          }
+        });
+        bOK.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        panel.add(Box.createRigidArea(new Dimension(450,20)));
+
+        // Any key press will dispose the dialog - this avoids the issue of
+        // a barcode scan for the next customer being thrown away. The first character
+        // of the barcode will be lost but this should result in an error beep and
+        // barcode not found message. The alternative is for the scan to be silently thrown away
+        // without the operator being aware.
+        bOK.addKeyListener( new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                dialog.setVisible(false);
+                dialog.dispose();
+            }
+        } );
+        panel.add( bOK );
+
+        dialog.add( panel );
+        if( seconds > 0 ) {
+            Timer timer = new Timer( seconds * 1000, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    dialog.setVisible(false);
+                    dialog.dispose();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+        }
+        
+        dialog.setVisible( true );
+
+    }
+    
 }
 
