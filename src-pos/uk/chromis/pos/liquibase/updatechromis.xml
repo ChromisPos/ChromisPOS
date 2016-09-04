@@ -1357,6 +1357,16 @@
         </insert>
     </changeSet> 		             		        				                                     		        			                                               		           		        		
 
+    <changeSet author="Chromis POS" id="Add Customer Statement Permissions">    
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="/uk/chromis/reports/customersstatement.bs"/>
+            <column name="SECTION" value="##label.sectioncustomers"/>
+            <column name="DISPLAYNAME" value="##label.displayname129"/>
+            <column name="DESCRIPTION" value="##label.description129"/>
+        </insert>
+    </changeSet> 		             		        				                                     		        			                                               		           		        		
+		
+
     <changeSet author="Chromis POS" id="drop top10salesMysql">  
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 
@@ -1538,9 +1548,9 @@
     </changeSet>
     
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.56.6.1">    
+    <changeSet author="Chromis POS" id="Update to 0.56.6.2">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.56.6.1"/>          
+            <column name="VERSION" value="0.56.6.2"/>          
         </update>  
     </changeSet>
 </databaseChangeLog>
