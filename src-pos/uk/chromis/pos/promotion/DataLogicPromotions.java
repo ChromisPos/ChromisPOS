@@ -19,10 +19,7 @@
 
 package uk.chromis.pos.promotion;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.Datas;
@@ -39,10 +36,7 @@ import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.model.Field;
 import uk.chromis.data.model.Row;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.customers.CustomerTransaction;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
-import uk.chromis.pos.forms.DataLogicSales;
-import uk.chromis.pos.ticket.CouponLine;
 
 public class DataLogicPromotions extends BeanFactoryDataSingle {
     
