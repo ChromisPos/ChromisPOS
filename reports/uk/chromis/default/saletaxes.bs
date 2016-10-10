@@ -21,21 +21,28 @@
 // effected initially is deducted. all taxes occur in taxlines.amount 
 // where the sum is obtained. It is therefore important to show on this 
 // report the taxes that were charged on a receipt but later refunded
+//
+//   Derby & PostgreSQl July 2016
+
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.SaleTaxes");
 report.setReport("/uk/chromis/reports/saletaxes");
-report.setResourceBundle("uk/chromis/reports/saletaxes_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence(
-                "SELECT TICKETS.TICKETID,RECEIPTS.DATENEW, PAYMENTS.PAYMENT, TAXCATEGORIES.NAME, TAXLINES.AMOUNT "+
-"FROM RECEIPTS, TAXLINES, TAXES, TAXCATEGORIES,TICKETS, PAYMENTS " +
-                "WHERE PAYMENTS.RECEIPT = RECEIPTS.ID AND RECEIPTS.ID = TAXLINES.RECEIPT AND RECEIPTS.ID=TICKETS.ID AND TAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID AND ?(QBF_FILTER) "+
-               "ORDER BY RECEIPTS.DATENEW");
+                "SELECT TICKETS.TICKETID, RECEIPTS.DATENEW, PAYMENTS.PAYMENT, TAXCATEGORIES.NAME, TAXLINES.AMOUNT, " +
+                "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = RECEIPTS.SITEGUID) AS SITE " +
+                "FROM RECEIPTS, TAXLINES, TAXES, TAXCATEGORIES,TICKETS, PAYMENTS " +
+                "WHERE PAYMENTS.RECEIPT = RECEIPTS.ID AND RECEIPTS.ID = TAXLINES.RECEIPT AND RECEIPTS.ID=TICKETS.ID AND TAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID AND ?(QBF_FILTER) "+                             
+                "ORDER BY RECEIPTS.SITEGUID, RECEIPTS.DATENEW");
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.SITEGUID");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
@@ -49,5 +56,6 @@ report.addField("DATENEW", uk.chromis.data.loader.Datas.TIMESTAMP);
 report.addField("PAYMENT", uk.chromis.data.loader.Datas.STRING);
 report.addField("NAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("AMOUNT", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
 
 report;

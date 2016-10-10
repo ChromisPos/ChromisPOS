@@ -32,7 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import uk.chromis.pos.util.AltEncrypter;
-import uk.chromis.pos.sync.Sync;
+
 
 /**
  *
@@ -462,15 +462,19 @@ public class JPanelManualSync extends JPanel implements JPanelView {
 
 // process the sync table data on this machine
         jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local syncdata table." : syncMessage);
-        sync.processSyncData(localConnection, localGUID, remoteGUID);
+        sync.processSyncData(localConnection);
 
         // Sync the changedobject tables       
         jtxtSyncProcess.setText(syncMessage.equals("") ? "Synchronising data between server." : syncMessage);
-        sync.syncSites(localConnection, remoteConnection, remoteGUID, localGUID);
+       sync.syncSites(localConnection);
 
         jtxtSyncProcess.setText(syncMessage.equals("") ? "Processing local changed objects table." : syncMessage);
-        sync.processChangedObjects(localConnection, localGUID);
+        sync.processChangedObjects(localConnection);
 
+        //sync.updateStock(localConnection);
+        //sync.updateStatusFlags(localConnection);
+        //sync.cleanChangedObjectsTable(localConnection);
+        
         jtxtFromLocal.setText(checkLocalRecords(localConnection).toString() + " local records found to process.");
         jtxtChangedObjects.setText(checkLocalTransferRecords(localConnection, localGUID).toString() + " local records found to transfer.");
         jtxtFromRemote.setText(checkRemoteRecords(remoteConnection, localGUID).toString() + " remote records found to transfer.");

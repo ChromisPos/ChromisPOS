@@ -1,0 +1,49 @@
+//   Chromis POS - The New Face of Open Source POS 
+//   Copyright (c) 2015 Chromis , previous uniCenta & Openbravo POS works   
+//
+//   This file is part of chromis oPOS
+//
+//  Chromis POS is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//
+//   Chromis POS is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
+report = new uk.chromis.pos.reports.PanelReportBean();
+
+report.setTitleKey("Menu.EmployeeTimeSheet");
+report.setReport("/uk/chromis/reports/employeetimesheet");
+report.setResourceBundle("uk/chromis/reports/employeetimesheet_messages");
+
+report.setSentence("SELECT " +
+                "PEOPLE.NAME, " +
+                "SHIFTS.STARTSHIFT, " +
+                "SHIFTS.ENDSHIFT, " +
+                "CONCAT('',TIMEDIFF(SHIFTS.ENDSHIFT, SHIFTS.STARTSHIFT)) AS TOTAL " +
+                "FROM PEOPLE LEFT JOIN SHIFTS ON SHIFTS.PPLID = PEOPLE.ID " +
+                "WHERE ?(QBF_FILTER) ORDER BY PEOPLE.NAME ASC, SHIFTS.ENDSHIFT ASC");
+
+report.addParameter("SHIFTS.STARTSHIFT");
+report.addParameter("SHIFTS.ENDSHIFT");
+
+paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
+
+paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
+paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
+
+report.addQBFFilter(paramdates);
+
+report.addField("NAME", uk.chromis.data.loader.Datas.STRING);
+report.addField("STARTSHIFT", uk.chromis.data.loader.Datas.TIMESTAMP);
+report.addField("ENDSHIFT", uk.chromis.data.loader.Datas.TIMESTAMP);
+report.addField("TOTAL", uk.chromis.data.loader.Datas.STRING);
+
+report;
+

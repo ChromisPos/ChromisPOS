@@ -16,13 +16,16 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    Derby version
+//   Derby  July 2016 
+//
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.SaleCatalog");
 report.setReport("/uk/chromis/reports/salecatalog");
-report.setResourceBundle("uk/chromis/reports/salecatalog_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence(
 "SELECT " +
@@ -40,12 +43,18 @@ report.setSentence(
 "  PRODUCTS.TAXCAT = TC.ID " +
 "WHERE PRODUCTS.ISCATALOG = TRUE AND ?(QBF_FILTER) " +
 "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME");
+
 report.addParameter("PRODUCTS.NAME");
 report.addParameter("PRODUCTS.PRICEBUY");
 report.addParameter("PRODUCTS.PRICESELL");
 report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
-report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
+report.addParameter("PRODUCTS.ISCATALOG"); 
+report.addParameter("STOCKCURRENT.LOCATION");
+report.addParameter("UNITS");
+report.addParameter("PRODUCTS.SITEGUID");
+
+report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilterReportWithCat(false, false));
 
 report.addField("ID", uk.chromis.data.loader.Datas.STRING);
 report.addField("REFERENCE", uk.chromis.data.loader.Datas.STRING);

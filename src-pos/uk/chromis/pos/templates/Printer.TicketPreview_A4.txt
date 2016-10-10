@@ -77,12 +77,12 @@
 	
 	#if ($paymentline.name == "magcard")
 		<line><text bold="true">Card</text></line>
-		<line><text align ="right" length="42">${paymentline.printTotal()}</text></line>
+		<line><text align ="right" length="32">${paymentline.getTotal()}</text></line>
 	#end
 
 	#if ($paymentline.name == "magcardrefund")
 		<line><text bold="true">Card Refund</text></line>
-		<line><text align ="right" length="42">${paymentline.printTotal()}</text></line>
+		<line><text align ="right" length="32">${paymentline.getTotal()}</text></line>
 	#end
 
 	#if ($paymentline.name == "cheque")

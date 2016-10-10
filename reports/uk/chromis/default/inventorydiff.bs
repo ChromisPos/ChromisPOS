@@ -15,12 +15,15 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
+//   Derby & PostgreSQl July 2016
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.InventoryDiff");
 report.setReport("/uk/chromis/reports/inventorydiff");
-report.setResourceBundle("uk/chromis/reports/inventorydiff_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence("SELECT " +
                 "LOCATIONS.ID AS LOCATIONID, LOCATIONS.NAME AS LOCATIONNAME, " +
@@ -30,29 +33,27 @@ report.setSentence("SELECT " +
                 "SUM(CASE WHEN STOCKDIARY.UNITS >=0 THEN STOCKDIARY.UNITS ELSE 0 END) AS UNITSIN, " +
                 "SUM(CASE WHEN STOCKDIARY.UNITS >=0 THEN STOCKDIARY.UNITS * STOCKDIARY.PRICE ELSE 0 END) AS TOTALIN, " +
                 "SUM(STOCKDIARY.UNITS) AS UNITSDIFF, " +
-                "SUM(STOCKDIARY.UNITS * STOCKDIARY.PRICE) AS TOTALDIFF " +
+                "SUM(STOCKDIARY.UNITS * STOCKDIARY.PRICE) AS TOTALDIFF, " +
+                "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = LOCATIONS.SITEGUID) AS SITE " +
                 "FROM STOCKDIARY JOIN LOCATIONS ON STOCKDIARY.LOCATION = LOCATIONS.ID, " +
                 "PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID " +
                 "WHERE PRODUCTS.ID = STOCKDIARY.PRODUCT " +
                 "AND ?(QBF_FILTER) " +
                 "GROUP BY LOCATIONS.ID, LOCATIONS.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.CATEGORY, CATEGORIES.NAME " +
-                "ORDER BY LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME");
+                "ORDER BY LOCATIONS.SITEGUID, LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME");
 
 report.addParameter("STOCKDIARY.DATENEW");
 report.addParameter("STOCKDIARY.DATENEW");
+report.addParameter("LOCATIONS.SITEGUID");
+report.addParameter("LOCATIONS.ID");
+report.addParameter("STOCKDIARY.REASON");
 
-paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
+paramdates = new uk.chromis.pos.reports.JParamsInventory();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
 report.addQBFFilter(paramdates);
-
-report.addParameter("LOCATIONS.ID");
-report.addQBFFilter(new uk.chromis.pos.reports.JParamsLocationWithFirst());
-
-report.addParameter("STOCKDIARY.REASON");
-report.addQBFFilter(new uk.chromis.pos.reports.JParamsReason());
 
 report.addField("LOCATIONID", uk.chromis.data.loader.Datas.STRING);
 report.addField("LOCATIONNAME", uk.chromis.data.loader.Datas.STRING);
@@ -66,6 +67,7 @@ report.addField("UNITSIN", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TOTALIN", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("UNITSDIFF", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TOTALDIFF", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
 
 report;
 

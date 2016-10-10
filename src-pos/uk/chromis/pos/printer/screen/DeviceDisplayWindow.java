@@ -25,8 +25,12 @@ import uk.chromis.pos.sales.JTicketLines;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import uk.chromis.pos.forms.JRootApp;
+import uk.chromis.pos.scale.ScaleException;
 
 /**
  *
@@ -48,6 +52,14 @@ public class DeviceDisplayWindow extends javax.swing.JFrame implements DeviceDis
 
         m_jContainer.add(m_display.getDisplayComponent());
 
+        
+        try {
+            JRootApp.m_Scale.readWeight();
+        } catch (ScaleException ex) {
+            Logger.getLogger(DeviceDisplayWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+                
         setVisible(true);
     }
 

@@ -583,7 +583,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
 
             double total = 0.0;
             for (PaymentInfo p : payments) {
-                total += p.getTotal();
+                 total += p.getPaid();
             }
 
             payments.add(new PaymentInfoTicket(-total, "debtpaid"));

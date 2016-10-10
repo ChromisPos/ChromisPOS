@@ -15,12 +15,16 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
+//   Derby & PostgreSQl July 2016
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.SalesByCustomer");
 report.setReport("/uk/chromis/reports/salebycustomer");
-report.setResourceBundle("uk/chromis/reports/salebycustomer_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence("SELECT " +
                 "CUSTOMERS.NAME AS CNAME, " +
@@ -29,14 +33,16 @@ report.setSentence("SELECT " +
                 "PRODUCTS.NAME AS PNAME, " +                
                 "TICKETS.TICKETTYPE, " +
                 "SUM(TICKETLINES.UNITS) AS UNITS, " +
-                "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL " +
+                "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL, " +
+                "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = RECEIPTS.SITEGUID) AS SITE " +
                 "FROM RECEIPTS, CUSTOMERS, TICKETS, TICKETLINES LEFT OUTER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID " +
                 "WHERE CUSTOMERS.ID = TICKETS.CUSTOMER AND TICKETLINES.PRODUCT = PRODUCTS.ID AND RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET AND ?(QBF_FILTER) " +
                 "GROUP BY CUSTOMERS.NAME, RECEIPTS.DATENEW, TICKETS.TICKETID, PRODUCTS.NAME, TICKETS.TICKETTYPE " +
-                "ORDER BY CUSTOMERS.NAME, PRODUCTS.NAME, RECEIPTS.DATENEW");
+                "ORDER BY RECEIPTS.SITEGUID, CUSTOMERS.NAME, PRODUCTS.NAME, RECEIPTS.DATENEW");
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.SITEGUID");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
@@ -47,6 +53,7 @@ report.addQBFFilter(paramdates);
 
 report.addParameter("CUSTOMERS.ID");
 report.addParameter("CUSTOMERS.NAME");
+
 report.addQBFFilter(new uk.chromis.pos.reports.JParamsCustomer());
 
 report.addField("CNAME", uk.chromis.data.loader.Datas.STRING);
@@ -56,5 +63,6 @@ report.addField("PNAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("TICKETTYPE", uk.chromis.data.loader.Datas.INT);
 report.addField("UNITS", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TOTAL", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
 
 report;

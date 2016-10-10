@@ -15,12 +15,15 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
+//   Derby & PostgreSQl July 2016
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.ClosedProducts");
 report.setReport("/uk/chromis/reports/closedproducts_1");
-report.setResourceBundle("uk/chromis/reports/closedproducts_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence("SELECT " +
             "CLOSEDCASH.HOST, " +
@@ -31,20 +34,22 @@ report.setSentence("SELECT " +
             "PRODUCTS.NAME, " +
             "PRODUCTS.PRICESELL, " +
             "Sum(TICKETLINES.UNITS) AS UNITS, " +
-            "Sum((TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS TOTAL " +
-        "FROM (TAXES INNER JOIN " +
+            "Sum((TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS TOTAL, " +
+            "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = CLOSEDCASH.SITEGUID) AS SITE " +
+            "FROM (TAXES INNER JOIN " +
             "((PRODUCTS INNER JOIN " +
             "(TICKETS INNER JOIN TICKETLINES ON TICKETS.ID = TICKETLINES.TICKET) " +
             "ON PRODUCTS.ID = TICKETLINES.PRODUCT) " +
             "INNER JOIN RECEIPTS ON TICKETS.ID = RECEIPTS.ID) " +
             "ON TAXES.ID = TICKETLINES.TAXID) INNER JOIN CLOSEDCASH " +
             "ON RECEIPTS.MONEY = CLOSEDCASH.MONEY " +
-        "WHERE ?(QBF_FILTER) " +
-        "GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.DATESTART, CLOSEDCASH.DATEEND, TAXES.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.PRICESELL " +
-        "ORDER BY CLOSEDCASH.HOST, TAXES.NAME, PRODUCTS.NAME");
+            "WHERE ?(QBF_FILTER) " +
+        "GROUP BY CLOSEDCASH.SITEGUID, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND, CLOSEDCASH.DATESTART, TAXES.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.PRICESELL " +
+        "ORDER BY CLOSEDCASH.SITEGUID, CLOSEDCASH.HOST, TAXES.NAME, PRODUCTS.NAME");
 
 report.addParameter("CLOSEDCASH.DATEEND");
 report.addParameter("CLOSEDCASH.DATEEND");
+report.addParameter("CLOSEDCASH.SITEGUID");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
@@ -62,5 +67,6 @@ report.addField("NAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("PRICE", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("UNITS", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TOTAL", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
 
 report;

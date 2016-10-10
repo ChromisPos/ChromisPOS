@@ -32,6 +32,7 @@ report.setSentence("SELECT " +
 
 report.addParameter("SHIFTS.STARTSHIFT");
 report.addParameter("SHIFTS.ENDSHIFT");
+report.addParameter("SHIFTS.SITEGUID");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 

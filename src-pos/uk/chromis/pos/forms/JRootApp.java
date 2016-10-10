@@ -104,7 +104,7 @@ public class JRootApp extends JPanel implements AppView {
     private Date m_dActiveCashDateEnd;
     private String m_sInventoryLocation;
     private StringBuilder inputtext;
-    private DeviceScale m_Scale;
+    public static DeviceScale m_Scale;
     private DeviceScanner m_Scanner;
     private DeviceTicket m_TP;
     private TicketParser m_TTP;
@@ -811,12 +811,9 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private void showLogin() {
-
-        // Show Login
         listPeople();
         showView("login");
 
-        // show welcome message
         printerStart();
 
         // keyboard listener activation

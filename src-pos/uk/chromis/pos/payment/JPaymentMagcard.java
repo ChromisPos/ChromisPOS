@@ -66,29 +66,31 @@ public class JPaymentMagcard extends javax.swing.JPanel implements JPaymentInter
         }
     }
 
+
     @Override
     public PaymentInfo executePayment() {
 
         jlblMessage.setText(null);
 
         PaymentInfoMagcard payinfo = m_cardpanel.getPaymentInfoMagcard();
-// this msg shows but only after transaction state returned
-//        jlblMessage.setText("Processing Transaction " + payinfo.getTransactionID() + "\n Please Wait...");
-      //  revalidate();
 
 // Go to Payment gateway
         m_paymentgateway.execute(payinfo);
 
         if (payinfo.isPaymentOK()) {
-//            jlblMessage.setText("Transaction ID: " + payinfo.getTransactionID() + "APPROVED!");
-//            JOptionPane.showMessageDialog(getRootPane(), "Transaction APPROVED!", "Card Payment", 
-//                    JOptionPane.PLAIN_MESSAGE);              
-//          //  revalidate();            
+            JOptionPane.showMessageDialog(getRootPane(), "Transaction APPROVED!", "Card Payment",
+                    JOptionPane.PLAIN_MESSAGE);
+            revalidate();
             return payinfo;
         } else {
+            if (!payinfo.isPaymentOK()) {
+                JOptionPane.showMessageDialog(getRootPane(), "Transaction Failed", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                jlblMessage.setText(payinfo.getMessage());
+                //revalidate();
+            }
             return null;
         }
-
     }
 
     /**

@@ -58,7 +58,7 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
 
     /** Creates a new instance of PaymentGatewayBluePay20POST
      * @param props */
-    public PaymentGatewayBluePay20POST(AppProperties props) {
+    public PaymentGatewayBluePay20POST() {
         // Grab some configuration variables
         BP_AccountID = AppConfig.getInstance().getProperty("payment.BluePay20POST.accountID");
         
@@ -69,12 +69,7 @@ public class PaymentGatewayBluePay20POST implements PaymentGateway {
         ENDPOINTADDRESS = AppConfig.getInstance().getProperty( "payment.BluePay20POST.URL" );
     }
 
-    /**
-     *
-     */
-    public PaymentGatewayBluePay20POST() {
-        
-    }
+
 
     /**
      *

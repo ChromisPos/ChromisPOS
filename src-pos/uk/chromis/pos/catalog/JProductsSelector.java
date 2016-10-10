@@ -61,7 +61,7 @@ public class JProductsSelector extends javax.swing.JPanel {
 
         btn.setText(display);
 //        btn.setText(name);
-        btn.setIcon(new ImageIcon(img));
+        btn.setIcon(new ImageIcon(img));        
         btn.setFocusPainted(false);
         if (textTip != null){
         btn.setToolTipText(textTip);

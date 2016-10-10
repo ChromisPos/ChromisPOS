@@ -31,63 +31,22 @@ import uk.chromis.pos.scanpal2.DeviceScanner;
  */
 public interface AppView {
     
-    /**
-     *
-     * @return
-     */
     public DeviceScale getDeviceScale();
 
-    /**
-     *
-     * @return
-     */
     public DeviceTicket getDeviceTicket();
 
-    /**
-     *
-     * @return
-     */
     public DeviceScanner getDeviceScanner();
       
-    /**
-     *
-     * @return
-     */
     public Session getSession();
 
-    /**
-     *
-     * @return
-     */
     public AppProperties getProperties();
 
-    /**
-     *
-     * @param beanfactory
-     * @return
-     * @throws BeanFactoryException
-     */
     public Object getBean(String beanfactory) throws BeanFactoryException;
      
-    /**
-     *
-     * @param value
-     * @param iSeq
-     * @param dStart
-     * @param dEnd
-     */
     public void setActiveCash(String value, int iSeq, Date dStart, Date dEnd);
 
-    /**
-     *
-     * @return
-     */
     public String getActiveCashIndex();
 
-    /**
-     *
-     * @return
-     */
     public int getActiveCashSequence();
 
     /**

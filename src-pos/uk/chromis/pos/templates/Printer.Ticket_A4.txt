@@ -103,7 +103,7 @@
                 <line> 
                     <text>${paymentline.getCardName()}</text> 
                 </line>                 
-		<line><text align ="right" length="108">${paymentline.printTotal()}</text></line>
+		<line><text align ="right" length="108">${paymentline.getTotal()}</text></line>
 	#end
 
 	#if ($paymentline.name == "magcardrefund")
@@ -112,7 +112,7 @@
                 <line> 
                     <text>${paymentline.getCardName()}</text> 
                 </line>                 
-		<line><text align ="right" length="108">${paymentline.printTotal()}</text></line>
+		<line><text align ="right" length="108">${paymentline.getTotal()}</text></line>
 	#end
 
 	#if ($paymentline.name == "cheque")

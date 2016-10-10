@@ -70,7 +70,7 @@ public class PaymentGatewayLinkPoint implements PaymentGateway {
      *
      * @param props
      */
-    public PaymentGatewayLinkPoint(AppProperties props) {
+    public PaymentGatewayLinkPoint() {
 
         
         this.m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
@@ -83,13 +83,7 @@ public class PaymentGatewayLinkPoint implements PaymentGateway {
                 ? "staging.linkpt.net"
                 : "secure.linkpt.net";
     }
-    
-    /**
-     *
-     */
-    public PaymentGatewayLinkPoint() {
-        
-    }
+
 
     /**
      *

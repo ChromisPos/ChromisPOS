@@ -74,7 +74,7 @@ public class PaymentGatewayCaixa implements PaymentGateway {
      *
      * @param props
      */
-    public PaymentGatewayCaixa (AppProperties props) {
+    public PaymentGatewayCaixa () {
         AltEncrypter cypher = new AltEncrypter("cypherkey");
         this.sCommerceSign = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercesign").substring(6));
         
@@ -95,12 +95,6 @@ public class PaymentGatewayCaixa implements PaymentGateway {
         
     }
     
-    /**
-     *
-     */
-    public PaymentGatewayCaixa(){
-        
-    }
     
     
     private String createOrderId() {

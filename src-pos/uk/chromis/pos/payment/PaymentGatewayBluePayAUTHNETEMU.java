@@ -65,7 +65,7 @@ public class PaymentGatewayBluePayAUTHNETEMU implements PaymentGateway {
      *
      * @param props
      */
-    public PaymentGatewayBluePayAUTHNETEMU(AppProperties props) {
+    public PaymentGatewayBluePayAUTHNETEMU() {
         // Grab some configuration variables
         m_sCommerceID = AppConfig.getInstance().getProperty("payment.BluePay.accountID");
 
@@ -75,12 +75,6 @@ public class PaymentGatewayBluePayAUTHNETEMU implements PaymentGateway {
         ENDPOINTADDRESS = AppConfig.getInstance().getProperty("payment.BluePay.URL");
     }
 
-    /**
-     *
-     */
-    public PaymentGatewayBluePayAUTHNETEMU() {
-
-    }
 
     /**
      *

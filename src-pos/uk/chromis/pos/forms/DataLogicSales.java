@@ -1161,7 +1161,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 // }
 
                 final Payments payments = new Payments();
-                SentenceExec paymentinsert = new PreparedSentence(s, "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE);
+                SentenceExec paymentinsert = new PreparedSentence(s, 
+                        "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                        SerializerWriteParams.INSTANCE);
 
                 for (final PaymentInfo p : ticket.getPayments()) {
                     payments.addPayment(p.getName(), p.getTotal(), p.getPaid(), ticket.getReturnMessage());
@@ -1189,8 +1191,36 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             payments.removeFirst(pName);
                         }
                     });
+/*
+            for (final PaymentInfo p : ticket.getPayments()) {
+                payments.addPayment(p.getName(),p.getTotal(), p.getPaid(),ticket.getReturnMessage());  
+                    paymentinsert.exec(new DataParams() {
+                       @Override
+                        public void writeValues() throws BasicException {
+                            pName = payments.getFirstElement();
+                            getTotal = payments.getPaidAmount(pName);
+                            getTendered = payments.getTendered(pName);
+                            getRetMsg = payments.getRtnMessage(pName);                              
+                            payments.removeFirst(pName);                        
+            
+                            setString(1, UUID.randomUUID().toString());
+                            setString(2, ticket.getId());
+                            setString(3, pName);
+                            setDouble(4, getTotal);
+                            setString(5, ticket.getTransactionID());
+                            setBytes(6, (byte[]) Formats.BYTEA.parseValue(getRetMsg));
+                            setDouble(7, getTendered);
+                            setString(8, getCardName);                            
+                            payments.removeFirst(pName);
+                        }
+                    });
+
+*/
 
                     if ("debt".equals(pName) || "debtpaid".equals(pName)) {
+                        System.out.println("pName = " + pName);
+                        System.out.println("Current debt " + ticket.getCustomer().getCurdebt());
+                        System.out.println("date " + ticket.getCustomer().getCurdate());
                         // udate customer fields...
                         ticket.getCustomer().updateCurDebt(getTotal, ticket.getDate());
                         // save customer fields...
@@ -1266,7 +1296,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                         // udate customer fields...
                         ticket.getCustomer().updateCurDebt(-p.getTotal(), ticket.getDate());
-
+                        System.out.println("now here");
                         // save customer fields...
                         getDebtUpdate().exec(new DataParams() {
                             @Override

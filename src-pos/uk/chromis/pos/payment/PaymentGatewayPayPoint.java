@@ -40,7 +40,7 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
     
     /** Creates a new instance of PaymentGatewaySECPay
      * @param props */
-    public PaymentGatewayPayPoint(AppProperties props) {
+    public PaymentGatewayPayPoint() {
         
         // Propiedades del sistema
         System.setProperty("java.protocol.handler.pkgs", "com.sun.net.ssl.internal.www.protocol" );
@@ -49,8 +49,8 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
         // Configuracion del pago
         m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
         
-        AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
-        this.m_sCommercePassword = cypher.decrypt(props.getProperty("payment.commercepassword").substring(6));
+        AltEncrypter cypher = new AltEncrypter("cypherkey" + AppConfig.getInstance().getProperty("payment.commerceid"));
+        this.m_sCommercePassword = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6));
         
         m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
         m_sCurrency = (Locale.getDefault().getCountry().isEmpty())
@@ -58,12 +58,7 @@ public class PaymentGatewayPayPoint implements PaymentGateway {
             : Currency.getInstance(Locale.getDefault()).getCurrencyCode();
     }
     
-    /**
-     *
-     */
-    public PaymentGatewayPayPoint(){
-        
-    }
+
     
     /**
      *

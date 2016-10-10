@@ -15,14 +15,18 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
+//   Derby & PostgreSQl July 2016
 
-// *** NOT SUITABLE FOR DERBY DB'S***
+
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.ExtendedByProducts");
 report.setReport("/uk/chromis/reports/extproducts");
-report.setResourceBundle("uk/chromis/reports/extproducts_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence("SELECT " +
         "CUSTOMERS.TAXID,  " +
@@ -31,31 +35,38 @@ report.setSentence("SELECT " +
         "PRODUCTS.REFERENCE AS REFERENCE,  " +
         "PRODUCTS.NAME AS PRODUCT, " +
         "SUM(TICKETLINES.UNITS) AS UNIT,  " +
-        "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL " +
+        "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL, " +
+        "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = PRODUCTS.SITEGUID) AS SITE " +
         "FROM TICKETS  " +
             "LEFT OUTER JOIN CUSTOMERS ON TICKETS.CUSTOMER = CUSTOMERS.ID, TICKETLINES " +
             "LEFT OUTER JOIN PRODUCTS ON TICKETLINES.PRODUCT = PRODUCTS.ID " +
             "LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID, RECEIPTS " +
         "WHERE RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET AND ?(QBF_FILTER) " +
-        "GROUP BY CUSTOMERS.TAXID, CUSTOMERS.NAME, CATEGORIES.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME " +
-        "ORDER BY CUSTOMERS.NAME, CATEGORIES.NAME, PRODUCTS.NAME");
+        "GROUP BY PRODUCTS.SITEGUID, CUSTOMERS.TAXID, CUSTOMERS.NAME, CATEGORIES.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME " +
+        "ORDER BY PRODUCTS.SITEGUID, CUSTOMERS.NAME, CATEGORIES.NAME, PRODUCTS.NAME");
 
-report.addParameter("RECEIPTS.DATENEW");
-report.addParameter("RECEIPTS.DATENEW");
+//report.addParameter("RECEIPTS.DATENEW");
+//report.addParameter("RECEIPTS.DATENEW");
+//report.addParameter("RECEIPTS.SITEGUID");
 
-paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
+paramdates = new uk.chromis.pos.ticket.ProductFilterReportWithDates();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
-report.addQBFFilter(paramdates);
-
+report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.SITEGUID");
 report.addParameter("PRODUCTS.NAME");
 report.addParameter("PRODUCTS.PRICEBUY");
 report.addParameter("PRODUCTS.PRICESELL");
 report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
-report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
+report.addParameter("PRODUCTS.SITEGUID");
+
+report.addQBFFilter(paramdates);
+
+//report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilterReportWithDate());
 
 report.addParameter("CUSTOMERS.ID");
 report.addParameter("CUSTOMERS.NAME");
@@ -68,6 +79,8 @@ report.addField("REFERENCE", uk.chromis.data.loader.Datas.STRING);
 report.addField("PRODUCT", uk.chromis.data.loader.Datas.STRING);
 report.addField("UNIT", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TOTAL", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
+
 
 report;
 

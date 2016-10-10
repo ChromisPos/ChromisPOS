@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import uk.chromis.data.loader.Session;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSystem;
@@ -461,7 +459,7 @@ public class RestaurantDBUtils {
      */
     public void clearTableMovedFlag(String tableID) {
         try {
-            SQL = "UPDATE PLACES SET TABLEMOVED='false' WHERE NAME=?";
+            SQL = "UPDATE PLACES SET TABLEMOVED = false WHERE NAME=?";
             pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, tableID);
             pstmt.executeUpdate();
@@ -484,46 +482,61 @@ public class RestaurantDBUtils {
 
     public void setTableLock(String tableID, String user) {
         try {
-            SQL = "UPDATE PLACES SET LOCKED ='true', OPENEDBY = ? WHERE TICKETID = ?";
+            SQL = "UPDATE PLACES SET LOCKED = true, OPENEDBY = ? WHERE TICKETID = ?";
             pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, user);
             pstmt.setString(2, tableID);
             pstmt.executeUpdate();
         } catch (Exception e) {
+            System.out.println("lock error");
         }
     }
 
     public void clearTableLock(String tableID) {
         try {
-            SQL = "UPDATE PLACES SET LOCKED ='false', OPENEDBY = null WHERE ID = ?";
+            SQL = "UPDATE PLACES SET LOCKED = false, OPENEDBY = null WHERE ID = ?";
             pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, tableID);
             pstmt.executeUpdate();
         } catch (Exception e) {
+            System.out.println("clear lock error");
         }
     }
 
-        public void clearTableLockByTicket(String tableID) {
+        public void clearTableLockByName(String tableName) {
         try {
-            SQL = "UPDATE PLACES SET LOCKED ='false', OPENEDBY = null WHERE TICKETID = ?";
+            SQL = "UPDATE PLACES SET LOCKED = false, OPENEDBY = null WHERE NAME = ?";
             pstmt = con.prepareStatement(SQL);
-            pstmt.setString(1, tableID);
+            pstmt.setString(1, tableName);
             pstmt.executeUpdate();
         } catch (Exception e) {
+            System.out.println("clear lock error");
         }
     }
     
+    
+    public void clearTableLockByTicket(String ticketID) {
+        try {
+            SQL = "UPDATE PLACES SET LOCKED = false, OPENEDBY = null WHERE TICKETID = ?";
+            pstmt = con.prepareStatement(SQL);
+            pstmt.setString(1, ticketID);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("clear lock error");
+        }
+    }
+
     public Boolean getTableLock(String tableID) {
         try {
             SQL = "SELECT LOCKED FROM PLACES WHERE ID='" + tableID + "'";
             stmt = (Statement) con.createStatement();
             rs = stmt.executeQuery(SQL);
             if (rs.next()) {
-               return (rs.getBoolean("LOCKED"));               
+                return (rs.getBoolean("LOCKED"));
             }
         } catch (Exception e) {
 
-        }        
+        }
         return false;
     }
 }

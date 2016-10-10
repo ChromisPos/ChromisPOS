@@ -141,7 +141,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private TaxesLogic taxeslogic;
     private JPaymentSelect paymentdialogreceipt;
     private JPaymentSelect paymentdialogrefund;
-    private JRootApp root;
     private Object m_principalapp;
     private Boolean restaurant;
     private Action logout;
@@ -1637,6 +1636,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 restDB.clearCustomerNameInTable(ticketext.toString());
                                 restDB.clearWaiterNameInTable(ticketext.toString());
                                 restDB.clearTicketIdInTable(ticketext.toString());
+                                restDB.clearTableLockByName(ticketext.toString());
                             }
                         }
                     }
@@ -1858,8 +1858,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
                 lastDisplay = display;
             } catch (BasicException ex) {
-                Logger.getLogger(JPanelTicket.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -1937,9 +1936,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private Object executeEvent(TicketInfo ticket, Object ticketext, String eventkey, ScriptArg... args) {
         String resource = m_jbtnconfig.getEvent(eventkey);
-        Logger
-                .getLogger(JPanelTicket.class
-                        .getName()).log(Level.INFO, null, eventkey);
+        Logger.getLogger(JPanelTicket.class.getName()).log(Level.INFO, null, eventkey);
         if (resource == null) {
             return null;
         } else {
@@ -2033,7 +2030,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 
         public Object evalScript(String code, ScriptArg... args) throws ScriptException {
-
+            
             ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
             String sDBUser = AppConfig.getInstance().getProperty("db.user");
             String sDBPassword = AppConfig.getInstance().getProperty("db.password");
@@ -2870,8 +2867,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 Object result;
                 result = i.eval(rScript);
             } catch (EvalError ex) {
-                Logger.getLogger(JPanelTicket.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             AutoLogoff.getInstance().activateTimer();

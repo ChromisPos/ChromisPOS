@@ -82,7 +82,7 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
   
     /** Creates a new instance of PaymentGatewayAuthorizeNet
      * @param props */
-    public PaymentGatewayAuthorizeNet(AppProperties props) {
+    public PaymentGatewayAuthorizeNet() {
         // Grab some configuration variables
         m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
         
@@ -96,12 +96,6 @@ public class PaymentGatewayAuthorizeNet implements PaymentGateway {
                 : "https://cardpresent.authorize.net/gateway/transact.dll";
     }
 
-    /**
-     *
-     */
-    public PaymentGatewayAuthorizeNet() {
-        
-    }
 
     /**
      *

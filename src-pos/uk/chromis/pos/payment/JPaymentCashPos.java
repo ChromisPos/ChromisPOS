@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -93,10 +92,8 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
      */
     @Override
     public void activate(CustomerInfoExt customerext, double dTotal, String transID) {
-               
-               
-        m_dTotal = dTotal;
-        
+                              
+        m_dTotal = dTotal;        
         m_jTendered.reset();
         m_jTendered.activate();
         

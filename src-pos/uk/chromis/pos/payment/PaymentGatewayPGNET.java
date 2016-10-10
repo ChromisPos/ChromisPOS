@@ -57,11 +57,11 @@ public class PaymentGatewayPGNET implements PaymentGateway {
      *
      * @param props
      */
-    public PaymentGatewayPGNET(AppProperties props) {
+    public PaymentGatewayPGNET() {
         // Grab some configuration variables
         m_sCommerceID = AppConfig.getInstance().getProperty("payment.commerceid");
         
-        AltEncrypter cypher = new AltEncrypter("cypherkey" + props.getProperty("payment.commerceid"));
+        AltEncrypter cypher = new AltEncrypter("cypherkey" + AppConfig.getInstance().getProperty("payment.commerceid"));
         this.m_sCommercePassword = cypher.decrypt(AppConfig.getInstance().getProperty("payment.commercepassword").substring(6));
         
         m_bTestMode = AppConfig.getInstance().getBoolean("payment.testmode");
@@ -70,13 +70,7 @@ public class PaymentGatewayPGNET implements PaymentGateway {
                 ? "https://www.paymentsgateway.net/cgi-bin/posttest.pl"
                 : "https://www.paymentsgateway.net/cgi-bin/postauth.pl";
     }
-    
-    /**
-     *
-     */
-    public PaymentGatewayPGNET(){
-        
-    }
+
     
     /**
      *

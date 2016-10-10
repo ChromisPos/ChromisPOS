@@ -16,13 +16,18 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    PostgreSQL version 
+//   PostgreSQL  July 2016 
+//
+
+
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.TimeSeriesProduct");
 report.setReport("/uk/chromis/reports/timeseriesproduct");
-report.setResourceBundle("uk/chromis/reports/timeseriesproduct_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence("SELECT " +
         "CATEGORIES.NAME AS CATNAME, " +
@@ -41,14 +46,15 @@ report.setSentence("SELECT " +
     "FROM RECEIPTS LEFT OUTER JOIN TICKETS ON RECEIPTS.ID = TICKETS.ID LEFT OUTER JOIN TICKETLINES ON " +
         "TICKETS.ID = TICKETLINES.TICKET, PRODUCTS LEFT OUTER JOIN CATEGORIES ON " +
         "PRODUCTS.CATEGORY = CATEGORIES.ID LEFT OUTER JOIN TAXCATEGORIES ON PRODUCTS.TAXCAT = TAXCATEGORIES.ID, " +
-        " PEOPLE " +
-    "WHERE PRODUCTS.ID = TICKETLINES.PRODUCT AND PEOPLE.ID = TICKETS.PERSON AND PRODUCTS.ISCATALOG = TRUE AND ?(QBF_FILTER) " +
+        "PEOPLE " +
+    "WHERE PRODUCTS.ID = TICKETLINES.PRODUCT AND PEOPLE.ID = TICKETS.PERSON AND PRODUCTS.ISCATALOG = true AND ?(QBF_FILTER) " +
     "GROUP BY CATEGORIES.NAME, PRODUCTS.NAME, PRODUCTS.REFERENCE,PRODUCTS.CODE,PRODUCTS.PRICEBUY, " +
     "PRODUCTS.PRICESELL, PRODUCTS.STOCKCOST,PRODUCTS.STOCKVOLUME, TAXCATEGORIES.ID, TAXCATEGORIES.NAME, PEOPLE.NAME, RECEIPTS.DATENEW " +
     "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME, RECEIPTS.DATENEW, PEOPLE.NAME");
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.SITEGUID");
 
 paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
 
@@ -62,11 +68,12 @@ report.addParameter("PRODUCTS.PRICEBUY");
 report.addParameter("PRODUCTS.PRICESELL");
 report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
-report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
+report.addParameter("PRODUCTS.SITEGUID");
+
+report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilterReport());
 
 report.addField("CATNAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("PRODUCT", uk.chromis.data.loader.Datas.STRING);
-//report.addField("PRODIMG", uk.chromis.data.loader.Datas.IMAGE);
 report.addField("REF", uk.chromis.data.loader.Datas.STRING);
 report.addField("BARCODE", uk.chromis.data.loader.Datas.STRING);
 report.addField("PRICEBUY", uk.chromis.data.loader.Datas.DOUBLE);

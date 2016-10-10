@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-07-19T22:47:29 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dailypresence" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="3d54f578-a590-4edb-bf04-52e173e8f34e">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
@@ -9,13 +11,6 @@
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="ARG" class="java.lang.Object" isForPrompting="false"/>
-	<queryString>
-		<![CDATA[SELECT PEOPLE.NAME,
-       SHIFTS.ENDSHIFT,
-       SHIFTS.STARTSHIFT,
-       ({fn TIMESTAMPDIFF(SQL_TSI_MINUTE, SHIFTS.STARTSHIFT, SHIFTS.ENDSHIFT)}) AS TOTAL
- FROM PEOPLE LEFT JOIN SHIFTS ON SHIFTS.PPLID = PEOPLE.ID]]>
-	</queryString>
 	<field name="NAME" class="java.lang.String"/>
 	<field name="ENDSHIFT" class="java.util.Date"/>
 	<field name="STARTSHIFT" class="java.util.Date"/>
@@ -55,7 +50,7 @@
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.title}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{title.dailypresence}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-2" mode="Opaque" x="400" y="0" width="135" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="1a3309d5-85c9-4e40-9854-d824b0e50ef5"/>

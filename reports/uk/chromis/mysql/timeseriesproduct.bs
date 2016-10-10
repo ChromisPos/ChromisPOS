@@ -1,4 +1,4 @@
-//   Chromis POS - The New Face of Open Source POS 
+    //   Chromis POS - The New Face of Open Source POS 
 //   Copyright (c) (c) 2015-2016Chromis , previous uniCenta & Openbravo POS works   
 //
 //   This file is part of chromis oPOS
@@ -16,13 +16,16 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
 //
-//    MySQL version 
+//   MySQL  July 2016 
+//
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.TimeSeriesProduct");
 report.setReport("/uk/chromis/reports/timeseriesproduct");
-report.setResourceBundle("uk/chromis/reports/timeseriesproduct_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence("SELECT " +
         "CATEGORIES.NAME AS CATNAME, " +
@@ -37,35 +40,38 @@ report.setSentence("SELECT " +
         "TAXCATEGORIES.NAME AS TAXCATNAME, " +
         "PEOPLE.NAME AS SELLER, " +
         "RECEIPTS.DATENEW AS RECEIPTDATE, " +
-    "SUM(TICKETLINES.UNITS) AS TOTALUNIT " +
-    "FROM RECEIPTS LEFT OUTER JOIN TICKETS ON RECEIPTS.ID = TICKETS.ID LEFT OUTER JOIN TICKETLINES ON " +
+        "SUM(TICKETLINES.UNITS) AS TOTALUNIT, " +
+        "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = PRODUCTS.SITEGUID) AS SITE " +
+        "FROM RECEIPTS LEFT OUTER JOIN TICKETS ON RECEIPTS.ID = TICKETS.ID LEFT OUTER JOIN TICKETLINES ON " +
         "TICKETS.ID = TICKETLINES.TICKET, PRODUCTS LEFT OUTER JOIN CATEGORIES ON " +
         "PRODUCTS.CATEGORY = CATEGORIES.ID LEFT OUTER JOIN TAXCATEGORIES ON PRODUCTS.TAXCAT = TAXCATEGORIES.ID, " +
         " PEOPLE " +
-    "WHERE PRODUCTS.ID = TICKETLINES.PRODUCT AND PEOPLE.ID = TICKETS.PERSON AND PRODUCTS.ISCATALOG = 1 AND ?(QBF_FILTER) " +
-    "GROUP BY CATEGORIES.NAME, PRODUCTS.NAME, PRODUCTS.REFERENCE,PRODUCTS.CODE,PRODUCTS.PRICEBUY, " +
-    "PRODUCTS.PRICESELL, PRODUCTS.STOCKCOST,PRODUCTS.STOCKVOLUME, TAXCATEGORIES.ID, TAXCATEGORIES.NAME, PEOPLE.NAME, RECEIPTS.DATENEW " +
-    "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME, RECEIPTS.DATENEW, PEOPLE.NAME");
-report.addParameter("RECEIPTS.DATENEW");
-report.addParameter("RECEIPTS.DATENEW");
+        "WHERE PRODUCTS.ID = TICKETLINES.PRODUCT AND PEOPLE.ID = TICKETS.PERSON AND PRODUCTS.ISCATALOG = 1 AND ?(QBF_FILTER) " +
+        "GROUP BY CATEGORIES.NAME, PRODUCTS.NAME, PRODUCTS.REFERENCE,PRODUCTS.CODE,PRODUCTS.PRICEBUY, " +
+        "PRODUCTS.PRICESELL, PRODUCTS.STOCKCOST,PRODUCTS.STOCKVOLUME, TAXCATEGORIES.ID, TAXCATEGORIES.NAME, PEOPLE.NAME, RECEIPTS.DATENEW " +
+        "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME, RECEIPTS.DATENEW, PEOPLE.NAME");
 
-paramdates = new uk.chromis.pos.reports.JParamsDatesInterval();
+
+paramdates = new uk.chromis.pos.ticket.ProductFilterReportWithDates();
 
 paramdates.setStartDate(uk.chromis.beans.DateUtils.getToday());
 paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
-report.addQBFFilter(paramdates);
-
+report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.SITEGUID");
 report.addParameter("PRODUCTS.NAME");
 report.addParameter("PRODUCTS.PRICEBUY");
 report.addParameter("PRODUCTS.PRICESELL");
 report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
-report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
+report.addParameter("PRODUCTS.SITEGUID");
+
+
+report.addQBFFilter(paramdates);
 
 report.addField("CATNAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("PRODUCT", uk.chromis.data.loader.Datas.STRING);
-//report.addField("PRODIMG", uk.chromis.data.loader.Datas.IMAGE);
 report.addField("REF", uk.chromis.data.loader.Datas.STRING);
 report.addField("BARCODE", uk.chromis.data.loader.Datas.STRING);
 report.addField("PRICEBUY", uk.chromis.data.loader.Datas.DOUBLE);
@@ -77,6 +83,8 @@ report.addField("TAXCATNAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("SALER", uk.chromis.data.loader.Datas.STRING);
 report.addField("RECEIPTDATE", uk.chromis.data.loader.Datas.TIMESTAMP);
 report.addField("TOTALUNIT", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
+
 
 report;
 

@@ -15,16 +15,27 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
+//   Derby & PostgreSQl July 2016
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.CustomersBReport");
-report.setReport("/uk/chromis/reports/customers");
-report.setResourceBundle("uk/chromis/reports/customers_messages");
+report.setReport("/uk/chromis/reports/customersb");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
-report.setSentence("SELECT ID, TAXID, NAME, ADDRESS, NOTES, CARD, MAXDEBT, CURDATE, CURDEBT, DISCOUNT " +
-                   "FROM CUSTOMERS " +
-                   "WHERE VISIBLE = " + app.getSession().DB.TRUE() + " AND CURDEBT IS NOT NULL AND CURDEBT <> 0");
+report.setSentence("SELECT ID, TAXID, NAME, ADDRESS, NOTES, CARD, MAXDEBT, CURDATE, CURDEBT, DISCOUNT, " +
+                    "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = CUSTOMERS.SITEGUID) AS SITE " +
+                    "FROM CUSTOMERS " +
+                    "WHERE VISIBLE = " + app.getSession().DB.TRUE() + " AND CURDEBT IS NOT NULL AND CURDEBT <> 0 AND ?(QBF_FILTER)" +
+                    "ORDER BY CUSTOMERS.SITEGUID  ");
+
+report.addParameter("CUSTOMERS.SITEGUID");
+
+report.addQBFFilter(new uk.chromis.pos.reports.JParamsSites(true));
+
 
 report.addField("ID", uk.chromis.data.loader.Datas.STRING);
 report.addField("TAXID", uk.chromis.data.loader.Datas.STRING);
@@ -36,6 +47,7 @@ report.addField("MAXDEBT", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("CURDATE", uk.chromis.data.loader.Datas.TIMESTAMP);
 report.addField("CURDEBT", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("DISCOUNT", uk.chromis.data.loader.Datas.DOUBLE); 
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
 
 report;
 

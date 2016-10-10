@@ -15,29 +15,36 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+//
+//   Derby & PostgreSQl July 2016
+
+
 
 report = new uk.chromis.pos.reports.PanelReportBean();
 
 report.setTitleKey("Menu.BarcodeSheet");
 report.setReport("/uk/chromis/reports/barcodesheet");
-report.setResourceBundle("uk/chromis/reports/barcodesheet_messages");
+report.setResourceBundle("uk/chromis/reports/report_messages");
 
 report.setSentence("SELECT "
                 + "PRODUCTS.CODE, PRODUCTS.CODETYPE, PRODUCTS.NAME, "
+                + "(SELECT SITES.NAME FROM SITES WHERE SITES.GUID = PRODUCTS.SITEGUID) AS SITE, "
                 + "CATEGORIES.ID AS CATEGORY, "
-                + "CATEGORIES.NAME AS CATEGORYNAME "
+                + "CATEGORIES.NAME AS CATEGORYNAME "              
                 + "FROM PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID "
-                + "WHERE ?(QBF_FILTER) "
-                + "ORDER BY CATEGORIES.NAME, PRODUCTS.NAME");
+                + "WHERE PRODUCTS.CODETYPE IS NOT NULL AND ?(QBF_FILTER) "
+                + "ORDER BY PRODUCTS.SITEGUID, CATEGORIES.NAME, PRODUCTS.NAME");
 
 report.addParameter("PRODUCTS.NAME");
 report.addParameter("PRODUCTS.CATEGORY");
 report.addParameter("PRODUCTS.CODE");
+report.addParameter("PRODUCTS.SITEGUID");
 report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter1());
 
 report.addField("CODE", uk.chromis.data.loader.Datas.STRING);
 report.addField("CODETYPE", uk.chromis.data.loader.Datas.STRING);
 report.addField("NAME", uk.chromis.data.loader.Datas.STRING);
+report.addField("SITE", uk.chromis.data.loader.Datas.STRING);
 
 report;
 
