@@ -200,9 +200,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(false);
-        m_junitsinstock.setEnabled(false);
-        m_jbuyprice.setEnabled(false);
-        m_jsellprice.setEnabled(false);
         m_jminimum.setEnabled(false);
         m_jmaximum.setEnabled(false);
         m_FindProduct.setEnabled(false);
@@ -311,9 +308,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
         jproduct.setEnabled(false);
-        m_junitsinstock.setEnabled(false);
-        m_jbuyprice.setEnabled(false);
-        m_jsellprice.setEnabled(false);
 
         m_jminimum.setEnabled(false);
         m_jmaximum.setEnabled(false);
@@ -509,6 +503,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                 m_junitsinstock.setText(unitsinstock);
                 m_jbuyprice.setText(Formats.CURRENCY.formatValue(buyprice ) );
                 m_jsellprice.setText(Formats.CURRENCY.formatValue(sellprice) );
+                m_junits.setText("0");
                 
                 m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
                 m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
@@ -845,7 +840,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText(AppLocal.getIntString("label.price")); // NOI18N
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 40, 25));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 40, 25));
 
         m_jprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -861,6 +856,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_junitsinstock.setEditable(false);
         m_junitsinstock.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_junitsinstock.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        m_junitsinstock.setBorder(null);
+        m_junitsinstock.setFocusable(false);
         jPanel1.add(m_junitsinstock, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, 60, 20));
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -888,6 +885,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jbuyprice.setEditable(false);
         m_jbuyprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbuyprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        m_jbuyprice.setBorder(null);
+        m_jbuyprice.setFocusable(false);
         jPanel1.add(m_jbuyprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, 60, 20));
 
         jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -907,6 +906,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jsellprice.setEditable(false);
         m_jsellprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jsellprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        m_jsellprice.setBorder(null);
+        m_jsellprice.setFocusable(false);
         jPanel1.add(m_jsellprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 60, 20));
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
