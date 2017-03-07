@@ -1644,9 +1644,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     if ( refund || ticket.getTotal() < 0.0 || ticket.getCustomer() != null ) {
                         // If customer or refund or credit then default to printer on
                         paymentdialog.setPrintSelected(true);
-                    }
-                
-                    if( !refund ) {
+                    } else {
                         String val = m_jbtnconfig.getProperty( "printselected" );
                         if( val != null && val.isEmpty() == false ) {
                             paymentdialog.setPrintSelected("true".equals(m_jbtnconfig.getProperty("printselected", "true")));
