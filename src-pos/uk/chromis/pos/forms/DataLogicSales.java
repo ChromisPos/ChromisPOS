@@ -1418,18 +1418,33 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     }
                 }
                 
-                /* Set up adjust parameters */
-                Object[] adjustParams = new Object[4];
+                int ret = 0;
+
+                // Adjust stock levels and create diary entry only if units are not zero
+                Double units = 0.0;
                 Object[] paramsArray = (Object[]) params;
-                adjustParams[0] = paramsArray[3]; //product ->Location 
-                adjustParams[1] = paramsArray[4]; //location -> Product 
-                adjustParams[2] = paramsArray[5]; //attrubutesetinstance 
-                adjustParams[3] = paramsArray[6]; //units 
+                
+                if(  ((Object[]) params)[6] != null ) {
+                    units = (Double) ( paramsArray[6] );
+                }
 
-                int as = adjustStock(adjustParams);
+                if(  units != 0.0 ) {
+                    /* Set up adjust parameters */
+                    Object[] adjustParams = new Object[4];
+                    adjustParams[0] = paramsArray[3]; //product ->Location 
+                    adjustParams[1] = paramsArray[4]; //location -> Product 
+                    adjustParams[2] = paramsArray[5]; //attrubutesetinstance 
+                    adjustParams[3] = paramsArray[6]; //units 
 
-                return as + new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
+                    ret = adjustStock(adjustParams);
 
+                    ret += new PreparedSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, AppUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})).exec(params);
+                } else {
+                    ret = 1;
+                }
+                
+                return ret;
+                
             }
         };
     }
