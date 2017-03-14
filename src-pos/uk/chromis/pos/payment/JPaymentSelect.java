@@ -74,6 +74,13 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         printselected = true;
     }
 
+    public boolean isDebtAllowed() {
+        if(  customerext != null && customerext.getMaxdebt() > 0 ) 
+            return true;
+        else
+            return false;
+    }
+    
     public void setPrintSelected(boolean value) {
         printselected = value;
     }

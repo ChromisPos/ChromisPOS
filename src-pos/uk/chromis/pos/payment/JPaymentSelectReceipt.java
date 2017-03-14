@@ -75,6 +75,9 @@ public class JPaymentSelectReceipt extends JPaymentSelect {
     @Override
     protected void addTabs() {
 
+        if( isDebtAllowed() && Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptaccount")) ) {
+            addTabPayment(new JPaymentSelect.JPaymentDebtCreator());
+        }
         if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcash")) ) {
             addTabPayment(new JPaymentSelect.JPaymentCashCreator());
         }
@@ -92,9 +95,6 @@ public class JPaymentSelectReceipt extends JPaymentSelect {
         }
         if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptcheque")) ) {
             addTabPayment(new JPaymentSelect.JPaymentChequeCreator());
-        }
-        if( Boolean.parseBoolean(AppConfig.getInstance().getProperty("payment.acceptaccount")) ) {
-            addTabPayment(new JPaymentSelect.JPaymentDebtCreator());
         }
         setHeaderVisible(true);
     }
