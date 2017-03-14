@@ -26,6 +26,7 @@ report.setSentence("SELECT " +
             "RECEIPTS.DATENEW, " +
             "TICKETS.TICKETID, " +
             "PAYMENTS.PAYMENT, " +
+            "PAYMENTS.DEBTDUE, " +
             "PAYMENTS.TOTAL, " +
             "CUSTOMERS.TAXID, " +
             "CUSTOMERS.NAME " +
@@ -52,6 +53,7 @@ report.addQBFFilter(new uk.chromis.pos.reports.JParamsCustomer());
 report.addField("DATENEW", uk.chromis.data.loader.Datas.TIMESTAMP);
 report.addField("TICKETID", uk.chromis.data.loader.Datas.STRING);
 report.addField("PAYMENT", uk.chromis.data.loader.Datas.STRING);
+report.addField("DEBTDUE", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TOTAL", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TAXID", uk.chromis.data.loader.Datas.STRING);
 report.addField("NAME", uk.chromis.data.loader.Datas.STRING);

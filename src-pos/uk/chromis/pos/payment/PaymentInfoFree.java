@@ -79,6 +79,23 @@ public class PaymentInfoFree extends PaymentInfo {
     public double getPaid() {
         return (0.0); 
     }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public double getDebtDue(){
+       return 0.0;
+   }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public void setDebtDue( double debt ) {
+    }
     
     /**
      *

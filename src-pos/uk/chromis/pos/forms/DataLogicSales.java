@@ -35,6 +35,7 @@ import uk.chromis.pos.ticket.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -60,6 +61,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     private Double getTotal;
     private Double getTendered;
     private Double getChange;
+    private Double getDebtDue;
     private String getRetMsg;
     public static final String DEBT = "debt";
     public static final String DEBT_PAID = "debtpaid";
@@ -68,6 +70,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     private String getCardName;
 
     private SentenceExec m_updateRefund;
+    private SentenceExec m_updateDebtDue;
 
     // Use this INDEX_xxx instead of numbers to access arrays of product information
     public static int FIELD_COUNT = 0;
@@ -256,6 +259,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.INT
         }));
 
+        m_updateDebtDue = new StaticSentence(s, "UPDATE PAYMENTS SET DEBTDUE = ? WHERE ID = ? ", new SerializerWriteBasic(new Datas[]{
+            Datas.DOUBLE,
+            Datas.STRING
+        }));
+        
         m_sellvoucher = new StaticSentence(s, "INSERT INTO VOUCHERS ( VOUCHER, SOLDTICKETID) "
                 + "VALUES (?, ?)", new SerializerWriteBasic(new Datas[]{
             Datas.STRING,
@@ -958,6 +966,19 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public final TicketInfo loadTicket(final int tickettype, final int ticketid) throws BasicException {
+        return findTicket( tickettype, ticketid, null, true );
+    }
+    
+        /**
+     *
+     * @param tickettype
+     * @param ticketid
+     * @param whereclause
+     * @return
+     * @throws BasicException
+     */
+    public final TicketInfo findTicket(final int tickettype, final int ticketid, 
+            final String whereclause, final boolean newestFirst ) throws BasicException {
         TicketInfo ticket = (TicketInfo) new PreparedSentence(s, "SELECT "
                 + "T.ID, "
                 + "T.TICKETTYPE, "
@@ -972,7 +993,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "JOIN TICKETS T ON R.ID = T.ID "
                 + "LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID "
                 + "WHERE T.TICKETTYPE = ? AND T.TICKETID = ? "
-                + "ORDER BY R.DATENEW DESC", SerializerWriteParams.INSTANCE, new SerializerReadClass(TicketInfo.class))
+                + (( whereclause != null && !whereclause.isEmpty() ) ? "AND " : "" )
+                + whereclause
+                + "ORDER BY R.DATENEW "
+                + (newestFirst ? "DESC" : "ASC"),
+                SerializerWriteParams.INSTANCE, new SerializerReadClass(TicketInfo.class))
                 .find(new DataParams() {
                     @Override
                     public void writeValues() throws BasicException {
@@ -990,7 +1015,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             ticket.setLines(new PreparedSentence(s, "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES, L.REFUNDQTY  "
                     + "FROM TICKETLINES L, TAXES T WHERE L.TAXID = T.ID AND L.TICKET = ? ORDER BY L.LINE", SerializerWriteString.INSTANCE, new SerializerReadClass(TicketLineInfo.class)).list(ticket.getId()));
             ticket.setPayments(new PreparedSentence(s //                    , "SELECT PAYMENT, TOTAL, TRANSID TENDERED FROM PAYMENTS WHERE RECEIPT = ?" 
-                    , "SELECT PAYMENT, TOTAL, TRANSID, TENDERED, CARDNAME, CHANGEGIVEN FROM PAYMENTS WHERE RECEIPT = ?", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentInfoTicket.class)).list(ticket.getId()));
+                    , "SELECT ID, PAYMENT, TOTAL, TRANSID, TENDERED, CARDNAME, CHANGEGIVEN, DEBTDUE FROM PAYMENTS WHERE RECEIPT = ?",
+                    SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentInfoTicket.class)).list(ticket.getId()));
         }
         return ticket;
     }
@@ -1091,10 +1117,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 }
                 final Payments payments = new Payments();
                 SentenceExec paymentinsert = new PreparedSentence(s,
-                        "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME, CHANGEGIVEN) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE);
+                        "INSERT INTO PAYMENTS (ID, RECEIPT, PAYMENT, TOTAL, TRANSID, RETURNMSG, TENDERED, CARDNAME, CHANGEGIVEN, DEBTDUE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE);
 
                 for (final PaymentInfo p : ticket.getPayments()) {
-                    payments.addPayment(p.getName(), p.getTotal(), p.getTendered(), p.getChange(), ticket.getReturnMessage() );
+                    payments.addPayment(p.getName(), p.getTotal(), p.getTendered(), p.getChange(), p.getDebtDue(), ticket.getReturnMessage() );
                 }
 
                 //for (final PaymentInfo p : ticket.getPayments()) {
@@ -1105,6 +1131,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             pName = payments.getFirstElement();
                             getTotal = payments.getPaidAmount(pName);
                             getTendered = payments.getTendered(pName);
+                            getDebtDue = payments.getDebtDue(pName);
                             getRetMsg = payments.getRtnMessage(pName);
                             getChange = payments.getChange(pName);
                             payments.removeFirst(pName);
@@ -1118,6 +1145,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             setDouble(7, getTendered);
                             setString(8, getCardName);
                             setDouble(9, getChange);
+                            setDouble(10, getDebtDue);
                             payments.removeFirst(pName);
                         }
                     });
@@ -1221,6 +1249,51 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             }
         };
         t.execute();
+    }
+
+       /**
+     *
+     * @param tickettype
+     * @param ticketid
+     * @param whereclause
+     * @return
+     * @throws BasicException
+     */
+    public final List findOldestDebtDue( final String customerid ) throws BasicException {
+        List pList = new PreparedSentence(s, "SELECT P.ID, P.PAYMENT, P.TOTAL, P.TRANSID, P.TENDERED, P.CARDNAME, P.CHANGEGIVEN, P.DEBTDUE FROM PAYMENTS P "
+            + "JOIN RECEIPTS R on R.ID = P.RECEIPT JOIN TICKETS T on T.ID = R.ID "
+            + "WHERE P.PAYMENT = 'debt' AND P.DEBTDUE <> 0 "
+            + "AND T.CUSTOMER = ? "
+            + "ORDER BY R.DATENEW ASC", SerializerWriteString.INSTANCE, new SerializerReadClass(PaymentInfoTicket.class)).list(customerid);
+        
+        return pList;
+    }
+
+    /**
+     * Reduce debtOwed on the oldest payments for this customer, keep reducing until total is used up
+     * or there are no more payments that have an outstanding debt
+     * 
+     * @return @throws BasicException
+     */
+    public final void reduceCustomerDebt( final String Customer, final double total ) throws BasicException {
+        List pList = findOldestDebtDue( Customer );
+        double remainder = total;
+        if( pList != null ) {
+            for (Iterator it = pList.iterator(); it.hasNext() && remainder > 0.0; ) {
+                PaymentInfoTicket payment = (PaymentInfoTicket) it.next();
+                double due = payment.getDebtDue();
+                double reduceby = 0.0;
+                if( remainder >= due )
+                    reduceby = due;
+                else
+                    reduceby = remainder;
+
+                if( reduceby > 0.0 ) {
+                    remainder -= reduceby;
+                    updateDebtDue( payment.getID(), due - reduceby );
+                }
+            }
+        }
     }
 
     /**
@@ -1659,6 +1732,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         m_updateRefund.exec(qty, ticket, line);
     }
 
+    public final void updateDebtDue( String payment, Double due ) throws BasicException {
+        m_updateDebtDue.exec( due, payment );
+    }
+    
     public final boolean getVoucher(String id) throws BasicException {
         return new PreparedSentence(s,
                 "SELECT SOLDTICKETID FROM VOUCHERS WHERE VOUCHER = ?",

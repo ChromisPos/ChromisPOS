@@ -67,6 +67,17 @@ public abstract class PaymentInfo {
      *
      * @return
      */
+    public abstract double getDebtDue();
+    
+    /**
+     *
+     */
+    public abstract void setDebtDue( double debt );
+    
+    /**
+     *
+     * @return
+     */
     public abstract double getTendered();
 
     /**

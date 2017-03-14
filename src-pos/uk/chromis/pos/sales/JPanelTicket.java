@@ -489,7 +489,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             try {
                 m_oTicket.getCustomer().setCurdebt(dlSales.getCustomerDebt(m_oTicket.getCustomer().getId()));
                 
-                jButtonCustomerPay.setEnabled( m_oTicket.getCustomer().getCurdebt() > 0 ? true: false);
+                boolean bDebt = m_oTicket.getCustomer().getCurdebt() != 0.0;
+                jButtonCustomerPay.setEnabled( bDebt );
             } catch (BasicException ex) {
                 Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }

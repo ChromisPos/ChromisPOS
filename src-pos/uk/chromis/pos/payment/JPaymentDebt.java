@@ -107,7 +107,9 @@ public class JPaymentDebt extends javax.swing.JPanel implements JPaymentInterfac
      */
     @Override
     public PaymentInfo executePayment() {
-        return new PaymentInfoTicket(m_dPaid, "debt");
+        PaymentInfo p = new PaymentInfoTicket(m_dPaid, "debt");
+        p.setDebtDue( m_dPaid );
+        return p;
     }
 
     /**

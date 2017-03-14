@@ -126,7 +126,23 @@ public class PaymentInfoCash extends PaymentInfo {
      * @return
      */
     @Override
-
+    public double getDebtDue() {
+        return 0.0;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public void setDebtDue( double debt ) {
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getCardName() {
         return m_dCardName;
     }

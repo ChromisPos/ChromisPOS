@@ -1027,7 +1027,19 @@
         </addColumn>                                                     
     </changeSet>  
    
-  <!--  
+     <changeSet author="Chromis POS" id="Add DEBTDUE into PAYMENTS" >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="DEBTDUE" tableName="PAYMENTS"/>
+            </not>
+        </preConditions> 
+                       
+        <addColumn tableName="PAYMENTS">            
+            <column name="DEBTDUE" type="double precision" defaultValueNumeric="0.0" />
+        </addColumn>                                                     
+    </changeSet>  
+
+    <!--  
     <changeSet author="Chromis POS" id="Add tableopen column in sharedtickets if it does not exist" >    
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1548,9 +1560,9 @@
     </changeSet>
     
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.56.6.2">    
+    <changeSet author="Chromis POS" id="Update to 0.56.6.3">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.56.6.2"/>          
+            <column name="VERSION" value="0.56.6.3"/>          
         </update>  
     </changeSet>
 </databaseChangeLog>

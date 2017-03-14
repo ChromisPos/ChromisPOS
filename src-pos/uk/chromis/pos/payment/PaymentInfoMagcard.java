@@ -460,6 +460,23 @@ public class PaymentInfoMagcard extends PaymentInfo {
      * @return
      */
     @Override
+    public double getDebtDue(){
+       return 0.0;
+   }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public void setDebtDue( double debt ) {
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
     public double getTendered() {
         return (m_dTotal + m_dProcessFee + m_dCashBack); 
     }

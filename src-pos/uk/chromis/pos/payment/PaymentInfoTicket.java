@@ -30,12 +30,13 @@ import uk.chromis.format.Formats;
 public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
 
     private static final long serialVersionUID = 8865238639097L;
+    private String m_sID;
     private double m_dTicket;
     private String m_sName;
     private String m_transactionID;
     private double m_dTendered;
-    //  private double m_change;
     private double m_dChange;
+    private double m_dDebtDue;
     private String m_dCardName = null;
 
     /**
@@ -45,8 +46,13 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
      * @param sName
      */
     public PaymentInfoTicket(double dTicket, String sName) {
+        m_sID = null;
         m_sName = sName;
+        m_transactionID = null;
         m_dTicket = dTicket;
+        m_dDebtDue = 0.0;
+        m_dChange = 0.0;
+        m_dTendered = 0.0;
     }
 
     /**
@@ -58,9 +64,11 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
     public PaymentInfoTicket(double dTicket, String sName, String transactionID) {
         m_sName = sName;
         m_dTicket = dTicket;
+        m_sID = null;
         m_transactionID = transactionID;
-        m_dTendered = 0.00;
-        m_dChange = 0.00;        
+        m_dDebtDue = 0.0;
+        m_dChange = 0.0;
+        m_dTendered = 0.0;
     }
 
     /**
@@ -69,9 +77,11 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
     public PaymentInfoTicket() {
         m_sName = null;
         m_dTicket = 0.0;
+        m_sID = null;
         m_transactionID = null;
-        m_dTendered = 0.00;
-        m_dChange = 0.00;
+        m_dDebtDue = 0.0;
+        m_dChange = 0.0;
+        m_dTendered = 0.0;
     }
 
     /**
@@ -81,15 +91,19 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
      */
     @Override
     public void readValues(DataRead dr) throws BasicException {
-        m_sName = dr.getString(1);
-        m_dTicket = dr.getDouble(2);
-        m_transactionID = dr.getString(3);
-        if (dr.getDouble(4) != null) {
-            m_dTendered = dr.getDouble(4);
+        m_sID = dr.getString(1);
+        m_sName = dr.getString(2);
+        m_dTicket = dr.getDouble(3);
+        m_transactionID = dr.getString(4);
+        if (dr.getDouble(5) != null) {
+            m_dTendered = dr.getDouble(5);
         }
-        m_dCardName = dr.getString(5);
-        if (dr.getDouble(6) != null) {
-            m_dChange = dr.getDouble(6);
+        m_dCardName = dr.getString(6);
+        if (dr.getDouble(7) != null) {
+            m_dChange = dr.getDouble(7);
+        }
+        if (dr.getDouble(8) != null) {
+            m_dDebtDue = dr.getDouble(8);
         }
     }
 
@@ -99,9 +113,21 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
      */
     @Override
     public PaymentInfo copyPayment() {
-        return new PaymentInfoTicket(m_dTicket, m_sName);
+        PaymentInfo p = new PaymentInfoTicket(m_dTicket, m_sName);
+        m_dDebtDue = p.getDebtDue();
+        m_dChange = p.getChange();
+        m_dTendered = p.getTendered();
+        return p;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getID() {
+        return m_sID;
+    }
+    
     /**
      *
      * @return
@@ -153,6 +179,24 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
         return m_dChange;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public double getDebtDue(){
+       return m_dDebtDue;
+   }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public void setDebtDue( double debt ){
+       m_dDebtDue = debt;
+   }
+    
     /**
      *
      * @return
