@@ -40,6 +40,7 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.CustomersBReport", "/uk/chromis/reports/customersb.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.CustomersDebtors", "/uk/chromis/reports/customersdebtors.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.CustomersStatement", "/uk/chromis/reports/customersstatement.bs");
+        submenu.addPanel("/uk/chromis/images/reports.png", "Menu.CustomersStatementDetailed", "/uk/chromis/reports/customersstatementdetailed.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.CustomersDiary", "/uk/chromis/reports/customersdiary.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.CustomersList", "/uk/chromis/reports/customers_list.bs");
         submenu.addPanel("/uk/chromis/images/reports.png", "Menu.SalesByCustomer", "/uk/chromis/reports/salebycustomer.bs");
