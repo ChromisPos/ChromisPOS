@@ -50,7 +50,10 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
         m_sName = sName;
         m_transactionID = null;
         m_dTicket = dTicket;
-        m_dDebtDue = 0.0;
+        if( "debt".compareTo(sName) == 0 )
+            m_dDebtDue = dTicket;
+        else
+            m_dDebtDue = 0.0;
         m_dChange = 0.0;
         m_dTendered = 0.0;
     }
@@ -66,7 +69,10 @@ public class PaymentInfoTicket extends PaymentInfo implements SerializableRead {
         m_dTicket = dTicket;
         m_sID = null;
         m_transactionID = transactionID;
-        m_dDebtDue = 0.0;
+        if( "debt".compareTo(sName) == 0 )
+            m_dDebtDue = dTicket;
+        else
+            m_dDebtDue = 0.0;
         m_dChange = 0.0;
         m_dTendered = 0.0;
     }

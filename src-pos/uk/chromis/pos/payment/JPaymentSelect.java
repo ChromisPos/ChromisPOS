@@ -75,8 +75,12 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     }
 
     public boolean isDebtAllowed() {
-        if(  customerext != null && customerext.getMaxdebt() > 0 ) 
-            return true;
+        if(  customerext != null ) {
+            if( (customerext.getMaxdebt() - customerext.getCurdebt()) > 0 )
+                return true;
+            else
+                return false;
+        }
         else
             return false;
     }
