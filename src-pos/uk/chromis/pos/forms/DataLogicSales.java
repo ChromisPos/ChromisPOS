@@ -993,9 +993,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "JOIN TICKETS T ON R.ID = T.ID "
                 + "LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID "
                 + "WHERE T.TICKETTYPE = ? AND T.TICKETID = ? "
-                + (( whereclause != null && !whereclause.isEmpty() ) ? "AND " : "" )
-                + whereclause
-                + "ORDER BY R.DATENEW "
+                + (( whereclause != null && !whereclause.isEmpty() ) ? "AND " + whereclause : "" )
+                + " ORDER BY R.DATENEW "
                 + (newestFirst ? "DESC" : "ASC"),
                 SerializerWriteParams.INSTANCE, new SerializerReadClass(TicketInfo.class))
                 .find(new DataParams() {
