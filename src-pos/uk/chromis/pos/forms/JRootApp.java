@@ -953,7 +953,9 @@ public class JRootApp extends JPanel implements AppView {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel2.setPreferredSize(new java.awt.Dimension(180, 34));
+        jLabel2.setPreferredSize(new java.awt.Dimension(210, 34));
+        jLabel2.setRequestFocusEnabled(false);
+        jLabel2.setVerifyInputWhenFocusTarget(false);
         m_jPanelTitle.add(jLabel2, java.awt.BorderLayout.LINE_START);
 
         add(m_jPanelTitle, java.awt.BorderLayout.NORTH);
