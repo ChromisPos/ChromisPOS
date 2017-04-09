@@ -684,6 +684,12 @@ public class PromotionSupport {
         TaxInfo tax = null;
         
         if (qtyFree > 0) {
+
+            // If the customer gets a discount - apply that to the fixed price
+            if( ticket.getDiscount() > 0.0 ) {
+                fixedPrice = fixedPrice - (fixedPrice * ticket.getDiscount());
+            }
+            
             // Step through discounting items until qtyFree is reached
             Double totalDiscount = 0.0;
             Double qtyFound = 0.0;

@@ -660,6 +660,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 // Apply any customer discount
                 if( oLine.canDiscount() && m_oTicket.getDiscount() > 0.0 ) {
                    oLine.setPrice( oLine.getPrice() - ( oLine.getPrice() * m_oTicket.getDiscount()));
+                   oLine.setDiscounted( "yes" );
                 }
                 
                 m_oTicket.addLine(oLine);
@@ -1202,6 +1203,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         for (TicketLineInfo line : m_oTicket.getLines()) {
                                             if( line.canDiscount() ) {
                                                 line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                                line.setDiscounted( "yes" );
                                             }
                                         }
                                         refreshTicket();
@@ -2843,6 +2845,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             for (TicketLineInfo line : m_oTicket.getLines()) {
                                 if( line.canDiscount() ) {
                                     line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                    line.setDiscounted( "yes" );
                                 }
                             }
                             refreshTicket();
