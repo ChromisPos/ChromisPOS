@@ -175,14 +175,7 @@ public final class Session {
 
         // reconnect if closed
         if (bclosed) {
-            try {
-                connect();
-            } catch (SQLException e) {
-                if( m_c == null || m_c.isClosed() ) {
-                    // Have a second try
-                    connect();
-                }
-            }
+            connect();
         }
     }  
 
