@@ -67,6 +67,7 @@ public class ProductInfoExt {
     protected String m_discounted;
     protected String m_promotionid;
     protected Boolean m_bCatalog;
+    protected Boolean m_bRetired;
     protected Double m_catorder;
     protected Boolean m_bPack;
     protected Double m_packquantity;
@@ -104,6 +105,7 @@ public class ProductInfoExt {
         m_discounted = "no";
         m_promotionid = null;
         m_bCatalog = true;
+        m_bRetired = false;
         m_catorder = 0.0;
         m_bPack = false;
         m_packquantity = 0.0;
@@ -295,6 +297,10 @@ public class ProductInfoExt {
         return m_bCatalog;
     }
 
+    public final Boolean getRetired() {
+        return m_bRetired;
+    }
+    
     public final Double getCatOrder() {
         return m_catorder;
     }
@@ -423,6 +429,7 @@ public class ProductInfoExt {
                 product.m_stockCost = dr.getDouble(DataLogicSales.INDEX_STOCKCOST + 1);
                 product.m_stockVolume = dr.getDouble(DataLogicSales.INDEX_STOCKVOLUME + 1);
                 product.m_bCatalog = dr.getBoolean(DataLogicSales.INDEX_ISCATALOG + 1);
+                product.m_bRetired = dr.getBoolean(DataLogicSales.INDEX_ISRETIRED + 1);
                 product.m_catorder = dr.getDouble(DataLogicSales.INDEX_CATORDER + 1);
                 product.m_bKitchen = dr.getBoolean(DataLogicSales.INDEX_ISKITCHEN + 1);
                 product.m_bService = dr.getBoolean(DataLogicSales.INDEX_ISSERVICE + 1);

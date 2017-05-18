@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -135,6 +136,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.getDocument().addDocumentListener(dirty);
         m_jstockvolume.getDocument().addDocumentListener(dirty);
         m_jInCatalog.addActionListener(dirty);
+        m_jRetired.addActionListener(dirty);
         m_jCatalogOrder.getDocument().addDocumentListener(dirty);
         txtAttributes.getDocument().addDocumentListener(dirty);
         m_jKitchen.addActionListener(dirty);
@@ -230,6 +232,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 m_jstockcost.setText(Formats.CURRENCY.formatValue(info.getStockCost()));
                 m_jstockvolume.setText(Formats.DOUBLE.formatValue(info.getStockVolume()));
                 m_jInCatalog.setSelected( info.getInCatalog());
+                m_jRetired.setSelected( info.getRetired());
                 m_jCatalogOrder.setText(Formats.INT.formatValue(info.getCatOrder()));
                 m_jKitchen.setSelected( info.isKitchen());
                 m_jService.setSelected( info.isService());
@@ -305,6 +308,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.setText(null);
         m_jstockvolume.setText(null);
         m_jInCatalog.setSelected(false);
+        m_jRetired.setSelected(false);
         m_jCatalogOrder.setText(null);
         txtAttributes.setText(null);
         m_jKitchen.setSelected(false);
@@ -340,6 +344,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.setEnabled(false);
         m_jstockvolume.setEnabled(false);
         m_jInCatalog.setEnabled(false);
+        m_jRetired.setEnabled(false);
         m_jCatalogOrder.setEnabled(false);
         txtAttributes.setEnabled(false);
         m_jKitchen.setEnabled(false);
@@ -392,6 +397,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.setText("0.00");
         m_jstockvolume.setText("0.00");
         m_jInCatalog.setSelected(true);
+        m_jRetired.setSelected(false);
         m_jCatalogOrder.setText(null);
         txtAttributes.setText(null);
         m_jKitchen.setSelected(false);
@@ -427,6 +433,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.setEnabled(true);
         m_jstockvolume.setEnabled(true);
         m_jInCatalog.setEnabled(true);
+        m_jRetired.setEnabled(true);
         m_jCatalogOrder.setEnabled(false);
         txtAttributes.setEnabled(true);
         m_jKitchen.setEnabled(true);
@@ -486,6 +493,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[DataLogicSales.INDEX_STOCKCOST]));
         m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[DataLogicSales.INDEX_STOCKVOLUME]));
         m_jInCatalog.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISCATALOG]));
+        m_jRetired.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISRETIRED]));
         m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[DataLogicSales.INDEX_CATORDER]));
         txtAttributes.setText(Formats.BYTEA.formatValue(myprod[DataLogicSales.INDEX_ATTRIBUTES]));
         m_jKitchen.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISKITCHEN]));
@@ -546,6 +554,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.setEnabled(false);
         m_jstockvolume.setEnabled(false);
         m_jInCatalog.setEnabled(false);
+        m_jRetired.setEnabled(false);
         m_jCatalogOrder.setEnabled(false);
         txtAttributes.setEnabled(false);
         m_jKitchen.setEnabled(false);
@@ -604,6 +613,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jstockcost.setEnabled(true);
         m_jstockvolume.setEnabled(true);
         m_jInCatalog.setEnabled(true);
+        m_jRetired.setEnabled(true);
         m_jCatalogOrder.setEnabled(m_jInCatalog.isSelected());
         txtAttributes.setEnabled(true);
         m_jKitchen.setEnabled(true);
@@ -660,6 +670,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         myprod[DataLogicSales.INDEX_STOCKCOST] = Formats.CURRENCY.parseValue(m_jstockcost.getText());
         myprod[DataLogicSales.INDEX_STOCKVOLUME] = Formats.DOUBLE.parseValue(m_jstockvolume.getText());
         myprod[DataLogicSales.INDEX_ISCATALOG] = m_jInCatalog.isSelected();
+        myprod[DataLogicSales.INDEX_ISRETIRED] = m_jRetired.isSelected();
         myprod[DataLogicSales.INDEX_CATORDER] = Formats.INT.parseValue(m_jCatalogOrder.getText());
         myprod[DataLogicSales.INDEX_ATTRIBUTES] = Formats.BYTEA.parseValue(txtAttributes.getText());
         myprod[DataLogicSales.INDEX_ISKITCHEN] = m_jKitchen.isSelected();
@@ -1079,6 +1090,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jService = new eu.hansolo.custom.SteelCheckBox();
         m_jComment = new eu.hansolo.custom.SteelCheckBox();
         m_jManageStock = new eu.hansolo.custom.SteelCheckBox();
+        m_jRetired = new eu.hansolo.custom.SteelCheckBox();
         m_jImage = new uk.chromis.data.gui.JImageEditor();
         jPanel4 = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
@@ -1290,42 +1302,42 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText(AppLocal.getIntString("label.prodstockcost")); // NOI18N
         jPanel2.add(jLabel9);
-        jLabel9.setBounds(250, 60, 120, 25);
+        jLabel9.setBounds(250, 30, 120, 25);
 
         m_jstockcost.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jstockcost.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jstockcost.setText("0.00");
         jPanel2.add(m_jstockcost);
-        m_jstockcost.setBounds(370, 60, 80, 25);
+        m_jstockcost.setBounds(370, 30, 80, 25);
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText(AppLocal.getIntString("label.prodstockvol")); // NOI18N
         jPanel2.add(jLabel10);
-        jLabel10.setBounds(250, 100, 120, 25);
+        jLabel10.setBounds(250, 70, 120, 25);
 
         m_jstockvolume.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jstockvolume.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jstockvolume.setText("0.00");
         jPanel2.add(m_jstockvolume);
-        m_jstockvolume.setBounds(370, 100, 80, 25);
+        m_jstockvolume.setBounds(370, 70, 80, 25);
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel18.setText(AppLocal.getIntString("label.prodorder")); // NOI18N
         jLabel18.setToolTipText("");
         jPanel2.add(jLabel18);
-        jLabel18.setBounds(250, 140, 120, 25);
+        jLabel18.setBounds(250, 110, 120, 25);
 
         m_jCatalogOrder.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         m_jCatalogOrder.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jPanel2.add(m_jCatalogOrder);
-        m_jCatalogOrder.setBounds(370, 140, 80, 25);
+        m_jCatalogOrder.setBounds(370, 110, 80, 25);
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel23.setText(bundle.getString("label.prodminmax")); // NOI18N
         jLabel23.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jPanel2.add(jLabel23);
-        jLabel23.setBounds(250, 180, 270, 60);
+        jLabel23.setBounds(250, 150, 270, 60);
 
         m_jStockUnits.setEditable(false);
         m_jStockUnits.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1343,21 +1355,21 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             }
         });
         jPanel2.add(m_jPackQuantity);
-        m_jPackQuantity.setBounds(350, 270, 80, 25);
+        m_jPackQuantity.setBounds(350, 240, 80, 25);
 
         m_jPackProduct.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jPanel2.add(m_jPackProduct);
-        m_jPackProduct.setBounds(350, 300, 220, 25);
+        m_jPackProduct.setBounds(350, 270, 220, 25);
 
         jLabelPackQuantity.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabelPackQuantity.setText("Pack Quantity");
         jPanel2.add(jLabelPackQuantity);
-        jLabelPackQuantity.setBounds(260, 270, 90, 20);
+        jLabelPackQuantity.setBounds(260, 240, 90, 20);
 
         jLabelPackProduct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabelPackProduct.setText("of Product");
         jPanel2.add(jLabelPackProduct);
-        jLabelPackProduct.setBounds(260, 290, 80, 30);
+        jLabelPackProduct.setBounds(260, 260, 80, 30);
 
         m_jInCatalog.setSelected(true);
         m_jInCatalog.setText(bundle.getString("label.prodincatalog")); // NOI18N
@@ -1381,7 +1393,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             }
         });
         jPanel2.add(m_jIsPack);
-        m_jIsPack.setBounds(250, 240, 110, 30);
+        m_jIsPack.setBounds(250, 210, 110, 30);
 
         m_jAlwaysAvailable.setText(bundle.getString("Label.AlwaysAvailable")); // NOI18N
         m_jAlwaysAvailable.addActionListener(new java.awt.event.ActionListener() {
@@ -1415,6 +1427,16 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jManageStock.setText(bundle.getString("label.managestock")); // NOI18N
         jPanel2.add(m_jManageStock);
         m_jManageStock.setBounds(20, 290, 200, 30);
+
+        m_jRetired.setText(bundle.getString("label.retired")); // NOI18N
+        m_jRetired.setActionCommand("Retired");
+        m_jRetired.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jRetiredActionPerformed(evt);
+            }
+        });
+        jPanel2.add(m_jRetired);
+        m_jRetired.setBounds(20, 20, 200, 30);
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.prodstock"), jPanel2); // NOI18N
         jTabbedPane1.addTab("Image", m_jImage);
@@ -1614,6 +1636,26 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         }
     }//GEN-LAST:event_m_jPackQuantityFocusLost
 
+    private void m_jRetiredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jRetiredActionPerformed
+        if (m_jRetired.isSelected()) {
+            Object[] options = {AppLocal.getIntString("Button.Yes"),
+                AppLocal.getIntString("Button.No") };
+            
+            if (JOptionPane.showOptionDialog(this,
+                AppLocal.getIntString("message.retiringproduct") ,
+                AppLocal.getIntString("Menu.Products"),
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.INFORMATION_MESSAGE, null,
+                options, options[1]) == 0) {
+                   
+                m_jInCatalog.setSelected(false);
+                m_jAlwaysAvailable.setSelected(false);
+            } else {
+                m_jRetired.setSelected( false );
+            }
+        }
+    }//GEN-LAST:event_m_jRetiredActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonHTML;
     private eu.hansolo.custom.SteelCheckBox jCheckBoxPromotion;
@@ -1681,6 +1723,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private javax.swing.JTextField m_jPriceSell;
     private javax.swing.JTextField m_jPriceSellTax;
     private javax.swing.JTextField m_jRef;
+    private eu.hansolo.custom.SteelCheckBox m_jRetired;
     private eu.hansolo.custom.SteelCheckBox m_jScale;
     private eu.hansolo.custom.SteelCheckBox m_jService;
     private javax.swing.JTextField m_jStockUnits;
