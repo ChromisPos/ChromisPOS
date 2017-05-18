@@ -60,6 +60,8 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     /**
      *
      */
+    private static int PRODUCT_FINDER_LIMIT = 1000;
+
     @Override
     protected void init() {
         m_dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
@@ -70,7 +72,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
         row = m_dlSales.getProductsRow();
 
-        lpr = new ListProviderCreator(m_dlSales.getProductCatQBF(), jproductfilter);
+        lpr = new ListProviderCreator(m_dlSales.getProductCatQBF( PRODUCT_FINDER_LIMIT ), jproductfilter);
 
         spr = new SaveProvider(
                 m_dlSales.getProductCatUpdate(),
