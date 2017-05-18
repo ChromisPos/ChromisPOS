@@ -62,7 +62,7 @@ public class PriceImportPanel extends JPanelTable2 implements EditorListener {
 
         row = m_dlSales.getProductsRow();
 
-        lpr =  new ListProviderCreator(m_dlSales.getProductCatQBF(), jproductfilter);
+        lpr =  new ListProviderCreator(m_dlSales.getProductCatQBF( 0 ), jproductfilter);
 
         spr = new SaveProvider(
             m_dlSales.getProductCatUpdate(),
