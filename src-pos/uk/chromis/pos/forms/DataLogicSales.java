@@ -557,13 +557,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY C.NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).find(id);
     }
 
-    public final SentenceList getProductList() {
+    public final SentenceList getProductList(int nLimit) {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE, P.NAME",
+                + "ORDER BY P.REFERENCE, P.NAME"
+                + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}), new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,
             Datas.OBJECT, Datas.DOUBLE,
@@ -573,13 +574,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.OBJECT, Datas.DOUBLE,}), ProductInfoExt.getSerializerRead());
     }
 
-    public SentenceList getProductListNormal() {
+    public SentenceList getProductListNormal( int nLimit ) {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCOM = " + s.DB.FALSE() + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE, P.NAME",
+                + "ORDER BY P.REFERENCE, P.NAME"
+                + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}),
                 new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,
@@ -591,13 +593,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         }), ProductInfoExt.getSerializerRead());
     }
 
-    public SentenceList getProductListAuxiliar() {
+    public SentenceList getProductListAuxiliar(int nLimit) {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "WHERE P.ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE",
+                + "ORDER BY P.REFERENCE"
+                + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}),
                 new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,

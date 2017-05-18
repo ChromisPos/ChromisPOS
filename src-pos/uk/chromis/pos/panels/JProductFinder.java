@@ -58,6 +58,8 @@ public class JProductFinder extends javax.swing.JDialog {
         super(parent, modal);
     }    
     
+    private static int PRODUCT_FINDER_LIMIT = 1000;
+    
     private ProductInfoExt init(DataLogicSales dlSales, int productsType) {
 
         initComponents();
@@ -70,13 +72,13 @@ public class JProductFinder extends javax.swing.JDialog {
         m_jProductSelect.add(jproductfilter, BorderLayout.CENTER);
         switch (productsType) {
             case PRODUCT_NORMAL:
-                lpr = new ListProviderCreator(dlSales.getProductListNormal(), jproductfilter);
+                lpr = new ListProviderCreator(dlSales.getProductListNormal( PRODUCT_FINDER_LIMIT ), jproductfilter);
                 break;
             case PRODUCT_AUXILIAR:               
-                lpr = new ListProviderCreator(dlSales.getProductListAuxiliar(), jproductfilter);
+                lpr = new ListProviderCreator(dlSales.getProductListAuxiliar(PRODUCT_FINDER_LIMIT), jproductfilter);
                 break;
             default: // PRODUCT_ALL
-                lpr = new ListProviderCreator(dlSales.getProductList(), jproductfilter);
+                lpr = new ListProviderCreator(dlSales.getProductList(PRODUCT_FINDER_LIMIT), jproductfilter);
                 break;
                 
         }

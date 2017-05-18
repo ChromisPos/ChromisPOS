@@ -39,6 +39,7 @@ public class MaterialFilter extends javax.swing.JPanel implements EditorCreator 
     
     private SentenceList m_sentprods;
     private ComboBoxValModel m_ProdsModel;
+    private static int PRODUCT_FINDER_LIMIT = 1000;
 
     /** Creates new form JQBFProduct
      * @param dlSales */
@@ -46,7 +47,7 @@ public class MaterialFilter extends javax.swing.JPanel implements EditorCreator 
         initComponents();
         
         //El modelo de productos
-        m_sentprods = dlSales.getProductList();
+        m_sentprods = dlSales.getProductList(PRODUCT_FINDER_LIMIT);
         m_ProdsModel = new ComboBoxValModel();
          
         m_jCboName.setModel(new ListQBFModelNumber());
