@@ -452,7 +452,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE (P.ISCATALOG = " + s.DB.TRUE() + " AND P.CATEGORY = ?) OR (P.ALWAYSAVAILABLE = " + s.DB.TRUE() + ") "
+                + "WHERE (P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
+                + " AND P.CATEGORY = ?) OR (P.ALWAYSAVAILABLE = " + s.DB.TRUE() + ") "
                 + "ORDER BY P.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
     }
 
@@ -466,16 +467,16 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " "
-                + "ORDER BY P.CATORDER, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
+                + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
+                + " ORDER BY P.CATORDER, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
 
     public List<ProductInfoExt> getAllNonProductCatalog() throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE P.ISCATALOG = " + s.DB.FALSE() + " "
-                + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
+                + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.FALSE()
+                + " ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
 
     /**
@@ -488,8 +489,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " "
-                + "ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
+                + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
+                + " ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
 
     /**
@@ -503,8 +504,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + " INNER JOIN CATEGORIES C ON (P.CATEGORY = C.ID) "
-                + "WHERE P.ALWAYSAVAILABLE = " + s.DB.TRUE() + " "
-                + "ORDER BY  C.NAME, P.NAME",
+                + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ALWAYSAVAILABLE = " + s.DB.TRUE()
+                + " ORDER BY  C.NAME, P.NAME",
                 null,
                 ProductInfoExt.getSerializerRead()).list();
 
@@ -514,8 +515,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE P.ISCATALOG = " + s.DB.FALSE() + " "
-                + "AND P.CATEGORY = ? "
+                + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.FALSE()
+                + " AND P.CATEGORY = ? "
                 + "ORDER BY P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
     }
 
@@ -530,8 +531,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + ", PRODUCTS_COM M "
-                + "WHERE P.ISCATALOG = " + s.DB.TRUE() + " "
-                + "AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
+                + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
+                + " AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
                 + "AND P.ISCOM = " + s.DB.TRUE() + " "
                 + "ORDER BY P.CATORDER, P.NAME", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(id);
     }
@@ -562,7 +563,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE ?(QBF_FILTER) "
+                + "WHERE"
+                + " P.RETIRED = " + s.DB.FALSE()
+                + " AND ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE, P.NAME"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}), new SerializerWriteBasic(new Datas[]{
@@ -579,7 +582,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE P.ISCOM = " + s.DB.FALSE() + " AND ?(QBF_FILTER) "
+                + "WHERE P.ISCOM = " + s.DB.FALSE()
+                + " AND P.RETIRED = " + s.DB.FALSE()
+                + " AND ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE, P.NAME"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}),
@@ -598,7 +603,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + "WHERE P.ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) "
+                + "WHERE P.ISCOM = " + s.DB.TRUE()
+                + " AND P.RETIRED = " + s.DB.FALSE()
+                + " AND ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}),
@@ -1338,13 +1345,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      *
      * @return
      */
-    public final SentenceList getProductCatQBF() {
+    public final SentenceList getProductCatQBF( int nLimit  ) {
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
                 + getSelectFieldList()
                  + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-               + "WHERE ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE",
+               + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND ?(QBF_FILTER) "
+                + "ORDER BY P.REFERENCE"
+                + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{
                     "P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}, false), new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,

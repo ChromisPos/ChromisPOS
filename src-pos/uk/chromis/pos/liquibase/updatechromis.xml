@@ -1244,7 +1244,24 @@
             <column name="RESTYPE" valueNumeric="0"/>  
             <column name="CONTENT" valueBlobResource="/uk/chromis/pos/promotion/scripts/promotion.fixedpricegroup.txt"/>  
         </insert>  
-    </changeSet>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    </changeSet>              
+
+    <!-- Retired product support - This is as close as we can get to deleting a product   -->
+    <!-- ***************************************************************************************** -->
+    <changeSet author="Chromis POS" id="Add retired product support" >    
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="RETIRED" tableName="PRODUCTS"/>
+            </not>
+        </preConditions> 
+        
+        <addColumn tableName="PRODUCTS">
+            <column name="RETIRED" type="${boolean.type}"   
+                    defaultValueBoolean="false"/>  
+        </addColumn>        
+    </changeSet>     
+      
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     <!-- End of resource changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1568,9 +1585,9 @@
     </changeSet>
     
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.56.6.4">    
+    <changeSet author="Chromis POS" id="Update to 0.56.6.5">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.56.6.4"/>          
+            <column name="VERSION" value="0.56.6.5"/>          
         </update>  
     </changeSet>
 </databaseChangeLog>
