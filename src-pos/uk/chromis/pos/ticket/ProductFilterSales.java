@@ -73,11 +73,12 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
 
         m_jtxtBarCode.reset();
         m_jtxtBarCode.setEditModeEnum(JEditorString.MODE_123);
-        m_jtxtBarCode.activate();
         m_jtxtName.reset();
         m_jPriceBuy.reset();
         m_jPriceSell.reset();
 
+        m_jtxtName.activate();
+        
         try {
             List catlist = m_sentcat.list();
             catlist.add(0, null);
