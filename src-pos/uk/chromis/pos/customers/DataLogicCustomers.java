@@ -27,8 +27,10 @@ import uk.chromis.data.loader.QBFBuilder;
 import uk.chromis.data.loader.SentenceExec;
 import uk.chromis.data.loader.SentenceExecTransaction;
 import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.SentenceFind;
 import uk.chromis.data.loader.SerializerRead;
 import uk.chromis.data.loader.SerializerReadBasic;
+import uk.chromis.data.loader.SerializerReadInteger;
 import uk.chromis.data.loader.SerializerWriteBasic;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.SerializerWriteParams;
@@ -61,6 +63,8 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
         Datas.INT,
         Datas.BOOLEAN,
         Datas.STRING};
+
+    private SentenceFind m_getCustomerCount;
 
     /**
      *
@@ -175,6 +179,10 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
             Formats.NULL,
             Formats.TIMESTAMP,
             Formats.PERCENT}, new int[]{0}," LOWER(NAME) ");
+        
+        m_getCustomerCount = new PreparedSentence(s,
+                "SELECT COUNT(*) FROM CUSTOMERS", null, SerializerReadInteger.INSTANCE);
+
     }
 
 
@@ -291,5 +299,10 @@ public class DataLogicCustomers extends BeanFactoryDataSingle {
      */
     public final TableDefinition getTableCustomers() {
         return tcustomers;
+    }
+    
+    public final int getCustomerCount() throws BasicException {
+        Integer i = (Integer) m_getCustomerCount.find();
+        return (i == null) ? 1 : i;
     }
 }

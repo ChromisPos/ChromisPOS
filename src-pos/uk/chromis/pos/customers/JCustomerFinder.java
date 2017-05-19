@@ -24,6 +24,8 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import uk.chromis.basic.BasicException;
@@ -41,6 +43,8 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
 
     private CustomerInfo selectedCustomer;
     private ListProvider lpr;
+    private boolean simpleVersion = false;
+    
     //  private JSplitButton splitButton;
 
     /** Creates new form JCustomerFinder */
@@ -71,7 +75,7 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
             myMsg = new JCustomerFinder((Dialog) window, true);
         }
         myMsg.init(dlCustomers);
-        myMsg.applyComponentOrientation(parent.getComponentOrientation());
+        myMsg.applyComponentOrientation(parent.getComponentOrientation());        
         return myMsg;
     }
 
@@ -87,8 +91,17 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
 
         initComponents();
 
-        jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
+        try {
+            simpleVersion = (dlCustomers.getCustomerCount() > 50) ? false : true;
+        } catch (BasicException ex) {
+            simpleVersion = true;
+        }       
 
+        jPanel2.setVisible(!simpleVersion);
+        jPanel5.setVisible(!simpleVersion);
+
+        jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
+        
         m_jtxtTaxID.addEditorKeys(m_jKeys);
         m_jtxtSearchKey.addEditorKeys(m_jKeys);
         m_jtxtName.addEditorKeys(m_jKeys);
@@ -104,14 +117,25 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
         m_jtxtEmail.reset();
 
         m_jtxtTaxID.activate();
-
+        
         lpr = new ListProviderCreator(dlCustomers.getCustomerList(), this);
-
         jListCustomers.setCellRenderer(new CustomerRenderer());
 
         getRootPane().setDefaultButton(jcmdOK);
 
-        selectedCustomer = null;
+        selectedCustomer = null;    
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                // TODO Auto-generated method stub
+                super.windowActivated(e);
+                
+                if( simpleVersion ) {
+                    executeSearch();
+                }
+            }
+        });
     }
 
     /**
@@ -130,7 +154,7 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
             m_jtxtEmail.reset();
 
             m_jtxtTaxID.activate();
-
+            
             cleanSearch();
         } else {
 
@@ -142,7 +166,7 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
             m_jtxtEmail.setText(customer.getEmail());
 
             m_jtxtTaxID.activate();
-
+            
             executeSearch();
         }
     }
@@ -539,7 +563,7 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
 
     private void jcmdExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdExecuteActionPerformed
 
-                    executeSearch();
+        executeSearch();
         
     }//GEN-LAST:event_jcmdExecuteActionPerformed
 
