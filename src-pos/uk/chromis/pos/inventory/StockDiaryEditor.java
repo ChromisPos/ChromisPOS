@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import uk.chromis.data.loader.LocalRes;
 import uk.chromis.pos.sales.TaxesLogic;
 import uk.chromis.pos.ticket.PlayWave;
 
@@ -137,7 +138,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jprice.getDocument().addDocumentListener(dirty);
         m_jminimum.getDocument().addDocumentListener(dirty);
         m_jmaximum.getDocument().addDocumentListener(dirty);
-        
+
         writeValueEOF();
     }
 
@@ -209,6 +210,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jprice.setEnabled(false);
         m_cat.setComponentEnabled(false);
         m_EditProduct.setEnabled(false);
+        
+        m_jcodebar.requestFocusInWindow();
     }
 
     /**
@@ -374,6 +377,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jprice.setEnabled(false);
         m_cat.setComponentEnabled(false);
         m_EditProduct.setEnabled(true);
+        
+        m_junits.requestFocusInWindow();
+        m_junits.setSelectionStart(0);
+        m_junits.setSelectionEnd(m_junits.getText().length());
+
     }
 
     /**
@@ -441,79 +449,89 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private void assignProduct(ProductInfoExt prod) {
 
         if (jproduct.isEnabled()) {
-            if (prod == null) {
-                productid = null;
-                productref = null;
-                productcode = null;
-                productname = null;
-                unitsinstock = null;
-                buyprice = null;
-                sellprice = null;
-                stocksecurity = null;
-                stockmaximum = null;
-                attsetid = null;
-                attsetinstid = null;
-                attsetinstdesc = null;
-                jproduct.setText(null);
-                m_jcodebar.setText(null);
-                m_jreference.setText(null);
-                jattributes.setText(null);
-                m_EditProduct.setEnabled(false);
-                m_junitsinstock.setText(null);
-                m_jbuyprice.setText(null);
-                m_jsellprice.setText(null);                
-                m_jminimum.setText(null);
-                m_jmaximum.setText(null);        
-            } else {
-                productid = prod.getID();
-                productref = prod.getReference();
-                productcode = prod.getCode();
-                productname = prod.getName();
-                attsetid = prod.getAttributeSetID();
-                try {
-                    Double dStock = m_dlSales.findProductStock(
-                            (String) m_LocationsModel.getSelectedKey(),
-                            productid, attsetid);
-                    unitsinstock = Formats.DOUBLE.formatValue(dStock);
-
-                    buyprice = prod.getPriceBuy();
-                    sellprice = prod.getPriceSellTax( taxeslogic.getTaxInfo( prod.getTaxCategoryID() ) );
-                    
-                    stocksecurity = m_dlSales.findProductStockSecurity(
-                            (String) m_LocationsModel.getSelectedKey(),
-                            productid );
-
-                    stockmaximum = m_dlSales.findProductStockMaximum(
-                            (String) m_LocationsModel.getSelectedKey(),
-                            productid );
-                   
-                } catch (BasicException ex) {
+            if( warnChangesLost() ) {
+            
+                if (prod == null) {
+                    productid = null;
+                    productref = null;
+                    productcode = null;
+                    productname = null;
                     unitsinstock = null;
-                    stockmaximum = null;
-                    stocksecurity = null;
                     buyprice = null;
                     sellprice = null;
+                    stocksecurity = null;
+                    stockmaximum = null;
+                    attsetid = null;
+                    attsetinstid = null;
+                    attsetinstdesc = null;
+                    jproduct.setText(null);
+                    m_jcodebar.setText(null);
+                    m_jreference.setText(null);
+                    jattributes.setText(null);
+                    m_EditProduct.setEnabled(false);
+                    m_junitsinstock.setText(null);
+                    m_jbuyprice.setText(null);
+                    m_jsellprice.setText(null);                
+                    m_jminimum.setText(null);
+                    m_jmaximum.setText(null);        
+                } else {
+                    productid = prod.getID();
+                    productref = prod.getReference();
+                    productcode = prod.getCode();
+                    productname = prod.getName();
+                    attsetid = prod.getAttributeSetID();
+                    try {
+                        Double dStock = m_dlSales.findProductStock(
+                                (String) m_LocationsModel.getSelectedKey(),
+                                productid, attsetid);
+                        unitsinstock = Formats.DOUBLE.formatValue(dStock);
+
+                        buyprice = prod.getPriceBuy();
+                        sellprice = prod.getPriceSellTax( taxeslogic.getTaxInfo( prod.getTaxCategoryID() ) );
+
+                        stocksecurity = m_dlSales.findProductStockSecurity(
+                                (String) m_LocationsModel.getSelectedKey(),
+                                productid );
+
+                        stockmaximum = m_dlSales.findProductStockMaximum(
+                                (String) m_LocationsModel.getSelectedKey(),
+                                productid );
+
+                    } catch (BasicException ex) {
+                        unitsinstock = null;
+                        stockmaximum = null;
+                        stocksecurity = null;
+                        buyprice = null;
+                        sellprice = null;
+                    }
+
+                    attsetinstid = null;
+                    attsetinstdesc = null;
+                    jproduct.setText(productname);
+                    m_jcodebar.setText(productcode);
+                    m_jreference.setText(productref);
+                    m_junitsinstock.setText(unitsinstock);
+                    m_jbuyprice.setText(Formats.CURRENCY.formatValue(buyprice ) );
+                    m_jsellprice.setText(Formats.CURRENCY.formatValue(sellprice) );
+                    m_junits.setText("0");
+                    m_junits.requestFocusInWindow();
+                    m_junits.setSelectionStart(0);
+                    m_junits.setSelectionEnd(m_junits.getText().length());
+
+                    m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
+                    m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
+                    jattributes.setText(null);
+                    m_EditProduct.setEnabled(true);
+
+                    // calculo el precio sugerido para la entrada.
+                    MovementReason reason = (MovementReason) m_ReasonModel.getSelectedItem();
+                    Double dPrice = reason.getPrice(prod.getPriceBuy(), prod.getPriceSell());
+                    m_jprice.setText(Formats.CURRENCY.formatValue(dPrice));
+
                 }
-
-                attsetinstid = null;
-                attsetinstdesc = null;
-                jproduct.setText(productname);
-                m_jcodebar.setText(productcode);
-                m_jreference.setText(productref);
-                m_junitsinstock.setText(unitsinstock);
-                m_jbuyprice.setText(Formats.CURRENCY.formatValue(buyprice ) );
-                m_jsellprice.setText(Formats.CURRENCY.formatValue(sellprice) );
-                m_junits.setText("0");
                 
-                m_jminimum.setText(Formats.DOUBLE.formatValue(stocksecurity));
-                m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));        
-                jattributes.setText(null);
-                m_EditProduct.setEnabled(true);
-
-                // calculo el precio sugerido para la entrada.
-                MovementReason reason = (MovementReason) m_ReasonModel.getSelectedItem();
-                Double dPrice = reason.getPrice(prod.getPriceBuy(), prod.getPriceSell());
-                m_jprice.setText(Formats.CURRENCY.formatValue(dPrice));
+                // Not dirty from user changes
+                m_Dirty.setDirty(false);
             }
         }
     }
@@ -621,7 +639,20 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     @Override
     public void notifyCompletionCancel() {
     }
-
+    
+    private boolean warnChangesLost() {
+     
+        if (!m_Dirty.isDirty() ||
+                JOptionPane.showConfirmDialog( this,
+                        LocalRes.getIntString("message.changeslost"),
+                        LocalRes.getIntString("title.editor"), JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {  
+            return(true);
+        } else {
+            return(false);
+        }
+    }
+    
     private class CatalogListener implements ActionListener {
 
         @Override
@@ -752,6 +783,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 80, 25));
 
         m_jcodebar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jcodebar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                m_jcodebarFocusGained(evt);
+            }
+        });
         m_jcodebar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jcodebarActionPerformed(evt);
@@ -869,6 +905,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_junits.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_junits.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        m_junits.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                m_junitsFocusGained(evt);
+            }
+        });
         jPanel1.add(m_junits, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 70, 25));
 
         m_jminimum.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -985,9 +1026,20 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     }//GEN-LAST:event_m_jbtndateActionPerformed
 
     private void m_FindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_FindProductActionPerformed
-        assignProduct(JProductFinder.showMessage(this, m_dlSales));
-
+      if( warnChangesLost() ) {
+          assignProduct(JProductFinder.showMessage(this, m_dlSales));
+      }
 }//GEN-LAST:event_m_FindProductActionPerformed
+
+    private void m_jcodebarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_jcodebarFocusGained
+        m_jcodebar.setSelectionStart(0);
+        m_jcodebar.setSelectionEnd(m_jcodebar.getText().length());
+    }//GEN-LAST:event_m_jcodebarFocusGained
+
+    private void m_junitsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_junitsFocusGained
+        m_junits.setSelectionStart(0);
+        m_junits.setSelectionEnd(m_junits.getText().length());
+    }//GEN-LAST:event_m_junitsFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel catcontainer;
