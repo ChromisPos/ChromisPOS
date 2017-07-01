@@ -603,35 +603,42 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
     
     private void editProduct() {
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
-        dlg.init( m_dlSales, m_Dirty, productid, null );
-        dlg.setCallbacks(this);
-        dlg.setVisible( true );
+        if( warnChangesLost() ) {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
+            dlg.init( m_dlSales, m_Dirty, productid, null );
+            dlg.setCallbacks(this);
+            dlg.setVisible( true );
+        }
     }
       
     private void newProduct() {
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
-        
-        String code = m_jcodebar.getText();
-        
-        dlg.init( m_dlSales, m_Dirty, null, code );
-        dlg.setCallbacks(this);
-        dlg.setVisible( true );
+        if( warnChangesLost() ) {
+
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
+
+            String code = m_jcodebar.getText();
+
+            dlg.init( m_dlSales, m_Dirty, null, code );
+            dlg.setCallbacks(this);
+            dlg.setVisible( true );
+        }
     }
     
     @Override
     public void notifyCompletionOk( String reference ) {
         // Try to assign product again
         if( reference != null ) {
-            writeValueInsert();
+            
             m_jreference.setText( reference );
 
             jproduct.setEnabled(true);
             m_jminimum.setEnabled(true);
             m_jmaximum.setEnabled(true);
-
+            
+            m_Dirty.setDirty(false);
+        
             assignProductByReference();
         }
     }
