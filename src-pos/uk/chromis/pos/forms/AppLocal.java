@@ -26,7 +26,7 @@ public class AppLocal {
     public static final String APP_ID = "chromispos";
     public static final String APP_VERSION = "0.56.6.5";
     public static final String APP_DEMO = "";
-    public static final String APP_BUILD = "JB1";
+    public static final String APP_BUILD = "JB2";
     
    //  public static final String APP_DEMO = " - Test Edition";
 
