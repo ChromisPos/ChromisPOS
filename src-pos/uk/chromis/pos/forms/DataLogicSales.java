@@ -318,7 +318,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
-                + "WHERE ID = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
+                + "WHERE P.ID = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
     }
 
     /**
@@ -333,7 +333,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
-                + " WHERE CODE = ? ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
+                + " WHERE P.CODE = ? ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
     }
 
     /**
@@ -347,7 +347,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
-                + "WHERE REFERENCE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sReference);
+                + "WHERE P.REFERENCE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sReference);
     }
 
     /**
