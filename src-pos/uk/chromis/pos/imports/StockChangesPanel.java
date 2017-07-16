@@ -20,6 +20,7 @@
 package uk.chromis.pos.imports;
 
 import java.awt.Component;
+import java.util.List;
 import javax.swing.ListCellRenderer;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ListCellRendererBasic;
@@ -77,7 +78,7 @@ public class StockChangesPanel extends JPanelTable implements EditorListener {
         m_params.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
          // el panel del editor
-        jeditor = new StockChangesEditor( m_dataLogic, m_dlSales, m_dlSystem, dirty);       
+        jeditor = new StockChangesEditor( app, m_dataLogic, m_dlSales, m_dlSystem, dirty);       
         
         setListWidth(400);
     }

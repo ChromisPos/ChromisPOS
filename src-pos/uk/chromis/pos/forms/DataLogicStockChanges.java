@@ -19,6 +19,7 @@
 
 package uk.chromis.pos.forms;
 
+import java.util.List;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.IRenderString;
@@ -26,12 +27,15 @@ import uk.chromis.data.loader.PreparedSentence;
 import uk.chromis.data.loader.RenderStringStockChange;
 import uk.chromis.data.loader.SentenceExec;
 import uk.chromis.data.loader.SentenceExecTransaction;
+import uk.chromis.data.loader.SerializerReadClass;
 import uk.chromis.data.loader.SerializerWrite;
 import uk.chromis.data.loader.SerializerWriteBasicExt;
 import uk.chromis.data.loader.Session;
+import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.model.Field;
 import uk.chromis.data.model.Row;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.imports.ChangesInfo;
 
 public class DataLogicStockChanges extends BeanFactoryDataSingle {
     
@@ -184,6 +188,20 @@ public class DataLogicStockChanges extends BeanFactoryDataSingle {
             + "ORDER BY C.LOCATION, P.NAME, C.PRODUCTID",
             serializerWrite, m_changesRow.getSerializerRead()
         );
+    }
+     
+    public final List<ChangesInfo> getAcceptedChanges() throws BasicException {
+
+        return (List<ChangesInfo>) 
+                new StaticSentence( m_session,         
+            "SELECT IFNULL(P.NAME,'***NEW PRODUCT') AS PRODUCTNAME, C.FIELD,"
+            + " ELT( C.CHANGETYPE+1, 'None', 'Adjust value', 'Set Value', "
+            + "  'Set Image', 'New Value', 'New Image', 'New Record' ) "
+            + "as CHANGELABEL, C.TEXTVALUE "
+            + "FROM STOCKCHANGES C LEFT JOIN PRODUCTS P ON (C.PRODUCTID = P.ID) "
+            + "WHERE C.CHANGES_PROCESSED = 0 "
+            + "ORDER BY C.LOCATION, P.NAME, C.PRODUCTID",
+            null, new SerializerReadClass(ChangesInfo.class)).list();
     }
      
          /**

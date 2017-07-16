@@ -1,16 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//    Chromis POS  - The New Face of Open Source POS
+//    Copyright (c) (c) 2015-2017
+//    http://www.chromis.co.uk
+//
+//    This file is part of Chromis POS
+//
+//     Chromis POS is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Chromis POS is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Chromis POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package uk.chromis.pos.imports;
 
 import java.awt.Component;
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,21 +42,29 @@ import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
-import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicStockChanges;
 import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.printer.DeviceTicket;
+import uk.chromis.pos.printer.TicketParser;
+import uk.chromis.pos.printer.TicketPrinterException;
+import uk.chromis.pos.scripting.ScriptEngine;
+import uk.chromis.pos.scripting.ScriptException;
+import uk.chromis.pos.scripting.ScriptFactory;
+
 
 /**
  *
  * @author John
  */
-public class StockChangesEditor extends javax.swing.JPanel implements EditorRecord {
+public final class StockChangesEditor extends javax.swing.JPanel implements EditorRecord {
 
     private Object m_oId;
-    private DataLogicStockChanges m_dlChanges;
-    private DataLogicSales m_dlSales;
+    private final AppView m_app;
+    private final DataLogicStockChanges m_dlChanges;
+    private final DataLogicSales m_dlSales;
     private static DataLogicSystem m_dlSystem;
 
     private final SentenceList m_sentcat;
@@ -58,9 +81,16 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
     /**
      * Creates new form StockChangesEditor
      *
+     * @param app
+     * @param dlChanges
      * @param dirty
+     * @param dlSystem
+     * @param dlSales
      */
-    public StockChangesEditor(DataLogicStockChanges dlChanges, DataLogicSales dlSales, DataLogicSystem dlSystem, DirtyManager dirty) {
+    public StockChangesEditor(AppView app, DataLogicStockChanges dlChanges,
+            DataLogicSales dlSales, DataLogicSystem dlSystem, DirtyManager dirty) {
+        
+        m_app = app;
         m_dlChanges = dlChanges;
         m_dlSales = dlSales;
         m_dlSystem = dlSystem;
@@ -86,6 +116,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_jImage.addPropertyChangeListener("image", dirty);
 
         writeValueEOF();
+ 
     }
 
     /**
@@ -113,14 +144,19 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
             return;
         }
 
-        if (field.contentEquals("IMAGE")) {
-            m_jImage.setVisible(true);
-        } else if (field.contentEquals("CATEGORY")) {
-            m_jCategory.setVisible(true);
-        } else if (field.contentEquals("TAXCAT")) {
-            m_jTax.setVisible(true);
-        } else {
-            jTextValue.setVisible(true);
+        switch (field) {
+            case "IMAGE":
+                m_jImage.setVisible(true);
+                break;
+            case "CATEGORY":
+                m_jCategory.setVisible(true);
+                break;
+            case "TAXCAT":
+                m_jTax.setVisible(true);
+                break;
+            default:
+                jTextValue.setVisible(true);
+                break;
         }
     }
 
@@ -321,14 +357,19 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         changes[m_dlChanges.getIndexOf("PRODUCTNAME")] = m_ProductName;
         changes[m_dlChanges.getIndexOf("PRODUCTREF")] = m_ProductRef;
 
-        if (field.contentEquals("CATEGORY")) {
-            changes[m_dlChanges.getIndexOf("TEXTVALUE")] = m_CategoryModel.getSelectedKey();
-        } else if (field.contentEquals("TAXCAT")) {
-            changes[m_dlChanges.getIndexOf("TEXTVALUE")] = m_taxcatmodel.getSelectedKey();
-        } else if (field.contentEquals("IMAGE")) {
-            changes[m_dlChanges.getIndexOf("BLOBVALUE")] = m_jImage.getImage();
-        } else {
-            changes[m_dlChanges.getIndexOf("TEXTVALUE")] = jTextValue.getText();
+        switch (field) {
+            case "CATEGORY":
+                changes[m_dlChanges.getIndexOf("TEXTVALUE")] = m_CategoryModel.getSelectedKey();
+                break;
+            case "TAXCAT":
+                changes[m_dlChanges.getIndexOf("TEXTVALUE")] = m_taxcatmodel.getSelectedKey();
+                break;
+            case "IMAGE":
+                changes[m_dlChanges.getIndexOf("BLOBVALUE")] = m_jImage.getImage();
+                break;
+            default:
+                changes[m_dlChanges.getIndexOf("TEXTVALUE")] = jTextValue.getText();
+                break;
         }
 
         return changes;
@@ -383,6 +424,33 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         }
     }
 
+    private void PrintAllAccepted() {
+        
+        DeviceTicket printer = m_app.getDeviceTicket();
+        TicketParser TP = new TicketParser( printer, m_dlSystem);
+
+        String sresource = m_dlSystem.getResourceAsXML("Printer.StockChanges");
+        if (sresource != null) {
+            ScriptEngine script;
+            try {
+                List<ChangesInfo> changelines;
+
+                changelines = m_dlChanges.getAcceptedChanges();
+
+                script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
+                script.put("changelines",  changelines );
+
+                TP.printTicket(script.eval(sresource).toString());
+            } catch (ScriptException ex) {
+                Logger.getLogger(StockChangesEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (TicketPrinterException ex) {
+                Logger.getLogger(StockChangesEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BasicException ex) {
+                Logger.getLogger(StockChangesEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -412,6 +480,7 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         m_jTax = new javax.swing.JComboBox();
         m_jCategory = new javax.swing.JComboBox();
         jButtonProcess = new javax.swing.JButton();
+        jButtonPrint = new javax.swing.JButton();
 
         m_jTitle.setFont(new java.awt.Font("SansSerif", 3, 18)); // NOI18N
         m_jTitle.setPreferredSize(new java.awt.Dimension(320, 30));
@@ -451,11 +520,19 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
 
         m_jCategory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jButtonProcess.setText("Process All Accepted");
+        jButtonProcess.setText("Process Accepted");
         jButtonProcess.setToolTipText("");
         jButtonProcess.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonProcessMouseClicked(evt);
+            }
+        });
+
+        jButtonPrint.setText("Print Accepted");
+        jButtonPrint.setToolTipText("");
+        jButtonPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPrintActionPerformed(evt);
             }
         });
 
@@ -495,8 +572,11 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
                                 .addComponent(jLabel7)
                                 .addGap(18, 18, 18)
                                 .addComponent(jComboAction, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(82, 82, 82)
-                                .addComponent(jButtonProcess))))
+                                .addGap(95, 95, 95)
+                                .addComponent(jButtonPrint)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonProcess)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addComponent(m_jTitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -508,7 +588,8 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(jButtonProcess))
+                    .addComponent(jButtonProcess)
+                    .addComponent(jButtonPrint))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -557,7 +638,12 @@ public class StockChangesEditor extends javax.swing.JPanel implements EditorReco
         ProcessAllAccepted();
     }//GEN-LAST:event_jButtonProcessMouseClicked
 
+    private void jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrintActionPerformed
+        PrintAllAccepted();
+    }//GEN-LAST:event_jButtonPrintActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonPrint;
     private javax.swing.JButton jButtonProcess;
     private javax.swing.JComboBox jComboAction;
     private javax.swing.JComboBox jComboChangeType;

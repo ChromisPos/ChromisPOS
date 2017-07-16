@@ -1246,6 +1246,20 @@
         </insert>  
     </changeSet>              
 
+    <changeSet author="Chromis POS" id="Add StockChanges script">
+        <preConditions onFail="MARK_RAN">  
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'Printer.StockChanges'</sqlCheck>  
+        </preConditions>   
+  
+        <insert tableName="RESOURCES">  
+            <column name="ID" value="6707"/>  
+            <column name="NAME" value="Printer.StockChanges"/>  
+            <column name="RESTYPE" valueNumeric="0"/>  
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.StockChanges.xml"/>  
+        </insert>  
+
+    </changeSet> 
+    
     <!-- Retired product support - This is as close as we can get to deleting a product   -->
     <!-- ***************************************************************************************** -->
     <changeSet author="Chromis POS" id="Add retired product support" >    
@@ -1585,9 +1599,9 @@
     </changeSet>
     
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.56.6.5">    
+    <changeSet author="Chromis POS" id="Update to 0.56.6.6">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.56.6.5"/>          
+            <column name="VERSION" value="0.56.6.6"/>          
         </update>  
     </changeSet>
 </databaseChangeLog>
