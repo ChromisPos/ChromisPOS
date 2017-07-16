@@ -309,8 +309,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
 
         if (pricevisible) {
             if (taxesincluded) {
-                TaxInfo tax = taxeslogic.getTaxInfo(product.getTaxCategoryID());
-                return "<html><center>" + product.printPriceSellTax(tax) + "<br>" + product.getDisplay();
+                return "<html><center>" + product.printPriceSellTax() + "<br>" + product.getDisplay();
             } else {
                 return "<html><center>" + product.printPriceSell() + "<br>" + product.getDisplay();
             }

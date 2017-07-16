@@ -110,6 +110,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public static int INDEX_PROMOTIONID = FIELD_COUNT++;
     public static int INDEX_MANAGESTOCK = FIELD_COUNT++;
     public static int INDEX_ISRETIRED = FIELD_COUNT++;
+    public static int INDEX_RATE = FIELD_COUNT++;
 
     /**
      * Creates a new instance of SentenceContainerGeneric
@@ -202,7 +203,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("PACKPRODUCT", Datas.STRING, Formats.STRING),
                 new Field("PROMOTIONID", Datas.STRING, Formats.STRING),
                 new Field("MANAGESTOCK", Datas.BOOLEAN, Formats.BOOLEAN),
-                new Field("RETIRED", Datas.BOOLEAN, Formats.BOOLEAN)
+                new Field("RETIRED", Datas.BOOLEAN, Formats.BOOLEAN),
+                new Field("RATE", Datas.DOUBLE, Formats.DOUBLE)
         );
 
         // If this fails there is a coding error - have you added a column
@@ -244,7 +246,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.ISPACK, P.PACKQUANTITY, P.PACKPRODUCT, "
                 + "P.PROMOTIONID, "
                 + "P.MANAGESTOCK, "
-                + "P.RETIRED ";
+                + "P.RETIRED,"
+                + "T.RATE ";
         return sel;
     }
 
@@ -314,6 +317,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE ID = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(id);
     }
 
@@ -328,6 +332,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + " WHERE CODE = ? ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sCode);
     }
 
@@ -341,6 +346,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return (ProductInfoExt) new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE REFERENCE = ?", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).find(sReference);
     }
 
@@ -455,6 +461,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE (P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
                 + " AND P.CATEGORY = ?) OR (P.ALWAYSAVAILABLE = " + s.DB.TRUE() + ") "
                 + "ORDER BY P.CATORDER, P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
@@ -470,6 +477,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
                 + " ORDER BY P.CATORDER, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
@@ -478,6 +486,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.FALSE()
                 + " ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
@@ -492,6 +501,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
                 + " ORDER BY P.CATEGORY, P.NAME ", null, ProductInfoExt.getSerializerRead()).list();
     }
@@ -507,6 +517,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + " INNER JOIN CATEGORIES C ON (P.CATEGORY = C.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ALWAYSAVAILABLE = " + s.DB.TRUE()
                 + " ORDER BY  C.NAME, P.NAME",
                 null,
@@ -518,6 +529,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.FALSE()
                 + " AND P.CATEGORY = ? "
                 + "ORDER BY P.NAME ", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(category);
@@ -534,6 +546,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
                 + ", PRODUCTS_COM M "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
                 + " AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
                 + "AND P.ISCOM = " + s.DB.TRUE() + " "
@@ -566,6 +579,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE"
                 + " P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
@@ -585,6 +599,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.ISCOM = " + s.DB.FALSE()
                 + " AND P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
@@ -606,6 +621,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C RIGHT OUTER JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                 + "WHERE P.ISCOM = " + s.DB.TRUE()
                 + " AND P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
@@ -1353,6 +1369,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "SELECT "
                 + getSelectFieldList()
                  + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
+                + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
                + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY P.REFERENCE"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),

@@ -194,8 +194,7 @@ public class JCatalogFull extends JPanel implements ListSelectionListener, Catal
     private String getProductLabel(ProductInfoExt product) {
         if (pricevisible) {
             if (taxesincluded) {
-                TaxInfo tax = taxeslogic.getTaxInfo(product.getTaxCategoryID());
-                return "<html><center>" + product.getName() + "<br>" + product.printPriceSellTax(tax);
+                return "<html><center>" + product.getName() + "<br>" + product.printPriceSellTax();
             } else {
                 return "<html><center>" + product.getDisplay() + "<br>" + product.printPriceSell();
             }

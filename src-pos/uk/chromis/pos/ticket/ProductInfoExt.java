@@ -77,6 +77,7 @@ public class ProductInfoExt {
     protected Boolean m_bPack;
     protected Double m_packquantity;
     protected String m_packproduct;
+    protected Double m_rate;
 
     public ProductInfoExt() {
         m_ID = null;
@@ -115,6 +116,7 @@ public class ProductInfoExt {
         m_bPack = false;
         m_packquantity = 0.0;
         m_packproduct = null;
+        m_rate = 0.0;
     }
 
     /**
@@ -290,8 +292,18 @@ public class ProductInfoExt {
         m_sTextTip = value;
     }
 
-    public final Double getPriceSellTax(TaxInfo tax) {
-        return m_dPriceSell * (1.0 + tax.getRate());
+    public final Double getTaxRate()
+    {
+        return m_rate;
+    }
+    
+    public final void setTaxRate( Double rate )
+    {
+        m_rate = rate;
+    }
+    
+    public final Double getPriceSellTax() {
+        return m_dPriceSell * (1.0 + m_rate);
     }
 
     public final String getPromotionID() {
@@ -314,8 +326,8 @@ public class ProductInfoExt {
         return Formats.CURRENCY.formatValue(new Double(getPriceSell()));
     }
 
-    public String printPriceSellTax(TaxInfo tax) {
-        return Formats.CURRENCY.formatValue(new Double(getPriceSellTax(tax)));
+    public String printPriceSellTax() {
+        return Formats.CURRENCY.formatValue(new Double(getPriceSellTax()));
     }
 
     public BufferedImage getImage() {
@@ -471,6 +483,7 @@ public class ProductInfoExt {
                 product.m_packproduct = dr.getString(DataLogicSales.INDEX_PACKPRODUCT + 1);
                 product.m_promotionid = dr.getString(DataLogicSales.INDEX_PROMOTIONID + 1);
                 product.m_manageStock = dr.getBoolean(DataLogicSales.INDEX_MANAGESTOCK + 1);
+                product.m_rate = dr.getDouble(DataLogicSales.INDEX_RATE + 1);
                 return product;
             }
         };

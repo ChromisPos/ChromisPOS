@@ -53,7 +53,7 @@ public class ProductRenderer extends DefaultListCellRenderer {
             setText("<html>" + prod.getReference() + " - " + prod.getName() + "<br> " +
                     "<b>" + AppLocal.getIntString("label.stockunits") +    ":</b> " + Formats.DOUBLE.formatValue(prod.getStockUnits()) + "<br /> " +
                     "<b>" + AppLocal.getIntString("label.prodpricesell") + ":</b> " + 
-                    Formats.CURRENCY.formatValue(prod.getPriceSell()));
+                    Formats.CURRENCY.formatValue(prod.getPriceSellTax()));
             Image img = tnbprod.getThumbNail(prod.getImage());
             setIcon(img == null ? null :new ImageIcon(img));
         }
