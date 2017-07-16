@@ -645,6 +645,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
     @Override
     public void notifyCompletionCancel() {
+            m_Dirty.setDirty(false);
     }
     
     private boolean warnChangesLost() {
