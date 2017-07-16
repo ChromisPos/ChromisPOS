@@ -24,7 +24,12 @@ import uk.chromis.data.loader.ImageUtils;
 import uk.chromis.data.loader.SerializerRead;
 import uk.chromis.format.Formats;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 
 /**
@@ -336,7 +341,25 @@ public class ProductInfoExt {
     public Properties getProperties() {
         return m_attributes;
     }
-
+    
+    public String getPropertiesXml() {
+        
+        if( m_attributes == null || m_attributes.isEmpty() )
+            return null;
+        
+        try {
+            ByteArrayOutputStream o = new ByteArrayOutputStream();
+            m_attributes.storeToXML(o, AppLocal.APP_NAME, "UTF-8");
+            return o.toString();
+        } catch (IOException ex) {
+            return null;
+        }
+    }
+    
+    public void setProperties( Properties props ) {
+        m_attributes = props;
+    }
+    
     public final String getAlias() {
         return m_sAlias;
     }
