@@ -254,6 +254,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 originalDisplay = m_jDisplay.getText();
                 displayEdited = displayname.compareToIgnoreCase(originalDisplay) != 0;
                 
+                txtAttributes.setText( info.getPropertiesXml() );
+                
             } else {
 
                 if( barcode != null ) {
@@ -264,7 +266,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         } catch (BasicException ex) {
             Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
     
     public String getID() {
