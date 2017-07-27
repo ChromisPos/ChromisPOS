@@ -745,9 +745,9 @@ public class JRootApp extends JPanel implements AppView {
                 btn.setFocusPainted(false);
                 btn.setFocusable(false);
                 btn.setRequestFocusEnabled(false);
-                btn.setMaximumSize(new Dimension(130, 60));
-                btn.setPreferredSize(new Dimension(130, 60));
-                btn.setMinimumSize(new Dimension(130, 60));
+                btn.setMaximumSize(new Dimension(120, 60));
+                btn.setPreferredSize(new Dimension(120, 60));
+                btn.setMinimumSize(new Dimension(120, 60));
                 btn.setHorizontalAlignment(SwingConstants.CENTER);
                 btn.setHorizontalTextPosition(AbstractButton.CENTER);
                 btn.setVerticalTextPosition(AbstractButton.BOTTOM);
