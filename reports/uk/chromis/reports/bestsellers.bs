@@ -26,6 +26,7 @@ report.setSentence("SELECT " +
             "PRODUCTS.REFERENCE, " +
             "PRODUCTS.NAME, " +
             "PRODUCTS.PRICESELL, " +
+            "PRODUCTS.PRICEBUY, " +
             "Sum(TICKETLINES.UNITS) AS UNITS, " +
             "Sum((TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS TOTAL " +
         "FROM (TAXES INNER JOIN " +
@@ -51,7 +52,8 @@ report.addQBFFilter(paramdates);
 
 report.addField("REFERENCE", uk.chromis.data.loader.Datas.STRING);
 report.addField("NAME", uk.chromis.data.loader.Datas.STRING);
-report.addField("PRICE", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("PRICESELL", uk.chromis.data.loader.Datas.DOUBLE);
+report.addField("PRICEBUY", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("UNITS", uk.chromis.data.loader.Datas.DOUBLE);
 report.addField("TOTAL", uk.chromis.data.loader.Datas.DOUBLE);
 
