@@ -11,8 +11,6 @@
 	<parameter name="ARG" class="java.lang.Object" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[SELECT
-    CLOSEDCASH.DATESTART,
-    CLOSEDCASH.DATEEND,
     products.REFERENCE,
     products.NAME,
     PRODUCTS.PRICESELL,
@@ -28,8 +26,6 @@ FROM (taxes INNER JOIN
 GROUP BY products.REFERENCE, products.NAME, PRODUCTS.PRICESELL
 ORDER BY TOTAL DESC, products.NAME]]>
 	</queryString>
-	<field name="DATESTART" class="java.util.Date"/>
-	<field name="DATEEND" class="java.util.Date"/>
 	<field name="REFERENCE" class="java.lang.String"/>
 	<field name="NAME" class="java.lang.String"/>
 	<field name="PRICE" class="java.lang.Double"/>
