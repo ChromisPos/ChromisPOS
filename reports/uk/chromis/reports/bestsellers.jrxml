@@ -14,6 +14,7 @@
     products.REFERENCE,
     products.NAME,
     PRODUCTS.PRICESELL,
+    PRODUCTS.PRICEBUY,
     Sum(ticketlines.UNITS) AS UNITS,
     Sum((TICKETLINES.PRICE+(TICKETLINES.PRICE*TAXES.RATE))*TICKETLINES.UNITS) AS TOTAL
 FROM (taxes INNER JOIN
@@ -28,7 +29,8 @@ ORDER BY TOTAL DESC, products.NAME]]>
 	</queryString>
 	<field name="REFERENCE" class="java.lang.String"/>
 	<field name="NAME" class="java.lang.String"/>
-	<field name="PRICE" class="java.lang.Double"/>
+	<field name="PRICESELL" class="java.lang.Double"/>
+	<field name="PRICEBUY" class="java.lang.Double"/>
 	<field name="UNITS" class="java.lang.Double"/>
 	<field name="TOTAL" class="java.lang.Double"/>
 	<variable name="BIGTOTAL" class="java.lang.Double" calculation="Sum">
@@ -157,12 +159,9 @@ ORDER BY TOTAL DESC, products.NAME]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="13" splitType="Stretch">
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-17" mode="Opaque" x="78" y="0" width="106" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+		<band height="20" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="1" y="0" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -173,8 +172,64 @@ ORDER BY TOTAL DESC, products.NAME]]>
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{label.reference}]]></textFieldExpression>
 			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="78" y="0" width="106" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{label.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="0" width="57" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$R{label.buyprice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="325" y="0" width="57" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$R{label.sellprice}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="385" y="0" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{label.units}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="440" y="0" width="90" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{label.value}]]></textFieldExpression>
+			</textField>
+                </band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-18" mode="Opaque" x="1" y="0" width="75" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
@@ -189,8 +244,32 @@ ORDER BY TOTAL DESC, products.NAME]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{REFERENCE}]]></textFieldExpression>
 			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-17" mode="Opaque" x="78" y="0" width="106" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="0" width="57" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{PRICEBUY})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="325" y="0" width="57" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{PRICESELL})]]></textFieldExpression>
+			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-19" mode="Opaque" x="325" y="0" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-19" mode="Opaque" x="385" y="0" width="51" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -204,7 +283,7 @@ ORDER BY TOTAL DESC, products.NAME]]>
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.DOUBLE.formatValue($F{UNITS})]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-3" mode="Opaque" x="433" y="0" width="97" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-3" mode="Opaque" x="440" y="0" width="90" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -216,11 +295,6 @@ ORDER BY TOTAL DESC, products.NAME]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{TOTAL})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="265" y="0" width="57" height="13" forecolor="#000000"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{PRICE})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
