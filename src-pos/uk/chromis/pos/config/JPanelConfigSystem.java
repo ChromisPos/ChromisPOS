@@ -56,6 +56,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jAutoLogoffToTables.addActionListener(dirty);
         jMarineOpt.addActionListener(dirty);
         jNoCustomerAddButton.addActionListener(dirty);
+        jNoSplitButton.addActionListener(dirty);
+        jNoScaleButton.addActionListener(dirty);
         jchkTextOverlay.addActionListener(dirty);
         jMoveAMountBoxToTop.addActionListener(dirty);
         jCheckPrice00.addActionListener(dirty);
@@ -118,6 +120,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jAutoLogoffAfterKitchen.setSelected(AppConfig.getInstance().getBoolean("till.autologoffafterkitchen"));
         jAutoLogoffAfterPrint.setSelected(AppConfig.getInstance().getBoolean("till.autologoffafterprint"));
         jNoCustomerAddButton.setSelected(AppConfig.getInstance().getBoolean("till.addcustomerbutton"));
+        jNoSplitButton.setSelected(AppConfig.getInstance().getBoolean("till.splitbutton"));
+        jNoScaleButton.setSelected(AppConfig.getInstance().getBoolean("till.scalebutton"));
         jMarineOpt.setSelected(AppConfig.getInstance().getBoolean("till.marineoption"));
         jchkTextOverlay.setSelected(AppConfig.getInstance().getBoolean("payments.textoverlay"));
         jMoveAMountBoxToTop.setSelected(AppConfig.getInstance().getBoolean("till.taxincluded"));
@@ -183,6 +187,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         AppConfig.getInstance().setBoolean("till.autologoffafterprint", jAutoLogoffAfterPrint.isSelected());
         AppConfig.getInstance().setBoolean("till.marineoption", jMarineOpt.isSelected());
         AppConfig.getInstance().setBoolean("till.addcustomerbutton", jNoCustomerAddButton.isSelected());
+        AppConfig.getInstance().setBoolean("till.splitbutton", jNoSplitButton.isSelected());
+        AppConfig.getInstance().setBoolean("till.scalebutton", jNoScaleButton.isSelected());
         AppConfig.getInstance().setBoolean("payments.textoverlay", jchkTextOverlay.isSelected());
         AppConfig.getInstance().setBoolean("till.taxincluded", jMoveAMountBoxToTop.isSelected());
         AppConfig.getInstance().setBoolean("till.pricewith00", jCheckPrice00.isSelected());
@@ -245,6 +251,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         jLabelMaxChange = new javax.swing.JLabel();
         JCustomSounds = new eu.hansolo.custom.SteelCheckBox();
         jNoCustomerAddButton = new eu.hansolo.custom.SteelCheckBox();
+        jNoSplitButton = new eu.hansolo.custom.SteelCheckBox();
+        jNoScaleButton = new eu.hansolo.custom.SteelCheckBox();
         jLabelInactiveTime = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(700, 500));
@@ -384,14 +392,14 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
                 jMaxChangeEnableActionPerformed(evt);
             }
         });
-        jPanel5.add(jMaxChangeEnable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 160, -1));
+        jPanel5.add(jMaxChangeEnable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 160, -1));
 
         jMaxChange.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jMaxChange.setText("50.00");
-        jPanel5.add(jMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 60, 30));
+        jPanel5.add(jMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 60, 30));
 
         jLabelMaxChange.setText(bundle.getString("label.maxchange")); // NOI18N
-        jPanel5.add(jLabelMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 150, 130, 30));
+        jPanel5.add(jLabelMaxChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, 130, 30));
 
         JCustomSounds.setText(bundle.getString("label.customerrorsounds")); // NOI18N
         jPanel5.add(JCustomSounds, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 190, -1));
@@ -402,7 +410,23 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
                 jNoCustomerAddButtonActionPerformed(evt);
             }
         });
-        jPanel5.add(jNoCustomerAddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 220, -1));
+        jPanel5.add(jNoCustomerAddButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 200, -1));
+
+        jNoSplitButton.setText(bundle.getString("label.disablesplit")); // NOI18N
+        jNoSplitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jNoSplitButtonActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jNoSplitButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 220, -1));
+
+        jNoScaleButton.setText(bundle.getString("label.disablescale")); // NOI18N
+        jNoScaleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jNoScaleButtonActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jNoScaleButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, 220, -1));
 
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 20, 670, 240));
 
@@ -486,6 +510,14 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
         // TODO add your handling code here:
     }//GEN-LAST:event_jNoCustomerAddButtonActionPerformed
 
+    private void jNoSplitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNoSplitButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jNoSplitButtonActionPerformed
+
+    private void jNoScaleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNoScaleButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jNoScaleButtonActionPerformed
+
     private void jTableRetainStateChanged(javax.swing.event.ChangeEvent evt) {
         // TODO add your handling code here:
         retain = "";
@@ -524,6 +556,8 @@ public class JPanelConfigSystem extends javax.swing.JPanel implements PanelConfi
     private eu.hansolo.custom.SteelCheckBox jMaxChangeEnable;
     private eu.hansolo.custom.SteelCheckBox jMoveAMountBoxToTop;
     private eu.hansolo.custom.SteelCheckBox jNoCustomerAddButton;
+    private eu.hansolo.custom.SteelCheckBox jNoScaleButton;
+    private eu.hansolo.custom.SteelCheckBox jNoSplitButton;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
