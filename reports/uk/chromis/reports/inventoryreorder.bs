@@ -26,6 +26,7 @@ report.setSentence("SELECT " +
                 "STOCKCURRENT.LOCATION AS LOCATIONID, " +
                 "LOCATIONS.NAME AS LOCATIONNAME, " +
                 "PRODUCTS.REFERENCE, " +
+                "PRODUCTS.CODE, PRODUCTS.CODETYPE, " +
                 "PRODUCTS.NAME AS PRODUCTNAME, " +
                 "PRODUCTS.CATEGORY, " +
                 "IFNULL( CONCAT( P.NAME, '/', C.NAME ), C.NAME) AS CATEGORYNAME, " +
@@ -59,6 +60,8 @@ report.addQBFFilter(new uk.chromis.pos.reports.JParamsLocationWithFirst());
 report.addField("LOCATIONID", uk.chromis.data.loader.Datas.STRING);
 report.addField("LOCATIONNAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("REFERENCE", uk.chromis.data.loader.Datas.STRING);
+report.addField("CODE", uk.chromis.data.loader.Datas.STRING);
+report.addField("CODETYPE", uk.chromis.data.loader.Datas.STRING);
 report.addField("NAME", uk.chromis.data.loader.Datas.STRING);
 report.addField("CATEGORY", uk.chromis.data.loader.Datas.STRING);
 report.addField("CATEGORYNAME", uk.chromis.data.loader.Datas.STRING);
