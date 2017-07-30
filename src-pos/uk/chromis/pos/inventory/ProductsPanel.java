@@ -28,6 +28,7 @@ import uk.chromis.data.user.SaveProvider;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.panels.JPanelTable2;
 import uk.chromis.pos.ticket.ProductFilter;
 
@@ -44,6 +45,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     private String m_initialFilter = "";
 
     private DataLogicSales m_dlSales = null;
+    private DataLogicSystem m_dlSystem = null;
 
     /**
      * Creates a new instance of ProductsPanel2
@@ -65,6 +67,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     @Override
     protected void init() {
         m_dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
+        m_dlSystem = (DataLogicSystem) app.getBean("uk.chromis.pos.forms.DataLogicSystem");
 
         // el panel del filtro
         jproductfilter = new ProductFilter();
@@ -80,7 +83,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
                 m_dlSales.getProductCatDelete());
 
         // el panel del editor
-        jeditor = new ProductsEditor(m_dlSales, dirty);
+        jeditor = new ProductsEditor(m_dlSales, m_dlSystem, dirty);
 
         if (AppConfig.getInstance().getBoolean("display.longnames")) {
             setListWidth(300);

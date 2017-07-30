@@ -23,11 +23,17 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +49,7 @@ import uk.chromis.data.user.EditorRecord;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.sales.TaxesLogic;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.util.BarcodeValidator;
@@ -74,8 +81,10 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private boolean reportlock = false;
     private BarcodeValidator validate;
     private DataLogicSales m_dlSales;
+    private DataLogicSystem m_dlSystem;
     private Boolean displayEdited = false;
     private String originalDisplay;
+    private Properties m_PropertyOptions;
     
     /**
      * Creates new form JEditProduct
@@ -83,12 +92,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
      * @param dlSales
      * @param dirty
      */
-    public ProductsEditor(DataLogicSales dlSales, DirtyManager dirty) {
+    public ProductsEditor(DataLogicSales dlSales, DataLogicSystem dlSystem, DirtyManager dirty) {
         initComponents();
 
         m_dlSales = dlSales;
-
-        m_dlSales = dlSales;
+        m_dlSystem = dlSystem;
         
         // Taxes sentence
         taxsent = dlSales.getTaxList();
@@ -121,6 +129,23 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         packproductsent = dlSales.getPackProductList();
         packproductmodel = new ComboBoxValModel();
 
+        m_PropertyOptions = new Properties();
+        jPropertyValueText.setVisible( false );
+        jPropertyValueCombo.setVisible( false );
+        
+        try {
+            m_PropertyOptions.loadFromXML( new ByteArrayInputStream(m_dlSystem.getResourceAsXML("Product.Properties").getBytes(StandardCharsets.UTF_8)));
+        } catch (IOException ex) {
+            Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
+            m_PropertyOptions.put( "Product.Properties", "");
+            jPropertyValueText.setVisible( true );
+            jPropertyValueText.setText( "Resource load failed");
+        }
+        for (Map.Entry<Object, Object> e : m_PropertyOptions.entrySet()) {
+          jComboProperties.addItem( (String) e.getKey() );
+        }
+        jComboProperties.setSelectedIndex(-1);
+        jComboProperties.addActionListener( new PropertyActionListener() );
         m_jRef.getDocument().addDocumentListener(dirty);
         m_jCode.getDocument().addDocumentListener(dirty);
         m_jName.getDocument().addDocumentListener(dirty);
@@ -138,7 +163,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.addActionListener(dirty);
         m_jRetired.addActionListener(dirty);
         m_jCatalogOrder.getDocument().addDocumentListener(dirty);
-        txtAttributes.getDocument().addDocumentListener(dirty);
+        txtProperties.getDocument().addDocumentListener(dirty);
         m_jKitchen.addActionListener(dirty);
         m_jService.addActionListener(dirty);
         m_jVprice.addActionListener(dirty);
@@ -254,7 +279,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 originalDisplay = m_jDisplay.getText();
                 displayEdited = displayname.compareToIgnoreCase(originalDisplay) != 0;
                 
-                txtAttributes.setText( info.getPropertiesXml() );
+                txtProperties.setText( info.getPropertiesXml() );
                 
             } else {
 
@@ -312,7 +337,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setSelected(false);
         m_jRetired.setSelected(false);
         m_jCatalogOrder.setText(null);
-        txtAttributes.setText(null);
+        txtProperties.setText(null);
         m_jKitchen.setSelected(false);
         m_jService.setSelected(false);
         m_jDisplay.setText(null);
@@ -348,7 +373,12 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(false);
         m_jRetired.setEnabled(false);
         m_jCatalogOrder.setEnabled(false);
-        txtAttributes.setEnabled(false);
+        txtProperties.setEnabled(false);
+        jComboProperties.setEnabled(false);
+        jPropertyValueText.setEnabled(false);
+        jPropertyValueCombo.setEnabled(false);
+        jPropertyAddButton.setEnabled(false);
+        
         m_jKitchen.setEnabled(false);
         m_jService.setEnabled(false);
         m_jDisplay.setEnabled(false);
@@ -401,7 +431,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setSelected(true);
         m_jRetired.setSelected(false);
         m_jCatalogOrder.setText(null);
-        txtAttributes.setText(null);
+        txtProperties.setText(null);
         m_jKitchen.setSelected(false);
         m_jService.setSelected(false);
         m_jDisplay.setText(null);
@@ -437,7 +467,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(true);
         m_jRetired.setEnabled(true);
         m_jCatalogOrder.setEnabled(false);
-        txtAttributes.setEnabled(true);
+        txtProperties.setEnabled(true);
+        jComboProperties.setEnabled(true);
+        jPropertyValueText.setEnabled(true);
+        jPropertyValueCombo.setEnabled(true);
+        jPropertyAddButton.setEnabled(true);        
         m_jKitchen.setEnabled(true);
         m_jService.setEnabled(true);
         m_jDisplay.setEnabled(true);
@@ -497,7 +531,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISCATALOG]));
         m_jRetired.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISRETIRED]));
         m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[DataLogicSales.INDEX_CATORDER]));
-        txtAttributes.setText(Formats.BYTEA.formatValue(myprod[DataLogicSales.INDEX_ATTRIBUTES]));
+        txtProperties.setText(Formats.BYTEA.formatValue(myprod[DataLogicSales.INDEX_ATTRIBUTES]));
         m_jKitchen.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISKITCHEN]));
         m_jService.setSelected(((Boolean) myprod[DataLogicSales.INDEX_ISSERVICE]));
         m_jDisplay.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_DISPLAY]));
@@ -533,7 +567,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jTitle.setText(Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_REFERENCE]) + " - "
                 + Formats.STRING.formatValue(myprod[DataLogicSales.INDEX_NAME]) + " "
                 + AppLocal.getIntString("label.recorddeleted"));
-        txtAttributes.setCaretPosition(0);
+        txtProperties.setCaretPosition(0);
 
         reportlock = false;
 
@@ -558,7 +592,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(false);
         m_jRetired.setEnabled(false);
         m_jCatalogOrder.setEnabled(false);
-        txtAttributes.setEnabled(false);
+        txtProperties.setEnabled(false);
+        jComboProperties.setEnabled(false);
+        jPropertyValueText.setEnabled(false);
+        jPropertyValueCombo.setEnabled(false);
+        jPropertyAddButton.setEnabled(false);
         m_jKitchen.setEnabled(false);
         m_jService.setEnabled(true);
         m_jDisplay.setEnabled(false);
@@ -594,7 +632,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         Object[] myprod = (Object[]) value;
         extractValues(myprod);
 
-        txtAttributes.setCaretPosition(0);
+        txtProperties.setCaretPosition(0);
         reportlock = false;
 
         // Los habilitados
@@ -617,7 +655,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jInCatalog.setEnabled(true);
         m_jRetired.setEnabled(true);
         m_jCatalogOrder.setEnabled(m_jInCatalog.isSelected());
-        txtAttributes.setEnabled(true);
+        txtProperties.setEnabled(true);
+        jComboProperties.setEnabled(true);
+        jPropertyValueText.setEnabled(true);
+        jPropertyValueCombo.setEnabled(true);
+        jPropertyAddButton.setEnabled(true);
         m_jKitchen.setEnabled(true);
         m_jService.setEnabled(true);
         m_jDisplay.setEnabled(true);
@@ -674,7 +716,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         myprod[DataLogicSales.INDEX_ISCATALOG] = m_jInCatalog.isSelected();
         myprod[DataLogicSales.INDEX_ISRETIRED] = m_jRetired.isSelected();
         myprod[DataLogicSales.INDEX_CATORDER] = Formats.INT.parseValue(m_jCatalogOrder.getText());
-        myprod[DataLogicSales.INDEX_ATTRIBUTES] = Formats.BYTEA.parseValue(txtAttributes.getText());
+        myprod[DataLogicSales.INDEX_ATTRIBUTES] = Formats.BYTEA.parseValue(txtProperties.getText());
         myprod[DataLogicSales.INDEX_ISKITCHEN] = m_jKitchen.isSelected();
         myprod[DataLogicSales.INDEX_ISSERVICE] = m_jService.isSelected();
         myprod[DataLogicSales.INDEX_DISPLAY] = m_jDisplay.getText();
@@ -889,6 +931,58 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         }
     }
 
+    private class PropertyActionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String sel = (String) jComboProperties.getSelectedItem();
+            String val = m_PropertyOptions.getProperty( sel, "" );
+            
+            String type = val;
+            int nComma = val.indexOf( ',' );
+            if( nComma >0 ) {
+                type = val.substring( 0, nComma ).trim();
+                val = val.substring( nComma + 1 ).trim();
+            }
+            
+            switch( type ) {
+                case "boolean" :
+                    jPropertyValueText.setVisible( false );
+                    jPropertyValueCombo.removeAllItems();
+                    jPropertyValueCombo.addItem(AppLocal.getIntString("Button.No"));
+                    jPropertyValueCombo.addItem(AppLocal.getIntString("Button.Yes"));
+                    jPropertyValueCombo.setVisible( true );
+                     break;
+                case "number" :
+                    jPropertyValueCombo.setVisible( false );
+                    jPropertyValueText.setVisible( true );
+                    jPropertyValueText.setText( "" );
+                    break;
+                case "option" :
+                    jPropertyValueCombo.removeAllItems();
+                    nComma = val.indexOf( ',' );
+                    while( nComma > 0 ) {
+                        jPropertyValueCombo.addItem( val.substring( 0, nComma ) );
+                        val = val.substring( nComma + 1 ).trim();
+                        nComma = val.indexOf( ',' );
+                    }
+                    jPropertyValueCombo.addItem(val);
+                    jPropertyValueCombo.setVisible( true );
+                    jPropertyValueText.setVisible( false );
+                    break;
+                case "text" :
+                    jPropertyValueCombo.setVisible( false );
+                    jPropertyValueText.setVisible( true );
+                    jPropertyValueText.setText( "" );
+                    break;
+                default:
+                    Logger.getLogger(ProductsEditor.class.getName()).log(Level.WARNING, "Unknown property type (" + type + ") in Product.Properties" );
+                    break;
+            }           
+        }
+
+    }
+    
     private class PriceSellManager implements DocumentListener {
 
         @Override
@@ -1110,7 +1204,13 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel30 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtAttributes = new javax.swing.JTextArea();
+        txtProperties = new javax.swing.JTextArea();
+        jPanelProperties = new javax.swing.JPanel();
+        jComboProperties = new javax.swing.JComboBox<>();
+        jPanel7 = new javax.swing.JPanel();
+        jPropertyValueCombo = new javax.swing.JComboBox<>();
+        jPropertyValueText = new javax.swing.JTextField();
+        jPropertyAddButton = new javax.swing.JButton();
 
         jLabel24.setText("jLabel24");
 
@@ -1431,7 +1531,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jManageStock.setBounds(20, 290, 200, 30);
 
         m_jRetired.setText(bundle.getString("label.retired")); // NOI18N
-        m_jRetired.setActionCommand("Retired");
         m_jRetired.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jRetiredActionPerformed(evt);
@@ -1565,10 +1664,53 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        txtAttributes.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
-        jScrollPane1.setViewportView(txtAttributes);
+        txtProperties.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        jScrollPane1.setViewportView(txtProperties);
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel7.setLayout(null);
+
+        jPanel7.add(jPropertyValueCombo);
+        jPropertyValueCombo.setBounds(0, 0, 250, 24);
+
+        jPropertyValueText.setText("jTextField1");
+        jPanel7.add(jPropertyValueText);
+        jPropertyValueText.setBounds(8, 0, 230, 20);
+
+        jPropertyAddButton.setText(bundle.getString("Button.Add")); // NOI18N
+        jPropertyAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPropertyAddButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelPropertiesLayout = new javax.swing.GroupLayout(jPanelProperties);
+        jPanelProperties.setLayout(jPanelPropertiesLayout);
+        jPanelPropertiesLayout.setHorizontalGroup(
+            jPanelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPropertiesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPropertyAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanelPropertiesLayout.setVerticalGroup(
+            jPanelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelPropertiesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPropertyAddButton)
+                    .addGroup(jPanelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jComboProperties)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(jPanelProperties, java.awt.BorderLayout.PAGE_START);
 
         jTabbedPane1.addTab(AppLocal.getIntString("label.properties"), jPanel3); // NOI18N
 
@@ -1658,10 +1800,63 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         }
     }//GEN-LAST:event_m_jRetiredActionPerformed
 
+    private void jPropertyAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPropertyAddButtonActionPerformed
+        Properties props = new Properties();
+
+        try {                                                   
+            props.loadFromXML(new ByteArrayInputStream(txtProperties.getText().getBytes(StandardCharsets.UTF_8)));
+        } catch (IOException ex) {
+            Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String sel = (String) jComboProperties.getSelectedItem();
+        String type = m_PropertyOptions.getProperty( sel, "" );
+            
+        int nComma = type.indexOf( ',' );
+        if( nComma >0 ) {
+            type = type.substring( 0, nComma ).trim();
+        }
+            
+        switch( type ) {
+            case "boolean" :
+                String sYes = (String) jPropertyValueCombo.getSelectedItem();
+                sYes = sYes.compareTo( "Yes" ) == 0 ? "1" : "0";
+                props.put( sel, sYes );
+                break;
+            case "number" :
+                Double dValue;
+                try {
+                    dValue = (Double) Formats.DOUBLE.parseValue(jPropertyValueText.getText());
+                } catch (BasicException ex) {
+                    dValue = 0.0;
+                }
+                props.put( sel, dValue.toString() );
+                break;
+            case "option" :
+                props.put( sel, (String) jPropertyValueCombo.getSelectedItem());
+                break;
+            case "text" :
+                props.put( sel, (String) jPropertyValueText.getText());
+                break;
+            default:
+                break;
+        }           
+        
+        try {
+            ByteArrayOutputStream o = new ByteArrayOutputStream();
+            props.storeToXML(o, AppLocal.APP_NAME, "UTF-8");
+            txtProperties.setText(o.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(ProductsEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jPropertyAddButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonHTML;
     private eu.hansolo.custom.SteelCheckBox jCheckBoxPromotion;
     private javax.swing.JComboBox jComboBoxPromotion;
+    private javax.swing.JComboBox<String> jComboProperties;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
@@ -1697,6 +1892,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanelProperties;
+    private javax.swing.JButton jPropertyAddButton;
+    private javax.swing.JComboBox<String> jPropertyValueCombo;
+    private javax.swing.JTextField jPropertyValueText;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
@@ -1737,7 +1937,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private javax.swing.JTextField m_jmargin;
     private javax.swing.JTextField m_jstockcost;
     private javax.swing.JTextField m_jstockvolume;
-    private javax.swing.JTextArea txtAttributes;
+    private javax.swing.JTextArea txtProperties;
     // End of variables declaration//GEN-END:variables
 
 }

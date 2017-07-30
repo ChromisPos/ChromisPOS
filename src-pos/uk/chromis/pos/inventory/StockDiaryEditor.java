@@ -41,13 +41,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import uk.chromis.data.loader.LocalRes;
-import uk.chromis.pos.sales.TaxesLogic;
+import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.ticket.PlayWave;
 
 /**
@@ -82,6 +80,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
     private final AppView m_App;
     private final DataLogicSales m_dlSales;
+    private final DataLogicSystem m_dlSystem;
     
     private DirtyManager m_Dirty;
     
@@ -93,6 +92,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_App = app;
         m_dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
+        m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
 
         m_Dirty = dirty;
         
@@ -599,7 +599,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         if( warnChangesLost() ) {
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             JDlgEditProduct dlg = new JDlgEditProduct( topFrame, true );
-            dlg.init( m_dlSales, m_Dirty, productid, null );
+            dlg.init( m_dlSales, m_dlSystem, m_Dirty, productid, null );
             dlg.setCallbacks(this);
             dlg.setVisible( true );
         }
@@ -613,7 +613,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
             String code = m_jcodebar.getText();
 
-            dlg.init( m_dlSales, m_Dirty, null, code );
+            dlg.init( m_dlSales, m_dlSystem, m_Dirty, null, code );
             dlg.setCallbacks(this);
             dlg.setVisible( true );
         }

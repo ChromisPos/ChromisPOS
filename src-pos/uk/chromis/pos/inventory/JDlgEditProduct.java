@@ -32,7 +32,9 @@ import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.SaveProvider;
 import uk.chromis.pos.forms.AppLocal;
+import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
 
 /**
  *
@@ -40,9 +42,9 @@ import uk.chromis.pos.forms.DataLogicSales;
  */
 public class JDlgEditProduct extends javax.swing.JDialog {
     
-    // private AppView m_App;
     private ProductsEditor producteditor;
     private DataLogicSales m_dlSales;
+    private DataLogicSystem m_dlSystem;
     private DirtyManager m_dirty;
     private SaveProvider m_SaveProvider;
     private CompletionCallback m_CallBacks;
@@ -67,8 +69,9 @@ public class JDlgEditProduct extends javax.swing.JDialog {
         m_CallBacks = callBacks;
     }
     
-    public void init( DataLogicSales dlSales, DirtyManager dirty, String productID, String barcode ) {
+    public void init( DataLogicSales dlSales, DataLogicSystem dlSystem, DirtyManager dirty, String productID, String barcode ) {
         m_dlSales = dlSales;
+        m_dlSystem = dlSystem;
         m_dirty = dirty;
         initComponents();
 
@@ -79,7 +82,7 @@ public class JDlgEditProduct extends javax.swing.JDialog {
         
         getRootPane().setDefaultButton(jcmdOK);   
    
-        producteditor = new ProductsEditor(m_dlSales, m_dirty);       
+        producteditor = new ProductsEditor(m_dlSales, m_dlSystem, m_dirty);       
         
         try {
             producteditor.activate();

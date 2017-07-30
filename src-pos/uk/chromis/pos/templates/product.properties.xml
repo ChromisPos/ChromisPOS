@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <comment>
+This file defines the properties available to the product property editor
+The format of each property definition is:  type, parameter1, parameter2....
+where type is:
+    text        {no parameters}
+        Free entry text
+    boolean     {no parameters}
+        True or False
+    number, minvalue, maxvalue
+        A number between minvalue and maxvalue
+    option, option1, option2, option3......
+        Choose one of the given options
+  </comment>
+
+  <entry key="Age_Check">boolean</entry>
+  <entry key="Age_Min">number,0,200</entry>
+  <entry key="Supplier">text</entry>
+  <entry key="Storage">option, Ambient, Frozen, Chilled</entry>
+</properties>
