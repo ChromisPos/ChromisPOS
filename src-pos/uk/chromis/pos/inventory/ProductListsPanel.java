@@ -608,16 +608,12 @@ public final class ProductListsPanel extends JPanel implements JPanelView, BeanF
 
     private void m_jbarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbarcodeActionPerformed
          assignProductByCode();
-         if( addProduct() ) {
-            new PlayWave("beep.wav").start(); // playing WAVE file 
-         }
+         addProduct();
     }//GEN-LAST:event_m_jbarcodeActionPerformed
 
     private void m_jBarcodeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jBarcodeBtnActionPerformed
          assignProductByCode();
-         if( addProduct() ) {
-            new PlayWave("beep.wav").start(); // playing WAVE file 
-         }
+         addProduct();
     }//GEN-LAST:event_m_jBarcodeBtnActionPerformed
 
     private void jButtonNewListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewListActionPerformed
