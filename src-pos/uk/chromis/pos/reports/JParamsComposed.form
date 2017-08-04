@@ -19,6 +19,19 @@
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
-    <Property name="axis" type="int" value="1"/>
+    <Property name="axis" type="int" value="3"/>
   </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanelFirstFilter">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanelExtras">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+    </Container>
+  </SubComponents>
 </Form>

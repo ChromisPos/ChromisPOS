@@ -111,7 +111,11 @@ public class JParamsComposed extends javax.swing.JPanel implements ReportEditorC
      */
     public void addEditor(ReportEditorCreator c) {
         editors.add(c);
-        add(c.getComponent());
+        if( editors.size() == 1 ) {
+            jPanelFirstFilter.add(c.getComponent());
+        } else {
+            jPanelExtras.add(c.getComponent());
+        }
     }
     
     /**
@@ -131,12 +135,23 @@ public class JParamsComposed extends javax.swing.JPanel implements ReportEditorC
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelFirstFilter = new javax.swing.JPanel();
+        jPanelExtras = new javax.swing.JPanel();
+
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
+
+        jPanelFirstFilter.setLayout(new javax.swing.BoxLayout(jPanelFirstFilter, javax.swing.BoxLayout.LINE_AXIS));
+        add(jPanelFirstFilter);
+
+        jPanelExtras.setLayout(new java.awt.GridLayout());
+        add(jPanelExtras);
     }// </editor-fold>//GEN-END:initComponents
    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanelExtras;
+    private javax.swing.JPanel jPanelFirstFilter;
     // End of variables declaration//GEN-END:variables
     
 }
