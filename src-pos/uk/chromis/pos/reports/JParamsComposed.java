@@ -144,7 +144,9 @@ public class JParamsComposed extends javax.swing.JPanel implements ReportEditorC
         jPanelFirstFilter.setLayout(new javax.swing.BoxLayout(jPanelFirstFilter, javax.swing.BoxLayout.LINE_AXIS));
         add(jPanelFirstFilter);
 
-        jPanelExtras.setLayout(new java.awt.GridLayout());
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT);
+        flowLayout1.setAlignOnBaseline(true);
+        jPanelExtras.setLayout(flowLayout1);
         add(jPanelExtras);
     }// </editor-fold>//GEN-END:initComponents
    
