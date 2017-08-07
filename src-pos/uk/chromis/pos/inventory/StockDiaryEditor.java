@@ -45,6 +45,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import uk.chromis.data.loader.LocalRes;
+import static uk.chromis.format.Formats.DOUBLE;
 import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.ticket.PlayWave;
 
@@ -385,7 +386,19 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     public Object createValue() throws BasicException {
         stocksecurity = (Double) Formats.DOUBLE.parseValue(m_jminimum.getText());
         stockmaximum = (Double) Formats.DOUBLE.parseValue(m_jmaximum.getText());
-                
+ 
+        Double dUnits=0.0;
+       
+        try {
+            dUnits = (Double) DOUBLE.parseValue(m_junits.getText());
+        } catch (BasicException ex) {
+            throw new BasicException( AppLocal.getIntString("message.valuetoolarge") );
+        }
+        
+        if( dUnits > 10000 ) { // Sanity check in case barcode scanned in this field
+            throw new BasicException( AppLocal.getIntString("message.valuetoolarge") );
+        }
+        
         return new Object[] {
             m_sID,
             Formats.TIMESTAMP.parseValue(m_jdate.getText()),
