@@ -143,43 +143,46 @@ public class JParamsProperties extends javax.swing.JPanel implements ReportEdito
     
     private String getSearchString() {
         String sValue = "";
-        String sel = (String) jComboProperties.getSelectedItem();
-        String type = m_PropertyOptions.getProperty( sel, "" );
         String sReturn = "";
-        
-        int nComma = type.indexOf( ',' );
-        if( nComma >0 ) {
-            type = type.substring( 0, nComma ).trim();
-        }
-            
-        switch( type ) {
-            case "boolean" :
-                String sYes = (String) jPropertyValueCombo.getSelectedItem();
-                sValue = sYes.compareTo( "Yes" ) == 0 ? "1" : "0";
-                break;
-            case "number" :
-                Double dValue;
-                try {
-                    dValue = (Double) Formats.DOUBLE.parseValue(jPropertyValueText.getText());
-                } catch (BasicException ex) {
-                    dValue = 0.0;
-                }
-                sValue = dValue.toString();
-                break;
-            case "option" :
-                sValue = (String) jPropertyValueCombo.getSelectedItem();
-                break;
-            case "text" :
-                sValue = (String) jPropertyValueText.getText();
-                break;
-            default:
-                break;
-        }           
-        
-        if( !sValue.isEmpty() ) {
-            sReturn = "<entry key=\"" + sel + "\">" + sValue + "</entry>";
-        }
+        String sel = (String) jComboProperties.getSelectedItem();
 
+        if( sel != null ) {
+            String type = m_PropertyOptions.getProperty( sel, "" );
+
+            int nComma = type.indexOf( ',' );
+            if( nComma >0 ) {
+                type = type.substring( 0, nComma ).trim();
+            }
+
+            switch( type ) {
+                case "boolean" :
+                    String sYes = (String) jPropertyValueCombo.getSelectedItem();
+                    sValue = sYes.compareTo( "Yes" ) == 0 ? "1" : "0";
+                    break;
+                case "number" :
+                    Double dValue;
+                    try {
+                        dValue = (Double) Formats.DOUBLE.parseValue(jPropertyValueText.getText());
+                    } catch (BasicException ex) {
+                        dValue = 0.0;
+                    }
+                    sValue = dValue.toString();
+                    break;
+                case "option" :
+                    sValue = (String) jPropertyValueCombo.getSelectedItem();
+                    break;
+                case "text" :
+                    sValue = (String) jPropertyValueText.getText();
+                    break;
+                default:
+                    break;
+            }           
+
+            if( !sValue.isEmpty() ) {
+                sReturn = "<entry key=\"" + sel + "\">" + sValue + "</entry>";
+            }
+        }
+        
         return sReturn;
     }
     
