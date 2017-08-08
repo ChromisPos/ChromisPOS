@@ -48,6 +48,9 @@ paramdates.setEndDate(uk.chromis.beans.DateUtils.getTodayMinutes());
 
 report.addQBFFilter(paramdates);
 
+report.addParameter("PRODUCTS.ATTRIBUTES");
+report.addQBFFilter(new uk.chromis.pos.reports.JParamsProperties());
+
 report.addParameter("LOCATIONS.ID");
 report.addQBFFilter(new uk.chromis.pos.reports.JParamsLocationWithFirst());
 
