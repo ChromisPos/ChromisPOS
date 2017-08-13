@@ -1259,7 +1259,20 @@
         </insert>  
 
     </changeSet> 
-    
+
+    <changeSet author="Chromis POS" id="Add Printer.Payment script to resources">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM RESOURCES WHERE NAME = 'Printer.Payment'</sqlCheck>
+        </preConditions> 
+        
+        <insert tableName="RESOURCES">
+            <column name="ID" value="64"/>
+            <column name="NAME" value="Printer.Payment"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/Printer.Payment.txt"/>
+        </insert>
+    </changeSet> 
+        
     <!-- Retired product support - This is as close as we can get to deleting a product   -->
     <!-- ***************************************************************************************** -->
     <changeSet author="Chromis POS" id="Add retired product support" >    

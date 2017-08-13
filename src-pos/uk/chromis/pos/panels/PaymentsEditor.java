@@ -20,15 +20,35 @@
 package uk.chromis.pos.panels;
 
 import java.awt.Component;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.IKeyed;
 import uk.chromis.data.user.DirtyManager;
 import uk.chromis.data.user.EditorRecord;
+import uk.chromis.pos.customers.DataLogicCustomers;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.printer.TicketParser;
+import uk.chromis.pos.printer.TicketPrinterException;
+import uk.chromis.pos.sales.JPanelTicket;
+import uk.chromis.pos.scripting.ScriptEngine;
+import uk.chromis.pos.scripting.ScriptException;
+import uk.chromis.pos.scripting.ScriptFactory;
+import uk.chromis.pos.ticket.TicketInfo;
 
 
 /**
@@ -37,6 +57,9 @@ import uk.chromis.pos.forms.AppView;
  */
 public final class PaymentsEditor extends javax.swing.JPanel implements EditorRecord {
     
+    DataLogicSystem m_dlSystem;
+    private TicketParser m_TTP;
+    private static SAXParser m_sp = null;
     private ComboBoxValModel m_ReasonModel;
     
     private String m_sId;
@@ -66,6 +89,8 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         jTotal.addPropertyChangeListener("Text", dirty);
         m_jNotes.addPropertyChangeListener("Text", dirty);
         m_jNotes.addEditorKeys(m_jKeys);        
+        m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
+        m_TTP = new TicketParser(m_App.getDeviceTicket(), m_dlSystem);
         
         writeValueEOF();
     }
@@ -95,7 +120,7 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         m_sId = null;
         m_sPaymentId = null;
         datenew = null;
-        setReasonTotal("cashin", null);
+        setReasonTotal("cashout", null);
         m_jreason.setEnabled(true);
         jTotal.setEnabled(true);   
         jTotal.activate();
@@ -138,7 +163,27 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         m_sNotes = (String) payment[6];
         m_jNotes.setEnabled(false);
     }
-    
+
+    private void executeEvent( String eventkey, Object [] payment ) {
+        try {
+            String sresource = m_dlSystem.getResourceAsXML(eventkey);
+            if( sresource != null && !sresource.isEmpty() ) {
+                ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
+                script.put("paymentdate", payment[2] );
+                script.put("paymentid", payment[3] );
+                script.put("paymentreason", payment[4] );
+                script.put("paymenttotal", payment[5] );
+                script.put("paymentnotes", payment[6] );
+
+                m_TTP.printTicket(script.eval(sresource).toString() );
+            }            
+        } catch (ScriptException ex) {
+            Logger.getLogger(PaymentsEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TicketPrinterException ex) {
+            Logger.getLogger(PaymentsEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+        
     /**
      *
      * @return
@@ -147,6 +192,7 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
     @Override
     public Object createValue() throws BasicException {
         Object[] payment = new Object[7];
+        
         payment[0] = m_sId == null ? UUID.randomUUID().toString() : m_sId;
         payment[1] = m_App.getActiveCashIndex();
         payment[2] = datenew == null ? new Date() : datenew;
@@ -158,6 +204,9 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         String snotes = "";
         m_sNotes = m_jNotes.getText();
         payment[6] = m_sNotes == null ? snotes : m_sNotes;
+        
+        executeEvent( "Printer.Payment", payment );
+
         return payment;
     }
     

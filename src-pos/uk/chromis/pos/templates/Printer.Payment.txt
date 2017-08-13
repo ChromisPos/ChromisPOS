@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<output>
+
+<ticket>
+   <image>Printer.Ticket.Logo</image>
+        <line></line>
+        <line></line>
+        <line size="1">
+            <text align ="center" length="32">Till Payment</text>
+        </line>
+        <line></line>
+        <line><text>--------------------------------</text></line>
+
+        <line><text align="left" length="12">Cash Payment:</text></line>	
+        <line><text align="left" length="12">Date:</text><text>${paymentdate}</text></line>
+        <line><text align="left" length="12">Type: </text><text>${paymentreason}</text></line>     
+      <line><text align="left" length="12">Total:</text><text>${paymenttotal}</text></line>
+      <line><text align="left" length="12">Notes:</text></line>	
+      <line><text align="left">${paymentnotes}</text></line>
+      <line><text>--------------------------------</text></line>
+
+        <line></line>
+        <line></line>
+        <line>
+           <text align ="left" length="32">__________________________</text>
+        </line>
+        <line>
+        <text align ="left" length="32">Received by</text>
+        </line>
+
+        <line></line>
+        <line></line>
+        <line>
+           <text align ="left" length="32">__________________________</text>
+        </line>
+        <line>
+        <text align ="left" length="32">Authorised by</text>
+        </line>
+
+        <line></line>
+      <line><text>--------------------------------</text></line>
+	
+</ticket>
+
+    <opendrawer/>
+   
+</output>
+
