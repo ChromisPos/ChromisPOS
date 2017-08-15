@@ -1051,7 +1051,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
                     JOptionPane.showMessageDialog(null,
                         AppLocal.getIntString("message.customerdiscountapplied"),
-                        AppLocal.getIntString("Menu.Customers"),
+                        sCode + ": " + newcustomer.getName(),
                         JOptionPane.WARNING_MESSAGE);
                 }
 
@@ -1068,7 +1068,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
                     if (JOptionPane.showOptionDialog(this,
                         AppLocal.getIntString("message.customerdiscount") ,
-                        AppLocal.getIntString("Menu.Customers"),
+                        sCode + ": " + newcustomer.getName(),
                         JOptionPane.YES_NO_OPTION, 
                         JOptionPane.INFORMATION_MESSAGE, null,
                         options, options[1]) == 0) {
