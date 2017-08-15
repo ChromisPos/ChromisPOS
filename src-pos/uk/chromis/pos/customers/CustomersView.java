@@ -85,6 +85,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
             txtMaxdebt.getDocument().addDocumentListener(dirty);
             txtDiscount.getDocument().addDocumentListener(dirty);
             m_jVisible.addActionListener(dirty);
+            jcard.addActionListener(dirty);
 
             txtFirstName.getDocument().addDocumentListener(dirty);
             txtLastName.getDocument().addDocumentListener(dirty);
@@ -659,7 +660,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         jLabel5.setMinimumSize(new java.awt.Dimension(140, 25));
         jLabel5.setPreferredSize(new java.awt.Dimension(140, 25));
 
-        jcard.setEditable(false);
         jcard.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/encrypted.png"))); // NOI18N
@@ -1060,15 +1060,6 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         jLabel12.setMaximumSize(new java.awt.Dimension(140, 25));
         jLabel12.setMinimumSize(new java.awt.Dimension(140, 25));
         jLabel12.setPreferredSize(new java.awt.Dimension(140, 25));
-
-        txtDiscount.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDiscount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-
-        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel11.setText(AppLocal.getIntString("label.discount")); // NOI18N
-        jLabel11.setMaximumSize(new java.awt.Dimension(140, 25));
-        jLabel11.setMinimumSize(new java.awt.Dimension(140, 25));
-        jLabel11.setPreferredSize(new java.awt.Dimension(140, 25));
 
         txtDiscount.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtDiscount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);

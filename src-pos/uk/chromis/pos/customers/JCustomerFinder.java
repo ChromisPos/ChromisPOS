@@ -92,11 +92,11 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
         initComponents();
 
         try {
-            simpleVersion = (dlCustomers.getCustomerCount() > 50) ? false : true;
+            simpleVersion = (dlCustomers.getCustomerCount() > 30) ? false : true;
         } catch (BasicException ex) {
             simpleVersion = true;
         }       
-
+ 
         jPanel2.setVisible(!simpleVersion);
         jPanel5.setVisible(!simpleVersion);
 

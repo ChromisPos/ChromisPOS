@@ -1042,6 +1042,69 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
+    private boolean checkCustomerCode( String sCode ) {
+        boolean customerCode = false;
+        
+        try {
+            CustomerInfoExt newcustomer = dlSales.findCustomerExt(sCode);
+            if (newcustomer != null) {
+                if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
+                    JOptionPane.showMessageDialog(null,
+                        AppLocal.getIntString("message.customerdiscountapplied"),
+                        AppLocal.getIntString("Menu.Customers"),
+                        JOptionPane.WARNING_MESSAGE);
+                }
+
+                m_oTicket.setCustomer(newcustomer);
+                jButtonCustomerPay.setEnabled(newcustomer.getCurdebt() > 0 ? true: false);
+
+                m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
+                customerCode = true;
+
+                if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
+
+                    Object[] options = {AppLocal.getIntString("Button.Yes"),
+                        AppLocal.getIntString("Button.No") };
+
+                    if (JOptionPane.showOptionDialog(this,
+                        AppLocal.getIntString("message.customerdiscount") ,
+                        AppLocal.getIntString("Menu.Customers"),
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.INFORMATION_MESSAGE, null,
+                        options, options[1]) == 0) {
+                        
+                        // Apply this discount to all ticket lines
+                        for (TicketLineInfo line : m_oTicket.getLines()) {
+                            if( line.canDiscount() ) {
+                                line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
+                                line.setDiscounted( "yes" );
+                            }
+                        }
+                        refreshTicket();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                        AppLocal.getIntString("message.customerselected") + newcustomer.getName(),
+                        sCode, JOptionPane.INFORMATION_MESSAGE);               
+                }
+            }
+        } catch (BasicException e) {
+            if (sCode.startsWith("c")) {
+                // Starting with 'c' should exist as a customer code
+                if (AppConfig.getInstance().getBoolean("till.customsounds")) {
+                    new PlayWave("error.wav").start(); // playing WAVE file 
+                } else {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+                JOptionPane.showMessageDialog(null,
+                        sCode + " - " + AppLocal.getIntString("message.nocustomer"),
+                        "Customer Not Found", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+        return customerCode;
+    }
+    
     private void stateTransition(char cTrans) {
         // if the user has pressed 'enter' or '?' read the number enter and check in barcodes
         if ((cTrans == '\n') || (cTrans == '?')) {
@@ -1162,66 +1225,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                      * End Kidsgrove Tropicals voucher codes
                      * ******************************************************************************
                      */
-// Are we passing a customer card these cards start with 'c'                
-                } else if (sCode.startsWith("c")) {
-                    try {
-                        CustomerInfoExt newcustomer = dlSales.findCustomerExt(sCode);
-                        if (newcustomer == null) {
-                            if (AppConfig.getInstance().getBoolean("till.customsounds")) {
-                                new PlayWave("error.wav").start(); // playing WAVE file 
-                            } else {
-                                Toolkit.getDefaultToolkit().beep();
-                            }
-                            JOptionPane.showMessageDialog(null,
-                                    sCode + " - " + AppLocal.getIntString("message.nocustomer"),
-                                    "Customer Not Found", JOptionPane.WARNING_MESSAGE);
-
-                            jButtonCustomerPay.setEnabled( false );
-                        } else {
-                            if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
-                                JOptionPane.showMessageDialog(null,
-                                    AppLocal.getIntString("message.customerdiscountapplied"),
-                                    AppLocal.getIntString("Menu.Customers"),
-                                    JOptionPane.WARNING_MESSAGE);
-                            }
-                            
-                            m_oTicket.setCustomer(newcustomer);
-                            jButtonCustomerPay.setEnabled(newcustomer.getCurdebt() > 0 ? true: false);
-
-                            m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
-
-                            if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
-                                
-                                Object[] options = {AppLocal.getIntString("Button.Yes"),
-                                    AppLocal.getIntString("Button.No") };
-                                
-                                if (JOptionPane.showOptionDialog(this,
-                                    AppLocal.getIntString("message.customerdiscount") ,
-                                    AppLocal.getIntString("Menu.Customers"),
-                                    JOptionPane.YES_NO_OPTION, 
-                                    JOptionPane.INFORMATION_MESSAGE, null,
-                                    options, options[1]) == 0) {
-                                        // Apply this discount to all ticket lines
-                                        for (TicketLineInfo line : m_oTicket.getLines()) {
-                                            if( line.canDiscount() ) {
-                                                line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
-                                                line.setDiscounted( "yes" );
-                                            }
-                                        }
-                                        refreshTicket();
-                                }
-                            }
-                        }
-                    } catch (BasicException e) {
-                        if (AppConfig.getInstance().getBoolean("till.customsounds")) {
-                            new PlayWave("error.wav").start(); // playing WAVE file 
-                        } else {
-                            Toolkit.getDefaultToolkit().beep();
-                        }
-                        JOptionPane.showMessageDialog(null,
-                                sCode + " - " + AppLocal.getIntString("message.nocustomer"),
-                                "Customer Not Found", JOptionPane.WARNING_MESSAGE);
-                    }
+                // Are we passing a customer card                 
+                } else if( checkCustomerCode( sCode ) ) {
+                    // All the hard work is done while checking the customer card
                     stateToZero();
 // lets look at variable price barcodes thhat conform to GS1 standard
 // For more details see Chromis docs

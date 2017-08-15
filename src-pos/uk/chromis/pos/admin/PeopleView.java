@@ -71,7 +71,8 @@ public class PeopleView extends JPanel implements EditorRecord {
         m_jRole.addActionListener(dirty);
         m_jVisible.addActionListener(dirty);
         m_jImage.addPropertyChangeListener("image", dirty);
-
+        jcard.addActionListener(dirty);
+        
         writeValueEOF();
     }
 
@@ -291,7 +292,6 @@ public class PeopleView extends JPanel implements EditorRecord {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(AppLocal.getIntString("label.role")); // NOI18N
 
-        jcard.setEditable(false);
         jcard.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/encrypted.png"))); // NOI18N
