@@ -50,6 +50,9 @@ report.addParameter("PRODUCTS.CODE");
 report.addParameter("PRODUCTS.ID");
 report.addQBFFilter(new uk.chromis.pos.ticket.ProductFilter());
 
+report.addParameter("PRODUCTS.ATTRIBUTES");
+report.addQBFFilter(new uk.chromis.pos.reports.JParamsProperties());
+
 report.addParameter("PRODUCTS.ISCATALOG");
 report.addQBFFilter(new uk.chromis.pos.reports.JParamsCatalog());
 
