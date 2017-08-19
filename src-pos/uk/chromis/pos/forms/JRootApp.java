@@ -90,6 +90,7 @@ import uk.chromis.pos.printer.TicketPrinterException;
 import uk.chromis.pos.scale.DeviceScale;
 import uk.chromis.pos.scanpal2.DeviceScanner;
 import uk.chromis.pos.scanpal2.DeviceScannerFactory;
+import uk.chromis.pos.ticket.PlayWave;
 import uk.chromis.pos.util.AltEncrypter;
 import uk.chromis.pos.util.OSValidator;
 
@@ -789,6 +790,13 @@ public class JRootApp extends JPanel implements AppView {
                     if (m_actionuser.authenticate(sPassword)) {
                         openAppView(m_actionuser);
                     } else {
+                        
+                        if (AppConfig.getInstance().getBoolean("till.customsounds")) {
+                            new PlayWave("error.wav").start(); // playing WAVE file 
+                        } else {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+
                         JOptionPane.showMessageDialog(null,
                                 AppLocal.getIntString("message.BadPassword"),
                                 "Password Error", JOptionPane.WARNING_MESSAGE);
@@ -882,6 +890,11 @@ public class JRootApp extends JPanel implements AppView {
 
             if (user == null) {
                 // user not found
+                if (AppConfig.getInstance().getBoolean("till.customsounds")) {
+                    new PlayWave("error.wav").start(); // playing WAVE file 
+                } else {
+                    Toolkit.getDefaultToolkit().beep();
+                }
                 JOptionPane.showMessageDialog(null,
                         AppLocal.getIntString("message.nocard"),
                         "User Card", JOptionPane.WARNING_MESSAGE);
