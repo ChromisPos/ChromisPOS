@@ -545,10 +545,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new PreparedSentence(s, "SELECT "
                 + getSelectFieldList()
                 + "FROM STOCKCURRENT C LEFT JOIN PRODUCTS P ON (C.PRODUCT = P.ID) "
-                + ", PRODUCTS_COM M "
                 + "LEFT JOIN TAXES T ON P.TAXCAT = T.CATEGORY "
+                + "LEFT JOIN PRODUCTS_COM M ON P.ID = M.PRODUCT2 "
                 + "WHERE P.RETIRED = " + s.DB.FALSE() + " AND P.ISCATALOG = " + s.DB.TRUE()
-                + " AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
+                + " AND M.PRODUCT = ? "
                 + "AND P.ISCOM = " + s.DB.TRUE() + " "
                 + "ORDER BY P.CATORDER, P.NAME", SerializerWriteString.INSTANCE, ProductInfoExt.getSerializerRead()).list(id);
     }
