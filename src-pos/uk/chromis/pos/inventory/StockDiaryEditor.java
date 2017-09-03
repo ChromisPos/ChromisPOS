@@ -503,7 +503,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                     m_jmaximum.setText(null);
                     assignedProduct = null;
                 } else {
-                    assignedProduct = prod;
                     productid = prod.getID();
                     productref = prod.getReference();
                     productcode = prod.getCode();
@@ -557,6 +556,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                     Double dPrice = reason.getPrice(prod.getPriceBuy(), prod.getPriceSell());
                     m_jprice.setText(Formats.CURRENCY.formatValue(dPrice));
 
+                    assignedProduct = prod;
+                    m_cat.showCatalogPanel( assignedProduct.getCategoryID() );
                 }
                 
                 // Not dirty from user changes
@@ -669,7 +670,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
             m_Dirty.setDirty(false);
         
             assignProductByReference();
-            
+
         }
     }
 

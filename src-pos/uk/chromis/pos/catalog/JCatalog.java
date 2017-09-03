@@ -139,7 +139,13 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     @Override
     public void refreshCatalogue( String id ) {
         m_categoriesset.remove(id);
-        selectCategoryPanel(id);
+        
+        if (showingcategory != null) {
+            if( id.contentEquals(showingcategory.getID() ) ) {
+                // currently displayed so redraw it
+                selectCategoryPanel(id);
+            }
+        }
     }
     
     /**
@@ -256,59 +262,55 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         }
     }
 
-    private void selectCategoryPanel(String catid) {
+    private void loadCategoryPanel( String catid ) {
+
         try {
-            // Load categories panel if not exists
-            if (!m_categoriesset.contains(catid)) {
+            JCatalogTab jcurrTab = new JCatalogTab();
+            jcurrTab.applyComponentOrientation(getComponentOrientation());
+            m_jProducts.add(jcurrTab, catid);
+            m_categoriesset.add(catid);
 
-                JCatalogTab jcurrTab = new JCatalogTab();
-                jcurrTab.applyComponentOrientation(getComponentOrientation());
-                m_jProducts.add(jcurrTab, catid);
-                m_categoriesset.add(catid);
+            // Add subcategories
+            if (AppConfig.getInstance().getBoolean("till.categoriesbynumberorder")) {
+                categories = m_dlSales.getSubcategoriesByCatOrder(catid);
+                categories.addAll(m_dlSales.getSubcategoriesByName(catid));
+            } else {
+                categories = m_dlSales.getSubcategories(catid);
+            }
 
-// Add subcategories
-                if (AppConfig.getInstance().getBoolean("till.categoriesbynumberorder")) {
-                    categories = m_dlSales.getSubcategoriesByCatOrder(catid);
-                    categories.addAll(m_dlSales.getSubcategoriesByName(catid));
+            //            startTime = System.nanoTime();
+            for (CategoryInfo cat : categories) {
+                // these the sub categories displayed in the main products Panel    
+
+                if (cat.getCatShowName()) {
+                    jcurrTab.addButton(new ImageIcon(tnbsubcat.getThumbNailText(cat.getImage(), cat.getName())), new SelectedCategory(cat), cat.getTextTip(), "");
                 } else {
-                    categories = m_dlSales.getSubcategories(catid);
-                }
-
-                //            startTime = System.nanoTime();
-                for (CategoryInfo cat : categories) {
-// these the sub categories displayed in the main products Panel    
-
-                    if (cat.getCatShowName()) {
-                        jcurrTab.addButton(new ImageIcon(tnbsubcat.getThumbNailText(cat.getImage(), cat.getName())), new SelectedCategory(cat), cat.getTextTip(), "");
-                    } else {
-                        jcurrTab.addButton(new ImageIcon(tnbsubcat.getThumbNailText(cat.getImage(), "")), new SelectedCategory(cat), cat.getTextTip(), "");
-                    }
-                }
-
-                /*
-                java.util.List<ProductInfoExt> prods = m_dlSales.getProductCatalogAlways();
-                for (ProductInfoExt prod : prods) {
-                    jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
-                }
-                 */
-// Add products
-                java.util.List<ProductInfoExt> products = m_dlSales.getProductCatalog(catid);
-                for (ProductInfoExt prod : products) {
-// These are the products selection panel                   
-                    jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
+                    jcurrTab.addButton(new ImageIcon(tnbsubcat.getThumbNailText(cat.getImage(), "")), new SelectedCategory(cat), cat.getTextTip(), "");
                 }
             }
 
-            // Show categories panel
-            CardLayout cl = (CardLayout) (m_jProducts.getLayout());
-            cl.show(m_jProducts, catid);
+            // Add products
+            java.util.List<ProductInfoExt> products = m_dlSales.getProductCatalog(catid);
+            for (ProductInfoExt prod : products) {
+                // These are the products selection panel                   
+                jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(prod.getImage(), getProductLabel(prod))), new SelectedAction(prod), prod.getTextTip(), "");
+            }
         } catch (BasicException e) {
             JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.notactive"), e));
         }
 
-        //       Long elapsedTime = System.nanoTime() - startTime;
-        //       double seconds = (double)elapsedTime / 1000000000.0;
-        //       System.out.println("Time take = " + seconds);
+    }
+    
+    public void selectCategoryPanel(String catid) {
+        // Load categories panel if not exists
+        if (!m_categoriesset.contains(catid)) {
+            loadCategoryPanel( catid );
+        }
+
+        // Show categories panel
+        CardLayout cl = (CardLayout) (m_jProducts.getLayout());
+        cl.show(m_jProducts, catid);
+
     }
 
     private String getProductLabel(ProductInfoExt product) {
