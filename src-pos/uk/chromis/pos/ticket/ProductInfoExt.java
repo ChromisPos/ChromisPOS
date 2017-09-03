@@ -272,6 +272,10 @@ public class ProductInfoExt {
         m_dStockUnits = dStockUnits;
     }
 
+    public String printStockUnits() {
+        return Formats.INT.formatValue(new Double(getStockUnits()));
+    }
+
     public final Double getStockVolume() {
         return m_stockVolume;
     }

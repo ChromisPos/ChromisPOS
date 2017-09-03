@@ -118,7 +118,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_jreason.setModel(m_ReasonModel);
 
-        m_cat = new JCatalog(m_dlSales);
+        m_cat = new JCatalog(m_dlSales, true, true, 90, 60);      
         m_cat.addActionListener(new CatalogListener());
 
         catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);
