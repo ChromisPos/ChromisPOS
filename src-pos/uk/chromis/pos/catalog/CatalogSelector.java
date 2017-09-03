@@ -39,6 +39,12 @@ public interface CatalogSelector {
      *
      * @param id
      */
+    public void refreshCatalogue( String id );
+    
+    /**
+     *
+     * @param id
+     */
     public void showCatalogPanel(String id);
 
     /**

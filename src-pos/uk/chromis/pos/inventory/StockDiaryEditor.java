@@ -73,7 +73,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel
     private String attsetinstid;
     private String attsetinstdesc;
     private String sAppUser;
-
+    private ProductInfoExt assignedProduct;
+        
     private final ComboBoxValModel m_ReasonModel;
 
     private final SentenceList m_sentlocations;
@@ -96,6 +97,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
 
         m_Dirty = dirty;
+        assignedProduct = null;
         
         initComponents();      
 
@@ -205,6 +207,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_cat.setComponentEnabled(false);
         m_EditProduct.setEnabled(false);
         
+        if( assignedProduct != null ) {
+            m_cat.refreshCatalogue( assignedProduct.getCategoryID() );
+        }
+        assignedProduct = null;
+        
         m_jcodebar.requestFocusInWindow();
     }
 
@@ -259,6 +266,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_jprice.setEnabled(true);
         m_cat.setComponentEnabled(true);
         m_jcodebar.requestFocusInWindow();
+        if( assignedProduct != null ) {
+            m_cat.refreshCatalogue( assignedProduct.getCategoryID() );
+        }
+
+        assignedProduct = null;
     }
 
     /**
@@ -314,6 +326,11 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         m_junits.setEnabled(false);
         m_jprice.setEnabled(false);
         m_cat.setComponentEnabled(false);
+        
+        if( assignedProduct != null ) {
+            m_cat.refreshCatalogue( assignedProduct.getCategoryID() );
+        }
+        assignedProduct = null;
     }
 
     /**
@@ -457,6 +474,10 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         if (jproduct.isEnabled()) {
             if( warnChangesLost() ) {
             
+                if( assignedProduct != null ) {
+                    m_cat.refreshCatalogue( assignedProduct.getCategoryID() );
+                }
+                
                 if (prod == null) {
                     productid = null;
                     productref = null;
@@ -479,8 +500,10 @@ public final class StockDiaryEditor extends javax.swing.JPanel
                     m_jbuyprice.setText(null);
                     m_jsellprice.setText(null);                
                     m_jminimum.setText(null);
-                    m_jmaximum.setText(null);        
+                    m_jmaximum.setText(null);
+                    assignedProduct = null;
                 } else {
+                    assignedProduct = prod;
                     productid = prod.getID();
                     productref = prod.getReference();
                     productcode = prod.getCode();
@@ -646,6 +669,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
             m_Dirty.setDirty(false);
         
             assignProductByReference();
+            
         }
     }
 

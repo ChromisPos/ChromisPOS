@@ -135,7 +135,13 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
             showProductPanel(id);
         }
     }
-
+    
+    @Override
+    public void refreshCatalogue( String id ) {
+        m_categoriesset.remove(id);
+        selectCategoryPanel(id);
+    }
+    
     /**
      *
      * @throws BasicException
