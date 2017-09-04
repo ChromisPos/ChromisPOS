@@ -31,6 +31,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 /**
  *
@@ -107,21 +111,33 @@ public class ThumbNailBuilder {
      * @return
      */
     public Image getThumbNailText(Image img, String text) {
-                
+
+        if( text.matches("(?i:.*<html>.*)") == false ) {
+            text = "<html><center>" + text + "</html>";
+        }
+        
         img = getThumbNail(img);
         
         BufferedImage imgtext = new BufferedImage(img.getWidth(null), img.getHeight(null),  BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = imgtext.createGraphics();
-                
+        
         // The text        
-        JLabel label = new JLabel();
-        label.setOpaque(false);
-        label.setText(text);
-        //label.setText("<html><center>Line1<br>Line2");
-        label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        label.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);            
-        Dimension d = label.getPreferredSize();
-        label.setBounds(0, 0, imgtext.getWidth(), d.height);
+        JTextPane textPane = new JTextPane();
+        textPane.setContentType("text/html");
+
+        StyledDocument doc = textPane.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        StyleConstants.setFontSize(center, 8 );
+        StyleConstants.setBold(center, true);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+        textPane.setOpaque(false);
+        textPane.setSize( new Dimension( m_width, m_height) );
+        textPane.setText(text);
+
+        Dimension d = textPane.getPreferredSize();
+        textPane.setBounds(0, 0, imgtext.getWidth(), d.height);
         
         // The background
         Color c1 = new Color(0xff, 0xff, 0xff, 0x40);
@@ -132,13 +148,13 @@ public class ThumbNailBuilder {
 //        float[] dist = {0.1f, 1.0f};
 //        Color[] colors = {c2, c1};        
 //        Paint gpaint = new RadialGradientPaint(center, radius, dist, colors);
-        Paint gpaint = new GradientPaint(new Point(0,0), c1, new Point(label.getWidth() / 2, 0), c2, true);
+        Paint gpaint = new GradientPaint(new Point(0,0), c1, new Point(textPane.getWidth() / 2, 0), c2, true);
         
         g2d.drawImage(img, 0, 0, null);
-        g2d.translate(0, imgtext.getHeight() - label.getHeight());
+        g2d.translate(0, imgtext.getHeight() - textPane.getHeight());
         g2d.setPaint(gpaint);            
-        g2d.fillRect(0 , 0, imgtext.getWidth(), label.getHeight());    
-        label.paint(g2d);
+        g2d.fillRect(0 , 0, imgtext.getWidth(), textPane.getHeight());    
+        textPane.paint(g2d);
             
         g2d.dispose();
         

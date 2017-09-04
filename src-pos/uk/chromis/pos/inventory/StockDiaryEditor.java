@@ -120,7 +120,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel
 
         m_jreason.setModel(m_ReasonModel);
 
-        m_cat = new JCatalog(m_dlSales, true, true, 90, 60);      
+        m_cat = new JCatalog(m_dlSales, true, true, 110, 70);      
         m_cat.addActionListener(new CatalogListener());
 
         catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);
@@ -404,15 +404,23 @@ public final class StockDiaryEditor extends javax.swing.JPanel
         stocksecurity = (Double) Formats.DOUBLE.parseValue(m_jminimum.getText());
         stockmaximum = (Double) Formats.DOUBLE.parseValue(m_jmaximum.getText());
  
-        Double dUnits=0.0;
+        Double dValue=0.0;
        
         try {
-            dUnits = (Double) DOUBLE.parseValue(m_junits.getText());
+            dValue = (Double) DOUBLE.parseValue(m_junits.getText());
         } catch (BasicException ex) {
             throw new BasicException( AppLocal.getIntString("message.valuetoolarge") );
         }
         
-        if( dUnits > 10000 ) { // Sanity check in case barcode scanned in this field
+        if( dValue > 10000 ) { // Sanity check in case barcode scanned in this field
+            throw new BasicException( AppLocal.getIntString("message.valuetoolarge") );
+        }
+        
+        if( stocksecurity > 10000 ) { // Sanity check in case barcode scanned in this field
+            throw new BasicException( AppLocal.getIntString("message.valuetoolarge") );
+        }
+
+        if( stockmaximum > 10000 ) { // Sanity check in case barcode scanned in this field
             throw new BasicException( AppLocal.getIntString("message.valuetoolarge") );
         }
         

@@ -318,7 +318,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         if (pricevisible) {
             return "<html><center>" + product.printStockUnits() + 
                     "@" + (taxesincluded?product.printPriceSellTax():product.printPriceSell()) +
-                    "<br>" + product.getDisplay();
+                    "<br>" + product.getDisplay() + "</html>";
         } else {
             return product.getDisplay();
         }
