@@ -112,10 +112,6 @@ public class ThumbNailBuilder {
      */
     public Image getThumbNailText(Image img, String text) {
 
-        if( text.matches("(?i:.*<html>.*)") == false ) {
-            text = "<html><center>" + text + "</html>";
-        }
-        
         img = getThumbNail(img);
         
         BufferedImage imgtext = new BufferedImage(img.getWidth(null), img.getHeight(null),  BufferedImage.TYPE_INT_ARGB);
@@ -124,7 +120,14 @@ public class ThumbNailBuilder {
         // The text        
         JTextPane textPane = new JTextPane();
         textPane.setContentType("text/html");
-
+        
+        if( text.matches("(?i:.*<html>.*)") == false ) {
+            text = "<html><center>" + text + "</html>";
+        }
+        
+        // We want the label to be bold font
+        text = text.replaceFirst( "<html>","<html><b>" );
+        
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -143,11 +146,6 @@ public class ThumbNailBuilder {
         Color c1 = new Color(0xff, 0xff, 0xff, 0x40);
         Color c2 = new Color(0xff, 0xff, 0xff, 0xd0);
 
-//        Point2D center = new Point2D.Float(imgtext.getWidth() / 2, label.getHeight());
-//        float radius = imgtext.getWidth() / 3;
-//        float[] dist = {0.1f, 1.0f};
-//        Color[] colors = {c2, c1};        
-//        Paint gpaint = new RadialGradientPaint(center, radius, dist, colors);
         Paint gpaint = new GradientPaint(new Point(0,0), c1, new Point(textPane.getWidth() / 2, 0), c2, true);
         
         g2d.drawImage(img, 0, 0, null);
