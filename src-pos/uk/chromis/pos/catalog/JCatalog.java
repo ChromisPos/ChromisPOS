@@ -316,9 +316,10 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private String getProductLabel(ProductInfoExt product) {
 
         if (pricevisible) {
-            return "<html><center>" + product.printStockUnits() + 
+            return "<html><center>" + product.getDisplay() +
+                    "<br>" + product.printStockUnits() + 
                     "@" + (taxesincluded?product.printPriceSellTax():product.printPriceSell()) +
-                    "<br>" + product.getDisplay() + "</html>";
+                    "</html>";
         } else {
             return product.getDisplay();
         }
