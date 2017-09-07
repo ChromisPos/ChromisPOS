@@ -122,7 +122,7 @@ public class ThumbNailBuilder {
         textPane.setContentType("text/html");
         
         if( text.matches("(?i:.*<html>.*)") == false ) {
-            text = "<html><center>" + text + "</html>";
+            text = "<html><center><b>" + text + "</</html>";
         }
         
         // We want the label to be bold font
@@ -143,8 +143,8 @@ public class ThumbNailBuilder {
         textPane.setBounds(0, 0, imgtext.getWidth(), d.height);
         
         // The background
-        Color c1 = new Color(0xff, 0xff, 0xff, 0x40);
-        Color c2 = new Color(0xff, 0xff, 0xff, 0xd0);
+        Color c1 = new Color(0xff, 0xff, 0xff, 0x30);
+        Color c2 = new Color(0xff, 0xff, 0xff, 0xb0);
 
         Paint gpaint = new GradientPaint(new Point(0,0), c1, new Point(textPane.getWidth() / 2, 0), c2, true);
         
