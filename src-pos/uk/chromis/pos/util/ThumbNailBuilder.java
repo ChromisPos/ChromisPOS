@@ -122,22 +122,19 @@ public class ThumbNailBuilder {
         textPane.setContentType("text/html");
         
         if( text.matches("(?i:.*<html>.*)") == false ) {
-            text = "<html><center><b>" + text + "</</html>";
+            text = "<html>" + text + "</html>";
         }
         
-        // We want the label to be bold font
-        text = text.replaceFirst( "<html>","<html><b>" );
-        
-        StyledDocument doc = textPane.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        StyleConstants.setFontSize(center, 8 );
-        StyleConstants.setBold(center, true);
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
-
         textPane.setOpaque(false);
         textPane.setSize( new Dimension( m_width, m_height) );
         textPane.setText(text);
+
+        StyledDocument doc = textPane.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        StyleConstants.setFontSize(center, 12 );
+        StyleConstants.setBold(center, true);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
 
         Dimension d = textPane.getPreferredSize();
         textPane.setBounds(0, 0, imgtext.getWidth(), d.height);
