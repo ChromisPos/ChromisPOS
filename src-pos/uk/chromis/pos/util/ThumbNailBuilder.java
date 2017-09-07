@@ -132,7 +132,7 @@ public class ThumbNailBuilder {
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        StyleConstants.setFontSize(center, 12 );
+        StyleConstants.setFontSize(center, 13 );
         StyleConstants.setBold(center, true);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
 
