@@ -789,7 +789,31 @@
             <column name="LISTNAME" type="varchar(255)"/>
         </createIndex>                                               
     </changeSet>   
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+    <changeSet author="Chromis POS" id="Create SCHEDULEDTASKS Table">       
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SCHEDULEDTASKS"/>
+            </not>
+        </preConditions> 
+        
+        <createTable tableName="SCHEDULEDTASKS">
+            <column name="ID" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(255)" >
+                <constraints nullable="false" />                
+            </column>
+            <column name="STARTDATE" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="TIMEINTERVAL" type="int"/>
+            <column name="SCRIPT"  type="${blob.type}" >
+                <constraints nullable="false" />
+            </column>
+            <column name="ISENABLED" type="${boolean.type}" 
+                    defaultValueBoolean="true"/>
+        </createTable>      
+    </changeSet>   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
     <!-- End of new tables sections -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1435,6 +1459,15 @@
         <sql> DELETE FROM DBPERMISSIONS WHERE DISPLAYNAME ='##label.displayname86'</sql>           
     </changeSet> 
     
+    <changeSet author="Chromis POS" id="Add Scheduler Permissions">    
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.scheduler.SchedulerPanel"/>
+            <column name="SECTION" value="##label.sectiontools"/>
+            <column name="DISPLAYNAME" value="##label.displayname131"/>
+            <column name="DESCRIPTION" value="##label.description131"/>
+        </insert>
+    </changeSet> 		             		        				                                     		        			                                               		           		        		
+
     <!-- End of dbpermissions changeset section   -->
     <!-- ***************************************************************************************** -->
     <!-- ***************************************************************************************** -->
@@ -1611,10 +1644,20 @@
                  
     </changeSet>
     
+    <changeSet author="Chromis POS" id="Create Scheduled Task entries v0.56.6.7"> 
+        <insert tableName="MENUENTRIES"> 
+            <column name="ENTRY" value="uk.chromis.pos.scheduler.SchedulerPanel"/>   
+            <column name="FOLLOWS" value="uk.chromis.pos.imports.StockChangesPanel"/>
+            <column name="GRAPHIC" value="/uk/chromis/images/utilities.png" />
+            <column name="TITLE" value="Menu.Scheduler" />   
+        </insert>                                 
+                 
+    </changeSet>
+    
     <!-- ***************************************************************************************** -->
-    <changeSet author="Chromis POS" id="Update to 0.56.6.6">    
+    <changeSet author="Chromis POS" id="Update to 0.56.6.7">    
         <update tableName="APPLICATIONS">
-            <column name="VERSION" value="0.56.6.6"/>          
+            <column name="VERSION" value="0.56.6.7"/>          
         </update>  
     </changeSet>
 </databaseChangeLog>

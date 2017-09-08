@@ -364,6 +364,7 @@
         </Component>
         <Component class="eu.hansolo.custom.SteelCheckBox" name="jCheckBoxEnabled">
           <Properties>
+            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Enabled"/>
           </Properties>
         </Component>
@@ -371,4 +372,3 @@
     </Container>
   </SubComponents>
 </Form>
-

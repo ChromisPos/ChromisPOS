@@ -272,7 +272,7 @@ public class PromotionEditor extends javax.swing.JPanel
         m_jName.setText(null);
         m_jTextCriteria.setText(null);
         m_jTextScript.setText(null);
-        jCheckBoxEnabled.setSelected(false);
+        jCheckBoxEnabled.setSelected(true);
         m_ModelResource.setSelectedKey(null);
         jCheckBoxAllProducts.setSelected(false);
         SelectAllProducts( false );
@@ -624,6 +624,7 @@ public class PromotionEditor extends javax.swing.JPanel
             }
         });
 
+        jCheckBoxEnabled.setSelected(true);
         jCheckBoxEnabled.setText("Enabled");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
