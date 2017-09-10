@@ -661,7 +661,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 
                 // Apply any customer discount
                 if( oLine.canDiscount() && m_oTicket.getDiscount() > 0.0 ) {
-                   oLine.setPrice( oLine.getPrice() - ( oLine.getPrice() * m_oTicket.getDiscount()));
+                   Double discount = oLine.getPrice() * m_oTicket.getDiscount();
+                   oLine.setPrice( oLine.getPrice() - discount );
+                   oLine.setDiscountAmount( includeTaxes( oLine.getProductTaxCategoryID(), discount ) );
                    oLine.setDiscounted( "yes" );
                 }
                 
@@ -1074,19 +1076,24 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         options, options[1]) == 0) {
                         
                         // Apply this discount to all ticket lines
-                        for (TicketLineInfo line : m_oTicket.getLines()) {
-                            if( line.canDiscount() ) {
-                                line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
-                                line.setDiscounted( "yes" );
+                        for (TicketLineInfo oLine : m_oTicket.getLines()) {
+                            if( oLine.canDiscount() ) {
+                                Double discount = oLine.getPrice() * m_oTicket.getDiscount();
+                                oLine.setPrice( oLine.getPrice() - discount );
+                                oLine.setDiscountAmount( includeTaxes( oLine.getProductTaxCategoryID(), discount ) );
+                                oLine.setDiscounted( "yes" );
                             }
                         }
                         refreshTicket();
+                        visorCurrentTicketLine();
                     }
                 } else {
                     JOptionPane.showMessageDialog(null,
                         AppLocal.getIntString("message.customerselected") + newcustomer.getName(),
                         sCode, JOptionPane.INFORMATION_MESSAGE);               
                 }
+                // read resource ticket.change and execute
+                executeEvent(m_oTicket, m_oTicketExt, "ticket.change");
             }
         } catch (BasicException e) {
             if (sCode.startsWith("c")) {
@@ -2849,14 +2856,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         JOptionPane.YES_NO_OPTION, 
                         JOptionPane.INFORMATION_MESSAGE, null,
                         options, options[1]) == 0) {
-                            // Apply this discount to all ticket lines
-                            for (TicketLineInfo line : m_oTicket.getLines()) {
-                                if( line.canDiscount() ) {
-                                    line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
-                                    line.setDiscounted( "yes" );
-                                }
+
+                        // Apply this discount to all ticket lines
+                        for (TicketLineInfo oLine : m_oTicket.getLines()) {
+                            if( oLine.canDiscount() ) {
+                                Double discount = oLine.getPrice() * m_oTicket.getDiscount();
+                                oLine.setPrice( oLine.getPrice() - discount );
+                                oLine.setDiscountAmount( includeTaxes( oLine.getProductTaxCategoryID(), discount ) );
+                                oLine.setDiscounted( "yes" );
                             }
-                            refreshTicket();
+                        }
+                        refreshTicket();
+                        visorCurrentTicketLine();
                     }
                 }                
             }

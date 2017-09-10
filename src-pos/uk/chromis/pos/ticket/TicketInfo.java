@@ -551,6 +551,23 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return sum;
     }
 
+    public double getDiscounts() {
+        double sum = 0.0;
+        for (TicketLineInfo line : m_aLines) {
+            double dValue = line.getSubValue();
+            
+            if( dValue < 0 ) {
+                // Negative amount - voucher or discount line
+                sum -= dValue;
+                sum -= line.getTax();
+            } else {
+                dValue = line.getDiscountAmount();
+                sum += dValue;
+            }
+        }
+        return sum;
+    }
+    
     public double getTax() {
         double sum = 0.0;
         if (hasTaxesCalculated()) {
@@ -740,6 +757,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return Formats.CURRENCY.formatValue(getSubTotal());
     }
 
+    public String printDiscounts() {
+        return Formats.CURRENCY.formatValue(getDiscounts());
+    }
+    
     public String printTax() {
         return Formats.CURRENCY.formatValue(getTax());
     }
