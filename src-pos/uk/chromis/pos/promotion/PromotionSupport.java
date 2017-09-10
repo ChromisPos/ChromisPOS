@@ -111,6 +111,7 @@ public class PromotionSupport {
     //  promotion.addline  
     //  promotion.changeline 
     //  promotion.removeline
+    //  promotion.refresh
     //
     public Boolean checkPromotions(String event,
             Boolean bwithActions,

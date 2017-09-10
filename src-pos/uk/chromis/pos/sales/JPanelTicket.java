@@ -1084,6 +1084,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 oLine.setDiscounted( "yes" );
                             }
                         }
+                        updatePromotions("promotion.refresh", m_oTicket.getLinesCount()-1, null);
+
                         refreshTicket();
                         visorCurrentTicketLine();
                     }
@@ -2866,6 +2868,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 oLine.setDiscounted( "yes" );
                             }
                         }
+                        updatePromotions("promotion.refresh", m_oTicket.getLinesCount()-1, null);
+
                         refreshTicket();
                         visorCurrentTicketLine();
                     }
