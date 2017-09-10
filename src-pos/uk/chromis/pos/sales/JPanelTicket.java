@@ -581,6 +581,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             });
         }
+        
+        int lineCount = 0;
+        if(m_oTicket != null) {
+            lineCount = m_oTicket.getLinesCount();
+        }
+        
+        if ( lineCount == 0 ) {
+            try {
+                m_TTP.printTicket(dlSystem.getResourceAsXML("Display.Message"));
+            } catch (TicketPrinterException ex) {
+            }
+        }
     }
 
     public void setTicketName(String tName) {
@@ -1084,6 +1096,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 oLine.setDiscounted( "yes" );
                             }
                         }
+                        updatePromotions("promotion.refresh", m_oTicket.getLinesCount()-1, null);
+
                         refreshTicket();
                         visorCurrentTicketLine();
                     }
@@ -2866,6 +2880,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 oLine.setDiscounted( "yes" );
                             }
                         }
+                        updatePromotions("promotion.refresh", m_oTicket.getLinesCount()-1, null);
+
                         refreshTicket();
                         visorCurrentTicketLine();
                     }
