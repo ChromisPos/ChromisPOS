@@ -94,6 +94,7 @@ import uk.chromis.pos.util.ReportUtils;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.data.gui.JMessageDialog;
+import uk.chromis.pos.customers.CustomerInfo;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
@@ -1075,6 +1076,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
                 customerCode = true;
 
+                try {
+                    m_TTP.printTicket( 
+                        "<output><display><line><text>" +
+                        AppLocal.getIntString("message.customerwelcome" ) +
+                        "</text></line><line><text>" +
+                        newcustomer.getName() +
+                        "</text></line></display></output>" );
+                } catch (TicketPrinterException ex) {
+                }
+ 
                 if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
 
                     Object[] options = {AppLocal.getIntString("Button.Yes"),
@@ -2848,17 +2859,28 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     JOptionPane.WARNING_MESSAGE);
             }
             
-            if (finder.getSelectedCustomer() == null) {
+            CustomerInfo newcustomer = finder.getSelectedCustomer();
+            if (newcustomer == null) {
                 m_oTicket.setCustomer(null);
                 jButtonCustomerPay.setEnabled(false);
             } else {
-                m_oTicket.setCustomer(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()));
+                m_oTicket.setCustomer(dlSales.loadCustomerExt(newcustomer.getId()));
                 if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag"))) {
-                    restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId());
+                    restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(newcustomer.getId()).toString(), m_oTicket.getId());
                 }
                 
                 jButtonCustomerPay.setEnabled(m_oTicket.getCustomer().getCurdebt() > 0 ? true: false);
 
+                try {
+                    m_TTP.printTicket( 
+                        "<output><display><line><text>" +
+                        AppLocal.getIntString("message.customerwelcome" ) +
+                        "</text></line><line><text>" +
+                        newcustomer.getName() +
+                        "</text></line></display></output>" );
+                } catch (TicketPrinterException ex) {
+                }
+                
                 if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
 
                     Object[] options = {AppLocal.getIntString("Button.Yes"),
