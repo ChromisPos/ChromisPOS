@@ -583,7 +583,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE"
                 + " P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE, P.NAME"
+                + "ORDER BY P.NAME"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}), new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,
@@ -603,7 +603,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE P.ISCOM = " + s.DB.FALSE()
                 + " AND P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE, P.NAME"
+                + "ORDER BY P.NAME"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}),
                 new SerializerWriteBasic(new Datas[]{
@@ -625,7 +625,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE P.ISCOM = " + s.DB.TRUE()
                 + " AND P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE"
+                + "ORDER BY P.NAME"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE"}),
                 new SerializerWriteBasic(new Datas[]{
