@@ -19,6 +19,7 @@
 //
 package uk.chromis.pos.inventory;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,7 +52,6 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.sales.TaxesLogic;
-import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.util.BarcodeValidator;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.util.AutoCompleteComboBox;
@@ -172,24 +172,21 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jDisplay.getDocument().addDocumentListener(dirty);
         m_jStockUnits.getDocument().putProperty(dlSales, 24);
 
-        FieldsManager fm = new FieldsManager();
-        m_jPriceBuy.getDocument().addDocumentListener(fm);
-        m_jPriceSell.getDocument().addDocumentListener(new PriceSellManager());
-        m_jTax.addActionListener(fm);
-
         m_jIsPack.addActionListener(dirty);
         m_jPackQuantity.getDocument().addDocumentListener(dirty);
         m_jPackProduct.addActionListener(dirty);
-        m_jPackProduct.addActionListener(fm);
-        m_jPriceSellTax.getDocument().addDocumentListener(new PriceTaxManager());
-        m_jmargin.getDocument().addDocumentListener(new MarginManager());
         m_jCheckWarrantyReceipt.addActionListener(dirty);
-        m_jGrossProfit.getDocument().addDocumentListener(new MarginManager());
         m_jAlias.getDocument().addDocumentListener(dirty);
         m_jAlwaysAvailable.addActionListener(dirty);
         m_jDiscounted.addActionListener(dirty);
         m_jManageStock.addActionListener(dirty);
 
+        m_jPriceBuy.getDocument().addDocumentListener(new PriceBuyManager());
+        m_jPriceSell.getDocument().addDocumentListener(new PriceSellManager());
+        m_jPriceSellTax.getDocument().addDocumentListener(new PriceTaxManager());
+        m_jTax.addActionListener(new PriceTaxManager());
+        m_jmargin.getDocument().addDocumentListener(new MarginManager());
+        
         writeValueEOF();
     }
 
@@ -239,7 +236,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 m_jComment.setSelected( info.isCom() );
                 m_jScale.setSelected( info.isScale() );
                 m_jPriceBuy.setText(Formats.CURRENCY.formatValue(info.getPriceBuy()));
-                setPriceSell(info.getPriceSell());
                 m_CategoryModel.setSelectedKey(info.getCategoryID());
                 jComboBoxPromotion.setEnabled(true);
                 
@@ -281,7 +277,11 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 
                 txtProperties.setText( info.getPropertiesXml() );
                 
-            } else {
+                setPriceSell(info.getPriceSell());
+                calculateMargin();
+                calculatePriceSellTax();
+                calculateGP();
+                } else {
 
                 if( barcode != null ) {
                     m_jRef.setText( barcode );
@@ -846,6 +846,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             } else {
                 m_jmargin.setText(Formats.PERCENT.formatValue(dPriceSell / dPriceBuy - 1.0));
             }
+            m_jmargin.setForeground(Color.red);            
+            
             reportlock = false;
         }
     }
@@ -863,6 +865,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 double dTaxRate = taxeslogic.getTaxRate((TaxCategoryInfo) taxcatmodel.getSelectedItem());
                 m_jPriceSellTax.setText(Formats.CURRENCY.formatValue(dPriceSell * (1.0 + dTaxRate)));
             }
+            m_jPriceSellTax.setForeground(Color.red);            
             reportlock = false;
         }
     }
@@ -880,6 +883,8 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             } else {
                 m_jGrossProfit.setText(Formats.PERCENT.formatValue((dPriceSell - dPriceBuy) / dPriceSell));
             }
+            m_jGrossProfit.setForeground(Color.red);
+
             reportlock = false;
         }
     }
@@ -897,6 +902,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             } else {
                 setPriceSell(dPriceBuy * (1.0 + dMargin));
             }
+            m_jPriceSell.setForeground(Color.red);
 
             reportlock = false;
         }
@@ -916,6 +922,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 double dTaxRate = taxeslogic.getTaxRate((TaxCategoryInfo) taxcatmodel.getSelectedItem());
                 setPriceSell(dPriceSellTax / (1.0 + dTaxRate));
             }
+            m_jPriceSell.setForeground(Color.red);
 
             reportlock = false;
         }
@@ -927,7 +934,9 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             priceselllock = true;
             pricesell = value;
             m_jPriceSell.setText(Formats.CURRENCY.formatValue(pricesell));
+            calculatePriceSellTax();
             priceselllock = false;
+            m_jPriceSell.setForeground(Color.black);
         }
     }
 
@@ -983,119 +992,72 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
     }
     
-    private class PriceSellManager implements DocumentListener {
+    private class PriceManager implements DocumentListener, ActionListener {
 
+        public void reCalculate() {};
+        
         @Override
         public void changedUpdate(DocumentEvent e) {
-            if (!priceselllock) {
-                priceselllock = true;
-                pricesell = readCurrency(m_jPriceSell.getText());
-                priceselllock = false;
-            }
-            calculateMargin();
-            calculatePriceSellTax();
-            calculateGP();
+            reCalculate();
         }
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            if (!priceselllock) {
-                priceselllock = true;
-                pricesell = readCurrency(m_jPriceSell.getText());
-                priceselllock = false;
-            }
-            calculateMargin();
-            calculatePriceSellTax();
-            calculateGP();
+            reCalculate();
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
-            if (!priceselllock) {
-                priceselllock = true;
-                pricesell = readCurrency(m_jPriceSell.getText());
-                priceselllock = false;
-            }
-            calculateMargin();
-            calculatePriceSellTax();
-            calculateGP();
-        }
-    }
-
-    private class FieldsManager implements DocumentListener, ActionListener {
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            calculateMargin();
-            calculatePriceSellTax();
-            calculateGP();
-
-        }
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            calculateMargin();
-            calculatePriceSellTax();
-            calculateGP();
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            calculateMargin();
-            calculatePriceSellTax();
-            calculateGP();
+            reCalculate();
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            reCalculate();
+        }
+    }
+    
+    private class PriceSellManager extends PriceManager {
+
+        @Override
+        public void reCalculate() {
+            if (!priceselllock) {
+                priceselllock = true;
+                pricesell = readCurrency(m_jPriceSell.getText());
+                priceselllock = false;
+            }
+            m_jPriceSell.setForeground(Color.black);
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
         }
     }
 
-    private class PriceTaxManager implements DocumentListener {
-
+    private class PriceBuyManager extends PriceManager {
+        
         @Override
-        public void changedUpdate(DocumentEvent e) {
-            calculatePriceSellfromPST();
+        public void reCalculate() {
             calculateMargin();
             calculateGP();
         }
+    }
+
+    private class PriceTaxManager extends PriceManager {
 
         @Override
-        public void insertUpdate(DocumentEvent e) {
-            calculatePriceSellfromPST();
-            calculateMargin();
-            calculateGP();
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
+        public void reCalculate() {
+            m_jPriceSellTax.setForeground(Color.black);
             calculatePriceSellfromPST();
             calculateMargin();
             calculateGP();
         }
     }
 
-    private class MarginManager implements DocumentListener {
+    private class MarginManager extends PriceManager  {
 
         @Override
-        public void changedUpdate(DocumentEvent e) {
-            calculatePriceSellfromMargin();
-            calculatePriceSellTax();
-            calculateGP();
-        }
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            calculatePriceSellfromMargin();
-            calculatePriceSellTax();
-            calculateGP();
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
+        public void reCalculate() {
+            m_jmargin.setForeground(Color.black);
             calculatePriceSellfromMargin();
             calculatePriceSellTax();
             calculateGP();
