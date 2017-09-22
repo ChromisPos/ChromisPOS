@@ -375,7 +375,7 @@ public class StockManagement extends JPanel implements JPanelView {
                 rec.getReason().samesignum(inv.getMultiply()),
                 inv.getPrice(),
                 rec.getUser(),
-                null, null, null, null, null, null, null, null
+                null, null, null, null, null, null, null, null, null, null, null
             });
         }
 

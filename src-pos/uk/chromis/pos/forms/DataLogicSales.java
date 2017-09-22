@@ -1139,8 +1139,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             l.getProductID(),
                             l.getProductAttSetInstId(), -l.getMultiply(), l.getPrice(),
                             ticket.getUser().getName(),
-                            null, null, null, null, null, null, null, null
-                        });
+                            null, null, null, null, null, null, null, null, null, null, null });
                     }
 
                 }
@@ -1244,7 +1243,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             ticket.getLine(i).getProductID(),
                             ticket.getLine(i).getProductAttSetInstId(), ticket.getLine(i).getMultiply(), ticket.getLine(i).getPrice(),
                             ticket.getUser().getName(),
-                            null, null, null, null, null, null, null, null
+                            null, null, null, null, null, null, null, null, null, null, null
                         });
                     }
                 }
