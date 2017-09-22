@@ -51,6 +51,7 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.sales.TaxesLogic;
+import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.util.BarcodeValidator;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.util.AutoCompleteComboBox;
@@ -84,14 +85,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
     private Boolean displayEdited = false;
     private String originalDisplay;
     private Properties m_PropertyOptions;
-    
-    // Keep track of what field was edited last for calculating the other two
-    // The last one edited is not recalculated if possible
-    private static int LAST_ENTRY_PRICE = 0;
-    private static int LAST_ENTRY_PRICETAX = 1;
-    private static int LAST_ENTRY_MARGIN = 2;
-    private static int LAST_ENTRY_PRICESELL = 3;
-    private int m_LastEntered = LAST_ENTRY_PRICE; 
     
     /**
      * Creates new form JEditProduct
@@ -182,7 +175,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         FieldsManager fm = new FieldsManager();
         m_jPriceBuy.getDocument().addDocumentListener(fm);
         m_jPriceSell.getDocument().addDocumentListener(new PriceSellManager());
-        m_jTax.addActionListener(new TaxRateManager() );
+        m_jTax.addActionListener(fm);
 
         m_jIsPack.addActionListener(dirty);
         m_jPackQuantity.getDocument().addDocumentListener(dirty);
@@ -923,7 +916,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
                 double dTaxRate = taxeslogic.getTaxRate((TaxCategoryInfo) taxcatmodel.getSelectedItem());
                 setPriceSell(dPriceSellTax / (1.0 + dTaxRate));
             }
-            
+
             reportlock = false;
         }
     }
@@ -1002,7 +995,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICESELL; 
         }
 
         @Override
@@ -1015,7 +1007,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICESELL; 
         }
 
         @Override
@@ -1028,7 +1019,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICESELL; 
         }
     }
 
@@ -1039,7 +1029,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICE; 
 
         }
 
@@ -1048,7 +1037,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICE; 
         }
 
         @Override
@@ -1056,7 +1044,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICE; 
         }
 
         @Override
@@ -1064,42 +1051,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculateMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICE; 
-        }
-    }
-
-    private class TaxRateManager implements DocumentListener, ActionListener {
-
-        private void doCalculation() {
-            int savedValue = m_LastEntered;
-            if( m_LastEntered == LAST_ENTRY_PRICETAX ) {
-                calculatePriceSellfromPST();
-            } else {
-                calculatePriceSellTax();
-            }
-            calculateMargin();
-            calculateGP();            
-            m_LastEntered = savedValue;
-        }
-        
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            doCalculation();
-        }
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            doCalculation();
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            doCalculation();
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            doCalculation();
         }
     }
 
@@ -1110,7 +1061,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculatePriceSellfromPST();
             calculateMargin();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICETAX; 
         }
 
         @Override
@@ -1118,7 +1068,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculatePriceSellfromPST();
             calculateMargin();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICETAX; 
         }
 
         @Override
@@ -1126,7 +1075,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculatePriceSellfromPST();
             calculateMargin();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_PRICETAX; 
         }
     }
 
@@ -1137,7 +1085,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculatePriceSellfromMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_MARGIN; 
         }
 
         @Override
@@ -1145,7 +1092,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculatePriceSellfromMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_MARGIN; 
         }
 
         @Override
@@ -1153,7 +1099,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             calculatePriceSellfromMargin();
             calculatePriceSellTax();
             calculateGP();
-            m_LastEntered = LAST_ENTRY_MARGIN; 
         }
     }
 
