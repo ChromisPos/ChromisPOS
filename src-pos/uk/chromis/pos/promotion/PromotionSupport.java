@@ -600,7 +600,7 @@ public class PromotionSupport {
         if (bWholeUnitsOnly) {
             qty = intPart(qty);
         }
-
+        
         // Calculate the total number of free items
         Double qtyFree = qty / qtyBuy;
                 if (bWholeUnitsOnly) {
@@ -670,6 +670,13 @@ public class PromotionSupport {
             qty = intPart(qty);
         }
 
+        Boolean bRefunding = false;
+        if( qty < 0 ) {
+            // Refunds
+            bRefunding = true;
+            qty = -qty;
+        }
+        
         // Calculate the total number of free items
         Double qtyFree = 0d;
         while( qtyFree + qtyBuy <= qty ){
@@ -733,8 +740,12 @@ public class PromotionSupport {
             
             // Now add a line after the last discounted item for the discounts
             Double qtyDiscount = qtyFree/qtyBuy;
+            if( bRefunding ) {
+                // Refund
+                qtyDiscount = -qtyDiscount;
+            }
             Double priceDiscount = fixedPrice - (dDiscount /qtyDiscount);
-
+            
             // All the above calculations are done on the taxed price
             // DiscountProductGroup takes a pre-tax price
             priceDiscount = (priceDiscount / (1+tax.getRate()) );

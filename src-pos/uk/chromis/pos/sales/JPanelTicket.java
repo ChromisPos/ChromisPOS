@@ -632,7 +632,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void visorCurrentTicketLine() {
         int index = m_ticketlines.getSelectedIndex();
-        visorTicketLine(m_oTicket.getLine(index) );
+        if( index >= 0 ) {
+            visorTicketLine(m_oTicket.getLine(index) );
+        }
     }
     
     private void addTicketLine(ProductInfoExt oProduct, double dMul, double dPrice) {
