@@ -48,11 +48,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
@@ -61,7 +59,6 @@ import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.JPrincipalApp;
 import uk.chromis.pos.payment.PaymentInfo;
 import uk.chromis.pos.payment.PaymentInfoMagcard;
 import uk.chromis.pos.util.StringUtils;
@@ -557,11 +554,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             double dValue = line.getSubValue();
             
             if( dValue < 0 ) {
-                // Negative amount - voucher or discount line
-                sum -= dValue;
-                sum -= line.getTax();
+                // Negative amount - discount, voucher or refund line
+                sum += ( -(dValue + line.getTax()) * line.getMultiply() );
             } else {
-                dValue = line.getDiscountAmount();
+                dValue = line.getDiscountAmount() * line.getMultiply();
                 sum += dValue;
             }
         }
