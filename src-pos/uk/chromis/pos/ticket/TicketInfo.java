@@ -555,9 +555,9 @@ public final class TicketInfo implements SerializableRead, Externalizable {
             
             if( dValue < 0 ) {
                 // Negative amount - discount, voucher or refund line
-                sum += ( -(dValue + line.getTax()) * line.getMultiply() );
+                sum += ( -(line.getPriceTax()) * line.getMultiply() );
             } else {
-                dValue = line.getDiscountAmount() * line.getMultiply();
+                dValue = ( line.getDiscountAmount() * (1.0 + line.getTaxRate()) ) * line.getMultiply();
                 sum += dValue;
             }
         }
