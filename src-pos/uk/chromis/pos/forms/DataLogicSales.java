@@ -1521,9 +1521,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     }
                 }
 
-                if(  (((Object[]) params)[17] != null) && (((Object[]) params)[18] != null) && (((Object[]) params)[19] != null) ) {
+                if(  (((Object[]) params)[17] != null) && (((Object[]) params)[19] != null) ) {
                     // Update the isCatalog flag
-                    new PreparedSentence(s, "UPDATE PRODUCTS SET PRICEBUY = ?, PRICESELL = ?, ISCATALOG = ? WHERE ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{17, 18, 19, 4})).exec(params);
+                    new PreparedSentence(s, "UPDATE PRODUCTS SET PRICEBUY = ?, ISCATALOG = ? WHERE ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{17, 19, 4})).exec(params);
                 }
                 
                 int ret = 0;
