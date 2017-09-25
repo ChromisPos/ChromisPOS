@@ -1686,8 +1686,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     // Select the Payments information
                     JPaymentSelect paymentdialog = refund ? paymentdialogrefund : paymentdialogreceipt;
                     
-                    if ( refund || ticket.getTotal() < 0.0 || ticket.getCustomer() != null ) {
-                        // If customer or refund or credit then default to printer on
+                    boolean creditaccount = false;
+                    if ( ticket.getCustomer() != null ) {
+                        creditaccount = (ticket.getCustomer().getMaxdebt() > 0.0);
+                    }
+                    if ( refund || ticket.getTotal() <= 0.0 || creditaccount ) {
+                        // If customer credit or refund or credit then default to printer on
                         paymentdialog.setPrintSelected(true);
                     } else {
                         String val = m_jbtnconfig.getProperty( "printselected" );
