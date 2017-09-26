@@ -1681,7 +1681,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     // Muestro el total
                     printTicket("Printer.TicketTotal", ticket, ticketext);
 
-                    boolean refund = ticket.getTicketType().equals(TicketType.REFUND);
+                    boolean refund = ticket.getTicketType().equals(TicketType.REFUND) &&
+                                     ticket.getTotal() <= 0;
 
                     // Select the Payments information
                     JPaymentSelect paymentdialog = refund ? paymentdialogrefund : paymentdialogreceipt;
