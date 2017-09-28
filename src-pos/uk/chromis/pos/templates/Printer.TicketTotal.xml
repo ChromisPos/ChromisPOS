@@ -21,11 +21,16 @@
 <output>   
     <display>
         <line>
-            <text align="left" length="10">Total:</text>
+            <text align="left" length="10">To Pay:</text>
             <text align="right" length="10">${ticket.printTotal()}</text>
         </line>
         <line>
+	#if (${ticket.getDiscounts()} > 0 )
+            <text align="left" length="10">Discounts Today:</text>
+            <text align="right" length="10">${ticket.printDiscounts()}</text>
+	#else
            <text align="center" length="20">Thank you</text>
+	#end
         </line>
     </display>
 </output>

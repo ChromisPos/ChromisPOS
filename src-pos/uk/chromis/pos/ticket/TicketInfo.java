@@ -48,11 +48,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataRead;
@@ -61,7 +59,6 @@ import uk.chromis.data.loader.SerializableRead;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.forms.AppConfig;
-import uk.chromis.pos.forms.JPrincipalApp;
 import uk.chromis.pos.payment.PaymentInfo;
 import uk.chromis.pos.payment.PaymentInfoMagcard;
 import uk.chromis.pos.util.StringUtils;
@@ -551,6 +548,22 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return sum;
     }
 
+    public double getDiscounts() {
+        double sum = 0.0;
+        for (TicketLineInfo line : m_aLines) {
+            double dValue = line.getSubValue();
+            
+            if( dValue < 0 ) {
+                // Negative amount - discount, voucher or refund line
+                sum += ( -(line.getPriceTax()) * line.getMultiply() );
+            } else {
+                dValue = ( line.getDiscountAmount() * (1.0 + line.getTaxRate()) ) * line.getMultiply();
+                sum += dValue;
+            }
+        }
+        return sum;
+    }
+    
     public double getTax() {
         double sum = 0.0;
         if (hasTaxesCalculated()) {
@@ -740,6 +753,10 @@ public final class TicketInfo implements SerializableRead, Externalizable {
         return Formats.CURRENCY.formatValue(getSubTotal());
     }
 
+    public String printDiscounts() {
+        return Formats.CURRENCY.formatValue(getDiscounts());
+    }
+    
     public String printTax() {
         return Formats.CURRENCY.formatValue(getTax());
     }

@@ -488,6 +488,20 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         attributes.setProperty("product.discounted", value);
     }
 
+    public void setDiscountAmount(Double value) {
+        attributes.setProperty("product.discountamount", value.toString() );
+    }
+
+    public Double getDiscountAmount() {
+        String value;
+        value = attributes.getProperty("product.discountamount");
+        if( value == null ) {
+            return 0.0;
+        } else {
+            return Double.valueOf( value );
+        }
+    }
+    
     public String printAlias() {
          return StringUtils.encodeXML(attributes.getProperty("product.alias")); 
     }

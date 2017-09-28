@@ -85,6 +85,12 @@
 	<line><text>Items count: </text><text align ="left" length="14">${ticket.printArticlesCount()}</text></line>
 	<line></line>
 
+	#if (${ticket.getDiscounts()} > 0 )
+            <text align="left" length="18">Discounts Today:</text>
+            <text align="right" length="10">${ticket.printDiscounts()}</text>
+            <line></line>
+	#end
+ 
 	<line size="1"><text align ="left" length="16" bold="true">Total</text><text align ="right" length="26" bold="true">${ticket.printTotal()}</text></line>
 
 #foreach ($paymentline in $ticket.payments)

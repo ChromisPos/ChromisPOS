@@ -94,6 +94,7 @@ import uk.chromis.pos.util.ReportUtils;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import uk.chromis.data.gui.JMessageDialog;
+import uk.chromis.pos.customers.CustomerInfo;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
@@ -581,6 +582,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             });
         }
+        
+        int lineCount = 0;
+        if(m_oTicket != null) {
+            lineCount = m_oTicket.getLinesCount();
+        }
+        
+        if ( lineCount == 0 ) {
+            try {
+                m_TTP.printTicket(dlSystem.getResourceAsXML("Display.Message"));
+            } catch (TicketPrinterException ex) {
+            }
+        }
     }
 
     public void setTicketName(String tName) {
@@ -619,7 +632,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void visorCurrentTicketLine() {
         int index = m_ticketlines.getSelectedIndex();
-        visorTicketLine(m_oTicket.getLine(index) );
+        if( index >= 0 ) {
+            visorTicketLine(m_oTicket.getLine(index) );
+        }
     }
     
     private void addTicketLine(ProductInfoExt oProduct, double dMul, double dPrice) {
@@ -661,7 +676,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 
                 // Apply any customer discount
                 if( oLine.canDiscount() && m_oTicket.getDiscount() > 0.0 ) {
-                   oLine.setPrice( oLine.getPrice() - ( oLine.getPrice() * m_oTicket.getDiscount()));
+                   Double discount = oLine.getPrice() * m_oTicket.getDiscount();
+                   oLine.setPrice( oLine.getPrice() - discount );
+                   oLine.setDiscountAmount( includeTaxes( oLine.getProductTaxCategoryID(), discount ) );
                    oLine.setDiscounted( "yes" );
                 }
                 
@@ -1061,6 +1078,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
                 customerCode = true;
 
+                try {
+                    m_TTP.printTicket( 
+                        "<output><display><line><text>" +
+                        AppLocal.getIntString("message.customerwelcome" ) +
+                        "</text></line><line><text>" +
+                        newcustomer.getName() +
+                        "</text></line></display></output>" );
+                } catch (TicketPrinterException ex) {
+                }
+ 
                 if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
 
                     Object[] options = {AppLocal.getIntString("Button.Yes"),
@@ -1074,19 +1101,26 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         options, options[1]) == 0) {
                         
                         // Apply this discount to all ticket lines
-                        for (TicketLineInfo line : m_oTicket.getLines()) {
-                            if( line.canDiscount() ) {
-                                line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
-                                line.setDiscounted( "yes" );
+                        for (TicketLineInfo oLine : m_oTicket.getLines()) {
+                            if( oLine.canDiscount() ) {
+                                Double discount = oLine.getPrice() * m_oTicket.getDiscount();
+                                oLine.setPrice( oLine.getPrice() - discount );
+                                oLine.setDiscountAmount( includeTaxes( oLine.getProductTaxCategoryID(), discount ) );
+                                oLine.setDiscounted( "yes" );
                             }
                         }
+                        updatePromotions("promotion.refresh", m_oTicket.getLinesCount()-1, null);
+
                         refreshTicket();
+                        visorCurrentTicketLine();
                     }
                 } else {
                     JOptionPane.showMessageDialog(null,
                         AppLocal.getIntString("message.customerselected") + newcustomer.getName(),
                         sCode, JOptionPane.INFORMATION_MESSAGE);               
                 }
+                // read resource ticket.change and execute
+                executeEvent(m_oTicket, m_oTicketExt, "ticket.change");
             }
         } catch (BasicException e) {
             if (sCode.startsWith("c")) {
@@ -1652,8 +1686,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     // Select the Payments information
                     JPaymentSelect paymentdialog = refund ? paymentdialogrefund : paymentdialogreceipt;
                     
-                    if ( refund || ticket.getTotal() < 0.0 || ticket.getCustomer() != null ) {
-                        // If customer or refund or credit then default to printer on
+                    boolean creditaccount = false;
+                    if ( ticket.getCustomer() != null ) {
+                        creditaccount = (ticket.getCustomer().getMaxdebt() > 0.0);
+                    }
+                    if ( refund || ticket.getTotal() <= 0.0 || creditaccount ) {
+                        // If customer credit or refund or credit then default to printer on
                         paymentdialog.setPrintSelected(true);
                     } else {
                         String val = m_jbtnconfig.getProperty( "printselected" );
@@ -2827,17 +2865,28 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     JOptionPane.WARNING_MESSAGE);
             }
             
-            if (finder.getSelectedCustomer() == null) {
+            CustomerInfo newcustomer = finder.getSelectedCustomer();
+            if (newcustomer == null) {
                 m_oTicket.setCustomer(null);
                 jButtonCustomerPay.setEnabled(false);
             } else {
-                m_oTicket.setCustomer(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()));
+                m_oTicket.setCustomer(dlSales.loadCustomerExt(newcustomer.getId()));
                 if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag"))) {
-                    restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId());
+                    restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(newcustomer.getId()).toString(), m_oTicket.getId());
                 }
                 
                 jButtonCustomerPay.setEnabled(m_oTicket.getCustomer().getCurdebt() > 0 ? true: false);
 
+                try {
+                    m_TTP.printTicket( 
+                        "<output><display><line><text>" +
+                        AppLocal.getIntString("message.customerwelcome" ) +
+                        "</text></line><line><text>" +
+                        newcustomer.getName() +
+                        "</text></line></display></output>" );
+                } catch (TicketPrinterException ex) {
+                }
+                
                 if( m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0 ) {
 
                     Object[] options = {AppLocal.getIntString("Button.Yes"),
@@ -2849,14 +2898,20 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         JOptionPane.YES_NO_OPTION, 
                         JOptionPane.INFORMATION_MESSAGE, null,
                         options, options[1]) == 0) {
-                            // Apply this discount to all ticket lines
-                            for (TicketLineInfo line : m_oTicket.getLines()) {
-                                if( line.canDiscount() ) {
-                                    line.setPrice( line.getPrice() - (line.getPrice() *  m_oTicket.getDiscount()) );
-                                    line.setDiscounted( "yes" );
-                                }
+
+                        // Apply this discount to all ticket lines
+                        for (TicketLineInfo oLine : m_oTicket.getLines()) {
+                            if( oLine.canDiscount() ) {
+                                Double discount = oLine.getPrice() * m_oTicket.getDiscount();
+                                oLine.setPrice( oLine.getPrice() - discount );
+                                oLine.setDiscountAmount( includeTaxes( oLine.getProductTaxCategoryID(), discount ) );
+                                oLine.setDiscounted( "yes" );
                             }
-                            refreshTicket();
+                        }
+                        updatePromotions("promotion.refresh", m_oTicket.getLinesCount()-1, null);
+
+                        refreshTicket();
+                        visorCurrentTicketLine();
                     }
                 }                
             }

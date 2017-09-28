@@ -141,7 +141,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             Datas.DOUBLE,       // 15 - Stock Security
             Datas.DOUBLE,       // 16 - Stock Maximum
             Datas.DOUBLE,       // 17 - Buy Price
-            Datas.DOUBLE        // 18 - Sell Price
+            Datas.DOUBLE,       // 18 - Sell Price
+            Datas.BOOLEAN       // 19 - InCatalog
         };
         
         paymenttabledatas = new Datas[]{
@@ -583,7 +584,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE"
                 + " P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE, P.NAME"
+                + "ORDER BY P.NAME"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}), new SerializerWriteBasic(new Datas[]{
             Datas.OBJECT, Datas.STRING,
@@ -603,7 +604,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE P.ISCOM = " + s.DB.FALSE()
                 + " AND P.RETIRED = " + s.DB.FALSE()
                 + " AND ?(QBF_FILTER) "
-                + "ORDER BY P.REFERENCE, P.NAME"
+                + "ORDER BY P.NAME"
                 + ( (nLimit > 0) ? " LIMIT " + nLimit : "" ),
                 new String[]{"P.NAME", "P.PRICEBUY", "P.PRICESELL", "P.CATEGORY", "P.CODE", "C.UNITS"}),
                 new SerializerWriteBasic(new Datas[]{
@@ -1138,8 +1139,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             l.getProductID(),
                             l.getProductAttSetInstId(), -l.getMultiply(), l.getPrice(),
                             ticket.getUser().getName(),
-                            null, null, null, null, null, null, null
-                        });
+                            null, null, null, null, null, null, null, null, null, null, null });
                     }
 
                 }
@@ -1243,7 +1243,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             ticket.getLine(i).getProductID(),
                             ticket.getLine(i).getProductAttSetInstId(), ticket.getLine(i).getMultiply(), ticket.getLine(i).getPrice(),
                             ticket.getUser().getName(),
-                            null, null, null, null, null, null, null
+                            null, null, null, null, null, null, null, null, null, null, null
                         });
                     }
                 }
@@ -1519,6 +1519,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     if (updateresult == 0) {
                         new PreparedSentence(s, "INSERT INTO STOCKLEVEL (ID, LOCATION, PRODUCT, STOCKSECURITY, STOCKMAXIMUM) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{0, 3, 4, 15, 16})).exec(params);
                     }
+                }
+
+                if(  (((Object[]) params)[17] != null) && (((Object[]) params)[19] != null) ) {
+                    // Update the isCatalog flag
+                    new PreparedSentence(s, "UPDATE PRODUCTS SET PRICEBUY = ?, ISCATALOG = ? WHERE ID = ?", new SerializerWriteBasicExt(stockdiaryDatas, new int[]{17, 19, 4})).exec(params);
                 }
                 
                 int ret = 0;
