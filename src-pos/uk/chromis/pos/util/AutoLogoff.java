@@ -98,9 +98,7 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
     // Implement AWTEventListener, all events are dispatched via this
     @Override
     public void eventDispatched(AWTEvent e) {
-        if ((this.timer) && this.isTimerRunning()) {
-            LogoffTimer.restart();
-        }
+        restartTimer();
     }
 
     // returns the timer state
@@ -125,13 +123,19 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
         }
     }
 
+    public void restartTimer() {
+        if ((this.timer) && this.isTimerRunning()) {
+            LogoffTimer.restart();
+        }
+    }
+
     public void activateTimer() {
         // System.out.println("activate");
         this.timer = true;
         this.running = true;
         this.start();
     }
-
+    
     public void deactivateTimer() {
         // System.out.println("deactivate");
         this.stop();

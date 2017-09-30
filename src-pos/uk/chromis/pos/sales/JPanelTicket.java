@@ -1140,6 +1140,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
     
     private void stateTransition(char cTrans) {
+        
+        AutoLogoff.getInstance().restartTimer();
+
         // if the user has pressed 'enter' or '?' read the number enter and check in barcodes
         if ((cTrans == '\n') || (cTrans == '?')) {
             /**
@@ -2981,8 +2984,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 }//GEN-LAST:event_jEditAttributesActionPerformed
 
     private void jButtonCustomerAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCustomerAddActionPerformed
-        AutoLogoff.getInstance().activateTimer();
-// Show the custmer panel - this does deactivate
+        AutoLogoff.getInstance().deactivateTimer();
+        // Show the custmer panel - this does deactivate
         m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
         AutoLogoff.getInstance().activateTimer();
     }//GEN-LAST:event_jButtonCustomerAddActionPerformed
@@ -3097,13 +3100,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_btnReprintActionPerformed
 
     private void jButtonCustomerPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCustomerPayActionPerformed
-        
         CustomerInfoExt cInfo = m_oTicket.getCustomer();
         if( cInfo == null ) {
             jButtonCustomerPay.setEnabled(false);  // Should not be here
             return;
         }
 
+        AutoLogoff.getInstance().deactivateTimer();
         paymentdialogcustomer.setPrintSelected(true);
         if (paymentdialogcustomer.showDialog(cInfo.getCurdebt(), cInfo)) {
 
@@ -3142,6 +3145,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             jButtonCustomerPay.setEnabled(false);
             refreshTicket();
         }
+        AutoLogoff.getInstance().activateTimer();
         
     }//GEN-LAST:event_jButtonCustomerPayActionPerformed
 
