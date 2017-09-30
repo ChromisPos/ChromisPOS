@@ -34,10 +34,12 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
             + AWTEvent.MOUSE_EVENT_MASK;
     private final static long USER_EVENTS = KEY_EVENTS + MOUSE_EVENTS;
 
-    private Action action;
+    private Action action = null;
+    private Integer period = 10000;
+
     private final long eventMask;
     private Boolean running = false;
-    private Timer LogoffTimer;
+    private Timer LogoffTimer = null;
     private JDialog m_object = null;
 
     private static AutoLogoff INSTANCE = new AutoLogoff();
@@ -45,9 +47,7 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // create a basic timer instance
     private AutoLogoff() {
-        LogoffTimer = new Timer(10000, action);
         this.eventMask = USER_EVENTS;
-        LogoffTimer.setInitialDelay(100);
     }
 
     public static AutoLogoff getInstance() {
@@ -112,19 +112,14 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
 
     // set the timer interval in seconds
     public void setTimer(Integer period, Action action) {
+        
+        stop();
+        LogoffTimer = new Timer(period, action);
         this.timer = true;
-        if (isTimerRunning()) {
-            this.stop();
-            LogoffTimer = new Timer(period, action);
-            LogoffTimer.start();
-        } else {
-            LogoffTimer = new Timer(period, action);
-            LogoffTimer.start();
-        }
     }
 
     public void restartTimer() {
-        if ((this.timer) && this.isTimerRunning()) {
+        if (this.timer) {
             LogoffTimer.restart();
         }
     }
@@ -134,6 +129,7 @@ public class AutoLogoff implements ActionListener, AWTEventListener {
         this.timer = true;
         this.running = true;
         this.start();
+        restartTimer();
     }
     
     public void deactivateTimer() {

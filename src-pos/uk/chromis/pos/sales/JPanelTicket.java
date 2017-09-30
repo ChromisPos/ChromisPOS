@@ -627,6 +627,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             executeEventAndRefresh("ticket.pretotals");
             executeEventAndRefresh("ticket.change");
+            AutoLogoff.getInstance().restartTimer();
         }
     }
 
@@ -771,6 +772,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             // read resource ticket.change and execute
             executeEvent(m_oTicket, m_oTicketExt, "ticket.change");
+            AutoLogoff.getInstance().restartTimer();
         }
 
     }
@@ -827,6 +829,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 stateToZero();
                 executeEventAndRefresh("ticket.pretotals");
                 executeEventAndRefresh("ticket.change");
+                AutoLogoff.getInstance().restartTimer();
 
             }
         } else {
@@ -1135,14 +1138,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         "Customer Not Found", JOptionPane.WARNING_MESSAGE);
             }
         }
+        AutoLogoff.getInstance().restartTimer();
 
         return customerCode;
     }
     
     private void stateTransition(char cTrans) {
         
-        AutoLogoff.getInstance().restartTimer();
-
         // if the user has pressed 'enter' or '?' read the number enter and check in barcodes
         if ((cTrans == '\n') || (cTrans == '?')) {
             /**
