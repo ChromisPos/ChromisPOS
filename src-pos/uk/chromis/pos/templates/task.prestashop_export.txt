@@ -1,0 +1,87 @@
+// task.prestashop_export
+// This is a task Java script for use with the scheduler
+//
+// This task will export images and files ready to be imported into prestashop
+//
+// You should set up the following variables before using this script
+
+// Root directory for the data to be exported to on the local file system
+private final String EXPORT_DIRECTORY = "/usr/home/prestashop/export";
+
+// A local script or command to be run at the beginning to prepare the environment
+private final String PREPARE_ENVIRONMENT_COMMAND = "rm -rf " + IMAGE_DIRECTORY + "/*";
+
+// A local script or command to be run to transfer image files to a
+// web accessible location. Usually this will run FTP to transfer the images
+private final String SENDCOMMAND = "/usr/home/prestashop/sendfiles";
+
+// Url the images are sent to - this URL is used by prestashop to find the product and category images
+private final String PRESTASHOP_IMAGE_IMPORT_URL = "http://shopping.new-quay-shop.co.uk/imageimport";
+
+// Url of the prestashop site
+private final String PRESTASHOP_URL = "http://shopping.new-quay-shop.co.uk";
+
+// Login credentials on the Prestashop site for a user who has permission to run imports
+private final String PRESTASHOP_USER = "john";
+private final String PRESTASHOP_PASSWORD = "2BizzyBee";
+
+// SQL WHERE clause to filter which categories are exported
+private final String CATEGORY_FILTER = "CATEGORIES.ID <> 'xxx999'";
+
+// SQL WHERE clause to filter which products are exported
+private final String PRODUCT_FILTER = 
+    "PRODUCTS.ISCATALOG <> 0 " +
+    "AND PRODUCTS.ATTRIBUTES LIKE '.*<entry key='ONLINE'>1</entry>.*'";
+
+private final String IMAGE_DIRECTORY = EXPORT_DIRECTORY + "/images";
+private final String CATEGORY_IMAGE_FILE_PREFIX = "c";
+private final String PRODUCT_IMAGE_FILE_PREFIX = "p";
+private final String CATEGORY_CSV_FILENAME = "categories-import.csv";
+private final String PRODUCT_CSV_FILENAME = "products-import.csv";
+
+// Create a log entry
+taskSupport.getLogger().info(  p_taskinfo.getName() + " script has started");
+
+// Run the environment preparation script
+taskSupport.runCommand( PREPARE_ENVIRONMENT_COMMAND );
+
+// Export the category image files and create the category import csv file
+List<CategoryInfo> lstCategories = taskSupport.getDLSales().getAllCategories( CATEGORY_FILTER );
+List<String> csvCatalogue;
+
+// Header line
+csvCatalogue.add( new String( 
+    "Category ID;Active (0/1);Name *;Parent category;Root category (0/1);"+
+    "Description;Meta title;Meta keywords;Meta description;URL rewritten;"+
+    "Image URL" ) );
+
+for (CategoryInfo cat : categories) {
+
+    String catName = cat.getName();
+    String parent = cat.getPath().substring( 0, (parent.length() - catName.length()) - 1);
+
+    taskSupport.exportImage( IMAGE_DIRECTORY + "/" + CATEGORY_IMAGE_FILE_PREFIX + 
+        cat.getID(), cat.getImage() );
+
+    csvCatalogue.add( new String( 
+        cat.getID()+";"+cat.getCatShowName()?"1":"0"+";"+
+        catName+";"+parent+";"+parent.length() > 0 ?"0":"1"+";"+
+        cat.getTextTip()+";;;;;"+
+        PRESTASHOP_IMAGE_IMPORT_URL+"/"+CATEGORY_IMAGE_FILE_PREFIX + 
+        cat.getID( ) );
+} 
+
+taskSupport.writeFile( EXPORT_DIRECTORY + "/" + CATEGORY_CSV_FILENAME, csvCatalogue );
+
+// Export the product image files and create the product import csv file
+//taskSupport.exportImage( PRODUCT_IMAGE_FILE_PREFIX, PRODUCT_FILTER );
+
+// Upload the image files to a web accessible location
+taskSupport.runCommand( SENDCOMMAND );
+
+// Run the prestashop category import
+
+// Run the prestashop product import
+
+taskSupport.getLogger().info(  p_taskinfo.getName() + " script completed");
+

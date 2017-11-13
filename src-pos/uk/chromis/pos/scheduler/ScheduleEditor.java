@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import uk.chromis.basic.BasicException;
 import uk.chromis.beans.JCalendarDialog;
 import uk.chromis.data.gui.ComboBoxValModel;
-import uk.chromis.data.loader.DataRead;
 import uk.chromis.data.loader.LocalRes;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.DirtyManager;
@@ -496,7 +495,7 @@ public class ScheduleEditor extends javax.swing.JPanel
                     m_jTextScript.getText(),
                     jCheckBoxEnabled.isSelected() );
             
-            ScheduledTask task = new ScheduledTask(info);
+            ScheduledTask task = new ScheduledTask(m_App, info);
             
             task.RunOnceNow();
             

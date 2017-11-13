@@ -1297,7 +1297,16 @@
         </insert>
     </changeSet> 
         
-    <!-- Retired product support - This is as close as we can get to deleting a product   -->
+    <changeSet author="Chromis POS" id="Add task.sample script to resources">
+        <insert tableName="RESOURCES">
+            <column name="ID" value="6708"/>
+            <column name="NAME" value="task.sample"/>
+            <column name="RESTYPE" valueNumeric="0"/>
+            <column name="CONTENT" valueBlobResource="/uk/chromis/pos/templates/task.sample.txt"/>
+        </insert>
+    </changeSet> 
+
+        <!-- Retired product support - This is as close as we can get to deleting a product   -->
     <!-- ***************************************************************************************** -->
     <changeSet author="Chromis POS" id="Add retired product support" >    
         <preConditions onFail="MARK_RAN">

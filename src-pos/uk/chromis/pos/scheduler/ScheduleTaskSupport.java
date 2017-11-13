@@ -20,18 +20,93 @@ package uk.chromis.pos.scheduler;
 
 import java.awt.Dialog;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
+import uk.chromis.data.loader.Session;
+import uk.chromis.pos.forms.AppView;
+import uk.chromis.pos.forms.DataLogicSales;
 
 public class ScheduleTaskSupport {
 
-    public ScheduleTaskSupport() {
+    private Logger m_logger;
+    private final AppView m_App;
+    DataLogicScheduler  m_dlScheduler = null;
+    DataLogicSales m_dlSales = null;
+    
+    public ScheduleTaskSupport( AppView app ) {
+        m_App = app;
+        
+        try {
+            FileHandler logHandler = new FileHandler("scheduledtask.log", true );
+            m_logger = Logger.getLogger("uk.chromis.pos.scheduler");
+            m_logger.addHandler(logHandler);
+        } catch (IOException ex) {
+            Logger.getLogger(ScheduleTaskSupport.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(ScheduleTaskSupport.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Logger getLogger() {
+        return m_logger;
     }
 
     // Script support functions
+    
+    public Session getSession() {
+        return m_App.getSession();
+    }
+
+    public DataLogicSales getDLSales() {
+        if( m_dlSales == null ) {
+            m_dlSales = new DataLogicSales();
+            m_dlSales.init( m_App );
+        }
+        return m_dlSales;
+    }
+    
+    public DataLogicScheduler getDLSscheduler() {
+        if( m_dlSales == null ) {
+            m_dlScheduler = new DataLogicScheduler();
+            m_dlScheduler.init( m_App );
+        }
+        return m_dlScheduler;
+    }
+        
+    public int runCommand( String sCommand ) {
+        int retValue = -1;
+        
+        if( sCommand != null && sCommand.length() > 0 ) {
+
+            try {
+                ProcessBuilder pb = new ProcessBuilder(sCommand);
+                pb.redirectErrorStream(true);
+                Process process;
+                process = pb.start();
+
+                //Check result
+                retValue = process.waitFor();
+                
+            } catch (IOException ex) {
+                getLogger().log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                getLogger().log(Level.SEVERE, null, ex);
+            }
+        }
+        return retValue;
+    }
+    
     // Display a message as a popup dialog
+    // ONLY USE THIS FOR DEBUGGING
     public void ShowMessage(String title, String message) {
 
         // Get details of the original font before we change it otherwise all dialogboxes will use new settings
@@ -51,5 +126,15 @@ public class ScheduleTaskSupport {
         UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(), originalFont.getStyle(), originalFont.getSize())));
     }
 
+    public boolean saveImagePng( String filePath, String fileName, BufferedImage imageData ) {
+        
+        try {
+            File outputfile = new File( filePath + "/" + fileName );
+            ImageIO.write( imageData, "png", outputfile);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }
 

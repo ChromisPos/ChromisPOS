@@ -14,6 +14,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.chromis.pos.forms.AppConfig;
+import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
@@ -29,16 +30,19 @@ public class ScheduledTask implements Runnable {
          Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> m_TaskHandle = null;
             
+    private final AppView m_App;
     private ScheduledTaskInfo m_TaskInfo = null;
     private boolean m_bInitialised = false;
     private ScheduleTaskSupport m_TaskSupport;
     
-    ScheduledTask() {
-        m_TaskSupport = new ScheduleTaskSupport();
+    ScheduledTask( AppView app ) {
+        m_App = app;
+        m_TaskSupport = new ScheduleTaskSupport( app );        
     }
 
-    ScheduledTask( ScheduledTaskInfo taskInfo ) {
-        m_TaskSupport = new ScheduleTaskSupport();
+    ScheduledTask( AppView app, ScheduledTaskInfo taskInfo ) {
+        m_App = app;
+        m_TaskSupport = new ScheduleTaskSupport( app );
         setTask( taskInfo );
         Init();
     }
@@ -114,17 +118,7 @@ public class ScheduledTask implements Runnable {
     private Object RunScript() throws ScriptException {
 
         ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
-        String sDBUser = AppConfig.getInstance().getProperty("db.user");
-        String sDBPassword = AppConfig.getInstance().getProperty("db.password");
-
-        if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
-            AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
-            sDBPassword = cypher.decrypt(sDBPassword.substring(6));
-        }
-        script.put("p_Hostname", AppConfig.getInstance().getProperty("machine.hostname"));
-        script.put("p_dbURL", AppConfig.getInstance().getProperty("db.URL"));
-        script.put("p_dbUser", sDBUser);
-        script.put("p_dbPassword", sDBPassword);
+        
         script.put("p_taskInfo", m_TaskInfo);
         script.put("p_taskSupport", m_TaskSupport);
 

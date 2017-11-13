@@ -424,6 +424,29 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "WHERE C.PARENTID = ? ORDER BY C.NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(category);
     }
 
+    /**
+     *
+     * @return
+     * @throws BasicException
+     */
+    public final List<CategoryInfo> getAllCategories( String sqlWhere ) throws BasicException {
+        if( sqlWhere == null || sqlWhere.isEmpty() ) {
+            sqlWhere = "1";
+        }
+        
+        return new PreparedSentence(s, "SELECT "
+                + "C.ID, "
+                + "C.NAME, "
+                + "C.IMAGE, "
+                + "C.TEXTTIP, "
+                + "C.CATSHOWNAME, "
+                + "C.COLOUR, "
+                + "C.CATORDER, "
+                + "IFNULL( CONCAT( P.NAME, '/', C.NAME ), C.NAME) AS PATH "
+                + "FROM CATEGORIES C LEFT JOIN CATEGORIES P ON C.PARENTID=P.ID "
+                + "WHERE ? ORDER BY C.NAME", SerializerWriteString.INSTANCE, CategoryInfo.getSerializerRead()).list(sqlWhere);
+    }
+
     public final List<CategoryInfo> getSubcategoriesByCatOrder(String category) throws BasicException {
         return new PreparedSentence(s, "SELECT "
                 + "C.ID, "

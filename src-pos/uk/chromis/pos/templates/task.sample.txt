@@ -1,0 +1,26 @@
+// task.sample
+// This is a sample task Java script for use with the scheduler
+//
+// Tasks are stored in the database but template tasks can be stored
+// in the resources with then name task.*
+//
+// Variables available to task scripts include:
+//        ScheduledTaskInfo     p_taskInfo    
+//        ScheduleTaskSupport   p_taskSupport
+//
+// See uk.chromis.pos.scheduler.ScheduledTask:RunScript for the latest information
+// 
+// Because these scripts are designed to run as background tasks, no user interaction is possible
+// output should be via log files
+//
+
+import java.util.Properties;
+import uk.chromis.format.Formats;
+
+
+// Create a log entry
+taskSupport.getLogger().info( p_taskinfo.getName() + " script has started");
+
+// You should never call the following function but is is possible to use this for debugging
+taskSupport.ShowMessage( p_taskinfo.getName(), "The task is running" );
+
