@@ -1,22 +1,15 @@
-# Chromis POS
+# KAC-Pos
 
-Chromis POS is a Point of Sale application designed to cater to the needs of retail businesses. It offers a range of features to help manage sales, inventory, and customer relations efficiently.
+KAC-Pos is a Point of Sale (POS) application for retail and hospitality businesses.
 
 ## Features
-- User-friendly interface
-- Inventory management
-- Sales tracking
+
+- Easy-to-use interface
+- Inventory and sales tracking
 - Customer management
-- Reporting tools
+- Sales reports
+- Multi-user support
 
-## Installation
-To install Chromis POS, follow these steps:
-1. Download the latest release from the [releases page](https://github.com/wilfredmbugua/ChromisPOS/releases).
-2. Extract the downloaded files.
-3. Follow the installation instructions provided in the documentation.
+## Support
 
-## Contributing
-We welcome contributions from the community. Please check the contribution guidelines for more information on how to get involved.
-
-## License
-Chromis POS is licensed under the terms of the [MIT License](LICENSE).
+For questions or support, contact us via repository Issues or visit [www.kac-pos.co.ke](https://www.kac-pos.co.ke).
