@@ -1,0 +1,26 @@
+<svg width="480" height="90" viewBox="0 0 480 90" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b3e6ff"/>
+      <stop offset="100%" stop-color="#87ceeb"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="90" fill="url(#sky)"/>
+  <!-- KAC-Pos Text -->
+  <text x="120" y="40" font-size="32" font-family="Arial, Helvetica, sans-serif" fill="#045285" font-weight="bold">
+    Welcome to KAC-Pos
+  </text>
+  <!-- Simple cash register icon (right side) -->
+  <g transform="translate(370,28) scale(1.1)">
+    <rect x="0" y="18" width="60" height="25" rx="4" fill="#e0e8ef" stroke="#045285" stroke-width="2"/>
+    <rect x="10" y="28" width="20" height="8" fill="#b0c4de"/>
+    <rect x="34" y="28" width="16" height="8" fill="#b0c4de"/>
+    <rect x="25" y="15" width="10" height="8" fill="#045285" stroke="#045285" stroke-width="1"/>
+    <rect x="18" y="8" width="24" height="7" rx="2" fill="#b0c4de" stroke="#045285" stroke-width="1"/>
+    <circle cx="50" cy="36" r="3.5" fill="#75c06b" stroke="#045285" stroke-width="1"/>
+    <rect x="5" y="36" width="10" height="4" rx="1" fill="#b0c4de"/>
+    <rect x="18" y="36" width="10" height="4" rx="1" fill="#b0c4de"/>
+    <rect x="31" y="36" width="10" height="4" rx="1" fill="#b0c4de"/>
+    <rect x="44" y="36" width="4" height="4" rx="1" fill="#b0c4de"/>
+  </g>
+</svg>
