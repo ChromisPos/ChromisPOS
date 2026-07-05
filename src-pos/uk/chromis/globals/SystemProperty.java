@@ -317,12 +317,6 @@ public class SystemProperty {
         VOUCHERPOINTS = getInt("VOUCHERPOINTS");
         SWINGFONTSIZE = getInt("SWINGFONTSIZE");
 
-//        //get values from Properties file
-//        if (TerminalInfo.getPosType() == null) {
-//            TICKETSBAG = "standard";
-//        } else {
-//            TICKETSBAG = TerminalInfo.getPosType();
-//        }
         Currency cur = Currency.getInstance(new Locale(USERLANGUAGE, USERCOUNTRY));
         CURRENCYSYMBOL = cur.getSymbol();
 
